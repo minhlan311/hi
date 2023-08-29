@@ -36,7 +36,7 @@ export default function ModalOpen(props) {
             recordId: records.id,
             mentor: {
                 fullName: user.fullName,
-                avatarUrl: user.avatarUrl,
+                avatarUrl: user?.avatarUrl,
             },
             answers: {
                 text: values.answers,
@@ -50,7 +50,7 @@ export default function ModalOpen(props) {
             message.success('Gửi câu trả lời thành công!')
         }
     }
-    const onFinishFailed = (errorInfo) => { }
+    const onFinishFailed = (errorInfo) => {}
 
     const handelCancelModal = () => {
         setDetail(!detail)
@@ -103,7 +103,7 @@ export default function ModalOpen(props) {
                 <h3>Câu trả lời của Mentor</h3>
 
                 {value?.length > 0 &&
-                    value?.find((item) => item.recordId === records.id) ? (
+                value?.find((item) => item.recordId === records.id) ? (
                     value?.map((data, id) =>
                         data.recordId === records.id ? (
                             <div style={{ margin: '10px 0' }} key={id}>
@@ -146,15 +146,15 @@ export default function ModalOpen(props) {
                                     style={
                                         isMobile
                                             ? {
-                                                background: '#F3F9FD',
-                                                margin: '5px 0 0 25px',
-                                                whiteSpace: 'break-spaces',
-                                            }
+                                                  background: '#F3F9FD',
+                                                  margin: '5px 0 0 25px',
+                                                  whiteSpace: 'break-spaces',
+                                              }
                                             : {
-                                                background: '#F3F9FD',
-                                                marginLeft: 55,
-                                                whiteSpace: 'break-spaces',
-                                            }
+                                                  background: '#F3F9FD',
+                                                  marginLeft: 55,
+                                                  whiteSpace: 'break-spaces',
+                                              }
                                     }
                                 >
                                     {data.answers.text}
@@ -189,9 +189,7 @@ export default function ModalOpen(props) {
                         handleChange={(value) => {
                             form.setFieldsValue({ answers: value })
                         }}
-                    >
-
-                    </Editor>
+                    ></Editor>
                 </Form.Item>
             </Form>
         </Modal>

@@ -51,18 +51,18 @@ export default function Notifications() {
         }
     }, [])
 
-    useEffect(() => {
-        const payload = {
-            filterQuery: {
-                userId: user._id,
-            },
-            options: {
-                pagination: false,
-            },
-        }
+    // useEffect(() => {
+    //     const payload = {
+    //         filterQuery: {
+    //             userId: user._id,
+    //         },
+    //         options: {
+    //             pagination: false,
+    //         },
+    //     }
 
-        dispatch(getNotificationRequest(payload))
-    }, [])
+    //     dispatch(getNotificationRequest(payload))
+    // }, [])
 
     const newData = [...socketData, ...notificate]
     const unReadNotifi = newData?.filter((ntf) => ntf.status === 'unread')
@@ -80,7 +80,7 @@ export default function Notifications() {
                     dispatch(putNotificationRequest(payload))
                     const data = {
                         filterQuery: {
-                            userId: user._id,
+                            userId: user?._id,
                         },
                         options: {
                             pagination: false,
@@ -122,7 +122,7 @@ export default function Notifications() {
             setTimeout(() => {
                 const payload = {
                     filterQuery: {
-                        userId: user._id,
+                        userId: user?._id,
                     },
                     options: {
                         pagination: false,

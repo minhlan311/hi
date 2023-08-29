@@ -170,7 +170,7 @@ export default function ChapterMain() {
                 topicId: data.progression._id,
                 targetId: topicId,
                 targetModel: 'TOPIC',
-                userId: user._id,
+                userId: user?._id,
             })
         )
     }

@@ -40,7 +40,7 @@ export default function ModalPoint({ type, open, onClose }) {
                     fullName: values.fullName,
                     value: values.value,
                     note: values.note,
-                    userId: user._id,
+                    userId: user?._id,
                     type: 'WITHDRAW',
                 })
                 .then((res) => {

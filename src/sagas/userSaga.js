@@ -38,9 +38,13 @@ export function* userDetail({ payload }) {
 export function* updateUser({ payload }) {
     try {
         const response = yield call(() => {
-            return axios.put(settings.API_URL + USER_PATH + user._id, payload, {
-                headers: setHeader(),
-            })
+            return axios.put(
+                settings.API_URL + USER_PATH + user?._id,
+                payload,
+                {
+                    headers: setHeader(),
+                }
+            )
         })
         if (response && response.status === 200) {
             yield delay(800)

@@ -104,7 +104,7 @@ const Exams = () => {
 
     const [filterData, setFilterData] = useState({
         filterQuery: {
-            createdById: user._id,
+            createdById: user?._id,
         },
         options: {
             limit: 10,

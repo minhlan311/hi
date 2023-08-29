@@ -293,7 +293,7 @@ const Quiz = (prop) => {
                         {messageUser?.message}
                     </div>
                     <img
-                        src={user?.avatarUrl ? user.avatarUrl : noAvt}
+                        src={user?.avatarUrl ? user?.avatarUrl : noAvt}
                         alt={user?.fullname}
                         id="avatar-robot"
                     />

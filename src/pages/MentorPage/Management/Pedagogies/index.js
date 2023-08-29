@@ -93,7 +93,7 @@ const Pedagogies = () => {
     const getQuestionByMentor = (record, status) => {
         const payload = {
             status: status,
-            ownerId: status === 'PENDING' ? null : user._id,
+            ownerId: status === 'PENDING' ? null : user?._id,
         }
         axiosInstance
             .put(`${settings.API_URL}${PEDAGOGY_PATH}/${record._id}`, payload)
@@ -188,7 +188,7 @@ const Pedagogies = () => {
                         </Tooltip>
                     ) : (
                         <>
-                            {record.ownerId === user._id && (
+                            {record.ownerId === user?._id && (
                                 <Tooltip title="Hủy nhận">
                                     <Button
                                         type="primary"
@@ -206,7 +206,7 @@ const Pedagogies = () => {
                     )}
 
                     {record.status === 'LOCK' &&
-                        record.ownerId === user._id && (
+                        record.ownerId === user?._id && (
                             <Tooltip title="Trả lời câu hỏi">
                                 <Button
                                     type="primary"

@@ -1,6 +1,6 @@
 import React from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from 'ckeditor5-custom-build'
+// import ClassicEditor from 'ckeditor5-custom-build'
 import settings from '../settings'
 import { UPLOAD_ATTACHMENT } from '../constants/paths'
 
@@ -41,7 +41,7 @@ export default function Editor({ handleChange, options, value }) {
                 extraPlugins: [uploadPlugin],
             }}
             {...options}
-            editor={ClassicEditor}
+            // editor={ClassicEditor}
             onReady={(editor) => {}}
             onBlur={(event, editor) => {}}
             onFocus={(event, editor) => {}}

@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import mtzLogoImg from '../../../assets/images/backgrounds/mtz-logo.svg'
+import mtzLogoImg from '../../../assets/images/backgrounds/logo-full.png'
 import './styles.scss'
 import { useMediaQuery } from 'react-responsive'
 import MenuMb from './MenuMb'
@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getStorage, setStorage } from '../../../services/storage'
 import { USER_INFO } from '../../../constants/storageKeys'
 import { userDetailRequest, userDetailSelector } from '../../../slices/user'
+import { Button, Col, Divider, Row, Space } from 'antd'
+import { GlobalOutlined } from '@ant-design/icons'
 
 const Navigation = () => {
     const dispatch = useDispatch()
@@ -42,50 +44,67 @@ const Navigation = () => {
         })
         .catch((err) => console.log('failed: ', err))
 
-    const [visible, setVisible] = useState(true)
-    const [open, setOpen] = useState(false)
-    useEffect(() => {
-        if (!isMobile || !isTablet) setOpen(false)
-        let prevScrollPosition = window.pageYOffset
-        const handleScroll = () => {
-            const currentScrollPosition = window.pageYOffset
-            setVisible(
-                prevScrollPosition > currentScrollPosition ||
-                    currentScrollPosition < 150
-            )
-            prevScrollPosition = currentScrollPosition
-        }
-        window.addEventListener('scroll', handleScroll)
+    // const [visible, setVisible] = useState(true)
+    // const [open, setOpen] = useState(false)
+    // useEffect(() => {
+    //     if (!isMobile || !isTablet) setOpen(false)
+    //     let prevScrollPosition = window.pageYOffset
+    //     const handleScroll = () => {
+    //         const currentScrollPosition = window.pageYOffset
+    //         setVisible(
+    //             prevScrollPosition > currentScrollPosition ||
+    //                 currentScrollPosition < 150
+    //         )
+    //         prevScrollPosition = currentScrollPosition
+    //     }
+    //     window.addEventListener('scroll', handleScroll)
 
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [isMobile, isTablet])
+    //     return () => window.removeEventListener('scroll', handleScroll)
+    // }, [isMobile, isTablet])
 
     return (
-        <>
-            <div
-                className={`${
-                    visible ? 'nav-fixed' : 'navn-fixed'
-                } mtz-nav-main`}
-            >
-                <div
+        <div>
+            <div className={` mtz-nav-main`}>
+                <Row
+                    justify="space-between"
+                    align="middle"
                     className={`${
                         isMobile || isTablet
                             ? 'mtz-container-m'
                             : 'mtz-container'
-                    } d-space-flex`}
+                    }`}
                     style={isMobile || isTablet ? { height: 70 } : null}
                 >
-                    <Link className="logo" to={'/'}>
-                        <img src={mtzLogoImg} alt="mtz logo" />
-                    </Link>
-                    {isMobile || isTablet ? (
-                        <MenuMb setOpen={setOpen} open={open} />
-                    ) : (
-                        <MenuPc />
-                    )}
-                </div>
+                    <Col>
+                        <Link to={'/'}>
+                            <img
+                                src={mtzLogoImg}
+                                className="logo"
+                                alt="mtz logo"
+                            />
+                        </Link>
+                    </Col>
+                    <div className="menu-bar">
+                        <div className="avatar-action">
+                            <Space>
+                                <Button type="text">
+                                    <b>Hotline: 028 7309 9959 (Phím 3)</b>
+                                </Button>
+                                <Button icon={<GlobalOutlined />}></Button>
+                                <Button>Đăng ký</Button>
+                                <Divider
+                                    type="vertical"
+                                    style={{ margin: '0 5px', height: 35 }}
+                                ></Divider>
+                                <Button type="primary">Đăng nhập</Button>
+                            </Space>
+                        </div>
+                    </div>
+                </Row>
             </div>
-        </>
+
+            <MenuPc></MenuPc>
+        </div>
     )
 }
 
