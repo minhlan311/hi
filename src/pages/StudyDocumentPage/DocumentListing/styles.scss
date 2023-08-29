@@ -1,0 +1,62 @@
+.mtz-documents-listing {
+    flex-wrap: wrap;
+    .mtz-no-document {
+        display: flex;
+        justify-content: center;
+        color: #8f95b2;
+        font-weight: 500;
+        font-size: 18px;
+    }
+    .ant-card {
+        // width: auto !important;
+        background: #ffffff;
+        border: 1px solid #edeff5;
+
+        border-radius: 4px;
+
+        cursor: pointer;
+        .ant-card-body {
+            position: relative;
+        }
+        .ant-card-meta-title {
+            margin-bottom: 0 !important;
+        }
+        .ant-card-cover {
+            img {
+                height: 150px;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+        .ant-card-meta-description {
+            color: #8f95b2;
+            span {
+                font-size: inherit;
+                color: #2952cc;
+            }
+        }
+        .documents-tag {
+            display: flex;
+
+            img {
+                width: 11px;
+            }
+            .ant-typography {
+                font-size: inherit;
+            }
+        }
+        .ant-card-actions {
+            li {
+                // border-inline-end: none;
+            }
+        }
+    }
+    .ant-list-item {
+        display: inline-block;
+        border-block-end: none;
+        padding: 0;
+    }
+}
+#pdf-controls {
+    background: #ffffff;
+}

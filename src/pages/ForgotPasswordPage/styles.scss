@@ -1,0 +1,50 @@
+.mtz-forgot-password {
+    height: 100vh;
+    padding: 0px 50px;
+    .mtz-forgot-password-form-container {
+        width: 100%;
+        position: relative;
+        .mtz-forgot-password-form {
+            height: 100%;
+            position: absolute;
+
+            .ant-form-item-row {
+                padding-bottom: 5px;
+            }
+
+            form {
+                margin-top: 20px;
+
+                label {
+                    font-weight: 500;
+                }
+            }
+
+            .title {
+                font-weight: 600;
+                font-size: 28px;
+                line-height: 38px;
+                letter-spacing: -0.05px;
+                color: #304659;
+                margin-bottom: 10px;
+            }
+
+            .title-label {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 20px;
+                letter-spacing: -0.05px;
+
+                color: #8f95b2;
+            }
+        }
+    }
+
+    .mtz-logo {
+        cursor: pointer;
+
+        img {
+            height: 100% !important;
+        }
+    }
+}

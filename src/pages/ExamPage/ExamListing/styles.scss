@@ -1,0 +1,110 @@
+.mtz-exam-list {
+    //padding: 30px 180px;
+    text-align: left;
+    .ant-collapse-header {
+        margin-bottom: 3px;
+        font-size: 18px;
+        background: #f8fbff;
+    }
+    .quiz-active {
+        color: #0d84e0 !important;
+        background: #f8fbff !important;
+        .ant-collapse-header-text {
+            color: #0d84e0 !important;
+            background: #f8fbff !important;
+        }
+    }
+
+    .ant-collapse-content-box {
+        // font-weight: 500;
+        font-size: 16px;
+        color: #8f95b2;
+        padding: 0 !important;
+
+        .quiz-test {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            min-height: 56px;
+            margin-bottom: 3px;
+            background: #f9fafc;
+            padding: 0 25px;
+            cursor: pointer;
+
+            .score-primary,
+            .score-inprogress {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-width: 55px;
+                min-height: 30px;
+                border-radius: 4px;
+            }
+
+            .score-primary {
+                color: #ffffff;
+                background: #0d84e0;
+            }
+
+            .score-inprogress {
+                color: #6eb5ed;
+                background: #cfe6f9;
+            }
+        }
+    }
+}
+.exam-list-subject {
+    .ant-collapse-header {
+        margin-bottom: 3px;
+        font-size: 16px;
+        background: #f8fbff;
+        .ant-collapse-header-text {
+            font-size: 16px;
+            font-weight: normal;
+        }
+    }
+    .ant-collapse-content {
+        margin: 5px;
+        min-height: 35px;
+        background-color: #c2d0ec;
+        .ant-collapse-content-box {
+            // font-weight: 500;
+            font-size: 14px;
+            color: #8f95b2;
+            padding: 0 !important;
+
+            .quiz-test {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                min-height: 56px;
+                margin-bottom: 3px;
+                background: #f9fafc;
+                padding: 0 25px;
+                cursor: pointer;
+
+                .score-primary,
+                .score-inprogress {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-width: 55px;
+                    min-height: 30px;
+                    border-radius: 4px;
+                }
+
+                .score-primary {
+                    color: #ffffff;
+                    background: #0d84e0;
+                }
+
+                .score-inprogress {
+                    color: #6eb5ed;
+                    background: #cfe6f9;
+                }
+            }
+        }
+    }
+}
