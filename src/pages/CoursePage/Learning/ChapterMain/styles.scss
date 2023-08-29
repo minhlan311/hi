@@ -1,0 +1,36 @@
+.mtz-prf-chapter-main {
+    margin-bottom: 50px;
+    .body-learn {
+        display: flex;
+        justify-content: space-between;
+        .learn-card {
+            border-radius: 6px;
+            background-color: #f8fbff;
+            .vimeo-main {
+                position: relative;
+                .vimeo-more {
+                    position: absolute;
+                    z-index: 10;
+                    margin-left: 99%;
+                    bottom: 49%;
+                }
+            }
+        }
+    }
+    .vimeo-enlarge {
+        display: block;
+    }
+
+    .ant-card {
+        height: 100%;
+        overflow: auto;
+    }
+    .ant-card-body {
+        // padding: 0;
+    }
+    .btn-updateProgresion {
+        display: flex;
+        justify-content: flex-end;
+        margin: 15px;
+    }
+}

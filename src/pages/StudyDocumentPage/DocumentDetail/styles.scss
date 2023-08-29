@@ -1,0 +1,186 @@
+.ant-modal-content {
+    .ant-modal-body {
+        padding-top: 5px;
+    }
+}
+#header-bar {
+    min-height: 10px;
+}
+.mtz-documents-detail {
+    .documents-detail-container {
+        background: #f8fbff;
+        border-radius: 4px;
+        padding: 20px 12px;
+        margin-right: 20px;
+
+        img {
+            border-radius: 4px;
+            width: 100%;
+        }
+    }
+    .documents-detail-banner {
+        margin: -20px -10px 0px -10px;
+        img {
+            min-height: 380px;
+            object-fit: cover;
+        }
+    }
+    .documents-see-more {
+        position: absolute;
+        left: 50%;
+        cursor: pointer;
+    }
+
+    .documents-tag {
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 11px;
+        }
+
+        .ant-typography {
+            font-size: inherit;
+        }
+    }
+
+    .title-group {
+        display: flex;
+        justify-content: space-between;
+
+        .title {
+            font-size: 29px;
+            font-weight: 500;
+            color: #101840;
+
+            .sub-title {
+                font-size: 16px;
+                color: #8f95b2;
+
+                span {
+                    font-size: 16px;
+                    color: #2952cc;
+                }
+            }
+        }
+
+        button {
+            font-weight: 500;
+        }
+    }
+
+    .documents-description {
+        h1 {
+            font-weight: 500;
+            font-size: 20px;
+            color: #101840;
+        }
+
+        .description {
+            position: relative;
+            font-weight: 400;
+            font-size: 16px;
+            color: #8f95b2;
+
+            ul {
+                margin: revert;
+                padding: revert;
+            }
+
+            #fadeout {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 50%;
+                background: linear-gradient(
+                    0deg,
+                    #f8fbff 6.34%,
+                    rgba(248, 251, 255, 0) 95.29%
+                );
+                pointer-events: none;
+            }
+        }
+    }
+
+    .ant-card {
+        width: auto !important;
+        background: #ffffff;
+        border: 1px solid #edeff5;
+
+        border-radius: 4px;
+        cursor: pointer;
+
+        .ant-card-cover {
+            img {
+                width: 100%;
+                background-size: cover;
+            }
+        }
+        .ant-card-body {
+            padding: 10px !important;
+            position: relative;
+            .documents-tag {
+                position: absolute;
+                display: flex;
+                top: 10px;
+                align-items: center;
+                right: 10px;
+            }
+        }
+
+        .ant-card-meta-description {
+            color: #8f95b2;
+
+            span {
+                font-size: inherit;
+                color: #2952cc;
+            }
+        }
+
+        .ant-card-actions {
+            max-height: 48px;
+
+            li {
+                display: flex;
+                border-inline-end: none;
+
+                &:nth-child(2) {
+                    justify-content: end;
+                }
+
+                span {
+                    display: flex;
+                    align-items: center;
+
+                    &:nth-child(1) {
+                        padding-left: 24px;
+                    }
+
+                    &:nth-child(2) {
+                        padding-right: 24px;
+                    }
+                }
+            }
+
+            img {
+                width: 16px;
+                margin-right: 10px;
+            }
+
+            .ant-typography {
+                font-size: inherit;
+            }
+        }
+    }
+}
+.fgaiJa {
+    overflow: inherit !important;
+}
+.ant-modal-content {
+    .ant-modal-body {
+        padding: 0 !important;
+    }
+    .ant-form-item {
+        margin-bottom: 0 !important;
+    }
+}

@@ -1,0 +1,99 @@
+.mtz-courses-listing {
+    flex-wrap: wrap;
+    .mtz-no-course {
+        display: flex;
+        justify-content: center;
+        color: #8f95b2;
+        font-weight: 500;
+        font-size: 18px;
+    }
+
+    .list-card {
+        .ant-card {
+            // width: auto !important;
+            background: #ffffff;
+            border: 1px solid #edeff5;
+
+            // border-radius: 4px;
+
+            cursor: pointer;
+            .ant-card-body {
+                padding: 10px !important;
+                position: relative;
+            }
+            .ant-card-meta-title {
+                margin-bottom: 0 !important;
+            }
+            .ant-card-cover {
+                img {
+                    width: 100%;
+                    background-size: cover;
+                }
+            }
+            .ant-card-meta-description {
+                color: #8f95b2;
+                span {
+                    font-size: inherit;
+                    color: #2952cc;
+                }
+            }
+            .courses-tag {
+                position: absolute;
+                display: flex;
+                top: 10px;
+                align-items: center;
+                right: 10px;
+                img {
+                    width: 16px;
+                    margin-right: 10px;
+                }
+                .ant-typography {
+                    font-size: inherit;
+                }
+            }
+            .ant-card-actions {
+                max-height: 48px;
+                li {
+                    display: flex;
+                    border-inline-end: none;
+                    margin: 7px 12px !important;
+
+                    &:nth-child(2) {
+                        justify-content: end;
+                    }
+                    span {
+                        display: flex;
+                        align-items: center;
+                        &:nth-child(1) {
+                            // padding-left: 24px;
+                        }
+                        &:nth-child(2) {
+                            // padding-right: 24px;
+                        }
+                        .ant-rate {
+                            display: flex;
+                            .ant-rate-star {
+                                margin: 0 !important;
+                            }
+                        }
+                    }
+                }
+                img {
+                    width: 16px;
+                    margin-right: 10px;
+                }
+                .ant-typography {
+                    font-size: inherit;
+                }
+            }
+        }
+    }
+    .ant-list-item {
+        display: inline-block;
+        border-block-end: none;
+        padding: 0;
+    }
+}
+#pdf-controls {
+    background: #ffffff;
+}

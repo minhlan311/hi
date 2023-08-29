@@ -1,0 +1,14 @@
+.score {
+    padding: 0;
+
+    .score-item {
+        margin-bottom: 10px;
+    }
+    .history {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .recharts-wrapper > svg {
+        padding-right: 50px;
+    }
+}

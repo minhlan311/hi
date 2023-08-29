@@ -1,0 +1,47 @@
+.mtz-document-page {
+    .mtz-documents-box-title {
+        position: relative;
+
+        .mtz-tabs {
+            display: block;
+
+            .group-filter-container {
+                .ant-form {
+                    display: flex;
+                }
+
+                .group-filter-left {
+                    width: 70%;
+                    display: flex;
+
+                    .ant-form-item {
+                        margin-right: 10px;
+                    }
+                }
+
+                .group-filter-right {
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    width: 30%;
+                }
+            }
+
+            // .ant-tabs-tabpane {
+            //   display: flex;
+            // }
+
+            .ant-tabs-nav::before {
+                border-bottom: none !important;
+            }
+
+            .ant-tabs-tab-active > .ant-tabs-tab-btn {
+                color: #101840;
+            }
+
+            .ant-tabs-tab {
+                color: #8f95b2;
+            }
+        }
+    }
+}

@@ -1,0 +1,57 @@
+.note-main {
+    width: 28%;
+    .screen-main {
+        position: relative;
+        margin-bottom: 10px;
+        height: 42vh;
+        overflow: hidden;
+
+        .note-screen {
+            position: absolute;
+            width: 100%;
+            overflow-y: auto;
+            padding: 5px 0;
+        }
+        .pin-note {
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            max-height: 62px;
+            background-color: aliceblue;
+            overflow: hidden;
+        }
+        .note-item {
+            width: 100%;
+            display: flex;
+            .note-body {
+                position: relative;
+                width: 100%;
+                .note-content {
+                    white-space: pre-wrap;
+                    word-break: break-word;
+                    width: 100%;
+                    .note-update {
+                        max-height: 300px;
+                        width: 100%;
+                        overflow-y: auto;
+                    }
+                }
+                .note-more {
+                    width: 25px;
+                    .note-more-butt {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+                }
+            }
+        }
+    }
+    .screen-main > .ant-card-body {
+        padding: 0;
+        .ant-card-bordered {
+            border-radius: 0;
+        }
+    }
+}

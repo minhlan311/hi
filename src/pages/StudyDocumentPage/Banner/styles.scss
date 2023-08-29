@@ -1,0 +1,63 @@
+.mtz-document-banner {
+    position: relative;
+    margin: 15px 0 30px 0;
+    .row-container {
+        background: #ffffff;
+        border: 2px solid #f0f0f0;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        .info {
+            padding: 2rem;
+        }
+
+        .banner-info {
+            width: 100%;
+
+            .title {
+                font-weight: 600;
+                font-size: 29px;
+                line-height: 40px;
+                color: #795ed5;
+                margin-bottom: 10px;
+            }
+
+            .title-description {
+                font-weight: 400;
+                font-size: 17px;
+                line-height: 25px;
+                color: #8f95b2;
+            }
+
+            .group-button {
+                margin: 30px 0;
+
+                button {
+                    font-size: 14px;
+                }
+            }
+
+            .docs-discover {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 60px;
+                span {
+                    font-weight: 500;
+                    font-size: 14px;
+                    color: #8f95b2;
+                }
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
+
+        .docs-img {
+            position: relative;
+            display: flex;
+            justify-content: end;
+            align-self: end;
+        }
+    }
+}

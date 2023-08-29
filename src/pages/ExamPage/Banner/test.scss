@@ -1,0 +1,236 @@
+.pc {
+    display: none;
+}
+.tablet {
+    display: none;
+}
+.mobile {
+    display: none;
+} /* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .pc {
+        display: block;
+        .mtz-exam-banner {
+            margin: 15px 0 30px 0;
+            position: relative;
+            .row-container {
+                background: #ffffff;
+                border: 2px solid #f0f0f0;
+                box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+                border-radius: 12px;
+                .col-container {
+                    padding: 77px 0px 0px 44px;
+                    .row-content {
+                        margin-bottom: 44px;
+                        .heading {
+                            width: 401px;
+                            height: 80px;
+                            font-family: 'Inter';
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 35px;
+                            line-height: 40px;
+                            letter-spacing: -0.24px;
+                            color: #0d84e0;
+                        }
+                        .description {
+                            width: 458px;
+                            height: 50px;
+                            font-family: 'Inter';
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 17px;
+                            line-height: 25px;
+                            color: #8f95b2;
+                        }
+                    }
+                    .btn-banner {
+                        background: #f9fafc;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//PC
+@media only screen and (min-width: 992px) {
+    .pc {
+        display: block;
+        .mtz-exam-banner {
+            position: relative;
+            .row-container {
+                background: #ffffff;
+                border: 2px solid #f0f0f0;
+                box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+                border-radius: 12px;
+                .col-container {
+                    padding: 77px 0px 0px 44px;
+                    .row-content {
+                        margin-bottom: 44px;
+                        .heading {
+                            width: 401px;
+                            height: 80px;
+                            font-family: 'Inter';
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 35px;
+                            line-height: 40px;
+                            letter-spacing: -0.24px;
+                            color: #0d84e0;
+                        }
+                        .description {
+                            width: 458px;
+                            height: 50px;
+                            font-family: 'Inter';
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 17px;
+                            line-height: 25px;
+                            color: #8f95b2;
+                        }
+                    }
+                    .btn-banner {
+                        background: #f9fafc;
+                    }
+                }
+            }
+        }
+    }
+}
+//Tablet
+@media only screen and (min-width: 740px) and (max-width: 991px) {
+    .tablet {
+        display: block;
+        // color: #0d84e0;
+    }
+}
+//Mobile
+@media only screen and (max-width: 740px) {
+    .mobile {
+        display: block;
+        // color: #0d84e0;
+    }
+}
+
+// @media (min-width: 1024px) {
+
+// }
+// //tablet
+
+// @media (min-width: 740px) and (max-width: 1023px) {
+//   .mtz-exam-banner {
+//     padding: 30px 50px;
+//     .row-small {
+//       // display: block;
+//       background: #ffffff;
+//       border: 2px solid #f0f0f0;
+//       box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+//       border-radius: 12px;
+//       .col-container {
+//         padding: 20px 0px 0px 10px;
+//         .row-content {
+//           margin-bottom: 20px;
+//           .image-banner1 {
+//             margin-left: 60px;
+//             width: 170px;
+//             height: 170px;
+//             background: url(../../../assets/images/exam-page/banner-2.svg);
+//           }
+//           .heading {
+//             text-align: center;
+//             width: 401px;
+//             height: 80px;
+//             font-family: "Inter";
+//             font-style: normal;
+//             font-weight: 500;
+//             font-size: 25px;
+//             line-height: 40px;
+//             letter-spacing: -0.24px;
+//             color: #0d84e0;
+//           }
+//           .description {
+//             text-align: center;
+//             width: 458px;
+//             height: 50px;
+//             font-family: "Inter";
+//             font-style: normal;
+//             font-weight: 400;
+//             font-size: 17px;
+//             line-height: 25px;
+//             color: #8f95b2;
+//           }
+//         }
+//         .btn-banner {
+//           left: 52px;
+//           margin-bottom: 10px;
+//           background: #f9fafc;
+//         }
+//       }
+//     }
+//     .row-container {
+//       visibility: hidden;
+//       width: 0;
+//       height: 0;
+//     }
+//   }
+// }
+// //mobile
+// @media (max-width: 740px) {
+//   .mtz-exam-banner {
+//     padding: 30px 50px;
+//     .row-small {
+//     .row-small {
+//       // display: block;
+//       background: #ffffff;
+//       border: 2px solid #f0f0f0;
+//       box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+//       border-radius: 12px;
+//       .col-container {
+//         padding: 20px 0px 0px 10px;
+//         .row-content {
+//           margin-bottom: 20px;
+//           .image-banner1 {
+//             margin-left: 60px;
+//             width: 170px;
+//             height: 170px;
+//             background: url(../../../assets/images/exam-page/banner-2.svg);
+//           }
+//           .heading {
+//             text-align: center;
+//             width: 401px;
+//             height: 80px;
+//             font-family: "Inter";
+//             font-style: normal;
+//             font-weight: 500;
+//             font-size: 25px;
+//             line-height: 40px;
+//             letter-spacing: -0.24px;
+//             color: #0d84e0;
+//           }
+//           .description {
+//             text-align: center;
+//             width: 458px;
+//             height: 50px;
+//             font-family: "Inter";
+//             font-style: normal;
+//             font-weight: 400;
+//             font-size: 17px;
+//             line-height: 25px;
+//             color: #8f95b2;
+//           }
+//         }
+//         .btn-banner {
+//           left: 52px;
+//           margin-bottom: 10px;
+//           background: #f9fafc;
+//         }
+//       }
+//     }
+//     .row-container {
+//       visibility: hidden;
+//       width: 0;
+//       height: 0;
+//     }
+//   }
+// }

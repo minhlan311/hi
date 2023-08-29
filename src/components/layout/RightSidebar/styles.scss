@@ -1,0 +1,46 @@
+.mtz-right-sidebar {
+    $this: &;
+
+    display: flex;
+    z-index: 2;
+
+    &__left {
+        background: #ffffff;
+        box-shadow: -1px 0px 4px rgba(105, 169, 167, 0.3);
+        height: 100%;
+        width: 60px;
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+    }
+
+    &__right {
+        width: 0px;
+        min-width: 0px;
+        background: #ffffff;
+        box-shadow: -1px 0px 0px #dce0e9;
+        transition: width 0.4s, min-width 0.4s;
+    }
+
+    &--expand {
+        #{$this}__right {
+            width: 312px;
+            min-width: 312px;
+            display: inline-block;
+        }
+    }
+
+    .mtz-b-tabs {
+        margin-top: 21px;
+
+        .nav-item {
+            font-size: 14px;
+        }
+    }
+}
