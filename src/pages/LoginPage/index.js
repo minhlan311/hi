@@ -10,7 +10,7 @@ import {
 } from 'firebase/auth'
 
 import loginIntroduceImg from '../../assets/images/login/login-introduce-image.png'
-import mtzLogoImg from '../../assets/images/backgrounds/mtz-logo.svg'
+import mtzLogoImg from '../../assets/images/backgrounds/logo.svg'
 import googleLogo from '../../assets/images/login/google-logo.svg'
 import sadIcon from '../../assets/images/login/sad-icon.png'
 import { ROUTERS_URL } from '../../constants/routerUrl'

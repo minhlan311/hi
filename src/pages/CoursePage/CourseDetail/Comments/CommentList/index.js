@@ -288,7 +288,9 @@ export default function CommentList(props) {
                             <div className="d-flex">
                                 <Avatar
                                     src={
-                                        user.avatarUrl ? user.avatarUrl : noAvt
+                                        user?.avatarUrl
+                                            ? user?.avatarUrl
+                                            : noAvt
                                     }
                                     icon={<UserOutlined />}
                                     style={{

@@ -153,7 +153,7 @@ export default function FormRegis({ form }) {
                                         key={key}
                                     >
                                         <div
-                                            className="d-col-center"
+                                            className="d-col-c"
                                             style={{ width: '100%' }}
                                         >
                                             <b

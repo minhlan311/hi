@@ -59,7 +59,7 @@ export default function MenuMb({ setOpen, open }) {
         getItem(
             <Space>
                 <Avatar
-                    src={user.avatarUrl ? user.avatarUrl : noAvt}
+                    src={user?.avatarUrl ? user?.avatarUrl : noAvt}
                     size={32}
                     icon={<UserOutlined />}
                 />

@@ -96,7 +96,7 @@ const RegisMentorPage = () => {
                           }
                 }
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 }`}
             >
                 <img

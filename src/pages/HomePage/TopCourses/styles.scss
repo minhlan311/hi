@@ -1,0 +1,29 @@
+.intro-card {
+    border-radius: 6px;
+    background-color: white;
+    min-height: 300px;
+    .cover {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+    }
+    .course-count {
+        background-color: #f6f6f6;
+        color: #a9a9a9;
+    }
+    .more {
+        color: var(--defaultColor);
+    }
+}
+.ball,
+.point3 {
+    position: absolute;
+}
+.point3 {
+    right: 5%;
+    top: 38%;
+}
+.ball {
+    left: 7%;
+    top: 5%;
+}

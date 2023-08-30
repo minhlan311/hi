@@ -74,7 +74,7 @@ const CoursePage = () => {
             return (
                 <>
                     <div className="mtz-courses-box-title">
-                        <Row className="mtz-courses-header d-space-flex mb-15">
+                        <Row className="mtz-courses-header d-space-c mb-15">
                             <Text className="h3-title ">
                                 Danh sách khóa học
                             </Text>
@@ -89,7 +89,7 @@ const CoursePage = () => {
             return (
                 <>
                     <div className="mtz-courses-box-title">
-                        <Row className="mtz-courses-header d-space-flex mb-15">
+                        <Row className="mtz-courses-header d-space-c mb-15">
                             <Text className="h3-title ">
                                 Danh sách khóa học
                             </Text>
@@ -107,7 +107,7 @@ const CoursePage = () => {
             <Navigation />
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } mtz-course-page`}
                 style={{ marginTop: 80 }}
             >

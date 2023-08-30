@@ -79,7 +79,7 @@ export const CreateCoursesModal = ({
         if (deleteCourses.status === 'success') {
             const payload = {
                 filterQuery: {
-                    mentorId: user._id,
+                    mentorId: user?._id,
                 },
                 options: {
                     pagination: false,
@@ -100,7 +100,7 @@ export const CreateCoursesModal = ({
                     coverMedia: data.coverMedia,
                     question: data.descriptions,
                     subjectId: data.subjectId,
-                    mentorId: user._id,
+                    mentorId: user?._id,
                     educations: data.educations,
                     status: 'ACTIVE',
                     plan: data.plan,
@@ -157,7 +157,7 @@ export const CreateCoursesModal = ({
                                     formValues?.coverMedia?.file?.response?.url,
                                 descriptions: formValues.question,
                                 subjectId: formValues.subjectId.value,
-                                mentorId: user._id,
+                                mentorId: user?._id,
                                 educations: formValues.educations,
                                 status: 'ACTIVE',
                                 plan: formValues.plan,

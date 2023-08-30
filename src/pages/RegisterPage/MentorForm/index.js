@@ -178,7 +178,7 @@ const MentorForm = ({ form }) => {
                                         style={{
                                             padding: '0 0 10px 0',
                                         }}
-                                        className="d-col-center"
+                                        className="d-col-c"
                                     >
                                         <b
                                             style={{

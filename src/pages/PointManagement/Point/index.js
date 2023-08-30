@@ -180,7 +180,7 @@ export default function Point({ history }) {
                             </p>
                         ) : (
                             <div
-                                className="d-col-center"
+                                className="d-col-c"
                                 style={isTablet ? { padding: '5%' } : null}
                             >
                                 <ResponsiveContainer

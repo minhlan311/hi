@@ -51,18 +51,18 @@ export default function Notifications() {
         }
     }, [])
 
-    useEffect(() => {
-        const payload = {
-            filterQuery: {
-                userId: user._id,
-            },
-            options: {
-                pagination: false,
-            },
-        }
+    // useEffect(() => {
+    //     const payload = {
+    //         filterQuery: {
+    //             userId: user._id,
+    //         },
+    //         options: {
+    //             pagination: false,
+    //         },
+    //     }
 
-        dispatch(getNotificationRequest(payload))
-    }, [])
+    //     dispatch(getNotificationRequest(payload))
+    // }, [])
 
     const newData = [...socketData, ...notificate]
     const unReadNotifi = newData?.filter((ntf) => ntf.status === 'unread')
@@ -80,7 +80,7 @@ export default function Notifications() {
                     dispatch(putNotificationRequest(payload))
                     const data = {
                         filterQuery: {
-                            userId: user._id,
+                            userId: user?._id,
                         },
                         options: {
                             pagination: false,
@@ -122,7 +122,7 @@ export default function Notifications() {
             setTimeout(() => {
                 const payload = {
                     filterQuery: {
-                        userId: user._id,
+                        userId: user?._id,
                     },
                     options: {
                         pagination: false,
@@ -136,7 +136,7 @@ export default function Notifications() {
         const NoticationPC = ({ notification }) => {
             return (
                 <Card className="notification-menu">
-                    <div className="d-space-flex" style={{ padding: 10 }}>
+                    <div className="d-space-c" style={{ padding: 10 }}>
                         <h2 style={{ margin: 0 }}>Thông báo</h2>
                         <Tooltip title="Đánh dấu đã đọc tất cả">
                             <Button
@@ -170,7 +170,7 @@ export default function Notifications() {
                     className="notification-menu"
                     style={isMobile || isTablet ? { width: '100%' } : null}
                 >
-                    <div className="d-space-flex" style={{ padding: 10 }}>
+                    <div className="d-space-c" style={{ padding: 10 }}>
                         <div style={{ display: 'flex' }}>
                             <Button
                                 icon={<CloseOutlined />}

@@ -626,7 +626,7 @@ const CourseListing = ({ subjectId, screen, mentorId }) => {
                     style={{
                         width: '100%',
                     }}
-                    className="d-space-flex"
+                    className="d-space-c"
                 >
                     {isTablet ? (
                         <Space>

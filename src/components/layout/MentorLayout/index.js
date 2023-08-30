@@ -21,7 +21,7 @@ import {
     UserOutlined,
     RollbackOutlined,
 } from '@ant-design/icons'
-import mtzLogoImg from '../../../assets/images/backgrounds/mtz-logo.svg'
+import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
 import { TbLock } from 'react-icons/tb'
 import {
     BsFillPersonFill,
@@ -328,7 +328,9 @@ export default function MentorLayout({ children }) {
                             <div style={{ marginLeft: 15 }}>
                                 <Avatar
                                     src={
-                                        user.avatarUrl ? user.avatarUrl : noAvt
+                                        user?.avatarUrl
+                                            ? user?.avatarUrl
+                                            : noAvt
                                     }
                                     size={32}
                                     icon={<UserOutlined />}

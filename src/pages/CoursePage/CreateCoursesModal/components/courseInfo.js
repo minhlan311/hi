@@ -206,14 +206,12 @@ export default function CourseInfo({ form, data }) {
             autoComplete="off"
             initialValues={{ plan: 'PREMIUM' }}
         >
-            <div className={isMobile || isTablet ? null : 'd-space-flex'}>
+            <div className={isMobile || isTablet ? null : 'd-space-c'}>
                 <div style={isMobile || isTablet ? null : { width: '80%' }}>
-                    <div
-                        className={isMobile || isTablet ? null : 'd-space-flex'}
-                    >
+                    <div className={isMobile || isTablet ? null : 'd-space-c'}>
                         <div
                             className={`${
-                                isMobile ? null : 'd-space-flex'
+                                isMobile ? null : 'd-space-c'
                             } upload-course`}
                             style={
                                 isMobile || isTablet ? null : { width: '30%' }
@@ -320,7 +318,7 @@ export default function CourseInfo({ form, data }) {
                     </div>
 
                     <div
-                        className={isMobile ? null : 'd-space-flex'}
+                        className={isMobile ? null : 'd-space-c'}
                         style={isMobile ? null : { margin: '10px 0 15px' }}
                     >
                         <Form.Item

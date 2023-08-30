@@ -50,7 +50,7 @@ export default function Course() {
         if (limit > 0) {
             const payload = {
                 filterQuery: {
-                    userId: user._id,
+                    userId: user?._id,
                     targetModel: 'COURSE',
                 },
 
