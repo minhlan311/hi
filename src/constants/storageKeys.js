@@ -1,6 +1,0 @@
-export const CURRENT_PATH = 'qzbxnulvxwbixthjovrf'
-export const ACCESS_TOKEN = 'cylimzszhkjmdnqxcwro'
-export const USER_INFO = 'mbqxdfaljzdrafvvldpc'
-export const LESSON_INFO = 'jsfhiusfghiueshfhs'
-export const SUBJECT_INFO = 'jsfhiusfghSCFJBXZJKBVJSGueshfhs'
-export const COURSE_INFO = 'askjghakjsgkashgkajhskg'
