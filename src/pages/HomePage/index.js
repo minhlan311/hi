@@ -17,6 +17,9 @@ import { useDispatch } from 'react-redux'
 import { getEducationDetailRequest } from '../../slices/education'
 import Intro from './Intro'
 import TopCourses from './TopCourses'
+import VideoContent from './VideoContent/VideoContent'
+import News from './News/News'
+import CourseCalender from './CourseCalender/CourseCalender'
 
 const HomePage = () => {
     const history = useHistory()
@@ -41,11 +44,9 @@ const HomePage = () => {
             <Intro />
             <Cooperate />
             <TopCourses />
-            {/* <Announcement /> */}
-            {/* <AskingQuestion />
-            <StudyDocuments />
-            <Exam />
-            <UniversitySubjects /> */}
+            <VideoContent />
+            <CourseCalender />
+            <News />
             <Footer />
         </div>
     )
