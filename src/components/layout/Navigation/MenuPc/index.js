@@ -2,14 +2,19 @@ import { Link } from 'react-router-dom'
 import './styles.scss'
 import { Col, Row, Space } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
+import Header from '../../Header/Header'
 export default function MenuPc() {
     const menu = [
         {
             label: 'Giới thiệu',
-            children: [],
+            href: '/',
         },
         {
-            label: 'Du học các nước',
+            label: 'Giáo viên',
+            href: '/',
+        },
+        {
+            label: 'Khóa học',
             children: [
                 {
                     label: 'DU HỌC ANH',
@@ -202,78 +207,99 @@ export default function MenuPc() {
                 },
             ],
         },
+
         {
-            label: 'Thực tập có lương',
-            children: [{}],
+            label: 'Luyện thi',
+            href: '/',
         },
         {
-            label: 'Định cư - Thực tập',
-            children: [{}],
+            label: 'Lịch khai giảng',
+            href: '/',
         },
         {
-            label: 'Ngành hot',
-            children: [{}],
+            label: 'Trách nhiệm',
+            href: '/',
         },
         {
-            label: 'Trường học',
-            children: [],
+            label: 'Tin tức',
+            href: '/',
         },
         {
-            label: 'XK Lao động',
-            children: [],
+            label: 'Hỏi đáp',
+            href: '/',
         },
         {
-            label: 'Đào tạo ngoại ngữ',
-            children: [{}],
-        },
-        {
-            label: 'Tin tức - Học bổng',
-            children: [],
-        },
-        {
-            label: "FAQ'S",
-            children: [],
+            label: 'Thi đấu',
+            href: '/',
         },
     ]
     return (
         <div className="menu">
-            <div className="menuItem mtz-container">
-                {menu.map((item) => (
-                    <div key={item.label} className="menuLabel">
-                        <div className="labelItem">
-                            <Space style={{ width: '100%' }} size="small">
-                                {item.label}
-                                {item.children.length > 0 && <DownOutlined />}
-                            </Space>
-                            <div className="arr"></div>
-                        </div>
-                        <div className="chilMenu mtz-container">
-                            <Row justify="space-between" gutter={24}>
-                                {item.children.map((chil) => (
-                                    <Col
-                                        span={6}
-                                        className="chil"
-                                        key={chil.label}
-                                    >
-                                        <h3>{chil.label}</h3>
-                                        {chil?.menuChild?.map((menuChil) => (
-                                            <Space
-                                                style={{ width: '100%' }}
-                                                direction="vertical"
-                                                key={menuChil.childLabel}
+            <Header>
+                <div className="menuItem">
+                    {menu.map((item) => (
+                        <div key={item.label} className="menuLabel">
+                            <div className="labelItem">
+                                <Space style={{ width: '100%' }} size="small">
+                                    {item?.href ? (
+                                        <Link to={item.href} className="title">
+                                            {item.label}
+                                        </Link>
+                                    ) : (
+                                        <div className="title">
+                                            {item.label}
+                                        </div>
+                                    )}
+                                    {item?.children?.length > 0 && (
+                                        <DownOutlined />
+                                    )}
+                                </Space>
+                                {item?.children?.length > 0 && (
+                                    <div className="arr"></div>
+                                )}
+                            </div>
+                            {item?.children?.length > 0 && (
+                                <div className="chilMenu uc-container">
+                                    <Row justify="space-between" gutter={24}>
+                                        {item.children.map((chil) => (
+                                            <Col
+                                                span={6}
+                                                className="chil"
+                                                key={chil.label}
                                             >
-                                                <Link to={menuChil.href}>
-                                                    {menuChil.childLabel}
-                                                </Link>
-                                            </Space>
+                                                <h3>{chil.label}</h3>
+                                                {chil?.menuChild?.map(
+                                                    (menuChil) => (
+                                                        <Space
+                                                            style={{
+                                                                width: '100%',
+                                                            }}
+                                                            direction="vertical"
+                                                            key={
+                                                                menuChil.childLabel
+                                                            }
+                                                        >
+                                                            <Link
+                                                                to={
+                                                                    menuChil.href
+                                                                }
+                                                            >
+                                                                {
+                                                                    menuChil.childLabel
+                                                                }
+                                                            </Link>
+                                                        </Space>
+                                                    )
+                                                )}
+                                            </Col>
                                         ))}
-                                    </Col>
-                                ))}
-                            </Row>
+                                    </Row>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            </Header>
         </div>
     )
 }

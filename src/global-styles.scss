@@ -1,3 +1,13 @@
+:root {
+    --black: #000;
+    --blackBg: #1f1e1f;
+    --white: #fff;
+    --whiteBg: #fff;
+    --lighish-white: #f4f4f4;
+    --bgColor: #f4f4f4;
+    --bgColor2: #0e3a23;
+    --defaultColor: #f2184f;
+}
 *,
 ::before,
 ::after {
@@ -48,27 +58,38 @@ body {
     overflow-x: hidden;
     font-family: 'Inter';
     font-size: 0.938rem;
-    background-color: #e5e5e5;
+    background-color: var(--lighish-white);
     color: #3f3c4c;
 }
-.mtz-container {
+.uc-container {
     width: min(100% - 15px, 1330px);
     margin-inline: auto;
 }
 
-.mtz-container-m {
+.uc-container-2 {
+    width: min(100% - 15px, 1330px);
+    margin-inline: auto;
+}
+
+.uc-container-3 {
+    width: min(100% - 360px, 1330px);
+    margin-inline: auto;
+}
+
+.uc-container-m {
     padding: 0 30px;
     margin: 0 auto;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-p,
-ul {
-    margin-bottom: 10px;
-}
+// }
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// p,
+// ul {
+//     margin-bottom: 10px;
+// }
 
 // ul {
 //   margin: 0;
@@ -183,13 +204,13 @@ button {
     padding-bottom: 30px;
 }
 
-.d-col-center {
+.d-col-c {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
 }
-.d-space-flex {
+.d-space-c {
     display: flex;
     justify-content: space-between;
     align-items: center;

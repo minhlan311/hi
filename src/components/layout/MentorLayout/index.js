@@ -21,7 +21,7 @@ import {
     UserOutlined,
     RollbackOutlined,
 } from '@ant-design/icons'
-import mtzLogoImg from '../../../assets/images/backgrounds/logo-full.png'
+import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
 import { TbLock } from 'react-icons/tb'
 import {
     BsFillPersonFill,

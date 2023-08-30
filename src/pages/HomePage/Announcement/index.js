@@ -96,7 +96,7 @@ const Announcement = () => {
         return (
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } announcement`}
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}

@@ -201,7 +201,7 @@ const QuestionForm = (props) => {
 
     return (
         <>
-            <div className="d-col-center">
+            <div className="d-col-c">
                 <Space>
                     <Button
                         onClick={() => {

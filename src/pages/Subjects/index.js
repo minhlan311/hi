@@ -13,7 +13,7 @@ const Subjects = () => {
             <Navigation />
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } subject-page`}
                 style={{ marginTop: 80 }}
             >

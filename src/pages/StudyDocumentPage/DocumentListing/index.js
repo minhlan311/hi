@@ -534,7 +534,7 @@ const DocumentListing = ({ type, screen, createdById }) => {
         <>
             <div className="group-filter-container mb-15">
                 {isMobile || isTablet ? (
-                    <Form form={form} className="d-space-flex">
+                    <Form form={form} className="d-space-c">
                         {' '}
                         <Form.Item>
                             <Space>

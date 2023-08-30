@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { Button, Form, Input, Row, Space, message } from 'antd'
 
 import loginIntroduceImg from '../../assets/images/login/login-introduce-image.png'
-import mtzLogoImg from '../../assets/images/backgrounds/logo-full.png'
+import mtzLogoImg from '../../assets/images/backgrounds/logo.svg'
 
 import { ROUTERS_URL } from '../../constants/routerUrl'
 import { REGEX_PATTERN } from '../../constants'

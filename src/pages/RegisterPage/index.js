@@ -28,7 +28,7 @@ import {
     educationDetailSelector,
 } from '../../slices/education'
 import registerImg from '../../assets/images/login/img-register.png'
-import mtzLogoImg from '../../assets/images/backgrounds/logo-full.png'
+import mtzLogoImg from '../../assets/images/backgrounds/logo.svg'
 import mentorImg from '../../assets/images/login/mentor.svg'
 import studentImg from '../../assets/images/login/student.svg'
 import pupilImg from '../../assets/images/login/pupil.svg'

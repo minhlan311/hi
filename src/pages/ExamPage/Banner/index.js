@@ -11,7 +11,7 @@ const Banner = () => {
     return (
         <div
             className={`${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } pc`}
             style={{ marginTop: 80 }}
         >

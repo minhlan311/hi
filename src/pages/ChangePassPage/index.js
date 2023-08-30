@@ -45,8 +45,8 @@ export default function ChangePassPage() {
             <div
                 className={
                     isMobile || isTablet
-                        ? 'mtz-container-m d-col-center'
-                        : 'mtz-container d-space-flex'
+                        ? 'uc-container-m d-col-c'
+                        : 'uc-container d-space-c'
                 }
                 style={{ marginTop: 80, padding: '50px 0' }}
             >
@@ -61,7 +61,7 @@ export default function ChangePassPage() {
                             ? { textAlign: 'center' }
                             : { width: '48%' }
                     }
-                    className="mtz-container-m"
+                    className="uc-container-m"
                 >
                     <h2 style={{ textAlign: 'center', margin: '35px auto' }}>
                         Đổi mật khẩu

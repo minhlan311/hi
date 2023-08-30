@@ -93,7 +93,7 @@ export default function ShowProfile({ id }) {
                     </div>
                 </div>
             ) : (
-                <div className="d-col-center">
+                <div className="d-col-c">
                     <div className="popover-bg">
                         <img
                             src={

@@ -2,7 +2,7 @@
 import React, { memo, useEffect } from 'react'
 import { List, Space, Typography } from 'antd'
 
-import mtzLogoImg from '../../../assets/images/backgrounds/logo-full.png'
+import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
 import mtzFacebookIcon from '../../../assets/images/homepage/facebook-icon.svg'
 import mtzInstagramIcon from '../../../assets/images/homepage/instagram-icon.svg'
 import mtzTwitterIcon from '../../../assets/images/homepage/twitter-icon.svg'

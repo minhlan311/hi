@@ -262,7 +262,7 @@ const Pedagogies = () => {
             <div>
                 {isMobile ? <h3>Danh sách câu hỏi</h3> : null}
                 {isMobile || isTablet ? (
-                    <div className="d-space-flex" style={{ width: '100%' }}>
+                    <div className="d-space-c" style={{ width: '100%' }}>
                         <Form.Item>
                             <Button onClick={() => setOpen(!open)}>Lọc</Button>
                         </Form.Item>

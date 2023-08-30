@@ -49,7 +49,7 @@ const StudyDocuments = () => {
     return (
         <div
             className={`${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } mtz-study-documents pb-30`}
         >
             <Row className="mtz-study-documents-header pb-15">

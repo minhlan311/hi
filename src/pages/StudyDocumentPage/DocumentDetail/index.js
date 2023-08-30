@@ -728,7 +728,7 @@ const DocumentDetail = () => {
             <Navigation />
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } mtz-document-page`}
                 style={{ marginTop: 80 }}
             >

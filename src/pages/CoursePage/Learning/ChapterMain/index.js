@@ -348,7 +348,7 @@ export default function ChapterMain() {
     return data?.length > 0 ? (
         <div
             className={`mtz-prf-chapter-main ${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } `}
             style={{ marginTop: 90 }}
         >
@@ -498,7 +498,7 @@ export default function ChapterMain() {
                                             >
                                                 <div>
                                                     {isDoing ? (
-                                                        <div className="d-space-flex">
+                                                        <div className="d-space-c">
                                                             <Space>
                                                                 <h3
                                                                     style={{
@@ -700,7 +700,7 @@ export default function ChapterMain() {
                                             )}
                                         </div>
                                         <div
-                                            className="d-space-flex"
+                                            className="d-space-c"
                                             style={{ padding: '10px 0' }}
                                         >
                                             <Space>

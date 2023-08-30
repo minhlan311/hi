@@ -103,7 +103,7 @@ const UniversitySubjects = () => {
         return (
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } mtz-university-subjects pb-30`}
             >
                 <Skeleton active />
@@ -120,7 +120,7 @@ const UniversitySubjects = () => {
     return (
         <div
             className={`${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } mtz-university-subjects pb-30`}
         >
             <Row className="mtz-university-header pb-15 pt-15">
