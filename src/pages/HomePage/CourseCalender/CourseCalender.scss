@@ -52,20 +52,23 @@
             margin-top: 50px;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
             .col {
+                padding: 0;
+                margin: 0;
+
                 border-radius: 20px;
                 .imgCol {
-                    width: 100%;
                     .imgColin {
                         object-fit: cover;
-                        width: 386px;
+                        width: 390px;
                         height: 165px;
                         border-radius: 10px 10px 0 0;
                     }
                 }
                 .contentList {
+                    border: 1px solid rgba(0, 0, 0, 0.099);
                     text-align: start;
-                    width: 386px;
                     border-radius: 0 0 10px 10px;
                     .flexPrice {
                         text-align: start;
