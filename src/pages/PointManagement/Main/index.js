@@ -66,7 +66,7 @@ export default function Main({
     return (
         <div>
             <div
-                className="d-space-flex"
+                className="d-space-c"
                 style={{ width: '100%', margin: '15px 0 ' }}
             >
                 {isMobile || isTablet ? null : <b>Lịch sử giao dịch</b>}

@@ -19,7 +19,7 @@ export function* getHistory({ payload }) {
     try {
         const response = yield call(() => {
             return axios.get(
-                settings.API_URL + HISTORY_PATH + user._id,
+                settings.API_URL + HISTORY_PATH + user?._id,
                 payload,
                 {
                     headers: setHeader(),
@@ -41,7 +41,7 @@ export function* updateHistory({ payload }) {
     try {
         const response = yield call(() => {
             return axios.put(
-                settings.AUTH_URL + HISTORY_PATH + user._id,
+                settings.AUTH_URL + HISTORY_PATH + user?._id,
                 payload,
                 {
                     headers: setHeader(),

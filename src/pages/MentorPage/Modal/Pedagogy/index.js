@@ -141,7 +141,7 @@ export default function ModalOpen(props) {
     const handleReply = () => {
         const payload = {
             pedagogyId: dataDetail.id,
-            userId: user._id,
+            userId: user?._id,
             answer: answer,
         }
         axiosInstane

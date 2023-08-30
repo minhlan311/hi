@@ -302,17 +302,17 @@ const TestDetail = () => {
                     <div
                         className={`${
                             isMobile || isTablet
-                                ? 'mtz-container-m'
-                                : 'mtz-container'
+                                ? 'uc-container-m'
+                                : 'uc-container'
                         } test-detail-conainer`}
                     >
                         <BreadCrumb breadcrumbData={breadcrumbData} />
                         <Row className="mtz-test-detail">
-                            <div className="header-timer d-space-flex">
+                            <div className="header-timer d-space-c">
                                 {isMobile ? (
                                     <div style={{ width: '100%' }}>
                                         <h4>{examDetail?.data?.name} </h4>{' '}
-                                        <div className="d-space-flex">
+                                        <div className="d-space-c">
                                             <div className="tag-label">
                                                 {
                                                     examDetail?.data
@@ -392,7 +392,7 @@ const TestDetail = () => {
 
                             {/* <Progress percent={0} showInfo={false} /> */}
 
-                            <div className="action-footer d-space-flex">
+                            <div className="action-footer d-space-c">
                                 <Tooltip
                                     title={isMobile ? 'Kiểm tra lại' : null}
                                 >

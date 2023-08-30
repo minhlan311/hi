@@ -16,7 +16,7 @@ export default function Profile() {
             <Navigation />
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } mtz-profilepage`}
                 style={{ marginTop: 80 }}
             >

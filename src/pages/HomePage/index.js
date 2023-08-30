@@ -15,6 +15,11 @@ import './styles.scss'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getEducationDetailRequest } from '../../slices/education'
+import Intro from './Intro'
+import TopCourses from './TopCourses'
+import VideoContent from './VideoContent/VideoContent'
+import News from './News/News'
+import CourseCalender from './CourseCalender/CourseCalender'
 
 const HomePage = () => {
     const history = useHistory()
@@ -36,12 +41,12 @@ const HomePage = () => {
         <div className="mtz-homepage">
             <Navigation />
             <Banner />
+            <Intro />
             <Cooperate />
-            <Announcement />
-            <AskingQuestion />
-            <StudyDocuments />
-            <Exam />
-            <UniversitySubjects />
+            <TopCourses />
+            <VideoContent />
+            <CourseCalender />
+            <News />
             <Footer />
         </div>
     )

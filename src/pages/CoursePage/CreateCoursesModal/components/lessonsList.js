@@ -341,7 +341,7 @@ export default function LessonsList({ coursesId, educations }) {
                                 key={item._id}
                                 extra={<TopicAction topicData={item} />}
                             >
-                                <div className="d-space-flex">
+                                <div className="d-space-c">
                                     <Button
                                         type="primary"
                                         onClick={() => {
@@ -385,7 +385,7 @@ export default function LessonsList({ coursesId, educations }) {
                                                 key={less._id}
                                                 style={{ marginBottom: 10 }}
                                             >
-                                                <div className="d-space-flex">
+                                                <div className="d-space-c">
                                                     {less.name}
                                                     <Space size="middle">
                                                         <Space>

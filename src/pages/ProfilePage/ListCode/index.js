@@ -45,7 +45,7 @@ const ListCode = (props) => {
                 filterQuery: {
                     targetId: documentId,
                     targetModel: 'DOCUMENT',
-                    userId: user._id,
+                    userId: user?._id,
                 },
                 options: {
                     pagination: false,
@@ -60,7 +60,7 @@ const ListCode = (props) => {
         const payload = {
             targetId: documentId,
             targetModel: 'DOCUMENT',
-            userId: user._id,
+            userId: user?._id,
             ...values,
         }
         dispatch(addCodeRequest(payload))
@@ -80,7 +80,7 @@ const ListCode = (props) => {
                 filterQuery: {
                     targetId: documentId,
                     targetModel: 'DOCUMENT',
-                    userId: user._id,
+                    userId: user?._id,
                 },
                 options: {
                     pagination: false,
@@ -103,7 +103,7 @@ const ListCode = (props) => {
                 filterQuery: {
                     targetId: documentId,
                     targetModel: 'DOCUMENT',
-                    userId: user._id,
+                    userId: user?._id,
                 },
                 options: {
                     limit: 10,

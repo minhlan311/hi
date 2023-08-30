@@ -104,7 +104,7 @@ const Exams = () => {
 
     const [filterData, setFilterData] = useState({
         filterQuery: {
-            createdById: user._id,
+            createdById: user?._id,
         },
         options: {
             limit: 10,
@@ -462,7 +462,7 @@ const Exams = () => {
                 {/* <AddExams openAdd={openAdd} setOpenAdd={setOpenAdd} /> */}
                 {isMobile ? <h3>Quản lý đề thi thử</h3> : null}
                 {isMobile || isTablet ? (
-                    <div className="d-space-flex">
+                    <div className="d-space-c">
                         <Space>
                             <Form.Item>
                                 <Button onClick={() => setOpen(!open)}>
@@ -512,7 +512,7 @@ const Exams = () => {
                         <Form
                             form={form}
                             autoComplete="off"
-                            className="d-space-flex"
+                            className="d-space-c"
                             initialValues={{
                                 educationType: {
                                     value: 'UNIVERSITY',

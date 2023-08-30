@@ -11,6 +11,7 @@
             color: #101010;
         }
         h3 {
+            margin-top: 10px;
             font-size: 50px;
             font-weight: 700;
             color: #101010;
@@ -21,6 +22,7 @@
             display: flex;
             gap: 20px;
             .button {
+                border: 2px solid #e0e0e0;
                 justify-content: center;
                 min-width: 170px;
                 border-radius: 30px;
@@ -34,6 +36,7 @@
             .buttonActive {
                 background-color: #f2184f;
                 color: white;
+                border: none;
                 justify-content: center;
                 min-width: 170px;
                 border-radius: 30px;
@@ -61,6 +64,7 @@
                     }
                 }
                 .contentList {
+                    text-align: start;
                     width: 386px;
                     border-radius: 0 0 10px 10px;
                     .flexPrice {

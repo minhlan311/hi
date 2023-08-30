@@ -1,15 +1,19 @@
-import { Typography } from 'antd'
+import { Button, Card, Space, Typography } from 'antd'
 import React, { memo } from 'react'
 
-import slickIonRight from '../../../assets/icons/slick-icon-right.png'
-import slickIconLeft from '../../../assets/icons/slick-icon-left.png'
-import Slider from 'react-slick'
-import './styles.scss'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { useMediaQuery } from 'react-responsive'
+import { BsArrowRight } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
+import { useMediaQuery } from 'react-responsive'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
+import book from '../../../assets/icons/book.svg'
+import point2 from '../../../assets/icons/point2.svg'
+import slickIconLeft from '../../../assets/icons/slick-icon-left.png'
+import slickIonRight from '../../../assets/icons/slick-icon-right.png'
 import { configsSelector } from '../../../slices/configs'
+import Header from '../Header/Header'
+import './styles.scss'
 
 const { Text } = Typography
 
@@ -63,7 +67,7 @@ const Cooperate = () => {
         infinite: true,
         adaptiveHeight: true,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: 4,
         slidesToScroll: 1,
         initialSlide: 0,
         autoplay: true,
@@ -98,31 +102,73 @@ const Cooperate = () => {
     }
 
     return (
-        <div className="mtz-cooperate">
-            <div
-                className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
-                }`}
-            >
-                <Text className="mtz-cooperate-title">
-                    Chúng tôi hợp tác với hơn 200 trường đại học và các Mentor
-                    hàng đầu
-                </Text>
-
+        <Header
+            title="Đội ngũ giảng viên tại UCAM"
+            titleSize={50}
+            desc="ĐỘI NGŨ GIẢNG DẠY CHUYÊN NGHIỆP"
+            descSize={20}
+            styleChild={{
+                background: 'var(--bgColor2)',
+                color: 'var(--white)',
+                padding: '120px 100px 70px 100px     ',
+                borderRadius: 12,
+            }}
+        >
+            <img src={point2} alt="point2" className="point2" />
+            <img src={book} alt="book" className="book" />
+            <div className="mtz-cooperate">
                 <div className="mtz-dt">
-                    <Slider {...settings} className="pb-15 pt-15">
+                    <Slider
+                        {...settings}
+                        dots
+                        // dotsClass="dots-slider"
+                        className="slider-mentor"
+                    >
                         {configs?.data?.logos?.map((item) => (
-                            <img
-                                key={item}
-                                src={item}
-                                alt="mtz cooperate university"
-                                className="logo-img"
-                            />
+                            <Card key={item} className="mentor-introduce">
+                                <Space
+                                    direction="vertical"
+                                    align="center"
+                                    className="it-main"
+                                >
+                                    <div className="image">
+                                        <img
+                                            src={item}
+                                            alt="mtz cooperate university"
+                                            className="logo-img"
+                                        />
+                                    </div>
+                                    <div>
+                                        <h2>Name</h2>
+
+                                        <div>Chứng chỉ Teft</div>
+                                    </div>
+
+                                    <Space className="it-butt">
+                                        <Button size="small">865 giờ</Button>
+                                        <Button size="small">
+                                            3456 học viên
+                                        </Button>
+                                    </Space>
+                                    <Button
+                                        className="sm-butt"
+                                        size="large"
+                                        style={{ width: '100%' }}
+                                    >
+                                        <Space>
+                                            <div>Chọn giáo viên</div>
+                                            <BsArrowRight
+                                                style={{ margin: '0 0 -3px' }}
+                                            />
+                                        </Space>
+                                    </Button>
+                                </Space>
+                            </Card>
                         ))}
                     </Slider>
-                </div>
+                </div>{' '}
             </div>
-        </div>
+        </Header>
     )
 }
 

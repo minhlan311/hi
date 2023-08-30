@@ -167,7 +167,7 @@ export default function ProfileInfo() {
                     <Button
                         loading={loading}
                         onClick={() => setBgBase(true)}
-                        className="bg-upload d-space-flex"
+                        className="bg-upload d-space-c"
                         icon={<CameraFilled style={{ fontSize: '16px' }} />}
                         disabled={(avtBase && true) || (fileUp && false)}
                     >

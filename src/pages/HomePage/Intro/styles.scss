@@ -1,0 +1,42 @@
+.intor-main {
+    margin-top: 50px;
+    .intro-card {
+        border-radius: 6px;
+        background-color: white;
+        min-height: 300px;
+        .icon-bg {
+            display: flex;
+            width: 64px;
+            height: 64px;
+            padding: 16px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            color: white;
+        }
+        .i-bg {
+            background: linear-gradient(48deg, #ef7944 0%, #efb284 100%);
+        }
+
+        .i-bg2 {
+            background: linear-gradient(48deg, #1e8382 0%, #63a9a8 100%);
+        }
+        .i-bg3 {
+            background: linear-gradient(48deg, #fca023 0%, #fbb449 100%);
+        }
+        .i-bg4 {
+            background: linear-gradient(48deg, #e12b2b 0%, #ff9494 100%);
+        }
+    }
+}
+.place,
+.point {
+    position: absolute;
+    top: 18%;
+}
+.place {
+    right: 18%;
+}
+.point {
+    left: 17%;
+}

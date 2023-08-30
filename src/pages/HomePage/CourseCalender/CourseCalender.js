@@ -87,7 +87,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -
@@ -116,7 +116,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -
@@ -145,7 +145,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -
@@ -174,7 +174,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -
@@ -203,7 +203,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -
@@ -232,7 +232,7 @@ export default function CourseCalender() {
                                     19:20
                                 </p>
                             </div>
-                            <div className="flex">
+                            <div className="flex" style={{ marginTop: '10px' }}>
                                 <CalenderSVG className="icons" />
                                 <p>
                                     Khai giảng 22.08.2023 - Thứ 3-5-7 Từ 17:20 -

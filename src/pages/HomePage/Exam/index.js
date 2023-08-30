@@ -16,7 +16,7 @@ const Exam = () => {
     return (
         <div
             className={`${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } exam pb-30`}
         >
             <Row gutter={10}>

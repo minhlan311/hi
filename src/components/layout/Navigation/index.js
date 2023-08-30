@@ -1,16 +1,18 @@
+import { GlobalOutlined } from '@ant-design/icons'
+import { Affix, Button, Col, Divider, Row, Space } from 'antd'
 import React, { memo, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import mtzLogoImg from '../../../assets/images/backgrounds/mtz-logo.svg'
-import './styles.scss'
-import { useMediaQuery } from 'react-responsive'
-import MenuMb from './MenuMb'
-import MenuPc from './MenuPc'
-import { onMessageListener } from '../../../firebases'
 import { useDispatch, useSelector } from 'react-redux'
-import { getStorage, setStorage } from '../../../services/storage'
+import { useMediaQuery } from 'react-responsive'
+import { Link } from 'react-router-dom'
+import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
 import { USER_INFO } from '../../../constants/storageKeys'
+import { onMessageListener } from '../../../firebases'
+import { getStorage, setStorage } from '../../../services/storage'
 import { userDetailRequest, userDetailSelector } from '../../../slices/user'
-
+import MenuPc from './MenuPc'
+import './styles.scss'
+import Header from '../Header/Header'
+import { BsFillTelephoneFill } from 'react-icons/bs'
 const Navigation = () => {
     const dispatch = useDispatch()
     const userDetail = useSelector(userDetailSelector)
@@ -61,31 +63,66 @@ const Navigation = () => {
     }, [isMobile, isTablet])
 
     return (
-        <>
-            <div
-                className={`${
-                    visible ? 'nav-fixed' : 'navn-fixed'
-                } mtz-nav-main`}
-            >
+        <div>
+            <div className="mtz-nav-main">
+                <Header>
+                    <div
+                        className={`${
+                            isMobile || isTablet
+                                ? 'uc-container-m'
+                                : 'uc-container'
+                        } d-space-c`}
+                        style={isMobile || isTablet ? { height: 70 } : null}
+                    >
+                        <Link to={'/'}>
+                            <img
+                                src={mtzLogoImg}
+                                className="logo"
+                                alt="mtz logo"
+                            />
+                        </Link>
+
+                        <div className="menu-bar">
+                            <Space size="large">
+                                <Space
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <div className="phoneIcon">
+                                        <BsFillTelephoneFill />
+                                    </div>
+                                    <div>
+                                        <p className="mb-5 hotline">Hotline</p>
+                                        <b>1900 10328</b>
+                                    </div>
+                                </Space>
+
+                                <Button
+                                    icon={<GlobalOutlined />}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    VIE
+                                </Button>
+                            </Space>
+                        </div>
+                    </div>
+                </Header>
+            </div>
+            <Affix className="affix-main">
                 <div
                     className={`${
-                        isMobile || isTablet
-                            ? 'mtz-container-m'
-                            : 'mtz-container'
-                    } d-space-flex`}
-                    style={isMobile || isTablet ? { height: 70 } : null}
+                        visible ? 'nav-fixed' : 'navn-fixed'
+                    } mtz-nav-main`}
                 >
-                    <Link className="logo" to={'/'}>
-                        <img src={mtzLogoImg} alt="mtz logo" />
-                    </Link>
-                    {isMobile || isTablet ? (
-                        <MenuMb setOpen={setOpen} open={open} />
-                    ) : (
-                        <MenuPc />
-                    )}
+                    <MenuPc />
                 </div>
-            </div>
-        </>
+            </Affix>
+        </div>
     )
 }
 

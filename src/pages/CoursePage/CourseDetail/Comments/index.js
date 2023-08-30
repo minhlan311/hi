@@ -149,7 +149,7 @@ export default function Comments(props) {
                 <div className="d-flex">
                     <div>
                         <Avatar
-                            src={user.avatarUrl ? user.avatarUrl : noAvt}
+                            src={user?.avatarUrl ? user?.avatarUrl : noAvt}
                             icon={<UserOutlined />}
                             style={{ marginRight: 10 }}
                         />

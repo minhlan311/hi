@@ -61,7 +61,7 @@ const AskingQuestion = () => {
     return (
         <div
             className={`${
-                isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                isMobile || isTablet ? 'uc-container-m' : 'uc-container'
             } mtz-submit-question pb-30`}
         >
             <div className="question-container">

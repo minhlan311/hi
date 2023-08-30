@@ -8,6 +8,7 @@
         max-width: 1200px;
         margin: auto;
         h3 {
+            margin-top: 10px;
             font-size: 50px;
             font-weight: 700;
         }
@@ -46,10 +47,16 @@
     }
 }
 .buttonMore {
+    border-radius: 10px;
     min-width: 110px;
     min-height: 45px;
     margin-top: 50px;
     color: #f2184f;
     font-weight: 600;
     border: 2px solid #f2184f;
+}
+.buttonMore:hover {
+    color: white !important;
+    border-radius: 10px;
+    background-color: #f2184f;
 }

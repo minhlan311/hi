@@ -372,7 +372,7 @@ const CourseDetailPage = ({ courseId }) => {
                     </p>
                     {data?.progressions ? (
                         <>
-                            <div className="d-space-flex">
+                            <div className="d-space-c">
                                 <p>Tiến trình hoàn thành</p>
                                 <Link style={{ marginBottom: '10px' }}>
                                     <b>{formatNumber(percent)}</b>

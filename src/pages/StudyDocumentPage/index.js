@@ -70,13 +70,13 @@ const StudyDocumentPage = () => {
             <Navigation />
             <div
                 className={`${
-                    isMobile || isTablet ? 'mtz-container-m' : 'mtz-container'
+                    isMobile || isTablet ? 'uc-container-m' : 'uc-container'
                 } mtz-document-page`}
                 style={{ marginTop: 80 }}
             >
                 <Banner />
                 <div className="mtz-documents-box-title">
-                    <Row className="mtz-documents-header d-space-flex mb-15">
+                    <Row className="mtz-documents-header d-space-c mb-15">
                         <Text className="h3-title">Tài liệu học tập</Text>
                         {isMobile ? (
                             <Tooltip
