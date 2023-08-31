@@ -72,7 +72,7 @@ const LoginPage = () => {
     const { status } = loginInfo
 
     const onFinish = async (values) => {
-        // window.location = '/'
+        window.location = '/'
         if (values.remember === true) {
             setStorage({ key: 'remember', val: values })
         } else {
