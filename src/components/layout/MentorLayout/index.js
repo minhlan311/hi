@@ -57,7 +57,7 @@ export default function MentorLayout({ children }) {
     const { Text } = Typography
     const user = getStorage(USER_INFO)
     useEffect(() => {
-        dispatch(userDetailRequest(user._id))
+        // dispatch(userDetailRequest(user?._id))
     }, [])
     const collaps = getStorage('sjklbhdjk3trfgyagvhq31s')
 

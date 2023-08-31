@@ -19,7 +19,7 @@ const Navigation = () => {
     const [educationId, setEducationId] = useState('')
     const user = getStorage(USER_INFO)
     useEffect(() => {
-        dispatch(userDetailRequest(user._id))
+        // dispatch(userDetailRequest(user?._id))
     }, [])
     useEffect(() => {
         if (userDetail.status === 'success') {

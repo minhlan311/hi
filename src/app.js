@@ -79,23 +79,23 @@ const App = () => {
     )
 
     useAxiosInterceptor(axios)
-    useEffect(() => {
-        if (userInfo) {
-            if (
-                [
-                    ROUTERS_URL.LOGIN,
-                    ROUTERS_URL.FORGOT_PASS,
-                    ROUTERS_URL.REGISTER,
-                ].includes(history.location.pathname)
-            ) {
-                history.push('/')
-            } else {
-                history.push(history.location.pathname)
-            }
-        } else {
-            history.push(history.location.pathname)
-        }
-    }, [history, userInfo])
+    // useEffect(() => {
+    //     if (userInfo) {
+    //         if (
+    //             [
+    //                 ROUTERS_URL.LOGIN,
+    //                 ROUTERS_URL.FORGOT_PASS,
+    //                 ROUTERS_URL.REGISTER,
+    //             ].includes(history.location.pathname)
+    //         ) {
+    //             history.push('/')
+    //         } else {
+    //             history.push(history.location.pathname)
+    //         }
+    //     } else {
+    //         history.push(history.location.pathname)
+    //     }
+    // }, [history, userInfo])
 
     return (
         <ToastContext.Provider value={toastValue}>
