@@ -22,20 +22,19 @@ import News from './News/News'
 import CourseCalender from './CourseCalender/CourseCalender'
 
 const HomePage = () => {
-    const history = useHistory()
-    const userInfo = useMemo(() => getStorage(USER_INFO), [])
-    const dispatch = useDispatch()
-    useEffect(() => {
-        if (!userInfo?.accessToken) {
-            history.push('/login')
-        }
-    }, [userInfo])
-    const educationId = getStorage('educationId')
-    useEffect(() => {
-        if (educationId) {
-            dispatch(getEducationDetailRequest(educationId))
-        }
-    }, [educationId])
+    // const userInfo = useMemo(() => getStorage(USER_INFO), [])
+    // const dispatch = useDispatch()
+    // useEffect(() => {
+    //     if (!userInfo?.accessToken) {
+    //         history.push('/login')
+    //     }
+    // }, [userInfo])
+    // const educationId = getStorage('educationId')
+    // useEffect(() => {
+    //     if (educationId) {
+    //         dispatch(getEducationDetailRequest(educationId))
+    //     }
+    // }, [educationId])
 
     return (
         <div className="mtz-homepage">

@@ -36,7 +36,7 @@ export default function Point({ history }) {
     const userDetail = useSelector(userDetailSelector)
 
     useEffect(() => {
-        dispatch(userDetailRequest(user._id))
+        // dispatch(userDetailRequest(user?._id))
     }, [])
 
     const [open, setOpen] = useState(false)

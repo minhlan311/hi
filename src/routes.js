@@ -3,6 +3,12 @@ import { ROUTERS_URL } from './constants/routerUrl'
 
 const routes = [
     {
+        path: '/',
+        component: lazy(() => import('./pages/HomePage')),
+        exact: true,
+        requiredAuthen: false,
+    },
+    {
         path: ROUTERS_URL.LOGIN,
         component: lazy(() => import('./pages/LoginPage')),
         requiredAuthen: false,
@@ -20,12 +26,7 @@ const routes = [
         requiredAuthen: false,
         exact: true,
     },
-    {
-        path: '/',
-        component: lazy(() => import('./pages/HomePage')),
-        exact: true,
-        requiredAuthen: true,
-    },
+
     {
         path: ROUTERS_URL.DOCUMENTS,
         component: lazy(() => import('./pages/StudyDocumentPage')),
