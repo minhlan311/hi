@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { memo } from 'react'
 import { Row, Col, Button } from 'antd'
-import mtzTestImg from '../../../assets/images/exam-page/test-img.svg'
+import mtzTestImg from '../../../assets/images/exam-page/test-img.png'
 // import "./styles.scss";
 import './test.scss'
 import { useMediaQuery } from 'react-responsive'
