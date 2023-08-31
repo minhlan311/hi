@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import './styles.scss'
-import { Col, Row, Space } from 'antd'
+import { Col, Row, Space, Button } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import Header from '../../Header/Header'
+import { getStorage } from '../../../../services/storage'
+import { USER_INFO } from '../../../../constants/storageKeys'
 export default function MenuPc() {
+    const user = getStorage(USER_INFO)
     const menu = [
         {
             label: 'Giới thiệu',
@@ -231,6 +234,24 @@ export default function MenuPc() {
         {
             label: 'Thi đấu',
             href: '/',
+        },
+        {
+            label: (
+                <>
+                    {!user && (
+                        <Button
+                            style={{
+                                backgroundColor: '#F2184F',
+                                color: 'white',
+                                fontWeight: 600,
+                            }}
+                        >
+                            Đăng nhâp /Đăng ký
+                        </Button>
+                    )}
+                </>
+            ),
+            href: '/login',
         },
     ]
     return (
