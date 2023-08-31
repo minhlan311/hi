@@ -17,9 +17,9 @@ const RoutesPage = ({ routesItem, isAuthenticated }) => (
         <Switch>
             {routesItem.map((route) => {
                 if (route?.requiredAuthen) {
-                    if(route.path.includes('payment')) {
-                        const url = window.location.href;
-                        window.localStorage.setItem('urlCallback', url);
+                    if (route.path.includes('payment')) {
+                        const url = window.location.href
+                        window.localStorage.setItem('urlCallback', url)
                     }
                     return (
                         <PrivateRoute

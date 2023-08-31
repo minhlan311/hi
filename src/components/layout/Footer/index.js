@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { memo, useEffect } from 'react'
 import { List, Space, Typography } from 'antd'
+import { Link } from 'react-router-dom'
+import { ReactComponent as LogoSVG } from '../../../assets/icons/logo_light.svg'
+import { ReactComponent as DCMASVG } from '../../../assets/icons/verify.svg'
+import { ReactComponent as FbSVG } from '../../../assets/icons/fb.svg'
+import { ReactComponent as BeSVG } from '../../../assets/icons/be.svg'
+import { ReactComponent as LinkInSVG } from '../../../assets/icons/linkIn.svg'
 
-import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
-import mtzFacebookIcon from '../../../assets/images/homepage/facebook-icon.svg'
-import mtzInstagramIcon from '../../../assets/images/homepage/instagram-icon.svg'
-import mtzTwitterIcon from '../../../assets/images/homepage/twitter-icon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import './styles.scss'
 import '../../../assets/css/bonus.css'
@@ -26,91 +28,115 @@ const Footer = () => {
         <>
             <div className="footer">
                 <div className="footer-col">
-                    <div className="grid wide">
-                        <div className="rowM">
-                            <div className="col-footer l-3 m-6 c-6">
+                    <div className="grid ">
+                        <div className="rowM gap-3">
+                            <div
+                                className="col-footer l-3 m-6 c-6"
+                                style={{ textAlign: 'start' }}
+                            >
                                 <div className="col-footer-left">
                                     <Space
                                         direction="vertical"
-                                        style={{ position: 'relative' }}
+                                        style={{
+                                            position: 'relative',
+                                        }}
                                     >
                                         <div className="mtz-footer-logo">
-                                            <img
-                                                src={mtzLogoImg}
-                                                alt="mtz logo"
+                                            <LogoSVG
+                                                style={{ color: 'white' }}
                                             />
                                         </div>
-                                        <Text className="footer-title">
-                                            Follow Us
-                                        </Text>
+
                                         <Space className="social-group">
-                                            {data?.socials?.map((item) => (
-                                                <div key={item._id}>
-                                                    {item.type ===
-                                                    'FACEBOOK' ? (
-                                                        <img
-                                                            src={
-                                                                mtzFacebookIcon
-                                                            }
-                                                            alt="social network"
-                                                            onClick={() =>
-                                                                (window.location.href =
-                                                                    item.url)
-                                                            }
-                                                        />
-                                                    ) : null}
-                                                    {item.type === 'TWITTER' ? (
-                                                        <img
-                                                            src={mtzTwitterIcon}
-                                                            alt="social network"
-                                                            onClick={() =>
-                                                                (window.location.href =
-                                                                    item.url)
-                                                            }
-                                                        />
-                                                    ) : null}{' '}
-                                                    {item.type ===
-                                                    'INSTAGRAM' ? (
-                                                        <img
-                                                            src={
-                                                                mtzInstagramIcon
-                                                            }
-                                                            alt="social network"
-                                                            onClick={() =>
-                                                                (window.location.href =
-                                                                    item.url)
-                                                            }
-                                                        />
-                                                    ) : null}
-                                                </div>
-                                            ))}
+                                            <div style={{ textAlign: 'start' }}>
+                                                <DCMASVG />
+                                            </div>
                                         </Space>
                                     </Space>
                                 </div>
                             </div>
                             <div className="col-footer l-3 m-6 c-6">
-                                <div className="col-footer-right">
-                                    <Space direction="vertical">
-                                        <Text className="footer-heading">
-                                            LIÊN HỆ
+                                <div className="col-footer-right max-w">
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            VĂN PHÒNG TP HCM
                                         </Text>
-                                        {data?.contacts?.map((item) => (
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                }}
-                                                key={item._id}
-                                            >
-                                                <Text className="footer-title">
-                                                    {item.name} -{' '}
-                                                    {item.phoneNumber}
-                                                </Text>
-                                                <Text className="footer-title">
-                                                    {item.email}
-                                                </Text>
-                                            </div>
-                                        ))}
+
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                color: '#FFFFFF',
+                                            }}
+                                        >
+                                            <ul className="ul-fff">
+                                                <li>
+                                                    Địa chỉ: 286 Phạm Hùng, Hoà
+                                                    Phước, Hòa Vang, Đà Nẵng
+                                                </li>
+                                                <li>Hotline: 0359006655</li>
+                                            </ul>
+                                        </div>
+                                    </Space>
+                                </div>
+                            </div>
+                            <div className="col-footer l-3 m-6 c-6">
+                                <div className="col-footer-left max-w">
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            CHI NHÁNH ĐÀ NẴNG
+                                        </Text>
+                                        <ul className="ul-fff">
+                                            <li>
+                                                Địa chỉ: 286 Phạm Hùng, Hoà
+                                                Phước, Hòa Vang, Đà Nẵng
+                                            </li>
+                                            <li>Hotline: 0359006655</li>
+                                        </ul>
+                                    </Space>
+                                </div>
+                            </div>
+                            <div className="col-footer l-3 m-6 c-6">
+                                <div className="col-footer-right max-w">
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            CHI NHÁNH HÀ NỘI
+                                        </Text>
+                                        <ul className="ul-fff">
+                                            <li>
+                                                Địa chỉ: 286 Phạm Hùng, Hoà
+                                                Phước, Hòa Vang, Đà Nẵng
+                                            </li>
+                                            <li>Hotline: 035900665</li>
+                                        </ul>
+                                    </Space>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid ">
+                        <div className="rowM gap-3">
+                            <div
+                                className="col-footer l-3 m-6 c-6"
+                                style={{ textAlign: 'start' }}
+                            >
+                                <div className="col-footer-left max-w">
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            Giới thiệu
+                                        </Text>
 
                                         <div
                                             style={{
@@ -118,91 +144,126 @@ const Footer = () => {
                                                 flexDirection: 'column',
                                             }}
                                         >
-                                            <h4
-                                                style={{
-                                                    color: 'white',
-                                                    margin: 0,
-                                                }}
-                                            >
-                                                Liên hệ tài trợ - đối tác:
-                                            </h4>
-                                            {data?.partners?.map((pm) => (
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                    }}
-                                                    key={pm._id}
-                                                >
-                                                    <Text className="footer-title">
-                                                        {pm.name} -{' '}
-                                                        {pm.phoneNumber}
-                                                    </Text>
-                                                    <Text className="footer-title">
-                                                        {pm.email}
-                                                    </Text>
-                                                </div>
-                                            ))}
+                                            <ul className="ul-fff">
+                                                <li>Về chúng tôi</li>
+                                                <li>Đội ngũ giáo viên</li>
+                                                <li>Khách hàng và đối tác</li>
+                                                <li>Tin tức</li>
+                                            </ul>
                                         </div>
                                     </Space>
                                 </div>
                             </div>
                             <div className="col-footer l-3 m-6 c-6">
-                                <div className="col-footer-left">
-                                    <Space direction="vertical">
-                                        <Text className="footer-heading">
-                                            MENTORZ
+                                <div
+                                    className="col-footer-right max-w"
+                                    style={{ textAlign: 'start' }}
+                                >
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            Tuyển dụng
                                         </Text>
-                                        <Text className="footer-title">
-                                            Về MentorZ
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Tuyển dụng giảng viên
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Liên hệ MentorZ
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Trả góp – Hỗ trợ tài chính
-                                        </Text>
-                                        <Text className="footer-title">
-                                            FAQs
-                                        </Text>
+
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                            }}
+                                        >
+                                            <ul className="ul-fff">
+                                                <li>Become a Teacher</li>
+                                                <li>Cơ hội việc làm</li>
+                                                <li>Sổ tay nhân viên</li>
+                                                <li>Góc học tập</li>
+                                            </ul>
+                                        </div>
                                     </Space>
                                 </div>
                             </div>
                             <div className="col-footer l-3 m-6 c-6">
-                                <div className="col-footer-right">
-                                    <Space direction="vertical">
-                                        <Text className="footer-heading">
-                                            LINKS
+                                <div
+                                    className="col-footer-left max-w"
+                                    style={{ textAlign: 'start' }}
+                                >
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            Cung cấp giáo viên bản ngữ
                                         </Text>
-                                        <Text className="footer-title">
-                                            ACCA
+                                        <ul className="ul-fff">
+                                            <li>Mầm non & Tiểu học</li>
+                                            <li>Trường THCS-THPT</li>
+                                            <li>Đại học và sau đại học</li>
+                                            <li>Trung tâm Anh Ngữ</li>
+                                        </ul>
+                                    </Space>
+                                </div>
+                            </div>
+                            <div className="col-footer l-3 m-6 c-6">
+                                <div
+                                    className="col-footer-right max-w"
+                                    style={{ textAlign: 'start' }}
+                                >
+                                    <Space
+                                        direction="vertical"
+                                        style={{ textAlign: 'start' }}
+                                    >
+                                        <Text className="footer-heading text-red-heading">
+                                            Khóa học tiếng Anh
                                         </Text>
-                                        <Text className="footer-title">
-                                            Kinh nghiệm tuyển dụng
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Test
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Voucher
-                                        </Text>
-                                        <Text className="footer-title">
-                                            Excel thực hành
-                                        </Text>
+                                        <ul className="ul-fff">
+                                            <li>Tiếng anh 1 kèm 1</li>
+                                            <li>Tiếng Anh cho trẻ em </li>
+                                            <li>Tiếng Anh cho người đi làm</li>
+                                            <li>Tiếng Anh Doanh nghiệp</li>
+                                        </ul>
                                     </Space>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div className="grid wide">
-                <div className="rowM">
-                    <div className="col l-12 m-12 c-12">
-                        © 2022. MentorZ Vietnam Joint Stock Company.
+                    <hr className="hr-footer" />
+                    <div className="grid ">
+                        <div className="rowM flex-col-footer-bottom">
+                            <div
+                                className="white-color-link container-link"
+                                style={{ textAlign: 'start' }}
+                            >
+                                <Link className="white-color-link hover-link-white">
+                                    Quyền riêng tư
+                                </Link>
+                                l {''}
+                                <Link className="white-color-link hover-link-white">
+                                    Chính sách bảo mật
+                                </Link>
+                                l {''}
+                                <Link className="white-color-link hover-link-white">
+                                    Điều khoản
+                                </Link>
+                                l {''}
+                                <Link className="white-color-link hover-link-white">
+                                    Bản quyền
+                                </Link>
+                                l {''}
+                                <Link className="white-color-link hover-link-white">
+                                    Hình thức thanh toán
+                                </Link>
+                                l {''}
+                                <Link className="white-color-link hover-link-white">
+                                    Chính sách đổi/ Hủy hoàn tiền
+                                </Link>
+                            </div>
+                            <div className="div-icons">
+                                <FbSVG className="icon-link-footer" />
+                                <BeSVG className="icon-link-footer" />
+                                <LinkInSVG className="icon-link-footer" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
