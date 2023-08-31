@@ -20,21 +20,20 @@ import TopCourses from './TopCourses'
 import VideoContent from './VideoContent/VideoContent'
 import News from './News/News'
 import CourseCalender from './CourseCalender/CourseCalender'
+import { findSubjectRequest } from '../../slices/subjects'
 
 const HomePage = () => {
     // const userInfo = useMemo(() => getStorage(USER_INFO), [])
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
     // useEffect(() => {
     //     if (!userInfo?.accessToken) {
     //         history.push('/login')
     //     }
     // }, [userInfo])
     // const educationId = getStorage('educationId')
-    // useEffect(() => {
-    //     if (educationId) {
-    //         dispatch(getEducationDetailRequest(educationId))
-    //     }
-    // }, [educationId])
+    useEffect(() => {
+        dispatch(findSubjectRequest())
+    }, [])
 
     return (
         <div className="mtz-homepage">

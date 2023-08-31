@@ -21,7 +21,7 @@ export const FIND_DOCUMENTS_PATH = '/edu/documents/find'
 export const DOCUMENTS_PATH = '/edu/documents/'
 
 // ==================== SUBJECT PATH =====================
-export const FIND_SUBJECTS_PATH = '/edu/subjects/find'
+export const FIND_SUBJECTS_PATH = '/subjects/find'
 export const SUBJECTS_PATH = '/edu/subjects/'
 
 // ==================== EXAM PATH =====================
@@ -49,7 +49,7 @@ export const FIND_CATEGORIES_PATH = '/categories/find'
 
 // ==================== Course PATH =====================
 export const COURSES_PATH = '/edu/courses/'
-export const FIND_COURSES_PATH = '/edu/courses/find'
+export const FIND_COURSES_PATH = '/courses/find'
 export const COURSES_QUIZ_PATH = '/exam/questions/find'
 export const PROGRESSIONS_PATH = '/edu/progressions/'
 export const FIND_PROGRESSIONS_PATH = '/edu/progressions/find'
