@@ -7,7 +7,7 @@ export default function News() {
     return (
         <div className="news-container">
             <div className="container-1200px">
-                <p>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
+                <p className="text-xs">ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
                 <h3>Tin tức và Góc học tập</h3>
                 <div className="title-container">
                     <div className="col">

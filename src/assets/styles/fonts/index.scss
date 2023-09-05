@@ -14,19 +14,19 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
-    src: url('../../fonts/Inter/SVN-Gilroy\ Medium.otf');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
     src: url('../../fonts/Inter/SVN-Gilroy\ Regular.otf');
 }
 
 @font-face {
     font-family: 'Inter';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     src: url('../../fonts/Inter/SVN-Gilroy\ SemiBold.otf');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../../fonts/Inter/SVN-Gilroy\ Bold.otf');
 }
