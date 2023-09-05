@@ -21,9 +21,6 @@ export default function VideoContent() {
                 </div>
                 <div className="video-content">
                     <iframe
-                        style={{
-                            borderRadius: '15px',
-                        }}
                         width="100%"
                         height="100%"
                         src="https://www.youtube.com/embed/U2rB68ouwJY?si=uVDSO-wAO6y8Rgc_"
