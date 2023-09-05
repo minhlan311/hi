@@ -6,9 +6,11 @@
     background: #f4f4f4;
     .container-1200px {
         max-width: 1200px;
+        min-height: 800px;
         margin: auto;
-        p {
+        .text-xs {
             color: #101010;
+            font-size: 20px;
         }
         h3 {
             margin-top: 10px;
@@ -52,7 +54,7 @@
             margin-top: 50px;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
+            gap: 15px;
             .col {
                 padding: 0;
                 margin: 0;

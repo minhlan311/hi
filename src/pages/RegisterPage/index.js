@@ -30,7 +30,6 @@ import {
 import registerImg from '../../assets/images/login/img-register.png'
 import mtzLogoImg from '../../assets/images/backgrounds/logo.svg'
 import mentorImg from '../../assets/images/login/mentor.svg'
-import studentImg from '../../assets/images/login/student.svg'
 import pupilImg from '../../assets/images/login/pupil.svg'
 import { ReactComponent as ArrowRight } from '../../assets/icons/arrow-right.svg'
 import checkIconImg from '../../assets/images/login/check-icon.png'
@@ -38,8 +37,7 @@ import { getStorage, removeStorage } from '../../services/storage'
 import { USER_INFO } from '../../constants/storageKeys'
 import { ACCOUNT_TYPE, EDUCATION_TYPE, REGEX_PATTERN } from '../../constants'
 import MentorForm from './MentorForm'
-import StudentForm from './StudentForm'
-import PupilForm from './PupilForm'
+// import PupilForm from './PupilForm'
 import SpinComponent from '../../components/layout/SpinComponent'
 import './styles.scss'
 import { useMediaQuery } from 'react-responsive'
@@ -50,12 +48,6 @@ const RolesDataSelection = [
         prefix: 'mentor',
         title: 'Mentor',
         imgIcon: mentorImg,
-    },
-    {
-        id: uuidv4(),
-        prefix: 'student',
-        title: 'Sinh Viên',
-        imgIcon: studentImg,
     },
     {
         id: uuidv4(),
@@ -89,10 +81,6 @@ const RegisterPage = () => {
             options: { pagination: false },
         }
         switch (roleSelected) {
-            case 'student':
-                body.filterQuery = { educationType: EDUCATION_TYPE.UNIVERSITY }
-                dispatch(getEducationsRequest(body))
-                break
             case 'pupil':
                 body.filterQuery = { educationType: EDUCATION_TYPE.HIGH_SCHOOL }
                 dispatch(getEducationsRequest(body))
@@ -138,12 +126,12 @@ const RegisterPage = () => {
     const onFinish = (values) => {
         if (!values) return
 
-        if (steps === 4 && roleSelected !== 'mentor') {
+        if (steps === 3 && roleSelected !== 'mentor') {
             handleRegister(formValues)
             return
         }
 
-        if (steps === 4 && roleSelected === 'mentor') {
+        if (steps === 3 && roleSelected === 'mentor') {
             const {
                 fullName,
                 password,
@@ -361,11 +349,6 @@ const RegisterPage = () => {
                 }
                 break
             case 3:
-                title = 'Mật khẩu'
-                subTitle =
-                    'Nhập mật khẩu gồm ít nhất sáu chữ số chữ cái và dấu câu...'
-                break
-            case 4:
                 title = 'Kiểm tra thông tin'
                 subTitle =
                     'Hãy kiểm tra lại thông tin cá nhân, của mình xem đã chuẩn chưa nhé'
@@ -384,7 +367,7 @@ const RegisterPage = () => {
     const renderActionButtons = useMemo(() => {
         return (
             <>
-                {steps !== 4 && (
+                {steps !== 3 && (
                     <Space
                         className="pt-10 pb-10"
                         direction="horizontal"
@@ -407,7 +390,7 @@ const RegisterPage = () => {
                         </Button>
                     </Space>
                 )}
-                {steps === 4 && (
+                {steps === 3 && (
                     <Space
                         className="pt-10 pb-10"
                         direction="horizontal"
@@ -513,22 +496,14 @@ const RegisterPage = () => {
         )
     }, [steps])
     const renderFormContentBySelectedRole = useMemo(() => {
-        if (steps === 2) {
-            switch (roleSelected) {
-                case 'mentor':
-                    return <MentorForm form={form} />
-                case 'student':
-                    return <StudentForm steps={steps} form={form} />
-                case 'pupil':
-                    return <PupilForm form={form} />
-                default:
-                    break
-            }
+        if (steps === 2 && roleSelected === 'mentor') {
+            return <MentorForm form={form} />
         }
     }, [steps, form, roleSelected])
+
     const renderFormContentPassword = useMemo(() => {
         return (
-            steps === 3 && (
+            steps === 2 && (
                 <>
                     <Form.Item
                         label="Mật khẩu"
@@ -613,9 +588,6 @@ const RegisterPage = () => {
                             title: 'Thông tin cơ bản',
                         },
                         {
-                            title: 'Thông tin trường học',
-                        },
-                        {
                             title: 'Bảo mật',
                         },
                     ]}
@@ -626,7 +598,7 @@ const RegisterPage = () => {
 
     const renderPreviewInfor = useMemo(() => {
         return (
-            steps === 4 &&
+            steps === 3 &&
             formValues &&
             data && (
                 <div style={{ overflowY: 'auto' }}>
@@ -721,15 +693,15 @@ const RegisterPage = () => {
                             </Space>
                         </Col>
                     </Row>
-                    <Row style={{ height: 'inherit', margin: '10px 0 10px 0' }}>
-                        <Col xs={24} xl={8} style={{ lineHeight: '35px' }}>
+                    {/* <Row style={{ height: 'inherit', margin: '10px 0 10px 0' }}> */}
+                    {/* <Col xs={24} xl={8} style={{ lineHeight: '35px' }}>
                             <Space direction="vertical">
                                 <Text className="title-label f-sz-16">
                                     Trường đại học:
                                 </Text>
                             </Space>
-                        </Col>
-                        <Col xs={24} xl={16} style={{ lineHeight: '35px' }}>
+                        </Col> */}
+                    {/* <Col xs={24} xl={16} style={{ lineHeight: '35px' }}>
                             <Space direction="vertical">
                                 <Text className="title-label f-sz-16 text-bold-600">
                                     {
@@ -741,16 +713,16 @@ const RegisterPage = () => {
                                 </Text>
                             </Space>
                         </Col>
-                    </Row>
-                    {roleSelected === 'mentor' ? (
+                    </Row> */}
+                    {/* {roleSelected === 'mentor' ? (
                         <>
                             <Row
                                 style={{
                                     height: 'inherit',
                                     margin: '10px 0 10px 0',
                                 }}
-                            >
-                                <Col
+                            > */}
+                    {/* <Col
                                     xs={24}
                                     xl={8}
                                     style={{ lineHeight: '35px' }}
@@ -760,8 +732,8 @@ const RegisterPage = () => {
                                             Trình độ đào tạo:
                                         </Text>
                                     </Space>
-                                </Col>
-                                <Col
+                                </Col> */}
+                    {/* <Col
                                     xs={24}
                                     xl={16}
                                     style={{ lineHeight: '35px' }}
@@ -772,7 +744,9 @@ const RegisterPage = () => {
                                         </Text>
                                     </Space>
                                 </Col>
-                            </Row>
+                            </Row> */}
+                    <>
+                        {roleSelected === 'mentor' && (
                             <Row
                                 style={{
                                     height: 'inherit',
@@ -860,35 +834,35 @@ const RegisterPage = () => {
                                     </Space>
                                 </Col>
                             </Row>
-                        </>
-                    ) : (
-                        <Row
-                            style={{
-                                height: 'inherit',
-                                margin: '10px 0 10px 0',
-                            }}
-                        >
-                            <Col xs={24} xl={8} style={{ lineHeight: '35px' }}>
-                                <Space direction="vertical">
-                                    <Text className="title-label f-sz-16">
-                                        Ngành học:
-                                    </Text>
-                                </Space>
-                            </Col>
-                            <Col xs={24} xl={16} style={{ lineHeight: '35px' }}>
-                                <Space direction="vertical">
-                                    <Text className="title-label f-sz-16 text-bold-600">
-                                        {
-                                            educationDetail?.data.majors.find(
-                                                (f) =>
-                                                    f._id === formValues.majorId
-                                            )?.name
-                                        }
-                                    </Text>
-                                </Space>
-                            </Col>
-                        </Row>
-                    )}
+                        )}
+                    </>
+                    : (
+                    <Row
+                        style={{
+                            height: 'inherit',
+                            margin: '10px 0 10px 0',
+                        }}
+                    >
+                        <Col xs={24} xl={8} style={{ lineHeight: '35px' }}>
+                            <Space direction="vertical">
+                                <Text className="title-label f-sz-16">
+                                    Ngành học:
+                                </Text>
+                            </Space>
+                        </Col>
+                        <Col xs={24} xl={16} style={{ lineHeight: '35px' }}>
+                            <Space direction="vertical">
+                                <Text className="title-label f-sz-16 text-bold-600">
+                                    {
+                                        educationDetail?.data?.majors?.find(
+                                            (f) => f._id === formValues.majorId
+                                        )?.name
+                                    }
+                                </Text>
+                            </Space>
+                        </Col>
+                    </Row>
+                    )
                 </div>
             )
         )

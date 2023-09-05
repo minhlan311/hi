@@ -17,6 +17,12 @@
             }
         }
         .contentList {
+            .flex {
+                gap: 10px;
+                text-align: start;
+                display: flex;
+                justify-content: start;
+            }
             border: 1px solid rgba(0, 0, 0, 0.099);
             text-align: start;
             border-radius: 0 0 10px 10px;
@@ -37,14 +43,9 @@
                 font-size: 24px;
                 margin-bottom: 20px;
             }
+
             padding: 20px;
             background-color: white;
-            .flex {
-                gap: 10px;
-                text-align: start;
-                display: flex;
-                justify-content: start;
-            }
         }
     }
 }

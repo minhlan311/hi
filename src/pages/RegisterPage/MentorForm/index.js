@@ -101,7 +101,7 @@ const MentorForm = ({ form }) => {
     }
     return (
         <>
-            <Form.Item
+            {/* <Form.Item
                 name="educationId"
                 label={
                     educationType === EDUCATION_TYPE.HIGH_SCHOOL
@@ -130,7 +130,7 @@ const MentorForm = ({ form }) => {
                     onChange={handleChangeSchool}
                     disabled={educations?.data?.length > 0 ? false : true}
                 />
-            </Form.Item>
+            </Form.Item> */}
             <h3>Chứng chỉ liên quan</h3>
             <div
                 style={
@@ -139,7 +139,7 @@ const MentorForm = ({ form }) => {
                         : { maxHeight: '50vh', overflowY: 'auto' }
                 }
             >
-                <Form.Item
+                {/* <Form.Item
                     name="universityDegree"
                     label="Trình độ đào tạo"
                     rules={[
@@ -151,7 +151,7 @@ const MentorForm = ({ form }) => {
                 >
                     <Select
                         placeholder={'Chọn trình độ đào tạo'}
-                        disabled={educationType ? false : true}
+                        // disabled={educationType ? false : true}
                     >
                         <Select.Option value="Cử nhân">Cử nhân</Select.Option>
                         <Select.Option value="Thạc Sĩ">Thạc Sĩ</Select.Option>
@@ -159,7 +159,7 @@ const MentorForm = ({ form }) => {
                         <Select.Option value="Phó GS">Phó GS</Select.Option>
                         <Select.Option value="Khác">Khác</Select.Option>
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.List
                     name="certificate"
                     initialValue={[
@@ -229,12 +229,12 @@ const MentorForm = ({ form }) => {
                                                         style={{
                                                             width: '100%',
                                                         }}
-                                                        disabled={
-                                                            loading ||
-                                                            educationType
-                                                                ? false
-                                                                : true
-                                                        }
+                                                        // disabled={
+                                                        //     loading ||
+                                                        //     educationType
+                                                        //         ? false
+                                                        //         : true
+                                                        // }
                                                     >
                                                         {loading
                                                             ? 'Đang tải lên...'
