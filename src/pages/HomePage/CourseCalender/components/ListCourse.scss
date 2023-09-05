@@ -49,3 +49,23 @@
         }
     }
 }
+
+@media screen and (max-width: 1280px) {
+    .listCourse {
+        padding: 20px;
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .listCourse {
+        padding: 20px;
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}

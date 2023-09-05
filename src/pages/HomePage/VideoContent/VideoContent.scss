@@ -20,22 +20,26 @@
             left: 8%;
         }
         max-width: 1920px;
-        height: 1158px;
+        min-height: 1158px;
         margin: auto;
         .video-content {
             top: 0;
             margin: 50px auto 0 auto;
-            width: 1200px;
+            max-width: 1200px;
             height: 677px;
             text-align: center;
+            iframe {
+                border-radius: 20px;
+            }
         }
         .content {
             max-width: 1198px;
-            max-height: 249px;
+            height: 249px;
             margin: 50px auto 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
+
             .content-col {
                 .steps {
                     .iconTop {
@@ -92,6 +96,35 @@
                     opacity: 0.8;
                 }
             }
+        }
+        @media screen and (max-width: 980px) {
+            .video-content {
+                top: 0;
+                margin: auto;
+                max-width: 900px;
+                min-width: 300px;
+                max-height: 800px;
+                height: 400px;
+                text-align: center;
+                iframe {
+                    border-radius: 0;
+                }
+            }
+            .content {
+                margin: 0;
+                padding: 20px;
+                height: auto;
+                max-width: 1198px;
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
+@media screen and (max-width: 980px) {
+    .video-content-container {
+        background: #0e3a23;
+        .container-1920px {
+            padding: 0 10px 0 10px;
         }
     }
 }
