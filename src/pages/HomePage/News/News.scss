@@ -7,6 +7,10 @@
     .container-1200px {
         max-width: 1200px;
         margin: auto;
+        .text-xs {
+            color: #101010;
+            font-size: 20px;
+        }
         h3 {
             margin-top: 10px;
             font-size: 50px;
@@ -27,6 +31,7 @@
                         cursor: pointer;
                     }
                     .text {
+                        margin-top: 10px;
                         color: #666666;
                         font-size: 16px;
                     }

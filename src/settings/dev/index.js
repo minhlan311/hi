@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 
 export default {
-    AUTH_URL: 'https://api-ucam.hiblue.online',
-    API_URL: 'https://api-ucam.hiblue.online',
-    FILE_URL: 'https://file.smartlms.online',
+    AUTH_URL: 'https://api.ucam.edu.vn',
+    API_URL: 'https://api.ucam.edu.vn',
+    FILE_URL: 'https://file.mentorz.edu.vn',
 }

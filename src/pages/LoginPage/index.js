@@ -72,7 +72,6 @@ const LoginPage = () => {
     const { status } = loginInfo
 
     const onFinish = async (values) => {
-        window.location = '/'
         if (values.remember === true) {
             setStorage({ key: 'remember', val: values })
         } else {
@@ -85,9 +84,9 @@ const LoginPage = () => {
             browser: browser,
             os: os,
         }
+        handleLoginUser(values)
         // question window notification
         // values.fcmToken = await fetchToken(setTokenFound)
-        handleLoginUser(values)
     }
 
     useEffect(() => {
@@ -157,7 +156,7 @@ const LoginPage = () => {
             if (loginInfo.data.notRegister) {
                 setRegister(true)
             } else if (loginInfo.data.accessToken) {
-                return window.location.reload()
+                return history.push('/')
             }
         }
     }, [loginInfo, messageApi])
