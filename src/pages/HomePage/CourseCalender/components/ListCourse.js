@@ -7,6 +7,13 @@ import { useSelector } from 'react-redux'
 import { coursesSelector } from '../../../../slices/course'
 import { useConvertSlug } from '../../../../hooks'
 import { useHistory } from 'react-router-dom'
+import {
+    formatDate,
+    formatDaysOfWeek,
+    formatHour,
+    formatPriceVND,
+} from '../../../../utils/helper'
+import settings from '../../../../settings'
 export default function ListCourse() {
     const dataCourse = useSelector(coursesSelector)
     const history = useHistory()
@@ -45,7 +52,11 @@ export default function ListCourse() {
                             <div className="imgCol">
                                 <Image
                                     className="imgColin"
-                                    src="https://static.anhnguathena.vn/anhngu//img.media/2020/07/159436821388.jpg"
+                                    src={
+                                        settings.FILE_URL +
+                                        '/' +
+                                        item?.coverMedia
+                                    }
                                 />
                             </div>
                             <div className="contentList">
@@ -54,25 +65,25 @@ export default function ListCourse() {
                                 <div className="flex">
                                     <CalenderSVG className="icons" />
                                     <p className="text-date">
-                                        Khai giảng 22.08.2023 - Thứ 3-5-7
+                                        Khai giảng {''}
+                                        {formatDate(item?.startDate)}
+                                        {''} - Thứ {''}
+                                        {formatDaysOfWeek(item?.schedules).join(
+                                            '-'
+                                        )}{' '}
+                                        {''}
                                         <br />
-                                        Từ 17:20 - 19:20
-                                    </p>
-                                </div>
-                                <div
-                                    className="flex"
-                                    style={{ marginTop: '10px' }}
-                                >
-                                    <CalenderSVG className="icons" />
-                                    <p className="text-date">
-                                        Khai giảng 22.08.2023 - Thứ 3-5-7
-                                        <br />
-                                        Từ 17:20 - 19:20
+                                        Từ {formatHour(item?.startAt)} -{' '}
+                                        {formatHour(item?.endAt)}
                                     </p>
                                 </div>
                                 <div className="flexPrice">
                                     <span className="name">Chi phí: </span>
-                                    <span className="price">1.650.00 vnđ</span>
+                                    <span className="price">
+                                        {item?.cost
+                                            ? formatPriceVND(item?.cost)
+                                            : 'Free'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
