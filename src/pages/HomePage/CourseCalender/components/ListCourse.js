@@ -50,7 +50,7 @@ export default function ListCourse() {
                                     }}
                                     className="link"
                                 >
-                                    <h4>{item.name}</h4>
+                                    <h4 className="link-h4">{item.name}</h4>
                                 </Link>
                                 <div className="flex">
                                     <CalenderSVG className="icons" />

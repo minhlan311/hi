@@ -25,7 +25,7 @@ export default function CourseCalender() {
                 },
                 options: {
                     sort: { downloaded: '-1', viewed: 1 },
-                    limit: 10,
+                    limit: 6,
                     page: 1,
                 },
             })
@@ -41,7 +41,7 @@ export default function CourseCalender() {
                 },
                 options: {
                     sort: { downloaded: '-1', viewed: 1 },
-                    limit: 10,
+                    limit: 6,
                     page: 1,
                 },
             })
