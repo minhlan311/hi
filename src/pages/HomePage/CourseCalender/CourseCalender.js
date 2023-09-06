@@ -8,10 +8,11 @@ import { ReactComponent as KoreaSVG } from '../../../assets/icons/korea_flag.svg
 import { ReactComponent as ChinaSVG } from '../../../assets/icons/china_flag.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { subjectsSelector } from '../../../slices/subjects'
-import { getCoursesRequest } from '../../../slices/course'
+import { coursesSelector, getCoursesRequest } from '../../../slices/course'
 import ListCourse from './components/ListCourse'
 export default function CourseCalender() {
     const dataSubject = useSelector(subjectsSelector)
+    const dataCourse = useSelector(coursesSelector)
     const dispatch = useDispatch()
     const ArraySubject = dataSubject?.data
     const [active, setActive] = useState('Tiếng Anh')
@@ -55,6 +56,9 @@ export default function CourseCalender() {
                 <div className="groupButton">
                     {ArraySubject.map((item) => (
                         <Button
+                            disabled={
+                                dataCourse.status === 'loading' ? true : false
+                            }
                             className={
                                 active === item.name ? 'buttonActive' : 'button'
                             }

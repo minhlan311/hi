@@ -51,7 +51,7 @@ export default function Main({
         {
             title: 'Nội dung',
             dataIndex: 'message',
-            render: (_, record) => <div>{record.message}</div>,
+            render: (_, record) => <div>ahihihii</div>,
         },
     ]
 
