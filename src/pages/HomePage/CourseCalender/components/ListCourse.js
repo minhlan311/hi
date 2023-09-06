@@ -32,7 +32,16 @@ export default function ListCourse() {
                 <>
                     {' '}
                     {ArrayCouse?.map((item) => (
-                        <div className="col">
+                        <div
+                            className="col"
+                            onClick={() => {
+                                handleClickCourse(
+                                    item.id,
+                                    item.subjectId.name,
+                                    item.name
+                                )
+                            }}
+                        >
                             <div className="imgCol">
                                 <Image
                                     className="imgColin"
@@ -40,18 +49,7 @@ export default function ListCourse() {
                                 />
                             </div>
                             <div className="contentList">
-                                <h4
-                                    className="link-h4"
-                                    onClick={() => {
-                                        handleClickCourse(
-                                            item.id,
-                                            item.subjectId.name,
-                                            item.name
-                                        )
-                                    }}
-                                >
-                                    {item.name}
-                                </h4>
+                                <h4 className="link-h4-config">{item.name}</h4>
 
                                 <div className="flex">
                                     <CalenderSVG className="icons" />
