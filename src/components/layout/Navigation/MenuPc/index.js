@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import './styles.scss'
-import { Col, Row, Space, Button, Avatar } from 'antd'
+import { Col, Row, Space, Button, Avatar, Dropdown } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import Header from '../../Header/Header'
-import { getStorage } from '../../../../services/storage'
+import { getStorage, removeStorage } from '../../../../services/storage'
 import { USER_INFO } from '../../../../constants/storageKeys'
 import { useMediaQuery } from 'react-responsive'
 import { ReactComponent as LogoLight } from '../../../../assets/images/backgrounds/logo-light.svg'
@@ -240,6 +240,33 @@ export default function MenuPc() {
         },
     ]
 
+    const items = [
+        {
+            key: '1',
+            label: <Link to="/profiles">Trang cá nhân</Link>,
+        },
+
+        {
+            key: '2',
+            label: <Link to="/change-password">Đổi mật khẩu</Link>,
+        },
+        {
+            type: 'divider',
+        },
+        {
+            key: '3',
+            label: (
+                <div
+                    onClick={() => {
+                        removeStorage(USER_INFO)
+                        window.location.reload()
+                    }}
+                >
+                    Đăng xuất
+                </div>
+            ),
+        },
+    ]
     const isTablet = useMediaQuery({ maxWidth: 1024, minWidth: 768 })
     const isMobile = useMediaQuery({ maxWidth: 767, minWidth: 280 })
     return (
@@ -255,7 +282,11 @@ export default function MenuPc() {
                             <LogoLight />
                         </Col>
                         <Col>
-                            <Button type="text" size="small">
+                            <Button
+                                type="text"
+                                size="small"
+                                style={{ height: 40 }}
+                            >
                                 <IoMenuSharp size={35} color="white" />
                             </Button>
                         </Col>
@@ -354,10 +385,27 @@ export default function MenuPc() {
                                 </Link>
                             </div>
                         ) : (
-                            <Space>
-                                <h4>{user.fullName}</h4>
-                                <Avatar>{user.fullName}</Avatar>
-                            </Space>
+                            <Dropdown
+                                menu={{
+                                    items,
+                                }}
+                                placement="bottomRight"
+                            >
+                                <Space>
+                                    <h4 style={{ color: 'white' }}>
+                                        {user?.fullName}
+                                    </h4>
+                                    <Avatar
+                                        src={
+                                            user.avatarUrl
+                                                ? user.avatarUrl
+                                                : undefined
+                                        }
+                                    >
+                                        {user.fullName.charAt(0)}
+                                    </Avatar>
+                                </Space>
+                            </Dropdown>
                         )}
                     </Row>
                 )}
