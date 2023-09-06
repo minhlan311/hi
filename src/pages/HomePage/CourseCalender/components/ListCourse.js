@@ -40,7 +40,8 @@ export default function ListCourse() {
                                 />
                             </div>
                             <div className="contentList">
-                                <Link
+                                <h4
+                                    className="link-h4"
                                     onClick={() => {
                                         handleClickCourse(
                                             item.id,
@@ -48,10 +49,10 @@ export default function ListCourse() {
                                             item.name
                                         )
                                     }}
-                                    className="link"
                                 >
-                                    <h4 className="link-h4">{item.name}</h4>
-                                </Link>
+                                    {item.name}
+                                </h4>
+
                                 <div className="flex">
                                     <CalenderSVG className="icons" />
                                     <p className="text-date">
