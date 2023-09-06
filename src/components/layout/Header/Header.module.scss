@@ -1,19 +1,55 @@
+@import '../../GlobalStyles/responsive.scss';
 .header {
     width: 100%;
     position: relative;
     .title {
-        font-size: 32px;
+        font-size: 50px;
         font-weight: 700;
         margin-bottom: 45px;
+        @include respond-to(xs) {
+            font-size: 25px;
+        }
+        @include respond-to(sm) {
+            font-size: 30px;
+        }
+        @include respond-to(md) {
+            font-size: 35px;
+        }
+
+        @include respond-to(lg) {
+            font-size: 40px;
+        }
     }
     .desc {
         font-size: 20px;
         font-weight: 400;
+        @include respond-to(xs) {
+            font-size: 16px;
+        }
+        @include respond-to(sm) {
+            font-size: 18px;
+        }
+        @include respond-to(md) {
+            font-size: 18px;
+        }
     }
     .titleSecond {
         font-size: 24px;
         font-weight: 700;
         width: 60%;
+        @include respond-to(xs) {
+            font-size: 18px;
+        }
+        @include respond-to(sm) {
+            font-size: 18px;
+        }
+        @include respond-to(md) {
+            font-size: 18px;
+        }
+
+        @include respond-to(lg) {
+            font-size: 18px;
+        }
     }
 }
 

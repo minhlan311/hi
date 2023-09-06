@@ -18,7 +18,7 @@ export default function ListCourse() {
                 <>
                     {' '}
                     {ArrayCouse?.map((item) => (
-                        <div className="col">
+                        <div className="col" key={item._id}>
                             <div className="imgCol">
                                 <Image
                                     className="imgColin"

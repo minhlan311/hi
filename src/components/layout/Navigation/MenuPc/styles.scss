@@ -3,6 +3,7 @@
     z-index: 1020;
     border-top: 1px solid var(--gray86);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+
     .menuItem {
         display: flex;
         align-items: center;
@@ -78,6 +79,18 @@
                     }
                 }
             }
+        }
+    }
+    .butt-auth {
+        background: #f2184f;
+        color: white;
+        height: 50px;
+        button {
+            border-radius: 0;
+            color: white;
+        }
+        .butt-item {
+            height: 50px;
         }
     }
 }

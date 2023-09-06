@@ -1,23 +1,47 @@
-.intro-card {
-    border-radius: 6px;
-    background-color: white;
-    min-height: 300px;
-    .cover {
-        height: 180px;
-        width: 100%;
-        object-fit: cover;
+@import '../../../components/GlobalStyles/responsive.scss';
+.list-course {
+    @include respond-to(xs) {
+        padding: 0 6px;
     }
-    .course-count {
-        background-color: #f6f6f6;
-        color: #a9a9a9;
+    @include respond-to(sm) {
+        padding: 0 6px;
     }
-    .more {
-        color: var(--defaultColor);
+    @include respond-to(md) {
+        padding: 0 6px;
+    }
+
+    @include respond-to(lg) {
+        padding: 0 6px;
+    }
+    .intro-card {
+        border-radius: 6px;
+        background-color: white;
+        min-height: 300px;
+        .cover {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .course-count {
+            background-color: #f6f6f6;
+            color: #a9a9a9;
+        }
+        .more {
+            color: var(--defaultColor);
+        }
     }
 }
 .ball,
 .point3 {
-    position: absolute;
+    display: none;
+    @include respond-to(xl) {
+        display: block;
+        position: absolute;
+    }
+    @include respond-to(xxl) {
+        display: block;
+        position: absolute;
+    }
 }
 .point3 {
     right: 5%;
