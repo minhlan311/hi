@@ -1,10 +1,9 @@
 import React from 'react'
-import './VideoContent.scss'
-import { Button } from 'antd'
 import { BsCheckLg } from 'react-icons/bs'
-import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
 import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
 import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
+import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
+import './VideoContent.scss'
 
 export default function VideoContent() {
     return (
