@@ -1,8 +1,17 @@
-.mtz-cooperate {
-    margin-top: 50px;
+@import '../../../components/GlobalStyles/responsive.scss';
 
+.mtz-cooperate {
+    margin-top: 0;
+    @include respond-to(xl) {
+        margin-top: 50px;
+        padding: 15px;
+    }
+    @include respond-to(xxl) {
+        margin-top: 50px;
+        padding: 15px;
+    }
     text-align: center;
-    padding: 15px;
+
     .mtz-cooperate-title {
         font-weight: 500;
         font-size: 20px;
@@ -71,8 +80,17 @@
 
 .book,
 .point2 {
-    position: absolute;
-    top: 18%;
+    display: none;
+    @include respond-to(xl) {
+        display: block;
+        position: absolute;
+        top: 18%;
+    }
+    @include respond-to(xxl) {
+        display: block;
+        position: absolute;
+        top: 18%;
+    }
 }
 .book {
     right: 18%;

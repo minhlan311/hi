@@ -19,6 +19,7 @@ const Header = (props) => {
         padding,
         margin,
         background,
+        backgroundTitle,
         type,
         style,
         size,
@@ -28,7 +29,7 @@ const Header = (props) => {
 
     return (
         <div
-            className={`${css.header} ${type === 'fullsize' && css.bgHeader}`}
+            className={`${css.header}`}
             style={{
                 padding: padding,
                 background:
@@ -39,16 +40,16 @@ const Header = (props) => {
             }}
         >
             <div
-                className={`uc-container ${
+                className={`${type !== 'fullsize' && 'uc-container'} ${
                     (size === 'xl' && 'uc-container-2') ||
                     (size === 'sm' && 'uc-container-3')
-                } ${type === 'fullsize' && css.container}`}
+                }`}
                 style={styleChild}
             >
                 <div
                     className="d-col-c"
                     style={{
-                        background: background,
+                        background: backgroundTitle,
                         textAlign: 'center',
                     }}
                 >

@@ -52,13 +52,11 @@
     }
     .mentor-img {
         position: relative;
-        height: 100%;
+
         .img-info {
-            z-index: -1;
-            margin: auto;
             height: 100%;
             width: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         .mentor-box {

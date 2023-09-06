@@ -1,15 +1,15 @@
+import { Card, Space } from 'antd'
 import React from 'react'
-import Header from '../../../components/layout/Header/Header'
-import { Card, Col, Row, Space } from 'antd'
-import { RiEmotionLaughFill } from 'react-icons/ri'
-import './styles.scss'
 import {
     BsBookFill,
-    BsFillPencilFill,
     BsFillPauseBtnFill,
+    BsFillPencilFill,
 } from 'react-icons/bs'
+import { RiEmotionLaughFill } from 'react-icons/ri'
 import point from '../../../assets/icons/place.svg'
 import place from '../../../assets/icons/point.svg'
+import Header from '../../../components/layout/Header/Header'
+import './styles.scss'
 
 export default function Intro() {
     const introData = [
@@ -66,28 +66,52 @@ export default function Intro() {
         <Header
             size="sm"
             title="UCAM là trung tâm ngoại ngữ uy tín, tận tình"
-            titleSize={50}
             desc="VÌ SAO NÊN CHỌN CHÚNG TÔI?"
-            padding={60}
+            padding="60px 0"
             background="var(--lighish-white)"
         >
             <img src={place} alt="place" className="place" />
             <img src={point} alt="point" className="point" />
-            <Row gutter={[24, 24]} className="intor-main">
+
+            <div className="mb-scroll">
+                <div className="intor-main">
+                    {introData.map((item, id) => (
+                        <Card className="intro-card" key={id}>
+                            <Space direction="vertical">
+                                <Space>
+                                    <div
+                                        className={`i-bg${item.keyId} icon-bg`}
+                                    >
+                                        {item.icon}
+                                    </div>
+                                    <h3 style={{ margin: 0 }}>{item.title}</h3>
+                                </Space>
+                                <div style={{ margin: 0 }}>{item.desc}</div>
+                            </Space>
+                        </Card>
+                    ))}
+                </div>
+            </div>
+
+            {/* <Row gutter={[20, 20]} className="intor-main">
                 {introData.map((item, id) => (
                     <Col span={24} md={6} key={id}>
-                        <Card size="small" className="intro-card">
+                        <Card className="intro-card">
                             <Space direction="vertical">
-                                <div className={`i-bg${item.keyId} icon-bg`}>
-                                    {item.icon}
-                                </div>
-                                <h3 style={{ margin: 0 }}>{item.title}</h3>
+                                <Space>
+                                    <div
+                                        className={`i-bg${item.keyId} icon-bg`}
+                                    >
+                                        {item.icon}
+                                    </div>
+                                    <h3 style={{ margin: 0 }}>{item.title}</h3>
+                                </Space>
                                 <div style={{ margin: 0 }}>{item.desc}</div>
                             </Space>
                         </Card>
                     </Col>
                 ))}
-            </Row>
+            </Row> */}
         </Header>
     )
 }

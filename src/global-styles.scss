@@ -1,3 +1,5 @@
+@import './components/GlobalStyles/responsive.scss';
+
 :root {
     --black: #000;
     --blackBg: #1f1e1f;
@@ -5,7 +7,8 @@
     --whiteBg: #fff;
     --lighish-white: #f4f4f4;
     --bgColor: #f4f4f4;
-    --bgColor2: #0e3a23;
+    --bgColor2: #019d44;
+    --bgColor3: #d72831;
     --defaultColor: #f2184f;
 }
 *,
@@ -22,7 +25,7 @@
 
 /* Width Scroll */
 ::-webkit-scrollbar {
-    width: 18px;
+    width: 12px;
     height: 18px;
 }
 
@@ -33,7 +36,7 @@
 
 /* Handle Scroll */
 ::-webkit-scrollbar-thumb {
-    border: 6px solid transparent;
+    border: 3px solid transparent;
     background: #dfe1e3;
     border-radius: 11px;
     background-clip: padding-box;
@@ -64,16 +67,46 @@ body {
 .uc-container {
     width: min(100% - 15px, 1330px);
     margin-inline: auto;
+    @include respond-to(xs) {
+        padding: 0 10px;
+        width: 100%;
+    }
+    @include respond-to(sm) {
+        padding: 0 10px;
+        width: 100%;
+    }
+    @include respond-to(md) {
+        padding: 0 10px;
+        width: 100%;
+    }
+
+    @include respond-to(lg) {
+        padding: 0 10px;
+        width: 100%;
+    }
 }
 
 .uc-container-2 {
-    width: min(100% - 15px, 1330px);
+    width: 100%;
     margin-inline: auto;
 }
 
 .uc-container-3 {
-    width: min(100% - 360px, 1330px);
+    width: min(100% - 400px, 1330px);
     margin-inline: auto;
+    @include respond-to(xs) {
+        width: 100%;
+    }
+    @include respond-to(sm) {
+        width: 100%;
+    }
+    @include respond-to(md) {
+        width: 100%;
+    }
+
+    @include respond-to(lg) {
+        width: 100%;
+    }
 }
 
 .uc-container-m {

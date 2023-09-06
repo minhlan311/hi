@@ -20,14 +20,14 @@ $color2: #e8f380;
         font-size: 15px !important;
     }
     .logo {
-        margin: 5px 0;
+        margin: 18px 0;
         width: auto;
         height: 48px;
     }
     .phoneIcon {
-        width: 48px;
-        height: 48px;
-        padding: 14px;
+        width: 42px;
+        height: 42px;
+        padding: 10px;
         text-align: center;
         background-color: var(--bgColor2);
         color: white;
@@ -36,5 +36,14 @@ $color2: #e8f380;
     }
     .hotline {
         font-size: 12px;
+    }
+    .lang-change {
+        width: 80px;
+        .ant-select-selection-item {
+            padding-inline-end: 0;
+        }
+    }
+    .select-pop {
+        background: #0e3a23;
     }
 }

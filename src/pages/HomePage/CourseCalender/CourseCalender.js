@@ -65,6 +65,7 @@ export default function CourseCalender() {
                             onClick={() => {
                                 handleActive(item.name, item.id)
                             }}
+                            key={item.name}
                         >
                             {item.name === 'Tiếng Anh' ? (
                                 <EngSVG />
