@@ -48,7 +48,7 @@ export const CATEGORIES_PATH = '/categories/'
 export const FIND_CATEGORIES_PATH = '/categories/find'
 
 // ==================== Course PATH =====================
-export const COURSES_PATH = '/edu/courses/'
+export const COURSES_PATH = '/courses/'
 export const FIND_COURSES_PATH = '/courses/find'
 export const COURSES_QUIZ_PATH = '/exam/questions/find'
 export const PROGRESSIONS_PATH = '/edu/progressions/'

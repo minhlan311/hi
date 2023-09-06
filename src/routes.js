@@ -80,13 +80,13 @@ const routes = [
     {
         path: ROUTERS_URL.COURSE_PAGE,
         component: lazy(() => import('./pages/CoursePage')),
-        requiredAuthen: true,
+        requiredAuthen: false,
         exact: false,
     },
     {
         path: ROUTERS_URL.COURSE_DETAIL,
         component: lazy(() => import('./pages/CoursePage/CourseDetail')),
-        requiredAuthen: true,
+        requiredAuthen: false,
         exact: true,
     },
     {

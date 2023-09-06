@@ -22,6 +22,7 @@
             margin-top: 30px;
             justify-content: center;
             display: flex;
+            scrollbar-color: transparent;
             gap: 20px;
             .button {
                 border: 2px solid #e0e0e0;
@@ -50,22 +51,24 @@
                 align-items: center;
             }
         }
-        @media screen and (max-width: 900px) {
+        .groupButton::-webkit-scrollbar-thumb {
+            width: 10px;
+            background-color: transparent;
+        }
+
+        .groupButton::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        @media screen and (max-width: 1200px) {
             .groupButton {
                 overflow-x: scroll;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                padding: 30px;
                 scrollbar-color: transparent;
                 justify-content: space-between;
-                margin: 30px;
                 display: flex;
                 gap: 10px;
-            }
-            .groupButton::-webkit-scrollbar-thumb {
-                width: 10px;
-                background-color: #ebebeb;
-            }
-
-            .groupButton::-webkit-scrollbar-track {
-                background-color: transparent;
             }
         }
         .listCourse {

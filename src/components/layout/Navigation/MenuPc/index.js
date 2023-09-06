@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import './styles.scss'
-import { Col, Row, Space, Button } from 'antd'
+import { Col, Row, Space, Button, Avatar } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import Header from '../../Header/Header'
 import { getStorage } from '../../../../services/storage'
@@ -339,16 +339,25 @@ export default function MenuPc() {
                             ))}
                         </Col>
 
-                        {!user && (
+                        {!user ? (
                             <div className="butt-auth">
-                                <Button type="text" className="butt-item">
-                                    Đăng nhâp
-                                </Button>
+                                <Link to="/login">
+                                    <Button type="text" className="butt-item">
+                                        Đăng nhâp
+                                    </Button>
+                                </Link>
                                 /
-                                <Button type="text" className="butt-item">
-                                    Đăng ký
-                                </Button>
+                                <Link to="/register">
+                                    <Button type="text" className="butt-item">
+                                        Đăng ký
+                                    </Button>
+                                </Link>
                             </div>
+                        ) : (
+                            <Space>
+                                <h4>{user.fullName}</h4>
+                                <Avatar>{user.fullName}</Avatar>
+                            </Space>
                         )}
                     </Row>
                 )}

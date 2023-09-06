@@ -73,7 +73,10 @@ const LoginPage = () => {
 
     const onFinish = async (values) => {
         if (values.remember === true) {
-            setStorage({ key: 'remember', val: values })
+            setStorage({
+                key: 'remember',
+                val: { ...values, password: btoa(values.password) },
+            })
         } else {
             removeStorage('remember')
         }
@@ -91,11 +94,14 @@ const LoginPage = () => {
 
     useEffect(() => {
         const data = getStorage('remember')
-        form.setFieldsValue({
-            account: data?.account,
-            password: data?.password,
-            remember: data?.remember,
-        })
+
+        if (data) {
+            form.setFieldsValue({
+                account: data?.account,
+                password: atob(data?.password),
+                remember: data?.remember,
+            })
+        }
     }, [form])
 
     const onFinishFailed = (errorInfo) => {}
