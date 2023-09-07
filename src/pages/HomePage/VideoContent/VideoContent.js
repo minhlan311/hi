@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Button } from 'antd'
 import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
 import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
 import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
@@ -89,6 +89,17 @@ export default function VideoContent() {
                             allow="accelerometer;fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         ></iframe>
                     </div>
+                </div>
+            </div>
+            <div className="div-title-bottom">
+                <span className="number">500.000+ </span>
+                <span className="desc">
+                    {' '}
+                    Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao
+                    tiếp tiếng Anh thành công, còn bạn...?
+                </span>
+                <div className="button">
+                    <Button className="button-in">ĐĂNG KÝ NGAY</Button>
                 </div>
             </div>
         </div>
