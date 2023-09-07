@@ -22,21 +22,22 @@
             right: 28%;
         }
         .content-div-container {
+            padding: 30px 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
             align-items: center;
-            max-width: 1100px;
+            max-width: 1300px;
             .video-content {
                 top: 0;
-                max-width: 619px;
+                max-width: 819px;
                 height: 349px;
                 text-align: center;
                 iframe {
                     border-radius: 20px;
                 }
             }
-            @media screen and (max-width: 980px) {
+            @media screen and (max-width: 1290px) {
                 .video-content {
                     top: 0;
                     width: 100%;
@@ -109,7 +110,7 @@
                 }
             }
         }
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 1290px) {
             .content-div-container {
                 gap: 20px;
                 width: 100%;
@@ -120,7 +121,7 @@
             }
         }
     }
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1290px) {
         .container-1920px {
             width: 100%;
             .pencilSVG {
@@ -144,6 +145,12 @@
 .title-steps {
     font-size: 24px;
     font-weight: 600;
+    margin-top: 20px;
+}
+@media screen and (max-width: 900px) {
+    .title-steps {
+        font-size: 22px;
+    }
 }
 .desc-steps {
     margin-top: 10px;
@@ -153,26 +160,5 @@
     font-size: 18px;
 }
 .gap-steps {
-    margin-top: 35px;
-}
-.iconTopBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 32px;
-    border: 2px solid #fff;
-    height: 32px;
-    background-color: #d72831;
-    border-radius: 100%;
-}
-.iconBotBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 95px;
-    width: 32px;
-    height: 32px;
-    background-color: #d72831;
-    border: 2px solid #fff;
-    border-radius: 100%;
+    margin-top: 15px;
 }
