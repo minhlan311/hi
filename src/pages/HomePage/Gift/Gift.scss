@@ -1,9 +1,25 @@
 .container-gift {
+    position: relative;
     background-color: #d72831;
     text-align: center;
     max-width: 100%;
     margin: 0 auto;
     .max-w-1200 {
+        .pencilSVG {
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+        }
+        .ballSVG {
+            position: absolute;
+            top: 15%;
+            left: 10%;
+        }
+        .birdSVG {
+            position: absolute;
+            top: 10%;
+            right: 28%;
+        }
         padding: 50px 20px;
         max-width: 1200px;
         margin: 0 auto;
