@@ -21,6 +21,7 @@ import VideoContent from './VideoContent/VideoContent'
 import News from './News/News'
 import CourseCalender from './CourseCalender/CourseCalender'
 import { findSubjectRequest } from '../../slices/subjects'
+import Mission from './Mission'
 
 const HomePage = () => {
     // const userInfo = useMemo(() => getStorage(USER_INFO), [])
@@ -42,6 +43,7 @@ const HomePage = () => {
             <Intro />
             <Cooperate />
             <TopCourses />
+            <Mission />
             <VideoContent />
             <CourseCalender />
             <News />
