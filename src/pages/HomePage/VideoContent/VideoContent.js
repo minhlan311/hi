@@ -1,5 +1,5 @@
 import React from 'react'
-import { BsCheckLg } from 'react-icons/bs'
+
 import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
 import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
 import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
@@ -37,6 +37,10 @@ export default function VideoContent() {
 
     return (
         <div className="video-content-container">
+            <div className="div-title">
+                <p className="desc-steps">GIẢI PHÁP HOÀN HẢO</p>
+                <h2>UCAM THIẾT KẾ RIÊNG CHO BẠN</h2>
+            </div>
             <div className="container-1920px">
                 <div className="pencilSVG">
                     <PencilSVG />
@@ -49,10 +53,7 @@ export default function VideoContent() {
                 </div>
                 <div className="content-div-container">
                     <div className="content">
-                        <div className="content-col">
-                            <p className="desc-steps">GIẢI PHÁP HOÀN HẢO</p>
-                            <h2>UCAM THIẾT KẾ RIÊNG CHO BẠN</h2>
-                        </div>
+                        <div className="content-col"></div>
                         <div className="content-col flex-steps">
                             <div className="steps">
                                 <IconCheck />

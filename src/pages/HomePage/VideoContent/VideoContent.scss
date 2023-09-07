@@ -1,6 +1,15 @@
 .video-content-container {
     width: 100%;
     background-color: #d72831;
+    .div-title {
+        text-align: center;
+        padding-top: 50px;
+        h2 {
+            margin-top: 10px;
+            font-size: 40px;
+            color: #fff;
+        }
+    }
     .container-1920px {
         display: flex;
         justify-content: center;
