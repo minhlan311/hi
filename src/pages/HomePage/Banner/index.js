@@ -291,7 +291,7 @@ const Banner = () => {
                         <div
                             className="mentor-img"
                             style={
-                                !isMobile || !isTablet
+                                !isMobile && !isTablet
                                     ? { height: '100%' }
                                     : { height: '30vh' }
                             }

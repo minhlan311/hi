@@ -1,0 +1,80 @@
+@import '../../../components/GlobalStyles/responsive.scss';
+.ms-main {
+    .ms-item {
+        position: relative;
+        height: 300px;
+        border-radius: 25px;
+        overflow: hidden;
+        .ms-content {
+            color: white;
+            position: relative;
+            z-index: 1;
+            top: 50px;
+            padding: 0 50px;
+            width: 68%;
+            @include respond-to(xs) {
+                width: 100%;
+            }
+            @include respond-to(sm) {
+                width: 100%;
+            }
+
+            p {
+                font-size: 17px;
+            }
+        }
+    }
+}
+
+.ms-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+}
+.ms-6-step {
+    padding: 20px 0 60px;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    .step-shape {
+        position: relative;
+        border-radius: 25px;
+        overflow: hidden;
+        .ms-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            padding: 50px 0 100px;
+            h1 {
+                margin-bottom: 8%;
+            }
+            .step {
+                position: relative;
+                .sixstep {
+                    position: absolute;
+                    width: 35%;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    @include respond-to(xs) {
+                        opacity: 0;
+                    }
+                    @include respond-to(sm) {
+                        opacity: 0;
+                    }
+                    @include respond-to(md) {
+                        opacity: 0;
+                    }
+                }
+
+                .ms-step {
+                    position: relative;
+                    top: 15%;
+                }
+            }
+        }
+    }
+}

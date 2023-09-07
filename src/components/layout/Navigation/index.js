@@ -69,7 +69,7 @@ const Navigation = () => {
 
     return (
         <div>
-            {!isTablet && !isMobile && (
+            {!isMobile && !isTablet && (
                 <div className="mtz-nav-main">
                     <Header type="fullsize">
                         <div className="uc-container">
@@ -187,7 +187,7 @@ const Navigation = () => {
                         visible ? 'nav-fixed' : 'navn-fixed'
                     } mtz-nav-main`}
                 >
-                    <MenuPc />
+                    <MenuPc open={open} setOpen={setOpen} />
                 </div>
             </Affix>
         </div>

@@ -1,14 +1,31 @@
-import { Link } from 'react-router-dom'
-import './styles.scss'
-import { Col, Row, Space, Button, Avatar, Dropdown } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
-import Header from '../../Header/Header'
-import { getStorage, removeStorage } from '../../../../services/storage'
-import { USER_INFO } from '../../../../constants/storageKeys'
-import { useMediaQuery } from 'react-responsive'
-import { ReactComponent as LogoLight } from '../../../../assets/images/backgrounds/logo-light.svg'
+import { DownOutlined, LogoutOutlined } from '@ant-design/icons'
+import { HiOutlineLogout } from 'react-icons/hi'
+import {
+    Avatar,
+    Button,
+    Col,
+    Divider,
+    Drawer,
+    Dropdown,
+    Row,
+    Select,
+    Space,
+} from 'antd'
 import { IoMenuSharp } from 'react-icons/io5'
-export default function MenuPc() {
+import { useMediaQuery } from 'react-responsive'
+import { Link } from 'react-router-dom'
+import { ReactComponent as ChinaSVG } from '../../../../assets/icons/china_flag.svg'
+import { ReactComponent as EngSVG } from '../../../../assets/icons/eng_flag.svg'
+import { ReactComponent as GermanySVG } from '../../../../assets/icons/germany_flag.svg'
+import { ReactComponent as JapanSVG } from '../../../../assets/icons/japan_flag.svg'
+import { ReactComponent as KoreaSVG } from '../../../../assets/icons/korea_flag.svg'
+import { ReactComponent as VieSVG } from '../../../../assets/icons/vi_flag.svg'
+import { ReactComponent as LogoLight } from '../../../../assets/images/backgrounds/logo-light.svg'
+import { USER_INFO } from '../../../../constants/storageKeys'
+import { getStorage, removeStorage } from '../../../../services/storage'
+import Header from '../../Header/Header'
+import './styles.scss'
+export default function MenuPc({ open, setOpen }) {
     const user = getStorage(USER_INFO)
     const menu = [
         {
@@ -243,12 +260,24 @@ export default function MenuPc() {
     const items = [
         {
             key: '1',
-            label: <Link to="/profiles">Trang cá nhân</Link>,
+            label: (
+                <Link to="/profiles">
+                    <Button type="text" size="small">
+                        Trang cá nhân
+                    </Button>
+                </Link>
+            ),
         },
 
         {
             key: '2',
-            label: <Link to="/change-password">Đổi mật khẩu</Link>,
+            label: (
+                <Link to="/change-password">
+                    <Button type="text" size="small">
+                        Đổi mật khẩu
+                    </Button>
+                </Link>
+            ),
         },
         {
             type: 'divider',
@@ -256,14 +285,16 @@ export default function MenuPc() {
         {
             key: '3',
             label: (
-                <div
+                <Button
+                    type="text"
+                    size="small"
                     onClick={() => {
                         removeStorage(USER_INFO)
                         window.location.reload()
                     }}
                 >
                     Đăng xuất
-                </div>
+                </Button>
             ),
         },
     ]
@@ -286,6 +317,7 @@ export default function MenuPc() {
                                 type="text"
                                 size="small"
                                 style={{ height: 40 }}
+                                onClick={() => setOpen(!open)}
                             >
                                 <IoMenuSharp size={35} color="white" />
                             </Button>
@@ -410,6 +442,122 @@ export default function MenuPc() {
                     </Row>
                 )}
             </Header>
+            <Drawer
+                placement={isTablet ? 'right' : 'top'}
+                closable={!isTablet}
+                onClose={() => setOpen(!open)}
+                open={open}
+                style={{
+                    textAlign: 'center',
+                }}
+                className="nav-drawer"
+                size={isMobile && 'large'}
+                extra={
+                    user && (
+                        <Space>
+                            <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
+                            <Avatar
+                                src={
+                                    user.avatarUrl ? user.avatarUrl : undefined
+                                }
+                            >
+                                {user.fullName.charAt(0)}
+                            </Avatar>
+                        </Space>
+                    )
+                }
+                headerStyle={{ background: 'var(--bgColor2)' }}
+            >
+                <Space direction="vertical">
+                    {menu.map((item) => (
+                        <Link to={item.href} key={item.label}>
+                            <Button
+                                type="text"
+                                size="small"
+                                style={{ width: '100%' }}
+                            >
+                                {item.label}
+                            </Button>
+                        </Link>
+                    ))}
+                </Space>
+                <Divider />
+                <Space direction="vertical">
+                    <Select
+                        defaultValue="VIE"
+                        options={[
+                            {
+                                value: 'ENG',
+                                label: (
+                                    <div className="d-space-c">
+                                        <EngSVG />
+                                        <p className="ml-5">ENG</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                value: 'VIE',
+                                label: (
+                                    <div className="d-space-c">
+                                        <VieSVG />
+                                        <p className="ml-10">VIE</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                value: 'CHN',
+                                label: (
+                                    <div className="d-space-c">
+                                        <ChinaSVG />
+                                        <p className="ml-5">CHN</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                value: 'JPN',
+                                label: (
+                                    <div className="d-space-c">
+                                        <JapanSVG />
+                                        <p className="ml-5">JPN</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                value: 'KOR',
+                                label: (
+                                    <div className="d-space-c">
+                                        <KoreaSVG />
+                                        <p className="ml-5">KOR</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                value: 'GER',
+                                label: (
+                                    <div className="d-space-c">
+                                        <GermanySVG />
+                                        <p className="ml-5">GER</p>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                        suffixIcon={false}
+                    />
+                    {!user ? (
+                        <Space>
+                            <Link to="/login">
+                                <Button type="text">Đăng nhâp</Button>
+                            </Link>
+                            /
+                            <Link to="/register">
+                                <Button type="text">Đăng ký</Button>
+                            </Link>
+                        </Space>
+                    ) : (
+                        items.map((item) => item.label)
+                    )}
+                </Space>
+            </Drawer>
         </div>
     )
 }
