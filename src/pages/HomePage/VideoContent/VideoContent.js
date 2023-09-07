@@ -1,13 +1,46 @@
 import React from 'react'
-import { BsCheckLg } from 'react-icons/bs'
+import { Button } from 'antd'
 import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
 import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
 import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
 import './VideoContent.scss'
+import IconCheck from './components/IconCheck'
 
 export default function VideoContent() {
+    const ArrayDesc = [
+        {
+            id: 1,
+            name: 'Linh động thời gian, địa điểm',
+            desc: 'Linh hoạt thời gian - phù hợp với người bận rộn',
+        },
+        {
+            id: 2,
+            name: 'Đào tạo 1:1',
+            desc: 'Một giảng viên kèm 1 học viên - giao tiếp sửa lỗi liên tục',
+        },
+        {
+            id: 3,
+            name: 'Đội ngũ giảng viên giàu kinh nghiệm',
+            desc: '100% giảng viên đạt 7.0+ IELTS/850+ TOEIC hoặc có bằng cấp tương đương',
+        },
+        {
+            id: 4,
+            name: 'Lộ trình rõ ràng',
+            desc: 'Lộ trình cá nhân hóa - thiết kế bài giảng theo nhu cầu',
+        },
+        {
+            id: 5,
+            name: 'Phương pháp học hiệu qủa',
+            desc: 'X5 hiệu quả với các phương pháp tiên tiến',
+        },
+    ]
+
     return (
         <div className="video-content-container">
+            <div className="div-title">
+                <p className="desc-steps">GIẢI PHÁP HOÀN HẢO</p>
+                <h2>UCAM THIẾT KẾ RIÊNG CHO BẠN</h2>
+            </div>
             <div className="container-1920px">
                 <div className="pencilSVG">
                     <PencilSVG />
@@ -20,40 +53,29 @@ export default function VideoContent() {
                 </div>
                 <div className="content-div-container">
                     <div className="content">
-                        <div className="content-col">
-                            <p className="desc-steps">
-                                KHÓA HỌC NÀY DÀNH CHO AI?
-                            </p>
-                            <h2>Học Tiếng Anh Online Cho Người Bận Rộn</h2>
-                        </div>
+                        <div className="content-col"></div>
                         <div className="content-col flex-steps">
                             <div className="steps">
-                                <div className="iconTopBox">
-                                    <BsCheckLg className="icons-steps iconTop" />
-                                </div>
-
-                                <div className="iconBotBox">
-                                    <BsCheckLg className="icons-steps iconBot" />
-                                </div>
+                                <IconCheck />
+                                <IconCheck marginTop={'55px'} />
+                                <IconCheck marginTop={'80px'} />
+                                <IconCheck marginTop={'80px'} />
+                                <IconCheck marginTop={'80px'} />
                             </div>
                             <div className="content-steps">
-                                <div>
-                                    <p className="title-steps">Đào tạo 1:1</p>
-                                    <p className="desc-steps">
-                                        Học Tiếng Anh Online 1 thầy 1 trò Skype
-                                        ngay trên máy tính hoặc điện thoại
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="title-steps gap-steps">
-                                        {' '}
-                                        Linh động thời gian, địa điểm
-                                    </p>
-                                    <p className="desc-steps">
-                                        Học Tiếng Anh ở bất cứ nơi đâu và bất cứ
-                                        thời gian nào mà bạn lựa chọn
-                                    </p>
-                                </div>
+                                {ArrayDesc?.map((item) => (
+                                    <>
+                                        <div>
+                                            <p className="title-steps">
+                                                {' '}
+                                                {item.name}
+                                            </p>
+                                            <p className="desc-steps">
+                                                {item.desc}
+                                            </p>
+                                        </div>
+                                    </>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -67,6 +89,17 @@ export default function VideoContent() {
                             allow="accelerometer;fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         ></iframe>
                     </div>
+                </div>
+            </div>
+            <div className="div-title-bottom">
+                <span className="number">500.000+ </span>
+                <span className="desc">
+                    {' '}
+                    Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao
+                    tiếp tiếng Anh thành công, còn bạn...?
+                </span>
+                <div className="button">
+                    <Button className="button-in">ĐĂNG KÝ NGAY</Button>
                 </div>
             </div>
         </div>
