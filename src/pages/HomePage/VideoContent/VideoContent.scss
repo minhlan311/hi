@@ -1,4 +1,5 @@
 .video-content-container {
+    padding: 0 20px;
     width: 100%;
     background-color: #d72831;
     .div-title {
@@ -141,6 +142,31 @@
             }
             .birdSVG {
                 display: none;
+            }
+        }
+    }
+    .div-title-bottom {
+        padding-bottom: 50px;
+        text-align: center;
+
+        .number {
+            font-size: 30px;
+            color: #fff;
+            font-weight: 700;
+        }
+        .desc {
+            color: #fff;
+            font-size: 18px;
+        }
+        .button {
+            margin-top: 30px;
+            .button-in {
+                border: #d72831;
+                font-weight: 700;
+                color: #d72831;
+            }
+            .button-in:hover {
+                scale: 1.2;
             }
         }
     }
