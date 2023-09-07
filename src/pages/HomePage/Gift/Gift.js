@@ -1,6 +1,8 @@
 import { Button, Col, Row } from 'antd'
 import React from 'react'
-
+import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
+import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
+import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
 import './Gift.scss'
 import PromotionCountdown from './PromotionCountdown/PromotionCountdown'
 
@@ -8,6 +10,15 @@ export default function Gift() {
     return (
         <div className="container-gift">
             <div className="max-w-1200">
+                <div className="pencilSVG">
+                    <PencilSVG />
+                </div>
+                <div className="ballSVG">
+                    <BallSVG />
+                </div>
+                <div className="birdSVG">
+                    <BirdSVG />
+                </div>
                 <div className="gradient">
                     <h3>QUÀ TẶNG KHUYẾN MẠI</h3>
                 </div>
