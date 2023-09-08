@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import Footer from '../../components/layout/Footer'
 import Mentor from '../../components/layout/Mentor'
 import Navigation from '../../components/layout/Navigation'
-import { findSubjectRequest } from '../../slices/subjects'
+import { getCategoriesRequest } from '../../slices/category'
 import Banner from './Banner'
 import CourseCalender from './CourseCalender/CourseCalender'
 import Gift from './Gift/Gift'
@@ -26,7 +26,7 @@ const HomePage = () => {
     // }, [userInfo])
     // const educationId = getStorage('educationId')
     useEffect(() => {
-        dispatch(findSubjectRequest())
+        dispatch(getCategoriesRequest())
     }, [])
 
     return (

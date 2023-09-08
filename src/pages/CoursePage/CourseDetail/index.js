@@ -534,14 +534,6 @@ const CourseDetailPage = ({ courseId }) => {
             return <></>
         }
     }
-    useEffect(() => {
-        if (data) {
-            const payload = {
-                filterQuery: { targetModel: 'COURSE', targetId: data._id },
-            }
-            dispatch(getAssessmentRequest(payload))
-        }
-    }, [data, createAssessment])
 
     const [evaluate, setEvaluate] = useState(5)
     const [checkEvaluate, setCheckEvaluate] = useState(false)

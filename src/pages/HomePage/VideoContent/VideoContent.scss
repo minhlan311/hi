@@ -40,8 +40,8 @@
             max-width: 1300px;
             .video-content {
                 top: 0;
-                max-width: 819px;
-                height: 349px;
+                width: 700px;
+                height: 400px;
                 text-align: center;
                 iframe {
                     border-radius: 20px;
@@ -50,9 +50,10 @@
             @media screen and (max-width: 1290px) {
                 .video-content {
                     top: 0;
+                    max-width: 1100px;
                     width: 100%;
                     max-height: 800px;
-                    height: 349px;
+                    height: 400px;
                     text-align: center;
                     iframe {
                         border-radius: 0;
@@ -161,6 +162,7 @@
         .button {
             margin-top: 30px;
             .button-in {
+                min-height: 50px;
                 border: #d72831;
                 font-weight: 700;
                 color: #d72831;
@@ -196,4 +198,26 @@
 }
 .gap-steps {
     margin-top: 15px;
+}
+
+.button-in.shake {
+    animation: shake 1s infinite;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px) rotate(-5deg);
+    }
+    50% {
+        transform: translateX(5px) rotate(5deg);
+    }
+    75% {
+        transform: translateX(-5px) rotate(-5deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
