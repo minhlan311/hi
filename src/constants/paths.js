@@ -45,7 +45,7 @@ export const UPLOAD_LARGE_IMAGE = '/upload/large-image'
 
 // ==================== CATEGORY PATH =====================
 export const CATEGORIES_PATH = '/categories/'
-export const FIND_CATEGORIES_PATH = '/categories/find'
+export const FIND_CATEGORIES_PATH = '/category/find'
 
 // ==================== Course PATH =====================
 export const COURSES_PATH = '/courses/'

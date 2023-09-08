@@ -7,21 +7,21 @@ import { ReactComponent as JapanSVG } from '../../../assets/icons/japan_flag.svg
 import { ReactComponent as KoreaSVG } from '../../../assets/icons/korea_flag.svg'
 import { ReactComponent as ChinaSVG } from '../../../assets/icons/china_flag.svg'
 import { useDispatch, useSelector } from 'react-redux'
-import { subjectsSelector } from '../../../slices/subjects'
 import { coursesSelector, getCoursesRequest } from '../../../slices/course'
 import ListCourse from './components/ListCourse'
+import { categoriesSelector } from '../../../slices/category'
 export default function CourseCalender() {
-    const dataSubject = useSelector(subjectsSelector)
+    const dataCategories = useSelector(categoriesSelector)
     const dataCourse = useSelector(coursesSelector)
     const dispatch = useDispatch()
-    const ArraySubject = dataSubject?.data
+    const ArraySubject = dataCategories?.data
     const [active, setActive] = useState('Tiếng Anh')
 
     useEffect(() => {
         dispatch(
             getCoursesRequest({
                 filterQuery: {
-                    subjectId: '64f035c3392ec34d6a972406',
+                    categoryId: '64f9a8ac77e79fe90a1fbe8a',
                 },
                 options: {
                     sort: { downloaded: '-1', viewed: 1 },
@@ -37,7 +37,7 @@ export default function CourseCalender() {
         dispatch(
             getCoursesRequest({
                 filterQuery: {
-                    subjectId: id,
+                    categoryId: id,
                 },
                 options: {
                     sort: { downloaded: '-1', viewed: 1 },

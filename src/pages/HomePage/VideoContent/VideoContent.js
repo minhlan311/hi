@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
 import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
@@ -7,6 +7,17 @@ import './VideoContent.scss'
 import IconCheck from './components/IconCheck'
 
 export default function VideoContent() {
+    const [shake, setShake] = useState(false)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setShake((prevShake) => !prevShake)
+        }, 1000)
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
     const ArrayDesc = [
         {
             id: 1,
@@ -99,7 +110,9 @@ export default function VideoContent() {
                     tiếp tiếng Anh thành công, còn bạn...?
                 </span>
                 <div className="button">
-                    <Button className="button-in">ĐĂNG KÝ NGAY</Button>
+                    <Button className={`button-in ${shake ? 'shake' : ''}`}>
+                        ĐĂNG KÝ NGAY
+                    </Button>
                 </div>
             </div>
         </div>

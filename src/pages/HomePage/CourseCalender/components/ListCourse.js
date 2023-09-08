@@ -49,7 +49,16 @@ export default function ListCourse() {
                                 )
                             }}
                         >
-                            <div className="imgCol">
+                            <div
+                                className="imgCol"
+                                onClick={() => {
+                                    handleClickCourse(
+                                        item.id,
+                                        item.subject,
+                                        item.name
+                                    )
+                                }}
+                            >
                                 <Image
                                     className="imgColin"
                                     src={
