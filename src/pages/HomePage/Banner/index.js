@@ -288,14 +288,7 @@ const Banner = () => {
                             </div>
                         ))
                     ) : (
-                        <div
-                            className="mentor-img"
-                            style={
-                                !isMobile && !isTablet
-                                    ? { height: '100%' }
-                                    : { height: '30vh' }
-                            }
-                        >
+                        <div className="mentor-img">
                             <img
                                 className="img-info"
                                 src={bannerImg}

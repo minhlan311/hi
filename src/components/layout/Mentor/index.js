@@ -22,47 +22,6 @@ const Mentor = () => {
     const isMobile = useMediaQuery({ maxWidth: 767, minWidth: 280 })
     const configs = useSelector(configsSelector)
 
-    function SampleNextArrow(props) {
-        const { className, style, onClick } = props
-        return (
-            <div className={className} style={{ ...style }} onClick={onClick}>
-                <div
-                    style={{
-                        display: 'flex',
-                        padding: '7px 11px',
-                        borderRadius: '50%',
-                        background: '#EDEFF5',
-                        width: '25px',
-                        height: '25px',
-                        textAlign: 'center',
-                    }}
-                >
-                    <img src={slickIonRight} alt="slick icon right"></img>
-                </div>
-            </div>
-        )
-    }
-
-    const SamplePrevArrow = (props) => {
-        const { className, style, onClick } = props
-        return (
-            <div className={className} style={{ ...style }} onClick={onClick}>
-                <div
-                    style={{
-                        display: 'flex',
-                        padding: '7px 8px',
-                        borderRadius: '50%',
-                        background: '#EDEFF5',
-                        width: '25px',
-                        height: '25px',
-                        textAlign: 'center',
-                    }}
-                >
-                    <img src={slickIconLeft} alt="slick icon left"></img>
-                </div>
-            </div>
-        )
-    }
     var settings = {
         infinite: true,
         adaptiveHeight: true,
@@ -72,8 +31,7 @@ const Mentor = () => {
         initialSlide: 0,
         autoplay: true,
         autoplaySpeed: 4000,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
+
         responsive: [
             {
                 breakpoint: 1024,

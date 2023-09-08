@@ -285,21 +285,6 @@ button {
     gap: 16px;
 }
 
-.slick-prev:before,
-.slick-next:before {
-    font-size: xxx-large !important;
-    color: #d7d7d7 !important;
-    opacity: 1 !important;
-}
-
-.slick-prev {
-    //left: -50px !important;
-}
-
-.slick-next {
-    right: -25px !important;
-}
-
 .slick-slide {
     padding: 0px 5px 0px 5px;
 }
