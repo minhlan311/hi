@@ -1,4 +1,4 @@
-import { Button, Card, Space, Typography } from 'antd'
+import { Button, Card, Rate, Space, Typography } from 'antd'
 import React, { memo } from 'react'
 
 import { BsArrowRight } from 'react-icons/bs'
@@ -17,52 +17,11 @@ import './styles.scss'
 
 const { Text } = Typography
 
-const Cooperate = () => {
+const Mentor = () => {
     const isTablet = useMediaQuery({ maxWidth: 1024, minWidth: 768 })
     const isMobile = useMediaQuery({ maxWidth: 767, minWidth: 280 })
     const configs = useSelector(configsSelector)
 
-    function SampleNextArrow(props) {
-        const { className, style, onClick } = props
-        return (
-            <div className={className} style={{ ...style }} onClick={onClick}>
-                <div
-                    style={{
-                        display: 'flex',
-                        padding: '7px 11px',
-                        borderRadius: '50%',
-                        background: '#EDEFF5',
-                        width: '25px',
-                        height: '25px',
-                        textAlign: 'center',
-                    }}
-                >
-                    <img src={slickIonRight} alt="slick icon right"></img>
-                </div>
-            </div>
-        )
-    }
-
-    const SamplePrevArrow = (props) => {
-        const { className, style, onClick } = props
-        return (
-            <div className={className} style={{ ...style }} onClick={onClick}>
-                <div
-                    style={{
-                        display: 'flex',
-                        padding: '7px 8px',
-                        borderRadius: '50%',
-                        background: '#EDEFF5',
-                        width: '25px',
-                        height: '25px',
-                        textAlign: 'center',
-                    }}
-                >
-                    <img src={slickIconLeft} alt="slick icon left"></img>
-                </div>
-            </div>
-        )
-    }
     var settings = {
         infinite: true,
         adaptiveHeight: true,
@@ -72,8 +31,7 @@ const Cooperate = () => {
         initialSlide: 0,
         autoplay: true,
         autoplaySpeed: 4000,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
+
         responsive: [
             {
                 breakpoint: 1024,
@@ -108,6 +66,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 50,
             student: 30,
+            avgRate: 4,
+            countRate: 385,
         },
         {
             _id: '2',
@@ -116,6 +76,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 60,
             student: 25,
+            avgRate: 5,
+            countRate: 68,
         },
         {
             _id: '3',
@@ -124,6 +86,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 45,
             student: 40,
+            avgRate: 4.5,
+            countRate: 125,
         },
         {
             _id: '4',
@@ -132,6 +96,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 55,
             student: 35,
+            avgRate: 5,
+            countRate: 355,
         },
         {
             _id: '5',
@@ -140,6 +106,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 70,
             student: 20,
+            avgRate: 4,
+            countRate: 128,
         },
         {
             _id: '6',
@@ -148,6 +116,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 48,
             student: 38,
+            avgRate: 5,
+            countRate: 46,
         },
         {
             _id: '7',
@@ -156,6 +126,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 62,
             student: 22,
+            avgRate: 4.5,
+            countRate: 78,
         },
         {
             _id: '8',
@@ -164,6 +136,8 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 53,
             student: 33,
+            avgRate: 4,
+            countRate: 66,
         },
         {
             _id: '9',
@@ -172,14 +146,18 @@ const Cooperate = () => {
             certificate: 'Teft',
             time: 47,
             student: 42,
+            avgRate: 4.5,
+            countRate: 128,
         },
         {
             _id: '10',
             avatarUrl: 'https://i.pravatar.cc/150?img=10',
             fullName: 'Hoàng Thị K',
-            certificate: 'Teft0',
+            certificate: 'Teft',
             time: 65,
             student: 28,
+            avgRate: 5,
+            countRate: 254,
         },
     ]
     return (
@@ -216,8 +194,16 @@ const Cooperate = () => {
                                     </div>
                                     <div>
                                         <h2>{item.fullName}</h2>
-
                                         <div>Chứng chỉ {item.certificate}</div>
+                                        <Rate
+                                            value={item.avgRate}
+                                            allowHalf
+                                            style={{ fontSize: 12 }}
+                                        />
+                                        <p>
+                                            <b>{item.countRate}</b> lượt đánh
+                                            giá
+                                        </p>
                                     </div>
 
                                     <Space className="it-butt">
@@ -252,4 +238,4 @@ const Cooperate = () => {
     )
 }
 
-export default memo(Cooperate)
+export default memo(Mentor)

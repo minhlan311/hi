@@ -1,17 +1,46 @@
 @import '../../../components/GlobalStyles/responsive.scss';
 .list-course {
-    @include respond-to(xs) {
-        padding: 0 6px;
-    }
-    @include respond-to(sm) {
-        padding: 0 6px;
-    }
-    @include respond-to(md) {
-        padding: 0 6px;
-    }
+    .ls-title {
+        text-align: center;
+        .title {
+            font-size: 50px;
+            font-weight: 700;
+            margin-bottom: 45px;
+            @include respond-to(xs) {
+                font-size: 25px;
+            }
+            @include respond-to(sm) {
+                font-size: 30px;
+            }
+            @include respond-to(md) {
+                font-size: 35px;
+            }
 
-    @include respond-to(lg) {
-        padding: 0 6px;
+            @include respond-to(lg) {
+                font-size: 40px;
+            }
+        }
+        .desc {
+            font-size: 20px;
+            font-weight: 400;
+            @include respond-to(xs) {
+                font-size: 16px;
+            }
+            @include respond-to(sm) {
+                font-size: 18px;
+            }
+            @include respond-to(md) {
+                font-size: 18px;
+            }
+        }
+    }
+    .courseBn {
+        @include respond-to(xs) {
+            display: none;
+        }
+        @include respond-to(sm) {
+            display: none;
+        }
     }
     .intro-card {
         border-radius: 6px;
@@ -30,6 +59,9 @@
             color: var(--defaultColor);
         }
     }
+    border: 2px solid var(--bgColor3);
+    border-radius: 25px;
+    padding: 20px;
 }
 .ball,
 .point3 {

@@ -1,15 +1,19 @@
-import { Affix, Row, Select, Space } from 'antd'
+import { Affix, Button, Row, Select, Space } from 'antd'
 import React, { memo, useEffect, useState } from 'react'
 import { BsFillTelephoneFill } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { ReactComponent as ChinaSVG } from '../../../assets/icons/china_flag.svg'
 import { ReactComponent as EngSVG } from '../../../assets/icons/eng_flag.svg'
 import { ReactComponent as GermanySVG } from '../../../assets/icons/germany_flag.svg'
 import { ReactComponent as JapanSVG } from '../../../assets/icons/japan_flag.svg'
 import { ReactComponent as KoreaSVG } from '../../../assets/icons/korea_flag.svg'
 import { ReactComponent as VieSVG } from '../../../assets/icons/vi_flag.svg'
+import facebook from '../../../assets/icons/facebook-logo.svg'
+import youtube from '../../../assets/icons/youtube-logo.svg'
+import tiktok from '../../../assets/icons/tiktok-icon.svg'
+import zalo from '../../../assets/icons/zalo.png'
 import logoImg from '../../../assets/images/backgrounds/logo.svg'
 import { USER_INFO } from '../../../constants/storageKeys'
 import { onMessageListener } from '../../../firebases'
@@ -18,6 +22,7 @@ import { userDetailSelector } from '../../../slices/user'
 import Header from '../Header/Header'
 import MenuPc from './MenuPc'
 import './styles.scss'
+
 const Navigation = () => {
     const dispatch = useDispatch()
     const userDetail = useSelector(userDetailSelector)
@@ -81,9 +86,63 @@ const Navigation = () => {
                                         alt="mtz logo"
                                     />
                                 </Link>
+                                <Space size="large">
+                                    <Button type="primary" size="small">
+                                        Tiếng Anh Offline
+                                    </Button>
+                                    <Button type="primary" size="small">
+                                        Tiếng Anh trực tuyến 1 kèm 1
+                                    </Button>
+                                    <Button type="primary" size="small">
+                                        Tiếng Anh trực tuyến
+                                    </Button>
+                                </Space>
 
                                 <div className="menu-bar">
                                     <Space size="large">
+                                        {' '}
+                                        <Space size="small">
+                                            <Link
+                                                to="https://www.facebook.com/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src={facebook}
+                                                    alt="facebook"
+                                                    width={20}
+                                                />
+                                            </Link>
+                                            <Link
+                                                to="https://www.youtube.com/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src={youtube}
+                                                    alt="youtube"
+                                                    width={26}
+                                                />
+                                            </Link>
+                                            <Link
+                                                to="https://www.tiktok.com/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src={tiktok}
+                                                    alt="tiktok"
+                                                    width={20}
+                                                />
+                                            </Link>
+                                            <Link
+                                                to="https://zalo.me/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src={zalo}
+                                                    alt="zalo"
+                                                    width={20}
+                                                />
+                                            </Link>
+                                        </Space>
                                         <Space
                                             style={{
                                                 width: '100%',

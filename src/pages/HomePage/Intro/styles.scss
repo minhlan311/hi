@@ -1,12 +1,20 @@
 @import '../../../components/GlobalStyles/responsive.scss';
 .mb-scroll {
     display: block;
+    .buttTest {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        margin-top: 20px;
+    }
     .intor-main {
         margin-top: 0;
         display: flex;
         scroll-snap-type: x mandatory;
         overflow-x: auto;
         column-gap: 20px;
+
         &::-webkit-scrollbar {
             height: 0;
             background-color: transparent;

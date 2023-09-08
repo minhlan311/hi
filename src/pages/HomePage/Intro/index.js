@@ -1,4 +1,4 @@
-import { Card, Space } from 'antd'
+import { Button, Card, Space } from 'antd'
 import React from 'react'
 import {
     BsBookFill,
@@ -90,6 +90,11 @@ export default function Intro() {
                             </Space>
                         </Card>
                     ))}
+                </div>{' '}
+                <div className="buttTest">
+                    <Button type="primary" size="large">
+                        KIỂM TRA TRÌNH ĐỘ MIỄN PHÍ
+                    </Button>
                 </div>
             </div>
 
