@@ -46,13 +46,13 @@ const RolesDataSelection = [
     {
         id: uuidv4(),
         prefix: 'mentor',
-        title: 'Mentor',
+        title: 'Giảng Viên',
         imgIcon: mentorImg,
     },
     {
         id: uuidv4(),
         prefix: 'pupil',
-        title: 'Học Sinh',
+        title: 'Học Viên',
         imgIcon: pupilImg,
     },
 ]

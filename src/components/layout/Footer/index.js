@@ -134,7 +134,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-white-heading">
                                             Giới thiệu
                                         </Text>
 
@@ -163,7 +163,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-white-heading">
                                             Tuyển dụng
                                         </Text>
 
@@ -192,7 +192,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-white-heading">
                                             Cung cấp giáo viên bản ngữ
                                         </Text>
                                         <ul className="ul-fff">
@@ -213,7 +213,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-white-heading">
                                             Khóa học tiếng Anh
                                         </Text>
                                         <ul className="ul-fff">
