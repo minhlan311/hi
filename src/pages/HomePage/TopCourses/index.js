@@ -10,6 +10,7 @@ import { ReactComponent as EngSVG } from '../../../assets/icons/eng_flag.svg'
 import { ReactComponent as GermanySVG } from '../../../assets/icons/germany_flag.svg'
 import { ReactComponent as JapanSVG } from '../../../assets/icons/japan_flag.svg'
 import { ReactComponent as KoreaSVG } from '../../../assets/icons/korea_flag.svg'
+import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
 export default function TopCourses() {
     const courseData = [
         {
@@ -46,15 +47,19 @@ export default function TopCourses() {
     return (
         <Header
             size="sm"
-            title="Các khóa học tiêu biểu"
-            desc="ĐÀO TẠO NHIỀU NGÔN NGỮ"
+            title=""
+            desc=""
             padding="60px 0"
             background="var(--lighish-white)"
         >
             <img src={ball} alt="ball" className="ball" />
             <img src={point3} alt="point3" className="point3" />
             <div className="list-course">
-                <Row gutter={[24, 24]}>
+                <div className="ls-title">
+                    <p className="desc">ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
+                    <h2 className="title">Các khóa học tiêu biểu</h2>
+                </div>
+                <Row gutter={[24, 24]} justify="space-between">
                     {courseData.map((item, id) => (
                         <Col span={24} md={12} xl={8} key={id}>
                             <Card
@@ -97,6 +102,9 @@ export default function TopCourses() {
                             </Card>
                         </Col>
                     ))}
+                    <Col md={12} xl={8}>
+                        <img src={courseBn} alt="banner" className="courseBn" />
+                    </Col>
                 </Row>
             </div>
         </Header>
