@@ -1,29 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { memo, useEffect, useMemo, useState } from 'react'
-import { getStorage } from '../../services/storage'
-import { USER_INFO } from '../../constants/storageKeys'
-import Footer from '../../components/layout/Footer'
-import Banner from './Banner'
-import Navigation from '../../components/layout/Navigation'
-import Cooperate from '../../components/layout/Cooperate'
-import AskingQuestion from './AskingQuestion'
-import StudyDocuments from './StudyDocument'
-import UniversitySubjects from './UniversitySubjects'
-import Announcement from './Announcement'
-import Exam from './Exam'
-import './styles.scss'
-import { useHistory } from 'react-router-dom'
+import React, { memo, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { getEducationDetailRequest } from '../../slices/education'
+import Footer from '../../components/layout/Footer'
+import Mentor from '../../components/layout/Mentor'
+import Navigation from '../../components/layout/Navigation'
+import { findSubjectRequest } from '../../slices/subjects'
+import Banner from './Banner'
+import CourseCalender from './CourseCalender/CourseCalender'
+import Gift from './Gift/Gift'
 import Intro from './Intro'
+import LanguageSystem from './LanguageSystem/LanguageSystem'
+import Mission from './Mission'
+import News from './News/News'
 import TopCourses from './TopCourses'
 import VideoContent from './VideoContent/VideoContent'
-import News from './News/News'
-import CourseCalender from './CourseCalender/CourseCalender'
-import { findSubjectRequest } from '../../slices/subjects'
-import Mission from './Mission'
-import LanguageSystem from './LanguageSystem/LanguageSystem'
-import Gift from './Gift/Gift'
+import './styles.scss'
 
 const HomePage = () => {
     // const userInfo = useMemo(() => getStorage(USER_INFO), [])
@@ -43,7 +34,7 @@ const HomePage = () => {
             <Navigation />
             <Banner />
             <Intro />
-            <Cooperate />
+            <Mentor />
             <TopCourses />
             <Mission />
             <VideoContent />

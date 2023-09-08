@@ -240,11 +240,15 @@ export default function MenuPc({ open, setOpen }) {
             href: '/',
         },
         {
-            label: 'Trách nhiệm',
+            label: 'Trắc nhiệm',
             href: '/',
         },
         {
             label: 'Tin tức',
+            href: '/',
+        },
+        {
+            label: 'Tuyển dụng',
             href: '/',
         },
         {
@@ -327,80 +331,78 @@ export default function MenuPc({ open, setOpen }) {
                     <Row
                         justify="space-between"
                         align="middle"
-                        className="uc-container"
+                        className="uc-container menuItem"
                     >
-                        <Col span={16} className="menuItem">
-                            {menu.map((item) => (
-                                <div key={item.label} className="menuLabel">
-                                    <div className="labelItem">
-                                        <Space
-                                            style={{ width: '100%' }}
-                                            size="small"
-                                        >
-                                            {item?.href ? (
-                                                <Link
-                                                    to={item.href}
-                                                    className="title"
-                                                >
-                                                    {item.label}
-                                                </Link>
-                                            ) : (
-                                                <div className="title">
-                                                    {item.label}
-                                                </div>
-                                            )}
-                                            {item?.children?.length > 0 && (
-                                                <DownOutlined />
-                                            )}
-                                        </Space>
-                                        {item?.children?.length > 0 && (
-                                            <div className="arr"></div>
-                                        )}
-                                    </div>
-                                    {item?.children?.length > 0 && (
-                                        <div className="chilMenu">
-                                            <Row
-                                                justify="space-between"
-                                                gutter={24}
+                        {menu.map((item) => (
+                            <div key={item.label} className="menuLabel">
+                                <div className="labelItem">
+                                    <Space
+                                        style={{ width: '100%' }}
+                                        size="small"
+                                    >
+                                        {item?.href ? (
+                                            <Link
+                                                to={item.href}
+                                                className="title"
                                             >
-                                                {item.children.map((chil) => (
-                                                    <Col
-                                                        span={6}
-                                                        className="chil"
-                                                        key={chil.label}
-                                                    >
-                                                        <h3>{chil.label}</h3>
-                                                        {chil?.menuChild?.map(
-                                                            (menuChil) => (
-                                                                <Space
-                                                                    style={{
-                                                                        width: '100%',
-                                                                    }}
-                                                                    direction="vertical"
-                                                                    key={
-                                                                        menuChil.childLabel
-                                                                    }
-                                                                >
-                                                                    <Link
-                                                                        to={
-                                                                            menuChil.href
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            menuChil.childLabel
-                                                                        }
-                                                                    </Link>
-                                                                </Space>
-                                                            )
-                                                        )}
-                                                    </Col>
-                                                ))}
-                                            </Row>
-                                        </div>
+                                                {item.label}
+                                            </Link>
+                                        ) : (
+                                            <div className="title">
+                                                {item.label}
+                                            </div>
+                                        )}
+                                        {item?.children?.length > 0 && (
+                                            <DownOutlined />
+                                        )}
+                                    </Space>
+                                    {item?.children?.length > 0 && (
+                                        <div className="arr"></div>
                                     )}
                                 </div>
-                            ))}
-                        </Col>
+                                {item?.children?.length > 0 && (
+                                    <div className="chilMenu">
+                                        <Row
+                                            justify="space-between"
+                                            gutter={24}
+                                        >
+                                            {item.children.map((chil) => (
+                                                <Col
+                                                    span={6}
+                                                    className="chil"
+                                                    key={chil.label}
+                                                >
+                                                    <h3>{chil.label}</h3>
+                                                    {chil?.menuChild?.map(
+                                                        (menuChil) => (
+                                                            <Space
+                                                                style={{
+                                                                    width: '100%',
+                                                                }}
+                                                                direction="vertical"
+                                                                key={
+                                                                    menuChil.childLabel
+                                                                }
+                                                            >
+                                                                <Link
+                                                                    to={
+                                                                        menuChil.href
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        menuChil.childLabel
+                                                                    }
+                                                                </Link>
+                                                            </Space>
+                                                        )
+                                                    )}
+                                                </Col>
+                                            ))}
+                                        </Row>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
 
                         {!user ? (
                             <div className="butt-auth">
