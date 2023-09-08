@@ -47,7 +47,7 @@ export default function Gift() {
                             <ul>
                                 <li>Giảm - 40% HỌC PHÍ</li>
                                 <li>
-                                    FREE Giác trình & tài liệu + VIDEO bài giảng
+                                    FREE Giáo trình & tài liệu + VIDEO bài giảng
                                     bổ trợ kiến thức gửi SHIP tận nhà
                                 </li>
                                 <li>
