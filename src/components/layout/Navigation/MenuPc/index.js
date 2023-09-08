@@ -240,7 +240,7 @@ export default function MenuPc({ open, setOpen }) {
             href: '/',
         },
         {
-            label: 'Trắc nhiệm',
+            label: 'Trắc nghiệm',
             href: '/',
         },
         {
