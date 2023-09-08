@@ -1,0 +1,30 @@
+export const PATH = {
+  LOGIN: '/login',
+  FORGOT_PASS: '/forgot-pasword',
+  REGISTER: '/register',
+  DOCUMENTS: '/documents',
+  DOCUMENTS_DETAIL: '/documents/:id',
+  QUIZZES: '/quizzes',
+  TESTS: '/tests',
+  QUIZZES_DETAIL: '/quizzes/:id',
+  TESTS_DETAIL: '/tests/:id',
+  ERROR_PAGE: '/error-page',
+  SUBJECTS_PAGE: '/subjects',
+  PROFILES: '/profiles',
+  PROFILES_DETAIL: '/profiles/:id',
+  COURSE_PAGE: '/courses',
+  COURSE_DETAIL: '/courses/:subjectSlug/:courseSlug',
+  COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',
+  MENTOR_PAGE: '/mentor',
+  MENTOR_COURSES: '/mentor/courses',
+  MENTOR_DOCUMENTS: '/mentor/documents',
+  MENTOR_EXAMS: '/mentor/exams',
+  MENTOR_QUESTIONS: '/mentor/exams/:id/questions',
+  REGIS_MENTOR: '/regis-is-mentor',
+  POINT_MANAGEMENT: '/point-management',
+  CHANGE_PASS: '/change-password',
+  PAYMENT_CALLBACK: '/payment-callback',
+  PEDAGOGYS: '/pedagogys'
+} as const
+
+export default PATH

@@ -1,0 +1,21 @@
+.connect {
+  padding: 0 4%;
+  .introList {
+    line-height: 45px;
+    width: 58%;
+    .title {
+      font-size: 32px;
+      font-weight: 400;
+    }
+    .desc {
+      font-size: 40px;
+      font-weight: 500;
+    }
+  }
+  .button {
+    width: 100%;
+    font-size: 24px;
+    font-weight: 400;
+    height: 60px;
+  }
+}

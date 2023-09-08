@@ -1,0 +1,32 @@
+.bodyBanner {
+  .logo {
+    height: 33px;
+    width: auto;
+  }
+
+  .title {
+    font-size: 40px;
+    font-weight: 700;
+  }
+
+  .desc {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 32px 0;
+    & ul {
+      margin-left: 30px;
+      li {
+        list-style: initial;
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+  }
+}
+.dirLeft {
+  flex-direction: row-reverse !important;
+}

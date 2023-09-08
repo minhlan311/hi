@@ -1,0 +1,74 @@
+.col11 {
+  // background-color: chocolate;
+}
+.wrapper {
+  border: 1px solid #d1d7dc;
+  max-width: 660px;
+}
+.wrapperNoneBorder {
+  max-width: 660px;
+}
+.col22 {
+  // background-color: red;
+}
+.gridContainer {
+  display: grid;
+  grid-template-rows: 1fr 1fr; /* Chia layout thành 2 hàng có cùng tỷ lệ */
+  grid-gap: 10px; /* Khoảng cách giữa các grid item */
+}
+
+.gridItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.App {
+  position: relative;
+}
+
+.expandableContent {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.25s cubic-bezier(0, 1, 0, 1); /* Adjust cubic-bezier values */
+}
+
+.expanded {
+  max-height: 1000px; /* Adjust as needed */
+  transition: max-height 0.25s cubic-bezier(0, 0, 0, 0); /* Adjust cubic-bezier values */
+}
+
+.expandButton {
+  font-size: 14px;
+  font-weight: 700;
+  color: #8710d8;
+  display: block;
+  cursor: pointer;
+}
+.blur {
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  padding-top: 70px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 1));
+}
+.blurShow {
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  padding-top: 50px;
+}
+.flexButton {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.icons {
+  color: #8710d8;
+  font-size: 8px;
+}

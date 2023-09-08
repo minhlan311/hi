@@ -1,0 +1,8 @@
+.borderBottom > *::before {
+  border: 1px solid transparent !important;
+}
+.labelWeight {
+  > * {
+    font-weight: bold;
+  }
+}

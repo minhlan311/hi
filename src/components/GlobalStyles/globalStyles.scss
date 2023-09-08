@@ -1,0 +1,343 @@
+:root {
+  --black: #000;
+  --blackBg: #1f1e1f;
+  --white: #fff;
+  --whiteBg: #fff;
+  --lighish-white: #f7f9fa;
+  --gray: #1c1d1f;
+  --light-gray: #6a6f73;
+  --light-gray2: #242528;
+  --light-gray3: #3e4143;
+  --gray86: #d1d7dc;
+  --gray100: #f0f2f4;
+  --gray-wild-sand: #f3f3f3;
+  --gray-alto: #d9d9d9;
+  --gray-silver: #b7b7b7;
+  --gray-silver-chalice: #999999;
+  --gray-mine-shaft: #434343;
+  --purple: #7325a3;
+  --purple-dark: #a435f0;
+  --teal: #acd2cc;
+  --dark-teal: #199fa3;
+  --dark-teal2: #1e6055;
+  --teal-green-light: #6ac1d0;
+  --teal-green-lighter: #c3e6ec;
+  --yellow: #e9e729;
+  --blue: #5022c3;
+  --red: #fcbca0;
+  --red1: #b32d0f;
+  --indigo: #401b9c;
+  --indigo200: #b7a9e5;
+  --indigolight: #cec0fc;
+  --blackish2: rgb(51, 51, 51);
+  --yellowish-green: #eceb98;
+  --yellowish-green-dark: #3d3c0a;
+  --glodish1: #b4690e;
+  --glodish2: #e59819;
+  --crimson: crimson;
+  --light-orangish: #f3ca8c;
+  --transparent: transparent;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.4;
+  direction: 1tr;
+  unicode-bidi: embed;
+  width: 100%;
+  height: 100%;
+  font-family: 'SF Pro Text', 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: 280px) and (max-width: 575.98px) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (max-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: 768px) and (max-width: 991.98px) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: 992px) and (max-width: 1199.98px) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (min-width: 1600px) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint. Use xs, sm, md, lg, or xl.";
+  }
+}
+
+.container {
+  width: min(100% - 15px, 1330px);
+  margin-inline: auto;
+  @include respond-to(xs) {
+    padding: 0 10px;
+  }
+  @include respond-to(sm) {
+    padding: 0 15px;
+  }
+  @include respond-to(md) {
+    max-width: 960px;
+    padding: 0 20px;
+  }
+
+  @include respond-to(lg) {
+    max-width: 1140px;
+    padding: 0 20px;
+  }
+}
+
+.container2 {
+  max-width: 1164px;
+}
+.container3 {
+  max-width: 896px;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.ant-carousel .slick-prev,
+.ant-carousel .slick-next,
+.ant-carousel .slick-prev:focus,
+.ant-carousel .slick-next:focus {
+  box-sizing: content-box;
+  z-index: 100;
+  background-color: #404345;
+  border-radius: 100%;
+  padding: 10px;
+  font-size: inherit;
+  color: white !important;
+  width: auto;
+  height: auto;
+}
+
+.ant-carousel .slick-prev:hover,
+.ant-carousel .slick-next:hover {
+  padding: 10px;
+  box-sizing: content-box;
+  opacity: 0.9;
+  z-index: 100;
+  background-color: #404345;
+  border-radius: 100%;
+  font-size: inherit;
+  color: white !important;
+}
+
+.ant-carousel .slick-prev::before {
+  color: currentColor !important;
+}
+
+.slick-arrow.slick-prev {
+  font-size: 20px !important;
+}
+
+.ant-carousel .slick-next::before {
+  color: currentColor !important;
+}
+
+.slick-arrow.slick-next {
+  font-size: 20px !important;
+}
+.ant-card-body {
+  justify-content: start !important;
+  padding: 0 !important;
+}
+.ant-card {
+  box-shadow: none !important;
+}
+.ant-collapse-header {
+  align-items: center !important;
+}
+
+.ant-card .ant-card-cover img,
+.ant-card .ant-card-cover img + .ant-image-mask {
+  border-radius: 0 !important;
+}
+.ant-card:not(.ant-card-bordered) {
+  box-shadow: none !important;
+}
+.ant-card .ant-card-body {
+  text-align: left;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ant-typography.ant-typography-ellipsis.ant-typography-ellipsis-multiple-line.css-dev-only-do-not-override-txh9fw {
+  margin-bottom: 0 !important;
+}
+.ant-typography.ant-typography-ellipsis.ant-typography-ellipsis-multiple-line._title_k5ogj_19.css-dev-only-do-not-override-k7rw7n {
+  margin: 0 !important;
+}
+
+.sticky {
+  position: sticky;
+  top: 10px;
+}
+
+.custom-butt-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .anticon {
+    font-size: 20px !important;
+  }
+}
+
+.ant-btn-primary {
+  box-shadow: none;
+  font-weight: 400;
+}
+
+.ant-btn-default {
+  font-weight: 400;
+  &:hover {
+    background-color: #0000000a;
+  }
+}
+
+.ant-btn-link:hover {
+  font-weight: 600;
+}
+.ant-dropdown-menu-item:hover * {
+  color: var(--indigo);
+}
+.ant-list-item {
+  display: block !important;
+}
+
+.ant-menu-item-selected,
+.ant-menu-item:hover {
+  background-color: var(--light-gray) !important;
+  color: var(--white) !important;
+}
+.ant-menu-item {
+  font-size: 16px;
+  a {
+    transition: 0s !important;
+  }
+  a:hover {
+    color: var(--white) !important;
+  }
+}
+
+.dangerHTMLTwoLine {
+  white-space: break-spaces;
+  overflow: hidden;
+  height: 22px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.userContainer {
+  padding: 15px 150px;
+}
+
+.sp100 {
+  width: 100%;
+}
+/* Hide the scrollbar track */
+::-webkit-scrollbar {
+  width: 6px; /* Adjust the width as per your preference */
+  background-color: transparent; /* Set the background color of the scrollbar track */
+}
+
+/* Add a hover effect to show the scrollbar on hover */
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Set the background color on hover */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--purple-dark);
+}
+
+/* Hide the scrollbar when not in use */
+::-webkit-scrollbar-track-piece {
+  background-color: transparent; /* Set the background color of the scrollbar track piece */
+  visibility: hidden;
+}
+
+/* Show the scrollbar when hovering over the scrollable content */
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar:hover {
+  visibility: visible;
+}
