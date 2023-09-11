@@ -1,6 +1,6 @@
 import { forwardRef, useContext } from 'react'
 import { Slider, Tooltip, Typography } from 'antd'
-import { TbPlayerTrackPrevFilled, TbPlayerTrackNextFilled, TbArrowsRightLeft } from 'react-icons/tb'
+import { TbPlayerTrackPrevFilled, TbPlayerTrackNextFilled, TbArrowsRightLeft } from 'react-icons/Tb'
 import { BsPlayFill, BsFillPauseFill, BsArrowsFullscreen } from 'react-icons/bs'
 import { BiSolidVolumeFull, BiSolidVolumeMute, BiSolidVolumeLow } from 'react-icons/bi'
 import { AiOutlinePlayCircle, AiOutlinePauseCircle } from 'react-icons/ai'

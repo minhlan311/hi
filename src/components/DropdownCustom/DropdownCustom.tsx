@@ -8,7 +8,7 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 type Props = {
   children: React.ReactNode
   items?: MenuProps['items']
-  title?: string
+  title?: string | React.ReactNode
   buttonText?: string
   buttonHref?: string
   buttonType?: 'primary' | 'dashed' | 'link' | 'text' | 'default'

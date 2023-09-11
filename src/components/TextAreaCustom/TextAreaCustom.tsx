@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import './styles.scss'
-// type Props = {}
+type Props = {}
 
-const TextAreaCustom = () => {
+const TextAreaCustom = (props: Props) => {
   const [editorHtml, setEditorHtml] = useState('')
 
   const modules = {

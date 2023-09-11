@@ -1,5 +1,5 @@
-import { Row, Space } from 'antd'
-
+import { Col, Row, Space } from 'antd'
+import React from 'react'
 import Avatar from '~/components/Avatar/Avatar'
 import { UserState } from '~/interface/user'
 import css from './UserMenu.module.scss'

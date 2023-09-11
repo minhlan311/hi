@@ -26,7 +26,7 @@ const TabsCustom = (props: TabsItemProps) => {
   const items: TabType['items'] = getItem(data)
   return (
     <Tabs
-      className={`${!borderBottom && css.borderBottom} ${labelWeight && css.labelWeight} `}
+      className={`${!borderBottom && css.unBorderBottom} ${css.borderBottom} ${labelWeight && css.labelWeight} `}
       defaultActiveKey={defaultActiveKey || data?.[0]?.id}
       items={items}
       {...setting}

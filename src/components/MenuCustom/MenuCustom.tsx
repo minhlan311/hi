@@ -22,7 +22,7 @@ const MenuCustom = (props: Props) => {
     header,
     defaultOpenKeys,
     activeKey,
-    // action,
+    action,
     mode,
     theme,
     multiple = false,
