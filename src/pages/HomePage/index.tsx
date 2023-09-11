@@ -1,11 +1,11 @@
+import Banner from './Banner'
 import './styles.scss'
 
 export default function HomePage() {
   return (
     <div className='mtz-homepage'>
-      {/* <Navigation />
       <Banner />
-      <Intro />
+      {/* <Intro />
       <Mentor />
       <TopCourses />
       <Mission />
@@ -13,9 +13,7 @@ export default function HomePage() {
       <LanguageSystem />
       <Gift />
       <CourseCalender />
-      <News />
-      <Footer /> */}
-      home
+      <News /> */}
     </div>
   )
 }

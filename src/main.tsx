@@ -46,10 +46,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                       borderRadiusOuter: 12,
                       borderRadiusSM: 12,
                       borderRadiusXS: 12,
-                      paddingContentHorizontal: 23,
+                      paddingContentHorizontal: 14,
                       controlHeight: 40,
                       controlOutlineWidth: 1,
-                      colorSplit: '#D72831',
+                      colorSplit: '#E7E7E7',
                       colorBorderSecondary: '#6a6f73'
                     }
                   }}
