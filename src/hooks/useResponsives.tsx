@@ -12,10 +12,10 @@ interface ResponsiveSizes {
 const useResponsives = () => {
   const [windowSize, setWindowSize] = useState<ResponsiveSizes>({
     xs: window.innerWidth < 576,
-    sm: window.innerWidth >= 576 && window.innerWidth < 768,
-    md: window.innerWidth >= 768 && window.innerWidth < 992,
-    lg: window.innerWidth >= 992 && window.innerWidth < 1200,
-    xl: window.innerWidth >= 1200 && window.innerWidth < 1600,
+    sm: window.innerWidth < 768,
+    md: window.innerWidth < 992,
+    lg: window.innerWidth < 1200,
+    xl: window.innerWidth < 1600,
     xxl: window.innerWidth >= 1600
   })
 
@@ -23,10 +23,10 @@ const useResponsives = () => {
     const handleResize = () => {
       setWindowSize({
         xs: window.innerWidth < 576,
-        sm: window.innerWidth >= 576 && window.innerWidth < 768,
-        md: window.innerWidth >= 768 && window.innerWidth < 992,
-        lg: window.innerWidth >= 992 && window.innerWidth < 1200,
-        xl: window.innerWidth >= 1200 && window.innerWidth < 1600,
+        sm: window.innerWidth < 768,
+        md: window.innerWidth < 992,
+        lg: window.innerWidth < 1200,
+        xl: window.innerWidth < 1600,
         xxl: window.innerWidth >= 1600
       })
     }

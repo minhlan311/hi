@@ -1,16 +1,30 @@
 import { DownOutlined } from '@ant-design/icons'
-import { Avatar, Button, Col, Divider, Drawer, Dropdown, Row, Select, Space } from 'antd'
+import { Col, Divider, Drawer, Row, Select, Space } from 'antd'
 import { IoMenuSharp } from 'react-icons/io5'
-
 import { Link } from 'react-router-dom'
-
+import Avatar from '~/components/Avatar/Avatar'
+import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import DropdownCustom from '~/components/DropdownCustom/DropdownCustom'
+import Logo from '~/components/Logo/Logo'
+import { UserState } from '~/interface/user'
+import useResponsives from '../../../../hooks/useResponsives'
 import Header from '../../Header/Header'
 import './styles.scss'
-import useResponsives from '../../../../hooks/useResponsives'
-export default function MenuPc({ open, setOpen }) {
-  const user = false
+
+type Props = {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  user: UserState | null
+}
+
+type Menu = {
+  label: string | React.ReactNode
+  href: string
+  children: string[]
+}
+export default function MenuPc({ open, setOpen, user = null }: Props) {
   const { sm, md } = useResponsives()
-  const menu = [
+  const menu: Menu = [
     {
       label: 'Giới thiệu',
       href: '/'
@@ -249,9 +263,9 @@ export default function MenuPc({ open, setOpen }) {
       key: '1',
       label: (
         <Link to='/profiles'>
-          <Button type='text' size='small'>
+          <ButtonCustom type='text' size='small'>
             Trang cá nhân
-          </Button>
+          </ButtonCustom>
         </Link>
       )
     },
@@ -260,9 +274,9 @@ export default function MenuPc({ open, setOpen }) {
       key: '2',
       label: (
         <Link to='/change-password'>
-          <Button type='text' size='small'>
+          <ButtonCustom type='text' size='small'>
             Đổi mật khẩu
-          </Button>
+          </ButtonCustom>
         </Link>
       )
     },
@@ -272,7 +286,7 @@ export default function MenuPc({ open, setOpen }) {
     {
       key: '3',
       label: (
-        <Button
+        <ButtonCustom
           type='text'
           size='small'
           onClick={() => {
@@ -281,7 +295,7 @@ export default function MenuPc({ open, setOpen }) {
           }}
         >
           Đăng xuất
-        </Button>
+        </ButtonCustom>
       )
     }
   ]
@@ -289,93 +303,98 @@ export default function MenuPc({ open, setOpen }) {
   return (
     <div className='menu'>
       <Header type='fullsize'>
-        {/* mobile */}
-        <Row justify='space-between' align='middle' style={{ padding: '10px 12px' }}>
-          <Col span={16} className='menuItem'>
-            {/* <LogoLight /> */}
-          </Col>
-          <Col>
-            <Button type='text' size='small' style={{ height: 40 }} onClick={() => setOpen(!open)}>
-              <IoMenuSharp size={35} color='white' />
-            </Button>
-          </Col>
-        </Row>
-        pc
-        <Row justify='space-between' align='middle' className='uc-container menuItem'>
-          {menu.map((item) => (
-            <div key={item.label} className='menuLabel'>
-              <div className='labelItem'>
-                <Space style={{ width: '100%' }} size='small'>
-                  {item?.href ? (
-                    <Link to={item.href} className='title'>
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <div className='title'>{item.label}</div>
-                  )}
-                  {item?.children?.length > 0 && <DownOutlined />}
-                </Space>
-                {item?.children?.length > 0 && <div className='arr'></div>}
-              </div>
-              {item?.children?.length > 0 && (
-                <div className='chilMenu'>
-                  <Row justify='space-between' gutter={24}>
-                    {item.children.map((chil) => (
-                      <Col span={6} className='chil' key={chil.label}>
-                        <h3>{chil.label}</h3>
-                        {chil?.menuChild?.map((menuChil) => (
-                          <Space
-                            style={{
-                              width: '100%'
-                            }}
-                            direction='vertical'
-                            key={menuChil.childLabel}
-                          >
-                            <Link to={menuChil.href}>{menuChil.childLabel}</Link>
-                          </Space>
-                        ))}
-                      </Col>
-                    ))}
-                  </Row>
+        {md ? (
+          <Row justify='space-between' align='middle' style={{ padding: '10px 12px' }}>
+            <Col span={16} className='menuItem'>
+              <Logo type='light' />
+            </Col>
+            <Col>
+              <ButtonCustom
+                type='text'
+                size='small'
+                style={{ height: 40 }}
+                onClick={() => setOpen(!open)}
+                icon={<IoMenuSharp size={35} color='white' />}
+              ></ButtonCustom>
+            </Col>
+          </Row>
+        ) : (
+          <Row justify='space-between' align='middle' className='uc-container menuItem'>
+            {menu.map((item) => (
+              <div key={item.label} className='menuLabel'>
+                <div className='labelItem'>
+                  <Space style={{ width: '100%' }} size='small'>
+                    {item?.href ? (
+                      <Link to={item.href} className='title'>
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <div className='title'>{item.label}</div>
+                    )}
+                    {item?.children?.length > 0 && <DownOutlined />}
+                  </Space>
+                  {item?.children?.length > 0 && <div className='arr'></div>}
                 </div>
-              )}
-            </div>
-          ))}
+                {item?.children?.length > 0 && (
+                  <div className='chilMenu'>
+                    <Row justify='space-between' gutter={24}>
+                      {item.children.map((chil) => (
+                        <Col span={6} className='chil' key={chil.label}>
+                          <h3>{chil.label}</h3>
+                          {chil?.menuChild?.map((menuChil) => (
+                            <Space
+                              style={{
+                                width: '100%'
+                              }}
+                              direction='vertical'
+                              key={menuChil.childLabel}
+                            >
+                              <Link to={menuChil.href}>{menuChil.childLabel}</Link>
+                            </Space>
+                          ))}
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                )}
+              </div>
+            ))}
 
-          {!user ? (
-            <div className='butt-auth'>
-              <Link to='/login'>
-                <Button type='text' className='butt-item'>
-                  Đăng nhâp
-                </Button>
-              </Link>
-              /
-              <Link to='/register'>
-                <Button type='text' className='butt-item'>
-                  Đăng ký
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <Dropdown
-              menu={{
-                items
-              }}
-              placement='bottomRight'
-            >
-              <Space>
-                <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
-                <Avatar src={user.avatarUrl ? user.avatarUrl : undefined}>{user.fullName.charAt(0)}</Avatar>
-              </Space>
-            </Dropdown>
-          )}
-        </Row>
+            {user ? (
+              <DropdownCustom
+                menu={{
+                  items
+                }}
+                placement='bottomRight'
+              >
+                <Space>
+                  <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
+                  <Avatar avtUrl={user?.avatarUrl} userData={user}></Avatar>
+                </Space>
+              </DropdownCustom>
+            ) : (
+              <div className='butt-auth'>
+                <Link to='/login'>
+                  <ButtonCustom type='text' className='butt-item'>
+                    Đăng nhâp
+                  </ButtonCustom>
+                </Link>
+                /
+                <Link to='/register'>
+                  <ButtonCustom type='text' className='butt-item'>
+                    Đăng ký
+                  </ButtonCustom>
+                </Link>
+              </div>
+            )}
+          </Row>
+        )}
       </Header>
       <Drawer
-        placement={md ? 'right' : 'top'}
-        closable={!md}
+        placement={sm ? 'top' : 'right'}
+        closable={sm}
         onClose={() => setOpen(!open)}
-        open={open}
+        open={!md ? false : open}
         style={{
           textAlign: 'center'
         }}
@@ -385,7 +404,7 @@ export default function MenuPc({ open, setOpen }) {
           user && (
             <Space>
               <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
-              <Avatar src={user.avatarUrl ? user.avatarUrl : undefined}>{user.fullName.charAt(0)}</Avatar>
+              <Avatar avtUrl={user.avatarUrl} userData={user}></Avatar>
             </Space>
           )
         }
@@ -394,9 +413,9 @@ export default function MenuPc({ open, setOpen }) {
         <Space direction='vertical'>
           {menu.map((item) => (
             <Link to={item.href} key={item.label}>
-              <Button type='text' size='small' style={{ width: '100%' }}>
+              <ButtonCustom type='text' size='small' style={{ width: '100%' }}>
                 {item.label}
-              </Button>
+              </ButtonCustom>
             </Link>
           ))}
         </Space>
@@ -465,11 +484,11 @@ export default function MenuPc({ open, setOpen }) {
           {!user ? (
             <Space>
               <Link to='/login'>
-                <Button type='text'>Đăng nhâp</Button>
+                <ButtonCustom type='text'>Đăng nhâp</ButtonCustom>
               </Link>
               /
               <Link to='/register'>
-                <Button type='text'>Đăng ký</Button>
+                <ButtonCustom type='text'>Đăng ký</ButtonCustom>
               </Link>
             </Space>
           ) : (

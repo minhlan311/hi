@@ -286,6 +286,10 @@ table {
   width: 100%;
 }
 
+.flag-select {
+  display: flex;
+}
+
 /* Hide the scrollbar track */
 ::-webkit-scrollbar {
   width: 6px; /* Adjust the width as per your preference */

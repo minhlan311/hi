@@ -13,14 +13,16 @@ type Props = {
   mode?: 'multiple' | 'tags'
   disabled?: boolean
   style?: React.CSSProperties
+  className?: string
   size?: 'large' | 'middle' | 'small'
   defaultValue?: string | string[]
-  onChange?: () => {}
+  onChange?: () => void
   options: OptionType[]
   allowClear?: boolean
   loading?: boolean
   selectAll?: boolean
   selectAllLabel?: string
+  suffixIcon?: boolean
 }
 
 const SelectCustom = (props: Props) => {
@@ -30,6 +32,7 @@ const SelectCustom = (props: Props) => {
     mode,
     disabled,
     style,
+    className,
     size,
     defaultValue,
     onChange,
@@ -37,7 +40,8 @@ const SelectCustom = (props: Props) => {
     allowClear,
     loading,
     selectAll,
-    selectAllLabel = 'Select All'
+    selectAllLabel = 'Select All',
+    suffixIcon
   } = props
   const { Option } = Select
   const [selectedValues, setSelectedValues] = useState<string[]>([])
@@ -57,6 +61,7 @@ const SelectCustom = (props: Props) => {
       showSearch={type === 'search'}
       placeholder={placeholder}
       style={style}
+      className={className}
       value={selectedValues.length > 0 ? selectedValues : undefined}
       defaultValue={defaultValue}
       onChange={onChange}
@@ -67,6 +72,7 @@ const SelectCustom = (props: Props) => {
       maxTagCount='responsive'
       notFoundContent={loading ? <Spin size='small' /> : null}
       optionLabelProp='label'
+      suffixIcon={suffixIcon}
     >
       {selectAll && (
         <Option key='all' label={selectAllLabel}>
@@ -74,7 +80,17 @@ const SelectCustom = (props: Props) => {
         </Option>
       )}
       {options.map((item) => (
-        <Option value={item.value} label={item.label} key={item.value} disabled={item.disabled}>
+        <Option
+          value={item.value}
+          label={
+            <Space>
+              {item.icon && <div style={{ display: 'flex' }}>{item.icon}</div>}
+              {item.label}
+            </Space>
+          }
+          key={item.value}
+          disabled={item.disabled}
+        >
           <Space>
             {item.icon && item.icon}
             {item.label}

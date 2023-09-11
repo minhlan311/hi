@@ -1,8 +1,30 @@
-import React from 'react'
-import css from './Header.module.scss'
 import { Link } from 'react-router-dom'
+import css from './Header.module.scss'
+type Props = {
+  children: React.ReactNode
+  title?: string
+  titleGoBack?: string
+  titleSize?: number
+  titleStyle?: React.CSSProperties
+  titleTextSecond?: string
+  titleTextLink?: string
+  titleHref?: string
+  boxLink?: boolean
+  desc?: string
+  descSize?: number
+  descWidth?: string | number
+  padding?: string | number
+  margin?: string | number
+  background?: string
+  type?: 'fullsize'
+  style?: React.CSSProperties
+  size?: 'sm' | 'xl'
+  theme?: 'dark' | 'light'
+  backgroundTitle?: string
+  styleChild?: React.CSSProperties
+}
 
-const Header = (props) => {
+const Header = (props: Props) => {
   const {
     children,
     title,
@@ -45,7 +67,6 @@ const Header = (props) => {
         style={styleChild}
       >
         <div
-          className='d-col-c'
           style={{
             background: backgroundTitle,
             textAlign: 'center'

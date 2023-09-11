@@ -31,7 +31,7 @@ const ButtonCustom = (props: Props) => {
     onClick,
     className,
     style,
-    fontWeight = 700,
+    fontWeight = 400,
     htmlType,
     form,
     children,

@@ -1,21 +1,25 @@
-$color: #8f8f8f;
-$color2: #e8f380;
+@import '../../GlobalStyles/responsive.scss';
 .affix-main {
   font-size: 15px !important;
 }
-.nav-fixed {
-  // right: 0;
-  // left: 0;
-  // margin-top: 0;
-}
-.navn-fixed {
-  margin-top: -100px;
-}
 
 .uc-nav-main {
+  position: relative;
+  display: none;
+  @include respond-to(lg) {
+    display: block;
+  }
+  @include respond-to(xl) {
+    display: block;
+  }
+  @include respond-to(xxl) {
+    display: block;
+  }
   z-index: 999;
   transition: 0.3s;
   width: 100%;
+  padding: 18px 0;
+
   .title {
     font-size: 15px !important;
   }
@@ -29,7 +33,7 @@ $color2: #e8f380;
     height: 42px;
     padding: 10px;
     text-align: center;
-    background-color: var(--bgColor2);
+    background-color: var(--green);
     color: white;
     border-radius: 12px;
     font-size: 20px;
@@ -38,12 +42,9 @@ $color2: #e8f380;
     font-size: 12px;
   }
   .lang-change {
-    width: 80px;
+    width: 90px;
     .ant-select-selection-item {
       padding-inline-end: 0;
     }
-  }
-  .select-pop {
-    background: #0e3a23;
   }
 }
