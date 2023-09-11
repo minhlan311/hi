@@ -29,7 +29,7 @@ const UploadCustom = (props: Props) => {
     showLoading,
     showUploadList = false,
     typeLoading,
-    // setLoading,
+    setLoading,
     cropBeforeUpload = false,
     cropAspect = 16 / 9,
     maxCount = 1,

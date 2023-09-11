@@ -1,23 +1,31 @@
-import logoDark from '../../assets/icons/svgs/logo-udemy.svg'
-import logoLight from '../../assets/icons/svgs/logo-udemy-inverted.svg'
-import logoBussiness from '../../assets/icons/svgs/logo-ub.svg'
+import logoDark from '../../assets/logo/logo.svg'
+import logoSortDark from '../../assets/logo/logo-sort.svg'
+import logoLight from '../../assets/logo/logo-sort-light.svg'
+import logoSortLight from '../../assets/logo/logo-sort-light.svg'
 import { Link } from 'react-router-dom'
 type Props = {
-  type: 'dark' | 'light' | 'business'
+  type: 'dark' | 'sort-dark' | 'light' | 'sort-light'
   size?: number
-  style?: any
+  style?: React.CSSProperties
+  className?: string
 }
 
 const Logo = (props: Props) => {
-  const { type, size, style } = props
+  const { type, size, style, className } = props
 
   return (
     <Link to='/'>
       <img
-        src={(type === 'business' && logoBussiness) || (type === 'light' && logoLight) || logoDark}
+        src={
+          (type === 'light' && logoLight) ||
+          (type === 'sort-light' && logoSortLight) ||
+          (type === 'sort-dark' && logoSortDark) ||
+          logoDark
+        }
         alt={type}
         width={size}
         style={style}
+        className={className}
       />
     </Link>
   )

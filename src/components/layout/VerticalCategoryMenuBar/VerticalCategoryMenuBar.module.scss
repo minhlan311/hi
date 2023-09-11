@@ -1,0 +1,67 @@
+.menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--white);
+  z-index: 1020;
+  border-top: 1px solid var(--gray86);
+  background: var(--whiteBg);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+  .menuLabel {
+    transition: 0.3s;
+    cursor: pointer;
+    color: var(--black);
+    .chilMenu {
+      display: none;
+    }
+    .labelItem {
+      position: relative;
+      padding: 15px 10px;
+    }
+
+    &:hover {
+      color: var(--indigo);
+      .labelItem {
+        .arr {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%);
+          text-align: center;
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid var(--blackBg);
+        }
+      }
+      .chilMenu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        background: var(--blackBg);
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1020;
+
+        .chil {
+          position: relative;
+          padding: 15px 10px;
+          transition: 0.3s;
+          cursor: pointer;
+          color: var(--white);
+          &:hover {
+            color: var(--indigolight);
+          }
+        }
+      }
+    }
+  }
+}

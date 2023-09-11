@@ -1,4 +1,5 @@
 export const PATH = {
+  HOME: '/',
   LOGIN: '/login',
   FORGOT_PASS: '/forgot-pasword',
   REGISTER: '/register',

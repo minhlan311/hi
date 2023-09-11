@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
 import screenfull from 'screenfull'
+import { CoursesState } from '~/interface/coursesData'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -37,7 +38,7 @@ type Props = {
 
 type VideoProps = {
   video?: string
-  dataLession?: any[]
+  dataLession?: CoursesState[]
 }
 
 export default function VideoComponent({ video, dataLession }: VideoProps) {
@@ -46,6 +47,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
   const playerContainerRef = useRef<any>(null)
   const [playeds, setPlayeds] = useState<number | string>(0)
 
+  const [timeDisplayFormat, setTimeDisplayFormat] = React.useState('normal')
   const [state, setState] = useState<Props>({
     pip: false,
     playing: true,
@@ -131,7 +133,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
 
   const duration = playerRef && playerRef.current ? playerRef.current.getDuration() : '00:00'
 
-  const elapsedTime = format(currentTime)
+  const elapsedTime = timeDisplayFormat == 'normal' ? format(currentTime) : `-${format(duration - currentTime)}`
 
   const totalDuration = format(duration)
 

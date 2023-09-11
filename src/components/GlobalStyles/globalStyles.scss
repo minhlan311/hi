@@ -1,41 +1,19 @@
+@import './responsive.scss';
+
 :root {
-  --black: #000;
+  --black: black;
   --blackBg: #1f1e1f;
-  --white: #fff;
-  --whiteBg: #fff;
+  --white: white;
+  --whiteBg: white;
   --lighish-white: #f7f9fa;
   --gray: #1c1d1f;
   --light-gray: #6a6f73;
   --light-gray2: #242528;
   --light-gray3: #3e4143;
-  --gray86: #d1d7dc;
-  --gray100: #f0f2f4;
-  --gray-wild-sand: #f3f3f3;
-  --gray-alto: #d9d9d9;
-  --gray-silver: #b7b7b7;
-  --gray-silver-chalice: #999999;
-  --gray-mine-shaft: #434343;
-  --purple: #7325a3;
-  --purple-dark: #a435f0;
-  --teal: #acd2cc;
-  --dark-teal: #199fa3;
-  --dark-teal2: #1e6055;
-  --teal-green-light: #6ac1d0;
-  --teal-green-lighter: #c3e6ec;
-  --yellow: #e9e729;
-  --blue: #5022c3;
-  --red: #fcbca0;
-  --red1: #b32d0f;
-  --indigo: #401b9c;
-  --indigo200: #b7a9e5;
-  --indigolight: #cec0fc;
-  --blackish2: rgb(51, 51, 51);
-  --yellowish-green: #eceb98;
-  --yellowish-green-dark: #3d3c0a;
-  --glodish1: #b4690e;
-  --glodish2: #e59819;
-  --crimson: crimson;
-  --light-orangish: #f3ca8c;
+  --red: #d72831;
+  --red-2: #ff636f;
+  --green: #019d44;
+  --green-2: #0ec25c;
   --transparent: transparent;
 }
 
@@ -61,68 +39,56 @@ body {
 
   font-weight: 400;
   overflow-x: hidden;
+  background-color: var(--lighish-white);
 }
 
 * {
   margin: 0;
   padding: 0;
 }
-
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == xs {
-    @media (min-width: 280px) and (max-width: 575.98px) {
-      @content;
-    }
-  } @else if $breakpoint == sm {
-    @media (max-width: 768px) {
-      @content;
-    }
-  } @else if $breakpoint == md {
-    @media (min-width: 768px) and (max-width: 991.98px) {
-      @content;
-    }
-  } @else if $breakpoint == lg {
-    @media (min-width: 992px) and (max-width: 1199.98px) {
-      @content;
-    }
-  } @else if $breakpoint == xl {
-    @media (min-width: 1200px) {
-      @content;
-    }
-  } @else if $breakpoint == xxl {
-    @media (min-width: 1600px) {
-      @content;
-    }
-  } @else {
-    @error "Invalid breakpoint. Use xs, sm, md, lg, or xl.";
-  }
-}
-
-.container {
+.uc-container {
   width: min(100% - 15px, 1330px);
   margin-inline: auto;
   @include respond-to(xs) {
     padding: 0 10px;
+    width: 100%;
   }
   @include respond-to(sm) {
-    padding: 0 15px;
+    padding: 0 10px;
+    width: 100%;
   }
   @include respond-to(md) {
-    max-width: 960px;
-    padding: 0 20px;
+    padding: 0 10px;
+    width: 100%;
   }
 
   @include respond-to(lg) {
-    max-width: 1140px;
-    padding: 0 20px;
+    padding: 0 10px;
+    width: 100%;
   }
 }
 
-.container2 {
-  max-width: 1164px;
+.uc-container-2 {
+  width: 100%;
+  margin-inline: auto;
 }
-.container3 {
-  max-width: 896px;
+
+.uc-container-3 {
+  width: min(100% - 400px, 1330px);
+  margin-inline: auto;
+  @include respond-to(xs) {
+    width: 100%;
+  }
+  @include respond-to(sm) {
+    width: 100%;
+  }
+  @include respond-to(md) {
+    width: 100%;
+  }
+
+  @include respond-to(lg) {
+    width: 100%;
+  }
 }
 
 li {
@@ -291,7 +257,18 @@ table {
     color: var(--white) !important;
   }
 }
-
+.ant-dropdown-menu-submenu-placement-rightTop,
+.ant-dropdown-menu-submenu-placement-rightBottom {
+  top: 68px !important;
+  max-width: 18%;
+  width: 100%;
+}
+.ant-dropdown-menu-vertical {
+  width: 100%;
+  height: 90vh;
+  margin-left: 4px !important;
+  margin-top: -4px !important;
+}
 .dangerHTMLTwoLine {
   white-space: break-spaces;
   overflow: hidden;
@@ -308,6 +285,7 @@ table {
 .sp100 {
   width: 100%;
 }
+
 /* Hide the scrollbar track */
 ::-webkit-scrollbar {
   width: 6px; /* Adjust the width as per your preference */
@@ -321,13 +299,13 @@ table {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--purple);
+  background: var(--light-gray);
   border-radius: 6px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--purple-dark);
+  background: var(--light-gray3);
 }
 
 /* Hide the scrollbar when not in use */

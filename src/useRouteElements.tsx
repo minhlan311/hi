@@ -4,7 +4,8 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { AppContext } from './contexts/app.context'
 import PATH from './constants/path'
 import PageNotFound from './components/PageNotFound/PageNotFound'
-import Layout from './components/Layout/Layout'
+import Layout from './components/layout/Layout.tsx'
+import HomePage from './pages/HomePage/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -28,17 +29,13 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.LOGIN,
-          element: (
-            <Layout title='新規登録して学習を始める'>
-              <Login />
-            </Layout>
-          )
+          element: <Layout title='新規登録して学習を始める'>{/* <Login /> */}</Layout>
         },
         {
           path: PATH.REGISTER,
           element: (
             <Layout user={profile} title='新規登録して学習を始める'>
-              <Register />
+              {/* <Register /> */}
             </Layout>
           )
         }
@@ -119,15 +116,15 @@ export default function useRouteElements() {
       // public
       // element: <Layout />,
       children: [
-        // {
-        //   path: path.home,
-        //   index: true,
-        //   element: (
-        //     <Layout user={profile} title='サイトマップ'>
-        //       <HomePage user={profile} />
-        //     </Layout>
-        //   )
-        // },
+        {
+          path: PATH.HOME,
+          index: true,
+          element: (
+            <Layout user={profile} title='サイトマップ'>
+              <HomePage user={profile} />
+            </Layout>
+          )
+        },
         // {
         //   path: path.coursePage,
         //   element: (

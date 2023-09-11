@@ -20,7 +20,18 @@ type Props = {
 }
 
 const CheckboxCustom = (props: Props) => {
-  const { type, children, desc, value, items, onChange, checkAll = false, defaultChecked = false, className } = props
+  const {
+    type,
+    children,
+    desc,
+    value,
+    items,
+    onChange,
+    onClick,
+    checkAll = false,
+    defaultChecked = false,
+    className
+  } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
 
   if (items || (items && checkAll)) {
