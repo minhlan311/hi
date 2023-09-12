@@ -396,7 +396,8 @@ export default function MenuPc({ open, setOpen, user = null }: Props) {
         onClose={() => setOpen(!open)}
         open={!md ? false : open}
         style={{
-          textAlign: 'center'
+          textAlign: 'center',
+          maxHeight: '100vh'
         }}
         className='nav-drawer'
         size={sm ? 'large' : 'default'}
@@ -419,6 +420,7 @@ export default function MenuPc({ open, setOpen, user = null }: Props) {
             </Link>
           ))}
         </Space>
+
         <Divider />
         <Space direction='vertical'>
           <Select
