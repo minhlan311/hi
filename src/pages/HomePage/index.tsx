@@ -1,9 +1,14 @@
 import Mentor from '@/components/layout/Mentor'
 import Banner from './Banner'
+import Gift from './Gift/Gift'
+import LanguageSystem from './LanguageSystem/LanguageSystem'
 import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
 import TopCourses from './TopCourses'
 import Mission from './Mission'
+import Intro from './Intro'
+// import News from './News/News'
+import CourseCalender from './CourseCalender/CourseCalender'
 
 export default function HomePage() {
   return (
@@ -12,12 +17,12 @@ export default function HomePage() {
       <Intro />
       <Mentor />
       <TopCourses />
-      <Mission /> */}
+      <Mission />
       <VideoContent />
-      {/* <LanguageSystem />
+      <LanguageSystem />
       <Gift />
       <CourseCalender />
-      <News />  */}
+      {/* <News /> */}
     </div>
   )
 }

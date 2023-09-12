@@ -1,6 +1,10 @@
 export const ENDPOINT = {
   QUESTIONS_DETAIL_PATH: '/exam/questions/detail/',
 
+  // :::::::::::::::::::: AUTH PATH :::::::::::::::::::::
+  LOGGIN: '/auth/login',
+  REGISTER: '/auth/signup',
+  LOGOUT: '/auth/logout',
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::
   GET_ATTACHMENT: '/upload/download/',
   UPLOAD_ATTACHMENT: '/upload/attachments/',

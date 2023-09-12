@@ -1,8 +1,7 @@
 import { Button, Col, Row } from 'antd'
-import React from 'react'
-import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
-import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
-import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
+import ballSVG from '../../../assets/icons/ball.svg'
+import birdSVG from '../../../assets/icons/bird.svg'
+import pencilSVG from '../../../assets/icons/pencil.svg'
 import './Gift.scss'
 import PromotionCountdown from './PromotionCountdown/PromotionCountdown'
 
@@ -11,13 +10,13 @@ export default function Gift() {
     <div className='container-gift'>
       <div className='max-w-1200'>
         <div className='pencilSVG'>
-          <PencilSVG />
+          <img src={pencilSVG} alt='' />
         </div>
         <div className='ballSVG'>
-          <BallSVG />
+          <img src={ballSVG} alt='' />
         </div>
         <div className='birdSVG'>
-          <BirdSVG />
+          <img src={birdSVG} alt='' />
         </div>
         <div className='gradient'>
           <h3>QUÀ TẶNG KHUYẾN MẠI</h3>
@@ -26,6 +25,7 @@ export default function Gift() {
           <Col className='col-left' xs={24} sm={24} md={12} lg={12}>
             <div className='col-left-in'>
               <div className='top'>
+                {' '}
                 <p>THỜI GIAN CHỈ CÒN</p>
               </div>
 

@@ -1,10 +1,20 @@
 export interface SuccessResponse<Data> {
-  message: string
-  data: Data
+  docs?: Data
+  totalDocs: number
+  offset: number
+  limit: number
+  totalPages: number
+  page: number
+  pagingCounter: number
+  hasPrevPage: boolean
+  hasNextPage: boolean
+  prevPage: null
+  nextPage: null
 }
-export interface ErrorResponse<Data> {
+export interface ErrorResponse {
+  statusCode: number | string
   message: string
-  data?: Data
+  error: string
 }
 
 // cú pháp `-?` sẽ loại bỏ undefiend của key optional

@@ -2,7 +2,7 @@ import axios, { AxiosError, type AxiosInstance } from 'axios'
 import HttpStatusCode from '@/constants/httpStatusCode.enum'
 import { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileToLS } from './auth'
-import path from 'src/constants/path'
+import { ENDPOINT } from '@/constants/endpoint'
 
 class Http {
   instance: AxiosInstance
@@ -32,12 +32,12 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === path.login || url === path.signup) {
+        if (url === ENDPOINT.LOGGIN || url === ENDPOINT.REGISTER) {
           const data = response.data as AuthResponse
-          this.accessToken = data.data.access_token
+          this.accessToken = data.accessToken
           setAccessTokenToLS(this.accessToken)
-          setProfileToLS(data.data.user)
-        } else if (url === path.logout) {
+          setProfileToLS(data)
+        } else if (url === ENDPOINT.LOGOUT) {
           this.accessToken = ''
           clearLS()
         }
