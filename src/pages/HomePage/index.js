@@ -26,7 +26,19 @@ const HomePage = () => {
     // }, [userInfo])
     // const educationId = getStorage('educationId')
     useEffect(() => {
-        dispatch(getCategoriesRequest())
+        dispatch(
+            getCategoriesRequest({
+                filterQuery: {
+                    parentId: '64ffde9c746fe5413cf8d1af',
+                },
+                options: {
+                    pagination: false,
+                    sort: {
+                        position: 1,
+                    },
+                },
+            })
+        )
     }, [])
 
     return (
