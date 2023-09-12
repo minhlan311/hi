@@ -1,6 +1,6 @@
 import { Button, Col, Row, Space } from 'antd'
 import { useState } from 'react'
-import { BsFillTelephoneFill } from 'react-icons/bs'
+import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import AffixCustom from '@/components/AffixCustom'
 import Logo from '@/components/Logo/Logo'
@@ -83,12 +83,16 @@ export default function Navigation({ user }: Props) {
                         <img src={zalo} alt='zalo' width={20} />
                       </Link>
                     </Space>
+
                     <Space
                       style={{
                         width: '100%',
                         height: '100%'
                       }}
                     >
+                      <div className='cartIcon'>
+                        <BsFillCartFill />
+                      </div>
                       <div className='phoneIcon'>
                         <BsFillTelephoneFill />
                       </div>
