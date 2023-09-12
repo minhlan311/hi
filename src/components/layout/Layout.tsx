@@ -1,4 +1,4 @@
-import { UserState } from '~/interface/user'
+import { UserState } from '@/interface/user'
 import Footer from './Footer'
 import css from './Layout.module.scss'
 

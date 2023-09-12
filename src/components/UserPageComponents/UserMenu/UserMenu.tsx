@@ -1,9 +1,9 @@
 import { Col, Row, Space } from 'antd'
 import React from 'react'
-import Avatar from '~/components/Avatar/Avatar'
-import { UserState } from '~/interface/user'
+import Avatar from '@/components/Avatar/Avatar'
+import { UserState } from '@/interface/user'
 import css from './UserMenu.module.scss'
-import MenuCustom from '~/components/MenuCustom/MenuCustom'
+import MenuCustom from '@/components/MenuCustom/MenuCustom'
 
 type Props = {
   user: UserState | null

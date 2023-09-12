@@ -1,8 +1,8 @@
 import css from './PriceCalculator.module.scss'
 import { Space } from 'antd'
 import { TagFilled } from '@ant-design/icons'
-import { useTotalCalculator } from '~/hooks/useTotalCalculator'
-import { CoursesState } from '~/interface/coursesData'
+import { useTotalCalculator } from '@/hooks/useTotalCalculator'
+import { CoursesState } from '@/interface/coursesData'
 
 interface Discount {
   discount: number

@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react'
-import { CodeState } from '~/interface/code'
-import { CoursesState } from '~/interface/coursesData'
-import { UserState } from '~/interface/user'
-import { getAccessTokenFromLS, getProfileFromLS } from '~/utils/auth'
+import { CodeState } from '@/interface/code'
+import { CoursesState } from '@/interface/coursesData'
+import { UserState } from '@/interface/user'
+import { getAccessTokenFromLS, getProfileFromLS } from '@/utils/auth'
 import {
   getCode,
   getFavorite,
@@ -12,7 +12,7 @@ import {
   setFavoriteFromLS,
   setOrderFromLS,
   setWhiteListFromLS
-} from '~/utils/cart'
+} from '@/utils/cart'
 
 interface AppContextInterface {
   isAuthenticated: boolean

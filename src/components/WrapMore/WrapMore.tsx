@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import style from './WrapMore.module.scss'
-import Header from '~/components/Header/Header'
+import Header from '@/components/Header/Header'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
 
 type Props = {

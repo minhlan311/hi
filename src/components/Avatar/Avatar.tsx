@@ -1,7 +1,7 @@
-import { UserState } from '~/interface/user'
+import { UserState } from '@/interface/user'
 import { Avatar as Avt } from 'antd'
 import noAvt from '../../assets/images/navigation/No-avt.jpg'
-// import { UserState } from '~/interface/user'
+// import { UserState } from '@/interface/user'
 
 type Props = {
   avtUrl?: string

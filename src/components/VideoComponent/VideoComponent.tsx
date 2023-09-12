@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
 import screenfull from 'screenfull'
-import { CoursesState } from '~/interface/coursesData'
+import { CoursesState } from '@/interface/coursesData'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {

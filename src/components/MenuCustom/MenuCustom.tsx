@@ -2,7 +2,7 @@ import React from 'react'
 import { Menu, Space } from 'antd'
 import { Link, useLocation } from 'react-router-dom'
 import css from './MenuCustom.module.scss'
-import { MenuItemData } from '~/interface/menuItemData'
+import { MenuItemData } from '@/interface/menuItemData'
 
 type Props = {
   items: MenuItemData[]

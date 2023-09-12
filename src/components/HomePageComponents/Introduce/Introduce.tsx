@@ -1,6 +1,6 @@
 import css from './Introduce.module.scss'
 import { Col, Row, Space } from 'antd'
-import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 const Introduce = () => {
   const data = {
     title: 'チームを強化し、業界をリードする',

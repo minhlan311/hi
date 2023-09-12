@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios'
-import HttpStatusCode from '~/constants/httpStatusCode.enum'
+import HttpStatusCode from '@/constants/httpStatusCode.enum'
 import { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileToLS } from './auth'
 import path from 'src/constants/path'

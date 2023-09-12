@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import css from './FeaturedTopics.module.scss'
 import { Col, Row, Space } from 'antd'
-import { TopicList } from '~/interface/topic'
-import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import { TopicList } from '@/interface/topic'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 
 type Props = {
   data: TopicList[]

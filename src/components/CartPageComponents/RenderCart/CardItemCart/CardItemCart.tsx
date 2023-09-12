@@ -1,12 +1,12 @@
 import { useContext } from 'react'
-import { CoursesState } from '~/interface/coursesData'
+import { CoursesState } from '@/interface/coursesData'
 import css from './CardItemCart.module.scss'
 import { Col, Row, Space } from 'antd'
-import TagCustom from '~/components/TagCustom/TagCustom'
-import PriceCalculator from '~/components/PriceCalculator/PriceCalculator'
-import ProductRating from '~/components/ProductRating'
-import { AppContext } from '~/contexts/app.context'
-import { handleLocalAction } from '~/common'
+import TagCustom from '@/components/TagCustom/TagCustom'
+import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
+import ProductRating from '@/components/ProductRating'
+import { AppContext } from '@/contexts/app.context'
+import { handleLocalAction } from '@/common'
 
 interface CardItemCartProps {
   type: 'order' | 'favorite' | 'white-list'

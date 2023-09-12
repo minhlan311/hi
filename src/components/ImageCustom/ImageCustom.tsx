@@ -1,7 +1,7 @@
 import style from './imgageCustom.module.scss'
 import { Image } from 'antd'
 
-import { imageFallback } from '~/constants/utils'
+import { imageFallback } from '@/constants/utils'
 
 type TImage = {
   src: string
