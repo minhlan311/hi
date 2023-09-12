@@ -38,6 +38,22 @@
     border-radius: 12px;
     font-size: 20px;
   }
+  .cartIcon {
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    text-align: center;
+    // background-color: var(--red);
+    // color: white;
+    border: 2px solid var(--black);
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      color: var(--red);
+      border: 2px solid var(--red);
+    }
+  }
   .hotline {
     font-size: 12px;
   }
