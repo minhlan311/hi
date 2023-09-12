@@ -7,8 +7,8 @@ import './styles.scss'
 import TopCourses from './TopCourses'
 import Mission from './Mission'
 import Intro from './Intro'
-// import News from './News/News'
 import CourseCalender from './CourseCalender/CourseCalender'
+import News from './News/News'
 
 export default function HomePage() {
   return (
@@ -22,7 +22,7 @@ export default function HomePage() {
       <LanguageSystem />
       <Gift />
       <CourseCalender />
-      {/* <News /> */}
+      <News />
     </div>
   )
 }

@@ -7,7 +7,7 @@ const categoryApi = {
   getCategories() {
     return http.post<SuccessResponse<Category[]>>(ENDPOINT.FIND_CATEGORIES_PATH, {
       filterQuery: {
-        parentId: null
+        parentId: '64ffde9c746fe5413cf8d1af'
       },
       options: {
         pagination: true,

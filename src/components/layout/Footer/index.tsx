@@ -1,11 +1,13 @@
 import { Space, Typography } from 'antd'
 import { memo, useEffect } from 'react'
+import ucamFooter from '@/assets/icons/ucamFooter.png'
 
 // import { useDispatch, useSelector } from 'react-redux'
 
 import '../../../assets/css/grid.css'
 // import { configsSelector, getconfigsRequest } from '../../../slices/configs'
 import './styles.scss'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
 const { Text } = Typography
 
 const Footer = () => {
@@ -31,7 +33,9 @@ const Footer = () => {
                       position: 'relative'
                     }}
                   >
-                    <div className='mtz-footer-logo'>{/* <LogoSVG style={{ color: 'white' }} /> */}</div>
+                    <div className='mtz-footer-logo'>
+                      <img src={ucamFooter} />
+                    </div>
 
                     <Space className='social-group'>
                       <div style={{ textAlign: 'start' }}>{/* <DCMASVG /> */}</div>

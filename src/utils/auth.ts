@@ -1,4 +1,3 @@
-
 export const LocalStorageEventTarget = new EventTarget()
 
 export const setAccessTokenToLS = (access_token: string) => {
@@ -26,6 +25,7 @@ export const getProfileFromLS = () => {
   return result ? JSON.parse(result) : null
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setProfileToLS = (profile: any) => {
   localStorage.setItem('profile', JSON.stringify(profile))
 }

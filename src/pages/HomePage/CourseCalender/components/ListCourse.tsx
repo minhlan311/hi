@@ -1,79 +1,58 @@
-// import React from 'react'
-// import { ReactComponent as CalenderSVG } from '../../../../assets/icons/calendar.svg'
-// import { ROUTERS_URL } from '../../../../constants/routerUrl'
-// import { Image, Spin } from 'antd'
-// import { Link } from 'react-router-dom'
-// import { useSelector } from 'react-redux'
-// import { coursesSelector } from '../../../../slices/course'
-// import { useConvertSlug } from '../../../../hooks'
-// import { useHistory } from 'react-router-dom'
-// import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '../../../../utils/helper'
-// import settings from '../../../../settings'
-// export default function ListCourse() {
-//   const dataCourse = useSelector(coursesSelector)
-//   const history = useHistory()
-//   const handleClickCourse = (id, subject, name) => {
-//     history.push(
-//       // eslint-disable-next-line react-hooks/rules-of-hooks
-//       `/courses/${useConvertSlug(subject)}/${useConvertSlug(name)}`,
-//       {
-//         courseId: id
-//       }
-//     )
-//   }
+import calenderSVG from '@/assets/icons/calendar.svg'
+import { Image } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import useConvertSlug from '@/hooks/useConvertSlug'
+import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
+import { TCourse } from '@/types/course.type'
 
-//   const ArrayCouse = dataCourse?.data?.docs
-//   console.log(ArrayCouse, 'ArrayCouse')
-//   return (
-//     <div className='listCourse'>
-//       {dataCourse.status === 'loading' ? (
-//         <div>
-//           <Spin />
-//         </div>
-//       ) : dataCourse.status === 'success' ? (
-//         <>
-//           {ArrayCouse?.map((item) => (
-//             <div
-//               className='col'
-//               onClick={() => {
-//                 handleClickCourse(item.id, item.subjectId.name, item.name)
-//               }}
-//             >
-//               <div className='imgCol'>
-//                 <Image className='imgColin' src={settings.FILE_URL + '/' + item?.coverMedia} />
-//               </div>
-//               <div className='contentList'>
-//                 <h4 className='link-h4-config'>{item.name}</h4>
+type Props = {
+  listData?: TCourse[]
+}
 
-//                 <div className='flex'>
-//                   <CalenderSVG className='icons' />
-//                   <p className='text-date'>
-//                     Khai giảng {''}
-//                     {formatDate(item?.startDate)}
-//                     {''} - Thứ {''}
-//                     {formatDaysOfWeek(item?.schedules).join('-')}
-//                     {''}
-//                     <br />
-//                     Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
-//                   </p>
-//                 </div>
-//                 <div className='flexPrice'>
-//                   <span className='name'>Chi phí: </span>
-//                   <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-//         </>
-//       ) : (
-//         <>Không có data</>
-//       )}
-//     </div>
-//   )
-// }
+export default function ListCourse({ listData }: Props) {
+  const navigate = useNavigate()
+  const handleClickCourse = (id: string, subject: string, name: string) => {
+    navigate({
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      pathname: `/courses/${useConvertSlug(subject)}/${useConvertSlug(name)}`
+    })
+  }
 
-import React from 'react'
+  console.log(listData, 'ArrayCouse')
+  return (
+    <div className='listCourse'>
+      {listData?.map((item) => (
+        <div
+          className='col'
+          onClick={() => {
+            handleClickCourse(item._id, item.category.name, item?.name)
+          }}
+        >
+          <div className='imgCol'>
+            <Image className='imgColin' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia} />
+          </div>
+          <div className='contentList'>
+            <h4 className='link-h4-config'>{item.name}</h4>
 
-export default function ListCourse() {
-  return <div></div>
+            <div className='flex'>
+              <img src={calenderSVG} className='icons' alt='' />
+              <p className='text-date'>
+                Khai giảng {''}
+                {formatDate(item?.startDate)}
+                {''} - Thứ {''}
+                {formatDaysOfWeek(item?.schedules).join('-')}
+                {''}
+                <br />
+                Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
+              </p>
+            </div>
+            <div className='flexPrice'>
+              <span className='name'>Chi phí: </span>
+              <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }

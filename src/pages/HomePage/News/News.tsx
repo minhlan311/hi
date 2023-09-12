@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Image, Typography } from 'antd'
 import './News.scss'
 

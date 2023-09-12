@@ -29,7 +29,7 @@ export function formatPriceVND(giaTien: number) {
 }
 
 // format date backend trả ra về định dạng DD/MM/YYYY
-export function formatDate(dateStr: Date) {
+export function formatDate(dateStr: string) {
   const dateObj = new Date(dateStr)
   const day = dateObj.getDate()
   const month = dateObj.getMonth() + 1
@@ -55,7 +55,7 @@ export function formatDaysOfWeek(dayIndexes: number[]) {
 }
 
 //  format time sang giờ phút
-export function formatHour(timeString: Date) {
+export function formatHour(timeString: string) {
   const date = new Date(timeString)
   const hours = date.getHours()
   const minutes = date.getMinutes()
