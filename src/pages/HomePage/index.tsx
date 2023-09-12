@@ -1,4 +1,5 @@
 import Banner from './Banner'
+import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
 
 export default function HomePage() {
@@ -8,12 +9,12 @@ export default function HomePage() {
       {/* <Intro />
       <Mentor />
       <TopCourses />
-      <Mission />
+      <Mission /> */}
       <VideoContent />
-      <LanguageSystem />
+      {/* <LanguageSystem />
       <Gift />
       <CourseCalender />
-      <News /> */}
+      <News />  */}
     </div>
   )
 }

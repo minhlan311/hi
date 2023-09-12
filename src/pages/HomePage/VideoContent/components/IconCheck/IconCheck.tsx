@@ -1,11 +1,9 @@
-import React from 'react'
 import { BsCheckLg } from 'react-icons/bs'
 import './IconCheck.scss'
-
-export default function IconCheck({ marginTop }: React.CSSProperties) {
+export default function IconCheck(style: React.CSSProperties) {
   return (
     <div>
-      <div className='iconTopBox' style={{ marginTop: marginTop }}>
+      <div className='iconTopBox' style={style}>
         <BsCheckLg className='icons-steps iconTop' />
       </div>
     </div>
