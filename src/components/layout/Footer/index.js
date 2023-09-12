@@ -61,7 +61,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-yellow-heading">
                                             VĂN PHÒNG TP HCM
                                         </Text>
 
@@ -89,7 +89,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-yellow-heading">
                                             CHI NHÁNH ĐÀ NẴNG
                                         </Text>
                                         <ul className="ul-fff">
@@ -108,7 +108,7 @@ const Footer = () => {
                                         direction="vertical"
                                         style={{ textAlign: 'start' }}
                                     >
-                                        <Text className="footer-heading text-red-heading">
+                                        <Text className="footer-heading text-yellow-heading">
                                             CHI NHÁNH HÀ NỘI
                                         </Text>
                                         <ul className="ul-fff">
