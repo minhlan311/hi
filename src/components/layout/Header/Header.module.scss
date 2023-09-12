@@ -1,0 +1,24 @@
+.header {
+  position: relative;
+  .typo {
+    text-align: center;
+    .desc {
+      font-size: 20px;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+    .title {
+      font-size: 50px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      & > * {
+        max-width: 788px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .titleSecond {
+  }
+}

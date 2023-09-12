@@ -192,8 +192,8 @@ const UploadCustom = (props: Props) => {
           )}
           {selectedFile && !save ? (
             <Space>
-              <ButtonCustom onClick={() => setSave(true)}>OK</ButtonCustom>{' '}
-              <ButtonCustom onClick={handleClose}>変更</ButtonCustom>{' '}
+              <ButtonCustom onClick={() => setSave(true)}>OK</ButtonCustom>
+              <ButtonCustom onClick={handleClose}>変更</ButtonCustom>
             </Space>
           ) : null}
         </Space>

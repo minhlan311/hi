@@ -4,14 +4,14 @@ import logoLight from '../../assets/logo/logo-sort-light.svg'
 import logoSortLight from '../../assets/logo/logo-sort-light.svg'
 import { Link } from 'react-router-dom'
 type Props = {
-  type: 'dark' | 'sort-dark' | 'light' | 'sort-light'
+  type?: 'dark' | 'sort-dark' | 'light' | 'sort-light'
   size?: number
   style?: React.CSSProperties
   className?: string
 }
 
 const Logo = (props: Props) => {
-  const { type, size, style, className } = props
+  const { type = 'dark', size, style, className } = props
 
   return (
     <Link to='/'>

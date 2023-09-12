@@ -1,15 +1,15 @@
 import { Button, Card, Col, Row, Space } from 'antd'
-import React from 'react'
 import { BsArrowRightCircle } from 'react-icons/bs'
+import ball from '../../../assets/icons/ball.svg'
+import bird from '../../../assets/icons/bird.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-import ball from '../../../assets/icons/ball.svg'
-import point3 from '../../../assets/icons/point3.svg'
-// import { ReactComponent as ChinaSVG } from '../../../assets/icons/china_flag.svg'
-// import { ReactComponent as EngSVG } from '../../../assets/icons/eng_flag.svg'
-// import { ReactComponent as GermanySVG } from '../../../assets/icons/germany_flag.svg'
-// import { ReactComponent as JapanSVG } from '../../../assets/icons/japan_flag.svg'
-// import { ReactComponent as KoreaSVG } from '../../../assets/icons/korea_flag.svg'
+import chn from '../../../assets/icons/china_flag.svg'
+import eng from '../../../assets/icons/eng_flag.svg'
+import ger from '../../../assets/icons/germany_flag.svg'
+import jpn from '../../../assets/icons/japan_flag.svg'
+import kor from '../../../assets/icons/korea_flag.svg'
+
 import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
 export default function TopCourses() {
   const courseData = [
@@ -17,39 +17,39 @@ export default function TopCourses() {
       name: 'Tiếng Trung',
       desc: 'Tiếng Anh là ngôn ngữ  phổ biến của toàn cầu, ngôn ngữ này là lợi thế giúp bạn mở rộng cánh cửa tương lai của bạn',
       cover:
-        'https://littlestepsasia.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2021/08/06153111/Best_Mandarin_Classes_Kuala_Lumpur.jpg'
-      //   flag: <ChinaSVG />
+        'https://littlestepsasia.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2021/08/06153111/Best_Mandarin_Classes_Kuala_Lumpur.jpg',
+      flag: <img src={chn} alt='chn' />
     },
     {
       name: 'Tiếng Anh',
       desc: 'Tiếng Anh là ngôn ngữ  phổ biến của toàn cầu, ngôn ngữ này là lợi thế giúp bạn mở rộng cánh cửa tương lai của bạn',
-      cover: 'https://www.englishexplorer.com.sg/wp-content/uploads/2017/02/english-course.jpg'
-      //   flag: <EngSVG />
+      cover: 'https://www.englishexplorer.com.sg/wp-content/uploads/2017/02/english-course.jpg',
+      flag: <img src={eng} alt='eng' />
     },
     {
       name: 'Tiếng Nhật',
       desc: 'Tiếng Anh là ngôn ngữ  phổ biến của toàn cầu, ngôn ngữ này là lợi thế giúp bạn mở rộng cánh cửa tương lai của bạn',
-      cover: 'https://www.classcentral.com/report/wp-content/uploads/2023/02/ASL-BCG-Banner.png'
-      //   flag: <JapanSVG />
+      cover: 'https://www.classcentral.com/report/wp-content/uploads/2023/02/ASL-BCG-Banner.png',
+      flag: <img src={jpn} alt='jpn' />
     },
     {
       name: 'Tiếng Đức',
       desc: 'Tiếng Anh là ngôn ngữ  phổ biến của toàn cầu, ngôn ngữ này là lợi thế giúp bạn mở rộng cánh cửa tương lai của bạn',
       cover:
-        'https://www.studying-in-germany.org/wp-content/uploads/2018/08/learn-german-language-with-online-courses.jpg'
-      //   flag: <GermanySVG />
+        'https://www.studying-in-germany.org/wp-content/uploads/2018/08/learn-german-language-with-online-courses.jpg',
+      flag: <img src={ger} alt='ger' />
     },
     {
       name: 'Tiếng Hàn',
       desc: 'Tiếng Anh là ngôn ngữ  phổ biến của toàn cầu, ngôn ngữ này là lợi thế giúp bạn mở rộng cánh cửa tương lai của bạn',
-      cover: 'https://www.90daykorean.com/wp-content/uploads/2020/10/Online-Korean-Course-min-1.png'
-      //   flag: <KoreaSVG />
+      cover: 'https://www.90daykorean.com/wp-content/uploads/2020/10/Online-Korean-Course-min-1.png',
+      flag: <img src={kor} alt='kor' />
     }
   ]
   return (
     <Header size='sm' title='' desc='' padding='60px 0' background='var(--lighish-white)'>
       <img src={ball} alt='ball' className='ball' />
-      <img src={point3} alt='point3' className='point3' />
+      <img src={bird} alt='bird' className='point3' />
       <div className='list-course'>
         <div className='ls-title'>
           <p className='desc'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
@@ -66,8 +66,10 @@ export default function TopCourses() {
                 <Space direction='vertical'>
                   <div className='d-space-c'>
                     <Row align='middle'>
-                      {/* {item.flag}{!user ? ( */}
-                      <h2 className='ml-10'>{item.name}</h2>
+                      <Space align='center'>
+                        <div style={{ marginTop: 5 }}> {item.flag}</div>
+                        <h2>{item.name}</h2>
+                      </Space>
                     </Row>
                     <Button size='small' type='primary' className='course-count'>
                       28+ Khóa
@@ -75,10 +77,10 @@ export default function TopCourses() {
                   </div>
                   <div>{item.desc}</div>
                   <Button type='link' size='small'>
-                    <div className='d-space-c more'>
-                      <div className='mr-5'>Xem thêm </div>
-                      <BsArrowRightCircle />
-                    </div>
+                    <Space>
+                      <p>Xem thêm</p>
+                      <BsArrowRightCircle style={{ marginTop: 7 }} />
+                    </Space>
                   </Button>
                 </Space>
               </Card>

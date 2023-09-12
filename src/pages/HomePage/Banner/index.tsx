@@ -1,7 +1,6 @@
-import bannerImg from '../../../assets/images/banner/banner.png'
+import BannerSlider from '@/components/BannerSlider/BannerSlider'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-import BannerSlider from '@/components/BannerSlider/BannerSlider'
 const banner = [
   {
     _id: 'asdhg21',

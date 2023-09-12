@@ -50,7 +50,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                       controlHeight: 40,
                       controlOutlineWidth: 1,
                       colorSplit: '#E7E7E7',
-                      colorBorderSecondary: '#6a6f73'
+                      colorBorderSecondary: '#E7E7E7'
                     }
                   }}
                   locale={viVN}
