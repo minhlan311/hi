@@ -51,7 +51,7 @@ const Header = (props: Props) => {
 
   return (
     <div
-      className={`${css.header}`}
+      className={css.header}
       style={{
         padding: padding,
         background: background || `${theme === 'dark' && ' var(--gray)'}`,
@@ -68,9 +68,9 @@ const Header = (props: Props) => {
       >
         <div
           style={{
-            background: backgroundTitle,
-            textAlign: 'center'
+            background: backgroundTitle
           }}
+          className={css.typo}
         >
           {desc && (
             <div className={css.desc} style={{ fontSize: descSize, width: descWidth }}>
@@ -79,7 +79,7 @@ const Header = (props: Props) => {
           )}
           {title && (
             <div className={css.title} style={{ fontSize: titleSize, ...titleStyle }}>
-              <div style={{ maxWidth: 788 }}> {title}</div>
+              <div>{title}</div>
             </div>
           )}
         </div>
@@ -96,7 +96,7 @@ const Header = (props: Props) => {
               {boxLink && '」'}
             </span>
           )}
-          {titleTextSecond && <span>{titleTextSecond}</span>}{' '}
+          {titleTextSecond && <span>{titleTextSecond}</span>}
         </div>
 
         {children}

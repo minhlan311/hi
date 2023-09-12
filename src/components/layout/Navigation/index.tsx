@@ -7,18 +7,19 @@ import Logo from '@/components/Logo/Logo'
 import SelectCustom from '@/components/SelectCustom/SelectCustom'
 import chn from '../../../assets/icons/china_flag.svg'
 import eng from '../../../assets/icons/eng_flag.svg'
-import facebook from '../../../assets/icons/facebook-logo.svg'
 import ger from '../../../assets/icons/germany_flag.svg'
 import jpn from '../../../assets/icons/japan_flag.svg'
 import kor from '../../../assets/icons/korea_flag.svg'
-import tiktok from '../../../assets/icons/tiktok-icon.svg'
 import vie from '../../../assets/icons/vi_flag.svg'
+import facebook from '../../../assets/icons/facebook-logo.svg'
+import tiktok from '../../../assets/icons/tiktok-icon.svg'
 import youtube from '../../../assets/icons/youtube-logo.svg'
 import zalo from '../../../assets/icons/zalo.png'
 import Header from '../Header/Header'
-import MenuPc from './MenuPc'
+
 import './styles.scss'
 import { UserState } from '@/interface/user'
+import MenuPc from './MenuPc'
 type Props = {
   user: UserState | null
 }

@@ -31,7 +31,7 @@ const usePriceCalculator = (originalPrice: number, discountPercentage?: number) 
           style: 'currency',
           currency: 'JPY'
         }).format(originalPrice)}
-      </span>{' '}
+      </span>
     </div>
   )
 }

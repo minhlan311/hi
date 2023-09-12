@@ -45,7 +45,7 @@ const CardItemCart = ({ type, data, setOrderData, setFavoriteData, setWhiteListD
             </Space>
           </Space>
           <div className={css.aboutCourse}>
-            合計{data.countTime}時間 <span className={css.dot}>•</span> レクチャーの数:{data.countCourses}{' '}
+            合計{data.countTime}時間 <span className={css.dot}>•</span> レクチャーの数:{data.countCourses}
             <span className={css.dot}>•</span> {data.educationType}
           </div>
         </Col>

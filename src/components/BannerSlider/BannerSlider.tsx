@@ -10,7 +10,7 @@ type Props = {
 const BannerSlider = (props: Props) => {
   const { bannerData, dots = true, effect } = props
   return (
-    <Carousel autoplay dots={dots} effect={effect}>
+    <Carousel autoplay dots={dots} effect={effect} draggable speed={1500} autoplaySpeed={5000}>
       {bannerData.map((item) => (
         <Link className={css.outerDiv} to={item?.href || '/'} key={item._id}>
           <img src={item?.imageUrl} alt='banner' className={css.img} />

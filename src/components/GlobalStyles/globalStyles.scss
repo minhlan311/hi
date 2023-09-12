@@ -1,7 +1,7 @@
 @import './responsive.scss';
 
 :root {
-  --black: black;
+  --black: #3f3c4c;
   --blackBg: #1f1e1f;
   --white: white;
   --whiteBg: white;
@@ -15,6 +15,7 @@
   --green: #019d44;
   --green-2: #0ec25c;
   --transparent: transparent;
+  --borderColor: #e7e7e7;
 }
 
 * {
@@ -40,6 +41,7 @@ body {
   font-weight: 400;
   overflow-x: hidden;
   background-color: var(--lighish-white);
+  color: var(--black);
 }
 
 * {
@@ -134,70 +136,40 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-.ant-carousel .slick-prev,
-.ant-carousel .slick-next,
-.ant-carousel .slick-prev:focus,
-.ant-carousel .slick-next:focus {
-  box-sizing: content-box;
-  z-index: 100;
-  background-color: #404345;
-  border-radius: 100%;
-  padding: 10px;
-  font-size: inherit;
-  color: white !important;
-  width: auto;
-  height: auto;
+
+.carousel-cuttom {
+  .slick-arrow.slick-prev,
+  .slick-arrow.slick-next {
+    font-size: 20px;
+  }
+  .slick-arrow.slick-prev {
+    margin-left: -15px;
+  }
+
+  .slick-next::before,
+  .slick-prev::before {
+    color: currentColor;
+    content: '';
+  }
+  .slick-dots-bottom {
+    bottom: -50px;
+  }
+  .slick-dots li {
+    width: 8px;
+    height: 8px;
+    button {
+      height: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .slick-dots li.slick-active {
+    width: 8px;
+  }
 }
 
-.ant-carousel .slick-prev:hover,
-.ant-carousel .slick-next:hover {
-  padding: 10px;
-  box-sizing: content-box;
-  opacity: 0.9;
-  z-index: 100;
-  background-color: #404345;
-  border-radius: 100%;
-  font-size: inherit;
-  color: white !important;
-}
-
-.ant-carousel .slick-prev::before {
-  color: currentColor !important;
-}
-
-.slick-arrow.slick-prev {
-  font-size: 20px !important;
-}
-
-.ant-carousel .slick-next::before {
-  color: currentColor !important;
-}
-
-.slick-arrow.slick-next {
-  font-size: 20px !important;
-}
-.ant-card-body {
-  justify-content: start !important;
-  padding: 0 !important;
-}
-.ant-card {
-  box-shadow: none !important;
-}
 .ant-collapse-header {
   align-items: center !important;
-}
-
-.ant-card .ant-card-cover img,
-.ant-card .ant-card-cover img + .ant-image-mask {
-  border-radius: 0 !important;
-}
-.ant-card:not(.ant-card-bordered) {
-  box-shadow: none !important;
-}
-.ant-card .ant-card-body {
-  text-align: left;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 .ant-typography.ant-typography-ellipsis.ant-typography-ellipsis-multiple-line.css-dev-only-do-not-override-txh9fw {
