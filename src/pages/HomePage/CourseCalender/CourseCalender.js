@@ -17,11 +17,13 @@ export default function CourseCalender() {
     const ArraySubject = dataCategories?.data
     const [active, setActive] = useState('Tiếng Anh')
 
+    console.log(dataCategories, 'dataCategoriesdataCategories')
+
     useEffect(() => {
         dispatch(
             getCoursesRequest({
                 filterQuery: {
-                    categoryId: '64f9a8ac77e79fe90a1fbe8a',
+                    categoryId: dataCategories[0]?._id,
                 },
                 options: {
                     sort: { downloaded: '-1', viewed: 1 },
