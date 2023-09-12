@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import UserMenu from './UserMenu/UserMenu'
 import Header from '../Header/Header'
 import css from './UserLayout.module.scss'
-import { AppContext } from '~/contexts/app.context'
+import { AppContext } from '@/contexts/app.context'
 
 type Props = {
   title: string

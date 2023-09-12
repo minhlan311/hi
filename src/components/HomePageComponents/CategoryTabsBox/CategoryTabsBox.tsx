@@ -1,9 +1,9 @@
 import css from './CategoryTabsBox.module.scss'
 import { Card, Space } from 'antd'
-import { CategoryState } from '~/interface/categoryTab'
-import SliderCustom from '~/components/SliderCustom'
-import TabsCustom from '~/components/TabsCustom/TabsCustom'
-import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import { CategoryState } from '@/interface/categoryTab'
+import SliderCustom from '@/components/SliderCustom'
+import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 
 type Props = {
   data: any[]

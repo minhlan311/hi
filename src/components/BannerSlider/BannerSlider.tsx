@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import css from './BannerSlider.module.scss'
-import { BannerState } from '~/interface/banner'
+import { BannerState } from '@/interface/banner'
 import { Carousel } from 'antd'
 type Props = {
   bannerData: BannerState[]

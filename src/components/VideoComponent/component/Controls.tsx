@@ -5,7 +5,7 @@ import { BsPlayFill, BsFillPauseFill, BsArrowsFullscreen } from 'react-icons/bs'
 import { BiSolidVolumeFull, BiSolidVolumeMute, BiSolidVolumeLow } from 'react-icons/bi'
 import { AiOutlinePlayCircle, AiOutlinePauseCircle } from 'react-icons/ai'
 import style from './Controls.module.scss'
-import { AppContext } from '~/contexts/app.context'
+import { AppContext } from '@/contexts/app.context'
 
 const Controls = forwardRef(
   (

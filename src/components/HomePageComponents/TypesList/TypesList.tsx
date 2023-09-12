@@ -8,7 +8,7 @@ import pic5 from '../../../../public/images/lohp-category-personal-development-2
 import pic6 from '../../../../public/images/lohp-category-business-2x-v2.jpg'
 import pic7 from '../../../../public/images/lohp-category-photography-2x-v2.jpg'
 import pic8 from '../../../../public/images/lohp-category-music-2x-v2.jpg'
-import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 const TypesList = () => {
   const data = [
     { title: 'デザイン', img: pic1, to: '/' },

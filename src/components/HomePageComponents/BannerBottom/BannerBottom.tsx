@@ -1,6 +1,6 @@
 import css from './BannerBottom.module.scss'
 import { Col, Row, Space } from 'antd'
-import ButtonCustom from '~/components/ButtonCustom/ButtonCustom'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 
 interface DataProps {
   title: string

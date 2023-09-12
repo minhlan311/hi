@@ -7,14 +7,14 @@ import ProductRating from '../ProductRating'
 import style from './sliderCustom.module.scss'
 // import ImageCustom from '../ImageCustom/ImageCustom'
 import { Link } from 'react-router-dom'
-import { CoursesState } from '~/interface/coursesData'
+import { CoursesState } from '@/interface/coursesData'
 import EmptyCustom from '../EmptyCustom/EmptyCustom'
 import { responsiveSlider } from './responsiveSlider'
 import { colorStar } from '../ProductRating/pickColor.enum'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import PriceCalculator from '../PriceCalculator/PriceCalculator'
 import TagCustom from '../TagCustom/TagCustom'
-import { AppContext } from '~/contexts/app.context'
+import { AppContext } from '@/contexts/app.context'
 
 type Props = {
   data: CoursesState[] | any

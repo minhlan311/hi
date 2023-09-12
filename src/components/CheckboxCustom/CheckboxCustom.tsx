@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import css from './CheckboxCustom.module.scss'
 import { Card, Checkbox, Space } from 'antd'
-import { CheckboxState } from '~/interface/checkbox'
+import { CheckboxState } from '@/interface/checkbox'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import type { CheckboxValueType } from 'antd/es/checkbox/Group'
 
