@@ -1,10 +1,9 @@
-import React from 'react'
-import { Button } from 'antd'
 import ballSVG from '../../../assets/icons/ball.svg'
 import birdSVG from '../../../assets/icons/bird.svg'
 import pencilSVG from '../../../assets/icons/pencil.svg'
 import './VideoContent.scss'
-import IconCheck from './components/IconCheck'
+import IconCheck from './components/IconCheck/IconCheck'
+import ButtonShake from './components/ButtonShake/ButtonShake'
 
 export default function VideoContent() {
   const ArrayDesc = [
@@ -92,7 +91,7 @@ export default function VideoContent() {
           Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao tiếp tiếng Anh thành công, còn bạn...?
         </span>
         <div className='button'>
-          <Button className='button-in'>ĐĂNG KÝ NGAY</Button>
+          <ButtonShake />
         </div>
       </div>
     </div>
