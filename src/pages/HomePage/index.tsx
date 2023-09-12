@@ -1,6 +1,6 @@
 import Mentor from '@/components/layout/Mentor'
 import Banner from './Banner'
-import Intro from './Intro'
+import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
 import TopCourses from './TopCourses'
 import Mission from './Mission'
@@ -12,12 +12,12 @@ export default function HomePage() {
       <Intro />
       <Mentor />
       <TopCourses />
-      <Mission />
-      {/* <VideoContent />
-      <LanguageSystem />
+      <Mission /> */}
+      <VideoContent />
+      {/* <LanguageSystem />
       <Gift />
       <CourseCalender />
-      <News /> */}
+      <News />  */}
     </div>
   )
 }

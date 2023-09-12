@@ -1,10 +1,9 @@
-import React from 'react'
-import { Button } from 'antd'
-import { ReactComponent as BallSVG } from '../../../assets/icons/ball.svg'
-import { ReactComponent as BirdSVG } from '../../../assets/icons/bird.svg'
-import { ReactComponent as PencilSVG } from '../../../assets/icons/pencil.svg'
+import ballSVG from '../../../assets/icons/ball.svg'
+import birdSVG from '../../../assets/icons/bird.svg'
+import pencilSVG from '../../../assets/icons/pencil.svg'
 import './VideoContent.scss'
-import IconCheck from './components/IconCheck'
+import IconCheck from './components/IconCheck/IconCheck'
+import ButtonShake from './components/ButtonShake/ButtonShake'
 
 export default function VideoContent() {
   const ArrayDesc = [
@@ -43,13 +42,13 @@ export default function VideoContent() {
       </div>
       <div className='container-1920px'>
         <div className='pencilSVG'>
-          <PencilSVG />
+          <img src={pencilSVG} alt='' />
         </div>
         <div className='ballSVG'>
-          <BallSVG />
+          <img src={ballSVG} alt='' />
         </div>
         <div className='birdSVG'>
-          <BirdSVG />
+          <img src={birdSVG} alt='' />
         </div>
         <div className='content-div-container'>
           <div className='content'>
@@ -66,7 +65,7 @@ export default function VideoContent() {
                 {ArrayDesc?.map((item) => (
                   <>
                     <div>
-                      <p className='title-steps'>{item.name}</p>
+                      <p className='title-steps'> {item.name}</p>
                       <p className='desc-steps'>{item.desc}</p>
                     </div>
                   </>
@@ -80,7 +79,6 @@ export default function VideoContent() {
               height='100%'
               src='https://www.youtube.com/embed/U2rB68ouwJY?si=uVDSO-wAO6y8Rgc_'
               title='YouTube video player'
-              frameborder='0'
               allow='accelerometer;fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
             ></iframe>
           </div>
@@ -89,10 +87,11 @@ export default function VideoContent() {
       <div className='div-title-bottom'>
         <span className='number'>500.000+ </span>
         <span className='desc'>
+          {' '}
           Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao tiếp tiếng Anh thành công, còn bạn...?
         </span>
         <div className='button'>
-          <Button className='button-in'>ĐĂNG KÝ NGAY</Button>
+          <ButtonShake />
         </div>
       </div>
     </div>
