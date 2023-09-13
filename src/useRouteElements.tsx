@@ -35,6 +35,7 @@ export default function useRouteElements() {
           element: (
             <AuthLayout
               title='Login'
+              imgSize={14}
               titleForm='Đăng nhập ngay!'
               descForm='Học tập là công việc của cả cuộc đời, hãy để MentorZ là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
             >

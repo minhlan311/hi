@@ -6,6 +6,7 @@ type Props = {
   title: string
   align?: 'start' | 'end'
   imgBg?: string
+  imgBgSize?: string | number
   imgSize?:
     | 0
     | 1
@@ -72,8 +73,9 @@ const AuthLayout = (props: Props) => {
     title,
     align,
     imgBg = imgbg,
+    imgBgSize = '100%',
     imgSize = 12,
-    formSize = 12,
+    formSize,
     children,
     titleForm,
     titleSize = 32,
@@ -97,7 +99,7 @@ const AuthLayout = (props: Props) => {
         >
           <Space direction='vertical' size='large'>
             <Logo />
-            <img src={imgBg} alt='bg' />
+            <img src={imgBg} alt='bg' width={imgBgSize} />
           </Space>
         </Col>
         <Col
@@ -109,10 +111,12 @@ const AuthLayout = (props: Props) => {
             24
           }
         >
-          <Space direction='vertical'>
-            <h1 style={{ fontSize: titleSize, ...titleStyle }}>{titleForm}</h1>
-            <p style={{ fontSize: descSize, ...descStyle }}>{descForm}</p>
-            {children}
+          <Space direction='vertical' size='large'>
+            <Space direction='vertical'>
+              <h1 style={{ fontSize: titleSize, ...titleStyle }}>{titleForm}</h1>
+              <p style={{ fontSize: descSize, ...descStyle }}>{descForm}</p>
+            </Space>
+            <div className={css.formMain}> {children}</div>
           </Space>
         </Col>
       </Row>

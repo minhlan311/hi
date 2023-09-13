@@ -1,3 +1,23 @@
+@import '../../GlobalStyles/responsive.scss';
 .authMain {
   padding: 50px 35px;
+  .formMain {
+    height: 100%;
+    @include respond-to(lg) {
+      height: 72vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    @include respond-to(xl) {
+      height: 74vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    @include respond-to(xxl) {
+      height: 82vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
 }
