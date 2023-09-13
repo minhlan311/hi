@@ -1,0 +1,19 @@
+.userLayout {
+  border: 1px solid var(--gray86);
+  min-height: 650px;
+  .userMenu {
+    border-right: 1px solid var(--gray86);
+  }
+
+  .title {
+    text-align: center;
+
+    h2 {
+      margin-top: 15px;
+      font-size: 24px;
+    }
+    .desc {
+      font-size: 16px;
+    }
+  }
+}

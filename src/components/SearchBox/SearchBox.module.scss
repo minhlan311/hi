@@ -1,0 +1,20 @@
+.searchBox {
+  position: relative;
+  max-width: 80%;
+  width: 100%;
+
+  .searchDropdown {
+    width: 100%;
+  }
+  .searchButton {
+    position: absolute;
+    z-index: 1;
+    border-radius: 50px;
+  }
+
+  .searchInput {
+    width: 100%;
+    border-radius: 50px;
+    padding-left: 40px;
+  }
+}

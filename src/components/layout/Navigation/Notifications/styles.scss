@@ -1,0 +1,42 @@
+.notification-menu {
+    position: relative;
+    width: 320px;
+    max-width: 345px;
+    min-height: 350px;
+    height: auto;
+
+    .ant-card-body {
+        padding: 0 !important;
+    }
+    .ntf-main {
+        padding-bottom: 10px;
+        overflow-y: auto;
+    }
+    .notification-item {
+        margin: 5px 10px 10px;
+
+        cursor: pointer;
+        padding: 8px;
+    }
+    .see {
+        background-color: aliceblue;
+        color: gray;
+        border: 1px solid transparent;
+        a {
+            color: rgb(169, 173, 238);
+        }
+    }
+}
+.menu-ntf {
+    margin-top: 6px;
+    padding: 10px 0;
+}
+.menu-ntf-m {
+    height: 54px;
+    margin-top: 5px;
+}
+
+.ant-drawer-content-wrapper {
+    min-width: 280px !important;
+    width: auto;
+}

@@ -1,0 +1,66 @@
+@import '../../GlobalStyles/responsive.scss';
+.affix-main {
+  font-size: 15px !important;
+}
+
+.uc-nav-main {
+  position: relative;
+  display: none;
+  @include respond-to(lg) {
+    display: block;
+  }
+  @include respond-to(xl) {
+    display: block;
+  }
+  @include respond-to(xxl) {
+    display: block;
+  }
+  z-index: 999;
+  transition: 0.3s;
+  width: 100%;
+  padding: 18px 0;
+
+  .title {
+    font-size: 15px !important;
+  }
+  .logo {
+    margin: 18px 0;
+    width: auto;
+    height: 48px;
+  }
+  .phoneIcon {
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    text-align: center;
+    background-color: var(--green);
+    color: white;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+  .cartIcon {
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    text-align: center;
+    // background-color: var(--red);
+    // color: white;
+    border: 2px solid var(--black);
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      color: var(--red);
+      border: 2px solid var(--red);
+    }
+  }
+  .hotline {
+    font-size: 12px;
+  }
+  .lang-change {
+    width: 90px;
+    .ant-select-selection-item {
+      padding-inline-end: 0;
+    }
+  }
+}

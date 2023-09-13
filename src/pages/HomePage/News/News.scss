@@ -1,0 +1,101 @@
+.news-container {
+    width: 100%;
+    color: #101010;
+    padding: 80px 0;
+    text-align: center;
+    background: white;
+    .container-1200px {
+        max-width: 1200px;
+        margin: auto;
+        .text-xs {
+            color: #101010;
+            font-size: 20px;
+        }
+        h3 {
+            margin-top: 10px;
+            font-size: 50px;
+            font-weight: 700;
+        }
+        .title-container {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            .col {
+                .content {
+                    h4 {
+                        font-size: 20px;
+                    }
+                    h4:hover {
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                    .text {
+                        margin-top: 10px;
+                        color: #666666;
+                        font-size: 16px;
+                    }
+                }
+                display: flex;
+                align-items: center;
+                text-align: start;
+                gap: 20px;
+                .imgBox {
+                    .imgIn {
+                        border-radius: 10px;
+                        min-width: 235px;
+                        min-height: 160px;
+                    }
+                }
+            }
+        }
+    }
+}
+.buttonMore {
+    border-radius: 10px;
+    min-width: 110px;
+    min-height: 45px;
+    margin-top: 50px;
+    color: #f2184f;
+    font-weight: 600;
+    border: 2px solid #f2184f;
+}
+.buttonMore:hover {
+    color: white !important;
+    border-radius: 10px;
+    background-color: #f2184f;
+}
+
+@media screen and (max-width: 900px) {
+    .news-container {
+        width: 100%;
+        color: #101010;
+        padding: 80px 20px;
+        text-align: center;
+        background: white;
+        .container-1200px {
+            .title-container {
+                margin-top: 50px;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .col {
+                flex: none;
+                flex-wrap: wrap;
+                justify-content: center;
+                .imgBox {
+                    .ant-image {
+                        width: 100%;
+                    }
+                    .imgIn {
+                        border-radius: 10px;
+                        width: 100% !important;
+                        // max-width: 235px;
+                        // max-height: 160px;
+                    }
+                }
+            }
+        }
+    }
+}

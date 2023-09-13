@@ -1,0 +1,109 @@
+.controlsWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.top {
+  background-color: #000;
+  padding: 20px;
+}
+.mid {
+  margin-top: 30px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.bot {
+  // display: flex;
+  // align-items: center;
+  gap: 5px;
+  background-color: #000;
+  color: white;
+}
+
+.botLeft {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
+}
+.boxBotbot {
+  margin: 10px;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
+}
+.boxBot {
+  display: flex;
+  flex-direction: column;
+}
+.botRight {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.icon25 {
+  font-size: 25px;
+  cursor: pointer;
+  color: white;
+}
+.icon30 {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+.icon35 {
+  font-size: 35px;
+  cursor: pointer;
+  color: white;
+  margin-top: 3px;
+}
+.icon60 {
+  font-size: 80px;
+  cursor: pointer;
+  color: white;
+  margin-top: 3px;
+}
+.icon60:hover {
+  opacity: 0.8;
+}
+.icon25:hover {
+  scale: 1.1;
+  opacity: 0.8;
+}
+.icon30:hover {
+  scale: 1.1;
+  opacity: 0.8;
+}
+.icon35:hover {
+  scale: 1.1;
+  opacity: 0.8;
+}
+
+.button1x {
+  font-weight: 600;
+  border-radius: 10px;
+  color: #000;
+  padding: 10px 20px;
+  background-color: white;
+}
+.button1x:hover {
+  opacity: 0.8;
+}
+.tooltip1x {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+.tooltip1xHover:hover {
+  text-decoration: underline;
+}

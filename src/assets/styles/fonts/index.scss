@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'SVN normal';
+  src: url('../../fonts/svn/SVN-Gilroy_Medium.otf');
+}
+
+@font-face {
+  font-family: 'SVN normal';
+  font-style: normal;
+  font-weight: normal;
+  src: url('@/assets/fonts/svn/SVN-Gilroy_Medium.otf');
+}
+
+@font-face {
+  font-family: 'SVN normal';
+  font-style: normal;
+  font-weight: 500;
+  src: url('@/assets/fonts/svn/SVN-Gilroy_Regular.otf');
+}
+
+@font-face {
+  font-family: 'SVN normal';
+  font-style: normal;
+  font-weight: 600;
+  src: url('@/assets/fonts/svn/SVN-Gilroy_SemiBold.otf');
+}
+
+@font-face {
+  font-family: 'SVN normal';
+  font-style: normal;
+  font-weight: 700;
+  src: url('@/assets/fonts/svn/SVN-Gilroy_Bold.otf');
+}
