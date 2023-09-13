@@ -1,6 +1,5 @@
-import { Space, Typography } from 'antd'
-import { memo } from 'react'
 import ucamFooter from '@/assets/icons/ucamFooter.png'
+import { Space, Typography } from 'antd'
 import '../../../assets/css/grid.css'
 import './styles.scss'
 const { Text } = Typography
@@ -170,4 +169,4 @@ const Footer = () => {
   )
 }
 
-export default memo(Footer)
+export default Footer

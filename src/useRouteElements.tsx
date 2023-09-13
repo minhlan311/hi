@@ -1,10 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import { AppContext } from './contexts/app.context'
-import PATH from './constants/path'
 import PageNotFound from './components/PageNotFound/PageNotFound'
+import AuthLayout from './components/layout/AuthLayout/index.tsx'
 import Layout from './components/layout/Layout.tsx'
+import PATH from './constants/path'
+import { AppContext } from './contexts/app.context'
+import Login from './pages/Auth/Login/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
 
@@ -30,12 +32,22 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.LOGIN,
-          element: <Layout title='新規登録して学習を始める'>{/* <Login /> */}</Layout>
+          element: (
+            <AuthLayout
+              title='Login'
+              imgSize={14}
+              titleForm='Đăng nhập ngay!'
+              descForm='Học tập là công việc của cả cuộc đời, hãy để MentorZ là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
+            >
+              <Login />
+            </AuthLayout>
+          )
         },
         {
           path: PATH.REGISTER,
+
           element: (
-            <Layout user={profile} title='新規登録して学習を始める'>
+            <Layout user={profile} title='Đăng ký'>
               <Register />
             </Layout>
           )
@@ -121,11 +133,12 @@ export default function useRouteElements() {
           path: PATH.HOME,
           index: true,
           element: (
-            <Layout user={profile} title='サイトマップ'>
+            <Layout user={profile} title='Trang chủ'>
               <HomePage />
             </Layout>
           )
         },
+
         // {
         //   path: path.coursePage,
         //   element: (

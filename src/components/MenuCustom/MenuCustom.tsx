@@ -22,7 +22,7 @@ const MenuCustom = (props: Props) => {
     header,
     defaultOpenKeys,
     activeKey,
-    action,
+    // action,
     mode,
     theme,
     multiple = false,
@@ -33,7 +33,7 @@ const MenuCustom = (props: Props) => {
 
   const keyActive = items?.find((item) => location.pathname.includes(`${item?.key}`))
   return (
-    <Space direction='vertical' className='sp100'>
+    <Space direction='vertical' className={css.sp100}>
       {header && header}
       <Menu
         selectedKeys={activeKey ? [`${keyActive?.key}`] : undefined}

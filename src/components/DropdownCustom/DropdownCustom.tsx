@@ -17,6 +17,23 @@ type Props = {
   menuChildren?: React.ReactNode
   arrow?: boolean
 }
+
+export interface MenuChild {
+  childLabel: string | React.ReactNode
+  href: string
+}
+
+export interface Children {
+  label: string | React.ReactNode
+  menuChild: MenuChild[]
+}
+
+export interface Menu {
+  label: string | React.ReactNode
+  children?: Children[]
+  href?: string
+  placement?: 'bottomRight'
+}
 const { useToken } = theme
 const DropdownCustom = (props: Props) => {
   const {
