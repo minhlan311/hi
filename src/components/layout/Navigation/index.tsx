@@ -1,25 +1,20 @@
+import AffixCustom from '@/components/AffixCustom'
+import Logo from '@/components/Logo/Logo'
 import { Button, Col, Row, Space } from 'antd'
 import { useState } from 'react'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import AffixCustom from '@/components/AffixCustom'
-import Logo from '@/components/Logo/Logo'
-import SelectCustom from '@/components/SelectCustom/SelectCustom'
-import chn from '../../../assets/icons/china_flag.svg'
-import eng from '../../../assets/icons/eng_flag.svg'
-import ger from '../../../assets/icons/germany_flag.svg'
-import jpn from '../../../assets/icons/japan_flag.svg'
-import kor from '../../../assets/icons/korea_flag.svg'
-import vie from '../../../assets/icons/vi_flag.svg'
+
 import facebook from '../../../assets/icons/facebook-logo.svg'
 import tiktok from '../../../assets/icons/tiktok-icon.svg'
 import youtube from '../../../assets/icons/youtube-logo.svg'
 import zalo from '../../../assets/icons/zalo.png'
 import Header from '../Header/Header'
 
-import './styles.scss'
+import LanguageChange from '@/components/LanguageChange'
 import { UserState } from '@/interface/user'
 import MenuPc from './MenuPc'
+import './styles.scss'
 type Props = {
   user: UserState | null
 }
@@ -33,14 +28,7 @@ export default function Navigation({ user }: Props) {
   // }, [educationId])
 
   const [open, setOpen] = useState<boolean>(false)
-  const flagList = [
-    { value: 'ENG', label: 'ENG', icon: <img src={eng} alt='flag' /> },
-    { value: 'VIE', label: 'VIE', icon: <img src={vie} alt='flag' /> },
-    { value: 'CHN', label: 'CHN', icon: <img src={chn} alt='flag' /> },
-    { value: 'JPN', label: 'JPN', icon: <img src={jpn} alt='flag' /> },
-    { value: 'KOR', label: 'KOR', icon: <img src={kor} alt='flag' /> },
-    { value: 'GER', label: 'GER', icon: <img src={ger} alt='flag' /> }
-  ]
+
   return (
     <div>
       <div className='uc-nav-main'>
@@ -101,7 +89,7 @@ export default function Navigation({ user }: Props) {
                         <b>1900 10328</b>
                       </div>
                     </Space>
-                    <SelectCustom className='lang-change' defaultValue='VIE' options={flagList} suffixIcon={false} />
+                    <LanguageChange />
                   </Space>
                 </div>
               </Col>
