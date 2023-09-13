@@ -7,6 +7,8 @@ import PageNotFound from './components/PageNotFound/PageNotFound'
 import Layout from './components/layout/Layout.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import RegisterPage from './pages/RegisterPage/index.tsx'
+import AuthLayout from './components/layout/AuthLayout/index.tsx'
+import Login from './pages/Auth/Login/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -30,15 +32,19 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.LOGIN,
-          element: <Layout title='新規登録して学習を始める'>{/* <Login /> */}</Layout>
+          element: (
+            <AuthLayout
+              title='Login'
+              titleForm='Đăng nhập ngay!'
+              descForm='Học tập là công việc của cả cuộc đời, hãy để MentorZ là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
+            >
+              <Login />
+            </AuthLayout>
+          )
         },
         {
           path: PATH.REGISTER,
-          element: (
-            <Layout user={profile} title='新規登録して学習を始める'>
-              {/* <RegisterPage /> */}
-            </Layout>
-          )
+          element: <AuthLayout title='Login'>{/* <Register /> */}</AuthLayout>
         }
       ]
     },
@@ -126,6 +132,7 @@ export default function useRouteElements() {
             </Layout>
           )
         },
+
         // {
         //   path: path.coursePage,
         //   element: (
