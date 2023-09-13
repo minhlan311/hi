@@ -1,7 +1,8 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import style from './WrapMore.module.scss'
-import Header from '@/components/Header/Header'
+
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
+import Header from '../layout/Header/Header'
 
 type Props = {
   children: React.ReactNode

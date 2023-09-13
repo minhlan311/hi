@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
 import css from './CheckboxCustom.module.scss'
 import { Card, Checkbox, Space } from 'antd'
@@ -59,7 +61,7 @@ const CheckboxCustom = (props: Props) => {
         )}
         <Checkbox.Group
           onChange={onChangeAll}
-          className='sp100'
+          className={css.sp100}
           options={plainOptions}
           value={checkedList}
         ></Checkbox.Group>
@@ -70,7 +72,7 @@ const CheckboxCustom = (props: Props) => {
     return (
       <Card className={`${css.checkboxCard} ${className}`} onClick={() => setIsCheck(!isCheck)}>
         <Space direction='vertical'>
-          <Checkbox onChange={onChange} value={value} className={css.checkbox} checked={isCheck}>
+          <Checkbox onChange={onChange} value={value} className={css.checkbox} checked={isCheck} onClick={onClick}>
             {children}
           </Checkbox>
           {desc && <p className={css.desc}>{desc}</p>}
@@ -80,7 +82,13 @@ const CheckboxCustom = (props: Props) => {
   } else
     return (
       <Space direction='vertical'>
-        <Checkbox onChange={onChange} value={value} className={className} defaultChecked={defaultChecked}>
+        <Checkbox
+          onChange={onChange}
+          value={value}
+          className={className}
+          defaultChecked={defaultChecked}
+          onClick={onClick}
+        >
           {children}
         </Checkbox>
         <p className={css.desc}>{desc && desc}</p>

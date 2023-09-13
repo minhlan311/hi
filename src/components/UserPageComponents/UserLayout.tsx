@@ -1,36 +1,36 @@
-import { Col, Divider, Row } from 'antd'
-import React, { useContext } from 'react'
-import UserMenu from './UserMenu/UserMenu'
-import Header from '../Header/Header'
-import css from './UserLayout.module.scss'
-import { AppContext } from '@/contexts/app.context'
+// import { Col, Divider, Row } from 'antd'
+// import React, { useContext } from 'react'
 
-type Props = {
-  title: string
-  desc?: string
-  children: React.ReactNode
-}
+// import css from './UserLayout.module.scss'
+// import { AppContext } from '@/contexts/app.context'
+// import Header from '../layout/Header/Header'
 
-const UserLayout = ({ title, desc, children }: Props) => {
-  const { profile } = useContext(AppContext)
+// type Props = {
+//   title: string
+//   desc?: string
+//   children: React.ReactNode
+// }
 
-  return (
-    <Header size='xl' padding={'30px'} style={{ margin: '0px 25px' }}>
-      <Row className={css.userLayout}>
-        <Col className={css.userMenu} span={24} md={5}>
-          <UserMenu user={profile} />
-        </Col>
-        <Col className={css.userHeader} span={24} md={19}>
-          <div className={`${css.title} ${css.main}`}>
-            <h2>{title}</h2>
-            {desc ? <p className={css.desc}>{desc}</p> : null}
-          </div>
-          <Divider style={{ margin: '15px 0' }} />
-          <div>{children}</div>
-        </Col>
-      </Row>
-    </Header>
-  )
-}
+// const UserLayout = ({ title, desc, children }: Props) => {
+//   const { profile } = useContext(AppContext)
 
-export default UserLayout
+//   return (
+//     <Header size='xl' padding={'30px'} style={{ margin: '0px 25px' }}>
+//       <Row className={css.userLayout}>
+//         <Col className={css.userMenu} span={24} md={5}>
+//           <UserMenu user={profile} />
+//         </Col>
+//         <Col className={css.userHeader} span={24} md={19}>
+//           <div className={`${css.title} ${css.main}`}>
+//             <h2>{title}</h2>
+//             {desc ? <p className={css.desc}>{desc}</p> : null}
+//           </div>
+//           <Divider style={{ margin: '15px 0' }} />
+//           <div>{children}</div>
+//         </Col>
+//       </Row>
+//     </Header>
+//   )
+// }
+
+// export default UserLayout

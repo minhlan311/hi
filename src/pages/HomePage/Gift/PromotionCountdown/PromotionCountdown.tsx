@@ -14,6 +14,8 @@ const PromotionCountdown = ({ startDateProps, endDateProps }: any) => {
       const now = moment() // Lấy thời gian hiện tại
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const startDate = moment(startDateProps || '2023-09-07 07:00:00')
+      console.log(startDate)
+
       // Mốc thời gian bắt đầu khuyến mãi
       const endDate = moment(endDateProps || '2023-09-20 07:00:00') // Mốc thời gian kết thúc khuyến mãi
 

@@ -8,7 +8,7 @@
   --whiteBg: white;
   --lighish-white: #f7f9fa;
   --gray: #1c1d1f;
-  --light-gray: #6a6f73;
+  --light-gray: #8f95b2;
   --light-gray2: #242528;
   --light-gray3: #3e4143;
   --red: #d72831;
@@ -183,6 +183,12 @@ table {
   top: 10px;
 }
 
+.link {
+  color: var(--red);
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .custom-butt-icon {
   display: flex;
   align-items: center;

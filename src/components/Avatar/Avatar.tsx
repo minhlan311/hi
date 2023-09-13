@@ -1,7 +1,6 @@
 import { UserState } from '@/interface/user'
 import { Avatar as Avt } from 'antd'
 import noAvt from '../../assets/images/navigation/No-avt.jpg'
-// import { UserState } from '@/interface/user'
 
 type Props = {
   avtUrl?: string
@@ -15,9 +14,9 @@ function Avatar(props: Props) {
   if (!userData && !avtUrl) {
     return <Avt src={noAvt}></Avt>
   } else {
-    const nameParts: string[] = userData.fullName.split(' ')
+    const nameParts: string[] = userData ? userData.fullName.split(' ') : []
 
-    const reversedId: string = userData._id.split('').reverse().join('')
+    const reversedId: string = userData ? userData._id.split('').reverse().join('') : ''
     const firstNumber: string = reversedId.match(/\d/)?.[0] || ''
     const colorList: string[] = [
       '#FF5157',

@@ -84,10 +84,10 @@ const AuthLayout = (props: Props) => {
     descSize = 14,
     descStyle
   } = props
-  window.document.title = title + '| Ucam'
+  window.document.title = title + ' | Ucam'
   return (
     <div className={css.authMain}>
-      <Row justify='space-between'>
+      <Row justify='space-between' style={{ flexDirection: align === 'end' ? 'row-reverse' : 'row' }}>
         <Col
           span={24}
           md={
@@ -113,8 +113,12 @@ const AuthLayout = (props: Props) => {
         >
           <Space direction='vertical' size='large'>
             <Space direction='vertical'>
-              <h1 style={{ fontSize: titleSize, ...titleStyle }}>{titleForm}</h1>
-              <p style={{ fontSize: descSize, ...descStyle }}>{descForm}</p>
+              <h1 style={{ fontSize: titleSize, ...titleStyle }} className={css.title}>
+                {titleForm}
+              </h1>
+              <p style={{ fontSize: descSize, ...descStyle }} className={css.desc}>
+                {descForm}
+              </p>
             </Space>
             <div className={css.formMain}> {children}</div>
           </Space>

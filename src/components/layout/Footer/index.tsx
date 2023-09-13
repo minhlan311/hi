@@ -1,13 +1,12 @@
+import ucamFooter from '@/assets/icons/ucamFooter.png'
 import { Space, Typography } from 'antd'
 import { memo, useEffect } from 'react'
-import ucamFooter from '@/assets/icons/ucamFooter.png'
 
 // import { useDispatch, useSelector } from 'react-redux'
 
 import '../../../assets/css/grid.css'
 // import { configsSelector, getconfigsRequest } from '../../../slices/configs'
 import './styles.scss'
-import ImageCustom from '@/components/ImageCustom/ImageCustom'
 const { Text } = Typography
 
 const Footer = () => {

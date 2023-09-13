@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import DropdownCustom from '@/components/DropdownCustom/DropdownCustom'
+// import DropdownCustom from '@/components/DropdownCustom/DropdownCustom'
 import LanguageChange from '@/components/LanguageChange'
 import Logo from '@/components/Logo/Logo'
-import { MenuItemData } from '@/interface/menuItemData'
+// import { MenuItemData } from '@/interface/menuItemData'
 import { UserState } from '@/interface/user'
 import { DownOutlined } from '@ant-design/icons'
-import { Col, Divider, Drawer, Row, Space } from 'antd'
+import { Col, Divider, Drawer, Dropdown, Row, Space } from 'antd'
 import { IoMenuSharp } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import useResponsives from '../../../../hooks/useResponsives'
@@ -524,7 +525,7 @@ export default function MenuPc({ open, setOpen, user = null }: Props) {
     }
   ]
 
-  const items: MenuItemData[] = [
+  const items: any[] = [
     {
       key: '1',
       label: (
@@ -627,7 +628,7 @@ export default function MenuPc({ open, setOpen, user = null }: Props) {
             ))}
 
             {user ? (
-              <DropdownCustom
+              <Dropdown
                 menu={{
                   items
                 }}
@@ -637,7 +638,7 @@ export default function MenuPc({ open, setOpen, user = null }: Props) {
                   <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
                   <Avatar avtUrl={user?.avatarUrl} userData={user}></Avatar>
                 </Space>
-              </DropdownCustom>
+              </Dropdown>
             ) : (
               <div className='butt-auth'>
                 <Link to='/login'>

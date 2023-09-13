@@ -12,6 +12,8 @@ type Props = {
 export default function ListCourse({ listData }: Props) {
   const navigate = useNavigate()
   const handleClickCourse = (id: string, subject: string, name: string) => {
+    console.log(id)
+
     navigate({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       pathname: `/courses/${useConvertSlug(subject)}/${useConvertSlug(name)}`

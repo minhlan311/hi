@@ -1,6 +1,9 @@
 @import '../../GlobalStyles/responsive.scss';
 .authMain {
   padding: 50px 35px;
+  .desc {
+    color: var(--light-gray);
+  }
   .formMain {
     height: 100%;
     @include respond-to(lg) {

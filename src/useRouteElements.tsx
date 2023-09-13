@@ -1,14 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import { AppContext } from './contexts/app.context'
-import PATH from './constants/path'
 import PageNotFound from './components/PageNotFound/PageNotFound'
-import Layout from './components/layout/Layout.tsx'
-import HomePage from './pages/HomePage/index.tsx'
-import RegisterPage from './pages/RegisterPage/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
+import Layout from './components/layout/Layout.tsx'
+import PATH from './constants/path'
+import { AppContext } from './contexts/app.context'
 import Login from './pages/Auth/Login/index.tsx'
+import HomePage from './pages/HomePage/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
