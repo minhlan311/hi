@@ -17,9 +17,12 @@ export default function CourseCalender() {
   const { data: categoriesData, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => {
-      return categoryApi.getCategories()
+      return categoryApi.getCategories({
+        parentId: '64ffde9c746fe5413cf8d1af'
+      })
     }
   })
+
   const ArraySubject = categoriesData?.data?.docs
 
   const { data: listData } = useQuery({

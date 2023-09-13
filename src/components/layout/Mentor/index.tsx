@@ -119,7 +119,7 @@ const Mentor = () => {
       styleChild={{
         background: 'var(--red)',
         color: 'var(--white)',
-        padding: md || sm ? '50px 0' : '120px 60px 70px',
+        padding: md || sm ? '50px 0 80px' : '120px 60px 70px',
         borderRadius: md || sm ? 0 : 12
       }}
       background='var(--lighish-white)'

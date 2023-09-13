@@ -6,7 +6,6 @@
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.08),
     0 4px 12px rgba(0, 0, 0, 0.08);
-
   .menuItem {
     display: flex;
     align-items: center;
@@ -88,6 +87,9 @@
               &:hover {
                 color: #a70a00;
               }
+              // .lastTitle {
+              //   margin-left: 10px;
+              // }
             }
           }
         }
@@ -105,5 +107,8 @@
     .butt-item {
       height: 50px;
     }
+  }
+  .avtDrop {
+    padding: 5px 0;
   }
 }

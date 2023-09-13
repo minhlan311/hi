@@ -2,7 +2,7 @@ export const ENDPOINT = {
   QUESTIONS_DETAIL_PATH: '/exam/questions/detail/',
 
   // :::::::::::::::::::: AUTH PATH :::::::::::::::::::::
-  LOGGIN: '/auth/login',
+  LOGIN: '/auth/login',
   REGISTER: '/auth/signup',
   LOGOUT: '/auth/logout',
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::

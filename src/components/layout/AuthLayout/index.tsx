@@ -111,7 +111,7 @@ const AuthLayout = (props: Props) => {
             24
           }
         >
-          <Space direction='vertical' size='large'>
+          <Space direction='vertical' size='large' className={`sp100`}>
             <Space direction='vertical'>
               <h1 style={{ fontSize: titleSize, ...titleStyle }} className={css.title}>
                 {titleForm}

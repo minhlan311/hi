@@ -1,12 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
+import { AuthState } from '@/interface/auth'
+import { useMutation } from '@tanstack/react-query'
 import { Button, Checkbox, Form, Input, Space } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '@/contexts/app.context'
+import { UserState } from '@/interface/user'
 
 const Login = () => {
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
+
   const [form] = Form.useForm()
-  const onFinish = (values: any) => {
-    console.log(values)
+  const navitage = useNavigate()
+  const mutaionLogin = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
+  const onFinish = (values: AuthState) => {
+    mutaionLogin.mutate(values, {
+      onSuccess: (data) => {
+        navitage('/')
+        setIsAuthenticated(true)
+        setProfile(data.data as unknown as UserState)
+      }
+    })
   }
   return (
     <Form form={form} name='login' onFinish={onFinish} layout='vertical'>

@@ -23,6 +23,7 @@ export default function ListCourse({ listData }: Props) {
     <div className='listCourse'>
       {listData?.map((item) => (
         <div
+          key={item._id}
           className='col'
           onClick={() => {
             handleClickCourse(item.category.name, item?.name)

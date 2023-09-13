@@ -50,8 +50,8 @@ const DropdownCustom = (props: Props) => {
   } = props
   const { token } = useToken()
   const menuStyle: React.CSSProperties = {
-    minWidth: 270,
-    minHeight: '90vh'
+    // minWidth: 270,
+    // minHeight: '90vh'
   }
   const contentStyle: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
