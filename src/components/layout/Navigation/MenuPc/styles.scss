@@ -36,6 +36,7 @@
         }
       }
       .labelItem {
+        color: var(--white);
         position: relative;
         padding: 15px 10px;
       }
@@ -53,31 +54,40 @@
             height: 0;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-bottom: 10px solid white;
+            border-bottom: 10px solid var(--white);
           }
         }
         .chilMenu {
           position: absolute;
           left: 0;
           right: 0;
-          width: 100vw;
-          background: white;
-          color: black;
+          background: var(--whiteBg);
+          color: var(--black);
           display: flex;
-          padding: 0 5%;
+          padding: 24px;
           box-shadow:
             0 2px 4px rgba(0, 0, 0, 0.08),
             0 4px 12px rgba(0, 0, 0, 0.08);
           z-index: 1020;
           min-height: 300px;
-          .chil {
-            position: relative;
-            padding: 15px 10px;
-            transition: 0.3s;
-            cursor: pointer;
+          .sub-menu {
+            margin: 10px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-row-gap: 24px;
+            .chil {
+              position: relative;
+              transition: 0.3s;
+              cursor: pointer;
 
-            &:hover {
-              color: #a70a00;
+              .chilTitle {
+                color: var(--green);
+                text-transform: uppercase;
+              }
+              &:hover {
+                color: #a70a00;
+              }
             }
           }
         }

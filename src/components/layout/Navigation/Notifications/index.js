@@ -1,18 +1,17 @@
+import { CloseOutlined, FileDoneOutlined } from '@ant-design/icons'
 import { Badge, Button, Card, Drawer, Dropdown, Empty, Tooltip, message } from 'antd'
-import './styles.scss'
 import moment from 'moment-timezone'
 import 'moment/locale/vi'
-import { socket } from '../../../../socket'
-import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { getNotificationRequest, notificationSelector, putNotificationRequest } from '../../../../slices/notifications'
-import { CloseOutlined, FileDoneOutlined } from '@ant-design/icons'
-import { getStorage } from '../../../../services/storage'
-import { USER_INFO } from '../../../../constants/storageKeys'
-import { useMediaQuery } from 'react-responsive'
 import { useEffect, useState } from 'react'
 import { BiBell } from 'react-icons/bi'
-import { userDetailSelector } from '../../../../slices/user'
+import { useDispatch, useSelector } from 'react-redux'
+import { useMediaQuery } from 'react-responsive'
+import { useHistory } from 'react-router-dom'
+import { USER_INFO } from '../../../../constants/storageKeys'
+import { getStorage } from '../../../../services/storage'
+import { getNotificationRequest, notificationSelector, putNotificationRequest } from '../../../../slices/notifications'
+import { socket } from '../../../../socket'
+import './styles.scss'
 
 moment().locale('vi')
 export default function Notifications() {
@@ -181,7 +180,6 @@ export default function Notifications() {
     return isMobile || isTablet ? <NoticationM notification={newArr} /> : <NoticationPC notification={newArr} />
   }
   const [openN, setOpenN] = useState(false)
-  const userDetail = useSelector(userDetailSelector)
   return isMobile || isTablet ? (
     <>
       <Badge count={unReadNotifi ? unReadNotifi?.length : null}>
