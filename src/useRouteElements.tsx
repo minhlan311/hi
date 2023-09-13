@@ -8,6 +8,7 @@ import PATH from './constants/path'
 import { AppContext } from './contexts/app.context'
 import Login from './pages/Auth/Login/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -44,7 +45,12 @@ export default function useRouteElements() {
         },
         {
           path: PATH.REGISTER,
-          element: <AuthLayout title='Login'>{/* <Register /> */}</AuthLayout>
+
+          element: (
+            <Layout user={profile} title='新規登録して学習を始める'>
+              <Register />
+            </Layout>
+          )
         }
       ]
     },

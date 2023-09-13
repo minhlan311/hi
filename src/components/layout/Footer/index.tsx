@@ -1,23 +1,10 @@
 import ucamFooter from '@/assets/icons/ucamFooter.png'
 import { Space, Typography } from 'antd'
-import { memo, useEffect } from 'react'
-
-// import { useDispatch, useSelector } from 'react-redux'
-
 import '../../../assets/css/grid.css'
-// import { configsSelector, getconfigsRequest } from '../../../slices/configs'
 import './styles.scss'
 const { Text } = Typography
 
 const Footer = () => {
-  // const dispatch = useDispatch()
-
-  useEffect(() => {
-    // dispatch(getconfigsRequest())
-  }, [])
-
-  // const configs = useSelector(configsSelector)
-  // const data = configs?.data
   return (
     <>
       <div className='footer'>
@@ -45,7 +32,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-right max-w'>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>VĂN PHÒNG TP HCM</Text>
+                    <Text className='footer-heading text-yellow-heading'>VĂN PHÒNG TP HCM</Text>
 
                     <div
                       style={{
@@ -65,7 +52,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-left max-w'>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>CHI NHÁNH ĐÀ NẴNG</Text>
+                    <Text className='footer-heading text-yellow-heading'>CHI NHÁNH ĐÀ NẴNG</Text>
                     <ul className='ul-fff'>
                       <li>Địa chỉ: 286 Phạm Hùng, Hoà Phước, Hòa Vang, Đà Nẵng</li>
                       <li>Hotline: 0359006655</li>
@@ -76,7 +63,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-right max-w'>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>CHI NHÁNH HÀ NỘI</Text>
+                    <Text className='footer-heading text-yellow-heading'>CHI NHÁNH HÀ NỘI</Text>
                     <ul className='ul-fff'>
                       <li>Địa chỉ: 286 Phạm Hùng, Hoà Phước, Hòa Vang, Đà Nẵng</li>
                       <li>Hotline: 035900665</li>
@@ -91,7 +78,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6' style={{ textAlign: 'start' }}>
                 <div className='col-footer-left max-w'>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>Giới thiệu</Text>
+                    <Text className='footer-heading text-white-heading'>Giới thiệu</Text>
 
                     <div
                       style={{
@@ -112,7 +99,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-right max-w' style={{ textAlign: 'start' }}>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>Tuyển dụng</Text>
+                    <Text className='footer-heading text-white-heading'>Tuyển dụng</Text>
 
                     <div
                       style={{
@@ -133,7 +120,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-left max-w' style={{ textAlign: 'start' }}>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>Cung cấp giáo viên bản ngữ</Text>
+                    <Text className='footer-heading text-white-heading'>Cung cấp giáo viên bản ngữ</Text>
                     <ul className='ul-fff'>
                       <li>Mầm non & Tiểu học</li>
                       <li>Trường THCS-THPT</li>
@@ -146,7 +133,7 @@ const Footer = () => {
               <div className='col-footer l-3 m-6 c-6'>
                 <div className='col-footer-right max-w' style={{ textAlign: 'start' }}>
                   <Space direction='vertical' style={{ textAlign: 'start' }}>
-                    <Text className='footer-heading text-red-heading'>Khóa học tiếng Anh</Text>
+                    <Text className='footer-heading text-white-heading'>Khóa học tiếng Anh</Text>
                     <ul className='ul-fff'>
                       <li>Tiếng anh 1 kèm 1</li>
                       <li>Tiếng Anh cho trẻ em </li>
@@ -182,4 +169,4 @@ const Footer = () => {
   )
 }
 
-export default memo(Footer)
+export default Footer

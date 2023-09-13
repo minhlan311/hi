@@ -1,8 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import style from './WrapMore.module.scss'
-
+// import Header from '@/components/Header/Header'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
-import Header from '../layout/Header/Header'
 
 type Props = {
   children: React.ReactNode
@@ -17,10 +16,10 @@ type Props = {
 
 export default function WrapMore({
   children,
-  padding = '20px 20px',
-  titleStyle,
-  title,
-  titleSize,
+  // padding = '20px 20px',
+  // titleStyle,
+  // title,
+  // titleSize,
   wrapper,
   maxWidth,
   maxHeight
@@ -51,7 +50,7 @@ export default function WrapMore({
       }}
       className={wrapper === 'border' ? `${style.wrapper}` : `${style.wrapperNoneBorder}`}
     >
-      <Header
+      {/* <Header
         titleSize={titleSize}
         margin={`${!buttonRef ? `0 0 50px 0` : '0'}`}
         background='none'
@@ -59,28 +58,28 @@ export default function WrapMore({
         padding={padding}
         title={title}
         titleStyle={titleStyle}
-      >
-        <div className={style.App}>
-          <div
-            style={{
-              maxHeight: maxHeight
-            }}
-            className={`${style.expandableContent} ${expanded ? `${style.expanded}` : ''}`}
-          >
-            <div ref={refCon}>{children}</div>
-          </div>
-          <div hidden={buttonRef} className={`${!expanded ? `${style.blur}` : `${style.blurShow}`}`}>
-            <div className={style.flexButton}>
-              <div>
-                <span className={style.expandButton} onClick={toggleExpand}>
-                  {expanded ? '表示件数を減らす' : 'もっと見る'}
-                </span>
-              </div>
-              {!expanded ? <DownOutlined className={style.icons} /> : <UpOutlined className={style.icons} />}
+      > */}
+      <div className={style.App}>
+        <div
+          style={{
+            maxHeight: maxHeight
+          }}
+          className={`${style.expandableContent} ${expanded ? `${style.expanded}` : ''}`}
+        >
+          <div ref={refCon}>{children}</div>
+        </div>
+        <div hidden={buttonRef} className={`${!expanded ? `${style.blur}` : `${style.blurShow}`}`}>
+          <div className={style.flexButton}>
+            <div>
+              <span className={style.expandButton} onClick={toggleExpand}>
+                {expanded ? '表示件数を減らす' : 'もっと見る'}
+              </span>
             </div>
+            {!expanded ? <DownOutlined className={style.icons} /> : <UpOutlined className={style.icons} />}
           </div>
         </div>
-      </Header>
+      </div>
+      {/* </Header> */}
     </div>
   )
 }
