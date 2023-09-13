@@ -127,7 +127,7 @@ export default function useRouteElements() {
           path: PATH.HOME,
           index: true,
           element: (
-            <Layout user={profile} title='サイトマップ'>
+            <Layout user={profile} title='Trang chủ'>
               <HomePage />
             </Layout>
           )
