@@ -1,0 +1,11 @@
+.checkboxCard {
+  &:hover {
+    background-color: var(--lighish-white);
+  }
+  width: 100%;
+  padding: 15px;
+  cursor: pointer;
+}
+.desc {
+  margin-left: 25px;
+}

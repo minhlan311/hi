@@ -1,0 +1,54 @@
+.connect {
+  width: auto !important;
+  background-color: var(--lighish-white);
+}
+
+.introBody,
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item {
+  width: 30%;
+}
+.item b {
+  margin-left: 12px;
+}
+.icon {
+  padding: 8px;
+  background-color: var(--gray86);
+  border-radius: 50%;
+}
+
+@media screen and (min-width: 280px) and (max-width: 575.98px) {
+  .introBody {
+    flex-direction: column;
+    width: auto !important;
+    text-align: center;
+  }
+  .item {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .introBody {
+    flex-direction: column;
+    width: auto !important;
+  }
+  .item {
+    width: 65%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .introBody {
+    align-items: center;
+    width: auto !important;
+  }
+  .item {
+    width: 25%;
+  }
+}

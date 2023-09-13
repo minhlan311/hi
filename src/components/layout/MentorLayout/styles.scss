@@ -1,0 +1,84 @@
+.mtz-layout {
+    height: auto;
+    min-height: 100vh;
+    .mtz-trigger {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        transition: 0.3s;
+
+        .logo {
+            margin-left: 10px;
+            img {
+                height: auto;
+                transition: 0.3s;
+            }
+        }
+        .trigger {
+            font-size: 16px;
+            transition: 0.3s;
+        }
+    }
+    .site-layout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-bottom: solid 1px rgb(241, 241, 241);
+        .site-right {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }
+    .content {
+        overflow-y: auto;
+        max-height: 91.5vh;
+    }
+}
+
+.menu-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 169px;
+    height: 36px;
+    border-radius: 4px;
+
+    img {
+        width: 25px !important;
+        margin-right: 8px;
+    }
+
+    span {
+        color: #8f95b2;
+    }
+
+    &:hover {
+        background: none;
+    }
+}
+
+.group-filter-container {
+    .ant-form {
+        display: flex;
+    }
+
+    .group-filter-left {
+        width: 70%;
+        display: flex;
+
+        .ant-form-item {
+            margin-right: 10px;
+        }
+    }
+
+    .group-filter-right {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 30%;
+    }
+}
