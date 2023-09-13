@@ -56,10 +56,10 @@ export default function VideoContent() {
             <div className='content-col flex-steps'>
               <div className='steps'>
                 <IconCheck />
-                <IconCheck marginTop={'55px'} />
-                <IconCheck marginTop={'80px'} />
-                <IconCheck marginTop={'80px'} />
-                <IconCheck marginTop={'80px'} />
+                <IconCheck marginTop={'45px'} />
+                <IconCheck marginTop={'70px'} />
+                <IconCheck marginTop={'75px'} />
+                <IconCheck marginTop={'70px'} />
               </div>
               <div className='content-steps'>
                 {ArrayDesc?.map((item) => (

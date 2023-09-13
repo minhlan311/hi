@@ -11,7 +11,7 @@ type Props = {
 
 export default function ListCourse({ listData }: Props) {
   const navigate = useNavigate()
-  const handleClickCourse = (id: string, subject: string, name: string) => {
+  const handleClickCourse = (subject: string, name: string) => {
     navigate({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       pathname: `/courses/${useConvertSlug(subject)}/${useConvertSlug(name)}`
@@ -25,7 +25,7 @@ export default function ListCourse({ listData }: Props) {
         <div
           className='col'
           onClick={() => {
-            handleClickCourse(item._id, item.category.name, item?.name)
+            handleClickCourse(item.category.name, item?.name)
           }}
         >
           <div className='imgCol'>

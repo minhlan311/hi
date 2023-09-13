@@ -6,7 +6,7 @@ import PATH from './constants/path'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import Layout from './components/layout/Layout.tsx'
 import HomePage from './pages/HomePage/index.tsx'
-import RegisterPage from './pages/RegisterPage/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -36,7 +36,7 @@ export default function useRouteElements() {
           path: PATH.REGISTER,
           element: (
             <Layout user={profile} title='新規登録して学習を始める'>
-              {/* <RegisterPage /> */}
+              <Register />
             </Layout>
           )
         }

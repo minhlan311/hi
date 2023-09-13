@@ -35,7 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                       colorPrimaryActive: '#FF636F',
                       colorPrimaryBorder: '#D72831',
                       colorPrimaryHover: '#FF636F',
-                      colorPrimaryBg: '#D72831',
+                      // colorPrimaryBg: '#D72831',
                       colorInfo: '#1EA69A',
                       colorBorder: '#E7E7E7',
                       colorLink: '#1C1D1F',
