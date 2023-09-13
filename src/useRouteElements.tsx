@@ -47,7 +47,7 @@ export default function useRouteElements() {
           path: PATH.REGISTER,
 
           element: (
-            <Layout user={profile} title='新規登録して学習を始める'>
+            <Layout user={profile} title='Đăng ký'>
               <Register />
             </Layout>
           )
