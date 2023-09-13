@@ -61,7 +61,6 @@ export const ENDPOINT = {
   PAYMENT_CHECKOUT_PATH: '/payment/checkout',
   PAYMENT_CHECKOUT_POINT: '/payment/checkpoint',
   PAYMENT_CALLBACK_PATH: '/vnpay/callback',
-
   FIND_TRANSACTION_PATH: '/transactions/find',
   TRANSACTION_PATH: '/transactions',
 
