@@ -1,7 +1,7 @@
 export const PATH = {
   HOME: '/',
   LOGIN: '/login',
-  FORGOT_PASS: '/forgot-pasword',
+  FORGOT_PASS: '/forgot-password',
   REGISTER: '/register',
   DOCUMENTS: '/documents',
   DOCUMENTS_DETAIL: '/documents/:id',

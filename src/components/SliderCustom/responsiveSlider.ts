@@ -1,1 +1,1 @@
-export const responsiveSlider = [{ breakpoint: 576, settings: { slidesToShow: 2, slidesToScroll: 2, arrows: false } }]
+export const responsiveSlider = [{ breakpoint: 576, settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false } }]

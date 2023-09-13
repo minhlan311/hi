@@ -1,8 +1,8 @@
-import axios, { AxiosError, type AxiosInstance } from 'axios'
+import { ENDPOINT } from '@/constants/endpoint'
 import HttpStatusCode from '@/constants/httpStatusCode.enum'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileToLS } from './auth'
-import { ENDPOINT } from '@/constants/endpoint'
 
 class Http {
   instance: AxiosInstance
@@ -32,7 +32,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === ENDPOINT.LOGGIN || url === ENDPOINT.REGISTER) {
+        if (url === ENDPOINT.LOGIN || url === ENDPOINT.REGISTER) {
           const data = response.data as AuthResponse
           this.accessToken = data.accessToken
           setAccessTokenToLS(this.accessToken)

@@ -234,18 +234,7 @@ table {
     color: var(--white) !important;
   }
 }
-.ant-dropdown-menu-submenu-placement-rightTop,
-.ant-dropdown-menu-submenu-placement-rightBottom {
-  top: 68px !important;
-  max-width: 18%;
-  width: 100%;
-}
-.ant-dropdown-menu-vertical {
-  width: 100%;
-  height: 90vh;
-  margin-left: 4px !important;
-  margin-top: -4px !important;
-}
+
 .dangerHTMLTwoLine {
   white-space: break-spaces;
   overflow: hidden;

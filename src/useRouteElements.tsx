@@ -9,6 +9,7 @@ import { AppContext } from './contexts/app.context'
 import Login from './pages/Auth/Login/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
+import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -18,6 +19,7 @@ function ProtectedRoute() {
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -34,7 +36,7 @@ export default function useRouteElements() {
           path: PATH.LOGIN,
           element: (
             <AuthLayout
-              title='Login'
+              title='Đăng nhập'
               imgSize={14}
               titleForm='Đăng nhập ngay!'
               descForm='Học tập là công việc của cả cuộc đời, hãy để MentorZ là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
@@ -45,11 +47,23 @@ export default function useRouteElements() {
         },
         {
           path: PATH.REGISTER,
-
           element: (
             <Layout user={profile} title='Đăng ký'>
               <Register />
             </Layout>
+          )
+        },
+        {
+          path: PATH.FORGOT_PASS,
+          element: (
+            <AuthLayout
+              title='Quên mật khẩu'
+              imgSize={14}
+              titleForm='Quên mật khẩu'
+              descForm='Nhập email đã đăng ký của bạn bên dưới để nhận hướng dẫn lấy lại mật khẩu.'
+            >
+              <ForgotPassword />
+            </AuthLayout>
           )
         }
       ]

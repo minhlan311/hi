@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState } from 'react'
 import { CodeState } from '@/interface/code'
 import { CoursesState } from '@/interface/coursesData'
