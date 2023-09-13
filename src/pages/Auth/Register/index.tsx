@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
 import { Button, message, Steps, theme } from 'antd'
 import './Register.scss'
-
-const steps = [
-  {
-    title: 'Chọn vai trò',
-    content: 'First-content'
-  },
-  {
-    title: 'Thông tin cơ bản',
-    content: 'Second-content'
-  },
-  {
-    title: 'Thông tin bảo mật',
-    content: 'Last-content'
-  }
-]
+import Roles from './Roles/Roles'
 
 const Register: React.FC = () => {
+  // const [pickRole, setPickRole] = useState()
+
+  const steps = [
+    {
+      title: 'Chọn vai trò',
+      content: <Roles />
+    },
+    {
+      title: 'Thông tin cơ bản',
+      content: 'Second-content'
+    },
+    {
+      title: 'Thông tin bảo mật',
+      content: 'Last-content'
+    }
+  ]
+
   const { token } = theme.useToken()
   const [current, setCurrent] = useState(0)
 
@@ -32,7 +35,7 @@ const Register: React.FC = () => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
   const contentStyle: React.CSSProperties = {
-    lineHeight: '260px',
+    lineHeight: '50px',
     textAlign: 'center',
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
@@ -49,17 +52,17 @@ const Register: React.FC = () => {
         <div style={{ marginTop: 24 }}>
           {current < steps.length - 1 && (
             <Button type='primary' onClick={() => next()}>
-              Next
+              Tiếp tục
             </Button>
           )}
           {current === steps.length - 1 && (
             <Button type='primary' onClick={() => message.success('Processing complete!')}>
-              Done
+              Hoàn thành
             </Button>
           )}
           {current > 0 && (
             <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-              Previous
+              Quay lại
             </Button>
           )}
         </div>
