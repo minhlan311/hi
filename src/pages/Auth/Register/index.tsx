@@ -91,10 +91,10 @@ const Register: React.FC = () => {
     {
       title: 'Thông tin cơ bản',
       content:
-        pickRole === ROLE.MENTOR ? (
-          <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
-        ) : (
+        pickRole === ROLE.STUDENT ? (
           <StudentForm />
+        ) : (
+          <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
         )
     },
     {
