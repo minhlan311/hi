@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { DatePicker, Form, Input, notification } from 'antd'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
@@ -8,11 +8,15 @@ import { MentorForm as TMentorForm } from '../../constants'
 import { ROLE } from '../../Roles/constants'
 import { useNavigate } from 'react-router-dom'
 
-const MentorForm = forwardRef(({ onFinishs, formRef, roles }: any) => {
+const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
+  const [userId, setUserId] = useState<string>('')
   const navigate = useNavigate()
   const [form] = Form.useForm()
 
   formRef.current = form
+  useEffect(() => {
+    ids(userId)
+  }, [userId])
 
   const registerAccountMutation = useMutation({
     mutationFn: (body: TMentorForm) => authApi.registerAccount(body)
@@ -21,7 +25,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles }: any) => {
     const dataUpload = { ...values, isMentor: roles === ROLE.MENTOR ? true : false }
     registerAccountMutation.mutate(dataUpload, {
       onSuccess: (data) => {
-        localStorage.setItem('id', data?.data?._id)
+        setUserId(data?.data?._id)
         onFinishs(values)
         if (roles === ROLE.STUDENT) {
           navigate('/')

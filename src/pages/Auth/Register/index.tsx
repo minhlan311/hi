@@ -11,7 +11,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
-  const id = localStorage.getItem('id')
   const [loading, setLoading] = useState<boolean>(false)
   const [current, setCurrent] = useState(0)
   const [pickRole, setPickRole] = useState<string | undefined>(undefined)
@@ -24,7 +23,7 @@ const Register: React.FC = () => {
     phoneNumber: '',
     birthDay: '',
     certificates: [],
-    userId: id as string,
+    userId: '',
     educationType: ''
   })
   const formRef = useRef<HTMLFormElement>(null)
@@ -91,6 +90,10 @@ const Register: React.FC = () => {
   const dataChild = (steps3: { educationType: string; link: string[] }) => {
     setDataForm({ ...dataForm, certificates: steps3.link, educationType: steps3.educationType })
   }
+  const ids = (idRole: string) => {
+    console.log(idRole, 'idRole')
+    setDataForm({ ...dataForm, userId: idRole })
+  }
 
   const steps = [
     {
@@ -99,7 +102,7 @@ const Register: React.FC = () => {
     },
     {
       title: 'Thông tin cơ bản',
-      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} />
+      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} ids={ids} />
     },
     {
       title: 'Dành cho Giảng viên',
