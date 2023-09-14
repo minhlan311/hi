@@ -18,7 +18,6 @@ export default function ListCourse({ listData }: Props) {
     })
   }
 
-  console.log(listData, 'ArrayCouse')
   return (
     <div className='listCourse'>
       {listData?.map((item) => (

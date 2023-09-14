@@ -16,6 +16,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   formRef.current = form
   useEffect(() => {
     ids(userId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const registerAccountMutation = useMutation({
@@ -28,11 +29,11 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         setUserId(data?.data?._id)
         onFinishs(values)
         if (roles === ROLE.STUDENT) {
-          navigate('/')
+          navigate('/login')
           notification.open({
             type: 'success',
             message: 'Thông báo',
-            description: 'Đăng ký tài khoản thành công 1'
+            description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
           })
           return
         }
@@ -136,7 +137,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         <Input.Password size='large' placeholder='Nhập lại mật khẩu' />
       </Form.Item>
       <Form.Item<TMentorForm>
-        label='SĐT liên kết với tài khoản Zalo'
+        label='Số điện thoại'
         name='phoneNumber'
         rules={[
           {
@@ -152,7 +153,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         <Input type='number' placeholder='Nhập số điện thoại' size='large' />
       </Form.Item>
       <Form.Item<TMentorForm>
-        label='Sinh nhật'
+        label='Ngày sinh'
         name='birthDay'
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
