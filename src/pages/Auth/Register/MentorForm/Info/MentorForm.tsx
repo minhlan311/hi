@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef } from 'react'
-import { DatePicker, Form, Input } from 'antd'
+import { DatePicker, Form, Input, notification } from 'antd'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
@@ -20,8 +20,12 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
         localStorage.setItem('id', data?.data?._id)
         onFinishs(values)
       },
-      onError: (error) => {
-        console.log(error)
+      onError: (error: any) => {
+        notification.open({
+          type: 'error',
+          message: 'Thông báo',
+          description: error?.response?.data?.message
+        })
       }
     })
   }

@@ -12,10 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
-  const navigate = useNavigate()
-  const { token } = theme.useToken()
-  const [current, setCurrent] = useState(0)
   const id = localStorage.getItem('id')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [current, setCurrent] = useState(0)
   const [pickRole, setPickRole] = useState('')
   const [checkStep2, setCheckStep2] = useState<TMentorForm | undefined>(undefined)
   const [dataForm, setDataForm] = useState<DataFormMentor>({
@@ -30,8 +29,10 @@ const Register: React.FC = () => {
     educationType: '',
     isMentor: false
   })
-
   const formRef = useRef<HTMLFormElement>(null)
+  const navigate = useNavigate()
+  const { token } = theme.useToken()
+
   useEffect(() => {
     if (checkStep2 && current === 1) {
       setCurrent(current + 1)
@@ -99,7 +100,7 @@ const Register: React.FC = () => {
     },
     {
       title: 'Thông tin bảo mật',
-      content: pickRole === ROLE.MENTOR ? <Certificate dataChild={dataChild} /> : ''
+      content: pickRole === ROLE.STUDENT ? '' : <Certificate dataChild={dataChild} />
     }
   ]
 
@@ -118,9 +119,6 @@ const Register: React.FC = () => {
     lineHeight: '50px',
     textAlign: 'center',
     color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
-    borderRadius: token.borderRadiusLG,
-    border: `1px dashed ${token.colorBorder}`,
     marginTop: 16
   }
   console.log(dataForm, 'dataFormdataFormdataForm')
@@ -132,8 +130,10 @@ const Register: React.FC = () => {
         description: 'Vui lòng điền đầy đủ bằng cấp chứng chỉ và trình độ đào tạo'
       })
     } else {
+      setLoading(true)
       const data = await authApi.registerMentor(dataForm)
       if (data.status === 201) {
+        setLoading(false)
         notification.open({
           type: 'success',
           message: 'Thông báo',
@@ -141,6 +141,7 @@ const Register: React.FC = () => {
         })
         navigate('/')
       } else {
+        setLoading(false)
         notification.open({
           type: 'error',
           message: 'Thông báo',
@@ -162,7 +163,7 @@ const Register: React.FC = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type='primary' onClick={handleForm}>
+            <Button disabled={loading} type='primary' onClick={handleForm}>
               Hoàn thành
             </Button>
           )}

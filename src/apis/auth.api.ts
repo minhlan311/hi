@@ -1,25 +1,10 @@
 import { ENDPOINT } from '@/constants/endpoint'
+import { UserState } from '@/interface/user'
 import { AuthResponse } from '@/types/auth.type'
+import { Register } from '@/types/mentor.type'
+import { RegisterMentor } from '@/types/mentor.type'
+import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
-
-type Register = {
-  fullName: string
-  email: string
-  password: string
-  confirmPassword: string
-  phoneNumber: string
-  birthDay: string
-}
-type RegisterMentor = {
-  fullName: string
-  email: string
-  password: string
-  confirmPassword: string
-  phoneNumber: string
-  birthDay: string
-  certificates: string[]
-  userId: string
-}
 
 const authApi = {
   registerAccount(body: Register) {
@@ -33,6 +18,11 @@ const authApi = {
   },
   logout() {
     return http.post(ENDPOINT.LOGOUT)
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  forgot(data: any) {
+    return http.post<SuccessResponse<UserState[]>>(ENDPOINT.LOGIN, data)
   }
 }
 
