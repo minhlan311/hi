@@ -29,24 +29,22 @@ const Register: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const navigate = useNavigate()
   const { token } = theme.useToken()
-  console.log(pickRole, 'pickRolepickRole')
 
   useEffect(() => {
     if (checkStep2 && current === 1) {
       setCurrent(current + 1)
     }
+    return
   }, [checkStep2])
 
-  const handleSubmit = () => {
-    if (current === 0 && !pickRole) {
-      setCurrent(current)
-      notification.open({
-        type: 'error',
-        message: 'Thông báo',
-        description: 'Vui lòng chọn vai trò'
-      })
-      return
+  useEffect(() => {
+    if (pickRole && current === 0) {
+      setCurrent(current + 1)
     }
+    return
+  }, [pickRole])
+
+  const handleSubmit = () => {
     if (current === 1) {
       formRef.current!.submit()
     }
@@ -91,7 +89,6 @@ const Register: React.FC = () => {
     setDataForm({ ...dataForm, certificates: steps3.link, educationType: steps3.educationType })
   }
   const ids = (idRole: string) => {
-    console.log(idRole, 'idRole')
     setDataForm({ ...dataForm, userId: idRole })
   }
 
@@ -131,7 +128,6 @@ const Register: React.FC = () => {
     color: token.colorTextTertiary,
     marginTop: 16
   }
-  console.log(dataForm, 'dataFormdataFormdataForm')
   const handleForm = async () => {
     if (!dataForm.educationType || dataForm.certificates.length === 0) {
       notification.open({
@@ -147,7 +143,7 @@ const Register: React.FC = () => {
         notification.open({
           type: 'success',
           message: 'Thông báo',
-          description: 'Đăng ký thành công,vui lòng đăng nhập!'
+          description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
         })
         navigate('/login')
       } else {
@@ -167,7 +163,7 @@ const Register: React.FC = () => {
         <Steps current={current} items={items} />
         <div style={contentStyle}>{steps[current].content}</div>
         <div style={{ marginTop: 24 }}>
-          {current < steps.length - 1 && (
+          {current < steps.length - 1 && current > 0 && (
             <Button type='primary' onClick={handleSubmit}>
               Tiếp tục
             </Button>

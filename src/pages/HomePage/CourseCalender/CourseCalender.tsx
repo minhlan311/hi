@@ -34,8 +34,6 @@ export default function CourseCalender() {
     staleTime: 3 * 60 * 1000
   })
 
-  console.log(ArraySubject, '-------')
-
   const handleActive = (name: string, id: string) => {
     setActive(name)
     setId(id)
