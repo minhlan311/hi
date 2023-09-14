@@ -15,6 +15,7 @@ import LanguageChange from '@/components/LanguageChange'
 import { UserState } from '@/interface/user'
 import MenuPc from './MenuPc'
 import './styles.scss'
+import { BiSolidDashboard } from 'react-icons/bi'
 type Props = {
   user?: UserState
 }
@@ -78,6 +79,11 @@ export default function Navigation({ user }: Props) {
                         height: '100%'
                       }}
                     >
+                      <Link to='/mentor'>
+                        <div className='cartIcon'>
+                          <BiSolidDashboard />
+                        </div>
+                      </Link>
                       <div className='cartIcon'>
                         <BsFillCartFill />
                       </div>

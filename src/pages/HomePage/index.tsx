@@ -1,4 +1,4 @@
-import Mentor from '@/components/layout/Mentor'
+import Mentor from '@/pages/HomePage/Mentor'
 import Banner from './Banner'
 import Gift from './Gift/Gift'
 import LanguageSystem from './LanguageSystem/LanguageSystem'
