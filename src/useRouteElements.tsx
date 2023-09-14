@@ -11,7 +11,10 @@ import HomePage from './pages/HomePage/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
 import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 import MentorLayout from './components/layout/MentorLayout/index.tsx'
-import MentorPedagogies from './pages/MentorPage/index.tsx'
+import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
+import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
+import MentorDocuments from './pages/MentorPage/Management/Documents/index.tsx'
+import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -92,7 +95,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_COURSES,
           element: (
             <MentorLayout user={profile} title='Quản lý khóa học'>
-              <MentorPedagogies user={profile} />
+              <MentorCourses />
             </MentorLayout>
           )
         },
@@ -100,7 +103,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_DOCUMENTS,
           element: (
             <MentorLayout user={profile} title='Quản lý tài liệu'>
-              <MentorPedagogies user={profile} />
+              <MentorDocuments />
             </MentorLayout>
           )
         },
@@ -108,7 +111,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_EXAMS,
           element: (
             <MentorLayout user={profile} title='Quản lý đề thi thử'>
-              <MentorPedagogies user={profile} />
+              <MentorExams />
             </MentorLayout>
           )
         }

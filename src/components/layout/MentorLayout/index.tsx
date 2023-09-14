@@ -9,6 +9,8 @@ import { Link, useLocation } from 'react-router-dom'
 import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
 import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import { FiHome } from 'react-icons/fi'
 type Props = {
   user: UserState
   title: string
@@ -78,12 +80,18 @@ const MentorLayout = (props: Props) => {
         <Header className={css.navTop}>
           <Row justify='space-between' align='middle'>
             <Button
-              type='text'
               icon={collapsed ? <LuPanelLeftOpen size={22} /> : <LuPanelRightOpen size={22} />}
               onClick={() => setCollapsed(!collapsed)}
-              size={sm ? 'middle' : 'large'}
+              type='text'
+              style={{ color: 'var(--white)' }}
             />
-            <AvatarDropMenu userData={user} collapsed={sm} />
+
+            <Row align='middle'>
+              <Link to='/'>
+                <ButtonCustom icon={<FiHome size={20} />} style={{ marginRight: 15 }} size='middle'></ButtonCustom>
+              </Link>
+              <AvatarDropMenu userData={user} collapsed={sm} />
+            </Row>
           </Row>
         </Header>
         <Content className={css.content}>
