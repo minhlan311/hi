@@ -87,7 +87,9 @@ const MentorLayout = (props: Props) => {
             />
 
             <Row align='middle'>
-              <ButtonCustom icon={<FiHome size={20} />} style={{ marginRight: 15 }} size='middle'></ButtonCustom>
+              <Link to='/'>
+                <ButtonCustom icon={<FiHome size={20} />} style={{ marginRight: 15 }} size='middle'></ButtonCustom>
+              </Link>
               <AvatarDropMenu userData={user} collapsed={sm} />
             </Row>
           </Row>
