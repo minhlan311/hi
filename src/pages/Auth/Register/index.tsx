@@ -14,7 +14,7 @@ const Register: React.FC = () => {
   const id = localStorage.getItem('id')
   const [loading, setLoading] = useState<boolean>(false)
   const [current, setCurrent] = useState(0)
-  const [pickRole, setPickRole] = useState('')
+  const [pickRole, setPickRole] = useState<string | undefined>(undefined)
   const [checkStep2, setCheckStep2] = useState<TMentorForm | undefined>(undefined)
   const [dataForm, setDataForm] = useState<DataFormMentor>({
     fullName: '',
@@ -30,6 +30,7 @@ const Register: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const navigate = useNavigate()
   const { token } = theme.useToken()
+  console.log(pickRole, 'pickRolepickRole')
 
   useEffect(() => {
     if (checkStep2 && current === 1) {
@@ -38,6 +39,15 @@ const Register: React.FC = () => {
   }, [checkStep2])
 
   const handleSubmit = () => {
+    if (current === 0 && !pickRole) {
+      setCurrent(current)
+      notification.open({
+        type: 'error',
+        message: 'Thông báo',
+        description: 'Vui lòng chọn vai trò'
+      })
+      return
+    }
     if (current === 1) {
       formRef.current!.submit()
     }
@@ -45,6 +55,7 @@ const Register: React.FC = () => {
       if (current === 1) {
         setCurrent(current + 1)
       }
+
       if (current !== 1) {
         setCheckStep2(undefined)
         setCurrent(current + 1)
@@ -88,7 +99,7 @@ const Register: React.FC = () => {
     },
     {
       title: 'Thông tin cơ bản',
-      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
+      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} />
     },
     {
       title: 'Dành cho Giảng viên',
@@ -97,9 +108,13 @@ const Register: React.FC = () => {
   ]
 
   const prev = () => {
+    if (current === 1) {
+      setPickRole('')
+    }
     if (current !== 1) {
       setCheckStep2(undefined)
       setCurrent(current - 1)
+      return
     }
     setCurrent(current - 1)
   }
