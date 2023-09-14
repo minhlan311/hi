@@ -5,8 +5,11 @@ import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { MentorForm as TMentorForm } from '../../constants'
+import { ROLE } from '../../Roles/constants'
+import { useNavigate } from 'react-router-dom'
 
-const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
+const MentorForm = forwardRef(({ onFinishs, formRef, roles }: any) => {
+  const navigate = useNavigate()
   const [form] = Form.useForm()
 
   formRef.current = form
@@ -15,11 +18,20 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
     mutationFn: (body: TMentorForm) => authApi.registerAccount(body)
   })
   const onFinish = (values: any) => {
-    const dataUpload = { ...values, isMentor: true }
+    const dataUpload = { ...values, isMentor: roles === ROLE.MENTOR ? true : false }
     registerAccountMutation.mutate(dataUpload, {
       onSuccess: (data) => {
         localStorage.setItem('id', data?.data?._id)
         onFinishs(values)
+        if (roles === ROLE.STUDENT) {
+          navigate('/')
+          notification.open({
+            type: 'success',
+            message: 'Thông báo',
+            description: 'Đăng ký tài khoản thành công 1'
+          })
+          return
+        }
       },
       onError: (error: any) => {
         notification.open({
@@ -36,11 +48,9 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
   }
   return (
     <Form
+      layout='vertical'
       form={form}
       name='basic'
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
       initialValues={{ remember: true }}
       onFinishFailed={onFinishFailed}
       onFinish={onFinish}
@@ -51,7 +61,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
         name='fullName'
         rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
       >
-        <Input />
+        <Input size='large' placeholder='Nhập họ và tên của bạn' />
       </Form.Item>
 
       <Form.Item<TMentorForm>
@@ -68,7 +78,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
           }
         ]}
       >
-        <Input />
+        <Input size='large' placeholder='Nhập email của bạn' />
       </Form.Item>
 
       <Form.Item<TMentorForm>
@@ -89,7 +99,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
           }
         ]}
       >
-        <Input.Password placeholder='Nhập mật khẩu' />
+        <Input.Password placeholder='Nhập mật khẩu' size='large' />
       </Form.Item>
       <Form.Item<TMentorForm>
         label='confirmPassword'
@@ -119,7 +129,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
           })
         ]}
       >
-        <Input.Password />
+        <Input.Password size='large' placeholder='Nhập lại mật khẩu' />
       </Form.Item>
       <Form.Item<TMentorForm>
         label='SĐT liên kết với tài khoản Zalo'
@@ -135,14 +145,14 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
           }
         ]}
       >
-        <Input type='number' placeholder='Nhập số điện thoại' />
+        <Input type='number' placeholder='Nhập số điện thoại' size='large' />
       </Form.Item>
       <Form.Item<TMentorForm>
         label='Sinh nhật'
         name='birthDay'
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
-        <DatePicker />
+        <DatePicker size='large' />
       </Form.Item>
     </Form>
   )
