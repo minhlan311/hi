@@ -149,7 +149,7 @@ const Register: React.FC = () => {
           message: 'Thông báo',
           description: 'Đăng ký thành công,vui lòng đăng nhập!'
         })
-        navigate('/')
+        navigate('/login')
       } else {
         setLoading(false)
         notification.open({
