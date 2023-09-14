@@ -48,9 +48,14 @@ export default function useRouteElements() {
         {
           path: PATH.REGISTER,
           element: (
-            <Layout user={profile} title='Đăng ký'>
+            <AuthLayout
+              title='Đăng ký'
+              imgSize={14}
+              titleForm='Đăng ký'
+              descForm='Học tập là công việc của cả cuộc đời, hãy để MentorZ là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
+            >
               <Register />
-            </Layout>
+            </AuthLayout>
           )
         },
         {
