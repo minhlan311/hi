@@ -27,7 +27,6 @@ export default function Roles({ pickRoleChange }: any) {
         Giảng Viên
       </Button>
       <Button
-        disabled
         className={`${active === ROLE.STUDENT ? 'activeButton' : ''}`}
         onClick={() => {
           pickRoles(ROLE.STUDENT)

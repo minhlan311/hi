@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
-import { Upload, Button } from 'antd'
+import { Upload, Button, Form } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import { ENDPOINT } from '@/constants/endpoint'
 import LevelComponent from './Level/Level'
-import { UploadFile } from 'antd/lib'
+import { UploadFile, UploadProps } from 'antd/lib'
 import { RcFile } from 'antd/es/upload'
+import { useForm } from 'antd/es/form/Form'
 
 type Props = {
   dataChild: (data: { educationType: string; link: string[] }) => void
@@ -16,6 +17,8 @@ type Props = {
 const Certificate = ({ dataChild }: Props) => {
   const [link, setLink] = useState<string[]>([])
   const [data, setData] = useState<any>({})
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [form] = useForm()
 
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string
@@ -39,14 +42,16 @@ const Certificate = ({ dataChild }: Props) => {
     dataChild(data)
   }, [data])
 
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList)
+
   const props = {
-    name: 'image',
+    name: 'certificate',
     multiple: true,
     accept: '.png, .jpg, .jpge, .webp, .docx, .doc, .pdf',
     onPreview: onPreview,
     onChange(info: any) {
       if (info.file.status === 'done') {
-        return info.file.response
+        return info.file
       }
     },
     customRequest: async ({ onSuccess, onError, file }: any) => {
@@ -69,12 +74,14 @@ const Certificate = ({ dataChild }: Props) => {
 
   return (
     <>
-      <LevelComponent levels={levels} />
-      <br />
-      <h3>Bằng cấp chứng chỉ</h3>
-      <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-      </Upload>
+      <Form form={form}>
+        <LevelComponent levels={levels} />
+        <br />
+        <h3>Bằng cấp chứng chỉ</h3>
+        <Upload {...props} fileList={fileList} onChange={handleChange}>
+          <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+        </Upload>
+      </Form>
     </>
   )
 }

@@ -15,7 +15,8 @@ const MentorForm = forwardRef(({ onFinishs, formRef }: any) => {
     mutationFn: (body: TMentorForm) => authApi.registerAccount(body)
   })
   const onFinish = (values: any) => {
-    registerAccountMutation.mutate(values, {
+    const dataUpload = { ...values, isMentor: true }
+    registerAccountMutation.mutate(dataUpload, {
       onSuccess: (data) => {
         localStorage.setItem('id', data?.data?._id)
         onFinishs(values)
