@@ -5,7 +5,6 @@ import './Register.scss'
 import Roles from './Roles/Roles'
 import { ROLE } from './Roles/constants'
 import MentorForm from './MentorForm/Info/MentorForm'
-import StudentForm from './StudentForm/StudentForm'
 import Certificate from './MentorForm/Certificate/Certificate'
 import authApi from '@/apis/auth.api'
 import { useNavigate } from 'react-router-dom'
@@ -26,8 +25,7 @@ const Register: React.FC = () => {
     birthDay: '',
     certificates: [],
     userId: id as string,
-    educationType: '',
-    isMentor: false
+    educationType: ''
   })
   const formRef = useRef<HTMLFormElement>(null)
   const navigate = useNavigate()
@@ -75,8 +73,7 @@ const Register: React.FC = () => {
       password: steps2.password,
       confirmPassword: steps2.confirmPassword,
       phoneNumber: steps2.phoneNumber,
-      birthDay: steps2.birthDay,
-      isMentor: true
+      birthDay: steps2.birthDay
     })
   }
 
@@ -91,16 +88,11 @@ const Register: React.FC = () => {
     },
     {
       title: 'Thông tin cơ bản',
-      content:
-        pickRole === ROLE.STUDENT ? (
-          <StudentForm />
-        ) : (
-          <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
-        )
+      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
     },
     {
-      title: 'Thông tin bảo mật',
-      content: pickRole === ROLE.STUDENT ? '' : <Certificate dataChild={dataChild} />
+      title: 'Dành cho Giảng viên',
+      content: pickRole === ROLE.MENTOR && <Certificate dataChild={dataChild} />
     }
   ]
 
