@@ -2,15 +2,15 @@ import Logo from '@/components/Logo/Logo'
 import { UserState } from '@/interface/user'
 import { CarryOutOutlined, ContainerOutlined, DatabaseOutlined, SnippetsOutlined } from '@ant-design/icons'
 
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import useResponsives from '@/hooks/useResponsives'
 import { Breadcrumb, Button, Layout, Menu, Row, Space } from 'antd'
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { FiHome } from 'react-icons/fi'
+import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
-import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import { FiHome } from 'react-icons/fi'
 type Props = {
   user: UserState
   title: string
@@ -29,6 +29,7 @@ const { Header, Sider, Content } = Layout
 const MentorLayout = (props: Props) => {
   const { user, title, children } = props
   const location = useLocation()
+  const navitage = useNavigate()
   window.document.title = title
   const { sm } = useResponsives()
   const [collapsed, setCollapsed] = useState(sm ? true : false)
@@ -52,11 +53,12 @@ const MentorLayout = (props: Props) => {
   }
 
   const siderItems: SiderItem[] = [
-    getItem(<Link to='/mentor'>Danh sách câu hỏi</Link>, '/mentor', <ContainerOutlined />),
+    getItem(<Link to='/mentor/questions'>Danh sách câu hỏi</Link>, '/mentor/questions', <ContainerOutlined />),
     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
     getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
     getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />)
   ]
+
   return (
     <Layout className={css.layout}>
       <Sider
@@ -76,7 +78,7 @@ const MentorLayout = (props: Props) => {
           inlineIndent={sm ? 10 : 24}
         />
       </Sider>
-      <Layout>
+      <Layout className={css.main}>
         <Header className={css.navTop}>
           <Row justify='space-between' align='middle'>
             <Button
@@ -87,9 +89,13 @@ const MentorLayout = (props: Props) => {
             />
 
             <Row align='middle'>
-              <Link to='/'>
-                <ButtonCustom icon={<FiHome size={20} />} style={{ marginRight: 15 }} size='middle'></ButtonCustom>
-              </Link>
+              <ButtonCustom
+                icon={<FiHome size={20} />}
+                style={{ marginRight: 15 }}
+                size='middle'
+                onClick={() => navitage('/')}
+              ></ButtonCustom>
+
               <AvatarDropMenu userData={user} collapsed={sm} />
             </Row>
           </Row>
