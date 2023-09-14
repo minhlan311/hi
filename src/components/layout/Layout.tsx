@@ -7,7 +7,7 @@ import Navigation from './Navigation'
 type Props = {
   children?: React.ReactNode
   title?: string
-  user?: UserState | null
+  user?: UserState
 }
 
 const Layout = (props: Props) => {
@@ -19,7 +19,7 @@ const Layout = (props: Props) => {
 
   return (
     <div>
-      <Navigation user={user || null} />
+      <Navigation user={user} />
       <div className={css.children}>
         {children}
         <Outlet />

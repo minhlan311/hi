@@ -16,7 +16,7 @@ import { UserState } from '@/interface/user'
 import MenuPc from './MenuPc'
 import './styles.scss'
 type Props = {
-  user: UserState | null
+  user?: UserState
 }
 export default function Navigation({ user }: Props) {
   // const [educationId, setEducationId] = useState('')

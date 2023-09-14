@@ -20,8 +20,8 @@ interface AppContextInterface {
   scaleScreen: boolean
   setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-  profile: UserState | null
-  setProfile: React.Dispatch<React.SetStateAction<UserState | null>>
+  profile: UserState
+  setProfile: React.Dispatch<React.SetStateAction<UserState>>
   order: CoursesState[]
   setOrder: React.Dispatch<React.SetStateAction<CoursesState[]>>
   whiteList: CoursesState[]
@@ -57,7 +57,7 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
-  const [profile, setProfile] = useState<UserState | null>(initialAppContext.profile)
+  const [profile, setProfile] = useState<UserState>(initialAppContext.profile)
   const [order, setOrder] = useState<CoursesState[]>(initialAppContext.order)
   const [whiteList, setWhiteList] = useState<CoursesState[]>(initialAppContext.whiteList)
   const [favorite, setFavorite] = useState<CoursesState[]>(initialAppContext.favorite)

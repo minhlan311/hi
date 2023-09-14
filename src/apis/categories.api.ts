@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import http from '@/utils/http'
-import { Category } from '@/types/category.type'
 import { SuccessResponse } from '@/types/utils.type'
 import { ENDPOINT } from '@/constants/endpoint'
+import { CategoryState } from '@/interface/category'
 
 const categoryApi = {
   getCategories(filterQuery?: any) {
-    return http.post<SuccessResponse<Category[]>>(ENDPOINT.FIND_CATEGORIES_PATH, {
+    return http.post<SuccessResponse<CategoryState[]>>(ENDPOINT.FIND_CATEGORIES_PATH, {
       filterQuery: filterQuery,
       options: {
         pagination: false,

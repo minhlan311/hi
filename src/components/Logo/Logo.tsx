@@ -8,25 +8,27 @@ type Props = {
   size?: number
   style?: React.CSSProperties
   className?: string
+  href?: string
 }
 
 const Logo = (props: Props) => {
-  const { type = 'dark', size, style, className } = props
+  const { type = 'dark', size, style, className, href = '/' } = props
 
   return (
-    <Link to='/'>
-      <img
-        src={
-          (type === 'light' && logoLight) ||
-          (type === 'sort-light' && logoSortLight) ||
-          (type === 'sort-dark' && logoSortDark) ||
-          logoDark
-        }
-        alt={type}
-        width={size}
-        style={style}
-        className={className}
-      />
+    <Link to={href}>
+      <div className={className}>
+        <img
+          src={
+            (type === 'light' && logoLight) ||
+            (type === 'sort-light' && logoSortLight) ||
+            (type === 'sort-dark' && logoSortDark) ||
+            logoDark
+          }
+          alt={type}
+          width={size}
+          style={style}
+        />
+      </div>
     </Link>
   )
 }
