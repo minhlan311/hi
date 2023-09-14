@@ -32,7 +32,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === ENDPOINT.LOGIN || url === ENDPOINT.REGISTER) {
+        if (url === ENDPOINT.LOGIN) {
           const data = response.data as AuthResponse
           this.accessToken = data.accessToken
           setAccessTokenToLS(this.accessToken)
