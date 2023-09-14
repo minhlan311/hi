@@ -7,7 +7,7 @@ import { ROLE } from './Roles/constants'
 import MentorForm from './MentorForm/Info/MentorForm'
 import Certificate from './MentorForm/Certificate/Certificate'
 import authApi from '@/apis/auth.api'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
@@ -122,7 +122,7 @@ const Register: React.FC = () => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
   const contentStyle: React.CSSProperties = {
-    minHeight: '500px',
+    minHeight: '300px',
     lineHeight: '50px',
     textAlign: 'center',
     color: token.colorTextTertiary,
@@ -179,6 +179,12 @@ const Register: React.FC = () => {
               Quay lại
             </Button>
           )}
+          <p className='res'>
+            Bạn đã có tài khoản ?{' '}
+            <Link className='link' to={'/login'}>
+              Đăng nhập ngay
+            </Link>
+          </p>
         </div>
       </div>
     </>
