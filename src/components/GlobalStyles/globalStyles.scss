@@ -220,19 +220,16 @@ table {
   display: block !important;
 }
 
-.ant-menu-item-selected,
-.ant-menu-item:hover {
-  background-color: var(--light-gray) !important;
-  color: var(--white) !important;
+.ant-menu.ant-menu-root.ant-menu-inline,
+.ant-menu.ant-menu-inline-collapse {
+  border: none !important;
 }
 .ant-menu-item {
   font-size: 16px;
-  a {
-    transition: 0s !important;
-  }
-  a:hover {
-    color: var(--white) !important;
-  }
+
+  // :hover * {
+  //   color: var(--red) !important;
+  // }
 }
 
 .dangerHTMLTwoLine {
