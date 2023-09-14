@@ -1,15 +1,17 @@
 import './Roles.scss'
 import { Button } from 'antd'
 import { ROLE } from './constants'
+import { useState } from 'react'
 
 // type Props{}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Roles({ pickRoleChange }: any) {
-  //   const [pickRole, setRole] = useState('')
+  const [active, setActive] = useState<string>(ROLE.STUDENT)
 
   const pickRoles = (role: string) => {
     pickRoleChange(role)
+    setActive(role)
   }
 
   return (
@@ -17,6 +19,7 @@ export default function Roles({ pickRoleChange }: any) {
       <h3>VAI TRÒ CỦA BẠN</h3>
       <p>Chọn vai trò của bạn để đăng ký phù hợp hơn nhé!</p>
       <Button
+        className={`${active === ROLE.MENTOR ? 'buttonMentor activeButton' : 'buttonMentor'}`}
         onClick={() => {
           pickRoles(ROLE.MENTOR)
         }}
@@ -24,6 +27,7 @@ export default function Roles({ pickRoleChange }: any) {
         Giảng Viên
       </Button>
       <Button
+        className={`${active === ROLE.STUDENT ? 'activeButton' : ''}`}
         onClick={() => {
           pickRoles(ROLE.STUDENT)
         }}
