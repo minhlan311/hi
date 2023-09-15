@@ -158,6 +158,7 @@ const MentorExams = () => {
   //   setOpenExamDrawer(true)
   // }
   const [data, setData] = useState<any[]>([])
+  console.log(data)
 
   return (
     <div>
