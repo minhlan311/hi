@@ -79,11 +79,15 @@ export default function Navigation({ user }: Props) {
                         height: '100%'
                       }}
                     >
-                      <Link to='/mentor'>
-                        <div className='cartIcon'>
-                          <BiSolidDashboard />
-                        </div>
-                      </Link>
+                      {user
+                        ? user?.isMentor && (
+                            <Link to='/mentor'>
+                              <div className='cartIcon'>
+                                <BiSolidDashboard />
+                              </div>
+                            </Link>
+                          )
+                        : null}
                       <div className='cartIcon'>
                         <BsFillCartFill />
                       </div>

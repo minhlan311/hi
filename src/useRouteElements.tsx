@@ -17,8 +17,8 @@ import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 
 function RejectedMentorRoute() {
-  const { profile } = useContext(AppContext)
-  return profile.isMentor ? <Outlet /> : <Navigate to='/403' />
+  const { profile, isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
