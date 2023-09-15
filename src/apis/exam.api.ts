@@ -1,28 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { UserState } from '@/interface/user'
-import { AuthResponse } from '@/types/auth.type'
-import { Register } from '@/types/mentor.type'
-import { RegisterMentor } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
+type Props = {
+  filterQuery?: any
+  options?: any
+  payload?: any
+}
 const examApi = {
-  registerAccount(body: Register) {
-    return http.post<AuthResponse>(ENDPOINT.REGISTER, body)
+  createExam(data: any) {
+    return http.post<SuccessResponse<UserState[]>>(ENDPOINT.EXAM_PATH, data)
   },
-  registerMentor(body: RegisterMentor) {
-    return http.post<AuthResponse>(ENDPOINT.MENTOR, body)
-  },
-  login(body: { email: string; password: string }) {
-    return http.post<AuthResponse>(ENDPOINT.LOGIN, body)
-  },
-  logout() {
-    return http.post(ENDPOINT.LOGOUT)
-  },
+  findExam(props: Props) {
+    const {
+      filterQuery = {},
+      options = {
+        pagination: false,
+        sort: { createdAt: -1 }
+      },
+      payload
+    } = props
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  forgot(data: any) {
-    return http.post<SuccessResponse<UserState[]>>(ENDPOINT.LOGIN, data)
+    const data = {
+      filterQuery: filterQuery,
+      options: options
+    }
+    return http.post<SuccessResponse<any[]>>(ENDPOINT.FIND_EXAM_PATH, payload ? payload : data)
+  },
+  getExamDetail(id: string) {
+    return http.get<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id)
+  },
+  putExamDetail(id: string, data: any) {
+    return http.put<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id, data)
+  },
+  deleteExamDetail(id: string) {
+    return http.delete<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id)
   }
 }
 

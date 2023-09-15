@@ -7,6 +7,7 @@ import { BiEdit, BiPlus } from 'react-icons/bi'
 import { BsListUl } from 'react-icons/bs'
 import { FiDelete } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import DrawerExam from './Drawer/DrawerExam'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
@@ -153,21 +154,20 @@ const MentorExams = () => {
       )
     }
   ]
-  // const onPressCreate = () => {
-  //   setTestId(undefined)
-  //   setOpenExamDrawer(true)
-  // }
+  const [open, setOpen] = useState<boolean>(false)
+
+  const onPressCreate = () => {
+    setOpen(true)
+  }
   const [data, setData] = useState<any[]>([])
-  console.log(data)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [resetFilter, setResetFilter] = useState<boolean>(false)
 
   return (
     <div>
       <FilterAction
         addOnButton={
-          <ButtonCustom
-            type='primary'
-            //  onClick={onPressCreate}
-          >
+          <ButtonCustom type='primary' onClick={onPressCreate}>
             <Row align='middle'>
               <BiPlus size={22} />
               Thêm bộ đề mới
@@ -176,8 +176,11 @@ const MentorExams = () => {
         }
         apiFind={courseApi.getCourses}
         callBackData={setData}
+        setLoading={setLoading}
+        resetFilter={resetFilter}
       />
-      <Table columns={columns} dataSource={[]} bordered />
+      <Table columns={columns} dataSource={[]} loading={loading} bordered />
+      <DrawerExam open={open} setOpen={setOpen} setResetFilter={setResetFilter} />
     </div>
   )
 }
