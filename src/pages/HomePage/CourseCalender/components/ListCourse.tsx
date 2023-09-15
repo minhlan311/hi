@@ -1,7 +1,6 @@
 import calenderSVG from '@/assets/icons/calendar.svg'
 import { Image } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import useConvertSlug from '@/hooks/useConvertSlug'
 import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
 import { imageFallback } from '@/constants/utils'

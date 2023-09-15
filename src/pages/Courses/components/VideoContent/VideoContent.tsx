@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
-import { Button, Modal, Spin } from 'antd'
+import { Modal, Spin } from 'antd'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import { TCourse } from '@/types/course.type'
@@ -15,7 +15,6 @@ export default function VideoContent({ data }: Props) {
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [state, setState] = useState<string>('')
 
   useEffect(() => {
     setDatas(data)
@@ -86,9 +85,7 @@ export default function VideoContent({ data }: Props) {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <VideoComponent video={state} />
-        <Button onClick={() => setState('https://vimeo.com/90509568')}>1</Button>
-        <Button onClick={() => setState('https://www.youtube.com/watch?v=Q9GLCcJ27TA')}>2</Button>
+        <VideoComponent video={'https://vimeo.com/90509568'} />
       </Modal>
 
       <div className={style.boxVideo} ref={contentRef}>
