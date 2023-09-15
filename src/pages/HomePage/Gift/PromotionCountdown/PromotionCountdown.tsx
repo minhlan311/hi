@@ -3,7 +3,7 @@ import moment from 'moment'
 import './PromotionCountdown.scss'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const PromotionCountdown = ({ startDateProps, endDateProps }: any) => {
+const PromotionCountdown = ({ endDateProps }: any) => {
   const [days, setDays] = useState<number | string>('')
   const [hours, setHours] = useState<number | string>('')
   const [minutes, setMinutes] = useState<number | string>('')
@@ -13,8 +13,8 @@ const PromotionCountdown = ({ startDateProps, endDateProps }: any) => {
     const calculateTimeLeft = () => {
       const now = moment() // Lấy thời gian hiện tại
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const startDate = moment(startDateProps || '2023-09-07 07:00:00')
-      console.log(startDate, 'startDate')
+      // const startDate = moment(startDateProps || '2023-09-07 07:00:00')
+
       // Mốc thời gian bắt đầu khuyến mãi
       const endDate = moment(endDateProps || '2023-09-20 07:00:00') // Mốc thời gian kết thúc khuyến mãi
 

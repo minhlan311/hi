@@ -11,7 +11,7 @@ import ListCourse from './components/ListCourse'
 import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
 export default function CourseCalender() {
-  const [active, setActive] = useState('Tiếng Anh')
+  const [active, setActive] = useState('')
   const [id, setId] = useState<string>('')
 
   const { data: categoriesData, isLoading } = useQuery({

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import useConvertSlug from '@/hooks/useConvertSlug'
 import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
+import { imageFallback } from '@/constants/utils'
 
 type Props = {
   listData?: TCourse[]
@@ -29,7 +30,11 @@ export default function ListCourse({ listData }: Props) {
           }}
         >
           <div className='imgCol'>
-            <Image className='imgColin' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia} />
+            <Image
+              fallback={imageFallback}
+              className='imgColin'
+              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+            />
           </div>
           <div className='contentList'>
             <h4 className='link-h4-config'>{item.name}</h4>
