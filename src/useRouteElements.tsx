@@ -15,6 +15,7 @@ import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MentorDocuments from './pages/MentorPage/Management/Documents/index.tsx'
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
+import Courses from './pages/Courses/Courses.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
@@ -129,15 +130,14 @@ export default function useRouteElements() {
       path: '',
       element: <ProtectedRoute />,
       children: [
-        // {
-        //   path: path.editPhoto,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <EditPhoto />
-        //     </Layout>
-        //   )
-        // },
-        // {
+        {
+          path: PATH.COURSE_DETAIL,
+          element: (
+            <Layout user={profile} title='Trang chủ'>
+              <Courses />
+            </Layout>
+          )
+        }
       ]
     },
     {

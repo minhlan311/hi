@@ -1,0 +1,125 @@
+.menuBox {
+  margin-top: 10px;
+  max-width: 660px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #d1d7dc;
+}
+
+.boxContent {
+  display: flex;
+  justify-content: space-between;
+}
+.onbox {
+  display: flex;
+  gap: 10px;
+}
+.flexCol {
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 320px;
+}
+.title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+.img {
+  border: 1px solid #d1d7dc;
+}
+.divBottom {
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+.dot {
+  top: 40%;
+  right: -12%;
+  border-radius: 100%;
+  position: absolute;
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  background-color: #1e6055;
+}
+.flex {
+  display: flex;
+  font-size: 12px;
+  color: #1e6055;
+}
+.flexPrice {
+  display: flex;
+  font-size: 12px;
+}
+.marginRight {
+  font-weight: 800;
+  position: relative;
+  font-size: 12px;
+  margin-right: 16px;
+}
+.marginRightPrice {
+  font-weight: 800;
+  position: relative;
+  font-size: 14px;
+  margin-right: 16px;
+}
+
+.boxTitle {
+  :global {
+    .ant-typography.ant-typography-ellipsis.ant-typography-ellipsis-multiple-line {
+      margin-bottom: 10px;
+    }
+  }
+}
+.boxFlexStar {
+  line-height: 1.2;
+  display: flex;
+  gap: 10px;
+}
+.icon {
+  font-size: 16px;
+}
+
+.flexScore {
+  margin-top: 3px;
+  align-items: start;
+  font-size: 14px;
+  font-weight: 700;
+  color: #e39718;
+  gap: 5px;
+  display: flex;
+  padding-right: 30px;
+  min-width: 40px;
+}
+.font {
+  display: flex;
+  width: 60px;
+}
+.font {
+  :global {
+    .ant-space.ant-space-horizontal.ant-space-align-center {
+      align-items: normal;
+    }
+    .ant-space.ant-space-vertical {
+      gap: 0 !important;
+      .ant-space-item {
+        font-size: 12px;
+        align-items: normal;
+        text-align: end;
+      }
+    }
+  }
+}
+.heart {
+  margin-top: 3px;
+}
+.flexStar {
+  font-size: 14px;
+  color: #e39718;
+  font-weight: 600;
+  display: flex;
+  align-items: start;
+}

@@ -1,0 +1,169 @@
+.boxContaier {
+  min-height: 1800px;
+}
+.container {
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #1c1d1f;
+  min-height: 300px;
+  padding-bottom: 40px;
+}
+.content {
+  padding-top: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+.col1 {
+  //   background-color: chocolate;
+}
+.col2 {
+  //   background-color: red;
+}
+
+.boxVideo {
+  position: absolute;
+  background-color: white;
+  min-height: 600px;
+  width: 350px;
+  margin-top: 10px;
+  box-shadow:
+    0 4px 8px 0 rgba(151, 151, 151, 0.19),
+    0 6px 20px 0 rgba(151, 151, 151, 0.19);
+}
+.boxLessonContent {
+  text-align: start;
+}
+
+.lessonContent {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+.video {
+  position: relative;
+  height: 200px;
+  border: 1px solid white;
+}
+.flexLession {
+  font-size: 300;
+  margin-top: 10px;
+  font-size: 14px;
+  display: flex;
+  gap: 16px;
+}
+.video:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+.videoPosition {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.videoPositionText {
+  color: white;
+  position: absolute;
+  bottom: 20px;
+  left: 25%;
+  font-size: 16px;
+  font-weight: 700;
+}
+.contentVideo {
+  padding: 25px 20px 20px 20px;
+  align-items: center;
+  // background-color: #eceb98;
+}
+.flexBoxContent {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.price {
+  font-weight: 700;
+  font-size: 30px;
+}
+.delPrice {
+  margin-left: 10px;
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration: line-through;
+}
+.boxClock {
+  gap: 5px;
+  color: #b32d0f;
+  font-size: 14px;
+  display: flex;
+  justify-content: start;
+}
+.off {
+  margin: 5px 0 10px 0;
+  text-align: start;
+}
+.boxButton {
+  margin-top: 20px;
+  // background-color: red;
+}
+.button {
+  margin-top: 8px;
+  min-width: 310px;
+  background-color: #d72831;
+  color: #fff;
+  min-height: 50px;
+  font-weight: 700 !important;
+  border: 1px solid #000;
+}
+.buttonCart {
+  margin-top: 8px;
+  min-width: 310px;
+  background-color: #d72831;
+  border: 1px solid #d72831;
+  color: #fff;
+  min-height: 50px;
+  font-weight: 700 !important;
+}
+.buttonCart:hover {
+  opacity: 0.8 !important;
+  color: #fff !important;
+  background-color: #d72831 !important;
+}
+.buttonDetail {
+  margin-top: 8px;
+  color: #d72831;
+  min-width: 310px;
+  min-height: 50px;
+  font-weight: 700 !important;
+  border: 1px solid #d72831;
+}
+.buttonDetail:hover {
+  opacity: 0.8 !important;
+}
+.refund {
+  margin: 16px 0 24px 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.tag {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.tagDesc {
+  cursor: pointer;
+  font-weight: 600;
+  color: #1254ff;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+.tagDesc:hover {
+  opacity: 0.8;
+}
