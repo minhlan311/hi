@@ -4,10 +4,16 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+
   .dot {
     font-size: 30px;
     color: #fff;
     font-weight: 600;
+  }
+  @media screen and (max-width: 650px) {
+    .dot {
+      font-size: 15px;
+    }
   }
   .day {
     width: 120px;
@@ -28,6 +34,16 @@
       font-weight: 600;
     }
   }
+  @media screen and (max-width: 650px) {
+    .day {
+      width: 60px;
+      height: 60px;
+      p {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
   .hour {
     width: 120px;
     height: 100px;
@@ -38,13 +54,22 @@
     align-items: center;
     justify-content: center;
     p {
-      color: #000;
       font-size: 40px;
       font-weight: 600;
     }
     span {
       color: #000;
       font-weight: 600;
+    }
+  }
+  @media screen and (max-width: 650px) {
+    .hour {
+      width: 60px;
+      height: 60px;
+      p {
+        font-size: 20px;
+        font-weight: 600;
+      }
     }
   }
   .min {
@@ -66,6 +91,16 @@
       font-weight: 600;
     }
   }
+  @media screen and (max-width: 650px) {
+    .min {
+      width: 60px;
+      height: 60px;
+      p {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
   .secon {
     width: 120px;
     height: 100px;
@@ -84,5 +119,22 @@
       color: #000;
       font-weight: 600;
     }
+  }
+  @media screen and (max-width: 650px) {
+    .secon {
+      width: 60px;
+      height: 60px;
+      p {
+        color: #000;
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+@media screen and (max-width: 650px) {
+  .container-time {
+    justify-content: space-between;
+    flex: auto;
   }
 }
