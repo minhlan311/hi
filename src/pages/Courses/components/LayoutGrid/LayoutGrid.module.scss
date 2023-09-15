@@ -1,0 +1,17 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px; /* Khoảng cách giữa các grid item */
+  padding: 0 10px;
+}
+
+.gridItem {
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  justify-content: start;
+  line-height: 1.2;
+  gap: 20px;
+  // background-color: #eee;
+  padding: 5px 0;
+}

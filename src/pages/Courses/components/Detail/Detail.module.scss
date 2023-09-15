@@ -1,0 +1,90 @@
+.breadCrumbs {
+  color: #cec0fc;
+  font-weight: 700;
+}
+.breadCrumbs:hover {
+  text-decoration: underline;
+}
+.boxStyle {
+  margin-top: 15px;
+  max-width: 660px;
+}
+.title {
+  text-align: start;
+  color: #fff;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.2;
+}
+.boxDesc {
+  max-width: 660px;
+  margin-top: 10px;
+  text-align: start;
+  color: #fff;
+}
+
+.desc {
+  text-align: start;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1.4;
+  font-size: 19px;
+}
+.flex {
+  margin-left: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+.specialPrice {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px 0;
+  background-color: #eceb98;
+  width: 100px;
+}
+.detailPrice {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.total {
+  scale: 0.9;
+  color: #cec0fc;
+  text-decoration: underline;
+}
+
+.score {
+  color: #f3ca8c;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.member {
+  font-size: 14px;
+}
+.text {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: start;
+  color: #fff;
+}
+.textSpan {
+  color: #cec0fc;
+  text-decoration: underline;
+}
+.info {
+  margin-top: 12px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+  text-align: start;
+}
+.flexBoxInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

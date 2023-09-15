@@ -14,7 +14,7 @@ export default function CourseCalender() {
   const [active, setActive] = useState('')
   const [id, setId] = useState<string>('')
 
-  const { data: categoriesData, isLoading } = useQuery({
+  const { data: categoriesData } = useQuery({
     queryKey: ['categories'],
     queryFn: () => {
       return categoryApi.getCategories({
@@ -25,7 +25,7 @@ export default function CourseCalender() {
 
   const ArraySubject = categoriesData?.data?.docs
 
-  const { data: listData } = useQuery({
+  const { data: listData, isLoading } = useQuery({
     queryKey: ['course', id],
     queryFn: () => {
       return courseApi.getCourses({
@@ -37,6 +37,7 @@ export default function CourseCalender() {
     keepPreviousData: true,
     staleTime: 3 * 60 * 1000
   })
+  console.log(isLoading)
 
   const handleActive = (name: string, id: string) => {
     setActive(name)
@@ -51,7 +52,7 @@ export default function CourseCalender() {
         <div className='groupButton'>
           {ArraySubject?.map((item) => (
             <Button
-              disabled={isLoading ? true : false}
+              disabled={isLoading}
               className={active === item.name ? 'buttonActive' : 'button'}
               onClick={() => {
                 handleActive(item.name, item.id)
