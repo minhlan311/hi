@@ -29,7 +29,11 @@ export default function ListCourse({ listData }: Props) {
           }}
         >
           <div className='imgCol'>
-            <Image className='imgColin' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia} />
+            <Image
+              fallback={'true'}
+              className='imgColin'
+              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+            />
           </div>
           <div className='contentList'>
             <h4 className='link-h4-config'>{item.name}</h4>

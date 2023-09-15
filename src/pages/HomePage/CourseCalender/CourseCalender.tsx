@@ -31,7 +31,7 @@ export default function CourseCalender() {
       return courseApi.getCourses(id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id))
     },
     keepPreviousData: true,
-    staleTime: 3 * 60 * 1000
+    staleTime: 0.2 * 60 * 1000
   })
 
   const handleActive = (name: string, id: string) => {
