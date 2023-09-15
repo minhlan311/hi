@@ -40,8 +40,8 @@ const MentorExams = () => {
     if (status === 'error' && error) {
       openNotification({
         status: status,
-        message: error.name,
-        description: error.message
+        message: 'Thông báo',
+        description: ' Có lỗi xảy ra'
       })
     }
   }, [status, error])

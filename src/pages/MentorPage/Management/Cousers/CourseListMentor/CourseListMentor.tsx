@@ -2,25 +2,29 @@ import courseApi from '@/apis/course.api'
 import { imageFallback } from '@/constants/utils'
 import { TCourse } from '@/types/course.type'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Card, Col, Image, Popconfirm, Row, notification } from 'antd'
+import { useMutation } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import { Card, Col, Image, Popconfirm, Row } from 'antd'
 import { useNavigate } from 'react-router-dom'
 type Props = {
   data: TCourse[]
+  reset: (reset: boolean) => void
 }
 
-export default function CourseListMentor({ data }: Props) {
+export default function CourseListMentor({ data, reset }: Props) {
+  const [checkReset, setCheckReset] = useState<boolean>(false)
+  const { mutate } = useMutation({ mutationFn: (id: string) => courseApi.deleteCourses(id) })
+
   const navigate = useNavigate()
   const { Meta } = Card
 
-  const onConfirm = async (ids: string) => {
-    const dataDelete = await courseApi.deleteCourses(ids)
-    if (dataDelete) {
-      notification.open({
-        type: 'success',
-        message: 'Thông báo',
-        description: 'Đã xóa thành công khóa học'
-      })
-    }
+  useEffect(() => {
+    reset(checkReset)
+  }, [checkReset])
+
+  const onConfirm = async (id: string) => {
+    mutate(id)
+    setCheckReset(!checkReset)
   }
 
   return (
