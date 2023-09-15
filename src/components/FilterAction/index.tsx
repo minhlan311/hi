@@ -18,7 +18,32 @@ type Props = {
 
 const FilterAction = (props: Props) => {
   const { apiFind, callBackData, addOnButton, limit = 8, page = 1 } = props
+
+  useEffect(() => {
+    setFilterData({
+      ...filterData,
+      options: {
+        limit: limit,
+        page: page || 1,
+        sort: {
+          createdAt: '-1'
+        }
+      }
+    })
+  }, [page])
+
+  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
+    filterQuery: {},
+    options: {
+      limit: limit,
+      page: page || 1,
+      sort: {
+        createdAt: '-1'
+      }
+    }
+  })
   const [form] = Form.useForm()
+
   const { data: categoriesData } = useQuery({
     queryKey: ['topCategories'],
     queryFn: () => {
@@ -31,17 +56,6 @@ const FilterAction = (props: Props) => {
     return {
       value: sj._id,
       label: sj.name
-    }
-  })
-
-  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
-    filterQuery: {},
-    options: {
-      limit: limit,
-      page: page,
-      sort: {
-        createdAt: '-1'
-      }
     }
   })
 
@@ -77,7 +91,7 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: { createdAt: '-1' }
+          createdAt: '-1'
         }
       }
     })

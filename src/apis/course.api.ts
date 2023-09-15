@@ -24,6 +24,9 @@ const courseApi = {
       options: options
     }
     return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
+  },
+  deleteCourses(ids: string) {
+    return http.delete<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + `${ids}`)
   }
 }
 
