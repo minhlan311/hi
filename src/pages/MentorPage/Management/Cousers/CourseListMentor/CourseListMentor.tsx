@@ -3,13 +3,14 @@ import { imageFallback } from '@/constants/utils'
 import { TCourse } from '@/types/course.type'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Card, Col, Image, Popconfirm, Row, notification } from 'antd'
+import { useNavigate } from 'react-router-dom'
 type Props = {
   data: TCourse[]
 }
 
 export default function CourseListMentor({ data }: Props) {
+  const navigate = useNavigate()
   const { Meta } = Card
-  console.log(data, ',data')
 
   const onConfirm = async (ids: string) => {
     const dataDelete = await courseApi.deleteCourses(ids)
@@ -34,6 +35,9 @@ export default function CourseListMentor({ data }: Props) {
                     style={{ width: 300 }}
                     cover={
                       <Image
+                        onClick={() => {
+                          navigate(`/courses/${item._id}`)
+                        }}
                         height={'150px'}
                         alt='example'
                         src={import.meta.env.VITE_FILE_ENDPOINT + `/` + item?.coverMedia}

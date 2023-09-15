@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import style from './LayoutGrid.module.scss'
 import { CheckOutlined } from '@ant-design/icons'

@@ -10,7 +10,7 @@ import { PaginationProps } from 'antd/lib'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorCourses = () => {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<any>([])
   const [current, setCurrent] = useState(1)
 
   const onChange: PaginationProps['onChange'] = (page) => {

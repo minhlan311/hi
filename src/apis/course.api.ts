@@ -27,6 +27,9 @@ const courseApi = {
   },
   deleteCourses(ids: string) {
     return http.delete<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + `${ids}`)
+  },
+  getOneCourse(ids: string) {
+    return http.get<TCourse>(ENDPOINT.COURSES_PATH + `${ids}`)
   }
 }
 
