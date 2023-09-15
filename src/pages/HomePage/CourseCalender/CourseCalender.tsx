@@ -11,7 +11,7 @@ import ListCourse from './components/ListCourse'
 import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
 export default function CourseCalender() {
-  const [active, setActive] = useState('Tiếng Anh')
+  const [active, setActive] = useState('')
   const [id, setId] = useState<string>('')
 
   const { data: categoriesData, isLoading } = useQuery({
@@ -29,9 +29,7 @@ export default function CourseCalender() {
     queryKey: ['course', id],
     queryFn: () => {
       return courseApi.getCourses(id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id))
-    },
-    keepPreviousData: true,
-    staleTime: 0.2 * 60 * 1000
+    }
   })
 
   const handleActive = (name: string, id: string) => {
