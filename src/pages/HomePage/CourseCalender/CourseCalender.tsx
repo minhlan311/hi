@@ -28,8 +28,14 @@ export default function CourseCalender() {
   const { data: listData } = useQuery({
     queryKey: ['course', id],
     queryFn: () => {
-      return courseApi.getCourses(id || undefined)
-    }
+      return courseApi.getCourses({
+        filterQuery: {
+          categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id)
+        }
+      })
+    },
+    keepPreviousData: true,
+    staleTime: 3 * 60 * 1000
   })
 
   const handleActive = (name: string, id: string) => {

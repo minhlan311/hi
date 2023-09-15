@@ -2,18 +2,13 @@ import { Button, Card, Col, Row, Space } from 'antd'
 import { BsArrowRightCircle } from 'react-icons/bs'
 import ball from '../../../assets/icons/ball.svg'
 import bird from '../../../assets/icons/bird.svg'
-import chn from '../../../assets/icons/china_flag.svg'
-import eng from '../../../assets/icons/eng_flag.svg'
-import ger from '../../../assets/icons/germany_flag.svg'
-import jpn from '../../../assets/icons/japan_flag.svg'
-import kor from '../../../assets/icons/korea_flag.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-
 import categoryApi from '@/apis/categories.api'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
+
 export default function TopCourses() {
   const { data: categoriesData } = useQuery({
     queryKey: ['topCategories'],
@@ -41,17 +36,7 @@ export default function TopCourses() {
                   size='small'
                   cover={
                     <img
-                      src={
-                        (item.name === 'Tiếng Trung' &&
-                          'https://littlestepsasia.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2021/08/06153111/Best_Mandarin_Classes_Kuala_Lumpur.jpg') ||
-                        (item.name === 'Tiếng Anh' &&
-                          'https://www.englishexplorer.com.sg/wp-content/uploads/2017/02/english-course.jpg') ||
-                        (item.name === 'Tiếng Nhật' &&
-                          'https://www.classcentral.com/report/wp-content/uploads/2023/02/ASL-BCG-Banner.png') ||
-                        (item.name === 'Tiếng Đức' &&
-                          'https://www.studying-in-germany.org/wp-content/uploads/2018/08/learn-german-language-with-online-courses.jpg') ||
-                        'https://www.90daykorean.com/wp-content/uploads/2020/10/Online-Korean-Course-min-1.png'
-                      }
+                      src={`${import.meta.env.VITE_FILE_ENDPOINT}/${item.coverUrl}`}
                       alt={item.name}
                       className='cover'
                     />
@@ -64,11 +49,11 @@ export default function TopCourses() {
                       <Row align='middle'>
                         <Space align='center'>
                           <div style={{ marginTop: 5 }}>
-                            {(item.name === 'Tiếng Trung' && <img src={chn} alt='chn' />) ||
-                              (item.name === 'Tiếng Anh' && <img src={eng} alt='eng' />) ||
-                              (item.name === 'Tiếng Nhật' && <img src={jpn} alt='jpn' />) ||
-                              (item.name === 'Tiếng Đức' && <img src={ger} alt='ger' />) ||
-                              (item.name === 'Tiếng Hàn' && <img src={kor} alt='kor' />)}
+                            <img
+                              src={`${import.meta.env.VITE_FILE_ENDPOINT}/${item.icon}`}
+                              alt={item.icon}
+                              width={35}
+                            />
                           </div>
                           <h2>{item.name}</h2>
                         </Space>
