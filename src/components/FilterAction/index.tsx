@@ -24,7 +24,7 @@ const FilterAction = (props: Props) => {
       ...filterData,
       options: {
         limit: limit,
-        page: page || 1,
+        page: page,
         sort: {
           createdAt: '-1'
         }

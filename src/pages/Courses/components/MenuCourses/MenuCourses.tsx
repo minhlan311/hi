@@ -201,67 +201,69 @@ export default function MenuCourses() {
   ]
   return (
     <>
-      {coursesData.map((item) => (
-        <div className={style.menuBox}>
-          <Header>
-            <div className={style.boxContent}>
-              <div className={style.onbox}>
-                <ImageCustom src={item.img} className={style.img} width='70px' height='65px' />
-                {/* div conten  */}
-                <div className={style.flexCol}>
-                  <div className={style.boxTitle}>
-                    <Paragraph className={style.title} ellipsis={{ rows: 2 }}>
-                      {item.title}
-                    </Paragraph>
-                  </div>
-                  {/* //  div tren */}
-                  <div className={style.divBottom}>
-                    <div>
-                      <TagCustom
-                        intArrType={['BESS SELLER', 'REVISION', 'NEW']}
-                        intColor={['var(--yellowish-green)', 'var(--teal)', 'var(--red)']}
-                        intAlternativeType={['ベストセラー', '改訂', '話題・新着']}
-                        content={'BESS SELLER'}
-                        colorText='var(--black)'
-                      />
+      <div className='boxContainer'>
+        {coursesData.map((item) => (
+          <div className={style.menuBox}>
+            <Header>
+              <div className={style.boxContent}>
+                <div className={style.onbox}>
+                  <ImageCustom src={item.img} className={style.img} width='70px' height='65px' />
+                  {/* div conten  */}
+                  <div className={style.flexCol}>
+                    <div className={style.boxTitle}>
+                      <Paragraph className={style.title} ellipsis={{ rows: 2 }}>
+                        {item.title}
+                      </Paragraph>
                     </div>
-                    <div className={style.flex}>
-                      <div className={style.marginRight}>
-                        <span>合計7.5時間</span> <span className={style.dot}></span>
-                      </div>
+                    {/* //  div tren */}
+                    <div className={style.divBottom}>
                       <div>
-                        <span>更新済み2023/7</span>
+                        <TagCustom
+                          intArrType={['BESS SELLER', 'REVISION', 'NEW']}
+                          intColor={['var(--yellowish-green)', 'var(--teal)', 'var(--red)']}
+                          intAlternativeType={['ベストセラー', '改訂', '話題・新着']}
+                          content={'BESS SELLER'}
+                          colorText='var(--black)'
+                        />
+                      </div>
+                      <div className={style.flex}>
+                        <div className={style.marginRight}>
+                          <span>合計7.5時間</span> <span className={style.dot}></span>
+                        </div>
+                        <div>
+                          <span>更新済み2023/7</span>
+                        </div>
                       </div>
                     </div>
+                    {/* end div tren */}
                   </div>
-                  {/* end div tren */}
+                  {/* div conten  */}
                 </div>
-                {/* div conten  */}
-              </div>
 
-              <div className={style.flexStar}>
-                <div> {item.score}</div>
-                <AiFillStar style={{ marginTop: '1px' }} />
-              </div>
-              <div className={style.flexPrice}>
-                <div className={style.marginRightPrice}>
-                  <PriceCalculator price={item.price} discount={30} showTotal direction='column' />
+                <div className={style.flexStar}>
+                  <div> {item.score}</div>
+                  <AiFillStar style={{ marginTop: '1px' }} />
                 </div>
-                <div>
-                  <ButtonCustom
-                    shape='circle'
-                    icon={<HeartOutlined style={{ fontSize: '22px', marginTop: '3px' }} />}
-                    size='large'
-                    // onClick={() => {
-                    //   setFavorite(item)
-                    // }}
-                  ></ButtonCustom>
+                <div className={style.flexPrice}>
+                  <div className={style.marginRightPrice}>
+                    <PriceCalculator price={item.price} discount={30} showTotal direction='column' />
+                  </div>
+                  <div>
+                    <ButtonCustom
+                      shape='circle'
+                      icon={<HeartOutlined style={{ fontSize: '22px', marginTop: '3px' }} />}
+                      size='large'
+                      // onClick={() => {
+                      //   setFavorite(item)
+                      // }}
+                    ></ButtonCustom>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Header>
-        </div>
-      ))}
+            </Header>
+          </div>
+        ))}
+      </div>
     </>
   )
 }
