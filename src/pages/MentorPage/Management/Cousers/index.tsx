@@ -1,20 +1,26 @@
 import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
-import { Row } from 'antd'
+import { Pagination, Row } from 'antd'
 import { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
-
+import './index.scss'
 import CourseListMentor from './CourseListMentor/CourseListMentor'
+import { PaginationProps } from 'antd/lib'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorCourses = () => {
   const [data, setData] = useState<any[]>([])
-  console.log(data)
+  const [current, setCurrent] = useState(1)
+
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrent(page)
+  }
 
   return (
     <div>
       <FilterAction
+        page={current}
         addOnButton={
           <ButtonCustom
             type='primary'
@@ -29,7 +35,10 @@ const MentorCourses = () => {
         apiFind={courseApi.getCourses}
         callBackData={setData}
       />
-      <CourseListMentor />
+      <CourseListMentor data={data?.data?.docs} />
+      <div className='pagination'>
+        <Pagination current={current} defaultCurrent={1} total={50} onChange={onChange} />;
+      </div>
     </div>
   )
 }
