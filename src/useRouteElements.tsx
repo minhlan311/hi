@@ -16,10 +16,11 @@ import MentorDocuments from './pages/MentorPage/Management/Documents/index.tsx'
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
+import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 
 function RejectedMentorRoute() {
-  const { profile } = useContext(AppContext)
-  return profile.isMentor ? <Outlet /> : <Navigate to='/403' />
+  const { profile, isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
@@ -120,6 +121,14 @@ export default function useRouteElements() {
           element: (
             <MentorLayout user={profile} title='Quản lý đề thi thử'>
               <MentorExams />
+            </MentorLayout>
+          )
+        },
+        {
+          path: PATH.MENTOR_EXAMS_DETAIL,
+          element: (
+            <MentorLayout user={profile} title='Danh sách câu hỏi'>
+              <MentorQuestions />
             </MentorLayout>
           )
         }

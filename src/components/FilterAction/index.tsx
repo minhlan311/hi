@@ -10,14 +10,16 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 type Props = {
   apiFind: any
-  callBackData: React.Dispatch<React.SetStateAction<any[]>>
+  callBackData: React.Dispatch<React.SetStateAction<any>>
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  resetFilter?: boolean
   addOnButton?: React.ReactNode
   limit?: number
   page?: number
 }
 
 const FilterAction = (props: Props) => {
-  const { apiFind, callBackData, addOnButton, limit = 8, page = 1 } = props
+  const { apiFind, callBackData, setLoading, resetFilter = false, addOnButton, limit = 8, page = 1 } = props
 
   useEffect(() => {
     setFilterData({
@@ -91,19 +93,27 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: '-1'
+          createdAt: -1
         }
       }
     })
   }
-  const apiMutation = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
+  const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
   useEffect(() => {
-    apiMutation.mutate(filterData as unknown as any, {
+    if (resetFilter) handleReset()
+  }, [resetFilter])
+
+  useEffect(() => {
+    mutate(filterData as unknown as any, {
       onSuccess: (data) => {
         callBackData(data as unknown as any[])
       }
     })
   }, [filterData])
+
+  useEffect(() => {
+    setLoading && setLoading(isLoading)
+  }, [isLoading])
   return (
     <Form form={form} autoComplete='off'>
       <Row justify='space-between'>

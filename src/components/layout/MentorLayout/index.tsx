@@ -1,6 +1,6 @@
 import Logo from '@/components/Logo/Logo'
 import { UserState } from '@/interface/user'
-import { CarryOutOutlined, ContainerOutlined, DatabaseOutlined, SnippetsOutlined } from '@ant-design/icons'
+import { CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
 
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import useResponsives from '@/hooks/useResponsives'
@@ -30,7 +30,7 @@ const MentorLayout = (props: Props) => {
   const { user, title, children } = props
   const location = useLocation()
   const navitage = useNavigate()
-  window.document.title = title
+  window.document.title = title + ' | Ucam'
   const { sm } = useResponsives()
   const [collapsed, setCollapsed] = useState(sm ? true : false)
 
@@ -53,9 +53,9 @@ const MentorLayout = (props: Props) => {
   }
 
   const siderItems: SiderItem[] = [
-    getItem(<Link to='/mentor/questions'>Danh sách câu hỏi</Link>, '/mentor/questions', <ContainerOutlined />),
+    // getItem(<Link to='/mentor/questions'>Danh sách câu hỏi</Link>, '/mentor/questions', <ContainerOutlined />),
     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
-    getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
+    // getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
     getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />)
   ]
 

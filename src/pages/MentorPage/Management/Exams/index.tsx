@@ -1,15 +1,50 @@
-import courseApi from '@/apis/course.api'
+import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
+import { ExamState } from '@/interface/exam'
 import { Popconfirm, Row, Space, Table, Tag, Tooltip } from 'antd'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BiEdit, BiPlus } from 'react-icons/bi'
 import { BsListUl } from 'react-icons/bs'
-import { FiDelete } from 'react-icons/fi'
+import { MdDeleteOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import DrawerExam from './Drawer/DrawerExam'
+import openNotification from '@/components/Notification'
+import { useMutation } from '@tanstack/react-query'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
+  const [open, setOpen] = useState<boolean>(false)
+  const [data, setData] = useState<{ data: { docs: ExamState[] } }>()
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const [examData, setExamData] = useState<ExamState>()
+  const { status, mutate, error } = useMutation({ mutationFn: (id: string) => examApi.deleteExam(id) })
+  const handleDelete = (id: string) => {
+    mutate(id)
+  }
+
+  const [resetFilter, setResetFilter] = useState<boolean>(false)
+
+  const resetData = () => {
+    setResetFilter(true)
+    setTimeout(() => {
+      setResetFilter(false)
+    }, 200)
+  }
+  useEffect(() => {
+    if (status === 'success') {
+      openNotification({ status: status, message: 'Xóa bài thi thành công' })
+      resetData()
+    }
+    if (status === 'error' && error) {
+      openNotification({
+        status: status,
+        message: error.name,
+        description: error.message
+      })
+    }
+  }, [status, error])
   const columns: any[] = [
     {
       title: 'STT',
@@ -17,11 +52,10 @@ const MentorExams = () => {
       align: 'center',
       key: 'stt',
       width: '3%',
-      render: (index: number) => {
-        ++index
-        return index
-      },
-      showSorterTooltip: false
+      render: (_?: string, __?: string, index?: number) => {
+        if (index === 0) return 1
+        if (index) return index + 1
+      }
     },
     {
       title: 'Tên bài thi thử',
@@ -83,7 +117,7 @@ const MentorExams = () => {
       }
     },
     {
-      title: 'DS câu hỏi',
+      title: 'Số câu hỏi',
       align: 'center',
       dataIndex: 'countQuestions',
       key: 'countQuestions',
@@ -135,49 +169,51 @@ const MentorExams = () => {
           <Tooltip title='Chỉnh sửa bộ đề'>
             <BiEdit
               className='edit-icon'
-              // onClick={() => editTest(record)}
+              onClick={() => {
+                setExamData(record)
+                setOpen(true)
+              }}
             />
           </Tooltip>
           <Tooltip title='Xóa bộ đề'>
             <Popconfirm
               placement='right'
-              title={'Bạn có muốn xóa bộ đề này?'}
-              // onConfirm={(event) => deleteTestById(event, record)}
+              title='Bạn có muốn xóa bộ đề này?'
+              onConfirm={() => handleDelete(record._id)}
               okText='Xóa'
               cancelText='Hủy'
             >
-              <FiDelete style={{ color: 'red' }} />
+              <MdDeleteOutline style={{ color: 'var(--red)' }} />
             </Popconfirm>
           </Tooltip>
         </Space>
       )
     }
   ]
-  // const onPressCreate = () => {
-  //   setTestId(undefined)
-  //   setOpenExamDrawer(true)
-  // }
-  const [data, setData] = useState<any[]>([])
-  console.log(data)
+
+  const onPressCreate = () => {
+    setOpen(true)
+  }
 
   return (
     <div>
       <FilterAction
         addOnButton={
-          <ButtonCustom
-            type='primary'
-            //  onClick={onPressCreate}
-          >
+          <ButtonCustom type='primary' onClick={onPressCreate}>
             <Row align='middle'>
               <BiPlus size={22} />
               Thêm bộ đề mới
             </Row>
           </ButtonCustom>
         }
-        apiFind={courseApi.getCourses}
+        apiFind={examApi.findExam}
         callBackData={setData}
+        setLoading={setLoading}
+        resetFilter={resetFilter}
+        // dataType={}
       />
-      <Table columns={columns} dataSource={[]} bordered />
+      <Table columns={columns} dataSource={data?.data?.docs} loading={loading} bordered />
+      <DrawerExam open={open} setOpen={setOpen} resetData={resetData} setLoading={setLoading} examData={examData} />
     </div>
   )
 }
