@@ -30,13 +30,13 @@ const examApi = {
     return http.post<SuccessResponse<any[]>>(ENDPOINT.FIND_EXAM_PATH, payload ? payload : data)
   },
   getExamDetail(id: string) {
-    return http.get<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id)
+    return http.get<SuccessResponse<UserState[]>>(ENDPOINT.EXAM_PATH + id)
   },
-  putExamDetail(id: string, data: any) {
-    return http.put<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id, data)
+  putExam(data: any) {
+    return http.put<SuccessResponse<UserState[]>>(ENDPOINT.EXAM_PATH + data.id, data)
   },
-  deleteExamDetail(id: string) {
-    return http.delete<SuccessResponse<UserState[]>>(ENDPOINT.FIND_EXAM_PATH + id)
+  deleteExam(id: string) {
+    return http.delete<SuccessResponse<UserState[]>>(ENDPOINT.EXAM_PATH + id)
   }
 }
 

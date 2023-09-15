@@ -18,7 +18,7 @@ export const ENDPOINT = {
   FIND_CATEGORIES_PATH: '/category/find',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
-  EXAM_PATH: '/exam/tests',
+  EXAM_PATH: '/exam/tests/',
   FIND_EXAM_PATH: '/exam/tests/find',
 
   // :::::::::::::::::::: Course PATH :::::::::::::::::::::

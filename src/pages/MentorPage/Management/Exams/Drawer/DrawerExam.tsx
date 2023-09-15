@@ -3,6 +3,7 @@ import categoryApi from '@/apis/categories.api'
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
+import { ExamState } from '@/interface/exam'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Drawer, Form, Input, Select, Space } from 'antd'
 import { useState, useEffect } from 'react'
@@ -10,34 +11,26 @@ import { useState, useEffect } from 'react'
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setResetFilter?: React.Dispatch<React.SetStateAction<boolean>>
-  testId?: string
+  resetData?: () => void
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  examData?: ExamState
 }
 const DrawerExam = (props: Props) => {
-  const { open, setOpen, refreshPage, testId } = props
+  const { open, setOpen, resetData, setLoading, examData } = props
 
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [typePlan, setTypePlan] = useState('FREE')
-  console.log(typePlan)
 
   useEffect(() => {
-    if (testId) {
+    if (examData) {
       setAction('update')
+      form.setFieldsValue(examData)
     } else {
       setAction('create')
       form.resetFields()
     }
-  }, [testId])
-
-  useEffect(() => {
-    const body = {
-      filterQuery: {},
-      options: {
-        pagination: false
-      }
-    }
-  }, [])
+  }, [examData])
 
   const onCloseDrawer = () => {
     setOpen(false)
@@ -58,18 +51,37 @@ const DrawerExam = (props: Props) => {
       label: sj.name
     }
   })
-  const { isLoading, status, mutate } = useMutation({ mutationFn: (body) => examApi.createExam({ payload: body }) })
+  const { isLoading, status, mutate, error } = useMutation(
+    action === 'create'
+      ? { mutationFn: (body) => examApi.createExam(body) }
+      : { mutationFn: (body) => examApi.putExam(body) }
+  )
 
   useEffect(() => {
     if (status === 'success') {
-      setResetFilter(true)
+      openNotification({
+        status: status,
+        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công'
+      })
       setOpen(false)
+      resetData && resetData()
+      form.resetFields()
+    }
+    if (status === 'error' && error) {
+      openNotification({ status: status, message: error.name, description: error.message })
     }
   }, [status])
+
+  useEffect(() => {
+    setLoading && setLoading(isLoading)
+  }, [isLoading])
   const onFinish = (values: any) => {
-    mutate(values)
-    // openNotification({ status: 'success', message: 'Test', description: 'âsassa' })
-    console.log(values)
+    const payload = {
+      ...values,
+      cost: parseInt(values?.cost),
+      id: examData?._id
+    }
+    mutate(payload)
   }
 
   return (
@@ -90,7 +102,7 @@ const DrawerExam = (props: Props) => {
               Hủy
             </ButtonCustom>
             <ButtonCustom onClick={() => form.submit()} type='primary'>
-              Tạo bài thi
+              {action === 'create' ? 'Tạo bài thi' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
         }
@@ -177,7 +189,7 @@ const DrawerExam = (props: Props) => {
               }
             ]}
           >
-            <Input disabled={typePlan !== 'PREMIUM'} type='number' placeholder='Nhập số tiền'></Input>
+            <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
           </Form.Item>
 
           <Form.Item

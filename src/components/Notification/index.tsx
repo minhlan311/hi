@@ -3,7 +3,7 @@ import type { NotificationPlacement } from 'antd/es/notification/interface'
 type Props = {
   status: 'success' | 'info' | 'warning' | 'error'
   message: string | React.ReactNode
-  description: string | React.ReactNode
+  description?: string | React.ReactNode
   placement?: NotificationPlacement
 }
 

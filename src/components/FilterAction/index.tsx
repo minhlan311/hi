@@ -10,7 +10,7 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 type Props = {
   apiFind: any
-  callBackData: React.Dispatch<React.SetStateAction<any[]>>
+  callBackData: React.Dispatch<React.SetStateAction<any>>
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   resetFilter?: boolean
   addOnButton?: React.ReactNode
