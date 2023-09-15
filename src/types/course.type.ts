@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type TCourse = {
   _id: string
   createdById: string
@@ -23,6 +24,26 @@ export type TCourse = {
   countAssessment: number
   countTests: number
   document?: never[]
+  mentor?: {
+    ccountStatus: string
+    avatarUrl: string
+    coverUrl: string
+    createdAt: string
+    email: string
+    emailStatus: string
+    fullName: string
+    group: null
+    id: string
+    isMentor: boolean
+    password: string
+    phoneNumber: string
+    phoneStatus: string
+    referralCode: string
+    role: string[]
+    updatedAt: string
+    _destroy: boolean
+    _id: string
+  }
   category: {
     _id: string
     parentId: string
