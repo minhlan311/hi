@@ -4,13 +4,15 @@ import { CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
 
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import useResponsives from '@/hooks/useResponsives'
-import { Breadcrumb, Button, Layout, Menu, Row, Space } from 'antd'
+import { Button, Layout, Menu, Row, Space } from 'antd'
 import { useState } from 'react'
 import { FiHome } from 'react-icons/fi'
 import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
+import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
+
 type Props = {
   user: UserState
   title: string
@@ -104,21 +106,10 @@ const MentorLayout = (props: Props) => {
           <div className={css.children}>
             <Space direction='vertical' className={`sp100`}>
               <h2>{title}</h2>
-              <Breadcrumb
-                items={[
-                  {
-                    href: '/mentor',
-                    title: (
-                      <Space>
-                        <LuLayoutDashboard /> Mentor
-                      </Space>
-                    )
-                  },
-
-                  {
-                    title: title
-                  }
-                ]}
+              <BreadCrumbsDynamic
+                homeUrl='/mentor'
+                homeTitle='Mentor'
+                homeIcon={<LuLayoutDashboard style={{ marginTop: 5 }} />}
               />
               <div className={css.chilItem}>{children}</div>
             </Space>
