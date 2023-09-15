@@ -34,13 +34,13 @@ const FilterAction = (props: Props) => {
     }
   })
 
-  const [filterData, setFilterData] = useState<{ filterQuery: any; options: any }>({
-    filterQuery: { search: '' },
+  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
+    filterQuery: {},
     options: {
       limit: limit,
       page: page,
       sort: {
-        createdAt: { createdAt: '-1' }
+        createdAt: '-1'
       }
     }
   })
@@ -72,7 +72,7 @@ const FilterAction = (props: Props) => {
   const handleReset = () => {
     form.resetFields()
     setFilterData({
-      filterQuery: { search: '' },
+      filterQuery: {},
       options: {
         limit: limit,
         page: page,

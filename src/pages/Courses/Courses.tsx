@@ -1,6 +1,6 @@
 import style from './courses.module.scss'
 import Detail from './components/Detail/Detail'
-import FixedElement from './components/FixedElement/FixedElement'
+// import FixedElement from './components/FixedElement/FixedElement'
 import VideoContent from './components/VideoContent/VideoContent'
 import { LayoutGrid } from './components/LayoutGrid/LayoutGrid'
 import MenuCourses from './components/MenuCourses/MenuCourses'
