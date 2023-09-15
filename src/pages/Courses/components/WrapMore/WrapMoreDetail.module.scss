@@ -1,0 +1,73 @@
+.col11 {
+  // background-color: chocolate;
+}
+.inCol11 {
+  max-width: 660px;
+}
+.col22 {
+  // background-color: red;
+}
+.gridContainer {
+  display: grid;
+  grid-template-rows: 1fr 1fr; /* Chia layout thành 2 hàng có cùng tỷ lệ */
+  grid-gap: 10px; /* Khoảng cách giữa các grid item */
+}
+
+.gridItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.App {
+  position: relative;
+}
+
+.expandableContent {
+  width: 100%;
+  max-height: 670px;
+  overflow: hidden;
+  transition: max-height 0.25s cubic-bezier(0, 1, 0, 1); /* Adjust cubic-bezier values */
+}
+
+.expanded {
+  max-height: 5000px; /* Adjust as needed */
+  transition: max-height 0.25s cubic-bezier(0, 0, 0, 0); /* Adjust cubic-bezier values */
+}
+
+.expandButton {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8710d8;
+  display: block;
+  cursor: pointer;
+}
+.blur {
+  padding-top: 10px;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  background: #fff;
+}
+.blurShow {
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  padding-top: 50px;
+}
+.flexButton {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+}
+.icons {
+  color: #8710d8;
+  font-size: 8px;
+}
