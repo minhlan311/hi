@@ -6,7 +6,7 @@ type Props = {
   buttonHref?: string
   buttonPrimaryText?: string
   buttonPrimaryHref?: string
-  imageUrl?: string
+  imageUrl?: string | null
   heightImage?: string | number
   description?: string
   margin?: string | number

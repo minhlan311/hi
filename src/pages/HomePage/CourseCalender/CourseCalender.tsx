@@ -28,7 +28,11 @@ export default function CourseCalender() {
   const { data: listData } = useQuery({
     queryKey: ['course', id],
     queryFn: () => {
-      return courseApi.getCourses(id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id))
+      return courseApi.getCourses({
+        filterQuery: {
+          categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id)
+        }
+      })
     },
     keepPreviousData: true,
     staleTime: 3 * 60 * 1000
