@@ -90,7 +90,7 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.MENTOR_PAGE,
-          element: <Navigate to={PATH.MENTOR_QUESTIONS} />
+          element: <Navigate to={PATH.MENTOR_COURSES} />
         },
         {
           path: PATH.MENTOR_QUESTIONS,
