@@ -5,14 +5,18 @@ import { ENDPOINT } from '@/constants/endpoint'
 import { CategoryState } from '@/interface/category'
 
 const categoryApi = {
-  getCategories(filterQuery?: any) {
-    return http.post<SuccessResponse<CategoryState[]>>(ENDPOINT.FIND_CATEGORIES_PATH, {
+  getCategories(filterQuery?: any, options?: any, body?: any) {
+    const option = {
+      pagination: false,
+      sort: { createdAt: -1 }
+    }
+
+    const payload = {
       filterQuery: filterQuery,
-      options: {
-        pagination: false,
-        sort: { createdAt: -1 }
-      }
-    })
+      options: options || option
+    }
+
+    return http.post<SuccessResponse<CategoryState[]>>(ENDPOINT.FIND_CATEGORIES_PATH, payload || body)
   }
 }
 
