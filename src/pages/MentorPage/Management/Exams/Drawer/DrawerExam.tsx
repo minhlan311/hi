@@ -68,7 +68,7 @@ const DrawerExam = (props: Props) => {
       form.resetFields()
     }
     if (status === 'error' && error) {
-      openNotification({ status: status, message: error.name, description: error.message })
+      openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
   }, [status])
 
