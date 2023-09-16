@@ -1,0 +1,61 @@
+.boxContaier {
+  min-height: 1800px;
+}
+.container {
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #1c1d1f;
+  min-height: 300px;
+  padding-bottom: 40px;
+}
+.content {
+  padding-top: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+.body {
+  min-height: 150px;
+  max-width: 1080px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+.col11 {
+  margin-bottom: 299px;
+  // background-color: chocolate;
+}
+.inCol11 {
+  border: 1px solid #d1d7dc;
+  height: 100%;
+  max-width: 660px;
+}
+.col22 {
+  // background-color: red;
+}
+.gridContainer {
+  display: grid;
+  grid-template-rows: 1fr 1fr; /* Chia layout thành 2 hàng có cùng tỷ lệ */
+  grid-gap: 10px; /* Khoảng cách giữa các grid item */
+}
+
+.gridItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.icons {
+  color: #8710d8;
+  font-size: 8px;
+}
+.titleText {
+  margin: 30px 0 25px 0;
+  font-size: 22px;
+  font-weight: 700;
+}

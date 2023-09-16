@@ -8,7 +8,6 @@ export type DataFormMentor = {
   certificates: string[]
   userId: string
   educationType: string
-  isMentor: boolean
 }
 
 export type MentorForm = {

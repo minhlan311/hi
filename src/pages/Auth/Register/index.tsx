@@ -5,17 +5,15 @@ import './Register.scss'
 import Roles from './Roles/Roles'
 import { ROLE } from './Roles/constants'
 import MentorForm from './MentorForm/Info/MentorForm'
-import StudentForm from './StudentForm/StudentForm'
 import Certificate from './MentorForm/Certificate/Certificate'
 import authApi from '@/apis/auth.api'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
-  const id = localStorage.getItem('id')
   const [loading, setLoading] = useState<boolean>(false)
   const [current, setCurrent] = useState(0)
-  const [pickRole, setPickRole] = useState('')
+  const [pickRole, setPickRole] = useState<string | undefined>(undefined)
   const [checkStep2, setCheckStep2] = useState<TMentorForm | undefined>(undefined)
   const [dataForm, setDataForm] = useState<DataFormMentor>({
     fullName: '',
@@ -25,9 +23,8 @@ const Register: React.FC = () => {
     phoneNumber: '',
     birthDay: '',
     certificates: [],
-    userId: id as string,
-    educationType: '',
-    isMentor: false
+    userId: '',
+    educationType: ''
   })
   const formRef = useRef<HTMLFormElement>(null)
   const navigate = useNavigate()
@@ -37,7 +34,15 @@ const Register: React.FC = () => {
     if (checkStep2 && current === 1) {
       setCurrent(current + 1)
     }
+    return
   }, [checkStep2])
+
+  useEffect(() => {
+    if (pickRole && current === 0) {
+      setCurrent(current + 1)
+    }
+    return
+  }, [pickRole])
 
   const handleSubmit = () => {
     if (current === 1) {
@@ -47,6 +52,7 @@ const Register: React.FC = () => {
       if (current === 1) {
         setCurrent(current + 1)
       }
+
       if (current !== 1) {
         setCheckStep2(undefined)
         setCurrent(current + 1)
@@ -75,13 +81,15 @@ const Register: React.FC = () => {
       password: steps2.password,
       confirmPassword: steps2.confirmPassword,
       phoneNumber: steps2.phoneNumber,
-      birthDay: steps2.birthDay,
-      isMentor: true
+      birthDay: steps2.birthDay
     })
   }
 
   const dataChild = (steps3: { educationType: string; link: string[] }) => {
     setDataForm({ ...dataForm, certificates: steps3.link, educationType: steps3.educationType })
+  }
+  const ids = (idRole: string) => {
+    setDataForm({ ...dataForm, userId: idRole })
   }
 
   const steps = [
@@ -91,23 +99,22 @@ const Register: React.FC = () => {
     },
     {
       title: 'Thông tin cơ bản',
-      content:
-        pickRole === ROLE.STUDENT ? (
-          <StudentForm />
-        ) : (
-          <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} />
-        )
+      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} ids={ids} />
     },
     {
-      title: 'Thông tin bảo mật',
-      content: pickRole === ROLE.STUDENT ? '' : <Certificate dataChild={dataChild} />
+      title: 'Dành cho Giảng viên',
+      content: pickRole === ROLE.MENTOR && <Certificate dataChild={dataChild} />
     }
   ]
 
   const prev = () => {
+    if (current === 1) {
+      setPickRole('')
+    }
     if (current !== 1) {
       setCheckStep2(undefined)
       setCurrent(current - 1)
+      return
     }
     setCurrent(current - 1)
   }
@@ -115,13 +122,12 @@ const Register: React.FC = () => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
   const contentStyle: React.CSSProperties = {
-    minHeight: '500px',
+    minHeight: '300px',
     lineHeight: '50px',
     textAlign: 'center',
     color: token.colorTextTertiary,
     marginTop: 16
   }
-  console.log(dataForm, 'dataFormdataFormdataForm')
   const handleForm = async () => {
     if (!dataForm.educationType || dataForm.certificates.length === 0) {
       notification.open({
@@ -137,9 +143,9 @@ const Register: React.FC = () => {
         notification.open({
           type: 'success',
           message: 'Thông báo',
-          description: 'Đăng ký thành công,vui lòng đăng nhập!'
+          description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
         })
-        navigate('/')
+        navigate('/login')
       } else {
         setLoading(false)
         notification.open({
@@ -157,7 +163,7 @@ const Register: React.FC = () => {
         <Steps current={current} items={items} />
         <div style={contentStyle}>{steps[current].content}</div>
         <div style={{ marginTop: 24 }}>
-          {current < steps.length - 1 && (
+          {current < steps.length - 1 && current > 0 && (
             <Button type='primary' onClick={handleSubmit}>
               Tiếp tục
             </Button>
@@ -172,6 +178,12 @@ const Register: React.FC = () => {
               Quay lại
             </Button>
           )}
+          <p className='res'>
+            Bạn đã có tài khoản ?{' '}
+            <Link className='link' to={'/login'}>
+              Đăng nhập ngay
+            </Link>
+          </p>
         </div>
       </div>
     </>

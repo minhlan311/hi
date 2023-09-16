@@ -88,26 +88,6 @@ export default function Intro() {
           </Button>
         </div>
       </div>
-
-      {/* <Row gutter={[20, 20]} className="intor-main">
-                {introData.map((item, id) => (
-                    <Col span={24} md={6} key={id}>
-                        <Card className="intro-card">
-                            <Space direction="vertical">
-                                <Space>
-                                    <div
-                                        className={`i-bg${item.keyId} icon-bg`}
-                                    >
-                                        {item.icon}
-                                    </div>
-                                    <h3 style={{ margin: 0 }}>{item.title}</h3>
-                                </Space>
-                                <div style={{ margin: 0 }}>{item.desc}</div>
-                            </Space>
-                        </Card>
-                    </Col>
-                ))}
-            </Row> */}
     </Header>
   )
 }

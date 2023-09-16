@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Roles({ pickRoleChange }: any) {
-  const [active, setActive] = useState<string>(ROLE.MENTOR)
+  const [active, setActive] = useState<string>('')
 
   const pickRoles = (role: string) => {
     pickRoleChange(role)
@@ -27,7 +27,6 @@ export default function Roles({ pickRoleChange }: any) {
         Giảng Viên
       </Button>
       <Button
-        disabled
         className={`${active === ROLE.STUDENT ? 'activeButton' : ''}`}
         onClick={() => {
           pickRoles(ROLE.STUDENT)

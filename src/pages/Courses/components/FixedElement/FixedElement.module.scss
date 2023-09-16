@@ -1,0 +1,58 @@
+.fixed {
+  background-color: #000;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.titleFixed {
+  text-align: start;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.fixedBox {
+  padding: 10px 0 10px 20px;
+}
+.flex {
+  margin-left: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+.specialPrice {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px 0;
+  background-color: #eceb98;
+  width: 100px;
+}
+.detailPrice {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.flexStar {
+  font-size: 14px;
+  color: #e39718;
+  font-weight: 600;
+  display: flex;
+  align-items: start;
+}
+
+.score {
+  color: #f3ca8c;
+  font-weight: 600;
+}
+.total {
+  scale: 0.9;
+  color: #cec0fc;
+  text-decoration: underline;
+}
+.member {
+  font-size: 14px;
+}

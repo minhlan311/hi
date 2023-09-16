@@ -15,8 +15,9 @@ import LanguageChange from '@/components/LanguageChange'
 import { UserState } from '@/interface/user'
 import MenuPc from './MenuPc'
 import './styles.scss'
+import { BiSolidDashboard } from 'react-icons/bi'
 type Props = {
-  user: UserState | null
+  user?: UserState
 }
 export default function Navigation({ user }: Props) {
   // const [educationId, setEducationId] = useState('')
@@ -78,6 +79,15 @@ export default function Navigation({ user }: Props) {
                         height: '100%'
                       }}
                     >
+                      {user
+                        ? user?.isMentor && (
+                            <Link to='/mentor'>
+                              <div className='cartIcon'>
+                                <BiSolidDashboard />
+                              </div>
+                            </Link>
+                          )
+                        : null}
                       <div className='cartIcon'>
                         <BsFillCartFill />
                       </div>

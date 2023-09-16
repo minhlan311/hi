@@ -1,304 +1,123 @@
-// import React, { useEffect, useState } from 'react'
-// import './styles.scss'
-// import { Avatar, Button, Dropdown, Layout, Menu, Result, Tooltip, Typography } from 'antd'
-// import { Link, useLocation } from 'react-router-dom'
-// import {
-//   ContainerOutlined,
-//   CarryOutOutlined,
-//   DatabaseOutlined,
-//   SnippetsOutlined,
-//   MenuOutlined,
-//   DownOutlined,
-//   UserOutlined,
-//   RollbackOutlined
-// } from '@ant-design/icons'
-// import mtzLogoImg from '../../../assets/images/backgrounds/logo.svg'
-// import { TbLock } from 'react-icons/tb'
-// import { BsFillPersonFill, BsQuestionCircle, BsFillStarFill } from 'react-icons/bs'
-// import { MdLogout } from 'react-icons/md'
-// import { useHistory } from 'react-router-dom'
-// import { getStorage, removeStorage, setStorage } from '../../../services/storage'
-// import { USER_INFO } from '../../../constants/storageKeys'
-// import { useMediaQuery } from 'react-responsive'
-// import Navigation from '../Navigation'
-// import Footer from '../Footer'
-// import noAvt from '../../../assets/images/navigation/No-avt.jpg'
-// import Notifications from '../Navigation/Notifications'
-// import { userDetailRequest, userDetailSelector } from '../../../slices/user'
-// import { useDispatch, useSelector } from 'react-redux'
+import Logo from '@/components/Logo/Logo'
+import { UserState } from '@/interface/user'
+import { CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
 
-// export default function MentorLayout({ children }) {
-//   const dispatch = useDispatch()
-//   const userDetail = useSelector(userDetailSelector)
-//   const isTablet = useMediaQuery({ maxWidth: 1024, minWidth: 768 })
-//   const isMobile = useMediaQuery({ maxWidth: 767, minWidth: 280 })
-//   const location = useLocation()
-//   const history = useHistory()
-//   const [collapsed, setCollapsed] = useState(true)
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import useResponsives from '@/hooks/useResponsives'
+import { Button, Layout, Menu, Row, Space } from 'antd'
+import { useState } from 'react'
+import { FiHome } from 'react-icons/fi'
+import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import AvatarDropMenu from '../AvatarDropMenu'
+import css from './styles.module.scss'
+import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 
-//   const { Header, Content, Sider } = Layout
-//   const { Text } = Typography
-//   const user = getStorage(USER_INFO)
-//   useEffect(() => {
-//     // dispatch(userDetailRequest(user?._id))
-//   }, [])
-//   const collaps = getStorage('sjklbhdjk3trfgyagvhq31s')
+type Props = {
+  user: UserState
+  title: string
+  children: React.ReactNode
+}
+interface SiderItem {
+  key: string
+  icon: React.ReactNode
+  children: React.ReactNode
+  label: React.ReactNode
+  type?: string
+  route?: string
+}
 
-//   useEffect(() => {
-//     if (!collaps) {
-//       setCollapsed(collaps)
-//     }
-//   }, [collaps])
+const { Header, Sider, Content } = Layout
+const MentorLayout = (props: Props) => {
+  const { user, title, children } = props
+  const location = useLocation()
+  const navitage = useNavigate()
+  window.document.title = title + ' | Ucam'
+  const { sm } = useResponsives()
+  const [collapsed, setCollapsed] = useState(sm ? true : false)
 
-//   const getItem = (label, key, icon, children, type, route) => {
-//     return {
-//       key,
-//       icon,
-//       children,
-//       label,
-//       type,
-//       route
-//     }
-//   }
-//   const siderItems = [
-//     getItem(<Link to='/mentor'>Danh sách câu hỏi</Link>, '/mentor', <ContainerOutlined />),
-//     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
-//     getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
-//     getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />)
-//   ]
+  const getItem = (
+    label: React.ReactNode,
+    key: string,
+    icon: React.ReactNode,
+    children?: React.ReactNode,
+    type?: string,
+    route?: string
+  ): SiderItem => {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+      route
+    }
+  }
 
-//   const handleLogout = () => {
-//     removeStorage(USER_INFO)
-//     history.push('/login')
-//   }
+  const siderItems: SiderItem[] = [
+    // getItem(<Link to='/mentor/questions'>Danh sách câu hỏi</Link>, '/mentor/questions', <ContainerOutlined />),
+    getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
+    // getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
+    getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />)
+  ]
 
-//   const items = [
-//     {
-//       label: (
-//         <Link to='/profiles' className='menu-content'>
-//           <Text>Trang cá nhân</Text>
-//         </Link>
-//       ),
-//       key: '1',
-//       icon: <BsFillPersonFill size={20} style={{ marginLeft: 0 }} />
-//     },
-//     {
-//       label: (
-//         <Link to='/point-management' className='menu-content'>
-//           <Text>Quản lý điểm A+</Text>
-//         </Link>
-//       ),
-//       key: '2',
-//       icon: <BsFillStarFill size={19} style={{ marginLeft: 0 }} />
-//     },
-//     {
-//       label: (
-//         <Link to='/pedagogys' className='menu-content'>
-//           <Text>Các câu hỏi</Text>
-//         </Link>
-//       ),
-//       key: '3',
-//       icon: <BsQuestionCircle size={18} style={{ marginLeft: 1 }} />
-//     },
-//     {
-//       label: (
-//         <Link to='/change-password' className='menu-content'>
-//           <Text>Đổi mật khẩu</Text>
-//         </Link>
-//       ),
-//       key: '4',
-//       icon: <TbLock size={20} style={{ marginLeft: 0 }} />
-//     },
-//     {
-//       type: 'divider'
-//     },
-//     {
-//       label: (
-//         <div className='menu-content' onClick={handleLogout}>
-//           <Text>Đăng xuất</Text>
-//         </div>
-//       ),
-//       key: '5',
-//       icon: <MdLogout size={20} style={{ marginLeft: 2 }} />
-//     }
-//   ]
+  return (
+    <Layout className={css.layout}>
+      <Sider
+        trigger={null}
+        collapsed={collapsed}
+        className={css.navLeft}
+        style={{ background: 'var(--white)' }}
+        width={sm ? 200 : 240}
+        collapsedWidth={sm ? 55 : 80}
+      >
+        <Logo href='/mentor' className={`${collapsed && css.logoCrop} ${css.logo}`} />
+        <Menu
+          theme='light'
+          mode='inline'
+          selectedKeys={[location.pathname]}
+          items={siderItems}
+          inlineIndent={sm ? 10 : 24}
+        />
+      </Sider>
+      <Layout className={css.main}>
+        <Header className={css.navTop}>
+          <Row justify='space-between' align='middle'>
+            <Button
+              icon={collapsed ? <LuPanelLeftOpen size={22} /> : <LuPanelRightOpen size={22} />}
+              onClick={() => setCollapsed(!collapsed)}
+              type='text'
+              style={{ color: 'var(--white)' }}
+            />
 
-//   return !user.isMentor || (user.isMentor && (user.mentorStatus === 'PENDING' || !user.mentorStatus)) ? (
-//     <>
-//       <Navigation />
-//       <div style={{ marginTop: 80 }}>
-//         <Result
-//           style={{ height: '100vh' }}
-//           status='403'
-//           title='403'
-//           subTitle='Xin lỗi, bạn cần đăng ký làm Mentor để truy cập vào trang này!'
-//           extra={
-//             <div>
-//               <Button style={{ marginRight: 15 }} onClick={() => history.push('/regis-is-mentor')}>
-//                 Đăng ký làm Mentor
-//               </Button>
-//               <Button type='primary' onClick={() => (window.location.href = '/')}>
-//                 Trở về trang chủ
-//               </Button>
-//             </div>
-//           }
-//         />
-//       </div>
-//       <Footer />
-//     </>
-//   ) : (
-//     <Layout className='mtz-layout'>
-//       {collapsed && isMobile ? null : (
-//         <Sider trigger={null} collapsible collapsed={collapsed}>
-//           <div
-//             className='mtz-trigger'
-//             style={
-//               collapsed
-//                 ? {
-//                     width: 120
-//                   }
-//                 : {
-//                     width: 200
-//                   }
-//             }
-//           >
-//             <a className='logo' href={'/'}>
-//               <img
-//                 src={mtzLogoImg}
-//                 alt='mtz logo'
-//                 style={
-//                   collapsed
-//                     ? {
-//                         height: 38,
-//                         width: 32,
-//                         objectFit: 'cover',
-//                         objectPosition: 0,
-//                         marginLeft: 5
-//                       }
-//                     : {
-//                         height: 38,
-//                         width: '100%',
-//                         objectFit: 'fill'
-//                       }
-//                 }
-//               />
-//             </a>
-//             <MenuOutlined
-//               className='trigger'
-//               onClick={() => {
-//                 setCollapsed(!collapsed)
-//                 setStorage({
-//                   key: 'sjklbhdjk3trfgyagvhq31s',
-//                   val: !collapsed
-//                 })
-//               }}
-//               style={
-//                 collapsed
-//                   ? {
-//                       marginLeft: 37,
-//                       color: 'black'
-//                     }
-//                   : {
-//                       marginLeft: 18,
-//                       color: 'white'
-//                     }
-//               }
-//             />
-//           </div>
-//           <Menu theme='dark' mode='inline' defaultSelectedKeys={location.pathname} items={siderItems} />
-//         </Sider>
-//       )}
+            <Row align='middle'>
+              <ButtonCustom
+                icon={<FiHome size={20} />}
+                style={{ marginRight: 15 }}
+                size='middle'
+                onClick={() => navitage('/')}
+              ></ButtonCustom>
 
-//       <Layout style={{ maxHeight: '100vh' }}>
-//         <Header
-//           className='site-layout'
-//           style={
-//             isMobile || isTablet
-//               ? {
-//                   paddingInline: 15,
-//                   width: '100%',
-//                   position: !collapsed ? 'absolute' : null
-//                 }
-//               : null
-//           }
-//         >
-//           {collapsed && isMobile ? (
-//             <Button
-//               type='text'
-//               className='trigger'
-//               style={{
-//                 color: 'black'
-//               }}
-//               onClick={() => {
-//                 setCollapsed(!collapsed)
-//                 setStorage({
-//                   key: 'sjklbhdjk3trfgyagvhq31s',
-//                   val: !collapsed
-//                 })
-//               }}
-//               icon={<MenuOutlined />}
-//             ></Button>
-//           ) : null}
-//           {isMobile ? (
-//             <div style={{ width: '79%' }}></div>
-//           ) : (
-//             <div>
-//               {/* <Input
-//                                 placeholder="Tìm kiếm..."
-//                                 prefix={<SearchOutlined />}
-//                                 allowClear
-//                             /> */}
-//             </div>
-//           )}
+              <AvatarDropMenu userData={user} collapsed={sm} />
+            </Row>
+          </Row>
+        </Header>
+        <Content className={css.content}>
+          <div className={css.children}>
+            <Space direction='vertical' className={`sp100`}>
+              <h2>{title}</h2>
+              <BreadCrumbsDynamic
+                homeUrl='/mentor'
+                homeTitle='Mentor'
+                homeIcon={<LuLayoutDashboard style={{ marginTop: 5 }} />}
+              />
+              <div className={css.chilItem}>{children}</div>
+            </Space>
+          </div>
+        </Content>
+      </Layout>
+    </Layout>
+  )
+}
 
-//           <div className='site-right'>
-//             {isMobile ? (
-//               <Tooltip title='Trang chủ'>
-//                 <Button
-//                   style={{ marginRight: 15 }}
-//                   type='primary'
-//                   onClick={() => (window.location.href = '/')}
-//                   icon={<RollbackOutlined />}
-//                 />
-//               </Tooltip>
-//             ) : (
-//               <Button style={{ marginRight: 20 }} type='primary' onClick={() => (window.location.href = '/')}>
-//                 Trang chủ
-//               </Button>
-//             )}
-
-//             <Notifications />
-
-//             <Dropdown
-//               menu={{
-//                 items
-//               }}
-//               autoAdjustOverflow
-//             >
-//               <div style={{ marginLeft: 15 }}>
-//                 <Avatar src={user?.avatarUrl ? user?.avatarUrl : noAvt} size={32} icon={<UserOutlined />} />
-//                 {isMobile ? null : (
-//                   <Text
-//                     style={{
-//                       fontWeight: 'bold',
-//                       marginLeft: 5
-//                     }}
-//                   >
-//                     {user.fullName}
-//                   </Text>
-//                 )}
-//                 <DownOutlined style={{ marginLeft: 5, fontSize: 14 }} />
-//               </div>
-//             </Dropdown>
-//           </div>
-//         </Header>
-//         <Content
-//           className='content'
-//           style={(isMobile || isTablet) && !collapsed ? { position: 'absolute', marginTop: 63 } : null}
-//         >
-//           {children}
-//         </Content>
-//       </Layout>
-//     </Layout>
-//   )
-// }
+export default MentorLayout

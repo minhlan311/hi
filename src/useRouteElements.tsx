@@ -1,25 +1,35 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import PageNotFound from './components/PageNotFound/PageNotFound'
+import PageResult from './components/PageResult/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
 import Layout from './components/layout/Layout.tsx'
+import MentorLayout from './components/layout/MentorLayout/index.tsx'
 import PATH from './constants/path'
 import { AppContext } from './contexts/app.context'
-import Login from './pages/Auth/Login/index.tsx'
-import HomePage from './pages/HomePage/index.tsx'
-import Register from './pages/Auth/Register/index.tsx'
 import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
+import Login from './pages/Auth/Login/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
+import HomePage from './pages/HomePage/index.tsx'
+import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
+import MentorDocuments from './pages/MentorPage/Management/Documents/index.tsx'
+import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
+import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
+import Courses from './pages/Courses/Courses.tsx'
+import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
+
+function RejectedMentorRoute() {
+  const { profile, isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
+}
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
-
-  return isAuthenticated ? <Outlet /> : <Navigate to='/join/login' />
+  return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
-
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -74,79 +84,74 @@ export default function useRouteElements() {
       ]
     },
     {
+      // mentor
+      path: '',
+      element: <RejectedMentorRoute />,
+      children: [
+        {
+          path: PATH.MENTOR_PAGE,
+          element: <Navigate to={PATH.MENTOR_COURSES} />
+        },
+        {
+          path: PATH.MENTOR_QUESTIONS,
+          element: (
+            <MentorLayout user={profile} title='Danh sách câu hỏi'>
+              <MentorPedagogies user={profile} />
+            </MentorLayout>
+          )
+        },
+        {
+          path: PATH.MENTOR_COURSES,
+          element: (
+            <MentorLayout user={profile} title='Quản lý khóa học'>
+              <MentorCourses />
+            </MentorLayout>
+          )
+        },
+        {
+          path: PATH.MENTOR_DOCUMENTS,
+          element: (
+            <MentorLayout user={profile} title='Quản lý tài liệu'>
+              <MentorDocuments />
+            </MentorLayout>
+          )
+        },
+        {
+          path: PATH.MENTOR_EXAMS,
+          element: (
+            <MentorLayout user={profile} title='Quản lý đề thi thử'>
+              <MentorExams />
+            </MentorLayout>
+          )
+        },
+        {
+          path: PATH.MENTOR_EXAMS_DETAIL,
+          element: (
+            <MentorLayout user={profile} title='Danh sách câu hỏi'>
+              <MentorQuestions />
+            </MentorLayout>
+          )
+        }
+      ]
+    },
+    {
       // private
       path: '',
       element: <ProtectedRoute />,
       children: [
-        // {
-        //   path: path.profileEdit,
-        //   element: (
-        //     <Layout user={profile} title=''>
-        //       <EditProfile />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.editPhoto,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <EditPhoto />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.editAccount,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <EditAccount />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.editPayment,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <EditPayment />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.editNotifications,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <EditNotifications />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.closeAccount,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <CloseAccount />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.myCoursesLearning,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <MycoursesLearning />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.publicProfile,
-        //   element: (
-        //     <Layout user={profile} title='name'>
-        //       <Profile user={profile} />
-        //     </Layout>
-        //   )
-        // }
+        {
+          path: PATH.COURSE_DETAIL,
+          element: (
+            <Layout user={profile} title='Trang chủ'>
+              <Courses />
+            </Layout>
+          )
+        }
       ]
     },
     {
       // public
-      // element: <Layout />,
+
       children: [
         {
           path: PATH.HOME,
@@ -158,45 +163,9 @@ export default function useRouteElements() {
           )
         },
 
-        // {
-        //   path: path.coursePage,
-        //   element: (
-        //     <Layout user={profile} title='サイトマップ'>
-        //       <Courses />
-        //     </Layout>
-        //   ),
-        //   children: [
-        //     // {
-        //     //   path: path.coursesId,
-        //     //   element: <Courses />
-        //     // }
-        //   ]
-        // },
-        // {
-        //   path: path.siteMap,
-        //   element: (
-        //     <Layout user={profile} title='サイトマップ'>
-        //       <SiteMap />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.cart,
-        //   element: (
-        //     <Layout user={profile} title='サイトマップ'>
-        //       <Cart />
-        //     </Layout>
-        //   )
-        // },
-        // {
-        //   path: path.checkout,
-        //   element: (
-        //     <Layout user={profile} title='サイトマップ'>
-        //       <Checkout />
-        //     </Layout>
-        //   )
-        // }
-        { path: '*', element: <PageNotFound /> }
+        { path: '/404', element: <PageResult code={404} /> },
+        { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
+        { path: '*', element: <PageResult code={404} /> }
 
         //   )
         // }
