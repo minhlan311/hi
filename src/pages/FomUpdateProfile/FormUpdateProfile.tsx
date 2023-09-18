@@ -23,6 +23,8 @@ export default function FormUpdateProfile() {
     queryFn: () => userApi.getInfoUser(id!)
   })
 
+  console.log(data, 'dataaaaaaaaaaaaaaaaaa')
+
   const mutation = useMutation((body: TMentorForm) => {
     return userApi.updateProfileUser(body)
   })
@@ -131,23 +133,24 @@ export default function FormUpdateProfile() {
         >
           <Input size='large' placeholder='Nhập email của bạn' />
         </Form.Item>
-        <Form.Item<TMentorForm>
-          label='Học vị'
-          name='educationType'
-          rules={[{ required: true, message: 'Vui lòng chọn học vị của bạn' }]}
-        >
-          <Select
-            size='large'
-            placeholder='Chọn học vị của bạn'
-            options={[
-              { value: 'Cử nhân', label: 'Cử nhân' },
-              { value: 'Thạc sĩ', label: 'Thạc sĩ' },
-              { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
-              { value: 'Phó giáo sư', label: 'Phó giáo sư' }
-            ]}
-          />
-        </Form.Item>
-
+        {data?.data.isMentor && (
+          <Form.Item<TMentorForm>
+            label='Học vị'
+            name='educationType'
+            rules={[{ required: true, message: 'Vui lòng chọn học vị của bạn' }]}
+          >
+            <Select
+              size='large'
+              placeholder='Chọn học vị của bạn'
+              options={[
+                { value: 'Cử nhân', label: 'Cử nhân' },
+                { value: 'Thạc sĩ', label: 'Thạc sĩ' },
+                { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
+                { value: 'Phó giáo sư', label: 'Phó giáo sư' }
+              ]}
+            />
+          </Form.Item>
+        )}
         <Form.Item<TMentorForm>
           label='Số điện thoại'
           name='phoneNumber'
@@ -171,12 +174,15 @@ export default function FormUpdateProfile() {
         >
           <DatePicker size='large' format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' placement='topLeft' />
         </Form.Item>
-
-        <UploadCer />
-        <UploadDilopma />
-        <UploadOtherDilopma />
-        <UploadCMNDBefore />
-        <UploadCMNDAfter />
+        {data?.data.isMentor && (
+          <>
+            <UploadCer />
+            <UploadDilopma />
+            <UploadOtherDilopma />
+            <UploadCMNDBefore />
+            <UploadCMNDAfter />
+          </>
+        )}
 
         <Form.Item>
           <Button htmlType='submit' type='primary'>
