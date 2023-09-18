@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { AuthState } from '@/interface/auth'
@@ -7,24 +8,36 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
+import openNotification from '@/components/Notification'
+import { useSocket } from '@/lib/providers/socket'
 
 const Login = () => {
-  const { setIsAuthenticated, setProfile } = useContext(AppContext)
+  const socket = useSocket()
 
+  console.log(socket)
+
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const [form] = Form.useForm()
   const navitage = useNavigate()
-  const mutaionLogin = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
+  const { isLoading, mutate } = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
   const onFinish = (values: AuthState) => {
-    mutaionLogin.mutate(values, {
+    mutate(values, {
       onSuccess: (data) => {
         navitage('/')
         setIsAuthenticated(true)
         setProfile(data.data as unknown as UserState)
+      },
+      onError: (data: any) => {
+        openNotification({
+          status: 'error',
+          message: 'Thông báo',
+          description: data.response.data.message
+        })
       }
     })
   }
   return (
-    <Form form={form} name='login' onFinish={onFinish} layout='vertical'>
+    <Form form={form} name='login' onFinish={onFinish} layout='vertical' disabled={isLoading}>
       <Form.Item
         name='account'
         label='Email hoặc số điện thoại'
@@ -61,7 +74,7 @@ const Login = () => {
         <Checkbox>Nhớ mật khẩu</Checkbox>
       </Form.Item>
       <Form.Item>
-        <Button type='primary' htmlType='submit' size='large' className='sp100'>
+        <Button type='primary' htmlType='submit' size='large' className='sp100' loading={isLoading}>
           Đăng nhập
         </Button>
       </Form.Item>
