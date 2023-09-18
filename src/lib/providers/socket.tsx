@@ -27,8 +27,10 @@ export const SocketProvider = ({ children }: Props) => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const useSocket = (): Socket | null => {
   const { socket } = useContext(SocketContext)
+
   if (socket === null) {
     throw new Error('useSocket must be used within a SocketProvider')
   }
+
   return socket
 }

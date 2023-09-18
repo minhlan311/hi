@@ -25,11 +25,13 @@ const Room: FC = () => {
     }
   }
 
-  // const socket = useSocket()
+  const socket = useSocket()
 
-  // socket?.on('connect', () => {
-  //   console.log('connect')
-  // })
+  useEffect(() => {
+    socket?.on('connect', () => {
+      console.log('connect')
+    })
+  }, [socket])
 
   useEffect(() => {
     const index = pc.indexOf(socketId)
