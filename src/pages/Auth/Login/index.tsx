@@ -9,8 +9,13 @@ import { useContext } from 'react'
 import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
 import openNotification from '@/components/Notification'
+import { useSocket } from '@/lib/providers/socket'
 
 const Login = () => {
+  const socket = useSocket()
+
+  console.log(socket)
+
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const [form] = Form.useForm()
   const navitage = useNavigate()
