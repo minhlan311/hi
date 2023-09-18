@@ -1,8 +1,4 @@
-import React from 'react'
-
-type Props = {}
-
-const ExamsPage = (props: Props) => {
+const ExamsPage = () => {
   return <div>ExamsPage</div>
 }
 
