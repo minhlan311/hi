@@ -155,7 +155,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
         {' '}
-        <DatePicker size='large' placeholder='DD/MM/YYYY' format='DD/MM/YYYY' />
+        <DatePicker size='large' placeholder='DD/MM/YYYY' format='DD/MM/YYYY' placement='topLeft' />
       </Form.Item>
     </Form>
   )
