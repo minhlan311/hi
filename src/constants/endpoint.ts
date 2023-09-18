@@ -6,6 +6,10 @@ export const ENDPOINT = {
   REGISTER: '/auth/signup',
   LOGOUT: '/auth/logout',
   MENTOR: '/mentorinfo',
+
+  // :::::::::::::::::::: USER PATH :::::::::::::::::::::
+  GET_USER_INFO: '/users/',
+  UPDATE_USER_INFO: '/users/',
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::
   GET_ATTACHMENT: '/upload/download/',
   UPLOAD_ATTACHMENT: '/upload/attachments/',

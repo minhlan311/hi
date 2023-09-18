@@ -1,4 +1,3 @@
-import { setting } from '@/settings/dev'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 
@@ -14,7 +13,7 @@ export const SocketProvider = ({ children }: Props) => {
   const [socket, setSocket] = useState<Socket | null>(null)
 
   useEffect(() => {
-    const newSocket = io(setting.API_URL)
+    const newSocket = io(import.meta.env.VITE_SERVICE_ENDPOINT)
     setSocket(newSocket)
 
     return () => {
