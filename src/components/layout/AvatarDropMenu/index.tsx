@@ -16,10 +16,17 @@ type Props = {
 
 const AvatarDropMenu = (props: Props) => {
   const { userData, collapsed = false, renderMenu = false } = props
+
+  console.log(userData, 'userData')
+
   const items: any[] = [
     {
       key: 'profiles',
       label: <Link to={'/profiles/' + userData._id}>Trang cá nhân</Link>
+    },
+    {
+      key: 'profiles',
+      label: <Link to={'/pedagogys/' + userData._id}>Cập nhật thông tin</Link>
     },
 
     {

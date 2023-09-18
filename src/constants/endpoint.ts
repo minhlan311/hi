@@ -10,6 +10,8 @@ export const ENDPOINT = {
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
 
+  GET_USER_INFO: '/users/',
+  UPDATE_USER_INFO: '/users/',
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::
   GET_ATTACHMENT: '/upload/download/',
   UPLOAD_ATTACHMENT: '/upload/attachments/',
