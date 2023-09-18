@@ -65,13 +65,6 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
       >
         <Input size='large' placeholder='Nhập họ và tên của bạn' />
       </Form.Item>
-      <Form.Item<TMentorForm>
-        label='Họ tên'
-        name='fullName'
-        rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
-      >
-        <Input size='large' placeholder='Nhập họ và tên của bạn' />
-      </Form.Item>
 
       <Form.Item<TMentorForm>
         label='Email'

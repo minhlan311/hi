@@ -34,7 +34,7 @@ export default function UploadDilopma() {
         name='schoolName'
         rules={[{ required: true, message: 'Vui lòng cập nhật trường của bạn' }]}
       >
-        <Input placeholder='Tên trường của bạn' />
+        <Input size='large' placeholder='Tên trường của bạn' />
       </Form.Item>
 
       <Form.Item<TMentorForm>
