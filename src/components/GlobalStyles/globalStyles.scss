@@ -231,7 +231,12 @@ table {
   //   color: var(--red) !important;
   // }
 }
-
+.ant-tabs-nav .ant-tabs-nav-wrap {
+  justify-content: center;
+}
+:where(.css-dev-only-do-not-override-1ld4x6i).ant-carousel .slick-dots li button {
+  background-color: var(--red);
+}
 .dangerHTMLTwoLine {
   white-space: break-spaces;
   overflow: hidden;
@@ -251,6 +256,13 @@ table {
 
 .flag-select {
   display: flex;
+}
+
+.p-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Hide the scrollbar track */

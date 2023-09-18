@@ -1,0 +1,21 @@
+.loading {
+  margin-top: 30vh;
+}
+.prfMain {
+  .bg {
+    width: 100vw;
+    height: 300px;
+    filter: brightness(0.6);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .infor {
+    margin-top: -150px;
+    color: var(--white);
+    .inf {
+    }
+  }
+}
