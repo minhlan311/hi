@@ -26,7 +26,8 @@ export const PATH = {
   POINT_MANAGEMENT: '/point-management',
   CHANGE_PASS: '/change-password',
   PAYMENT_CALLBACK: '/payment-callback',
-  PEDAGOGYS: '/pedagogys'
+  PEDAGOGYS: '/pedagogys',
+  ROOM_LIVE: '/room/:roomId'
 } as const
 
 export default PATH

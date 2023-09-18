@@ -17,19 +17,23 @@ import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
+import Room from './pages/Room/index.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -162,15 +166,18 @@ export default function useRouteElements() {
             </Layout>
           )
         },
+        {
+          path: PATH.ROOM_LIVE,
+          index: true,
+          element: <Room />
+        },
 
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
         { path: '*', element: <PageResult code={404} /> }
-
-        //   )
-        // }
       ]
     }
   ])
+
   return routeElements
 }
