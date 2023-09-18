@@ -1,4 +1,18 @@
-export type User = {
-  id: number
-  name: string
+export type UserInfo = {
+  _id: string
+  _destroy: boolean
+  fullName: string
+  avatarUrl: string
+  coverUrl: string
+  email: string
+  phoneNumber: string
+  referralCode: string
+  accountStatus: string
+  emailStatus: string
+  phoneStatus: string
+  isMentor: boolean
+  role: string[]
+  createdAt: string
+  updatedAt: string
+  refreshToken: string
 }

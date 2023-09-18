@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import css from './Header.module.scss'
 type Props = {
   children: React.ReactNode
-  title?: string
+  title?: string | React.ReactNode
   titleGoBack?: string
   titleSize?: number
   titleStyle?: React.CSSProperties
@@ -10,7 +10,7 @@ type Props = {
   titleTextLink?: string
   titleHref?: string
   boxLink?: boolean
-  desc?: string
+  desc?: string | React.ReactNode
   descSize?: number
   descWidth?: string | number
   padding?: string | number

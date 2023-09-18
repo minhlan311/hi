@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef, useEffect, useState } from 'react'
-import { DatePicker, Form, Input, notification } from 'antd'
+import { DatePicker, Form, Input } from 'antd'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { MentorForm as TMentorForm } from '../../constants'
 import { ROLE } from '../../Roles/constants'
 import { useNavigate } from 'react-router-dom'
+import openNotification from '@/components/Notification'
 
 const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   const [userId, setUserId] = useState<string>('')
@@ -16,7 +17,6 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   formRef.current = form
   useEffect(() => {
     ids(userId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const registerAccountMutation = useMutation({
@@ -28,19 +28,16 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
       onSuccess: (data) => {
         setUserId(data?.data?._id)
         onFinishs(values)
-        if (roles === ROLE.STUDENT) {
-          navigate('/login')
-          notification.open({
-            type: 'success',
-            message: 'Thông báo',
-            description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
-          })
-          return
-        }
+        navigate('/login')
+        openNotification({
+          status: 'success',
+          message: 'Thông báo',
+          description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
+        })
       },
       onError: (error: any) => {
-        notification.open({
-          type: 'error',
+        openNotification({
+          status: 'error',
           message: 'Thông báo',
           description: error?.response?.data?.message
         })
@@ -87,7 +84,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
       </Form.Item>
 
       <Form.Item<TMentorForm>
-        label='Password'
+        label='Mật khẩu'
         name='password'
         rules={[
           {
@@ -107,7 +104,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         <Input.Password placeholder='Nhập mật khẩu' size='large' />
       </Form.Item>
       <Form.Item<TMentorForm>
-        label='confirmPassword'
+        label='Nhập lại mật khẩu'
         name='confirmPassword'
         dependencies={['password']}
         hasFeedback
@@ -157,7 +154,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         name='birthDay'
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
-        <DatePicker size='large' />
+        <DatePicker size='large' format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' placement='topLeft' />
       </Form.Item>
     </Form>
   )

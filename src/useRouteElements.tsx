@@ -18,6 +18,8 @@ import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import Room from './pages/Room/index.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
@@ -150,6 +152,19 @@ export default function useRouteElements() {
               <Courses />
             </Layout>
           )
+        },
+        {
+          path: PATH.PEDAGOGYS,
+          element: (
+            <AuthLayout
+              title='Cập nhật thông tin'
+              imgSize={14}
+              titleForm='Cập nhật thông tin'
+              descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
+            >
+              <FormUpdateProfile />
+            </AuthLayout>
+          )
         }
       ]
     },
@@ -163,6 +178,14 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Trang chủ'>
               <HomePage />
+            </Layout>
+          )
+        },
+        {
+          path: PATH.PROFILES_DETAIL,
+          element: (
+            <Layout user={profile} title=''>
+              <ProfilePage />
             </Layout>
           )
         },

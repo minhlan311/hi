@@ -1,0 +1,19 @@
+.countNum {
+  padding: 85px 18vw;
+  .count {
+    color: var(--white);
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .desc {
+      font-size: 18px;
+      max-width: 150px;
+      text-align: center;
+    }
+    .line {
+      border: 2px solid var(--red);
+      width: 100px;
+    }
+  }
+}
