@@ -8,6 +8,8 @@ export const ENDPOINT = {
   MENTOR: '/mentorinfo',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
+  USER_DETAIL_PATH: '/users/',
+
   GET_USER_INFO: '/users/',
   UPDATE_USER_INFO: '/users/',
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::

@@ -22,7 +22,7 @@ const AvatarDropMenu = (props: Props) => {
   const items: any[] = [
     {
       key: 'profiles',
-      label: <Link to='/profiles'>Trang cá nhân</Link>
+      label: <Link to={'/profiles/' + userData._id}>Trang cá nhân</Link>
     },
     {
       key: 'profiles',
