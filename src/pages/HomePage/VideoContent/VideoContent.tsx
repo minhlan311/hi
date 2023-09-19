@@ -1,5 +1,6 @@
 import './VideoContent.scss'
 import ButtonShake from './components/ButtonShake/ButtonShake'
+import imac from '@/assets/images/backgrounds/imac.jpg'
 
 export default function VideoContent() {
   return (
@@ -57,7 +58,9 @@ export default function VideoContent() {
             </div>
           </div>
           <div className='video-content'>
+            <img className='img-mac' src={imac} alt='' />
             <iframe
+              className='iframe'
               width='100%'
               height='100%'
               src='https://www.youtube.com/embed/U2rB68ouwJY?si=uVDSO-wAO6y8Rgc_'
