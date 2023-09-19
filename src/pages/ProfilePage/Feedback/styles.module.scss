@@ -1,3 +1,5 @@
+@import '../../../components/GlobalStyles/responsive.scss';
+
 .fbMain {
   text-align: center;
   height: 310px;
@@ -5,5 +7,14 @@
   width: 100%;
   .fbItem {
     max-width: 50vw;
+    @include respond-to(sm) {
+      max-width: 100%;
+    }
+    @include respond-to(xs) {
+      max-width: 100%;
+    }
+    @include respond-to(md) {
+      max-width: 100%;
+    }
   }
 }

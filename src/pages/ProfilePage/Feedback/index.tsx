@@ -21,7 +21,7 @@ const Feedback = () => {
       title: 'Giảng viên nhiệt tình',
       desc: 'Giảng viên này rất nhiệt tình trong việc giảng dạy. Anh ấy luôn sẵn sàng giải đáp mọi thắc mắc của sinh viên và tạo điều kiện tốt để học tập.',
       assess: 4.5,
-      createdAt: '2023-09-18'
+      createdAt: '2023-09-18',
     },
     {
       _id: '2',
@@ -30,7 +30,7 @@ const Feedback = () => {
       title: 'Kiến thức sâu rộng',
       desc: 'Giảng viên này có kiến thức sâu rộng về môn học. Bài giảng của cô ấy luôn rất chi tiết và dễ hiểu, giúp sinh viên nắm vững kiến thức.',
       assess: 4.8,
-      createdAt: '2023-09-18'
+      createdAt: '2023-09-18',
     },
     {
       _id: '3',
@@ -39,7 +39,7 @@ const Feedback = () => {
       title: 'Thái độ không tốt',
       desc: 'Giảng viên này thường xuyên đến trễ và không nhiệt tình trong việc giảng dạy. Điều này khiến cho việc học tập trở nên khó khăn hơn.',
       assess: 2.0,
-      createdAt: '2023-09-18'
+      createdAt: '2023-09-18',
     },
     {
       _id: '4',
@@ -48,7 +48,7 @@ const Feedback = () => {
       title: 'Giảng viên xuất sắc',
       desc: 'Giảng viên này thực sự xuất sắc trong việc truyền đạt kiến thức. Anh ấy luôn tạo ra môi trường học tập tích cực và thú vị.',
       assess: 5.0,
-      createdAt: '2023-09-18'
+      createdAt: '2023-09-18',
     },
     {
       _id: '5',
@@ -57,8 +57,8 @@ const Feedback = () => {
       title: 'Trình độ chuyên môn kém',
       desc: 'Giảng viên này thường xuyên mắc sai sót trong việc giảng dạy và không có kiến thức sâu rộng về môn học. Không nên chọn môn học này với cô ấy.',
       assess: 1.5,
-      createdAt: '2023-09-18'
-    }
+      createdAt: '2023-09-18',
+    },
   ]
   const [isHover, setHover] = useState(false)
 

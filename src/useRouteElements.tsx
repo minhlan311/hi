@@ -59,7 +59,7 @@ export default function useRouteElements() {
             >
               <Login />
             </AuthLayout>
-          )
+          ),
         },
         {
           path: PATH.REGISTER,
@@ -72,7 +72,7 @@ export default function useRouteElements() {
             >
               <Register />
             </AuthLayout>
-          )
+          ),
         },
         {
           path: PATH.FORGOT_PASS,
@@ -85,9 +85,9 @@ export default function useRouteElements() {
             >
               <ForgotPassword />
             </AuthLayout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // mentor
@@ -96,7 +96,7 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.MENTOR_PAGE,
-          element: <Navigate to={PATH.MENTOR_COURSES} />
+          element: <Navigate to={PATH.MENTOR_COURSES} />,
         },
         {
           path: PATH.MENTOR_QUESTIONS,
@@ -104,7 +104,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Danh sách câu hỏi'>
               <MentorPedagogies user={profile} />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_COURSES,
@@ -112,7 +112,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý khóa học'>
               <MentorCourses />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_DOCUMENTS,
@@ -120,7 +120,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý tài liệu'>
               <MentorDocuments />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_EXAMS,
@@ -128,7 +128,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý đề thi thử'>
               <MentorExams />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_EXAMS_DETAIL,
@@ -136,9 +136,9 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Danh sách câu hỏi'>
               <MentorQuestions />
             </MentorLayout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // private
@@ -151,7 +151,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Trang chủ'>
               <Courses />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.PEDAGOGYS,
@@ -164,9 +164,9 @@ export default function useRouteElements() {
             >
               <FormUpdateProfile />
             </AuthLayout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // public
@@ -179,27 +179,27 @@ export default function useRouteElements() {
             <Layout user={profile} title='Trang chủ'>
               <HomePage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.PROFILES_DETAIL,
           element: (
             <Layout user={profile} title=''>
-              <ProfilePage />
+              <ProfilePage profile={profile} />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.ROOM_LIVE,
           index: true,
-          element: <Room />
+          element: <Room />,
         },
 
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
-        { path: '*', element: <PageResult code={404} /> }
-      ]
-    }
+        { path: '*', element: <PageResult code={404} /> },
+      ],
+    },
   ])
 
   return routeElements

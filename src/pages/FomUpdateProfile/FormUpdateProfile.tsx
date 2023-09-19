@@ -20,43 +20,44 @@ export default function FormUpdateProfile() {
 
   const { isLoading, data } = useQuery({
     queryKey: ['userInfo'],
-    queryFn: () => userApi.getInfoUser(id!)
+    queryFn: () => userApi.getUserDetail(id!),
   })
 
   console.log(data, 'dataaaaaaaaaaaaaaaaaa')
 
   const mutation = useMutation((body: TMentorForm) => {
-    return userApi.updateProfileUser(body)
+    return userApi.updateMentor(body)
   })
 
   const onFinish = (values: TMentorForm) => {
     console.log(values, 'values')
 
     const imageCer = values?.certificate?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url
+      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
     )
     const imageAfter = values?.imageAfter?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url
+      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
     )
     const imageBefore = values?.imageBefore?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url
+      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
     )
     const otherDilopma = values?.otherDilopma?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url
+      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
     )
     const dilopma = values?.dilopma?.fileList?.map((item: any) => ({
       dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-      schoolName: values.schoolName
+      schoolName: values.schoolName,
     }))
 
     mutation.mutate(
       {
         ...values,
+        // _id: id,
         certificate: imageCer,
         imageAfter: imageAfter,
         imageBefore: imageBefore,
         otherDilopma: otherDilopma,
-        dilopma: dilopma
+        dilopma: dilopma,
       },
       {
         onSuccess: (data) => {
@@ -64,11 +65,11 @@ export default function FormUpdateProfile() {
             openNotification({
               status: 'success',
               message: 'Thông báo',
-              description: 'Update thành công thông tin!'
+              description: 'Update thành công thông tin!',
             })
           }
-        }
-      }
+        },
+      },
     )
   }
 
@@ -80,7 +81,7 @@ export default function FormUpdateProfile() {
     form.setFieldsValue({
       fullName: data?.data?.fullName,
       email: data?.data?.email,
-      phoneNumber: data?.data?.phoneNumber
+      phoneNumber: data?.data?.phoneNumber,
     })
   }, [form, data])
 
@@ -112,7 +113,7 @@ export default function FormUpdateProfile() {
           rules={[
             { required: true, message: 'Vui lòng nhập số căn cước của bạn' },
             { min: 12, message: 'Số căn cước chưa đúng định dạng' },
-            { max: 12, message: 'Số căn cước chưa đúng định dạng' }
+            { max: 12, message: 'Số căn cước chưa đúng định dạng' },
           ]}
         >
           <Input type='number' size='large' placeholder='Nhập số căn cước của bạn' />
@@ -123,12 +124,12 @@ export default function FormUpdateProfile() {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập email'
+              message: 'Vui lòng nhập email',
             },
             {
               pattern: REGEX_PATTERN.regexEmail,
-              message: `Email không hợp lệ!`
-            }
+              message: `Email không hợp lệ!`,
+            },
           ]}
         >
           <Input size='large' placeholder='Nhập email của bạn' />
@@ -146,7 +147,7 @@ export default function FormUpdateProfile() {
                 { value: 'Cử nhân', label: 'Cử nhân' },
                 { value: 'Thạc sĩ', label: 'Thạc sĩ' },
                 { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
-                { value: 'Phó giáo sư', label: 'Phó giáo sư' }
+                { value: 'Phó giáo sư', label: 'Phó giáo sư' },
               ]}
             />
           </Form.Item>
@@ -157,12 +158,12 @@ export default function FormUpdateProfile() {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập số điện thoại'
+              message: 'Vui lòng nhập số điện thoại',
             },
             {
               pattern: REGEX_PATTERN.regexPhoneNumber,
-              message: `SĐT không hợp lệ!`
-            }
+              message: `SĐT không hợp lệ!`,
+            },
           ]}
         >
           <Input type='number' placeholder='Nhập số điện thoại' size='large' />
