@@ -63,7 +63,7 @@ export default function VideoContent() {
               className='iframe'
               width='100%'
               height='100%'
-              src='https://www.youtube.com/embed/U2rB68ouwJY?si=uVDSO-wAO6y8Rgc_'
+              src='https://www.youtube.com/embed/6-uzl3hLfLM?si=j_FALjAZUMf5uV8B'
               title='YouTube video player'
               allow='accelerometer;fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
             ></iframe>
