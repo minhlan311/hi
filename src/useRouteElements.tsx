@@ -17,7 +17,6 @@ import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
-import Room from './pages/Room/index.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
 
@@ -194,7 +193,6 @@ export default function useRouteElements() {
           index: true,
           element: <Room />,
         },
-
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
         { path: '*', element: <PageResult code={404} /> },

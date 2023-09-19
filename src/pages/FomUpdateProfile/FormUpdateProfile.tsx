@@ -15,6 +15,10 @@ import UploadOtherDilopma from './UploadFIle/UploadOtherDIlopma'
 import { useParams } from 'react-router-dom'
 
 export default function FormUpdateProfile() {
+  const getImageUrls = (fileList = [{ response: { url: String } }]) => {
+    return fileList.map((item) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url)
+  }
+
   const { id } = useParams()
   const [form] = Form.useForm()
 
@@ -32,18 +36,13 @@ export default function FormUpdateProfile() {
   const onFinish = (values: TMentorForm) => {
     console.log(values, 'values')
 
-    const imageCer = values?.certificate?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    )
-    const imageAfter = values?.imageAfter?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    )
-    const imageBefore = values?.imageBefore?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    )
-    const otherDilopma = values?.otherDilopma?.fileList?.map(
-      (item: any) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    )
+    const imageCer = getImageUrls(values?.certificate?.fileList)
+    const imageAfter = getImageUrls(values?.imageAfter?.fileList)
+    const imageBefore = getImageUrls(values?.imageBefore?.fileList)
+    const otherDilopma = values?.otherDilopma?.fileList?.map((item: any) => ({
+      dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
+      schoolName: null
+    }))
     const dilopma = values?.dilopma?.fileList?.map((item: any) => ({
       dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
       schoolName: values.schoolName,
