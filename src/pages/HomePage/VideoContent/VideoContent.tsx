@@ -1,83 +1,69 @@
-import ballSVG from '../../../assets/icons/ball.svg'
-import birdSVG from '../../../assets/icons/bird.svg'
-import pencilSVG from '../../../assets/icons/pencil.svg'
 import './VideoContent.scss'
-import IconCheck from './components/IconCheck/IconCheck'
 import ButtonShake from './components/ButtonShake/ButtonShake'
+import imac from '@/assets/images/backgrounds/imac.jpg'
 
 export default function VideoContent() {
-  const ArrayDesc = [
-    {
-      id: 1,
-      name: 'Linh động thời gian, địa điểm',
-      desc: 'Linh hoạt thời gian - phù hợp với người bận rộn'
-    },
-    {
-      id: 2,
-      name: 'Đào tạo 1:1',
-      desc: 'Một giảng viên kèm 1 học viên - giao tiếp sửa lỗi liên tục'
-    },
-    {
-      id: 3,
-      name: 'Đội ngũ giảng viên giàu kinh nghiệm',
-      desc: '100% giảng viên đạt 7.0+ IELTS/850+ TOEIC hoặc có bằng cấp tương đương'
-    },
-    {
-      id: 4,
-      name: 'Lộ trình rõ ràng',
-      desc: 'Lộ trình cá nhân hóa - thiết kế bài giảng theo nhu cầu'
-    },
-    {
-      id: 5,
-      name: 'Phương pháp học hiệu qủa',
-      desc: 'X5 hiệu quả với các phương pháp tiên tiến'
-    }
-  ]
-
   return (
     <div className='video-content-container'>
       <div className='div-title'>
-        <p className='desc-steps'>GIẢI PHÁP HOÀN HẢO</p>
-        <h2>UCAM THIẾT KẾ RIÊNG CHO BẠN</h2>
+        <p className='desc-steps-top'>GIẢI PHÁP HOÀN HẢO</p>
+        <div className='ucam-desc'>
+          <h2>UCAM THIẾT KẾ RIÊNG CHO BẠN</h2>
+        </div>
+        <div className='hr-class' />
       </div>
       <div className='container-1920px'>
-        <div className='pencilSVG'>
-          <img src={pencilSVG} alt='' />
-        </div>
-        <div className='ballSVG'>
-          <img src={ballSVG} alt='' />
-        </div>
-        <div className='birdSVG'>
-          <img src={birdSVG} alt='' />
-        </div>
         <div className='content-div-container'>
           <div className='content'>
-            <div className='content-col'></div>
-            <div className='content-col flex-steps'>
-              <div className='steps'>
-                <IconCheck />
-                <IconCheck marginTop={'45px'} />
-                <IconCheck marginTop={'70px'} />
-                <IconCheck marginTop={'75px'} />
-                <IconCheck marginTop={'70px'} />
+            <div className='div-inContent'>
+              <div className='left'>01</div>
+              <div className='mid'>
+                {' '}
+                <strong>Linh hoạt thời gian</strong> - phù hợp với người bận rộn
               </div>
-              <div className='content-steps'>
-                {ArrayDesc?.map((item) => (
-                  <>
-                    <div>
-                      <p className='title-steps'> {item.name}</p>
-                      <p className='desc-steps'>{item.desc}</p>
-                    </div>
-                  </>
-                ))}
+              <div className='right'></div>
+            </div>
+
+            <div className='div-inContent-ves'>
+              <div className='left-ves'></div>
+              <div className='mid'>
+                {' '}
+                <strong>1 Giảng viên, kèm 1 học viên</strong> - giao tiếp sửa lỗi liên tục
               </div>
+              <div className='right-ves'>02</div>
+            </div>
+            <div className='div-inContent'>
+              <div className='left'>03</div>
+              <div className='mid'>
+                100% Giảng viên đạt
+                <strong> 7.0+ ITELT/850+ TOEIC </strong>
+                hoặc có bằng cấp tương đương
+              </div>
+              <div className='right'></div>
+            </div>
+            <div className='div-inContent-ves'>
+              <div className='left-ves'></div>
+              <div className='mid'>
+                Lộ trình <strong>cá nhân hóa</strong> - thiết kế bài giảng theo nhu cầu
+              </div>
+              <div className='right-ves'>04</div>
+            </div>
+            <div className='div-inContent'>
+              <div className='left'>05</div>
+              <div className='mid'>
+                {' '}
+                X5 hiệu quả với các <strong>phương pháp tiên tiến</strong>
+              </div>
+              <div className='right'></div>
             </div>
           </div>
           <div className='video-content'>
+            <img className='img-mac' src={imac} alt='' />
             <iframe
+              className='iframe'
               width='100%'
               height='100%'
-              src='https://www.youtube.com/embed/U2rB68ouwJY?si=uVDSO-wAO6y8Rgc_'
+              src='https://www.youtube.com/embed/6-uzl3hLfLM?si=j_FALjAZUMf5uV8B'
               title='YouTube video player'
               allow='accelerometer;fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
             ></iframe>
