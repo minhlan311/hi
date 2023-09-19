@@ -389,7 +389,7 @@ window.addEventListener('load', () => {
 
       await startWebcamAgain(videoElement)
 
-      // socket.emit('turnOnVideo', { to: socketId, isVideo: true, room: event.uuid, isHost: isHost })
+      // socket.emit('turnOnVideo', { to: socketId, isVideo: true, room: room.id, isHost: isHost })
     } else {
       //turn off webcam
       myStream.getVideoTracks()[0].enabled = false
@@ -399,7 +399,7 @@ window.addEventListener('load', () => {
       // close webcam
       // myStream.getVideoTracks()[0].stop()
       isTurnOnVideo = false
-      // socket.emit('turnOffVideo', { to: socketId, isVideo: false, room: event.uuid, isHost: isHost })
+      // socket.emit('turnOffVideo', { to: socketId, isVideo: false, room: room.id, isHost: isHost })
     }
 
     broadcastNewTracks(myStream, 'video')
@@ -606,7 +606,7 @@ window.addEventListener('load', () => {
         socket.emit('audio', {
           audio: averageAmplitude,
           to: socketId,
-          room: event.uuid,
+          room: room.id,
           userId: user.id,
           isHost: user.id === room.host_id
         })
@@ -640,7 +640,7 @@ window.addEventListener('load', () => {
           sender: socketId,
           isHost: isHost,
           user: user,
-          room: event.uuid
+          room: room.id
         })
         pc.push(data.socketId)
         init(true, data.socketId, data.isHost, data.user)
@@ -690,9 +690,9 @@ window.addEventListener('load', () => {
           const id = e.target.getAttribute('data')
 
           if (e.target.classList.contains('fa-microphone')) {
-            socket.emit('unmuted', { to: id, room: event.uuid })
+            socket.emit('unmuted', { to: id, room: room.id })
           } else {
-            socket.emit('muted', { to: id, room: event.uuid })
+            socket.emit('muted', { to: id, room: room.id })
           }
         }
 
@@ -700,7 +700,7 @@ window.addEventListener('load', () => {
           if (!isActiveVideo) {
             const id = e.target.getAttribute('data')
 
-            if (room.host_id === user.id) {
+            if (room.host_id === user._id) {
               const cardHost = document.getElementById('card-host')
               const cardUser = document.getElementById(id)
               cardUser.classList.add('h-100')
@@ -719,7 +719,7 @@ window.addEventListener('load', () => {
               idActive = id
               socket.emit('onActiveVideo', {
                 to: id,
-                room: event.uuid
+                room: room.id
               })
             }
           } else {
@@ -786,7 +786,7 @@ window.addEventListener('load', () => {
 
             socket.emit('unActiveVideo', {
               to: idActive,
-              room: event.uuid
+              room: room.id
             })
             isActiveVideo = false
           } else {
@@ -823,11 +823,11 @@ window.addEventListener('load', () => {
         document.getElementById('toggle-hand').addEventListener('click', function () {
           if (onHand) {
             this.children[0].classList.remove('text-warning')
-            socket.emit('unHand', { to: socketId, room: event.uuid })
+            socket.emit('unHand', { to: socketId, room: room.id })
             onHand = false
           } else {
             this.children[0].classList.add('text-warning')
-            socket.emit('onHand', { to: socketId, room: event.uuid })
+            socket.emit('onHand', { to: socketId, room: room.id })
             onHand = true
           }
         })
