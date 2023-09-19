@@ -191,7 +191,7 @@ export default function useRouteElements() {
         {
           path: PATH.ROOM_LIVE,
           index: true,
-          element: <Room />,
+          element: <></>,
         },
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },

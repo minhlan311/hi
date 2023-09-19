@@ -13,4 +13,7 @@ export interface UserState {
   role: string[]
   refreshToken: string
   updatedById: string
+  cccd?: string
+  educationType?: string
+  birthDay: string
 }
