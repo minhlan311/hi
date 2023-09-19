@@ -44,7 +44,7 @@ export default function VideoContent() {
             <div className='div-inContent-ves'>
               <div className='left-ves'></div>
               <div className='mid'>
-                <strong>Linh hoạt thời gian</strong> - phù hợp với người bận rộn
+                Lộ trình <strong>cá nhân hóa</strong> - thiết kế bài giảng theo nhu cầu
               </div>
               <div className='right-ves'>04</div>
             </div>
@@ -52,7 +52,7 @@ export default function VideoContent() {
               <div className='left'>05</div>
               <div className='mid'>
                 {' '}
-                <strong>Linh hoạt thời gian</strong> - phù hợp với người bận rộn
+                X5 hiệu quả với các <strong>phương pháp tiên tiến</strong>
               </div>
               <div className='right'></div>
             </div>
