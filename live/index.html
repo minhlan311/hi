@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Phong hoc</title>
+
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous">
+    <link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous">
+    <link rel='stylesheet' href='./live.css' type="text/css">
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.js"
+      integrity="sha512-jMNwWSmjje4fjYut9MBGKXw5FZA6D67NHAuC9szpjbbjg51KefquNfvn4DalCbGfkcv/jHsHnPo1o47+8u4biA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src='./rtc.js'></script>
+    <script type="module" src='./events.js'></script>
+    <script src='./autolink.js'></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js"
+      integrity="sha256-2qQheewaqnZlXJ3RJRghVUwD/3fD9HNqxh4C+zvgmF4="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script
+      src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js'></script>
+    <script
+      src='https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.js'></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <nav
+        class="navbar control bg-dark rounded-0 d-print-none d-flex justify-content-end">
+        <div class="pull-center text-center room-comm d-flex" hidden>
+          <!-- <button class="btn btn-sm rounded-0 btn-no-effect" id='goLive' title="giáo viên về với vị trí của mình">
+                    <i class="fas fa-crosshairs text-white control-item"></i>
+                    <a class="text-white d-block">Về vị trí</a>
+                </button> -->
+
+          <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-video'
+            title="Hide Video">
+            <i class="fa fa-video text-white control-item"></i>
+            <a class="text-white d-block">Camera</a>
+          </button>
+
+          <button class="btn btn-sm rounded-0 btn-no-effect">
+            <i class="fa fa-microphone-alt text-white control-item"
+              id='toggle-mute' title="Mute"></i>
+            <a class="text-white d-block"> Micro</a>
+          </button>
+
+          <button class="btn btn-sm rounded-0 btn-no-effect">
+            <i class="fa fa-desktop text-white control-item" id='share-screen'
+              title="Share screen"></i>
+            <a class="text-white d-block">Chia sẻ</a>
+          </button>
+        </div>
+        <!-- @if($room->host_id !== auth()->user()->id) -->
+        <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-hand'
+          title="handel hand">
+          <i class="fa fa-hand-paper text-white control-item" id="hand"></i>
+          <a class="text-white d-block">Giơ tay</a>
+        </button>
+        <!-- @endif -->
+        <button class="btn btn-sm text-white pull-right btn-no-effect"
+          id='toggle-chat-pane'>
+          <i class="fa fa-comment text-white control-item"></i>
+          <span class="badge badge-danger very-small font-weight-lighter"
+            id='new-chat-notification'
+            hidden>mới</span>
+          <a class="text-white d-block">Chat</a>
+        </button>
+        <!-- @if ($room->host_id === auth()->user()->id) -->
+        <!-- <button class="btn btn-sm rounded-0 btn-no-effect text-white control-item" id='record-video' title="Record">
+                <i class="fa fa-dot-circle text-white" id="record-icon"></i>
+                <a class="text-white d-block">Ghi hình</a>
+            </button>
+            <button data-toggle="modal" data-target="#modalUser"
+                class="btn btn-sm rounded-0 btn-no-effect text-white control-item" id='handl_acp' title="Hàng chờ">
+                <i class="fas fa-user-alt text-white"></i>
+                <span class="badge badge-danger very-small font-weight-lighter" id='countUser' hidden></span>
+                <a class="text-white d-block">Hàng chờ</a>
+            </button> -->
+
+        <!-- @endif -->
+        <!-- <button
+          class="btn btn-sm rounded-0 btn-no-effect text-white control-item"
+          id='handl_acp' title="Hàng chờ">
+          <i class="fas fa-user-alt text-white"></i>
+          <span class="badge badge-danger very-small font-weight-lighter"
+            id='countUser'></span>
+          <a class="text-white d-block"><span id="count-user">0</span> người</a>
+        </button> -->
+      </nav>
+      <div class="container-fluid room-comm" hidden id="room-comm">
+        <div class="row">
+          <video class="local-video mirror-mode" id='local' volume='0' autoplay
+            muted></video>
+        </div>
+        <div class="row">
+          <div class="col-md-12" id="main">
+            <div class="row mx-0">
+              <div class="col-md-12" id="guest">
+                <div class="row mx-0 my-2" id="videos">
+                  <video
+                    class="local-video remote-video video-{{ auth()->user()->id }}"
+                    volume='0'
+                    autoplay id="video-{{ auth()->user()->id }}" muted></video>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-3 chat-col " style="background: rgb(65 65 67)"
+            id='chat-pane'>
+            <div class="row">
+            </div>
+            <div id='chat-messages'></div>
+            <form>
+              <div class="input-group">
+                <textarea id="chat-input"
+                  class="form-control rounded-0 chat-box border-info" rows='2'
+                  placeholder="Tin nhắn..."></textarea>
+                <div class="input-group-append" id='chat-input-btn'>
+                  <button type="button"
+                    class="btn btn-dark rounded-0 border-info btn-no-effect">Gửi</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="checkDevice" class>
+      <div class="device row">
+        <div class="col-md-6">
+          <video id="video-demo"
+            poster="https://img.freepik.com/premium-photo/happy-teen-girl-use-computer-video-call-listen-webinar-headphones-online-education-school-girl-portrait-with-laptop-horizontal-poster-banner-header-with-copy-space_545934-31328.jpg"
+            muted autoplay></video>
+        </div>
+        <div class="col-md-6 d-flex align-self-center">
+          <form>
+            <div class="form-group">
+              <label for="mic-select" class="text-white">Chọn thiết bị audio</label>
+              <select class="form-control" id="mic-select"></select>
+            </div>
+            <div class="form-group">
+              <label for="webcam-select" class="text-white">Chọn thiết bị webcam</label>
+              <select class="form-control" id="webcam-select"></select>
+            </div>
+            <button type="button" class="btn btn-primary" id="startCall">Bắt đầu
+              ngay</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

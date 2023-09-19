@@ -17,7 +17,6 @@ import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
-import Room from './pages/Room/index.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
 
@@ -188,11 +187,6 @@ export default function useRouteElements() {
               <ProfilePage />
             </Layout>
           )
-        },
-        {
-          path: PATH.ROOM_LIVE,
-          index: true,
-          element: <Room />
         },
 
         { path: '/404', element: <PageResult code={404} /> },
