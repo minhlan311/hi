@@ -155,8 +155,8 @@ window.addEventListener('load', () => {
         if (isHost) {
           document.getElementById(`video-host`).srcObject = str
         } else {
-          if (document.getElementsByClassName(`${user.id}-video`).length) {
-            document.getElementsByClassName(`${user.id}-video`)[0].srcObject = str
+          if (document.getElementsByClassName(`${user._id}-video`).length) {
+            document.getElementsByClassName(`${user._id}-video`)[0].srcObject = str
           } else {
             if (user.id !== 1779) {
               let newVid = document.createElement('video')
@@ -165,7 +165,7 @@ window.addEventListener('load', () => {
               newVid.playsInline = true
               newVid.srcObject = str
               newVid.autoplay = true
-              newVid.className = `remote-video mirror-mode ${user.id}-video`
+              newVid.className = `remote-video mirror-mode ${user._id}-video`
               let nameDiv = document.createElement('p')
               nameDiv.className = 'username'
               nameDiv.innerHTML = `${user.fullName}`
