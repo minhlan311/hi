@@ -8,16 +8,16 @@ const categoryApi = {
   getCategories(filterQuery?: any, options?: any, body?: any) {
     const option = {
       pagination: false,
-      sort: { createdAt: -1 }
+      sort: { updatedAt: 1 },
     }
 
     const payload = {
       filterQuery: filterQuery,
-      options: options || option
+      options: options || option,
     }
 
     return http.post<SuccessResponse<CategoryState[]>>(ENDPOINT.FIND_CATEGORIES_PATH, payload || body)
-  }
+  },
 }
 
 export default categoryApi
