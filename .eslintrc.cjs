@@ -6,7 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'eslint-config-prettier',
-    'prettier'
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
   parser: '@typescript-eslint/parser',
@@ -24,8 +24,8 @@ module.exports = {
         useTabs: false,
         singleQuote: true,
         printWidth: 120,
-        jsxSingleQuote: true
-      }
+        jsxSingleQuote: true,
+      },
     ],
     'padding-line-between-statements': [
       'warn',
@@ -35,5 +35,5 @@ module.exports = {
       { blankLine: 'always', prev: 'block-like', next: '*' },
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
-  }
+  },
 }

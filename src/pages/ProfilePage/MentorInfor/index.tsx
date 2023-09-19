@@ -17,21 +17,40 @@ const MentorInfor = ({ user }: Props) => {
   const data = [
     { title: 'Thông tin về tôi', desc: 'Nội dung thông tin' },
     { title: 'Thành tích', desc: 'Thành tích...' },
-    { title: 'Phong cách giảng dạy', desc: 'Phong cách...' }
+    { title: 'Phong cách giảng dạy', desc: 'Phong cách...' },
   ]
+
   return (
-    <Header padding={'25px 0 50px 0'}>
+    <Header
+      title={
+        <Divider>
+          <VscDebugBreakpointLog />
+        </Divider>
+      }
+      desc={<h3>GIỚI THIỆU CHUNG</h3>}
+      padding={'30px 0 50px 0'}
+      size='sm'
+    >
       <div className={css.card}>
         <Row>
-          <Col span={24} md={10} className={css.avt}>
-            <img src={user.avatarUrl ? user.avatarUrl : gender === 'male' ? malePic : famalePic} alt='avt' />
+          <Col span={24} md={7} xl={10} className={css.avt}>
+            <img
+              src={
+                user.avatarUrl
+                  ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
+                  : gender === 'male'
+                  ? malePic
+                  : famalePic
+              }
+              alt='avt'
+            />
           </Col>
-          <Col span={24} md={14}>
+          <Col span={24} md={17} xl={14}>
             <div className={css.infor}>
               <Space direction='vertical' className={'sp100'}>
                 <Row justify='space-between'>
                   <Col span={24} md={8}>
-                    <Space size='large'>
+                    <Space>
                       <div className={css.icon}>
                         <FaSchool />
                       </div>
@@ -42,7 +61,7 @@ const MentorInfor = ({ user }: Props) => {
                     </Space>
                   </Col>
                   <Col span={24} md={12}>
-                    <Space size='large'>
+                    <Space>
                       <div className={css.icon}>
                         <MdSchool />
                       </div>
@@ -56,7 +75,7 @@ const MentorInfor = ({ user }: Props) => {
                 <Divider />
                 <Row justify='space-between'>
                   <Col span={24} md={8}>
-                    <Space size='large'>
+                    <Space>
                       <div className={css.icon}>
                         <MdEmail />
                       </div>
@@ -69,7 +88,7 @@ const MentorInfor = ({ user }: Props) => {
                     </Space>
                   </Col>
                   <Col span={24} md={12}>
-                    <Space size='large'>
+                    <Space>
                       <div className={css.icon}>
                         <FaEarthAsia />
                       </div>
@@ -87,27 +106,16 @@ const MentorInfor = ({ user }: Props) => {
           </Col>
         </Row>
       </div>{' '}
-      <Header
-        title={
-          <Divider>
-            <VscDebugBreakpointLog />
-          </Divider>
-        }
-        desc={<h3>GIỚI THIỆU CHUNG</h3>}
-        padding={'30px 0 50px 0'}
-        size='sm'
-      >
-        <SliderCustom dataLength={data.length} arrows autoHitdenArrow slidesToScroll={1} slidesToShow={1}>
-          {data.map((item, id) => (
-            <Card key={id}>
-              <Space direction='vertical'>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-              </Space>
-            </Card>
-          ))}
-        </SliderCustom>
-      </Header>
+      <SliderCustom dataLength={data.length} arrows autoHitdenArrow slidesToScroll={1} slidesToShow={1}>
+        {data.map((item, id) => (
+          <Card key={id}>
+            <Space direction='vertical'>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </Space>
+          </Card>
+        ))}
+      </SliderCustom>
     </Header>
   )
 }
