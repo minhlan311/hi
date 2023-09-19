@@ -1,24 +1,71 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { REGEX_PATTERN } from '@/constants/utils'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { MentorForm as TMentorForm } from '../Auth/Register/constants'
 import './FormUpdateProfile.scss'
-import { Button, DatePicker, Form, Input, Select } from 'antd'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { Button, Steps, theme } from 'antd'
+import { useMutation } from '@tanstack/react-query'
 import userApi from '@/apis/user.api'
-import UploadCMNDAfter from './UploadFIle/UploadCMNDAfter'
-import UploadCMNDBefore from './UploadFIle/UploadCMNDBefore'
+import UpdateProfileSteps1 from './Step1/UpdateProfileSteps1'
+import UploadProfileSteps2 from './Step2/UploadProfileSteps2'
+import UploadProfileSteps3 from './Step3/UploadProfileSteps3'
+import { useNavigate } from 'react-router-dom'
 import openNotification from '@/components/Notification'
-import UploadCer from './UploadFIle/UploadCer'
-import UploadDilopma from './UploadFIle/UploadDilopma'
-import UploadOtherDilopma from './UploadFIle/UploadOtherDIlopma'
-import { useParams } from 'react-router-dom'
 
 export default function FormUpdateProfile() {
+  const navigate = useNavigate()
+  const { token } = theme.useToken()
+  const [dataStesp1, setDataStep1] = useState(null)
+  const [dataStesp2, setDataStep2] = useState(null)
+  const [dataStesp3, setDataStep3] = useState(null)
+  const [dataForm, setDataForm] = useState({})
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (dataStesp1) setCurrent(current + 1)
+  }, [dataStesp1])
+
+  useEffect(() => {
+    if (dataStesp2) setCurrent(current + 1)
+  }, [dataStesp2])
+
+  useEffect(() => {
+    if (current === 1) setDataStep3({ ...dataStesp3, check: false })
+    if (current === 0) {
+      setDataStep3(null)
+      setDataStep2(null)
+      setDataStep1(null)
+    }
+  }, [current])
+
+  const steps = [
+    {
+      title: 'Thông tin cơ bản',
+      content: <UpdateProfileSteps1 setDataValue={setDataStep1} />
+    },
+    {
+      title: 'Bằng cấp / chứng chỉ',
+      content: <UploadProfileSteps2 setDataStep2={setDataStep2} />
+    },
+    {
+      title: 'Thông tin bảo mật',
+      content: <UploadProfileSteps3 setDataStep3={setDataStep3} />
+    }
+  ]
+
+  const items = steps.map((item) => ({ key: item.title, title: item.title }))
+
+  const contentStyle: React.CSSProperties = {
+    lineHeight: '260px',
+    textAlign: 'center',
+    color: token.colorTextTertiary,
+    marginTop: 16
+  }
+
   const getImageUrls = (fileList = [{ response: { url: String } }]) => {
     return fileList.map((item) => import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url)
   }
 
+<<<<<<< Updated upstream
   const { id } = useParams()
   const [form] = Form.useForm()
 
@@ -81,13 +128,56 @@ export default function FormUpdateProfile() {
       fullName: data?.data?.fullName,
       email: data?.data?.email,
       phoneNumber: data?.data?.phoneNumber,
-    })
-  }, [form, data])
+=======
+  const imageCer = getImageUrls(dataStesp2?.certificate?.fileList)
+  const imageAfter = getImageUrls(dataStesp3?.imageAfter?.fileList)
+  const imageBefore = getImageUrls(dataStesp3?.imageBefore?.fileList)
+  const otherDilopma = dataStesp2?.otherDilopma?.fileList?.map((item: any) => ({
+    dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
+    schoolName: null
+  }))
+  const dilopma = dataStesp2?.dilopma?.fileList?.map((item: any) => ({
+    dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
+    schoolName: dataStesp2?.schoolName
+  }))
 
-  console.log(data, 'datadata')
+  useEffect(() => {
+    setDataForm({
+      ...dataForm,
+      birthDay: dataStesp1?.birthDay,
+      cccd: dataStesp1?.cccd,
+      educationType: dataStesp1?.educationType,
+      email: dataStesp1?.email,
+      fullName: dataStesp1?.fullName,
+      phoneNumber: dataStesp1?.phoneNumber,
+      certificate: imageCer,
+      dilopma: dilopma,
+      otherDilopma: otherDilopma,
+      imageAfter: imageAfter,
+      imageBefore: imageBefore
+>>>>>>> Stashed changes
+    })
+  }, [dataStesp1, dataStesp2, dataStesp3])
+
+  const mutation = useMutation((dataForm: TMentorForm) => {
+    return userApi.updateProfileUser(dataForm)
+  })
+  const updateProfileChange = (dataForm: TMentorForm) => {
+    mutation.mutate(dataForm, {
+      onSuccess: () => {
+        navigate('/')
+        openNotification({
+          status: 'success',
+          message: 'Thông báo',
+          description: 'Cập Nhật thông tin thành công !'
+        })
+      }
+    })
+  }
 
   return (
     <div className='div-form-update'>
+<<<<<<< Updated upstream
       <Form
         disabled={isLoading}
         layout='vertical'
@@ -175,21 +265,35 @@ export default function FormUpdateProfile() {
           <DatePicker size='large' format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' placement='topLeft' />
         </Form.Item>
         {data?.data.isMentor && (
+=======
+      <>
+        <Steps current={current} items={items} />
+        <div style={contentStyle}>{steps[current]?.content}</div>
+        <div style={{ marginTop: 24 }}></div>
+        {current > 0 && !dataStesp3?.check && (
+>>>>>>> Stashed changes
           <>
-            <UploadCer />
-            <UploadDilopma />
-            <UploadOtherDilopma />
-            <UploadCMNDBefore />
-            <UploadCMNDAfter />
+            <Button
+              style={{
+                position: 'absolute',
+                bottom: '3%'
+              }}
+              type='dashed'
+              onClick={() => setCurrent(current - 1)}
+            >
+              Quay lại
+            </Button>
           </>
         )}
 
-        <Form.Item>
-          <Button htmlType='submit' type='primary'>
-            Cập nhật thông tin
-          </Button>
-        </Form.Item>
-      </Form>
+        {dataStesp3?.check && current === 2 && (
+          <>
+            <Button htmlType='button' onClick={() => updateProfileChange(dataForm)} type='primary'>
+              Cập nhật thông tin
+            </Button>
+          </>
+        )}
+      </>
     </div>
   )
 }
