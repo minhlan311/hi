@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { REGEX_PATTERN } from '@/constants/utils'
 import { MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 import { Button, DatePicker, Form, Input, Select } from 'antd'
@@ -12,7 +13,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
 
   const { isLoading, data } = useQuery({
     queryKey: ['userInfo'],
-    queryFn: () => userApi.getInfoUser(id!)
+    queryFn: () => userApi.getUserDetail(id!),
   })
   console.log(data, 'dataaaaaaaaaaaaaaaaaaaaaaaaaaa')
 
@@ -22,7 +23,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
     email: data?.data?.email,
     educationType: data?.data?.educationType,
     phoneNumber: data?.data?.phoneNumber,
-    birthDay: data?.data?.birthDay
+    birthDay: data?.data?.birthDay,
   })
 
   const onFinish = (values: TMentorForm) => {
@@ -58,7 +59,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
         rules={[
           { required: true, message: 'Vui lòng nhập số căn cước của bạn' },
           { min: 12, message: 'Số căn cước chưa đúng định dạng' },
-          { max: 12, message: 'Số căn cước chưa đúng định dạng' }
+          { max: 12, message: 'Số căn cước chưa đúng định dạng' },
         ]}
       >
         <Input type='number' size='large' placeholder='Nhập số căn cước của bạn' />
@@ -69,12 +70,12 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập email'
+            message: 'Vui lòng nhập email',
           },
           {
             pattern: REGEX_PATTERN.regexEmail,
-            message: `Email không hợp lệ!`
-          }
+            message: `Email không hợp lệ!`,
+          },
         ]}
       >
         <Input size='large' placeholder='Nhập email của bạn' />
@@ -91,7 +92,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
             { value: 'Cử nhân', label: 'Cử nhân' },
             { value: 'Thạc sĩ', label: 'Thạc sĩ' },
             { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
-            { value: 'Phó giáo sư', label: 'Phó giáo sư' }
+            { value: 'Phó giáo sư', label: 'Phó giáo sư' },
           ]}
         />
       </Form.Item>
@@ -101,12 +102,12 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập số điện thoại'
+            message: 'Vui lòng nhập số điện thoại',
           },
           {
             pattern: REGEX_PATTERN.regexPhoneNumber,
-            message: `SĐT không hợp lệ!`
-          }
+            message: `SĐT không hợp lệ!`,
+          },
         ]}
       >
         <Input type='number' placeholder='Nhập số điện thoại' size='large' />
@@ -118,7 +119,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
       >
         <DatePicker
           style={{
-            width: '100%'
+            width: '100%',
           }}
           size='large'
           format={'DD/MM/YYYY'}
@@ -131,7 +132,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
           <Button
             disabled
             style={{
-              display: 'none'
+              display: 'none',
             }}
           >
             {' '}

@@ -24,25 +24,7 @@ export default function UploadOtherDilopma() {
       } else if (status === 'error') {
         message.error(`Tải file ${info.file.name} thất bại.`)
       }
-    }
-  }
-  const onFinish = (values: TMentorForm) => {
-    console.log(values, 'values222222')
-    // const imageCer = getImageUrls(values?.certificate?.fileList)
-    // const imageAfter = getImageUrls(values?.imageAfter?.fileList)
-    // const imageBefore = getImageUrls(values?.imageBefore?.fileList)
-    // const otherDilopma = values?.otherDilopma?.fileList?.map((item: any) => ({
-    //   dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    //   schoolName: null
-    // }))
-    // const dilopma = values?.dilopma?.fileList?.map((item: any) => ({
-    //   dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-    //   schoolName: values.schoolName
-    // }))
-  }
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
+    },
   }
 
   return (
