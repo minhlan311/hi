@@ -123,21 +123,17 @@ const Register: React.FC = () => {
         <Steps current={current} items={items} />
         <div style={contentStyle}>{steps[current].content}</div>
         <div style={{ marginTop: 24 }}>
-          {current < steps.length - 1 && current > 0 && (
-            <Button type='primary' onClick={handleSubmit}>
-              Tiếp tục
-            </Button>
-          )}
           {current === steps.length - 1 && (
-            <Button type='primary' onClick={handleSubmit}>
-              Hoàn thành
-            </Button>
+            <div className='dix-flex'>
+              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                Quay lại
+              </Button>
+              <Button type='primary' onClick={handleSubmit}>
+                Hoàn thành
+              </Button>
+            </div>
           )}
-          {current > 0 && (
-            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-              Quay lại
-            </Button>
-          )}
+
           <p className='res'>
             Bạn đã có tài khoản ?{' '}
             <Link className='link' to={'/login'}>

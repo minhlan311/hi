@@ -1,11 +1,11 @@
 import { UploadFile } from 'antd/lib'
 import { useState } from 'react'
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Upload, UploadProps, message } from 'antd'
+import { Button, Form, Upload, UploadProps, message } from 'antd'
 import { ENDPOINT } from '@/constants/endpoint'
 import { MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 
-export default function UploadDilopma() {
+export default function UploadOtherDilopma() {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const propsImageDocument: UploadProps = {
@@ -24,28 +24,14 @@ export default function UploadDilopma() {
       } else if (status === 'error') {
         message.error(`Tải file ${info.file.name} thất bại.`)
       }
-    }
+    },
   }
 
   return (
-    <>
-      <Form.Item<TMentorForm>
-        label='Tên trường'
-        name='schoolName'
-        rules={[{ required: true, message: 'Vui lòng cập nhật trường của bạn' }]}
-      >
-        <Input size='large' placeholder='Tên trường của bạn' />
-      </Form.Item>
-
-      <Form.Item<TMentorForm>
-        label='Bằng cấp '
-        name='dilopma'
-        rules={[{ required: true, message: 'Vui lòng cập nhật bằng cấp' }]}
-      >
-        <Upload listType='picture-card' {...propsImageDocument} fileList={fileList}>
-          {fileList.length >= 8 ? null : <Button icon={<UploadOutlined />}></Button>}
-        </Upload>
-      </Form.Item>
-    </>
+    <Form.Item<TMentorForm> label='Bằng cấp khác' name='otherDilopma'>
+      <Upload listType='picture-card' {...propsImageDocument} fileList={fileList}>
+        {fileList.length >= 8 ? null : <Button icon={<UploadOutlined />}></Button>}
+      </Upload>
+    </Form.Item>
   )
 }

@@ -8,6 +8,7 @@ import { MentorForm as TMentorForm } from '../../constants'
 import { ROLE } from '../../Roles/constants'
 import { useNavigate } from 'react-router-dom'
 import openNotification from '@/components/Notification'
+import './MentorForm.scss'
 
 const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   const [userId, setUserId] = useState<string>('')
@@ -154,7 +155,13 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         name='birthDay'
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
-        <DatePicker size='large' format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' placement='topLeft' />
+        <DatePicker
+          style={{ width: '100%' }}
+          size='large'
+          format={'DD/MM/YYYY'}
+          placeholder='DD/MM/YYYY'
+          placement='topLeft'
+        />
       </Form.Item>
     </Form>
   )

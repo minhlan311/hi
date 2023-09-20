@@ -13,7 +13,6 @@ export default function ListCourse({ listData }: Props) {
   const navigate = useNavigate()
   const handleClickCourse = (id: string) => {
     navigate({
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       pathname: `/courses/` + id
     })
   }
