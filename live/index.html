@@ -39,10 +39,6 @@
       <nav
         class="navbar control bg-dark rounded-0 d-print-none d-flex justify-content-end">
         <div class="pull-center text-center room-comm d-flex" hidden>
-          <!-- <button class="btn btn-sm rounded-0 btn-no-effect" id='goLive' title="giáo viên về với vị trí của mình">
-                    <i class="fas fa-crosshairs text-white control-item"></i>
-                    <a class="text-white d-block">Về vị trí</a>
-                </button> -->
 
           <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-video'
             title="Hide Video">
@@ -62,7 +58,6 @@
             <a class="text-white d-block">Chia sẻ</a>
           </button>
         </div>
-        <!-- @if($room->host_id !== auth()->user()->id) -->
         <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-hand'
           title="handel hand">
           <i class="fa fa-hand-paper text-white control-item" id="hand"></i>
@@ -77,27 +72,6 @@
             hidden>mới</span>
           <a class="text-white d-block">Chat</a>
         </button>
-        <!-- @if ($room->host_id === auth()->user()->id) -->
-        <!-- <button class="btn btn-sm rounded-0 btn-no-effect text-white control-item" id='record-video' title="Record">
-                <i class="fa fa-dot-circle text-white" id="record-icon"></i>
-                <a class="text-white d-block">Ghi hình</a>
-            </button>
-            <button data-toggle="modal" data-target="#modalUser"
-                class="btn btn-sm rounded-0 btn-no-effect text-white control-item" id='handl_acp' title="Hàng chờ">
-                <i class="fas fa-user-alt text-white"></i>
-                <span class="badge badge-danger very-small font-weight-lighter" id='countUser' hidden></span>
-                <a class="text-white d-block">Hàng chờ</a>
-            </button> -->
-
-        <!-- @endif -->
-        <!-- <button
-          class="btn btn-sm rounded-0 btn-no-effect text-white control-item"
-          id='handl_acp' title="Hàng chờ">
-          <i class="fas fa-user-alt text-white"></i>
-          <span class="badge badge-danger very-small font-weight-lighter"
-            id='countUser'></span>
-          <a class="text-white d-block"><span id="count-user">0</span> người</a>
-        </button> -->
       </nav>
       <div class="container-fluid room-comm" hidden id="room-comm">
         <div class="row">
@@ -108,13 +82,18 @@
           <div class="col-md-12" id="main">
             <div class="row mx-0">
               <div class="col-md-12" id="guest">
-                <div class="row mx-0 my-2" id="videos">
-                  <video
-                    class="local-video remote-video video-{{ auth()->user()->id }}"
-                    volume='0'
-                    autoplay id="video-{{ auth()->user()->id }}" muted></video>
+                <div class="row mx-0 my-2">
+                  <div class="col-md-10" id="videos">
+                    <video
+                      class="local-video remote-video video-auth()->user()->id"
+                      volume='0'
+                      autoplay id="video-auth->user->id" muted></video>
+                  </div>
+                  <div class="col-md-2" id="video-off-camera">
+                  </div>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -141,12 +120,10 @@
     </div>
     <div id="checkDevice" class>
       <div class="device row">
-        <div class="col-md-6">
-          <video id="video-demo"
-            poster="https://img.freepik.com/premium-photo/happy-teen-girl-use-computer-video-call-listen-webinar-headphones-online-education-school-girl-portrait-with-laptop-horizontal-poster-banner-header-with-copy-space_545934-31328.jpg"
-            muted autoplay></video>
+        <div class="col-md-4">
+          <video id="video-demo" muted autoplay></video>
         </div>
-        <div class="col-md-6 d-flex align-self-center">
+        <div class="col-md-4 d-flex align-self-center">
           <form>
             <div class="form-group">
               <label for="mic-select" class="text-white">Chọn thiết bị audio</label>
@@ -156,7 +133,15 @@
               <label for="webcam-select" class="text-white">Chọn thiết bị webcam</label>
               <select class="form-control" id="webcam-select"></select>
             </div>
-            <button type="button" class="btn btn-primary" id="startCall">Bắt đầu
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox"
+                id="turn-on-camera" checked>
+              <label class="form-check-label" for="turn-on-camera">Bật
+                máy ảnh</label>
+            </div>
+
+            <button type="button" class="btn btn-primary my-2" id="startCall">Bắt
+              đầu
               ngay</button>
           </form>
         </div>

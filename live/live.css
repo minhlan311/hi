@@ -98,11 +98,11 @@ body {
 
 .local-video {
     bottom: 0;
-    left: 0;
+    right: 0;
     position: fixed;
     /*width: 15vw;*/
     z-index: 999;
-    width: 200px;
+    width: 250px;
     height: 200px;
 }
 
@@ -359,4 +359,7 @@ video {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+#video-demo {
+  background-color: #000;
 }

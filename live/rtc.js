@@ -6,6 +6,7 @@ import h from './helpers.js'
 import { changeVideoDevice } from './checkDevice.js'
 
 window.addEventListener('load', () => {
+  let isOnCamera = true
   const urlParams = new URLSearchParams(window.location.search)
   const roomId = urlParams.get('room_id')
   if (!roomId) window.location.href = '/'
@@ -16,18 +17,30 @@ window.addEventListener('load', () => {
     host_id: 1779
   }
   const user = JSON.parse(localStorage.getItem('profile'))
-  const event = {
-    uuid: 'sdcfnsb'
-  }
 
   if (!user) {
     window.location.href = '/login'
   }
 
+  document.getElementById('turn-on-camera').addEventListener('change', function (e) {
+    const isOn = e.target.checked
+    isOnCamera = e.target.checked
+    // document.getElementById('toggle-video').click()
+    const videoDemo = document.getElementById(`video-demo`)
+    changeVideoDevice(
+      window.localStorage.getItem('webcam'),
+      (stream) => {
+        myStream = stream
+        videoDemo.srcObject = stream
+      },
+      { isOnCamera: isOn }
+    )
+  })
+
   const SOCKET_URL = 'https://hiblue.fun/stream'
 
-  document.getElementById('guest').style.height = `calc(${window.innerHeight}px - 200px)`
-  document.getElementById('guest').style.overflowY = 'auto'
+  // document.getElementById('guest').style.height = `calc(${window.innerHeight}px - 200px)`
+  // document.getElementById('guest').style.overflowY = 'auto'
   const isHost = room.host_id === user.id
   let commElem = document.getElementsByClassName('room-comm')
 
@@ -88,7 +101,7 @@ window.addEventListener('load', () => {
 
   function sendMsg(msg) {
     let data = {
-      room: room.uuid,
+      room: room.id,
       msg: msg,
       sender: `${user.fullName}`
     }
@@ -100,7 +113,8 @@ window.addEventListener('load', () => {
     h.addChat(data, 'local')
   }
 
-  function init(createOffer, partnerName, isHost = false, user, idActive = null) {
+  function init(createOffer, partnerName, isHost = false, user, idActive = null, isOnCamera) {
+    console.log(isOnCamera)
     pc[partnerName] = new RTCPeerConnection(h.getIceServer())
 
     if (screen && screen.getTracks().length) {
@@ -114,7 +128,6 @@ window.addEventListener('load', () => {
     } else {
       h.getUserFullMedia()
         .then((stream) => {
-          //save my stream
           myStream = stream
 
           stream.getTracks().forEach((track) => {
@@ -191,7 +204,7 @@ window.addEventListener('load', () => {
 
               //create a new div for card
               let cardDiv = document.createElement('div')
-              cardDiv.className = `card card-sm card-video col-md-2 p-0`
+              cardDiv.className = `card card-sm`
               cardDiv.id = partnerName
               cardDiv.appendChild(newVid)
               cardDiv.appendChild(controlDiv)
@@ -199,6 +212,10 @@ window.addEventListener('load', () => {
               cardDiv.appendChild(hand)
               cardDiv.appendChild(vol)
 
+              // if (!isOnCamera) {
+              //   document.getElementById('video-off-camera').appendChild(cardDiv)
+              // } else {
+              // }
               document.getElementById('videos').appendChild(cardDiv)
 
               h.adjustVideoElemSize()
@@ -406,10 +423,14 @@ window.addEventListener('load', () => {
   })
 
   async function startWebcamAgain(element) {
-    changeVideoDevice(window.localStorage.getItem('webcam'), (stream) => {
-      myStream = stream
-      element.srcObject = stream
-    })
+    changeVideoDevice(
+      window.localStorage.getItem('webcam'),
+      (stream) => {
+        myStream = stream
+        element.srcObject = stream
+      },
+      {}
+    )
   }
 
   //When the mute icon is clicked
@@ -556,8 +577,13 @@ window.addEventListener('load', () => {
   function startCall() {
     document.getElementById('video-demo').remove()
     socket = io.connect(SOCKET_URL, { secure: true })
+
     var audioTracks = myStream.getAudioTracks()
     var hasAudio = audioTracks.length > 0
+
+    if (!isOnCamera) {
+      document.getElementById('toggle-video').click()
+    }
 
     if (hasAudio) {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)()
@@ -629,7 +655,8 @@ window.addEventListener('load', () => {
         room: room.id,
         socketId: socketId,
         user: user,
-        isHost: user.id === room.host_id
+        isHost: user.id === room.host_id,
+        isOnCamera: isOnCamera
       })
 
       socket.on('new user', (data) => {
@@ -640,10 +667,11 @@ window.addEventListener('load', () => {
           sender: socketId,
           isHost: isHost,
           user: user,
-          room: room.id
+          room: room.id,
+          isOnCamera: isOnCamera
         })
         pc.push(data.socketId)
-        init(true, data.socketId, data.isHost, data.user)
+        init(true, data.socketId, data.isHost, data.user, data.isOnCamera)
       })
 
       socket.on('newUserStart', (data) => {
@@ -655,7 +683,7 @@ window.addEventListener('load', () => {
         // document.getElementById('count-user').innerHTML = data.countUser
 
         pc.push(data.sender)
-        init(false, data.sender, data.isHost, data.user, data.idActive)
+        init(false, data.sender, data.isHost, data.user, data.idActive, data.isOnCamera)
       })
 
       socket.on('ice candidates', async (data) => {

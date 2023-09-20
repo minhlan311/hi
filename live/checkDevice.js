@@ -4,7 +4,7 @@
 // @ts-nocheck
 import h from './helpers.js'
 
-export const changeVideoDevice = (deviceId, callback) => {
+export const changeVideoDevice = (deviceId, callback, option) => {
   const videoDemo = document.getElementById('video-demo')
 
   navigator.mediaDevices
@@ -23,6 +23,11 @@ export const changeVideoDevice = (deviceId, callback) => {
           // Lấy track video mới từ stream mới
           var newVideoTrack = newStream.getVideoTracks()[0]
 
+          if (option && !option.isOnCamera) {
+            newVideoTrack.stop()
+          }
+
+          window.localStorage.setItem('on-camera', option.isOnCamera)
           // Thay thế track video trong stream cũ bằng track video mới
           stream.removeTrack(videoTrack)
           stream.addTrack(newVideoTrack)
