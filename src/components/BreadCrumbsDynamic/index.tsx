@@ -5,13 +5,16 @@ type Props = {
   homeTitle?: string
   homeIcon?: React.ReactNode
 }
+
 const BreadCrumbsDynamic = (props: Props) => {
   const { homeUrl = '/', homeTitle = 'Trang chủ', homeIcon } = props
   const location = useLocation()
+
   const breadCrumbView = () => {
     const { pathname } = location
     const pathnames = pathname.split('/').filter((item) => item)
     const capatilize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
     return (
       <div>
         <Breadcrumb>
@@ -30,11 +33,12 @@ const BreadCrumbsDynamic = (props: Props) => {
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`
             const isLast = index === pathnames.length - 1
+
             return isLast ? (
-              <Breadcrumb.Item>{capatilize(name)}</Breadcrumb.Item>
+              <Breadcrumb.Item key={index}>{capatilize(name)}</Breadcrumb.Item>
             ) : (
               index > 0 && (
-                <Breadcrumb.Item>
+                <Breadcrumb.Item key={index}>
                   <Link to={`${routeTo}`}>{capatilize(name)}</Link>
                 </Breadcrumb.Item>
               )

@@ -30,7 +30,7 @@ export default function FormUpdateProfile() {
   console.log(data, 'dataaaaaaaaaaaaaaaaaa')
 
   const mutation = useMutation((body: TMentorForm) => {
-    return userApi.updateMentor(body)
+    return userApi.updateMentorForm(body)
   })
 
   const onFinish = (values: TMentorForm) => {
@@ -41,7 +41,7 @@ export default function FormUpdateProfile() {
     const imageBefore = getImageUrls(values?.imageBefore?.fileList)
     const otherDilopma = values?.otherDilopma?.fileList?.map((item: any) => ({
       dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
-      schoolName: null
+      schoolName: null,
     }))
     const dilopma = values?.dilopma?.fileList?.map((item: any) => ({
       dilopma: import.meta.env.VITE_SERVICE_ENDPOINT + '/' + item?.response?.url,
