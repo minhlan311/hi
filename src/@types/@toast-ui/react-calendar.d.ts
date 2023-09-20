@@ -21,7 +21,7 @@ declare module '@toast-ui/react-calendar' {
   type Props = IOptions &
     EventMaps & {
       height: string
-      view?: string
+      view?: 'year' | 'month' | 'week' | 'day' | string
       events?: ISchedule[]
       week?: IWeekOptions & {
         taskView?: boolean
@@ -30,7 +30,10 @@ declare module '@toast-ui/react-calendar' {
     } & HTMLAttributes<HTMLElement>
 
   export default class Calendar extends Component<Props> {
-    public getInstance(): TuiCalendar
+    public getInstance(): TuiCalendar {
+      return super.getInstance() as TuiCalendar
+    }
+
     public getRootElement(): HTMLElement
   }
 }
