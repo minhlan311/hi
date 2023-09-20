@@ -110,7 +110,7 @@ export default function UpdateProfileSteps1({ setDataValue }: any) {
           },
         ]}
       >
-        <Input type='number' placeholder='Nhập số điện thoại' size='large' />
+        <Input placeholder='Nhập số điện thoại' size='large' />
       </Form.Item>
       <Form.Item<TMentorForm>
         label='Ngày sinh'

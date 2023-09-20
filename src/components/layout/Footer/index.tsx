@@ -15,7 +15,7 @@ const Footer = () => {
                 <Space
                   direction='vertical'
                   style={{
-                    position: 'relative'
+                    position: 'relative',
                   }}
                 >
                   <div className='mtz-footer-logo'>
@@ -37,12 +37,12 @@ const Footer = () => {
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
-                      color: '#FFFFFF'
+                      color: '#FFFFFF',
                     }}
                   >
                     <ul className='ul-fff'>
-                      <li>Địa chỉ: 286 Phạm Hùng, Hoà Phước, Hòa Vang, Đà Nẵng</li>
-                      <li>Hotline: 0359006655</li>
+                      <li>Địa chỉ: 699 Nguyễn Kiệm, Phường 3, Quận Gò Vấp, TP Hồ Chí Minh</li>
+                      <li>Hotline: 0769.340.340</li>
                     </ul>
                   </div>
                 </Space>
@@ -51,10 +51,10 @@ const Footer = () => {
             <Col className=''>
               <div className='col-footer-left max-w'>
                 <Space direction='vertical' style={{ textAlign: 'start' }}>
-                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH ĐÀ NẴNG</Text>
+                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH QUẢNG NGÃI</Text>
                   <ul className='ul-fff'>
-                    <li>Địa chỉ: 286 Phạm Hùng, Hoà Phước, Hòa Vang, Đà Nẵng</li>
-                    <li>Hotline: 0359006655</li>
+                    <li>Địa chỉ: 116 Hai Bà Trưng , P.Lê Hồng Phong, TP. Quảng Ngãi</li>
+                    <li>Hotline: 0769.340.340</li>
                   </ul>
                 </Space>
               </div>
@@ -62,10 +62,10 @@ const Footer = () => {
             <Col className=''>
               <div className='col-footer-right max-w'>
                 <Space direction='vertical' style={{ textAlign: 'start' }}>
-                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH HÀ NỘI</Text>
+                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH BÌNH PHƯỚC</Text>
                   <ul className='ul-fff'>
-                    <li>Địa chỉ: 286 Phạm Hùng, Hoà Phước, Hòa Vang, Đà Nẵng</li>
-                    <li>Hotline: 035900665</li>
+                    <li>Địa chỉ: 922/10 QL14, Phường Tiến Thành,TP Đồng Xoài, Tỉnh Bình Phước</li>
+                    <li>Hotline: 0769.340.340</li>
                   </ul>
                 </Space>
               </div>
@@ -82,7 +82,7 @@ const Footer = () => {
                   <div
                     style={{
                       display: 'flex',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
                     }}
                   >
                     <ul className='ul-fff'>
@@ -103,7 +103,7 @@ const Footer = () => {
                   <div
                     style={{
                       display: 'flex',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
                     }}
                   >
                     <ul className='ul-fff'>
