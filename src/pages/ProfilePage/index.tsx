@@ -25,6 +25,7 @@ import css from './styles.module.scss'
 type Props = {
   profile: UserState
 }
+
 const ProfilePage = ({ profile }: Props) => {
   const location = useLocation()
 
@@ -77,7 +78,7 @@ const ProfilePage = ({ profile }: Props) => {
           <div className={css.bg}>
             <img
               src={
-                data?.data.coverUrl
+                data?.data?.coverUrl
                   ? import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data.coverUrl
                   : user?.coverUrl
                   ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user?.coverUrl

@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Calendar from '@toast-ui/react-calendar'
-import { ISchedule, ICalendarInfo } from 'tui-calendar'
+import { useEffect, useRef, useState } from 'react'
+import { ISchedule } from 'tui-calendar'
 
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
@@ -10,31 +11,29 @@ import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, TimePicker }
 import moment from 'moment-timezone'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
-type Props = {}
-
-const CalendarCustom = (props: Props) => {
+const CalendarCustom = () => {
   const calRef = useRef()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedDate, setSelectedDate] = useState()
+  //   const [selectedDate, setSelectedDate] = useState()
   const [alltime, setAllTime] = useState(false)
 
   const [form] = Form.useForm()
 
-  const showModal = (e) => {
-    const calendar = e.calendar
-    const schedule = calendar.getSchedule(e.schedule.id, e.schedule.calendarId)
-    const startDate = moment(schedule.start.toDate())
-    const endDate = moment(schedule.end.toDate())
+  //   const showModal = (e) => {
+  //     const calendar = e.calendar
+  //     const schedule = calendar.getSchedule(e.schedule.id, e.schedule.calendarId)
+  //     const startDate = moment(schedule.start.toDate())
+  //     const endDate = moment(schedule.end.toDate())
 
-    setSelectedDate([startDate, endDate])
-    setOpenModal(true)
-  }
+  //     setSelectedDate([startDate, endDate])
+  //     setOpenModal(true)
+  //   }
 
-  const onClickSchedule = (e) => {
-    const { calendarId, id } = e.schedule
-    const el = cal.current.calendarInst.getElement(id, calendarId)
-    console.log(e, el.getBoundingClientRect())
-  }
+  //   const onClickSchedule = (e) => {
+  //     const { calendarId, id } = e.schedule
+  //     const el = cal.current.calendarInst.getElement(id, calendarId)
+  //     console.log(e, el.getBoundingClientRect())
+  //   }
 
   const handleSubmit = () => {
     setOpenModal(!openModal)
@@ -46,26 +45,27 @@ const CalendarCustom = (props: Props) => {
   }
 
   useEffect(() => {
-    if (selectedDate) {
-      setOpenModal(true)
-      form.setFieldsValue({ start: moment(selectedDate), date: moment(selectedDate) })
-    }
+    // if (selectedDate) {
+    //   setOpenModal(true)
+    //   form.setFieldsValue({ start: moment(selectedDate), date: moment(selectedDate) })
+    // }
 
-    if (!selectedDate) {
-      form.setFieldsValue({ startTime: moment(new Date()), date: moment(new Date()) })
-    }
-  }, [selectedDate])
+    // if (!selectedDate) {
+    //   form.setFieldsValue({ startTime: moment(new Date()), date: moment(new Date()) })
+    // }
+    form.setFieldsValue({ startTime: moment(new Date()), date: moment(new Date()) })
+  }, [])
 
   useEffect(() => {
     if (calRef) console.log(calRef)
   }, [calRef])
 
-  const handleClick = () => {
-    if (calRef) {
-      const inst = calRef.current.getInstance()
-      console.log(inst.getDate())
-    }
-  }
+  //   const handleClick = () => {
+  //     if (calRef) {
+  //       const inst = calRef.current.getInstance()
+  //       console.log(inst.getDate())
+  //     }
+  //   }
   console.log(alltime)
 
   return (
@@ -81,8 +81,8 @@ const CalendarCustom = (props: Props) => {
       <Calendar
         ref={calRef}
         height='500px'
-        onClickSchedule={(e) => {
-          console.log(e.schedule)
+        onClickSchedule={(e: ISchedule) => {
+          console.log(e)
         }}
       />
 

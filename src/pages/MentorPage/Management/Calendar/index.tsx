@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CalendarCustom from '@/components/CalendarCustom'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
-import { Col, Input, Row, Space } from 'antd'
 
 const MentorCalendar = () => {
   // const [selectedDate, setSelectedDate] = useState()
