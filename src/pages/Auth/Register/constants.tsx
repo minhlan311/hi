@@ -28,4 +28,6 @@ export type MentorForm = {
   dilopma?: any
   otherDilopma?: any
   schoolName?: string
+  coverUrl?: string
+  avatarUrl?: string
 }

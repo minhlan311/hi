@@ -15,7 +15,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Row, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { LuImagePlus } from 'react-icons/lu'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Certificate from './Certificate'
 import Feedback from './Feedback'
 import MentorInfor from './MentorInfor'
@@ -25,9 +25,10 @@ import css from './styles.module.scss'
 type Props = {
   profile: UserState
 }
+
 const ProfilePage = ({ profile }: Props) => {
   const location = useLocation()
-  const navigate = useNavigate()
+
   const { setProfile } = useContext(AppContext)
   const [payload, setPayload] = useState<UserState>()
   const userId = location.pathname.split('/')[2]
@@ -42,7 +43,7 @@ const ProfilePage = ({ profile }: Props) => {
 
   if (user) document.title = 'Thầy ' + user?.fullName + ' | Ucam'
 
-  const { mutate } = useMutation({ mutationFn: (body: UserState) => userApi.updateUser(body) })
+  const { data, mutate } = useMutation({ mutationFn: (body: UserState) => userApi.updateUser(body) })
 
   useEffect(() => {
     if (payload) {
@@ -59,6 +60,7 @@ const ProfilePage = ({ profile }: Props) => {
       )
     }
   }, [payload])
+  console.log(data)
 
   return isLoading ? (
     <LoadingCustom tip='Vui lòng chờ...' className={css.loading} />
@@ -71,15 +73,14 @@ const ProfilePage = ({ profile }: Props) => {
           callBackFileList={(data: any) => {
             const newData = { coverUrl: data?.[0].url }
             setPayload(newData as unknown as UserState)
-            setTimeout(() => {
-              navigate(0)
-            }, 500)
           }}
         >
           <div className={css.bg}>
             <img
               src={
-                user?.coverUrl
+                data?.data?.coverUrl
+                  ? import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data.coverUrl
+                  : user?.coverUrl
                   ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user?.coverUrl
                   : 'https://picsum.photos/1920/300'
               }
@@ -111,7 +112,7 @@ const ProfilePage = ({ profile }: Props) => {
         <Row justify='space-between' align='middle'>
           <Space size='large'>
             <Avatar
-              avtUrl={user.avatarUrl}
+              avtUrl={data?.data.avatarUrl ? data?.data.avatarUrl : user.avatarUrl}
               userData={user}
               size={(sm && 80) || (md && 120) || 180}
               uploadImg={profile._id === user._id ? true : false}

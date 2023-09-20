@@ -12,29 +12,27 @@ import Login from './pages/Auth/Login/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
-import MentorDocuments from './pages/MentorPage/Management/Documents/index.tsx'
+
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
+import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
-
   return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
-
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
-
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -95,7 +93,7 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.MENTOR_PAGE,
-          element: <Navigate to={PATH.MENTOR_COURSES} />,
+          element: <Navigate to={PATH.MENTOR_CALENDAR} />,
         },
         {
           path: PATH.MENTOR_QUESTIONS,
@@ -114,10 +112,10 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: PATH.MENTOR_DOCUMENTS,
+          path: PATH.MENTOR_CALENDAR,
           element: (
-            <MentorLayout user={profile} title='Quản lý tài liệu'>
-              <MentorDocuments />
+            <MentorLayout user={profile} title='Lịch giảng dạy'>
+              <MentorCalendar />
             </MentorLayout>
           ),
         },
@@ -187,11 +185,6 @@ export default function useRouteElements() {
               <ProfilePage profile={profile} />
             </Layout>
           ),
-        },
-        {
-          path: PATH.ROOM_LIVE,
-          index: true,
-          element: <></>,
         },
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },

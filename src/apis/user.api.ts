@@ -10,7 +10,7 @@ const userApi = {
   updateUser(body: UserState) {
     return http.put<MentorForm>(ENDPOINT.UPDATE_USER_INFO + body._id, body)
   },
-  updateMentor(body: MentorForm) {
+  updateMentorForm(body: MentorForm) {
     return http.put<MentorForm>(ENDPOINT.UPDATE_USER_INFO, body)
   },
 }

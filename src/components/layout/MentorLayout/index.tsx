@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
+import { AiOutlineCalendar } from 'react-icons/ai'
 
 type Props = {
   user: UserState
@@ -42,7 +43,7 @@ const MentorLayout = (props: Props) => {
     icon: React.ReactNode,
     children?: React.ReactNode,
     type?: string,
-    route?: string
+    route?: string,
   ): SiderItem => {
     return {
       key,
@@ -50,15 +51,15 @@ const MentorLayout = (props: Props) => {
       children,
       label,
       type,
-      route
+      route,
     }
   }
 
   const siderItems: SiderItem[] = [
-    // getItem(<Link to='/mentor/questions'>Danh sách câu hỏi</Link>, '/mentor/questions', <ContainerOutlined />),
+    getItem(<Link to='/mentor/questions'>Lịch giảng dạy</Link>, '/mentor/calendar', <AiOutlineCalendar />),
     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
     // getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
-    getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />)
+    getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />),
   ]
 
   return (
