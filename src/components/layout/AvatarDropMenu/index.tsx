@@ -16,18 +16,23 @@ type Props = {
 
 const AvatarDropMenu = (props: Props) => {
   const { userData, collapsed = false, renderMenu = false } = props
+
   const items: any[] = [
     {
       key: 'profiles',
-      label: <Link to='/profiles'>Trang cá nhân</Link>
+      label: <Link to={'/profiles/' + userData._id}>Trang cá nhân</Link>,
+    },
+    {
+      key: 'info',
+      label: <Link to={'/pedagogys/' + userData._id}>Cập nhật thông tin</Link>,
     },
 
     {
       key: 'change-password',
-      label: <Link to='/change-password'>Đổi mật khẩu</Link>
+      label: <Link to='/change-password'>Đổi mật khẩu</Link>,
     },
     {
-      type: 'divider'
+      type: 'divider',
     },
     {
       key: 'logout',
@@ -40,8 +45,8 @@ const AvatarDropMenu = (props: Props) => {
         >
           Đăng xuất
         </div>
-      )
-    }
+      ),
+    },
   ]
   return renderMenu ? (
     items.map(
@@ -50,7 +55,7 @@ const AvatarDropMenu = (props: Props) => {
           <ButtonCustom type='text' key={item._id} size='small'>
             {item.label}
           </ButtonCustom>
-        )
+        ),
     )
   ) : (
     <DropdownCustom items={items} placement='bottomRight'>

@@ -1,35 +1,24 @@
-import { setting } from '@/settings/dev'
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import io, { Socket } from 'socket.io-client'
+import React, { createContext, useContext } from 'react'
+import { io, Socket } from 'socket.io-client'
 
-interface SocketContextType {
-  socket: Socket | null
-}
+const SocketContext = createContext<Socket | undefined>(undefined)
 type Props = {
   children: React.ReactNode
 }
-const SocketContext = createContext<SocketContextType>({ socket: null })
 
 export const SocketProvider = ({ children }: Props) => {
-  const [socket, setSocket] = useState<Socket | null>(null)
+  const socket = io(import.meta.env.VITE_SERVICE_ENDPOINT)
 
-  useEffect(() => {
-    const newSocket = io(setting.API_URL)
-    setSocket(newSocket)
-
-    return () => {
-      newSocket.disconnect()
-    }
-  }, [])
-
-  return <SocketContext.Provider value={{ socket }}>{children}</SocketContext.Provider>
+  return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useSocket = (): Socket | null => {
-  const { socket } = useContext(SocketContext)
-  if (socket === null) {
+export const useSocket = () => {
+  const socket = useContext(SocketContext)
+
+  if (!socket) {
     throw new Error('useSocket must be used within a SocketProvider')
   }
+
   return socket
 }

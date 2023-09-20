@@ -1,17 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react'
-import { Button, notification, Steps, theme } from 'antd'
+import { Button, Steps, theme } from 'antd'
 import './Register.scss'
 import Roles from './Roles/Roles'
-import { ROLE } from './Roles/constants'
 import MentorForm from './MentorForm/Info/MentorForm'
-import Certificate from './MentorForm/Certificate/Certificate'
-import authApi from '@/apis/auth.api'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(false)
   const [current, setCurrent] = useState(0)
   const [pickRole, setPickRole] = useState<string | undefined>(undefined)
   const [checkStep2, setCheckStep2] = useState<TMentorForm | undefined>(undefined)
@@ -27,7 +23,6 @@ const Register: React.FC = () => {
     educationType: ''
   })
   const formRef = useRef<HTMLFormElement>(null)
-  const navigate = useNavigate()
   const { token } = theme.useToken()
 
   useEffect(() => {
@@ -85,9 +80,6 @@ const Register: React.FC = () => {
     })
   }
 
-  const dataChild = (steps3: { educationType: string; link: string[] }) => {
-    setDataForm({ ...dataForm, certificates: steps3.link, educationType: steps3.educationType })
-  }
   const ids = (idRole: string) => {
     setDataForm({ ...dataForm, userId: idRole })
   }
@@ -100,10 +92,6 @@ const Register: React.FC = () => {
     {
       title: 'Thông tin cơ bản',
       content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} ids={ids} />
-    },
-    {
-      title: 'Dành cho Giảng viên',
-      content: pickRole === ROLE.MENTOR && <Certificate dataChild={dataChild} />
     }
   ]
 
@@ -128,34 +116,6 @@ const Register: React.FC = () => {
     color: token.colorTextTertiary,
     marginTop: 16
   }
-  const handleForm = async () => {
-    if (!dataForm.educationType || dataForm.certificates.length === 0) {
-      notification.open({
-        type: 'warning',
-        message: 'Thông báo',
-        description: 'Vui lòng điền đầy đủ bằng cấp chứng chỉ và trình độ đào tạo'
-      })
-    } else {
-      setLoading(true)
-      const data = await authApi.registerMentor(dataForm)
-      if (data.status === 201) {
-        setLoading(false)
-        notification.open({
-          type: 'success',
-          message: 'Thông báo',
-          description: 'Đăng ký tài khoản thành công , vui lòng đăng nhập để sử dụng dịch vụ !'
-        })
-        navigate('/login')
-      } else {
-        setLoading(false)
-        notification.open({
-          type: 'error',
-          message: 'Thông báo',
-          description: 'Có lỗi xảy ra'
-        })
-      }
-    }
-  }
 
   return (
     <>
@@ -163,21 +123,17 @@ const Register: React.FC = () => {
         <Steps current={current} items={items} />
         <div style={contentStyle}>{steps[current].content}</div>
         <div style={{ marginTop: 24 }}>
-          {current < steps.length - 1 && current > 0 && (
-            <Button type='primary' onClick={handleSubmit}>
-              Tiếp tục
-            </Button>
-          )}
           {current === steps.length - 1 && (
-            <Button disabled={loading} type='primary' onClick={handleForm}>
-              Hoàn thành
-            </Button>
+            <div className='dix-flex'>
+              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                Quay lại
+              </Button>
+              <Button type='primary' onClick={handleSubmit}>
+                Hoàn thành
+              </Button>
+            </div>
           )}
-          {current > 0 && (
-            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-              Quay lại
-            </Button>
-          )}
+
           <p className='res'>
             Bạn đã có tài khoản ?{' '}
             <Link className='link' to={'/login'}>

@@ -19,14 +19,15 @@ export const PATH = {
   MENTOR_PAGE: '/mentor',
   MENTOR_QUESTIONS: '/mentor/questions',
   MENTOR_COURSES: '/mentor/courses',
-  MENTOR_DOCUMENTS: '/mentor/documents',
+  MENTOR_CALENDAR: '/mentor/calendar',
   MENTOR_EXAMS: '/mentor/exams',
   MENTOR_EXAMS_DETAIL: '/mentor/exams/:id/questions',
   REGIS_MENTOR: '/regis-is-mentor',
   POINT_MANAGEMENT: '/point-management',
   CHANGE_PASS: '/change-password',
   PAYMENT_CALLBACK: '/payment-callback',
-  PEDAGOGYS: '/pedagogys'
+  ROOM_LIVE: '/room/:roomId',
+  PEDAGOGYS: '/pedagogys/:id',
 } as const
 
 export default PATH

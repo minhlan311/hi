@@ -4,8 +4,9 @@ import { TCourse } from '@/types/course.type'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import { useState, useEffect } from 'react'
-import { Card, Col, Image, Popconfirm, Row } from 'antd'
+import { Card, Col, Image, Row } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 type Props = {
   data: TCourse[]
   reset: (reset: boolean) => void
@@ -49,18 +50,17 @@ export default function CourseListMentor({ data, reset }: Props) {
                       />
                     }
                     actions={[
-                      <EditOutlined key='edit' />,
-                      <Popconfirm
-                        destroyTooltipOnHide
-                        arrow
-                        title='Thông báo'
-                        description='Bạn có muốn xóa khóa học này?'
-                        onConfirm={() => onConfirm(item._id)}
-                        okText='Yes'
-                        cancelText='No'
+                      <>
+                        <EditOutlined key='edit' />
+                      </>,
+                      <PopConfirmAntd
+                        desc='Bạn có muốn xóa khóa học này ?'
+                        onConfirm={() => {
+                          onConfirm(item._id)
+                        }}
                       >
                         <DeleteOutlined key='ellipsis' />
-                      </Popconfirm>
+                      </PopConfirmAntd>
                     ]}
                   >
                     <Meta

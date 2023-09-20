@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { AuthState } from '@/interface/auth'
@@ -7,32 +8,41 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
+import openNotification from '@/components/Notification'
 
 const Login = () => {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
-
   const [form] = Form.useForm()
   const navitage = useNavigate()
-  const mutaionLogin = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
+  const { isLoading, mutate } = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
+
   const onFinish = (values: AuthState) => {
-    mutaionLogin.mutate(values, {
+    mutate(values, {
       onSuccess: (data) => {
         navitage('/')
         setIsAuthenticated(true)
         setProfile(data.data as unknown as UserState)
-      }
+      },
+      onError: (data: any) => {
+        openNotification({
+          status: 'error',
+          message: 'Thông báo',
+          description: data.response.data.message,
+        })
+      },
     })
   }
+
   return (
-    <Form form={form} name='login' onFinish={onFinish} layout='vertical'>
+    <Form form={form} name='login' onFinish={onFinish} layout='vertical' disabled={isLoading}>
       <Form.Item
         name='account'
         label='Email hoặc số điện thoại'
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập Email hoặc số điện thoại'
-          }
+            message: 'Vui lòng nhập Email hoặc số điện thoại',
+          },
         ]}
       >
         <Input placeholder='Nhập Email hoặc số điện thoại' size='large' />
@@ -43,16 +53,16 @@ const Login = () => {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập mật khẩu'
+            message: 'Vui lòng nhập mật khẩu',
           },
           {
             min: 8,
-            message: 'Mật khẩu phải có ít nhất 8 ký tự'
+            message: 'Mật khẩu phải có ít nhất 8 ký tự',
           },
           {
             pattern: REGEX_PATTERN.regexPassword,
-            message: `Mật khẩu bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt`
-          }
+            message: `Mật khẩu bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt`,
+          },
         ]}
       >
         <Input.Password placeholder='Nhập mật khẩu' size='large' />
@@ -61,7 +71,7 @@ const Login = () => {
         <Checkbox>Nhớ mật khẩu</Checkbox>
       </Form.Item>
       <Form.Item>
-        <Button type='primary' htmlType='submit' size='large' className='sp100'>
+        <Button type='primary' htmlType='submit' size='large' className='sp100' loading={isLoading}>
           Đăng nhập
         </Button>
       </Form.Item>

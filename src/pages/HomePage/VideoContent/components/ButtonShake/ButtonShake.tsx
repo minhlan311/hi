@@ -1,5 +1,6 @@
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
+import { DoubleRightOutlined, DoubleLeftOutlined } from '@ant-design/icons'
 import './ButtonShake.scss'
 
 export default function ButtonShake() {
@@ -14,5 +15,10 @@ export default function ButtonShake() {
       clearInterval(interval)
     }
   }, [])
-  return <Button className={`button-in ${shake ? 'shake' : ''}`}>ĐĂNG KÝ NGAY</Button>
+  return (
+    <Button className={`button-in ${shake ? 'shake' : ''}`}>
+      <DoubleRightOutlined /> ĐĂNG KÝ NGAY
+      <DoubleLeftOutlined />
+    </Button>
+  )
 }

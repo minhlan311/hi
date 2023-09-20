@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type DataFormMentor = {
   fullName: string
   email: string
@@ -11,10 +13,21 @@ export type DataFormMentor = {
 }
 
 export type MentorForm = {
+  _id?: string
   fullName: string
   email: string
   password: string
   confirmPassword: string
   phoneNumber: string
   birthDay: string
+  certificate?: any
+  imageBefore?: any
+  imageAfter?: any
+  cccd?: number
+  educationType?: string
+  dilopma?: any
+  otherDilopma?: any
+  schoolName?: string
+  coverUrl?: string
+  avatarUrl?: string
 }
