@@ -5,7 +5,7 @@ export const ENDPOINT = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/signup',
   LOGOUT: '/auth/logout',
-  MENTOR: '/mentorinfo',
+  MENTOR: '/mentorInfo/',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
@@ -86,5 +86,5 @@ export const ENDPOINT = {
   ANSWER_PEDAGOGY_PATH: '/answer',
 
   // :::::::::::::::::::: CONFIGS PATH :::::::::::::::::::::
-  CONFIGS_PATH: '/configs'
+  CONFIGS_PATH: '/configs',
 }

@@ -6,12 +6,10 @@ import { ENDPOINT } from '@/constants/endpoint'
 import { MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 
 export default function UploadCMNDBefore() {
-  const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const propsImageDocument: UploadProps = {
     name: 'image',
     maxCount: 1,
-    multiple: true,
     listType: 'picture-card',
     action: import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
     onChange(info) {
@@ -19,17 +17,18 @@ export default function UploadCMNDBefore() {
       console.log(info.file.response, 'inffoooo')
 
       setFileList(info.fileList)
+
       if (status === 'done') {
         message.success(`Tải file ${info.file.name} thành công.`)
-        form.setFieldValue('coverMedia', info)
       } else if (status === 'error') {
         message.error(`Tải file ${info.file.name} thất bại.`)
       }
-    }
+    },
   }
   const names = fileList.map((item) => item?.response?.url)
   console.log(fileList, 'fileListfileList')
   console.log(names, 'names')
+
   return (
     <Form.Item<TMentorForm>
       label='Mặt trước CMND'

@@ -21,7 +21,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   }, [userId])
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body: TMentorForm) => authApi.registerAccount(body),
+    mutationFn: (body: any) => authApi.registerAccount(body),
   })
 
   const onFinish = (values: any) => {
@@ -155,7 +155,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
       </Form.Item>
       <Form.Item<TMentorForm>
         label='Ngày sinh'
-        name='birthDay'
+        name='birthday'
         rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
       >
         <DatePicker
