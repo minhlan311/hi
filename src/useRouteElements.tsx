@@ -19,6 +19,7 @@ import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
+import NewsPage from './pages/NewsPage/NewsPage.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
@@ -177,6 +178,15 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Trang chủ'>
               <HomePage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.NEWS,
+          index: true,
+          element: (
+            <Layout user={profile} title='Bài viết'>
+              <NewsPage />
             </Layout>
           ),
         },

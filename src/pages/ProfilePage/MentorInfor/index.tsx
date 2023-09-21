@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button, Card, Col, Divider, Image, Row, Space } from 'antd'
 import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
-import { MdEmail, MdSchool } from 'react-icons/md'
+import { MdEmail } from 'react-icons/md'
 import { BsFillTelephoneFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
@@ -70,19 +70,7 @@ const MentorInfor = ({ user }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                    <Col span={24} md={12}>
-                      <Space>
-                        <div className={css.icon}>
-                          <MdSchool />
-                        </div>
-                        <Space direction='vertical'>
-                          <b>Học vị</b>
-                          <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
-                            {user?.mentorInfo?.educationType}
-                          </Paragraph>
-                        </Space>
-                      </Space>
-                    </Col>
+                    <Col span={24} md={12}></Col>
                   </Row>
                   <Divider />
                   <Row justify='space-between'>
