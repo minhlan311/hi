@@ -48,6 +48,7 @@ const AvatarDropMenu = (props: Props) => {
       ),
     },
   ]
+
   return renderMenu ? (
     items.map(
       (item) =>
@@ -58,17 +59,19 @@ const AvatarDropMenu = (props: Props) => {
         ),
     )
   ) : (
-    <DropdownCustom items={items} placement='bottomRight'>
-      <Space className='avtDrop'>
-        <Avatar avtUrl={userData?.avatarUrl} userData={userData}></Avatar>
-        {!collapsed && (
-          <Space style={{ color: 'var(--white)' }}>
-            <b>{userData?.fullName}</b>
-            <FiChevronDown style={{ fontSize: 20 }} />
-          </Space>
-        )}
-      </Space>
-    </DropdownCustom>
+    <>
+      <DropdownCustom items={items} placement='bottomRight'>
+        <Space className='avtDrop'>
+          <Avatar avtUrl={userData?.avatarUrl} userData={userData}></Avatar>
+          {!collapsed && (
+            <Space style={{ color: 'var(--white)' }}>
+              <b>{userData?.fullName}</b>
+              <FiChevronDown style={{ fontSize: 20 }} />
+            </Space>
+          )}
+        </Space>
+      </DropdownCustom>
+    </>
   )
 }
 

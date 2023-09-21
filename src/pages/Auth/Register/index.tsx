@@ -17,10 +17,10 @@ const Register: React.FC = () => {
     password: '',
     confirmPassword: '',
     phoneNumber: '',
-    birthDay: '',
+    birthday: '',
     certificates: [],
     userId: '',
-    educationType: ''
+    educationType: '',
   })
   const formRef = useRef<HTMLFormElement>(null)
   const { token } = theme.useToken()
@@ -29,6 +29,7 @@ const Register: React.FC = () => {
     if (checkStep2 && current === 1) {
       setCurrent(current + 1)
     }
+
     return
   }, [checkStep2])
 
@@ -36,6 +37,7 @@ const Register: React.FC = () => {
     if (pickRole && current === 0) {
       setCurrent(current + 1)
     }
+
     return
   }, [pickRole])
 
@@ -43,6 +45,7 @@ const Register: React.FC = () => {
     if (current === 1) {
       formRef.current!.submit()
     }
+
     if (checkStep2) {
       if (current === 1) {
         setCurrent(current + 1)
@@ -57,6 +60,7 @@ const Register: React.FC = () => {
         setCheckStep2(undefined)
         setCurrent(current + 1)
       }
+
       if (current === 1) {
         setCheckStep2(undefined)
         setCurrent(current)
@@ -67,6 +71,7 @@ const Register: React.FC = () => {
   const handleChildStateChange = (newState: string) => {
     setPickRole(newState)
   }
+
   const handleChildSteps2Change = (steps2: TMentorForm) => {
     setCheckStep2(steps2)
     setDataForm({
@@ -76,7 +81,7 @@ const Register: React.FC = () => {
       password: steps2.password,
       confirmPassword: steps2.confirmPassword,
       phoneNumber: steps2.phoneNumber,
-      birthDay: steps2.birthDay
+      birthday: steps2.birthday,
     })
   }
 
@@ -87,23 +92,26 @@ const Register: React.FC = () => {
   const steps = [
     {
       title: 'Chọn vai trò',
-      content: <Roles pickRoleChange={handleChildStateChange} />
+      content: <Roles pickRoleChange={handleChildStateChange} />,
     },
     {
       title: 'Thông tin cơ bản',
-      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} ids={ids} />
-    }
+      content: <MentorForm onFinishs={handleChildSteps2Change} formRef={formRef} roles={pickRole} ids={ids} />,
+    },
   ]
 
   const prev = () => {
     if (current === 1) {
       setPickRole('')
     }
+
     if (current !== 1) {
       setCheckStep2(undefined)
       setCurrent(current - 1)
+
       return
     }
+
     setCurrent(current - 1)
   }
 
@@ -114,7 +122,7 @@ const Register: React.FC = () => {
     lineHeight: '50px',
     textAlign: 'center',
     color: token.colorTextTertiary,
-    marginTop: 16
+    marginTop: 16,
   }
 
   return (

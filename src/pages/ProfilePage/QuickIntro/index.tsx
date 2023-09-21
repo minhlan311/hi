@@ -9,6 +9,7 @@ type Props = { user: UserState }
 
 const QuickIntro = ({ user }: Props) => {
   const gender = 'male'
+
   return (
     <div className={css.qiBody}>
       <Header size='sm'>
