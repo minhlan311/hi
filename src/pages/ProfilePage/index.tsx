@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import userApi from '@/apis/user.api'
 import Avatar from '@/components/Avatar/Avatar'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
@@ -60,7 +59,6 @@ const ProfilePage = ({ profile }: Props) => {
       )
     }
   }, [payload])
-  console.log(data)
 
   return isLoading ? (
     <LoadingCustom tip='Vui lòng chờ...' className={css.loading} />
@@ -123,7 +121,6 @@ const ProfilePage = ({ profile }: Props) => {
               <p>Giảng viên Ielts</p>
             </Space>
           </Space>
-          {profile._id === user._id && <ButtonCustom href={`/pedagogys/${user._id}`}>Cập nhật thông tin</ButtonCustom>}
         </Row>
       </div>
       <Header background='var(--whiteBg)' padding='0 0 50px 0'>
@@ -132,7 +129,7 @@ const ProfilePage = ({ profile }: Props) => {
             {
               id: '1',
               name: 'Video',
-              children: <MentorVideo user={user} />,
+              children: <MentorVideo />,
             },
             {
               id: '2',
@@ -142,7 +139,7 @@ const ProfilePage = ({ profile }: Props) => {
             {
               id: '3',
               name: 'Bằng cấp',
-              children: <Certificate user={user} />,
+              children: <>{user.isMentor ? <Certificate user={user} /> : ''}</>,
             },
             {
               id: '4',

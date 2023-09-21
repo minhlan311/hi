@@ -1,3 +1,5 @@
+import { MentorInfo } from '@/types/mentor.type'
+
 export interface UserState {
   _id: string
   fullName: string
@@ -15,5 +17,6 @@ export interface UserState {
   updatedById: string
   cccd?: string
   educationType?: string
-  birthDay: string
+  birthday: string
+  mentorInfo: MentorInfo
 }

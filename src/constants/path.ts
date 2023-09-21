@@ -12,6 +12,7 @@ export const PATH = {
   ERROR_PAGE: '/error-page',
   SUBJECTS_PAGE: '/subjects',
   PROFILES: '/profiles',
+  NEWS: '/news/:id',
   PROFILES_DETAIL: '/profiles/:id',
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',

@@ -1,38 +1,29 @@
-/* eslint-disable react-refresh/only-export-components */
-import { useContext } from 'react'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import PageResult from './components/PageResult/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
-import Layout from './components/layout/Layout.tsx'
-import MentorLayout from './components/layout/MentorLayout/index.tsx'
-import PATH from './constants/path'
-import { AppContext } from './contexts/app.context'
-import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
-import Login from './pages/Auth/Login/index.tsx'
-import Register from './pages/Auth/Register/index.tsx'
-import HomePage from './pages/HomePage/index.tsx'
-import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
-
 import Courses from './pages/Courses/Courses.tsx'
-import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
+import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
+import HomePage from './pages/HomePage/index.tsx'
+import Layout from './components/layout/Layout.tsx'
+import Login from './pages/Auth/Login/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
-
-import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
+import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
 import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
+import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
+import MentorLayout from './components/layout/MentorLayout/index.tsx'
+import NewsPage from './pages/NewsPage/NewsPage.tsx'
+import PageResult from './components/PageResult/index.tsx'
+import PATH from './constants/path'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
+import { AppContext } from './contexts/app.context'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { useContext } from 'react'
+/* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
 
-  return !isAuthenticated ? (
-    <Navigate to='/login' />
-  ) : profile?.isMentor ? (
-    // && profile?.mentorStatus === 'APPROVED'
-    <Outlet />
-  ) : (
-    <Navigate to='/403' />
-  )
+  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
@@ -162,19 +153,19 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.PEDAGOGYS,
-          element: (
-            <AuthLayout
-              title='Cập nhật thông tin'
-              imgSize={14}
-              titleForm='Cập nhật thông tin'
-              descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
-            >
-              <FormUpdateProfile />
-            </AuthLayout>
-          ),
-        },
+        // {
+        //   path: PATH.PEDAGOGYS,
+        //   element: (
+        //     <AuthLayout
+        //       title='Cập nhật thông tin'
+        //       imgSize={14}
+        //       titleForm='Cập nhật thông tin'
+        //       descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
+        //     >
+        //       <FormUpdateProfile />
+        //     </AuthLayout>
+        //   ),
+        // },
       ],
     },
     {
@@ -187,6 +178,15 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Trang chủ'>
               <HomePage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.NEWS,
+          index: true,
+          element: (
+            <Layout user={profile} title='Bài viết'>
+              <NewsPage />
             </Layout>
           ),
         },

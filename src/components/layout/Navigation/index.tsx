@@ -100,7 +100,7 @@ export default function Navigation({ user }: Props) {
                       </div>
                       <div>
                         <p className='mb-5 hotline'>Hotline</p>
-                        <b>1900 10328</b>
+                        <b>0769.340.340</b>
                       </div>
                     </Space>
                     <LanguageChange />

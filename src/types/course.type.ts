@@ -24,6 +24,23 @@ export type TCourse = {
   countAssessment: number
   countTests: number
   document?: never[]
+  class?: [
+    {
+      courseId: string
+      createdAt: string
+      createdById: string
+      endAt: string
+      endDate: string
+      id: string
+      schedules: number[]
+      startAt: string
+      startDate: string
+      updatedAt: string
+      updatedById: string
+      _destroy: boolean
+      _id: string
+    },
+  ]
   mentor?: {
     ccountStatus: string
     avatarUrl: string

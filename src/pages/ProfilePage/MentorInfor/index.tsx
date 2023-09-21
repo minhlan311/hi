@@ -1,18 +1,24 @@
 import Header from '@/components/layout/Header/Header'
 import { UserState } from '@/interface/user'
-import { Card, Col, Divider, Row, Space } from 'antd'
-import { FaSchool } from 'react-icons/fa'
+import { useState } from 'react'
+import { Button, Card, Col, Divider, Image, Row, Space } from 'antd'
+import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
-import { MdEmail, MdSchool } from 'react-icons/md'
+import { MdEmail } from 'react-icons/md'
+import { BsFillTelephoneFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
 import malePic from '../../../assets/images/examimg/male-teacher.png'
 import css from './styles.module.scss'
 import { VscDebugBreakpointLog } from 'react-icons/vsc'
 import SliderCustom from '@/components/SliderCustom'
+import UpdateMentor from './UpdateMentor'
+import { formatDate } from '@/helpers/common'
+import Paragraph from 'antd/es/typography/Paragraph'
 type Props = { user: UserState }
 
 const MentorInfor = ({ user }: Props) => {
+  const [update, setUpdate] = useState(false)
   const gender = 'male'
   const data = [
     { title: 'Thông tin về tôi', desc: 'Nội dung thông tin' },
@@ -34,7 +40,8 @@ const MentorInfor = ({ user }: Props) => {
       <div className={css.card}>
         <Row>
           <Col span={24} md={7} xl={10} className={css.avt}>
-            <img
+            <Image
+              height={'520px'}
               src={
                 user.avatarUrl
                   ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
@@ -46,63 +53,111 @@ const MentorInfor = ({ user }: Props) => {
             />
           </Col>
           <Col span={24} md={17} xl={14}>
-            <div className={css.infor}>
-              <Space direction='vertical' className={'sp100'}>
-                <Row justify='space-between'>
-                  <Col span={24} md={8}>
-                    <Space>
-                      <div className={css.icon}>
-                        <FaSchool />
-                      </div>
-                      <Space direction='vertical'>
-                        <b>Giảng viên</b>
-                        <div className={css.data}>Ielts</div>
-                      </Space>
-                    </Space>
-                  </Col>
-                  <Col span={24} md={12}>
-                    <Space>
-                      <div className={css.icon}>
-                        <MdSchool />
-                      </div>
-                      <Space direction='vertical'>
-                        <b>Học vị</b>
-                        <div className={css.data}>Thạc sĩ</div>
-                      </Space>
-                    </Space>
-                  </Col>
-                </Row>
-                <Divider />
-                <Row justify='space-between'>
-                  <Col span={24} md={8}>
-                    <Space>
-                      <div className={css.icon}>
-                        <MdEmail />
-                      </div>
-                      <Space direction='vertical'>
-                        <b>Email:</b>
-                        <div className={css.data}>
-                          <Link to='/'>{user.email}</Link>
+            {!update ? (
+              <div className={css.infor}>
+                <Space direction='vertical' className={'sp100'}>
+                  <Row justify='space-between'>
+                    <Col span={24} md={8}>
+                      <Space>
+                        <div className={css.icon}>
+                          <FaUserAlt />
                         </div>
+                        <Space direction='vertical'>
+                          <b>Giảng viên</b>
+                          <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
+                            {user.fullName}
+                          </Paragraph>
+                        </Space>
                       </Space>
-                    </Space>
-                  </Col>
-                  <Col span={24} md={12}>
-                    <Space>
-                      <div className={css.icon}>
-                        <FaEarthAsia />
-                      </div>
-                      <Space direction='vertical'>
-                        <b>Mạng xã hội</b>
-                        <div className={css.data}>
-                          <Link to='/'>https://www.facebook.com/</Link>
+                    </Col>
+                    <Col span={24} md={12}></Col>
+                  </Row>
+                  <Divider />
+                  <Row justify='space-between'>
+                    <Col span={24} md={8}>
+                      <Space>
+                        <div className={css.icon}>
+                          <MdEmail />
                         </div>
+                        <Space direction='vertical'>
+                          <b>Email</b>
+
+                          <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
+                            <Link to={'#'}>{user.email}</Link>
+                          </Paragraph>
+                        </Space>
                       </Space>
-                    </Space>
-                  </Col>
-                </Row>
-              </Space>
-            </div>
+                    </Col>
+                    <Col span={24} md={12}>
+                      <Space>
+                        <div className={css.icon}>
+                          <FaEarthAsia />
+                        </div>
+                        <Space direction='vertical'>
+                          <b>Mạng xã hội</b>
+                          <div className={css.data}>
+                            <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
+                              <Link to={'#'}>https://www.facebook.com/</Link>
+                            </Paragraph>
+                          </div>
+                        </Space>
+                      </Space>
+                    </Col>
+                  </Row>
+                  <Divider />
+                  <Row justify='space-between'>
+                    <Col span={24} md={8}>
+                      <Space>
+                        <div className={css.icon}>
+                          <BsFillTelephoneFill />
+                        </div>
+                        <Space direction='vertical'>
+                          <b>Điện thoại liên hệ</b>
+                          <div className={css.data}>
+                            <div>{user.phoneNumber}</div>
+                          </div>
+                        </Space>
+                      </Space>
+                    </Col>
+                    <Col span={24} md={12}>
+                      <Space>
+                        <div className={css.icon}>
+                          <FaBirthdayCake />
+                        </div>
+                        <Space direction='vertical'>
+                          <b>Ngày sinh</b>
+                          <div className={css.data}>
+                            <div>{formatDate(user?.birthday)}</div>
+                          </div>
+                        </Space>
+                      </Space>
+                    </Col>
+                  </Row>
+                </Space>
+              </div>
+            ) : (
+              <UpdateMentor user={user} checkOk={setUpdate} />
+            )}
+            {!update && (
+              <div
+                style={{
+                  margin: ' 0 10px  10px 0',
+                  textAlign: 'end',
+                }}
+              >
+                <Button
+                  type='primary'
+                  onClick={() => {
+                    setUpdate(!update)
+                  }}
+                  style={{
+                    marginRight: '10px',
+                  }}
+                >
+                  Thay đổi thông tin
+                </Button>
+              </div>
+            )}
           </Col>
         </Row>
       </div>{' '}

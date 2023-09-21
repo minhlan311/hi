@@ -2,7 +2,8 @@
 .card {
   background-color: var(--whiteBg);
   margin: 0 auto;
-  width: 60vw;
+  max-width: 1600px;
+  max-height: 520px;
   overflow: hidden;
   border-radius: 0 0 15px 15px;
   margin-bottom: 50px;
@@ -37,4 +38,53 @@
       color: var(--red);
     }
   }
+}
+
+.cardUpdate {
+  background-color: var(--whiteBg);
+  margin: 0 auto;
+  width: 900px;
+  max-height: 520px;
+  overflow: hidden;
+  border-radius: 0 0 15px 15px;
+  margin-bottom: 50px;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
+  @include respond-to(sm) {
+    width: 100%;
+  }
+  @include respond-to(xs) {
+    width: 100%;
+  }
+  @include respond-to(md) {
+    width: 100%;
+  }
+  .avt {
+    background-color: var(--green);
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  .infor {
+    padding: 20px;
+    .data {
+      text-transform: uppercase;
+      a {
+        text-transform: lowercase;
+        color: var(--red);
+      }
+    }
+    .icon {
+      font-size: 35px;
+      color: var(--red);
+    }
+  }
+  filter: none;
+}
+.flexButton {
+  justify-content: end;
+  gap: 15px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
 }

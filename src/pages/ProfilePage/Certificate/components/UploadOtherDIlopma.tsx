@@ -15,8 +15,8 @@ export default function UploadOtherDilopma() {
     action: import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
     onChange(info) {
       const { status } = info.file
-      console.log(info.file.response, 'inffoooo')
       setFileList(info.fileList)
+
       if (status === 'done') {
         message.success(`Tải file ${info.file.name} thành công.`)
         const names = fileList.map((item) => item?.response?.url)
@@ -28,7 +28,7 @@ export default function UploadOtherDilopma() {
   }
 
   return (
-    <Form.Item<TMentorForm> label='Bằng cấp khác' name='otherDilopma'>
+    <Form.Item<TMentorForm> label='Bằng cấp khác' name='otherDiploma'>
       <Upload listType='picture-card' {...propsImageDocument} fileList={fileList}>
         {fileList.length >= 8 ? null : <Button icon={<UploadOutlined />}></Button>}
       </Upload>

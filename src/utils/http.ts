@@ -13,25 +13,28 @@ class Http {
       baseURL: import.meta.env.VITE_SERVICE_ENDPOINT,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
     this.instance.interceptors.request.use(
       (config) => {
         if (this.accessToken && config.headers) {
           config.headers.authorization = `Bearer ${this.accessToken}`
+
           return config
         }
+
         return config
       },
       (error) => {
         return Promise.reject(error)
-      }
+      },
     )
     // Add a response interceptor
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
+
         if (url === ENDPOINT.LOGIN) {
           const data = response.data as AuthResponse
           this.accessToken = data.accessToken
@@ -41,6 +44,7 @@ class Http {
           this.accessToken = ''
           clearLS()
         }
+
         return response
       },
       function (error: AxiosError) {
@@ -50,8 +54,9 @@ class Http {
           const message = data.message || error.message
           console.log(message)
         }
+
         return Promise.reject(error)
-      }
+      },
     )
   }
 }
