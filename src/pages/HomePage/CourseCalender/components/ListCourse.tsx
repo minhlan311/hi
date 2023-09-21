@@ -11,9 +11,10 @@ type Props = {
 
 export default function ListCourse({ listData }: Props) {
   const navigate = useNavigate()
+
   const handleClickCourse = (id: string) => {
     navigate({
-      pathname: `/courses/` + id
+      pathname: `/courses/` + id,
     })
   }
 
@@ -37,18 +38,23 @@ export default function ListCourse({ listData }: Props) {
           <div className='contentList'>
             <h4 className='link-h4-config'>{item.name}</h4>
 
-            <div className='flex'>
-              <img src={calenderSVG} className='icons' alt='' />
-              <p className='text-date'>
-                Khai giảng {''}
-                {formatDate(item?.startDate)}
-                {''} - Thứ {''}
-                {formatDaysOfWeek(item?.schedules).join('-')}
-                {''}
-                <br />
-                Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
-              </p>
-            </div>
+            {item?.class?.map((item) => (
+              <>
+                <div className='flex'>
+                  <img src={calenderSVG} className='icons' alt='' />
+                  <p className='text-date'>
+                    Khai giảng {''}
+                    {formatDate(item?.startDate)}
+                    {''} - Thứ {''}
+                    {formatDaysOfWeek(item?.schedules).join('-')}
+                    {''}
+                    <br />
+                    Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
+                  </p>
+                </div>
+              </>
+            ))}
+
             <div className='flexPrice'>
               <span className='name'>Chi phí: </span>
               <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
