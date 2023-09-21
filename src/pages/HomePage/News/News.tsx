@@ -11,12 +11,12 @@ export default function News() {
       newsApi.getNews({
         filterQuery: {},
         options: {
+          limit: 4,
           pagination: false,
-          sort: { createdAt: -1, limit: 4 },
+          sort: { createdAt: -1 },
         },
       }),
   })
-  console.log(data, '1111111111111111')
 
   const { Paragraph } = Typography
 
