@@ -11,7 +11,7 @@ const Certificate = ({ user }: Props) => {
   const dataDiploma = user?.mentorInfo?.diploma
   const dataCertificates = user?.mentorInfo?.certificates
 
-  const dilopma = dataDiploma?.filter((item) => item?.schoolName !== 'other')
+  const dilopma = dataDiploma?.filter((item) => item?.schoolName !== 'other' && item?.schoolName !== null)
   const dilopmaNull = dataDiploma?.filter((item) => item?.schoolName === 'other')
 
   return (

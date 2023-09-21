@@ -15,7 +15,6 @@ export default function UploadOtherDilopma() {
     action: import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
     onChange(info) {
       const { status } = info.file
-      console.log(info.file.response, 'inffoooo')
       setFileList(info.fileList)
 
       if (status === 'done') {

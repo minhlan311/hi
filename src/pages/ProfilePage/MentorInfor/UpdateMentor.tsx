@@ -61,8 +61,6 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
     console.log('Failed:', errorInfo)
   }
 
-  console.log(user?.birthday, '--------------+++++++++++')
-
   const [form] = Form.useForm()
 
   form.setFieldsValue({

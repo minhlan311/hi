@@ -9,7 +9,7 @@ const MentorQuestions = () => {
     queryKey: ['examDetail'],
     queryFn: () => {
       return examApi.getExamDetail(examId)
-    }
+    },
   })
 
   console.log(examDetail)

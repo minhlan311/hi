@@ -14,14 +14,14 @@ const courseApi = {
       filterQuery = { categoryId: '64ffe02e746fe5413cf8d1d5' },
       options = {
         pagination: false,
-        sort: { createdAt: -1 }
+        sort: { createdAt: -1 },
       },
-      payload
+      payload,
     } = props
 
     const data = {
       filterQuery: filterQuery,
-      options: options
+      options: options,
     }
     return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
   },
@@ -30,7 +30,7 @@ const courseApi = {
   },
   getOneCourse(ids: string) {
     return http.get<TCourse>(ENDPOINT.COURSES_PATH + `${ids}`)
-  }
+  },
 }
 
 export default courseApi

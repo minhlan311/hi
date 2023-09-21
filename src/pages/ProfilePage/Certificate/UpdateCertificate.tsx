@@ -26,8 +26,6 @@ export default function UpdateCertificate() {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
-  console.log(data, 'data-valuessss')
-
   const propsImageDocument: UploadProps = {
     name: 'image',
     multiple: true,
@@ -35,7 +33,6 @@ export default function UpdateCertificate() {
     action: import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
     onChange(info) {
       const { status } = info.file
-      console.log(info.file.response, 'inffoooo')
       setFileList(info.fileList)
 
       if (status === 'done') {
@@ -79,7 +76,7 @@ export default function UpdateCertificate() {
     } else {
       mutation.mutate(
         {
-          diploma: result,
+          diploma: otherDiplomaData ? result : diplomaData,
           userId: id,
           imageAfter: imageAfter[0],
           imageBefore: imageBefore[0],
