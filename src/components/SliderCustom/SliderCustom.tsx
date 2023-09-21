@@ -42,7 +42,7 @@ export default function SliderCustom(props: Props) {
     emptyContent,
     autoplay,
     buttonStyle,
-    buttonType
+    buttonType,
   } = props
   const [buttonPrev, setButtonPrev] = useState<boolean>(true)
   const [buttonNext, setButtonNext] = useState<boolean>(true)
@@ -51,6 +51,7 @@ export default function SliderCustom(props: Props) {
     if (slideCount > 0 || slideCount === dataLength! - slidesToShow) {
       setButtonPrev(true)
     }
+
     if (slideCount === 0) {
       setButtonPrev(false)
     }
@@ -58,16 +59,20 @@ export default function SliderCustom(props: Props) {
     if (slideCount < dataLength! - slidesToShow) {
       setButtonNext(true)
     }
+
     if (slideCount === dataLength! - slidesToShow) {
       setButtonNext(false)
     }
   }
+
   const nextButt = () => {
     return <Button style={buttonStyle} icon={nextArrow} type={buttonType} shape='circle'></Button>
   }
+
   const prevButt = () => {
     return <Button style={buttonStyle} icon={prevArrow} type={buttonType} shape='circle'></Button>
   }
+
   return (
     <div className={style.containerModule}>
       <div className={style.containerSlider}>

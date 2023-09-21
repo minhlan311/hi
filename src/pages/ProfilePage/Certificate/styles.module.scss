@@ -1,0 +1,15 @@
+.gridCertificate {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.h3 {
+  margin: 20px 0;
+}
+
+.hr {
+  border: none;
+  border-top: 2px solid #ccc;
+  height: 2px;
+  width: 50%;
+}

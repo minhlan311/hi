@@ -18,21 +18,23 @@ import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx
 import Courses from './pages/Courses/Courses.tsx'
 import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
-import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
 }
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -150,19 +152,19 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.PEDAGOGYS,
-          element: (
-            <AuthLayout
-              title='Cập nhật thông tin'
-              imgSize={14}
-              titleForm='Cập nhật thông tin'
-              descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
-            >
-              <FormUpdateProfile />
-            </AuthLayout>
-          ),
-        },
+        // {
+        //   path: PATH.PEDAGOGYS,
+        //   element: (
+        //     <AuthLayout
+        //       title='Cập nhật thông tin'
+        //       imgSize={14}
+        //       titleForm='Cập nhật thông tin'
+        //       descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
+        //     >
+        //       <FormUpdateProfile />
+        //     </AuthLayout>
+        //   ),
+        // },
       ],
     },
     {

@@ -8,7 +8,7 @@ const categoryApi = {
   getCategories(filterQuery?: any, options?: any, body?: any) {
     const option = {
       pagination: false,
-      sort: { updatedAt: 1 },
+      sort: { createdAt: -1 },
     }
 
     const payload = {

@@ -15,6 +15,7 @@ type Props = {
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   examData?: ExamState
 }
+
 const DrawerExam = (props: Props) => {
   const { open, setOpen, resetData, setLoading, examData } = props
 
@@ -40,33 +41,34 @@ const DrawerExam = (props: Props) => {
     queryKey: ['categoriesList'],
     queryFn: () => {
       return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
+        parentId: '64ffde9c746fe5413cf8d1af',
       })
-    }
+    },
   })
 
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {
       value: sj._id,
-      label: sj.name
+      label: sj.name,
     }
   })
   const { isLoading, status, mutate, error } = useMutation(
     action === 'create'
       ? { mutationFn: (body) => examApi.createExam(body) }
-      : { mutationFn: (body) => examApi.putExam(body) }
+      : { mutationFn: (body) => examApi.putExam(body) },
   )
 
   useEffect(() => {
     if (status === 'success') {
       openNotification({
         status: status,
-        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công'
+        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
       })
       setOpen(false)
       resetData && resetData()
       form.resetFields()
     }
+
     if (status === 'error' && error) {
       openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
@@ -75,11 +77,12 @@ const DrawerExam = (props: Props) => {
   useEffect(() => {
     setLoading && setLoading(isLoading)
   }, [isLoading])
+
   const onFinish = (values: any) => {
     const payload = {
       ...values,
       cost: parseInt(values?.cost),
-      id: examData?._id
+      id: examData?._id,
     }
     mutate(payload)
   }
@@ -112,7 +115,7 @@ const DrawerExam = (props: Props) => {
           layout='vertical'
           form={form}
           initialValues={{
-            plan: 'FREE'
+            plan: 'FREE',
           }}
         >
           <Form.Item
@@ -121,8 +124,8 @@ const DrawerExam = (props: Props) => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tiêu đề bài thi'
-              }
+                message: 'Vui lòng nhập tiêu đề bài thi',
+              },
             ]}
           >
             <Input placeholder='Nhập tên tiêu đề bài thi' />
@@ -134,8 +137,8 @@ const DrawerExam = (props: Props) => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn loại bài thi'
-              }
+                message: 'Vui lòng chọn loại bài thi',
+              },
             ]}
           >
             <Select
@@ -143,12 +146,12 @@ const DrawerExam = (props: Props) => {
               options={[
                 {
                   value: 'QUIZ',
-                  label: 'Bài Quiz'
+                  label: 'Bài Quiz',
                 },
                 {
                   value: 'TEST',
-                  label: 'Bài thi thử'
-                }
+                  label: 'Bài thi thử',
+                },
               ]}
             />
           </Form.Item>
@@ -159,8 +162,8 @@ const DrawerExam = (props: Props) => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng loại phí'
-              }
+                message: 'Vui lòng loại phí',
+              },
             ]}
           >
             <Select
@@ -168,12 +171,12 @@ const DrawerExam = (props: Props) => {
               options={[
                 {
                   value: 'FREE',
-                  label: 'Miễn phí'
+                  label: 'Miễn phí',
                 },
                 {
                   value: 'PREMIUM',
-                  label: 'Có phí'
-                }
+                  label: 'Có phí',
+                },
               ]}
               onChange={(e) => setTypePlan(e)}
             />
@@ -185,8 +188,8 @@ const DrawerExam = (props: Props) => {
             rules={[
               {
                 required: typePlan === 'PREMIUM',
-                message: `Vui lòng nhập số tiền`
-              }
+                message: `Vui lòng nhập số tiền`,
+              },
             ]}
           >
             <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
@@ -198,8 +201,8 @@ const DrawerExam = (props: Props) => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn khóa học'
-              }
+                message: 'Vui lòng chọn khóa học',
+              },
             ]}
           >
             <Select placeholder='Chọn khóa học' options={subjectList} />
@@ -209,4 +212,5 @@ const DrawerExam = (props: Props) => {
     </div>
   )
 }
+
 export default DrawerExam

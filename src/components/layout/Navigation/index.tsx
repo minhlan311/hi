@@ -19,6 +19,7 @@ import { BiSolidDashboard } from 'react-icons/bi'
 type Props = {
   user?: UserState
 }
+
 export default function Navigation({ user }: Props) {
   // const [educationId, setEducationId] = useState('')
 
@@ -76,7 +77,7 @@ export default function Navigation({ user }: Props) {
                     <Space
                       style={{
                         width: '100%',
-                        height: '100%'
+                        height: '100%',
                       }}
                     >
                       {user
@@ -96,7 +97,7 @@ export default function Navigation({ user }: Props) {
                       </div>
                       <div>
                         <p className='mb-5 hotline'>Hotline</p>
-                        <b>1900 10328</b>
+                        <b>0769.340.340</b>
                       </div>
                     </Space>
                     <LanguageChange />
