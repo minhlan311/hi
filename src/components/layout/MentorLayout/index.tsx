@@ -13,6 +13,7 @@ import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import { AiOutlineCalendar } from 'react-icons/ai'
+import AffixCustom from '@/components/AffixCustom'
 
 type Props = {
   user: UserState
@@ -29,6 +30,7 @@ interface SiderItem {
 }
 
 const { Header, Sider, Content } = Layout
+
 const MentorLayout = (props: Props) => {
   const { user, title, children } = props
   const location = useLocation()
@@ -64,23 +66,25 @@ const MentorLayout = (props: Props) => {
 
   return (
     <Layout className={css.layout}>
-      <Sider
-        trigger={null}
-        collapsed={collapsed}
-        className={css.navLeft}
-        style={{ background: 'var(--white)' }}
-        width={sm ? 200 : 240}
-        collapsedWidth={sm ? 55 : 80}
-      >
-        <Logo href='/mentor' className={`${collapsed && css.logoCrop} ${css.logo}`} />
-        <Menu
-          theme='light'
-          mode='inline'
-          selectedKeys={[location.pathname]}
-          items={siderItems}
-          inlineIndent={sm ? 10 : 24}
-        />
-      </Sider>
+      <AffixCustom type='fixed' offsetTop={0}>
+        <Sider
+          trigger={null}
+          collapsed={collapsed}
+          className={css.navLeft}
+          style={{ background: 'var(--white)' }}
+          width={sm ? 200 : 240}
+          collapsedWidth={sm ? 55 : 80}
+        >
+          <Logo href='/mentor' className={`${collapsed && css.logoCrop} ${css.logo}`} />
+          <Menu
+            theme='light'
+            mode='inline'
+            selectedKeys={[location.pathname]}
+            items={siderItems}
+            inlineIndent={sm ? 10 : 24}
+          />
+        </Sider>
+      </AffixCustom>
       <Layout className={css.main}>
         <Header className={css.navTop}>
           <Row justify='space-between' align='middle'>

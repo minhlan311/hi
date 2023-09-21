@@ -11,13 +11,14 @@ type Props = {
 
 const LoadingCustom = (props: Props) => {
   const { icon, size, delay, tip, style, className } = props
+
   return (
     <Spin indicator={icon} tip={tip} delay={delay} size={size} style={style} className={className}>
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.05)'
+          background: 'rgba(0, 0, 0, 0.05)',
         }}
       />
     </Spin>

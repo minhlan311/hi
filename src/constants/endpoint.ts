@@ -9,9 +9,10 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
-
   GET_USER_INFO: '/users/',
+  FIND_USER_PATH: '/users/find',
   UPDATE_USER_INFO: '/users/',
+
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::
   GET_ATTACHMENT: '/upload/download/',
   UPLOAD_ATTACHMENT: '/upload/attachments/',
@@ -20,7 +21,7 @@ export const ENDPOINT = {
   UPLOAD_LARGE_IMAGE: '/upload/large-image',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
-  CATEGORIES_PATH: '/categories/',
+  CATEGORIES_PATH: '/category/',
   FIND_CATEGORIES_PATH: '/category/find',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
@@ -86,5 +87,5 @@ export const ENDPOINT = {
   ANSWER_PEDAGOGY_PATH: '/answer',
 
   // :::::::::::::::::::: CONFIGS PATH :::::::::::::::::::::
-  CONFIGS_PATH: '/configs'
+  CONFIGS_PATH: '/configs',
 }

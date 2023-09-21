@@ -13,26 +13,37 @@ import Register from './pages/Auth/Register/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 
-import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
-import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
-import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
 import FormUpdateProfile from './pages/FomUpdateProfile/FormUpdateProfile.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 
+import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
+import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
+
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
-  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
+
+  return !isAuthenticated ? (
+    <Navigate to='/login' />
+  ) : profile?.isMentor ? (
+    // && profile?.mentorStatus === 'APPROVED'
+    <Outlet />
+  ) : (
+    <Navigate to='/403' />
+  )
 }
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -95,14 +106,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_PAGE,
           element: <Navigate to={PATH.MENTOR_CALENDAR} />,
         },
-        {
-          path: PATH.MENTOR_QUESTIONS,
-          element: (
-            <MentorLayout user={profile} title='Danh sách câu hỏi'>
-              <MentorPedagogies user={profile} />
-            </MentorLayout>
-          ),
-        },
+
         {
           path: PATH.MENTOR_COURSES,
           element: (
@@ -130,8 +134,16 @@ export default function useRouteElements() {
         {
           path: PATH.MENTOR_EXAMS_DETAIL,
           element: (
+            <MentorLayout user={profile} title='Bộ đề'>
+              <MentorExamDetail />
+            </MentorLayout>
+          ),
+        },
+        {
+          path: PATH.MENTOR_EXAMS_QUESTION,
+          element: (
             <MentorLayout user={profile} title='Danh sách câu hỏi'>
-              <MentorQuestions />
+              <MentorExamQuestions />
             </MentorLayout>
           ),
         },
