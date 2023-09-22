@@ -32,7 +32,8 @@ export default function News() {
                 <div className='col'>
                   <div className='imgBox'>
                     <Image
-                      width={'280px'}
+                      width='280px'
+                      height='150px'
                       className='imgIn'
                       src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
                     />

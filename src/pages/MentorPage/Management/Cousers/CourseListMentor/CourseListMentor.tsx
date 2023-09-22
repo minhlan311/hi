@@ -60,7 +60,7 @@ export default function CourseListMentor({ data, reset }: Props) {
                         }}
                       >
                         <DeleteOutlined key='ellipsis' />
-                      </PopConfirmAntd>
+                      </PopConfirmAntd>,
                     ]}
                   >
                     <Meta

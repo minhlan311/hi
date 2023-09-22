@@ -9,6 +9,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
+  GET_ALL_MENTOR: '/users/find',
 
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
   NEWS: '/news/find',
@@ -45,6 +46,9 @@ export const ENDPOINT = {
   // :::::::::::::::::::: NOTES PATH :::::::::::::::::::::
   FIND_NOTE_PATH: '/edu/notes/find',
   NOTE_PATH: '/edu/notes',
+
+  // :::::::::::::::::::: SUBJECT PATH :::::::::::::::::::::
+  SUBJECT_PATH: '/subjects/find',
 
   // :::::::::::::::::::: LESSONS PATH :::::::::::::::::::::
   FIND_LESSONS_PATH: '/edu/lessons/find',
