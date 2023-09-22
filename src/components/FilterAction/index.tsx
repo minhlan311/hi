@@ -16,10 +16,22 @@ type Props = {
   addOnButton?: React.ReactNode
   limit?: number
   page?: number
+  className?: string
+  type?: 'course' | 'test' | 'question'
 }
 
 const FilterAction = (props: Props) => {
-  const { apiFind, callBackData, setLoading, resetFilter = false, addOnButton, limit = 8, page = 1 } = props
+  const {
+    type = 'course',
+    apiFind,
+    callBackData,
+    setLoading,
+    resetFilter = false,
+    addOnButton,
+    limit = 8,
+    page = 1,
+    className,
+  } = props
 
   useEffect(() => {
     setFilterData({
@@ -28,9 +40,9 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: '-1'
-        }
-      }
+          createdAt: '-1',
+        },
+      },
     })
   }, [page])
 
@@ -40,9 +52,9 @@ const FilterAction = (props: Props) => {
       limit: limit,
       page: page || 1,
       sort: {
-        createdAt: '-1'
-      }
-    }
+        createdAt: '-1',
+      },
+    },
   })
   const [form] = Form.useForm()
 
@@ -50,14 +62,14 @@ const FilterAction = (props: Props) => {
     queryKey: ['topCategories'],
     queryFn: () => {
       return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
+        parentId: '64ffde9c746fe5413cf8d1af',
       })
-    }
+    },
   })
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {
       value: sj._id,
-      label: sj.name
+      label: sj.name,
     }
   })
 
@@ -68,7 +80,7 @@ const FilterAction = (props: Props) => {
       categoryId: categoryId,
       plan: plan,
       status: status,
-      search: keyword ? keyword : undefined
+      search: keyword ? keyword : undefined,
     }
 
     setFilterData({
@@ -79,9 +91,9 @@ const FilterAction = (props: Props) => {
         sort: {
           createdAt: createdAt,
           countAssessment: viewCountDownCount === 'highestRating' ? -1 : undefined,
-          countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined
-        }
-      }
+          countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
+        },
+      },
     })
   }
 
@@ -93,11 +105,12 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: -1
-        }
-      }
+          createdAt: -1,
+        },
+      },
     })
   }
+
   const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
   useEffect(() => {
     if (resetFilter) handleReset()
@@ -107,88 +120,197 @@ const FilterAction = (props: Props) => {
     mutate(filterData as unknown as any, {
       onSuccess: (data) => {
         callBackData(data as unknown as any[])
-      }
+      },
     })
   }, [filterData])
 
   useEffect(() => {
     setLoading && setLoading(isLoading)
   }, [isLoading])
+
   return (
     <Form form={form} autoComplete='off'>
-      <Row justify='space-between'>
+      <Row justify='space-between' className={className}>
         <Space>
-          <Form.Item name='categoryId' style={{ width: 120 }}>
-            <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
-          </Form.Item>
-          <Form.Item name='plan'>
-            <Select
-              placeholder='Loại phí'
-              allowClear
-              onChange={onChangeFilter}
-              options={[
-                {
-                  value: 'FREE',
-                  label: 'Miễn phí'
-                },
-                {
-                  value: 'PREMIUM',
-                  label: 'Có phí'
-                }
-              ]}
-            />
-          </Form.Item>
-          <Form.Item name='viewCountDownCount' style={{ width: 160 }}>
-            <Select
-              placeholder='Đánh giá'
-              allowClear
-              onChange={onChangeFilter}
-              options={[
-                {
-                  value: 'highestRating',
-                  label: 'Đánh giá tốt nhất'
-                },
-                {
-                  value: 'highestParticipant',
-                  label: 'Đánh giá nhiều nhất'
-                }
-              ]}
-            />
-          </Form.Item>
-          <Form.Item name='status' style={{ width: 150 }}>
-            <Select
-              placeholder='Trạng thái'
-              onChange={onChangeFilter}
-              allowClear
-              options={[
-                {
-                  value: 'ACTIVE',
-                  label: 'Hoạt động'
-                },
-                {
-                  value: 'INACTIVE',
-                  label: 'Không hoạt động'
-                }
-              ]}
-            />
-          </Form.Item>
-          <Form.Item name='createdAt'>
-            <Select
-              placeholder='Ngày tải lên'
-              onChange={onChangeFilter}
-              allowClear
-              options={[
-                {
-                  value: '-1',
-                  label: 'Mới nhất'
-                },
-                {
-                  value: '1',
-                  label: 'Cũ nhất'
-                }
-              ]}
-            />
-          </Form.Item>
+          {type === 'course' || type === 'test' ? (
+            <>
+              <Form.Item name='categoryId' style={{ width: 120 }}>
+                <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
+              </Form.Item>
+              <Form.Item name='plan'>
+                <Select
+                  placeholder='Loại phí'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: 'FREE',
+                      label: 'Miễn phí',
+                    },
+                    {
+                      value: 'PREMIUM',
+                      label: 'Có phí',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='viewCountDownCount' style={{ width: 160 }}>
+                <Select
+                  placeholder='Đánh giá'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: 'highestRating',
+                      label: 'Đánh giá tốt nhất',
+                    },
+                    {
+                      value: 'highestParticipant',
+                      label: 'Đánh giá nhiều nhất',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='status' style={{ width: 150 }}>
+                <Select
+                  placeholder='Trạng thái'
+                  onChange={onChangeFilter}
+                  allowClear
+                  options={[
+                    {
+                      value: 'ACTIVE',
+                      label: 'Hoạt động',
+                    },
+                    {
+                      value: 'INACTIVE',
+                      label: 'Không hoạt động',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='createdAt'>
+                <Select
+                  placeholder='Ngày tải lên'
+                  onChange={onChangeFilter}
+                  allowClear
+                  options={[
+                    {
+                      value: '-1',
+                      label: 'Mới nhất',
+                    },
+                    {
+                      value: '1',
+                      label: 'Cũ nhất',
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </>
+          ) : (
+            <>
+              <Form.Item name='type'>
+                <Select
+                  style={{ width: 150 }}
+                  placeholder='Loại câu hỏi'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: 'SINGLE CHOICE',
+                      label: 'SINGLE CHOICE',
+                    },
+                    {
+                      value: 'MULTIPLE CHOICE',
+                      label: 'MULTIPLE CHOICE',
+                    },
+                    {
+                      value: 'TRUE FALSE',
+                      label: 'TRUE FALSE',
+                    },
+                    {
+                      value: 'SORT',
+                      label: 'SORT',
+                    },
+                    {
+                      value: 'DRAG DROP',
+                      label: 'DRAG DROP',
+                    },
+                    {
+                      value: 'LIKERT SCALE',
+                      label: 'LIKERT SCALE',
+                    },
+                    {
+                      value: 'FILL BLANK',
+                      label: 'FILL BLANK',
+                    },
+                    {
+                      value: 'MATCHING',
+                      label: 'MATCHING',
+                    },
+                    {
+                      value: 'NUMERICAL',
+                      label: 'NUMERICAL',
+                    },
+                    {
+                      value: 'WRITING',
+                      label: 'WRITING',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='sortNumber' style={{ width: 160 }}>
+                <Select
+                  placeholder='Điểm số'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: '-1',
+                      label: 'Từ thấp đến cao',
+                    },
+                    {
+                      value: '1',
+                      label: 'Từ cao đến thấp',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='status' style={{ width: 150 }}>
+                <Select
+                  placeholder='Trạng thái'
+                  onChange={onChangeFilter}
+                  allowClear
+                  options={[
+                    {
+                      value: 'ACTIVE',
+                      label: 'Hoạt động',
+                    },
+                    {
+                      value: 'INACTIVE',
+                      label: 'Không hoạt động',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='createdAt'>
+                <Select
+                  placeholder='Ngày tải lên'
+                  onChange={onChangeFilter}
+                  allowClear
+                  options={[
+                    {
+                      value: '-1',
+                      label: 'Mới nhất',
+                    },
+                    {
+                      value: '1',
+                      label: 'Cũ nhất',
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </>
+          )}
           {/* <Form.Item name='subjectId' label='' style={{ width: 200 }}>
             <Select
               placeholder='Tìm kiếm và chọn môn học'
