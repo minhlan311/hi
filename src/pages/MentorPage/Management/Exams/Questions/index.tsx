@@ -24,6 +24,7 @@ const MentorQuestions = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [resetFilter, setResetFilter] = useState<boolean>(false)
+  console.log(examDetail, loading, resetFilter)
 
   const resetData = () => {
     setResetFilter(true)
