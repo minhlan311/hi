@@ -1,10 +1,7 @@
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
-import { UserState } from '@/interface/user'
-type Props = { user: UserState }
 
-const MentorVideo = ({ user }: Props) => {
-  console.log(user)
+const MentorVideo = () => {
   const { sm, md } = useResponsives()
   return (
     <Header padding={'15px 0 50px 0'} type='fullsize'>

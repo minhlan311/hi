@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const debounce = (func: any, timeout = 300) => {
+export const debounce = (func: any, timeout = 500) => {
   let timer: any
   return (...args: any) => {
     clearTimeout(timer)
@@ -22,7 +22,7 @@ export function splitText(string: string, length: number) {
 export function formatPriceVND(giaTien: number) {
   const formatter = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
-    currency: 'VND'
+    currency: 'VND',
   })
   const giaTienFormatted = formatter.format(giaTien)
   return giaTienFormatted.replace('đ', 'vnđ')
@@ -43,7 +43,7 @@ export function formatDate(dateStr: string) {
 // hàm đổi định dạng sang thứ trong tuần
 export function formatDaysOfWeek(dayIndexes: number[]) {
   const daysOfWeek = ['Chủ nhật', '2', '3', '4', '5', '6', '7']
-  const formattedDays = dayIndexes.map((dayIndex) => {
+  const formattedDays = dayIndexes?.map((dayIndex) => {
     if (dayIndex >= 0 && dayIndex <= 7) {
       return daysOfWeek[dayIndex]
     } else {

@@ -8,28 +8,30 @@ import { BiPlus } from 'react-icons/bi'
 import './index.scss'
 import CourseListMentor from './CourseListMentor/CourseListMentor'
 import { PaginationProps } from 'antd/lib'
+import { useNavigate } from 'react-router-dom'
+import PATH from '@/constants/path'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
   const [current, setCurrent] = useState(1)
   const [resetData, setResetData] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page)
   }
+
   const reset = (check: boolean) => {
     setResetData(check)
   }
+
   return (
     <div>
       <FilterAction
         resetFilter={resetData}
         page={current}
         addOnButton={
-          <ButtonCustom
-            type='primary'
-            //  onClick={onPressCreate}
-          >
+          <ButtonCustom type='primary' onClick={() => navigate(PATH.MENTOR_COURSES_CREATE)}>
             <Row align='middle'>
               <BiPlus size={22} />
               Thêm khóa học mới

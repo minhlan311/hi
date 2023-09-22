@@ -20,6 +20,7 @@ const MentorExams = () => {
 
   const [examData, setExamData] = useState<ExamState>()
   const { status, mutate, error } = useMutation({ mutationFn: (id: string) => examApi.deleteExam(id) })
+
   const handleDelete = (id: string) => {
     mutate(id)
   }
@@ -32,16 +33,18 @@ const MentorExams = () => {
       setResetFilter(false)
     }, 200)
   }
+
   useEffect(() => {
     if (status === 'success') {
       openNotification({ status: status, message: 'Xóa bài thi thành công' })
       resetData()
     }
+
     if (status === 'error' && error) {
       openNotification({
         status: status,
         message: 'Thông báo',
-        description: ' Có lỗi xảy ra'
+        description: ' Có lỗi xảy ra',
       })
     }
   }, [status, error])
@@ -55,14 +58,14 @@ const MentorExams = () => {
       render: (_?: string, __?: string, index?: number) => {
         if (index === 0) return 1
         if (index) return index + 1
-      }
+      },
     },
     {
-      title: 'Tên bài thi thử',
+      title: 'Tên bộ đề',
       dataIndex: 'name',
       key: 'name',
       width: '30%',
-      render: (_: any, record: any) => <Link to='name-table'>{record.name}</Link>
+      render: (_: any, record: any) => <Link to={record.slug}>{record.name}</Link>,
     },
     {
       title: 'Phí',
@@ -88,7 +91,7 @@ const MentorExams = () => {
             </Tag>
           )
         }
-      }
+      },
     },
     {
       title: 'Loại',
@@ -114,7 +117,7 @@ const MentorExams = () => {
             </Tag>
           )
         }
-      }
+      },
     },
     {
       title: 'Số câu hỏi',
@@ -124,13 +127,13 @@ const MentorExams = () => {
       width: '10%',
       render: (_: any, record: any) => {
         return <Link to={`/mentor/exams/${record._id}/questions`}>{record.countQuestions}</Link>
-      }
+      },
     },
     {
       title: 'DS làm bài',
       align: 'center',
       dataIndex: 'tested',
-      key: 'tested'
+      key: 'tested',
     },
     {
       title: 'Trạng thái',
@@ -140,6 +143,7 @@ const MentorExams = () => {
       render: (_: any, { status }: { status: string }) => {
         if (status === 'ACTIVE') {
           const color = 'green'
+
           return (
             <Tag color={color} key={status}>
               {status.toUpperCase()}
@@ -147,13 +151,14 @@ const MentorExams = () => {
           )
         } else {
           const color = 'volcano'
+
           return (
             <Tag color={color} key={status}>
               {status.toUpperCase()}
             </Tag>
           )
         }
-      }
+      },
     },
     {
       title: 'Hành động',
@@ -162,7 +167,7 @@ const MentorExams = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           <Tooltip title='Danh sách câu hỏi'>
-            <Link to={`/mentor/exams/${record._id}/questions`}>
+            <Link to={`/mentor/exams/${record.slug}/questions`}>
               <BsListUl className='list-question-icon' />
             </Link>
           </Tooltip>
@@ -187,8 +192,8 @@ const MentorExams = () => {
             </Popconfirm>
           </Tooltip>
         </Space>
-      )
-    }
+      ),
+    },
   ]
 
   const onPressCreate = () => {

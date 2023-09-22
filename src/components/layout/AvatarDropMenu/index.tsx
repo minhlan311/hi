@@ -23,11 +23,6 @@ const AvatarDropMenu = (props: Props) => {
       label: <Link to={'/profiles/' + userData._id}>Trang cá nhân</Link>,
     },
     {
-      key: 'info',
-      label: <Link to={'/pedagogys/' + userData._id}>Cập nhật thông tin</Link>,
-    },
-
-    {
       key: 'change-password',
       label: <Link to='/change-password'>Đổi mật khẩu</Link>,
     },

@@ -4,7 +4,7 @@ type Props = {
   intArrType?: string | string[]
   intColor?: string | string[]
   intAlternativeType?: string | string[]
-  content: any
+  content: string | React.ReactNode
   color?: string
   colorText?: string
 }
@@ -12,7 +12,7 @@ type Props = {
 const TagCustom = (props: Props) => {
   const { intArrType, intColor, intAlternativeType, content, color, colorText } = props
 
-  let renderedTags: JSX.Element[] = []
+  const renderedTags: JSX.Element[] = []
 
   const contents = Array.isArray(content) ? content : [content]
 
@@ -38,9 +38,11 @@ const TagCustom = (props: Props) => {
 
     if (intArrType && intArrType.includes(item)) {
       const arrIndex = intArrType.indexOf(item)
+
       if (intAlternativeType && Array.isArray(intAlternativeType)) {
         renderedContent = intAlternativeType[arrIndex]
       }
+
       if (intColor && Array.isArray(intColor)) {
         renderedColor = intColor[arrIndex]
       }
@@ -49,7 +51,7 @@ const TagCustom = (props: Props) => {
     renderedTags.push(
       <Tag key={index} color={renderedColor}>
         <div style={{ color: colorText, fontWeight: 700 }}>{renderedContent}</div>
-      </Tag>
+      </Tag>,
     )
   })
 

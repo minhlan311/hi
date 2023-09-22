@@ -25,9 +25,6 @@ export default function UploadCMNDAfter() {
       }
     },
   }
-  const names = fileList.map((item) => item?.response?.url)
-  console.log(fileList, 'fileListfileList')
-  console.log(names, 'names')
 
   return (
     <Form.Item<TMentorForm>
