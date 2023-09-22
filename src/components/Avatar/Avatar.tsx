@@ -12,12 +12,13 @@ type Props = {
   userData?: UserState
   size?: number
   style?: React.CSSProperties
+  className?: string
   uploadImg?: boolean
   callbackPayload?: React.Dispatch<React.SetStateAction<UserState>>
 }
 
 const Avatar = (props: Props) => {
-  const { avtUrl, userData, size, style, uploadImg = false, callbackPayload } = props
+  const { avtUrl, userData, size, style, className, uploadImg = false, callbackPayload } = props
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Avatar = (props: Props) => {
   }, [fileList])
 
   if (!userData && !avtUrl) {
-    return <Avt src={noAvt}></Avt>
+    return <Avt src={noAvt} className={className}></Avt>
   } else {
     const nameParts: string[] = userData ? userData.fullName.split(' ') : []
 
@@ -60,6 +61,7 @@ const Avatar = (props: Props) => {
           }}
           size={size}
           src={avtUrl ? import.meta.env.VITE_FILE_ENDPOINT + '/' + avtUrl : undefined}
+          className={className}
         >
           {nameParts[nameParts?.length - 1].charAt(0)}
         </Avt>

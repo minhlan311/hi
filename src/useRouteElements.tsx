@@ -1,25 +1,24 @@
-/* eslint-disable react-refresh/only-export-components */
-import { useContext } from 'react'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import PageResult from './components/PageResult/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
-import Layout from './components/layout/Layout.tsx'
-import MentorLayout from './components/layout/MentorLayout/index.tsx'
-import PATH from './constants/path'
-import { AppContext } from './contexts/app.context'
-import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
-import Login from './pages/Auth/Login/index.tsx'
-import Register from './pages/Auth/Register/index.tsx'
-import HomePage from './pages/HomePage/index.tsx'
-import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
-
-import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
-import MentorPedagogies from './pages/MentorPage/Management/Pedagogies/index.tsx'
 import Courses from './pages/Courses/Courses.tsx'
-import MentorQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
+import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
+import HomePage from './pages/HomePage/index.tsx'
+import Layout from './components/layout/Layout.tsx'
+import Login from './pages/Auth/Login/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
+import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
+import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
+import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
+import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
+import MentorLayout from './components/layout/MentorLayout/index.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
+import PageResult from './components/PageResult/index.tsx'
+import PATH from './constants/path'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
+import { AppContext } from './contexts/app.context'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { useContext } from 'react'
+/* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
@@ -98,14 +97,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_PAGE,
           element: <Navigate to={PATH.MENTOR_CALENDAR} />,
         },
-        {
-          path: PATH.MENTOR_QUESTIONS,
-          element: (
-            <MentorLayout user={profile} title='Danh sách câu hỏi'>
-              <MentorPedagogies user={profile} />
-            </MentorLayout>
-          ),
-        },
+
         {
           path: PATH.MENTOR_COURSES,
           element: (
@@ -133,8 +125,16 @@ export default function useRouteElements() {
         {
           path: PATH.MENTOR_EXAMS_DETAIL,
           element: (
+            <MentorLayout user={profile} title='Bộ đề'>
+              <MentorExamDetail />
+            </MentorLayout>
+          ),
+        },
+        {
+          path: PATH.MENTOR_EXAMS_QUESTION,
+          element: (
             <MentorLayout user={profile} title='Danh sách câu hỏi'>
-              <MentorQuestions />
+              <MentorExamQuestions />
             </MentorLayout>
           ),
         },

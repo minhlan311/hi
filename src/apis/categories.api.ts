@@ -18,6 +18,9 @@ const categoryApi = {
 
     return http.post<SuccessResponse<CategoryState[]>>(ENDPOINT.FIND_CATEGORIES_PATH, payload || body)
   },
+  getCategorieDetail(id: string) {
+    return http.get<CategoryState>(ENDPOINT.CATEGORIES_PATH + id)
+  },
 }
 
 export default categoryApi

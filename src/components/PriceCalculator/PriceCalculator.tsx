@@ -32,20 +32,22 @@ const PriceCalculator = (props: Props) => {
     showTotal = false,
     showDiscountFromCode = false,
     showTotalDiscount = false,
-    direction
+    direction,
   } = props
 
   const total = useTotalCalculator(price, discount ? discount : 0)
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ja-JP', {
+    return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'JPY'
+      currency: 'VND',
     }).format(price)
   }
+
   if (showDiscountFromCode) {
     return <p>-{formatPrice(total.totalDiscountFromCode)}</p>
   }
+
   if (showTotalDiscount) {
     return <p>-{formatPrice(total.totalDiscount)}</p>
   } else
@@ -60,7 +62,7 @@ const PriceCalculator = (props: Props) => {
               ? 'vertical'
               : 'horizontal'
           }
-          className='sp100'
+          className={css.sp100}
         >
           <Space style={{ color: priceColor }}>
             <div className={css.title} style={{ fontSize: priceSize }}>

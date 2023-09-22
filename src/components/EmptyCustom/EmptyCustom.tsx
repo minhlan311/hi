@@ -15,12 +15,13 @@ type Props = {
 const EmptyCustom = (props: Props) => {
   const { buttonText, buttonHref, buttonPrimaryText, buttonPrimaryHref, imageUrl, heightImage, description, margin } =
     props
+
   return (
     <Empty
       image={imageUrl}
       imageStyle={{
         height: heightImage,
-        margin: margin
+        margin: margin,
       }}
       description={description}
     >

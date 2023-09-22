@@ -1,6 +1,6 @@
 import AffixCustom from '@/components/AffixCustom'
 import Logo from '@/components/Logo/Logo'
-import { Button, Col, Row, Space } from 'antd'
+import { Button, Col, Row, Space, Tooltip } from 'antd'
 import { useState } from 'react'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
@@ -82,11 +82,14 @@ export default function Navigation({ user }: Props) {
                     >
                       {user
                         ? user?.isMentor && (
-                            <Link to='/mentor'>
-                              <div className='cartIcon'>
-                                <BiSolidDashboard />
-                              </div>
-                            </Link>
+                            // user?.mentorStatus === 'APPROVED'
+                            <Tooltip title='Chuyển qua màn Mentor'>
+                              <Link to='/mentor'>
+                                <div className='cartIcon'>
+                                  <BiSolidDashboard />
+                                </div>
+                              </Link>
+                            </Tooltip>
                           )
                         : null}
                       <div className='cartIcon'>

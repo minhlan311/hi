@@ -14,7 +14,9 @@ export const ENDPOINT = {
   NEWS: '/news/find',
 
   GET_USER_INFO: '/users/',
+  FIND_USER_PATH: '/users/find',
   UPDATE_USER_INFO: '/users/',
+
   // :::::::::::::::::::: FILE PATH :::::::::::::::::::::
   GET_ATTACHMENT: '/upload/download/',
   UPLOAD_ATTACHMENT: '/upload/attachments/',
@@ -23,7 +25,7 @@ export const ENDPOINT = {
   UPLOAD_LARGE_IMAGE: '/upload/large-image',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
-  CATEGORIES_PATH: '/categories/',
+  CATEGORIES_PATH: '/category/',
   FIND_CATEGORIES_PATH: '/category/find',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::

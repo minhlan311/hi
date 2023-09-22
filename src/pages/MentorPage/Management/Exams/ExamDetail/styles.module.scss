@@ -1,0 +1,36 @@
+.exMain {
+  width: 100%;
+  .exTitle {
+    font-size: 24px;
+  }
+  .timeCreated {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--light-gray);
+  }
+  .infor {
+    align-items: flex-end;
+  }
+  .cardItem {
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+    }
+    .label {
+      .title {
+        color: var(--light-gray);
+      }
+      .data {
+        font-weight: 500;
+        font-size: 38px;
+        line-height: 30px;
+      }
+    }
+  }
+}
