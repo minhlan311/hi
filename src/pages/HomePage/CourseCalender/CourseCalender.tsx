@@ -27,6 +27,9 @@ export default function CourseCalender() {
         filterQuery: {
           categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id),
         },
+        option: {
+          limit: 6,
+        },
       })
     },
     keepPreviousData: true,
