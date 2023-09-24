@@ -2,7 +2,7 @@
 import { UploadFile } from 'antd/lib'
 import { useState } from 'react'
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Popconfirm, Select, Upload, UploadProps, message } from 'antd'
+import { Button, Col, Form, Input, Popconfirm, Row, Select, Upload, UploadProps, message } from 'antd'
 import { ENDPOINT } from '@/constants/endpoint'
 import { MentorForm, MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -143,10 +143,23 @@ export default function UpdateCertificate() {
             {fileList.length >= 8 ? null : <Button icon={<UploadOutlined />}></Button>}
           </Upload>
         </Form.Item>
-        <UploadCer />
-        <UploadOtherDilopma />
-        <UploadCMNDBefore />
-        <UploadCMNDAfter />
+        <Row gutter={64}>
+          <Col>
+            <UploadCer />
+          </Col>
+          <Col>
+            <UploadOtherDilopma />
+          </Col>
+        </Row>
+        <Row gutter={64}>
+          <Col>
+            <UploadCMNDBefore />
+          </Col>
+          <Col>
+            <UploadCMNDAfter />
+          </Col>
+        </Row>
+
         <div className='flex-btn'>
           <Form.Item<TMentorForm>>
             <Popconfirm
