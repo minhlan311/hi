@@ -13,6 +13,7 @@ type Props = {
 
 const Drawer = (props: Props) => {
   const { children, title, placement, onClose, open } = props
+
   return (
     <Dra className={css.drawer} title={title} placement={placement} closable={false} onClose={onClose} open={open}>
       {

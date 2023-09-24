@@ -28,9 +28,9 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: '-1'
-        }
-      }
+          createdAt: '-1',
+        },
+      },
     })
   }, [page])
 
@@ -40,24 +40,24 @@ const FilterAction = (props: Props) => {
       limit: limit,
       page: page || 1,
       sort: {
-        createdAt: '-1'
-      }
-    }
+        createdAt: '-1',
+      },
+    },
   })
   const [form] = Form.useForm()
 
   const { data: categoriesData } = useQuery({
-    queryKey: ['topCategories'],
+    queryKey: ['Categories'],
     queryFn: () => {
       return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
+        parentId: '64ffde9c746fe5413cf8d1af',
       })
-    }
+    },
   })
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {
       value: sj._id,
-      label: sj.name
+      label: sj.name,
     }
   })
 
@@ -68,7 +68,7 @@ const FilterAction = (props: Props) => {
       categoryId: categoryId,
       plan: plan,
       status: status,
-      search: keyword ? keyword : undefined
+      search: keyword ? keyword : undefined,
     }
 
     setFilterData({
@@ -79,9 +79,9 @@ const FilterAction = (props: Props) => {
         sort: {
           createdAt: createdAt,
           countAssessment: viewCountDownCount === 'highestRating' ? -1 : undefined,
-          countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined
-        }
-      }
+          countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
+        },
+      },
     })
   }
 
@@ -93,9 +93,9 @@ const FilterAction = (props: Props) => {
         limit: limit,
         page: page,
         sort: {
-          createdAt: -1
-        }
-      }
+          createdAt: -1,
+        },
+      },
     })
   }
   const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
@@ -107,7 +107,7 @@ const FilterAction = (props: Props) => {
     mutate(filterData as unknown as any, {
       onSuccess: (data) => {
         callBackData(data as unknown as any[])
-      }
+      },
     })
   }, [filterData])
 
@@ -129,12 +129,12 @@ const FilterAction = (props: Props) => {
               options={[
                 {
                   value: 'FREE',
-                  label: 'Miễn phí'
+                  label: 'Miễn phí',
                 },
                 {
                   value: 'PREMIUM',
-                  label: 'Có phí'
-                }
+                  label: 'Có phí',
+                },
               ]}
             />
           </Form.Item>
@@ -146,12 +146,12 @@ const FilterAction = (props: Props) => {
               options={[
                 {
                   value: 'highestRating',
-                  label: 'Đánh giá tốt nhất'
+                  label: 'Đánh giá tốt nhất',
                 },
                 {
                   value: 'highestParticipant',
-                  label: 'Đánh giá nhiều nhất'
-                }
+                  label: 'Đánh giá nhiều nhất',
+                },
               ]}
             />
           </Form.Item>
@@ -163,12 +163,12 @@ const FilterAction = (props: Props) => {
               options={[
                 {
                   value: 'ACTIVE',
-                  label: 'Hoạt động'
+                  label: 'Hoạt động',
                 },
                 {
                   value: 'INACTIVE',
-                  label: 'Không hoạt động'
-                }
+                  label: 'Không hoạt động',
+                },
               ]}
             />
           </Form.Item>
@@ -180,12 +180,12 @@ const FilterAction = (props: Props) => {
               options={[
                 {
                   value: '-1',
-                  label: 'Mới nhất'
+                  label: 'Mới nhất',
                 },
                 {
                   value: '1',
-                  label: 'Cũ nhất'
-                }
+                  label: 'Cũ nhất',
+                },
               ]}
             />
           </Form.Item>

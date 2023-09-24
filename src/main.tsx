@@ -15,9 +15,9 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 0
-    }
-  }
+      retry: 0,
+    },
+  },
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -50,8 +50,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                       controlHeight: 40,
                       controlOutlineWidth: 1,
                       colorSplit: '#E7E7E7',
-                      colorBorderSecondary: '#E7E7E7'
-                    }
+                      colorBorderSecondary: '#E7E7E7',
+                    },
                   }}
                   locale={viVN}
                 >
@@ -65,5 +65,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </ErrorBoundary>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

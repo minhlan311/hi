@@ -1,27 +1,22 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import courseApi from '@/apis/course.api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
-import { useQuery } from '@tanstack/react-query'
-import './CourseCalender.scss'
+import { useState } from 'react'
+import chinaSVG from '../../../assets/icons/china_flag.svg'
 import engSVG from '../../../assets/icons/eng_flag.svg'
 import germanySVG from '../../../assets/icons/germany_flag.svg'
 import japanSVG from '../../../assets/icons/japan_flag.svg'
 import koreaSVG from '../../../assets/icons/korea_flag.svg'
-import chinaSVG from '../../../assets/icons/china_flag.svg'
-import { useState } from 'react'
+import './CourseCalender.scss'
 import ListCourse from './components/ListCourse'
-import categoryApi from '@/apis/categories.api'
-import courseApi from '@/apis/course.api'
+
 export default function CourseCalender() {
+  const queryClient = useQueryClient()
+  const categoriesData = queryClient.getQueryData<any>(['categories'])
   const [active, setActive] = useState('')
   const [id, setId] = useState<string>('')
-
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
-      })
-    }
-  })
 
   const ArraySubject = categoriesData?.data?.docs
 
@@ -30,12 +25,12 @@ export default function CourseCalender() {
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
-          categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id)
-        }
+          categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id),
+        },
       })
     },
     keepPreviousData: true,
-    staleTime: 3 * 60 * 1000
+    staleTime: 3 * 60 * 1000,
   })
   console.log(isLoading)
 
@@ -50,7 +45,7 @@ export default function CourseCalender() {
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Lịch khai giảng khóa học online</h3>
         <div className='groupButton'>
-          {ArraySubject?.map((item) => (
+          {ArraySubject?.map((item: any) => (
             <Button
               disabled={isLoading}
               className={active === item.name ? 'buttonActive' : 'button'}
