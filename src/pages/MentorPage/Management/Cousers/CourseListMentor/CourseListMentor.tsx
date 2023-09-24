@@ -1,27 +1,60 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
-import { imageFallback } from '@/constants/utils'
-import { TCourse } from '@/types/course.type'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { useMutation } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
-import { Card, Col, Image, Row } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import openNotification from '@/components/Notification'
 import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
-type Props = {
-  data: TCourse[]
-  reset: (reset: boolean) => void
-}
+import { imageFallback } from '@/constants/utils'
+import { AppContext } from '@/contexts/app.context'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Card, Col, Image, Row } from 'antd'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export default function CourseListMentor({ data, reset }: Props) {
+export default function CourseListMentor({ data }: any) {
+  const { profile } = useContext(AppContext)
+  console.log(profile, 'profile')
+  const queryClient = useQueryClient()
   const [checkReset, setCheckReset] = useState<boolean>(false)
-  const { mutate } = useMutation({ mutationFn: (id: string) => courseApi.deleteCourses(id) })
+  const { mutate } = useMutation({
+    mutationFn: (id: string) => courseApi.deleteCourses(id),
+    onSuccess: (value: any) => {
+      console.log(value, 'valuevalue')
+
+      queryClient.invalidateQueries({ queryKey: ['course'] })
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: `Xóa khóa học ${value?.data?.name} thành công ! `,
+      })
+    },
+    onError() {
+      openNotification({
+        status: 'error',
+        message: 'Thông báo',
+        description: `Có lỗi xảy ra, vui lòng thử lại sau ! `,
+      })
+    },
+  })
+
+  // const { data } = useQuery({
+  //   queryKey: ['course'],
+  //   queryFn: () =>
+  //     courseApi.getCourses({
+  //       filterQuery: {
+  //         mentorId: profile._id,
+  //       },
+  //       option: {
+  //         limit: 10,
+  //         pagination: false,
+  //         sort: { createdAt: -1 },
+  //       },
+  //     }),
+  // })
+
+  console.log(data, 'datadata=====')
 
   const navigate = useNavigate()
   const { Meta } = Card
-
-  useEffect(() => {
-    reset(checkReset)
-  }, [checkReset])
 
   const onConfirm = async (id: string) => {
     mutate(id)
@@ -32,7 +65,7 @@ export default function CourseListMentor({ data, reset }: Props) {
     <>
       <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
         {data
-          ? data?.map((item) => (
+          ? data?.docs?.map((item: any) => (
               <>
                 <Col>
                   {' '}
@@ -68,7 +101,7 @@ export default function CourseListMentor({ data, reset }: Props) {
                       description={
                         <>
                           <p>Mentor : {item?.mentor?.fullName}</p>
-                          <p>{item?.descriptions || 'Không có mô tả'}</p>
+                          {/* <p>{item?.descriptions || 'Không có mô tả'}</p> */}
                         </>
                       }
                     />

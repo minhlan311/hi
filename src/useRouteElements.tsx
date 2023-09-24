@@ -18,7 +18,7 @@ import Register from './pages/Auth/Register/index.tsx'
 import { AppContext } from './contexts/app.context'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { useContext } from 'react'
-import CreateCourse from './pages/MentorPage/Management/Cousers/CreateCourse/CreateCourse.tsx'
+import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -111,7 +111,7 @@ export default function useRouteElements() {
           path: PATH.MENTOR_COURSES_CREATE,
           element: (
             <MentorLayout user={profile} title='Tạo khóa học'>
-              <CreateCourse />
+              <StepCreate />
             </MentorLayout>
           ),
         },

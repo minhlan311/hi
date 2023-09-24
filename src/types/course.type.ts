@@ -83,3 +83,28 @@ export type TCourse = {
     isLocked?: boolean
   }
 }
+
+export type CourseForm = {
+  categoryId: string
+  coverMedia: string
+  descriptions: string
+  mentorId: string
+  name: string
+  plan: string
+  cost?: number
+}
+
+export type Topic = {
+  createdAt: string
+  createdById: string
+  descriptions: string
+  id: string
+  name: string
+  parentId: string
+  position: number
+  status: string
+  updatedAt: string
+  updatedById: string
+  _destroy: boolean
+  _id: string
+}
