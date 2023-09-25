@@ -3,15 +3,13 @@ import courseApi from '@/apis/course.api'
 import openNotification from '@/components/Notification'
 import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 import { imageFallback } from '@/constants/utils'
-import { AppContext } from '@/contexts/app.context'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Image, Row } from 'antd'
-import { useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function CourseListMentor({ data, resetDatas }: any) {
-  const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
 
   const [resetData, setResetData] = useState(false)
