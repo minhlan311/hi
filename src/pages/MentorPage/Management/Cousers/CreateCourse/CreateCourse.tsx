@@ -46,7 +46,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     mutation.mutate({ ...values, mentorId: profile._id })
   }
 
-  const onFinishFailed = (values: any) => {}
+  const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
     queryKey: ['categoryAll'],
