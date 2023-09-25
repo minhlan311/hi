@@ -8,6 +8,12 @@ const topicApi = {
   getAllTopic(body: any) {
     return http.post<SuccessResponse<Topic>>(ENDPOINT.FIND_TOPIC_PATH, body)
   },
+  deleteTopic(id: string) {
+    return http.delete<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH + id)
+  },
+  updateTopic(body: Topic) {
+    return http.put<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH + body.id, body)
+  },
 }
 
 export default topicApi

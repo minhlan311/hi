@@ -14,7 +14,7 @@ import ListCourse from './components/ListCourse'
 
 export default function CourseCalender() {
   const queryClient = useQueryClient()
-  const categoriesData = queryClient.getQueryData<any>(['categories'])
+  const categoriesData = queryClient.getQueryData<any>(['topCategories'])
   const [active, setActive] = useState('')
   const [id, setId] = useState<string>('')
 
@@ -25,15 +25,13 @@ export default function CourseCalender() {
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
-          categoryId: id || (categoriesData?.data?.docs && categoriesData?.data?.docs[0]?.id),
+          categoryId: id,
         },
-        option: {
+        options: {
           limit: 6,
         },
       })
     },
-    keepPreviousData: true,
-    staleTime: 3 * 60 * 1000,
   })
   console.log(isLoading)
 

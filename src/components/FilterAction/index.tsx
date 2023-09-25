@@ -3,10 +3,11 @@ import categoryApi from '@/apis/categories.api'
 import { debounce } from '@/helpers/common'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form, Input, Row, Select, Space, Tooltip } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import { AppContext } from '@/contexts/app.context'
 
 type Props = {
   apiFind: any
@@ -32,6 +33,17 @@ const FilterAction = (props: Props) => {
     page = 1,
     className,
   } = props
+  const { profile } = useContext(AppContext)
+  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
+    filterQuery: {},
+    options: {
+      limit: limit,
+      page: page || 1,
+      sort: {
+        createdAt: '-1',
+      },
+    },
+  })
 
   useEffect(() => {
     setFilterData({
@@ -46,16 +58,21 @@ const FilterAction = (props: Props) => {
     })
   }, [page])
 
-  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
-    filterQuery: {},
-    options: {
-      limit: limit,
-      page: page || 1,
-      sort: {
-        createdAt: '-1',
+  useEffect(() => {
+    setFilterData({
+      filterQuery: {
+        mentorId: profile?._id,
       },
-    },
-  })
+      options: {
+        limit: limit,
+        page: page,
+        sort: {
+          createdAt: '-1',
+        },
+      },
+    })
+  }, [])
+
   const [form] = Form.useForm()
 
   const { data: categoriesData } = useQuery({
@@ -100,7 +117,9 @@ const FilterAction = (props: Props) => {
   const handleReset = () => {
     form.resetFields()
     setFilterData({
-      filterQuery: {},
+      filterQuery: {
+        mentorId: profile?._id,
+      },
       options: {
         limit: limit,
         page: page,
@@ -112,6 +131,7 @@ const FilterAction = (props: Props) => {
   }
 
   const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
+
   useEffect(() => {
     if (resetFilter) handleReset()
   }, [resetFilter])

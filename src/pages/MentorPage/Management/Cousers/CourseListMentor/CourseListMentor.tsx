@@ -7,25 +7,30 @@ import { AppContext } from '@/contexts/app.context'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Image, Row } from 'antd'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function CourseListMentor({ data }: any) {
+export default function CourseListMentor({ data, resetDatas }: any) {
   const { profile } = useContext(AppContext)
-  console.log(profile, 'profile')
   const queryClient = useQueryClient()
+
+  const [resetData, setResetData] = useState(false)
   const [checkReset, setCheckReset] = useState<boolean>(false)
+
+  useEffect(() => {
+    resetDatas(resetData)
+  }, [resetData])
+
   const { mutate } = useMutation({
     mutationFn: (id: string) => courseApi.deleteCourses(id),
     onSuccess: (value: any) => {
-      console.log(value, 'valuevalue')
-
       queryClient.invalidateQueries({ queryKey: ['course'] })
       openNotification({
         status: 'success',
         message: 'Thông báo',
         description: `Xóa khóa học ${value?.data?.name} thành công ! `,
       })
+      setResetData(true)
     },
     onError() {
       openNotification({
@@ -51,8 +56,6 @@ export default function CourseListMentor({ data }: any) {
   //     }),
   // })
 
-  console.log(data, 'datadata=====')
-
   const navigate = useNavigate()
   const { Meta } = Card
 
@@ -65,7 +68,7 @@ export default function CourseListMentor({ data }: any) {
     <>
       <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
         {data
-          ? data?.docs?.map((item: any) => (
+          ? data?.data?.docs?.map((item: any) => (
               <>
                 <Col>
                   {' '}
