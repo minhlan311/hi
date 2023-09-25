@@ -59,7 +59,7 @@ const FilterAction = (props: Props) => {
   const [form] = Form.useForm()
 
   const { data: categoriesData } = useQuery({
-    queryKey: ['topCategories'],
+    queryKey: ['Categories'],
     queryFn: () => {
       return categoryApi.getCategories({
         parentId: '64ffde9c746fe5413cf8d1af',
