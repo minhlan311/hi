@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
+import { AppContext } from '@/contexts/app.context'
 import { debounce } from '@/helpers/common'
 import { CourseForm } from '@/types/course.type'
 import { PlusOutlined } from '@ant-design/icons'
@@ -13,8 +15,6 @@ import { UploadFile } from 'antd/lib'
 import { useContext, useEffect, useState } from 'react'
 import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
-import { AppContext } from '@/contexts/app.context'
-import categoryApi from '@/apis/categories.api'
 
 export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
@@ -46,7 +46,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     mutation.mutate({ ...values, mentorId: profile._id })
   }
 
-  const onFinishFailed = (values: any) => {}
+  const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
     queryKey: ['categoryAll'],
