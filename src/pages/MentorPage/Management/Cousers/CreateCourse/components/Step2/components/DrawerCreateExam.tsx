@@ -38,7 +38,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
 
   const mutation = useMutation({
     mutationFn: (body: any) => courseApi.createTopics(body),
-    onSuccess: (values: any) => {
+    onSuccess: () => {
       openNotification({
         status: 'success',
         message: 'Thông báo',
