@@ -1,3 +1,4 @@
+@import '../GlobalStyles/responsive.scss';
 .unBorderBottom > *::before {
   border: 1px solid transparent !important;
 }
@@ -8,4 +9,20 @@
   > * {
     font-weight: bold;
   }
+}
+
+.center > div > div {
+  justify-content: center;
+  @include respond-to(sm) {
+    justify-content: flex-start;
+    padding: 0 10px;
+  }
+  @include respond-to(xs) {
+    justify-content: flex-start;
+    padding: 0 10px;
+  }
+}
+
+.end > div > div {
+  justify-content: flex-end;
 }

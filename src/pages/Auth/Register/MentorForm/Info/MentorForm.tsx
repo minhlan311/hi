@@ -25,7 +25,11 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   })
 
   const onFinish = (values: any) => {
-    const dataUpload = { ...values, isMentor: roles === ROLE.MENTOR ? true : false }
+    const dataUpload = {
+      ...values,
+      isMentor: roles === ROLE.MENTOR ? true : false,
+      mentorStatus: roles === ROLE.MENTOR ? 'PENDING' : '',
+    }
     registerAccountMutation.mutate(dataUpload, {
       onSuccess: (data) => {
         setUserId(data?.data?._id)

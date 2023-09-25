@@ -13,22 +13,27 @@ import PATH from '@/constants/path'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
-  const [current, setCurrent] = useState(1)
-  const [resetData, setResetData] = useState<boolean>(false)
+  const [current, setCurrent] = useState(0)
+  const [resetFilter, setResetFilter] = useState<boolean>(false)
   const navigate = useNavigate()
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page)
   }
 
-  const reset = (check: boolean) => {
-    setResetData(check)
+  const resetData = (value: boolean) => {
+    setResetFilter(value)
+    setTimeout(() => {
+      setResetFilter(false)
+    }, 200)
   }
 
   return (
     <div>
       <FilterAction
-        resetFilter={resetData}
+        resetFilter={resetFilter}
+        apiFind={courseApi.getCourses}
+        callBackData={setData}
         page={current}
         addOnButton={
           <ButtonCustom type='primary' onClick={() => navigate(PATH.MENTOR_COURSES_CREATE)}>
@@ -38,12 +43,10 @@ const MentorCourses = () => {
             </Row>
           </ButtonCustom>
         }
-        apiFind={courseApi.getCourses}
-        callBackData={setData}
       />
-      <CourseListMentor data={data?.data?.docs} reset={reset} />
+      <CourseListMentor data={data} resetDatas={resetData} />
       <div className='pagination'>
-        <Pagination current={current} defaultCurrent={1} total={50} onChange={onChange} />;
+        <Pagination current={current} defaultCurrent={1} onChange={onChange} />;
       </div>
     </div>
   )

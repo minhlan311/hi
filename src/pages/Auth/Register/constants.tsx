@@ -10,6 +10,7 @@ export type DataFormMentor = {
   userId?: string
   educationType?: string
   birthday?: string
+  mentorStatus?: string
 }
 
 export type MentorForm = {

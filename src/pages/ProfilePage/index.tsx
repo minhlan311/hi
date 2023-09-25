@@ -72,6 +72,7 @@ const ProfilePage = ({ profile }: Props) => {
             const newData = { coverUrl: data?.[0].url }
             setPayload(newData as unknown as UserState)
           }}
+          uploadQuality='high'
         >
           <div className={css.bg}>
             <img
@@ -155,6 +156,7 @@ const ProfilePage = ({ profile }: Props) => {
           setting={{
             size: 'large',
           }}
+          align='center'
         />
       </Header>
     </div>

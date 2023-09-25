@@ -2,12 +2,19 @@
 import http from '@/utils/http'
 import { SuccessResponse } from '@/types/utils.type'
 import { ENDPOINT } from '@/constants/endpoint'
-import { TCourse } from '@/types/course.type'
+import { TCourse, CourseForm, Topic } from '@/types/course.type'
 type Props = {
   filterQuery?: any
   options?: any
   payload?: any
 }
+
+type TopicsForm = {
+  descriptions?: string
+  name?: string
+  parentId?: string
+}
+
 const courseApi = {
   getCourses(props: Props) {
     const {
@@ -23,7 +30,14 @@ const courseApi = {
       filterQuery: filterQuery,
       options: options,
     }
+
     return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
+  },
+  createCourses(body: CourseForm) {
+    return http.post<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH, body)
+  },
+  createTopics(body: TopicsForm) {
+    return http.post<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH, body)
   },
   deleteCourses(ids: string) {
     return http.delete<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + `${ids}`)

@@ -11,6 +11,9 @@ export const ENDPOINT = {
   USER_DETAIL_PATH: '/users/',
   GET_ALL_MENTOR: '/users/find',
 
+  // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::
+  DOCUMENT_PATH: '/edu/documents',
+
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
   NEWS: '/news/find',
 
@@ -52,11 +55,11 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: LESSONS PATH :::::::::::::::::::::
   FIND_LESSONS_PATH: '/edu/lessons/find',
-  LESSONS_PATH: '/edu/lessons',
+  LESSONS_PATH: '/edu/lessons/',
 
   // :::::::::::::::::::: TOPIC PATH :::::::::::::::::::::
   FIND_TOPIC_PATH: '/edu/topics/find',
-  TOPIC_PATH: '/edu/topics',
+  TOPIC_PATH: '/edu/topics/',
 
   // :::::::::::::::::::: COMMENT PATH :::::::::::::::::::::
   COMMENT_PATH: '/comments/',

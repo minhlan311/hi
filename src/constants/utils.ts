@@ -5,5 +5,5 @@ export const REGEX_PATTERN = {
   regexPhoneNumber: /^(\+84|0)(2\d{9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8})$/,
   regexCombineEmailPhoneNumber: /^([a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,6}$)|([0-9]{10})+$/,
   regexPassword: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,16}$/,
-  regexUrl: /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|biz|info|vn)(\/[^\s]*)?$/
+  regexUrl: /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|biz|info|vn)(\/[^\s]*)?$/,
 }

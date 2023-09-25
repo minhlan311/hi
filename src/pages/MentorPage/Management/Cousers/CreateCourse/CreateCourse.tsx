@@ -1,49 +1,68 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Row, Select, Upload, UploadProps, message } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { EducationTypeEnum, PlanEnum, planOptions } from '../constants/ultil'
-import { UploadFile } from 'antd/lib'
-import ImgCrop from 'antd-img-crop'
-import { PlusOutlined } from '@ant-design/icons'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { RcFile } from 'antd/es/upload'
-import { useQuery } from '@tanstack/react-query'
-import subjectApi from '@/apis/subject.api'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import './CreateCourse.scss'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import courseApi from '@/apis/course.api'
 import { debounce } from '@/helpers/common'
+import { CourseForm } from '@/types/course.type'
+import { PlusOutlined } from '@ant-design/icons'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, Col, Form, Input, InputNumber, Row, Select, TreeSelect, Upload, UploadProps, message } from 'antd'
+import ImgCrop from 'antd-img-crop'
+import { RcFile } from 'antd/es/upload'
+import { UploadFile } from 'antd/lib'
+import { useContext, useEffect, useState } from 'react'
+import { PlanEnum, planOptions } from '../constants/ultil'
+import './CreateCourse.scss'
+import { AppContext } from '@/contexts/app.context'
+import categoryApi from '@/apis/categories.api'
 
-export default function CreateCourse() {
+export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [educationType, setEducationType] = useState(EducationTypeEnum.UNIVERSITY)
   const [form] = Form.useForm()
+  const { profile } = useContext(AppContext)
 
-  function handleEditorChange(event, editor) {
+  const queryClient = useQueryClient()
+
+  const myDataUser = queryClient.getQueryData<any>(['userDetail'])
+
+  const dataMedia = fileList?.map((item) => item?.response?.url)
+
+  useEffect(() => {
+    form.setFieldValue('coverMedia', dataMedia[0])
+    form.setFieldValue('descriptions', content)
+    form.setFieldValue('mentorId', myDataUser?.data?._id)
+  }, [fileList, dataMedia, content, myDataUser])
+
+  function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
     setContent(data)
   }
 
-  console.log('render')
-
   const onFinish = (values: any) => {
-    console.log(values, 'values')
+    next(1)
+
+    mutation.mutate({ ...values, mentorId: profile._id })
   }
 
-  const onFinishFailed = (values: any) => {
-    console.log(values, 'values')
-  }
+  const onFinishFailed = (values: any) => {}
 
   const { data: subjectData } = useQuery({
-    queryKey: ['subject'],
-    queryFn: () => subjectApi.getNews(),
+    queryKey: ['categoryAll'],
+    queryFn: () => categoryApi.getCategories(),
   })
   const subjectOptions = subjectData?.data?.docs?.map((user: any) => ({
     label: user.name,
     value: user._id,
   }))
 
-  console.log(content, 'contentcontent')
+  const mutation = useMutation({
+    mutationFn: (body: CourseForm) => courseApi.createCourses(body),
+    onSuccess: (data: any) => {
+      dataIdCouser(data?.data?._id)
+    },
+  })
 
   useEffect(() => {
     if (form.getFieldValue('plan')) {
@@ -73,7 +92,6 @@ export default function CreateCourse() {
 
       if (status === 'done') {
         message.success(`Tải file ${info.file.name} thành công.`)
-        form.setFieldValue('coverMedia', info)
       } else if (status === 'error') {
         message.error(`Tải file ${info.file.name} thất bại.`)
       }
@@ -85,22 +103,21 @@ export default function CreateCourse() {
     },
   }
 
-  const propsImageCrop = {
-    aspect: 2 / 1,
-    rotationSlider: true,
-    cropShape: 'rect',
-  }
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 800)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 300)
 
   return (
     <div>
-      <p>Tạo khóa học</p>
       <Form form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <Row gutter={10}>
           <Col span={16}>
             <Row gutter={30}>
               <Col span={6}>
-                <Form.Item label='Loại' name='plan' initialValue={PlanEnum.FREE} required>
+                <Form.Item
+                  rules={[{ required: true, message: 'Vui lòng chọn loại khóa học' }]}
+                  label='Loại'
+                  name='plan'
+                  initialValue={PlanEnum.FREE}
+                >
                   <Select
                     options={planOptions}
                     onChange={(value: PlanEnum) => {
@@ -111,17 +128,16 @@ export default function CreateCourse() {
                 </Form.Item>
               </Col>
               <Col span={3}>
-                <Form.Item
-                  label={'Số tiền'}
-                  name='cost'
-                  required={typePlan === PlanEnum.PREMIUM}
-                  rules={[{ min: 1, message: 'Vui lòng nhập số tiền' }]}
-                >
-                  <Input type='number' disabled={typePlan === PlanEnum.FREE} />
+                <Form.Item label='Số tiền' name='cost'>
+                  <InputNumber min={1} max={10} disabled={typePlan === PlanEnum.FREE} />
                 </Form.Item>
               </Col>
               <Col span={9}>
-                <Form.Item label='Tiêu đề khóa học' name='name' required>
+                <Form.Item
+                  label='Tiêu đề khóa học'
+                  name='name'
+                  rules={[{ required: true, message: 'Vui lòng điền tiêu đề khóa học' }]}
+                >
                   <Input placeholder='Nhập tiêu đề khoá học' allowClear />
                 </Form.Item>
               </Col>
@@ -129,58 +145,48 @@ export default function CreateCourse() {
             <Row gutter={30}>
               <Col span={9}>
                 <Form.Item
-                  label={'Chọn khóa học'}
-                  name='subject'
-                  //   type='select-debounce'
-                  //   fetchOptions={fetchSubjects}
-                  //   otherFilter={{ educationType: educationType }}
-                  required
+                  label='Tiêu đề khóa học'
+                  name='categoryId'
+                  rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
-                  <Select options={subjectOptions} placeholder='Chọn môn học' allowClear />
+                  <TreeSelect
+                    showSearch
+                    style={{ width: '90%' }}
+                    value={form.getFieldValue('categoryId')}
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder='Chọn danh mục'
+                    allowClear
+                    treeDefaultExpandAll={false}
+                    onChange={(newValue: string) => {
+                      form.setFieldValue('categoryId', newValue)
+                    }}
+                    treeData={subjectOptions}
+                  />
+                </Form.Item>
+
+                <Form.Item hidden name='mentorId'>
+                  <Input />
                 </Form.Item>
               </Col>
-              <Col span={9}>
-                <Form.Item
-                  label={'Giảng viên'}
-                  name='mentor'
-                  //   options={mentorOptions}
-                  //   type='select-debounce'
-                  //   fetchOptions={fetchMentorList}
-                  //   innerProps={{ placeholder: 'Chọn giảng viên', allowClear: true, showSearch: true }}
-                  required
-                >
-                  {' '}
-                  <Select placeholder='Chọn giảng viên' allowClear showSearch></Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={6}>
-                <Form.Item label={'Ngày khai giảng'} name='startDate'>
-                  <DatePicker placeholder='DD/MM/YYYY' format={'DD/MM/YYYY'} allowClear />{' '}
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item
-                  label={'Schedules'}
-                  name='schedules'
-                  //   type='checkbox'
-                  //   options={dateInWeek}
-                  //   innerProps={{ placeholder: 'Schedules' }}
-                >
-                  <Checkbox />
-                </Form.Item>
-              </Col>
+              <Col span={9}></Col>
             </Row>
           </Col>
           <Col span={4}>
             <Form.Item
               label='Ảnh khoá học'
               name='coverMedia'
+              // rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học' }]}
               // type='upload-image-crop'
               //   cropOptions={propsImageCrop}
             >
-              <ImgCrop {...propsImageCrop} modalCancel='Hủy' modalOk='Cắt' modalTitle='Chỉnh sửa hình ảnh'>
+              <ImgCrop
+                aspect={2 / 1}
+                cropShape='rect'
+                rotationSlider
+                modalCancel='Hủy'
+                modalOk='Cắt'
+                modalTitle='Chỉnh sửa hình ảnh'
+              >
                 <Upload {...propsImageDocuments} fileList={fileList}>
                   {fileList.length >= 1 ? null : <PlusOutlined />}
                 </Upload>
@@ -190,7 +196,7 @@ export default function CreateCourse() {
         </Row>
         <Row>
           <Col span={24}>
-            <Form.Item label={'Mô tả khóa học'} name='editor-1'>
+            <Form.Item label={'Mô tả khóa học'} name='descriptions'>
               <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
             </Form.Item>
           </Col>

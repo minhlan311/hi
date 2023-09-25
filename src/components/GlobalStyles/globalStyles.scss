@@ -231,17 +231,7 @@ table {
   //   color: var(--red) !important;
   // }
 }
-.ant-tabs-nav .ant-tabs-nav-wrap {
-  justify-content: center;
-  @include respond-to(sm) {
-    justify-content: flex-start;
-    padding: 0 10px;
-  }
-  @include respond-to(xs) {
-    justify-content: flex-start;
-    padding: 0 10px;
-  }
-}
+
 :where(.css-dev-only-do-not-override-1ld4x6i).ant-carousel .slick-dots li button {
   // background-color: var(--red);
 }
