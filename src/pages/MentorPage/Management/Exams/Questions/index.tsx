@@ -1,5 +1,6 @@
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import { useQuery } from '@tanstack/react-query'
@@ -7,9 +8,8 @@ import { Card, Col, Row, Space } from 'antd'
 import { useState } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
 import { useLocation } from 'react-router-dom'
-import css from './styles.module.scss'
 import DrawerQuestion from '../Drawer/DrawerQuestion'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import css from './styles.module.scss'
 
 const MentorQuestions = () => {
   const location = useLocation()
@@ -216,6 +216,7 @@ const MentorQuestions = () => {
 
   return (
     <Space direction='vertical' className={`${css.quesList} sp100`}>
+      {/* <DragAndDrop /> */}
       <FilterAction
         type='question'
         apiFind={'ádd'}
