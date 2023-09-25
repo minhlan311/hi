@@ -5,7 +5,7 @@ import { ENDPOINT } from '@/constants/endpoint'
 import { TCourse, CourseForm, Topic } from '@/types/course.type'
 type Props = {
   filterQuery?: any
-  option?: any
+  options?: any
   payload?: any
 }
 
@@ -19,7 +19,7 @@ const courseApi = {
   getCourses(props: Props) {
     const {
       filterQuery = { categoryId: '64ffe02e746fe5413cf8d1d5' },
-      option = {
+      options = {
         pagination: false,
         sort: { createdAt: -1 },
       },
@@ -28,7 +28,7 @@ const courseApi = {
 
     const data = {
       filterQuery: filterQuery,
-      option: option,
+      options: options,
     }
 
     return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
