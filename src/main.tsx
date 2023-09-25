@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
@@ -21,49 +20,47 @@ const queryClient = new QueryClient({
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <AppProvider>
-            <SocketProvider>
-              <GlobalStyles>
-                <ConfigProvider
-                  theme={{
-                    token: {
-                      colorPrimary: '#D72831',
-                      colorPrimaryActive: '#FF636F',
-                      colorPrimaryBorder: '#D72831',
-                      colorPrimaryHover: '#FF636F',
-                      // colorPrimaryBg: '#D72831',
-                      colorInfo: '#1EA69A',
-                      colorBorder: '#E7E7E7',
-                      colorLink: '#1C1D1F',
-                      colorLinkActive: '#D72831',
-                      colorLinkHover: '#FF636F',
-                      borderRadius: 12,
-                      borderRadiusLG: 12,
-                      borderRadiusOuter: 12,
-                      borderRadiusSM: 12,
-                      borderRadiusXS: 12,
-                      paddingContentHorizontal: 14,
-                      controlHeight: 40,
-                      controlOutlineWidth: 1,
-                      colorSplit: '#E7E7E7',
-                      colorBorderSecondary: '#E7E7E7',
-                    },
-                  }}
-                  locale={viVN}
-                >
-                  <ScrollTop>
-                    <App />
-                  </ScrollTop>
-                </ConfigProvider>
-              </GlobalStyles>
-            </SocketProvider>
-          </AppProvider>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <SocketProvider>
+            <GlobalStyles>
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: '#D72831',
+                    colorPrimaryActive: '#FF636F',
+                    colorPrimaryBorder: '#D72831',
+                    colorPrimaryHover: '#FF636F',
+                    // colorPrimaryBg: '#D72831',
+                    colorInfo: '#1EA69A',
+                    colorBorder: '#E7E7E7',
+                    colorLink: '#1C1D1F',
+                    colorLinkActive: '#D72831',
+                    colorLinkHover: '#FF636F',
+                    borderRadius: 12,
+                    borderRadiusLG: 12,
+                    borderRadiusOuter: 12,
+                    borderRadiusSM: 12,
+                    borderRadiusXS: 12,
+                    paddingContentHorizontal: 14,
+                    controlHeight: 40,
+                    controlOutlineWidth: 1,
+                    colorSplit: '#E7E7E7',
+                    colorBorderSecondary: '#E7E7E7',
+                  },
+                }}
+                locale={viVN}
+              >
+                <ScrollTop>
+                  <App />
+                </ScrollTop>
+              </ConfigProvider>
+            </GlobalStyles>
+          </SocketProvider>
+        </AppProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  </BrowserRouter>,
 )

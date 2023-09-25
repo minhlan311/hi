@@ -8,6 +8,7 @@ import css from './UploadCustom.module.scss'
 type Props = {
   children?: React.ReactNode
   action?: string
+  uploadQuality?: 'medium' | 'high'
   showUploadList?: boolean
   cropBeforeUpload?: boolean
   cropAspect?: number
@@ -17,6 +18,7 @@ type Props = {
   accessType?: 'image/jpeg' | 'image/png' | 'image/*' | string
   maxFileSize?: number
   cropShape?: 'rect' | 'round'
+  name?: string
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   setPreviewUrl?: React.Dispatch<React.SetStateAction<string>>
   callBackFileList?: React.Dispatch<React.SetStateAction<UploadFile[]>>
@@ -25,7 +27,8 @@ type Props = {
 const UploadCustom = (props: Props) => {
   const {
     children,
-    action = import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
+    action,
+    uploadQuality = 'medium',
     showUploadList = false,
     cropBeforeUpload = false,
     cropAspect = 16 / 9,
@@ -35,6 +38,7 @@ const UploadCustom = (props: Props) => {
     accessType,
     maxFileSize,
     cropShape,
+    name,
     setLoading,
     setPreviewUrl,
     callBackFileList,
@@ -45,33 +49,50 @@ const UploadCustom = (props: Props) => {
 
   const handleBeforeUpload = async (file: RcFile) => {
     setLoading && setLoading(true)
+
     if (accessType && file.type !== accessType) {
       message.error('You can only upload type file!')
       setLoading && setLoading(false)
+
       return false
     }
+
     if (maxFileSize) {
       const max = file.size / 1024 / 1024 < maxFileSize
+
       if (!max) {
         message.error(`Image must smaller than ${maxFileSize}MB!`)
       }
+
       setLoading && setLoading(false)
+
       return false
     }
+
     const reader = new FileReader()
     reader.readAsDataURL(file)
+
     reader.onload = (e) => {
       if (setPreviewUrl) setPreviewUrl(`${e?.target?.result}`)
     }
+
     const formData = new FormData()
     formData.append('image', file)
 
     try {
-      const response = await axios.post(action, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await axios.post(
+        action
+          ? action
+          : uploadQuality === 'high'
+          ? import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_LARGE_IMAGE
+          : import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         },
-      })
+      )
       if (multiple) setFileList([...fileList, response.data])
       else setFileList([response.data])
 
@@ -79,6 +100,7 @@ const UploadCustom = (props: Props) => {
     } catch (error) {
       message.error('Đăng ảnh lỗi')
     }
+
     setLoading && setLoading(false)
   }
 
@@ -92,6 +114,7 @@ const UploadCustom = (props: Props) => {
     return (
       <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
         <Upload
+          name={name}
           multiple={multiple || (!multiple && maxCount > 1) ? true : undefined}
           maxCount={maxCount}
           listType={listType}
@@ -105,8 +128,10 @@ const UploadCustom = (props: Props) => {
       </ImgCrop>
     )
   }
+
   return (
     <Upload
+      name={name}
       multiple={multiple || (!multiple && maxCount > 1) ? true : undefined}
       maxCount={maxCount}
       listType={listType}
