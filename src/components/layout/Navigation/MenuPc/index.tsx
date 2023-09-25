@@ -38,7 +38,7 @@ export default function MenuPc({ open, setOpen }: Props) {
 
   const navigate = useNavigate()
 
-  const query = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(profile._id) })
+  const query = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(profile?._id) })
   const user = query?.data?.data
   const { sm, md } = useResponsives()
   const { data: categories } = useQuery({
