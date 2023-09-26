@@ -25,6 +25,7 @@ type Props = {
     | 'NUMERICAL'
     | 'WRITING'
   callBackData: React.Dispatch<React.SetStateAction<Choice[]>>
+  data: Choice[] | any
   isClose: boolean
 }
 
@@ -130,7 +131,7 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
 
 const TableAddonQues = (props: Props) => {
   const id = useId()
-  const { selectionType, callBackData, isClose } = props
+  const { selectionType, callBackData, data, isClose } = props
   const [dataSource, setDataSource] = useState<Choice[]>([
     {
       key: id + Math.floor(Math.random() * 1000000).toString(),
@@ -139,6 +140,10 @@ const TableAddonQues = (props: Props) => {
       isChosen: false,
     },
   ])
+
+  useEffect(() => {
+    if (data) setDataSource(data as unknown as any)
+  }, [data])
 
   const handleDelete = (key: React.Key) => {
     const newData = dataSource.filter((item) => item.key !== key)
@@ -174,11 +179,11 @@ const TableAddonQues = (props: Props) => {
       title: 'Hành dộng',
       align: 'center',
       render: (_, record: Choice) =>
-        dataSource.length >= 1 ? (
+        dataSource.length >= 1 && (
           <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key)}>
             <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
           </Popconfirm>
-        ) : null,
+        ),
     },
   ]
 

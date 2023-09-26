@@ -3,7 +3,7 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import { ExamState } from '@/interface/exam'
 import { Popconfirm, Row, Space, Table, Tag, Tooltip } from 'antd'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { BiEdit, BiPlus } from 'react-icons/bi'
 import { BsListUl } from 'react-icons/bs'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -11,15 +11,16 @@ import { Link } from 'react-router-dom'
 import DrawerExam from './Drawer/DrawerExam'
 import openNotification from '@/components/Notification'
 import { useMutation } from '@tanstack/react-query'
+import { AppContext } from '@/contexts/app.context'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [data, setData] = useState<{ data: { docs: ExamState[] } }>()
   const [loading, setLoading] = useState<boolean>(false)
-
   const [examData, setExamData] = useState<ExamState>()
   const { status, mutate, error } = useMutation({ mutationFn: (id: string) => examApi.deleteExam(id) })
+  const { profile } = useContext(AppContext)
 
   const handleDelete = (id: string) => {
     mutate(id)
@@ -212,10 +213,11 @@ const MentorExams = () => {
           </ButtonCustom>
         }
         apiFind={examApi.findExam}
+        type='test'
         callBackData={setData}
         setLoading={setLoading}
         resetFilter={resetFilter}
-        // dataType={}
+        filterQuery={{ createdById: profile._id }}
       />
       <Table columns={columns} dataSource={data?.data?.docs} loading={loading} bordered />
       <DrawerExam open={open} setOpen={setOpen} resetData={resetData} setLoading={setLoading} examData={examData} />

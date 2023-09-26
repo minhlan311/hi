@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
 import { debounce } from '@/helpers/common'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form, Input, Row, Select, Space, Tooltip } from 'antd'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import { AppContext } from '@/contexts/app.context'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
   apiFind: any
@@ -18,7 +17,8 @@ type Props = {
   limit?: number
   page?: number
   className?: string
-  type?: 'course' | 'test' | 'question'
+  type: 'course' | 'test' | 'question'
+  filterQuery?: any
 }
 
 const FilterAction = (props: Props) => {
@@ -32,10 +32,10 @@ const FilterAction = (props: Props) => {
     limit = 8,
     page = 1,
     className,
+    filterQuery,
   } = props
-  const { profile } = useContext(AppContext)
   const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
-    filterQuery: {},
+    filterQuery: { ...filterQuery },
     options: {
       limit: limit,
       page: page || 1,
@@ -61,7 +61,7 @@ const FilterAction = (props: Props) => {
   useEffect(() => {
     setFilterData({
       filterQuery: {
-        mentorId: profile?._id,
+        ...filterQuery,
       },
       options: {
         limit: limit,
@@ -94,6 +94,7 @@ const FilterAction = (props: Props) => {
     const { categoryId, plan, viewCountDownCount, status, createdAt, keyword } = form.getFieldsValue()
 
     const body = {
+      ...filterQuery,
       categoryId: categoryId,
       plan: plan,
       status: status,
@@ -118,7 +119,7 @@ const FilterAction = (props: Props) => {
     form.resetFields()
     setFilterData({
       filterQuery: {
-        mentorId: profile?._id,
+        ...filterQuery,
       },
       options: {
         limit: limit,
@@ -138,8 +139,9 @@ const FilterAction = (props: Props) => {
 
   useEffect(() => {
     mutate(filterData as unknown as any, {
-      onSuccess: (data) => {
-        callBackData(data as unknown as any[])
+      onSuccess: (data: any) => {
+        const res = data?.data.docs
+        callBackData(res)
       },
     })
   }, [filterData])
