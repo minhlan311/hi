@@ -1,5 +1,5 @@
-import React from 'react'
 import { Button } from 'antd'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import css from './ButtonCustom.module.scss'
 type Props = {
@@ -36,12 +36,12 @@ const ButtonCustom = (props: Props) => {
     form,
     children,
     background,
-    color
+    color,
   } = props
+
   return href ? (
     <Link to={`${href}`}>
       <Button
-        icon={icon}
         size={size}
         type={type}
         shape={shape}
@@ -52,12 +52,13 @@ const ButtonCustom = (props: Props) => {
         form={form}
         htmlType={htmlType}
       >
-        {children}
+        <div className={'custom-butt-icon'}>
+          {icon} {children}
+        </div>
       </Button>
     </Link>
   ) : (
     <Button
-      icon={icon}
       size={size}
       type={type}
       shape={shape}
@@ -68,7 +69,9 @@ const ButtonCustom = (props: Props) => {
       form={form}
       htmlType={htmlType}
     >
-      {children}
+      <div className={'custom-butt-icon'}>
+        {icon} {children}
+      </div>
     </Button>
   )
 }

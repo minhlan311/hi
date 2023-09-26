@@ -7,9 +7,11 @@ import { useQuery } from '@tanstack/react-query'
 import { Card, Col, Row, Space } from 'antd'
 import { useState } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
+import { HiOutlineUpload } from 'react-icons/hi'
 import { useLocation } from 'react-router-dom'
 import DrawerQuestion from '../Drawer/DrawerQuestion'
 import css from './styles.module.scss'
+import questionApi from '@/apis/question.api'
 
 const MentorQuestions = () => {
   const location = useLocation()
@@ -20,6 +22,7 @@ const MentorQuestions = () => {
       return examApi.getExamDetail(examSlug)
     },
   })
+
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -219,12 +222,15 @@ const MentorQuestions = () => {
       {/* <DragAndDrop /> */}
       <FilterAction
         type='question'
-        apiFind={'ádd'}
+        apiFind={questionApi.findQuestion}
         callBackData={setQuestions}
         addOnButton={
-          <ButtonCustom type='primary' onClick={() => setOpen(true)}>
-            Thêm câu hỏi
-          </ButtonCustom>
+          <Space>
+            <ButtonCustom type='primary' onClick={() => setOpen(true)}>
+              Thêm câu hỏi
+            </ButtonCustom>
+            <ButtonCustom icon={<HiOutlineUpload />}>Thêm file câu hỏi</ButtonCustom>
+          </Space>
         }
       />
 
@@ -242,16 +248,11 @@ const MentorQuestions = () => {
                 </Col>
                 <Col>
                   <Space size='small'>
+                    <ButtonCustom shape='circle' type='text' icon={<AiOutlineEdit />} size='small'></ButtonCustom>
                     <ButtonCustom
                       shape='circle'
                       type='text'
-                      icon={<AiOutlineEdit className={'ic'} />}
-                      size='small'
-                    ></ButtonCustom>
-                    <ButtonCustom
-                      shape='circle'
-                      type='text'
-                      icon={<AiOutlineDelete className={'ic'} style={{ color: 'var(--red)' }} />}
+                      icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
                       size='small'
                     ></ButtonCustom>
                   </Space>
@@ -288,6 +289,8 @@ const MentorQuestions = () => {
         resetData={resetData}
         setLoading={setLoading}
         // questionData={questions}
+        testId={examDetail ? examDetail._id : ''}
+        categoryId={examDetail ? examDetail.subjectId : ''}
       />
     </Space>
   )

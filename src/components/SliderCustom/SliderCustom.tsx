@@ -73,6 +73,10 @@ export default function SliderCustom(props: Props) {
     return <Button style={buttonStyle} icon={prevArrow} type={buttonType} shape='circle'></Button>
   }
 
+  const checkArr = dataLength - slidesToShow
+
+  const NullArr = Array.from({ length: Math.abs(checkArr) }, (_, index) => index + 1)
+
   return (
     <div className={style.containerModule}>
       <div className={style.containerSlider}>
@@ -94,6 +98,7 @@ export default function SliderCustom(props: Props) {
             autoplaySpeed={5000}
           >
             {children}
+            {NullArr?.map((item) => <p key={item}></p>)}
           </Carousel>
         ) : (
           <div className={style.spin}>

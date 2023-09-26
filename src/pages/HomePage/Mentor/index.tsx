@@ -21,7 +21,7 @@ const Mentor = () => {
       return userApi.findUser({
         filterQuery: {
           isMentor: true,
-          // mentorStatus: 'APPROVED',
+          mentorStatus: 'APPROVED',
         },
       })
     },

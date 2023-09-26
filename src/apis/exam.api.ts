@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { ExamState } from '@/interface/exam'
-
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
@@ -12,7 +11,7 @@ type Props = {
 }
 const examApi = {
   createExam(data: any) {
-    return http.post<SuccessResponse<ExamState>>(ENDPOINT.EXAM_PATH, data)
+    return http.post<ExamState>(ENDPOINT.EXAM_PATH, data)
   },
   findExam(props: Props) {
     const {
@@ -37,11 +36,11 @@ const examApi = {
   },
 
   putExam(data: any) {
-    return http.put<SuccessResponse<ExamState>>(ENDPOINT.EXAM_PATH + data.id, data)
+    return http.put<ExamState>(ENDPOINT.EXAM_PATH + data.id, data)
   },
 
   deleteExam(id: string) {
-    return http.delete<SuccessResponse<ExamState>>(ENDPOINT.EXAM_PATH + id)
+    return http.delete<ExamState>(ENDPOINT.EXAM_PATH + id)
   },
 }
 

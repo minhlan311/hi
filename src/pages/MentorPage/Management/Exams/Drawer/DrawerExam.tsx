@@ -62,7 +62,7 @@ const DrawerExam = (props: Props) => {
     if (status === 'success') {
       openNotification({
         status: status,
-        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
+        message: action === 'create' ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
       setOpen(false)
       resetData && resetData()
@@ -105,7 +105,7 @@ const DrawerExam = (props: Props) => {
               Hủy
             </ButtonCustom>
             <ButtonCustom onClick={() => form.submit()} type='primary'>
-              {action === 'create' ? 'Tạo bài thi' : 'Cập nhật'}
+              {action === 'create' ? 'Tạo bộ đề' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
         }
@@ -120,29 +120,29 @@ const DrawerExam = (props: Props) => {
         >
           <Form.Item
             name='name'
-            label='Tiêu đề bài thi'
+            label='Tiêu đề bộ đề'
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tiêu đề bài thi',
+                message: 'Vui lòng nhập tiêu đề bộ đề',
               },
             ]}
           >
-            <Input placeholder='Nhập tên tiêu đề bài thi' />
+            <Input placeholder='Nhập tên tiêu đề bộ đề' />
           </Form.Item>
 
           <Form.Item
             name='type'
-            label='Loại bài thi'
+            label='Loại bộ đề'
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn loại bài thi',
+                message: 'Vui lòng chọn loại bộ đề',
               },
             ]}
           >
             <Select
-              placeholder='Chọn loại bài thi'
+              placeholder='Chọn loại bộ đề'
               options={[
                 {
                   value: 'QUIZ',
