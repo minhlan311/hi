@@ -1,5 +1,5 @@
+import { Steps, theme } from 'antd'
 import React, { useState } from 'react'
-import { Button, message, Steps, theme } from 'antd'
 import CreateCourse from './CreateCourse'
 import CreateSteps2 from './components/Step2/CreateSteps2'
 
@@ -22,18 +22,11 @@ const StepCreate: React.FC = () => {
       content: 'Last-content',
     },
   ]
-  const next = () => {
-    setCurrent(current + 1)
-  }
-
-  const prev = () => {
-    setCurrent(current - 1)
-  }
 
   const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
   const contentStyle: React.CSSProperties = {
-    // lineHeight: '260px',
+    minHeight: '500px',
     color: token.colorTextTertiary,
     marginTop: 32,
   }
@@ -42,7 +35,7 @@ const StepCreate: React.FC = () => {
     <>
       <Steps current={current} items={items} />
       <div style={contentStyle}>{steps[current].content}</div>
-      <div style={{ marginTop: 24 }}>
+      {/* <div style={{ marginTop: 24 }}>
         {current < steps.length - 1 && (
           <Button type='primary' onClick={() => next()}>
             Next
@@ -58,7 +51,7 @@ const StepCreate: React.FC = () => {
             Previous
           </Button>
         )}
-      </div>
+      </div> */}
     </>
   )
 }

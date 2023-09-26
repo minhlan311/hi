@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
-import subjectApi from '@/apis/subject.api'
 import { debounce } from '@/helpers/common'
 import { CourseForm } from '@/types/course.type'
 import { PlusOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, Form, Input, InputNumber, Row, Select, Upload, UploadProps, message } from 'antd'
+import { Button, Col, Form, Input, InputNumber, Row, Select, TreeSelect, Upload, UploadProps, message } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import { RcFile } from 'antd/es/upload'
 import { UploadFile } from 'antd/lib'
@@ -15,12 +14,12 @@ import { useContext, useEffect, useState } from 'react'
 import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
 import { AppContext } from '@/contexts/app.context'
+import categoryApi from '@/apis/categories.api'
 
 export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  // const [educationType, setEducationType] = useState(EducationTypeEnum.UNIVERSITY)
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
 
@@ -28,43 +27,30 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   const myDataUser = queryClient.getQueryData<any>(['userDetail'])
 
-  console.log(myDataUser, 'myDataUsermyDataUser')
-
   const dataMedia = fileList?.map((item) => item?.response?.url)
 
   useEffect(() => {
     form.setFieldValue('coverMedia', dataMedia[0])
-  }, [fileList, dataMedia])
-
-  useEffect(() => {
     form.setFieldValue('descriptions', content)
-  }, [content])
-
-  useEffect(() => {
     form.setFieldValue('mentorId', myDataUser?.data?._id)
-  }, [myDataUser])
+  }, [fileList, dataMedia, content, myDataUser])
 
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
     setContent(data)
   }
 
-  console.log('render')
-
   const onFinish = (values: any) => {
-    console.log(values, 'valuesvalues')
     next(1)
 
     mutation.mutate({ ...values, mentorId: profile._id })
   }
 
-  const onFinishFailed = (values: any) => {
-    console.log(values, 'values')
-  }
+  const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
-    queryKey: ['subject'],
-    queryFn: () => subjectApi.getNews(),
+    queryKey: ['categoryAll'],
+    queryFn: () => categoryApi.getCategories(),
   })
   const subjectOptions = subjectData?.data?.docs?.map((user: any) => ({
     label: user.name,
@@ -117,7 +103,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     },
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 300)
 
   return (
     <div>
@@ -159,13 +145,25 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             <Row gutter={30}>
               <Col span={9}>
                 <Form.Item
-                  label={'Chọn khóa học'}
+                  label='Tiêu đề khóa học'
                   name='categoryId'
-                  rules={[{ required: true, message: 'Vui lòng chọn môn học' }]}
-                  required
+                  rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
-                  <Select options={subjectOptions} placeholder='Chọn môn học' allowClear />
+                  <TreeSelect
+                    showSearch
+                    style={{ width: '90%' }}
+                    value={form.getFieldValue('categoryId')}
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder='Chọn danh mục'
+                    allowClear
+                    treeDefaultExpandAll={false}
+                    onChange={(newValue: string) => {
+                      form.setFieldValue('categoryId', newValue)
+                    }}
+                    treeData={subjectOptions}
+                  />
                 </Form.Item>
+
                 <Form.Item hidden name='mentorId'>
                   <Input />
                 </Form.Item>
@@ -177,7 +175,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             <Form.Item
               label='Ảnh khoá học'
               name='coverMedia'
-              rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học' }]}
+              // rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học' }]}
               // type='upload-image-crop'
               //   cropOptions={propsImageCrop}
             >
