@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import examApi from '@/apis/exam.api'
+
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
-import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { useMutation } from '@tanstack/react-query'
-import { Checkbox, Drawer, Form, Input, Select, Space, Switch } from 'antd'
+import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
 import { useEffect, useState } from 'react'
-import { BiImageAdd } from 'react-icons/bi'
-import { BsPlus } from 'react-icons/bs'
-import { MdDeleteOutline } from 'react-icons/md'
+import TableAddonQues from '../Components/TableAddonQues'
+import { Choice } from '@/interface/test'
+import questionApi from '@/apis/question.api'
 
 type Props = {
   open: boolean
@@ -16,12 +15,15 @@ type Props = {
   resetData?: () => void
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   questionData?: any
+  testId: string
+  categoryId: string
 }
 
 const DrawerQuestion = (props: Props) => {
-  const { open, setOpen, resetData, setLoading, questionData } = props
+  const { open, setOpen, resetData, setLoading, questionData, testId, categoryId } = props
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
+  const [choice, setChoice] = useState<Choice[]>([])
 
   useEffect(() => {
     if (questionData) {
@@ -35,6 +37,9 @@ const DrawerQuestion = (props: Props) => {
 
   const onCloseDrawer = () => {
     setOpen(false)
+    setAction('')
+    setChoice([])
+    form.resetFields()
   }
 
   // const { data: categoriesData } = useQuery({
@@ -46,11 +51,9 @@ const DrawerQuestion = (props: Props) => {
   //   },
   // })
 
-  const { isLoading, status, mutate, error } = useMutation(
-    action === 'create'
-      ? { mutationFn: (body) => examApi.createExam(body) }
-      : { mutationFn: (body) => examApi.putExam(body) },
-  )
+  const { isLoading, status, mutate, error } = useMutation({
+    mutationFn: (body) => questionApi.createQuestion(body),
+  })
 
   useEffect(() => {
     if (status === 'success') {
@@ -75,10 +78,14 @@ const DrawerQuestion = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
-      cost: parseInt(values?.cost),
-      id: questionData?._id,
+      point: parseInt(values.point),
+      testId: testId,
+      choices: choice,
+      categoryId: categoryId,
     }
     mutate(payload)
+    console.log(payload)
+    onCloseDrawer()
   }
 
   const [typeQues, setTypeQues] = useState()
@@ -87,7 +94,7 @@ const DrawerQuestion = (props: Props) => {
     <div>
       <Drawer
         title={action === 'create' ? 'Thêm câu hỏi' : 'Chỉnh sửa câu hỏi'}
-        width={'50%'}
+        width={'45%'}
         onClose={onCloseDrawer}
         open={open}
         extra={
@@ -106,23 +113,24 @@ const DrawerQuestion = (props: Props) => {
           </Space>
         }
       >
-        <Form onFinish={onFinish} layout='vertical' form={form}>
+        <Form onFinish={onFinish} layout='vertical' form={form} initialValues={{ difficulty: 'EASY' }}>
+          <h3>Câu hỏi</h3>
           <Form.Item
             name='question'
-            label='Câu hỏi'
+            label='Nội dung câu hỏi'
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập câu hỏi',
+                message: 'Vui lòng nhập nội dung câu hỏi',
               },
             ]}
           >
-            <Input placeholder='Nhập câu hỏi' />
+            <Input placeholder='Nhập nội dung câu hỏi' />
           </Form.Item>
 
-          <Space>
+          <Space className='sp100'>
             <Form.Item
-              name='score'
+              name='point'
               label='Số điểm'
               rules={[
                 {
@@ -149,101 +157,107 @@ const DrawerQuestion = (props: Props) => {
                 options={[
                   {
                     value: 'SINGLE CHOICE',
-                    label: 'SINGLE CHOICE',
+                    label: 'Một đáp án',
                   },
                   {
                     value: 'MULTIPLE CHOICE',
-                    label: 'MULTIPLE CHOICE',
+                    label: 'Nhiều đáp án',
                   },
                   {
                     value: 'TRUE FALSE',
-                    label: 'TRUE FALSE',
+                    label: 'Đúng / Sai',
                   },
                   {
                     value: 'SORT',
-                    label: 'SORT',
+                    label: 'Sắp xếp',
                   },
                   {
                     value: 'DRAG DROP',
-                    label: 'DRAG DROP',
+                    label: 'Kéo thả',
                   },
                   {
                     value: 'LIKERT SCALE',
-                    label: 'LIKERT SCALE',
+                    label: 'Đánh giá',
                   },
                   {
                     value: 'FILL BLANK',
-                    label: 'FILL BLANK',
+                    label: 'Điền vào ô trống',
                   },
                   {
                     value: 'MATCHING',
-                    label: 'MATCHING',
+                    label: 'Nối',
                   },
                   {
                     value: 'NUMERICAL',
-                    label: 'NUMERICAL',
+                    label: 'Điền số',
                   },
                   {
                     value: 'WRITING',
-                    label: 'WRITING',
+                    label: 'Viết',
                   },
                 ]}
                 onChange={(e) => setTypeQues(e)}
                 value={typeQues}
               />
             </Form.Item>
-
-            {questionData && (
+            <Form.Item
+              name='difficulty'
+              label='Độ khó'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn độ khó',
+                },
+              ]}
+            >
+              <Select
+                style={{ width: 100 }}
+                placeholder='Chọn độ khó'
+                options={[
+                  {
+                    value: 'EASY',
+                    label: 'Dễ',
+                  },
+                  {
+                    value: 'MEDIUM',
+                    label: 'Vừa phải',
+                  },
+                  {
+                    value: 'DIFFICULT',
+                    label: 'Khó',
+                  },
+                ]}
+              />
+            </Form.Item>
+            {action === 'update' && (
               <Form.Item name='status' label='Trạng thái'>
                 <Switch defaultChecked />
               </Form.Item>
             )}
           </Space>
+          <h3>Câu trả lời</h3>
           {((typeQues === 'SINGLE CHOICE' || typeQues === 'MULTIPLE CHOICE' || typeQues === 'TRUE FALSE') && (
-            <Form.List name='choices'>
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space key={key} align='center'>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'answer']}
-                        label='Câu trả lời'
-                        rules={[{ required: true, message: 'Vui lòng nhập câu trả lời' }]}
-                      >
-                        <Input placeholder='Nhập câu trả lời' />
-                      </Form.Item>
-                      <Form.Item {...restField} label='Hình ảnh'>
-                        <UploadCustom
-                          name={`${[name, 'coverUrl']}`}
-                          showUploadList
-                          callBackFileList={(e) => console.log(e)}
-                        >
-                          <ButtonCustom icon={<BiImageAdd />}>Thêm hình ảnh</ButtonCustom>
-                        </UploadCustom>
-                      </Form.Item>
+            <TableAddonQues selectionType={typeQues} callBackData={setChoice} isClose={!open} />
+          )) || (
+            <Form.Item
+              name='answer'
+              label='Đáp án'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập đáp án',
+                },
+              ]}
+            >
+              <Input placeholder='Nhập đáp án' />
+            </Form.Item>
+          )}
 
-                      <Form.Item {...restField} name={[name, 'isCorrect']} valuePropName='checked' label='Đáp án đúng'>
-                        <Checkbox />
-                      </Form.Item>
-
-                      <ButtonCustom
-                        type='text'
-                        onClick={() => remove(name)}
-                        icon={<MdDeleteOutline className='ic' style={{ color: 'var(--red)' }} />}
-                      ></ButtonCustom>
-                    </Space>
-                  ))}
-
-                  <ButtonCustom className='sp100' type='dashed' onClick={() => add()} icon={<BsPlus />}>
-                    Thêm câu trả lời
-                  </ButtonCustom>
-                </>
-              )}
-            </Form.List>
-          )) || <></>}
-          <Form.Item name='hint' label='Giải thích'>
+          <Form.Item name='explanation' label='Giải thích'>
             <Input.TextArea placeholder='Nhập giải thích'></Input.TextArea>
+          </Form.Item>
+          <Form.Item name='hint' label='Gợi ý'>
+            <Input.TextArea placeholder='Nhập gợi ý'></Input.TextArea>
           </Form.Item>
         </Form>
       </Drawer>

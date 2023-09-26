@@ -99,8 +99,8 @@ const CalendarCustom = () => {
         <Col span={10}>
           <Space>
             <ButtonCustom>Hôm nay</ButtonCustom>
-            <ButtonCustom icon={<AiOutlineLeft className='ic' />}></ButtonCustom>
-            <ButtonCustom icon={<AiOutlineRight className='ic' />}></ButtonCustom>
+            <ButtonCustom icon={<AiOutlineLeft />}></ButtonCustom>
+            <ButtonCustom icon={<AiOutlineRight />}></ButtonCustom>
             <Select
               onChange={(e) => setView(e)}
               defaultValue='week'

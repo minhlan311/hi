@@ -36,7 +36,7 @@ const MentorExams = () => {
 
   useEffect(() => {
     if (status === 'success') {
-      openNotification({ status: status, message: 'Xóa bài thi thành công' })
+      openNotification({ status: status, message: 'Xóa bộ đề thành công' })
       resetData()
     }
 

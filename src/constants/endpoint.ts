@@ -32,9 +32,14 @@ export const ENDPOINT = {
   CATEGORIES_PATH: '/category/',
   FIND_CATEGORIES_PATH: '/category/find',
 
-  // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
+  // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::
   EXAM_PATH: '/exam/tests/',
   FIND_EXAM_PATH: '/exam/tests/find',
+
+  // :::::::::::::::::::: QUESTION PATH :::::::::::::::::::::
+  QUESTION_PATH: '/exam/questions/',
+  FIND_QUESTION_PATH: '/exam/questions/find',
+  IMPORT_QUESTION_PATH: '/exam/questions/import',
 
   // :::::::::::::::::::: Course PATH :::::::::::::::::::::
   COURSES_PATH: '/courses/',
