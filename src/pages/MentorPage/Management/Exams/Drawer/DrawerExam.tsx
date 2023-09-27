@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import categoryApi from '@/apis/categories.api'
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
+import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { SuccessResponse } from '@/types/utils.type'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Drawer, Form, Input, Select, Space } from 'antd'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   open: boolean
@@ -37,14 +38,9 @@ const DrawerExam = (props: Props) => {
     setOpen(false)
   }
 
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categoriesList'],
-    queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
-      })
-    },
-  })
+  const queryClient = useQueryClient()
+
+  const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
 
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {

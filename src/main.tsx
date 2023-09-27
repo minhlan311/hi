@@ -9,6 +9,7 @@ import GlobalStyles from './components/GlobalStyles/globalStyles.tsx'
 import ScrollTop from './components/ScrollTop/ScrollTop.tsx'
 import { AppProvider } from './contexts/app.context.tsx'
 import { SocketProvider } from './lib/providers/socket.tsx'
+import Perloader from './components/Perloader/index.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,9 +54,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 }}
                 locale={viVN}
               >
-                <ScrollTop>
-                  <App />
-                </ScrollTop>
+                <Perloader>
+                  <ScrollTop>
+                    <App />
+                  </ScrollTop>
+                </Perloader>
               </ConfigProvider>
             </GlobalStyles>
           </SocketProvider>

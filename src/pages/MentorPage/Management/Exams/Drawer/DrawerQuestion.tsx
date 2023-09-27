@@ -1,75 +1,71 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
-import { useMutation } from '@tanstack/react-query'
-import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
-import { useEffect, useState } from 'react'
+import questionApi from '@/apis/question.api'
 import TableAddonQues from '../Components/TableAddonQues'
 import { Choice } from '@/interface/test'
-import questionApi from '@/apis/question.api'
+import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
+import { QuestionState } from '@/interface/question'
+import { useEffect, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  resetData?: () => void
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
-  questionData?: any
+  questionData?: QuestionState | null
   testId: string
   categoryId: string
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setQuestionData: React.Dispatch<React.SetStateAction<QuestionState | null>>
+  resetData: () => void
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DrawerQuestion = (props: Props) => {
-  const { open, setOpen, resetData, setLoading, questionData, testId, categoryId } = props
-  const [action, setAction] = useState('create')
+  const { open, questionData = null, testId, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
-
+  const [isCheck, setCheck] = useState<boolean>(Boolean(questionData?.status === 'ACTIVE'))
+  const [data, setData] = useState<QuestionState>()
+  const [typeQues, setTypeQues] = useState<string>()
   useEffect(() => {
     if (questionData) {
-      setAction('update')
-      form.setFieldsValue(questionData)
-    } else {
-      setAction('create')
-      form.resetFields()
+      setData(questionData)
     }
   }, [questionData])
 
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue(data)
+      setTypeQues(data.type)
+    }
+  }, [data])
+
   const onCloseDrawer = () => {
     setOpen(false)
-    setAction('')
     setChoice([])
+    setQuestionData(null)
     form.resetFields()
   }
 
-  // const { data: categoriesData } = useQuery({
-  //   queryKey: ['categoriesList'],
-  //   queryFn: () => {
-  //     return categoryApi.getCategories({
-  //       parentId: '64ffde9c746fe5413cf8d1af',
-  //     })
-  //   },
-  // })
-
   const { isLoading, status, mutate, error } = useMutation({
-    mutationFn: (body) => questionApi.createQuestion(body),
+    mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
   })
 
   useEffect(() => {
     if (status === 'success') {
       openNotification({
         status: status,
-        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
+        message: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
       })
       setOpen(false)
-      resetData && resetData()
+      resetData()
       form.resetFields()
     }
 
     if (status === 'error' && error) {
       openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
-  }, [status])
+  }, [status, data])
 
   useEffect(() => {
     setLoading && setLoading(isLoading)
@@ -78,22 +74,21 @@ const DrawerQuestion = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
+      id: data?._id,
+      status: isCheck ? 'ACTIVE' : 'INACTIVE',
       point: parseInt(values.point),
       testId: testId,
       choices: choice,
       categoryId: categoryId,
     }
     mutate(payload)
-    console.log(payload)
     onCloseDrawer()
   }
-
-  const [typeQues, setTypeQues] = useState()
 
   return (
     <div>
       <Drawer
-        title={action === 'create' ? 'Thêm câu hỏi' : 'Chỉnh sửa câu hỏi'}
+        title={!data ? 'Thêm câu hỏi' : 'Chỉnh sửa câu hỏi'}
         width={'45%'}
         onClose={onCloseDrawer}
         open={open}
@@ -108,7 +103,7 @@ const DrawerQuestion = (props: Props) => {
               Hủy
             </ButtonCustom>
             <ButtonCustom onClick={() => form.submit()} type='primary'>
-              {action === 'create' ? 'Tạo câu hỏi' : 'Cập nhật'}
+              {!data ? 'Tạo câu hỏi' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
         }
@@ -229,15 +224,15 @@ const DrawerQuestion = (props: Props) => {
                 ]}
               />
             </Form.Item>
-            {action === 'update' && (
+            {questionData && (
               <Form.Item name='status' label='Trạng thái'>
-                <Switch defaultChecked />
+                <Switch checked={isCheck} onChange={() => setCheck(!isCheck)} />
               </Form.Item>
             )}
           </Space>
           <h3>Câu trả lời</h3>
           {((typeQues === 'SINGLE CHOICE' || typeQues === 'MULTIPLE CHOICE' || typeQues === 'TRUE FALSE') && (
-            <TableAddonQues selectionType={typeQues} callBackData={setChoice} isClose={!open} />
+            <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
           )) || (
             <Form.Item
               name='answer'

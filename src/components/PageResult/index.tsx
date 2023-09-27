@@ -3,11 +3,12 @@ import { Button, Result } from 'antd'
 import { Link } from 'react-router-dom'
 import { ResultStatusType } from 'antd/lib/result'
 type Props = {
-  code: ResultStatusType
+  code?: ResultStatusType
   title?: string | React.ReactNode
   desc?: string | React.ReactNode
   extra?: React.ReactNode
 }
+
 const PageResult = (props: Props) => {
   const {
     code = 404,
@@ -17,8 +18,9 @@ const PageResult = (props: Props) => {
       <Link to='/'>
         <Button type='primary'>Trở về trang chủ</Button>
       </Link>
-    )
+    ),
   } = props
+
   return <Result status={code} title={title ? title : code} subTitle={desc} extra={extra} />
 }
 
