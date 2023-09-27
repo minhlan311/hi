@@ -54,7 +54,7 @@ const MentorQuestions = () => {
       })
     }
   }, [status, error])
-  const [questions, setQuestions] = useState<QuestionState[]>([])
+  const [questions, setQuestions] = useState<{ docs: QuestionState[] }>()
   const [selectQuestions, setSelectQuestions] = useState<QuestionState | null>(null)
 
   return (
@@ -77,10 +77,10 @@ const MentorQuestions = () => {
       />
       {loading ? (
         <LoadingCustom />
-      ) : !questions.length ? (
+      ) : !questions?.docs?.length ? (
         <EmptyCustom description='Không có câu hỏi nào'></EmptyCustom>
       ) : (
-        questions.map((item, id) => (
+        questions?.docs?.map((item, id) => (
           <div className={css.qItem}>
             {item.status === 'INACTIVE' && (
               <div className={css.disable}>
