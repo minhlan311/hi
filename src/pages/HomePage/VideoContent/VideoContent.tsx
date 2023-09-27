@@ -27,7 +27,6 @@ export default function VideoContent() {
             <div className='div-inContent-ves'>
               <div className='left-ves'></div>
               <div className='mid'>
-                {' '}
                 <strong>1 Giảng viên, kèm 1 học viên</strong> - giao tiếp sửa lỗi liên tục
               </div>
               <div className='right-ves'>02</div>
@@ -51,7 +50,6 @@ export default function VideoContent() {
             <div className='div-inContent'>
               <div className='left'>05</div>
               <div className='mid'>
-                {' '}
                 X5 hiệu quả với các <strong>phương pháp tiên tiến</strong>
               </div>
               <div className='right'></div>
