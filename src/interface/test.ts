@@ -1,5 +1,6 @@
 export interface Choice {
-  key: string | number
+  _id?: string
+  key?: string
   answer: string
   isCorrect: boolean
   isChosen: boolean

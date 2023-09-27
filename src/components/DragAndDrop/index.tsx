@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { Card, Col, Row } from 'antd'
 import { DragDropState } from '@/interface/dragDrop'
@@ -9,6 +9,7 @@ import { reorderQuoteMap } from './reorder'
 
 type Props = {
   data: DragDropState[]
+  typeKey: string
   dragWidth?: string | number
   dragMinHeight?: string | number
   gutter?: Gutter | [Gutter, Gutter]
@@ -17,7 +18,7 @@ type Props = {
   dragStyle?: React.CSSProperties
   dragClassName?: string
   isCombineEnabled?: boolean
-  typeKey: string
+  children?: React.ReactNode
 }
 
 type TaskProps = {
@@ -44,6 +45,7 @@ const DragAndDrop = (props: Props) => {
     dragClassName,
     isCombineEnabled = false,
     typeKey,
+    children,
   } = props
   const fakeData = [
     {
@@ -181,7 +183,11 @@ const DragAndDrop = (props: Props) => {
         ignoreContainerClipping={Boolean(dragMinHeight)}
       >
         {(provided, snapshot) => {
-          return (
+          return children ? (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {children}
+            </div>
+          ) : (
             <Card
               {...provided.droppableProps}
               ref={provided.innerRef}

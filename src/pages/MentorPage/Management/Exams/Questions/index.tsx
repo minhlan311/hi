@@ -15,6 +15,7 @@ import DrawerQuestion from '../Drawer/DrawerQuestion'
 import css from './styles.module.scss'
 import { QuestionState } from '@/interface/question'
 import openNotification from '@/components/Notification'
+import { MdOutlineDisabledVisible } from 'react-icons/md'
 
 const MentorQuestions = () => {
   const location = useLocation()
@@ -53,7 +54,7 @@ const MentorQuestions = () => {
       })
     }
   }, [status, error])
-  const [questions, setQuestions] = useState<QuestionState[]>([])
+  const [questions, setQuestions] = useState<{ docs: QuestionState[] }>()
   const [selectQuestions, setSelectQuestions] = useState<QuestionState | null>(null)
 
   return (
@@ -71,88 +72,98 @@ const MentorQuestions = () => {
             <ButtonCustom icon={<HiOutlineUpload />}>Thêm file câu hỏi</ButtonCustom>
           </Space>
         }
-        filterQuery={{ categoryId: examDetail?.subjectId }}
+        filterQuery={{ categoryId: examDetail?.categoryId }}
         resetFilter={resetFilter}
       />
       {loading ? (
         <LoadingCustom />
-      ) : !questions.length ? (
+      ) : !questions?.docs?.length ? (
         <EmptyCustom description='Không có câu hỏi nào'></EmptyCustom>
       ) : (
-        questions.map((item, id) => (
-          <Card size='small' key={item._id}>
-            <Space direction='vertical' className={'sp100'}>
-              <Row justify='space-between'>
-                <Col span={24} md={19}>
-                  <Space>
-                    <h3>Câu {id + 1}: </h3>
-                    <TagCustom content={item.type} />
-                    <TagCustom color='gold' content={`${item.point} Điểm`} />
-                    <TagCustom
-                      intArrType={['EASY', 'MEDIUM', 'DIFFICULT']}
-                      intColor={['green', 'blue', 'red']}
-                      intAlternativeType={['Dễ', 'Vừa phải', 'Khó']}
-                      content={item.difficulty}
-                    />
-                  </Space>
-                </Col>
-                <Col>
-                  <Space size='small'>
-                    <ButtonCustom
-                      shape='circle'
-                      type='text'
-                      icon={<AiOutlineEdit />}
-                      size='small'
-                      onClick={() => {
-                        setSelectQuestions(item)
-                        setOpen(true)
-                      }}
-                    ></ButtonCustom>
-                    <Popconfirm
-                      placement='right'
-                      title='Bạn có muốn xóa câu hỏi này?'
-                      onConfirm={() => mutate(item._id)}
-                      okText='Xóa'
-                      cancelText='Hủy'
-                    >
+        questions?.docs?.map((item, id) => (
+          <div className={css.qItem}>
+            {item.status === 'INACTIVE' && (
+              <div className={css.disable}>
+                <Space direction='vertical' align='center' className={'p-center'}>
+                  <MdOutlineDisabledVisible className={css.iconDisable} />
+                  <div>Câu hỏi đang được ẩn</div>
+                </Space>
+              </div>
+            )}
+            <Card size='small' key={item._id}>
+              <Space direction='vertical' className={'sp100'}>
+                <Row justify='space-between'>
+                  <Col span={24} md={19}>
+                    <Space>
+                      <h3>Câu {id + 1}: </h3>
+                      <TagCustom content={item.type} />
+                      <TagCustom color='gold' content={`${item.point} Điểm`} />
+                      <TagCustom
+                        intArrType={['EASY', 'MEDIUM', 'DIFFICULT']}
+                        intColor={['green', 'blue', 'red']}
+                        intAlternativeType={['Dễ', 'Vừa phải', 'Khó']}
+                        content={item.difficulty}
+                      />
+                    </Space>
+                  </Col>
+                  <Col>
+                    <Space size='small'>
                       <ButtonCustom
                         shape='circle'
                         type='text'
-                        icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
+                        icon={<AiOutlineEdit />}
                         size='small'
+                        onClick={() => {
+                          setSelectQuestions(item)
+                          setOpen(true)
+                        }}
                       ></ButtonCustom>
-                    </Popconfirm>
-                  </Space>
-                </Col>
-              </Row>
+                      <Popconfirm
+                        placement='right'
+                        title='Bạn có muốn xóa câu hỏi này?'
+                        onConfirm={() => mutate(item._id)}
+                        okText='Xóa'
+                        cancelText='Hủy'
+                      >
+                        <ButtonCustom
+                          shape='circle'
+                          type='text'
+                          icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
+                          size='small'
+                        ></ButtonCustom>
+                      </Popconfirm>
+                    </Space>
+                  </Col>
+                </Row>
 
-              <h4>{item.question}</h4>
-              <Card size='small' className={css.anws}>
-                <Space className={'sp100'}>
-                  {item.choices.map((anw) => {
-                    if (anw.isCorrect) return <p className={css.isAnswer}>{anw.answer}</p>
-                  })}
-                  {item.choices.map((anw) => {
-                    if (!anw.isCorrect) return <p>{anw.answer}</p>
-                  })}
-                  {item.answer && item.answer}
-                </Space>
-              </Card>
-              {item.hint && (
-                <Space className={`${css.hint} sp100`} align='center'>
-                  <AiOutlineQuestionCircle />
-                  <p>{item.hint}</p>
-                </Space>
-              )}
-            </Space>
-          </Card>
+                <h4>{item.question}</h4>
+                <Card size='small' className={css.anws}>
+                  <Space className={'sp100'}>
+                    {item.choices.map((anw) => {
+                      if (anw.isCorrect) return <p className={css.isAnswer}>{anw.answer}</p>
+                    })}
+                    {item.choices.map((anw) => {
+                      if (!anw.isCorrect) return <p>{anw.answer}</p>
+                    })}
+                    {item.answer && item.answer}
+                  </Space>
+                </Card>
+                {item.hint && (
+                  <Space className={`${css.hint} sp100`} align='center'>
+                    <AiOutlineQuestionCircle />
+                    <p>{item.hint}</p>
+                  </Space>
+                )}
+              </Space>
+            </Card>
+          </div>
         ))
       )}
       <DrawerQuestion
         open={open}
         questionData={selectQuestions ? selectQuestions : null}
         testId={examDetail ? examDetail._id : ''}
-        categoryId={examDetail ? examDetail.subjectId : ''}
+        categoryId={examDetail ? examDetail.categoryId : ''}
         setOpen={setOpen}
         setQuestionData={setSelectQuestions}
         resetData={resetData}

@@ -91,7 +91,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
       toggleEdit()
       handleSave({ ...record, ...values })
-      console.log(values)
       message.success('Đã lưu thay đổi')
     } catch (errInfo) {
       console.log('Save failed:', errInfo)
@@ -129,19 +128,35 @@ type EditableTableProps = Parameters<typeof Table>[0]
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
 
 const TableAddonQues = (props: Props) => {
-  const id = useId()
   const { selectionType, callBackData, data, isClose } = props
+  const id = useId()
+  const randomId = id + Math.floor(Math.random() * 1000000).toString()
   const [dataSource, setDataSource] = useState<Choice[]>([
     {
-      key: id + Math.floor(Math.random() * 1000000).toString(),
+      key: randomId,
       answer: 'Nhập đáp án',
       isCorrect: false,
       isChosen: false,
     },
   ])
 
+  const convertCallBack = (array: Choice[]): Choice[] => {
+    const newArray = array.map((item) => {
+      const newItem: Choice = { ...item }
+      newItem.key = newItem._id
+      delete newItem._id
+
+      return newItem
+    })
+
+    return newArray
+  }
+
   useEffect(() => {
-    if (data) setDataSource(data as unknown as any)
+    if (data) {
+      const newData = convertCallBack(data)
+      setDataSource(newData)
+    }
   }, [data])
 
   const handleDelete = (key: React.Key) => {
@@ -179,7 +194,7 @@ const TableAddonQues = (props: Props) => {
       align: 'center',
       render: (_: any, record: Choice) =>
         dataSource.length >= 1 && (
-          <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key)}>
+          <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
             <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
           </Popconfirm>
         ),
@@ -188,7 +203,7 @@ const TableAddonQues = (props: Props) => {
 
   const handleAdd = () => {
     const newData: Choice = {
-      key: id + Math.floor(Math.random() * 1000000).toString(),
+      key: randomId,
       answer: 'Nhập đáp án',
       isCorrect: false,
       isChosen: false,
@@ -232,6 +247,8 @@ const TableAddonQues = (props: Props) => {
   })
 
   const handleSelect = (newSelectedRowKeys: any) => {
+    console.log(newSelectedRowKeys)
+
     const newData = dataSource.map((item: Choice) => {
       if (newSelectedRowKeys.includes(item.key)) {
         return {
@@ -240,20 +257,33 @@ const TableAddonQues = (props: Props) => {
         }
       }
 
-      return item
+      return {
+        ...item,
+        isCorrect: false,
+      }
     })
+
     callBackData(newData)
+
+    const key = newData.filter((item) => item.isCorrect).map((item) => item.key)
+    setSelectKey(key)
   }
 
+  const [selectKey, setSelectKey] = useState<any[]>()
+
   useEffect(() => {
-    if (dataSource.length > 0) callBackData(dataSource)
+    if (dataSource.length > 0) {
+      const key = dataSource.filter((item) => item.isCorrect).map((item) => item.key)
+      setSelectKey(key)
+      callBackData(dataSource)
+    }
   }, [dataSource])
 
   useEffect(() => {
     if (isClose)
       setDataSource([
         {
-          key: id + Math.floor(Math.random() * 1000000).toString(),
+          key: randomId,
           answer: 'Nhập đáp án',
           isCorrect: false,
           isChosen: false,
@@ -261,21 +291,41 @@ const TableAddonQues = (props: Props) => {
       ])
   }, [isClose])
 
+  // const sortData = {
+  //   id:
+  // }
+
   return (
     <Space direction='vertical' className='sp100'>
-      <Table
-        components={components}
-        rowClassName={() => 'editable-row'}
-        bordered
-        dataSource={dataSource}
-        columns={columns as ColumnTypes}
-        pagination={false}
-        rowSelection={{
-          type:
-            selectionType === 'MULTIPLE CHOICE' ? 'checkbox' : selectionType === 'SINGLE CHOICE' ? 'radio' : undefined,
-          onChange: handleSelect,
-        }}
-      />
+      {selectionType === 'SORT' ? (
+        <Table
+          components={components}
+          rowClassName={() => 'editable-row'}
+          bordered
+          dataSource={dataSource}
+          columns={columns as ColumnTypes}
+          pagination={false}
+        />
+      ) : (
+        <Table
+          components={components}
+          rowClassName={() => 'editable-row'}
+          bordered
+          dataSource={dataSource}
+          columns={columns as ColumnTypes}
+          pagination={false}
+          rowSelection={{
+            type:
+              selectionType === 'MULTIPLE CHOICE'
+                ? 'checkbox'
+                : selectionType === 'SINGLE CHOICE'
+                ? 'radio'
+                : undefined,
+            onChange: handleSelect,
+            selectedRowKeys: selectKey,
+          }}
+        />
+      )}
       <ButtonCustom onClick={handleAdd} type='dashed' icon={<MdPlaylistAdd />} className='sp100'>
         Thêm đáp án
       </ButtonCustom>

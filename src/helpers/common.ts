@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const debounce = (func: any, timeout = 500) => {
   let timer: any
+
   return (...args: any) => {
     clearTimeout(timer)
     timer = setTimeout(() => {
