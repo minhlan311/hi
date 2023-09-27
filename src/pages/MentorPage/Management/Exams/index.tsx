@@ -16,7 +16,7 @@ import { AppContext } from '@/contexts/app.context'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
   const [open, setOpen] = useState<boolean>(false)
-  const [data, setData] = useState<{ data: { docs: ExamState[] } }>()
+  const [data, setData] = useState<ExamState[]>()
   const [loading, setLoading] = useState<boolean>(false)
   const [examData, setExamData] = useState<ExamState>()
   const { status, mutate, error } = useMutation({ mutationFn: (id: string) => examApi.deleteExam(id) })
@@ -219,7 +219,7 @@ const MentorExams = () => {
         resetFilter={resetFilter}
         filterQuery={{ createdById: profile._id }}
       />
-      <Table columns={columns} dataSource={data?.data?.docs} loading={loading} bordered />
+      <Table columns={columns} dataSource={data} loading={loading} bordered />
       <DrawerExam open={open} setOpen={setOpen} resetData={resetData} setLoading={setLoading} examData={examData} />
     </div>
   )

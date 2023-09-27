@@ -34,6 +34,7 @@ const FilterAction = (props: Props) => {
     className,
     filterQuery,
   } = props
+
   const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
     filterQuery: { ...filterQuery },
     options: {
@@ -76,13 +77,14 @@ const FilterAction = (props: Props) => {
   const [form] = Form.useForm()
 
   const { data: categoriesData } = useQuery({
-    queryKey: ['Categories'],
+    queryKey: ['categoriesList'],
     queryFn: () => {
       return categoryApi.getCategories({
         parentId: '64ffde9c746fe5413cf8d1af',
       })
     },
   })
+
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {
       value: sj._id,
