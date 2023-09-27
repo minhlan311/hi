@@ -7,6 +7,7 @@ import UploadQuestion from './components/step3/UploadQuestion'
 const StepCreate: React.FC = () => {
   const { token } = theme.useToken()
   const [current, setCurrent] = useState(0)
+
   const [dataIdCouser, setDataIdCouser] = useState<string>('')
 
   const steps = [

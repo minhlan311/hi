@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import topicApi from '@/apis/topic.api'
-import openNotification from '@/components/Notification'
+
+import questionApi from '@/apis/question.api'
+import { MyPageTableOptions } from '@/types/page.type'
+import { DeleteOutlined, UploadOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Button,
@@ -17,18 +19,15 @@ import {
   UploadFile,
   message,
 } from 'antd'
-import { DeleteOutlined, UploadOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import { MyPageTableOptions, PageData } from '@/types/page.type'
 import { UploadProps } from 'antd/lib'
-import questionApi from '@/apis/question.api'
+import { useEffect, useState } from 'react'
 
-export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLession }: any) {
+export default function DrawerQuizz({ onOpen, onClose, dataUpdateLession }: any) {
   const [form] = Form.useForm()
   const [content, setContent] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [uploadQuestionFile, setUploadQuestionFile] = useState<UploadFile>()
-  const [pageData, setPageData] = useState<PageData<any>>({
+  const [pageData, setPageData] = useState<any>({
     limit: 10,
     page: 1,
     totalDocs: 0,
@@ -48,7 +47,7 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
   const { data: dataQuestion } = useQuery({
     queryKey: ['question'],
     queryFn: () =>
-      questionApi.getQuestion({
+      questionApi.findQuestion({
         filterQuery: {
           lessonId: dataUpdateLession?.id,
         },
@@ -86,13 +85,6 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
     }
     mutation.mutate(payload)
     setModalOpen(false)
-  }
-
-  const deleteQuestion = async (recordId: string) => {
-    // const res = await deleteQuestionApi(recordId)
-    // if (res.status) {
-    //   setReloadQuestion(!reloadQuestion)
-    // }
   }
 
   useEffect(() => {
@@ -160,7 +152,7 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
       title: 'Xoá',
       key: '_id',
       width: '5%',
-      render: (_, record) => (
+      render: () => (
         <div className='display-center'>
           <Space size='middle'>
             <Popconfirm
@@ -168,7 +160,7 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
               title={'Xác nhận xoá câu hỏi?'}
               okText='Có'
               cancelText='Không'
-              onConfirm={() => deleteQuestion(record._id)}
+              // onConfirm={() => deleteQuestion(record._id)}
             >
               <Button type='dashed' className='dashed'>
                 <DeleteOutlined />
@@ -181,10 +173,10 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
   ]
 
   const onPageChange = (page: number, limit?: number) => {
-    setPageData({ page })
+    setPageData(page)
 
     if (limit) {
-      setPageData({ limit })
+      setPageData(limit)
     }
   }
 
@@ -218,7 +210,7 @@ export default function DrawerQuizz({ onOpen, onClose, reFetchData, dataUpdateLe
               dataSource={dataQuestion?.data?.docs}
               expandable={{
                 expandedRowRender: (record) =>
-                  record.choices.map((e: any, index: number) => {
+                  record.choices.map((_e: any, index: number) => {
                     if (record.choices.length % 2 === 1 && index === record.choices.length - 1) {
                       return (
                         <Row>

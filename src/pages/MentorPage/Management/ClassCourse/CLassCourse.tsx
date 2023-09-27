@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Col, Input, Popconfirm, Row, Space, Table, Tooltip, DatePicker, Form } from 'antd'
 import { DeleteOutlined, PlusCircleOutlined, EditOutlined } from '@ant-design/icons'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import './CLassCourse.scss'
 import { debounce, formatDate, formatHour } from '@/helpers/common'
 import { MyPageTableOptions } from '@/types/page.type'
@@ -13,17 +13,16 @@ import ClassCourseCreate from './ClassCourseCreate'
 import openNotification from '@/components/Notification'
 import { DatePickerProps } from 'antd/lib'
 import { RangePickerProps } from 'antd/es/date-picker'
-import { TypeForm as FormInterface } from '@/types/form.type'
 import { FORM_TYPE } from '@/constants'
 
 export default function CLassCourse() {
   const { profile } = useContext(AppContext)
   const [onOpen, setOnOpen] = useState(false)
-  const [time, setTime] = useState<object | undefined>(undefined)
+  const [time, setTime] = useState<{ startDate: string; endDate: string } | undefined>(undefined)
   const [idClass, setIdClass] = useState('')
   const [reset, setReset] = useState(false)
-  const [search, setSearch] = useState(undefined)
-  const [typeForm, setTypeForm] = useState<FormInterface>()
+  const [search, setSearch] = useState('')
+  const [typeForm, setTypeForm] = useState<string | undefined>(undefined)
 
   const [form] = Form.useForm()
 
@@ -127,27 +126,27 @@ export default function CLassCourse() {
       title: 'Ngày bắt đầu',
       dataIndex: 'startDate',
       key: 'startDate',
-      render: (_: any, record: Class) => <span>{formatDate(record.startDate)}</span>,
+      render: (_: any, record: Class) => <span>{formatDate(record?.startDate as string)}</span>,
     },
     {
       title: 'Ngày kết thúc',
       dataIndex: 'endDate',
       key: 'startDate',
-      render: (_: any, record: Class) => <span>{formatDate(record.endDate)}</span>,
+      render: (_: any, record: Class) => <span>{formatDate(record.endDate as string)}</span>,
     },
 
     {
       title: 'Thời gian bắt đầu',
       dataIndex: 'endDate',
       key: 'startAt',
-      render: (_: any, record: Class) => <span>{formatHour(record.startAt)}</span>,
+      render: (_: any, record: Class) => <span>{formatHour(record.startAt as string)}</span>,
     },
 
     {
       title: 'Thời gian kết thúc',
       dataIndex: 'schedules',
       key: 'schedules',
-      render: (_: any, record: Class) => <span>{formatHour(record.endAt)}</span>,
+      render: (_: any, record: Class) => <span>{formatHour(record.endAt as string)}</span>,
     },
     {
       title: 'Hành động',
@@ -159,7 +158,7 @@ export default function CLassCourse() {
         <div>
           <Space size='middle'>
             <Tooltip placement='top' title='Chỉnh sửa lớp học'>
-              <Button type='dashed' className={'dashed'} onClick={() => setUpdate(record._id)}>
+              <Button type='dashed' className={'dashed'} onClick={() => setUpdate(record._id as string)}>
                 <EditOutlined className='icon-button' />
               </Button>
             </Tooltip>
@@ -169,7 +168,7 @@ export default function CLassCourse() {
               title={'Xác nhận xoá lớp học này?'}
               okText='Có'
               cancelText='Không'
-              onConfirm={() => mutationDelete.mutate(record._id)}
+              onConfirm={() => mutationDelete.mutate(record._id as string)}
             >
               <Tooltip placement='top' title='Xóa lớp học'>
                 <Button type='dashed' className={'dashed'}>
@@ -183,13 +182,13 @@ export default function CLassCourse() {
     },
   ]
 
-  const handleEditorChange = (event: Event) => {
+  const handleEditorChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event?.target?.value)
   }
 
   const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
-  const onOk = (value: DatePickerProps['value'] | RangePickerProps['value']) => {
+  const onOk = (value: DatePickerProps['value'] | RangePickerProps['value'] | any) => {
     setTime({
       startDate: value && value[0] ? value[0] : undefined,
       endDate: value && value[1] ? value[1] : undefined,
@@ -257,7 +256,7 @@ export default function CLassCourse() {
       </Form>
       <div className='div-table'>
         <Table
-          dataSource={data?.data?.docs as Class[]}
+          dataSource={data?.data?.docs as any}
           pagination={{
             current: data?.data?.page,
             pageSize: data?.data?.limit,
