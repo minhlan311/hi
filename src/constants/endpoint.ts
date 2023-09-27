@@ -61,6 +61,9 @@ export const ENDPOINT = {
   // :::::::::::::::::::: LESSONS PATH :::::::::::::::::::::
   FIND_LESSONS_PATH: '/edu/lessons/find',
   LESSONS_PATH: '/edu/lessons/',
+  // :::::::::::::::::::: CLASS PATH :::::::::::::::::::::
+  FIND_CLASS_PATH: '/class/find',
+  CLASS_PATH: '/class/',
 
   // :::::::::::::::::::: TOPIC PATH :::::::::::::::::::::
   FIND_TOPIC_PATH: '/edu/topics/find',
@@ -101,6 +104,10 @@ export const ENDPOINT = {
   PEDAGOGY_PATH: '/pedagogy',
   FIND_ANSWER_PEDAGOGY_PATH: '/answer/find',
   ANSWER_PEDAGOGY_PATH: '/answer',
+
+  // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::
+  EXAM_IMPORT_PATH: '/exam/questions/import',
+  EXAM_FIND_PATH: '/exam/questions/find',
 
   // :::::::::::::::::::: CONFIGS PATH :::::::::::::::::::::
   CONFIGS_PATH: '/configs',

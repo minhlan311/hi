@@ -142,7 +142,7 @@ const FilterAction = (props: Props) => {
   useEffect(() => {
     mutate(filterData as unknown as any, {
       onSuccess: (data: any) => {
-        const res = data?.data.docs
+        const res = data?.data
         callBackData(res)
       },
     })

@@ -61,6 +61,8 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
 
   const onFinish = (values: any) => {
     mutation.mutate(values)
+    form.resetFields()
+    setContent('')
     console.log(values, 'values')
   }
 

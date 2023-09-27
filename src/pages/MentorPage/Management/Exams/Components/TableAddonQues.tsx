@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
@@ -165,7 +164,7 @@ const TableAddonQues = (props: Props) => {
     setDataSource(newData)
   }
 
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+  const defaultColumns: (any & { editable?: boolean; dataIndex: string })[] = [
     {
       title: 'Đáp án',
       dataIndex: 'answer',
@@ -175,7 +174,9 @@ const TableAddonQues = (props: Props) => {
     {
       title: 'Hình ảnh / Âm thanh',
       align: 'center',
-      render: (_, record: Choice) => {
+      render: (_: any, record: Choice) => {
+        console.log(record)
+
         return (
           <Space>
             <UploadCustom accessType='image/*' name='image'>
@@ -191,7 +192,7 @@ const TableAddonQues = (props: Props) => {
     {
       title: 'Hành dộng',
       align: 'center',
-      render: (_, record: Choice) =>
+      render: (_: any, record: Choice) =>
         dataSource.length >= 1 && (
           <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
             <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
