@@ -66,7 +66,7 @@ export default function CourseListMentor({ data, resetDatas }: any) {
     <>
       <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
         {data
-          ? data?.data?.docs?.map((item: any) => (
+          ? data?.docs?.map((item: any) => (
               <>
                 <Col>
                   {' '}

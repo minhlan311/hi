@@ -9,16 +9,16 @@ const classApi = {
     return http.post<SuccessResponse<Class>>(ENDPOINT.FIND_CLASS_PATH, body)
   },
   createClass(body: any) {
-    return http.post<SuccessResponse<Class>>(ENDPOINT.CLASS_PATH, body)
+    return http.post<Class>(ENDPOINT.CLASS_PATH, body)
   },
   deleteClass(id: any) {
     return http.delete<SuccessResponse<Class>>(ENDPOINT.CLASS_PATH + id)
   },
   getOneClass(id: any) {
-    return http.get<SuccessResponse<Class>>(ENDPOINT.CLASS_PATH + id)
+    return http.get<Class>(ENDPOINT.CLASS_PATH + id)
   },
   updateClass(body: any) {
-    return http.put<SuccessResponse<Class>>(ENDPOINT.CLASS_PATH + body.id, body)
+    return http.put<Class>(ENDPOINT.CLASS_PATH + body.id, body)
   },
 }
 

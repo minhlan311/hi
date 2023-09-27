@@ -55,3 +55,8 @@ export enum StatusEnum {
   REJECTED = 'REJECTED',
   DELETED = 'DELETED',
 }
+
+export enum PathTypeForm {
+  CREATE = '/mentor/courses/create',
+  UPDATE = '/mentor/courses/update',
+}

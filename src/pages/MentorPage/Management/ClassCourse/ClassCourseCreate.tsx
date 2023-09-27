@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
@@ -16,7 +17,7 @@ type Props = {
   onOpen: boolean
   onClose: Dispatch<SetStateAction<boolean>>
   idClass: string
-  typeForm: 'UPDATE' | 'CREATE'
+  typeForm: string | undefined
 }
 
 type FormClass = {
@@ -55,15 +56,15 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
   useEffect(() => {
     if (dataClass && typeForm === 'UPDATE') {
       form.setFieldValue('courseId', dataClass?.data?.courseId)
-      form.setFieldValue('startDate', dayjs(formatDate(dataClass?.data?.startDate), 'DD/MM/YYYY'))
-      form.setFieldValue('endDate', dayjs(formatDate(dataClass?.data?.endDate), 'DD/MM/YYYY'))
-      form.setFieldValue('startAt', moment(formatHour(dataClass?.data?.startAt), 'HH:mm'))
-      form.setFieldValue('endAt', moment(formatHour(dataClass?.data?.endAt), 'HH:mm'))
+      form.setFieldValue('startDate', dayjs(formatDate(dataClass?.data?.startDate as string), 'DD/MM/YYYY'))
+      form.setFieldValue('endDate', dayjs(formatDate(dataClass?.data?.endDate as string), 'DD/MM/YYYY'))
+      form.setFieldValue('startAt', moment(formatHour(dataClass?.data?.startAt as string), 'HH:mm'))
+      form.setFieldValue('endAt', moment(formatHour(dataClass?.data?.endAt as string), 'HH:mm'))
       form.setFieldValue('schedules', dataClass?.data?.schedules)
       form.setFieldValue('courseId', dataClass?.data?.courseId)
       form.setFieldValue('id', idClass)
     } else {
-      form.resetFields('')
+      form.resetFields()
     }
   }, [dataClass])
 
@@ -144,7 +145,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
       typeForm === FORM_TYPE.CREATE ? mutation.mutate(values) : mutationUpdate.mutate(values)
     }
 
-    form.resetFields('')
+    form.resetFields([])
   }
 
   return (

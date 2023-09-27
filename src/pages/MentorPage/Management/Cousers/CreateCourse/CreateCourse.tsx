@@ -62,7 +62,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       }),
   })
 
-  const { data: courseDetail, isLoading } = useQuery({
+  const { data: courseDetail } = useQuery({
     queryKey: ['courseMentor'],
     queryFn: () => courseApi.getOneCourse(id!),
     enabled: id ? true : false,
@@ -87,8 +87,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.resetFields()
       setContent('')
     }
-
-    return
   }, [courseDetail, id])
 
   console.log(subjectData?.data?.docs, 'subjectData?.data?.docs')
@@ -170,8 +168,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   return (
     <div>
-      <Form form={form} disabled={isLoading} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
-        {' '}
+      <Form form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <Form.Item>
           <Row>
             <Col span={22}></Col>
