@@ -85,7 +85,12 @@ export default function CourseListMentor({ data, resetDatas }: any) {
                     }
                     actions={[
                       <>
-                        <EditOutlined key='edit' />
+                        <EditOutlined
+                          key='edit'
+                          onClick={() => {
+                            navigate(`/mentor/courses/update/${item._id}`)
+                          }}
+                        />
                       </>,
                       <PopConfirmAntd
                         desc='Bạn có muốn xóa khóa học này ?'

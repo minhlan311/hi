@@ -15,23 +15,25 @@ import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
 import { AppContext } from '@/contexts/app.context'
 import categoryApi from '@/apis/categories.api'
+import { Category } from '@/types/category.type'
+import { useParams } from 'react-router-dom'
 
 export default function CreateCourse({ next, dataIdCouser }: any) {
+  const { id } = useParams()
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
-
   const queryClient = useQueryClient()
-
   const myDataUser = queryClient.getQueryData<any>(['userDetail'])
-
   const dataMedia = fileList?.map((item) => item?.response?.url)
 
   useEffect(() => {
     form.setFieldValue('coverMedia', dataMedia[0])
+
     form.setFieldValue('descriptions', content)
+
     form.setFieldValue('mentorId', myDataUser?.data?._id)
   }, [fileList, dataMedia, content, myDataUser])
 
@@ -43,22 +45,83 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const onFinish = (values: any) => {
     next(1)
 
-    mutation.mutate({ ...values, mentorId: profile._id })
+    if (id) {
+      mutationUpdate.mutate({ ...values, mentorId: profile._id, id: id })
+    } else {
+      mutation.mutate({ ...values, mentorId: profile._id })
+    }
   }
 
   const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
     queryKey: ['categoryAll'],
-    queryFn: () => categoryApi.getCategories(),
+    queryFn: () =>
+      categoryApi.getCategories({
+        parentId: '64ffde9c746fe5413cf8d1af',
+      }),
   })
-  const subjectOptions = subjectData?.data?.docs?.map((user: any) => ({
-    label: user.name,
-    value: user._id,
+
+  const { data: courseDetail, isLoading } = useQuery({
+    queryKey: ['courseMentor'],
+    queryFn: () => courseApi.getOneCourse(id!),
+    enabled: id ? true : false,
+  })
+
+  useEffect(() => {
+    if (courseDetail && id) {
+      form.setFieldValue('plan', courseDetail?.data?.plan)
+      form.setFieldValue('cost', courseDetail?.data?.cost)
+      form.setFieldValue('name', courseDetail?.data?.name)
+      form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
+      form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
+      setContent(courseDetail?.data?.descriptions as string)
+      setFileList([
+        {
+          uid: 'áldkjalkdjalskj',
+          name: 'ádacsac',
+          url: import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail?.data?.coverMedia,
+        },
+      ])
+    } else {
+      form.resetFields()
+      setContent('')
+    }
+
+    return
+  }, [courseDetail, id])
+
+  console.log(subjectData?.data?.docs, 'subjectData?.data?.docs')
+
+  const subjectOptions = subjectData?.data?.docs?.map((category: any) => ({
+    key: category?._id,
+    title: category?.name,
+    value: category?._id,
+    children: category?.children?.map((item: Category) => {
+      return {
+        key: item?._id,
+        title: item?.name,
+        value: item?._id,
+        children: item?.children?.map((item1) => {
+          return {
+            key: item1?._id,
+            title: item1?.name,
+            value: item1?._id,
+          }
+        }),
+      }
+    }),
   }))
 
   const mutation = useMutation({
     mutationFn: (body: CourseForm) => courseApi.createCourses(body),
+    onSuccess: (data: any) => {
+      dataIdCouser(data?.data?._id)
+    },
+  })
+
+  const mutationUpdate = useMutation({
+    mutationFn: (body: CourseForm) => courseApi.updateCourses(body),
     onSuccess: (data: any) => {
       dataIdCouser(data?.data?._id)
     },
@@ -107,7 +170,18 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   return (
     <div>
-      <Form form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+      <Form form={form} disabled={isLoading} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        {' '}
+        <Form.Item>
+          <Row>
+            <Col span={22}></Col>
+            <Col span={2}>
+              <Button htmlType='submit' type='primary'>
+                Tiếp theo
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
         <Row gutter={10}>
           <Col span={16}>
             <Row gutter={30}>
@@ -145,7 +219,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             <Row gutter={30}>
               <Col span={9}>
                 <Form.Item
-                  label='Tiêu đề khóa học'
+                  label='Danh mục khóa học'
                   name='categoryId'
                   rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
@@ -201,11 +275,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item>
-          <Button htmlType='submit' type='primary'>
-            Tiếp theo
-          </Button>
-        </Form.Item>
       </Form>
     </div>
   )

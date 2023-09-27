@@ -128,6 +128,7 @@ export default function DrawerUpdateLession({
       courseId: userId,
     })
     form.resetFields()
+    setContent('')
     onClose(false)
     // console.log(values, 'values')
   }
@@ -137,7 +138,7 @@ export default function DrawerUpdateLession({
   }
 
   return (
-    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm Bài học mới '}>
+    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Sửa bài học '}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />

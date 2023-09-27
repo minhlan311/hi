@@ -2,6 +2,7 @@ import { Steps, theme } from 'antd'
 import React, { useState } from 'react'
 import CreateCourse from './CreateCourse'
 import CreateSteps2 from './components/Step2/CreateSteps2'
+import UploadQuestion from './components/step3/UploadQuestion'
 
 const StepCreate: React.FC = () => {
   const { token } = theme.useToken()
@@ -15,11 +16,11 @@ const StepCreate: React.FC = () => {
     },
     {
       title: 'Lộ trình học',
-      content: <CreateSteps2 dataId={dataIdCouser} />,
+      content: <CreateSteps2 dataId={dataIdCouser} stepPrev={setCurrent} stepNext={setCurrent} />,
     },
     {
       title: 'Bài kiểm tra',
-      content: 'Last-content',
+      content: <UploadQuestion />,
     },
   ]
 
@@ -35,23 +36,6 @@ const StepCreate: React.FC = () => {
     <>
       <Steps current={current} items={items} />
       <div style={contentStyle}>{steps[current].content}</div>
-      {/* <div style={{ marginTop: 24 }}>
-        {current < steps.length - 1 && (
-          <Button type='primary' onClick={() => next()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button type='primary' onClick={() => message.success('Processing complete!')}>
-            Done
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-            Previous
-          </Button>
-        )}
-      </div> */}
     </>
   )
 }
