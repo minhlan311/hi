@@ -70,22 +70,18 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     },
   })
 
-  //   console.log(dataDrawer, 'dataDrawerdataDrawer')
-
   useEffect(() => {
     form.setFieldValue('descriptions', content)
   }, [content])
 
-  useEffect(() => {
-    form.setFieldValue('parentId', idLessCheck)
-  }, [idLessCheck])
+  form.setFieldValue('parentId', idLessCheck)
 
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 200)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
     delete values.document
@@ -99,6 +95,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
       courseId: userId,
     })
     form.resetFields()
+    setContent('')
     onClose(false)
     // console.log(values, 'values')
   }

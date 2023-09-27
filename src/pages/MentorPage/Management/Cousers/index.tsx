@@ -10,10 +10,12 @@ import CourseListMentor from './CourseListMentor/CourseListMentor'
 import { PaginationProps } from 'antd/lib'
 import { useNavigate } from 'react-router-dom'
 import PATH from '@/constants/path'
+import LoadingCustom from '@/components/LoadingCustom'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
   const [current, setCurrent] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [resetFilter, setResetFilter] = useState<boolean>(false)
   const navigate = useNavigate()
 
@@ -31,6 +33,7 @@ const MentorCourses = () => {
   return (
     <div>
       <FilterAction
+        setLoading={setLoading}
         resetFilter={resetFilter}
         apiFind={courseApi.getCourses}
         callBackData={setData}
@@ -44,9 +47,17 @@ const MentorCourses = () => {
           </ButtonCustom>
         }
       />
-      <CourseListMentor data={data} resetDatas={resetData} />
+      {!loading ? (
+        <CourseListMentor data={data} resetDatas={resetData} />
+      ) : (
+        <LoadingCustom
+          style={{
+            marginTop: '50px',
+          }}
+        />
+      )}
       <div className='pagination'>
-        <Pagination current={current} defaultCurrent={1} onChange={onChange} />;
+        <Pagination total={data?.data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />;
       </div>
     </div>
   )

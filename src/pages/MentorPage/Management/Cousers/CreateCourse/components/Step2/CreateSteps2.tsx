@@ -8,7 +8,7 @@ import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 import { TopicList } from '@/interface/topic'
 import { Topic } from '@/types/course.type'
 import { Lession } from '@/types/lession.type'
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Collapse } from 'antd'
 import { ColumnsType } from 'antd/es/table'
@@ -18,32 +18,31 @@ import DrawerCreateExam from './components/DrawerCreateExam'
 import DrawerCreateLession from './components/DrawerCreateLession'
 import DrawerUpdateLession from './components/DrawerUpdateLession'
 import DrawerUpdateTopic from './components/DrawerUpdateTopic'
-import { useNavigate } from 'react-router-dom'
+import DrawerQuizz from './components/DrawerQuizz'
+import { useParams } from 'react-router-dom'
 
-// type TargetKey = React.MouseEvent | React.KeyboardEvent | string
 export type MyPageTableOptions<S> = ColumnsType<S>
 
-const CreateSteps2 = ({ dataId }: any) => {
+const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
   const [idLess, setIdLess] = useState('')
-
+  const { id } = useParams()
   const [onOpenExam, setOnOpenExam] = useState(false)
   const [onOpenUpdateExam, setOnOpenUpdateExam] = useState(false)
   const [dataUpdateTopic, setDataUpdateTopic] = useState<Topic>()
   const [dataUpdateLession, setDataUpdateLession] = useState<Lession>()
   const [onOpenLession, setOnOpenLession] = useState(false)
   const [onOpenUpdateLession, setOnOpenUpdateLession] = useState(false)
+  const [onOpenQuizz, setOnOpenQuizz] = useState(false)
   const [reFetch, setRefetch] = useState<string>('')
   const [dataColl, setDataColl] = useState<TopicList[] | []>([])
   const [dataCollLession, setDataCollLession] = useState<TopicList[] | []>([])
   const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate()
-
   useEffect(() => {
     const callApi = async () => {
       setLoading(true)
       const data = await topicApi.getAllTopic({
-        filterQuery: { parentId: dataId },
+        filterQuery: { parentId: id ? id : dataId },
         options: { limit: 10, createAt: 1 },
       })
       setLoading(false)
@@ -53,7 +52,7 @@ const CreateSteps2 = ({ dataId }: any) => {
     dataId ? callApi() : ''
 
     return
-  }, [dataId, reFetch, dataCollLession])
+  }, [dataId, reFetch, dataCollLession, id])
 
   const mutation = useMutation({
     mutationFn: (id: string) => topicApi.deleteTopic(id!),
@@ -95,18 +94,51 @@ const CreateSteps2 = ({ dataId }: any) => {
     setOnOpenUpdateLession(true)
   }
 
+  const updateQuizz = (item: Lession) => {
+    setDataUpdateLession(item)
+    setOnOpenQuizz(true)
+  }
+
   return (
     <>
+      <div className='text-end'>
+        <div>
+          <Button onClick={() => setOnOpenExam(true)} type='dashed' className='dashed'>
+            <PlusCircleOutlined />
+            Thêm chuyên đề mới
+          </Button>
+        </div>
+        <div>
+          <Button
+            style={{
+              marginTop: '30px',
+            }}
+            type='dashed'
+            className='dashed'
+            onClick={() => {
+              stepPrev(0)
+            }}
+          >
+            Quay lại
+          </Button>
+          <Button
+            style={{
+              marginTop: '30px',
+              marginLeft: '20px',
+            }}
+            type='primary'
+            onClick={() => {
+              stepNext(2)
+            }}
+          >
+            Tiếp theo
+          </Button>
+        </div>
+      </div>
       {loading || mutation.isLoading ? (
         <LoadingCustom />
       ) : (
         <div>
-          <div className='text-end'>
-            <Button onClick={() => setOnOpenExam(true)} type='dashed' className='dashed'>
-              <PlusCircleOutlined />
-              Thêm chuyên đề mới
-            </Button>
-          </div>
           <div className='collsape'>
             <Collapse>
               {dataColl && dataColl?.length > 0
@@ -151,7 +183,6 @@ const CreateSteps2 = ({ dataId }: any) => {
                                 gap: '10px',
                               }}
                             >
-                              {' '}
                               <PopConfirmAntd
                                 title='Bạn có muốn xóa bài học này không ?'
                                 onConfirm={() => mutationDelete.mutate(lession._id as string)}
@@ -163,6 +194,9 @@ const CreateSteps2 = ({ dataId }: any) => {
                               <Button type='dashed' className='dashed' onClick={() => updateLession(lession)}>
                                 <EditOutlined />
                               </Button>
+                              <Button type='dashed' className='dashed' onClick={() => updateQuizz(lession)}>
+                                <QuestionCircleOutlined />
+                              </Button>
                             </div>
                           </div>
                         ))}{' '}
@@ -172,17 +206,6 @@ const CreateSteps2 = ({ dataId }: any) => {
                 : ''}
             </Collapse>
           </div>
-          <Button
-            style={{
-              marginTop: '30px',
-            }}
-            type='primary'
-            onClick={() => {
-              navigate('/mentor/courses')
-            }}
-          >
-            Hoàn thành
-          </Button>
         </div>
       )}
 
@@ -201,6 +224,15 @@ const CreateSteps2 = ({ dataId }: any) => {
         dataUpdateLession={dataUpdateLession}
         onOpen={onOpenUpdateLession}
         onClose={setOnOpenUpdateLession}
+        reFetchData={setRefetch}
+      />
+
+      <DrawerQuizz
+        userId={dataId}
+        idLessCheck={idLess}
+        dataUpdateLession={dataUpdateLession}
+        onOpen={onOpenQuizz}
+        onClose={setOnOpenQuizz}
         reFetchData={setRefetch}
       />
 

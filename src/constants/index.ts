@@ -1,5 +1,5 @@
 export const enum SocketModule {
-  LIVE = 'live'
+  LIVE = 'live',
 }
 interface PrototypeStream {
   video: boolean
@@ -17,4 +17,9 @@ export const getStream = async (prototype: PrototypeStream) => {
 export interface DataRoom {
   socketId: string
   name: string
+}
+
+export const FORM_TYPE = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
 }

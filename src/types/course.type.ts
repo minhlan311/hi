@@ -85,6 +85,7 @@ export type TCourse = {
 }
 
 export type CourseForm = {
+  id?: string
   categoryId: string
   coverMedia: string
   descriptions: string

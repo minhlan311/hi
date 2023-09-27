@@ -36,6 +36,9 @@ const courseApi = {
   createCourses(body: CourseForm) {
     return http.post<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH, body)
   },
+  updateCourses(body: CourseForm) {
+    return http.put<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + body.id, body)
+  },
   createTopics(body: TopicsForm) {
     return http.post<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH, body)
   },
