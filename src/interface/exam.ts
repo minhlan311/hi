@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export interface Diploma {
+  image: string
+  schoolName: string
+}
+
 export interface MentorInfo {
   _id: string
   _destroy: boolean
@@ -8,16 +13,39 @@ export interface MentorInfo {
   prizes: any[]
   specializes: any[]
   levels: any[]
+  imageBefore: string
+  imageAfter: string
   userId: string
+  diploma: Diploma[]
   createdAt: string
   updatedAt: string
+  id: string
 }
 
 export interface Owner {
   _id: string
+  _destroy: boolean
   fullName: string
+  avatarUrl: string
+  coverUrl: string
+  email: string
+  password: string
+  birthday: string
+  phoneNumber: string
+  referralCode: string
+  accountStatus: string
+  emailStatus: string
+  phoneStatus: string
+  isMentor: boolean
+  role: string[]
+  mentorStatus: string
+  createdAt: string
+  updatedAt: string
+  refreshToken: string
+  updatedById: string
   group?: any
   mentorInfo: MentorInfo
+  id: string
 }
 
 export interface ExamState {
@@ -25,19 +53,21 @@ export interface ExamState {
   position: number
   createdById: string
   updatedById: string
-  subjectId: string
+  categoryId: string
   name: string
-  plan: string
+  plan: string | number
   status: string
   type: string
   cost?: any
   slug: string
-  questions: any[]
-  countQuestions: number
-  tested: number
   owner: Owner
-  _destroy: boolean
+  countQuestions: number
+  countSelectedResponseQuestions: number
+  countConstructedResponseQuestions: number
+  countUsersTested: number
+  countUsersDoned: number
+  countUsersIncompleted: number
+  id: string
   createdAt: string
   updatedAt: string
-  isLocked: boolean
 }

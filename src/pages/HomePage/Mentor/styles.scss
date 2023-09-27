@@ -74,6 +74,14 @@
       }
     }
   }
+  .oneLine {
+    white-space: break-spaces;
+    overflow: hidden;
+    // height: 33px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
 }
 
 .book,

@@ -7,6 +7,8 @@ import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
 import { QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
+// import { CKEditor } from '@ckeditor/ckeditor5-react'
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -24,12 +26,14 @@ const DrawerQuestion = (props: Props) => {
   const { open, questionData = null, testId, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
-  const [isCheck, setCheck] = useState<boolean>(Boolean(questionData?.status === 'ACTIVE'))
+  const [isCheck, setCheck] = useState<boolean>()
   const [data, setData] = useState<QuestionState>()
   const [typeQues, setTypeQues] = useState<string>()
+
   useEffect(() => {
     if (questionData) {
       setData(questionData)
+      setCheck(questionData.status === 'ACTIVE' ? true : false)
     }
   }, [questionData])
 
@@ -70,6 +74,8 @@ const DrawerQuestion = (props: Props) => {
   useEffect(() => {
     setLoading && setLoading(isLoading)
   }, [isLoading])
+
+  // const [content, setContent] = useState('')
 
   const onFinish = (values: any) => {
     const payload = {
@@ -231,7 +237,10 @@ const DrawerQuestion = (props: Props) => {
             )}
           </Space>
           <h3>Câu trả lời</h3>
-          {((typeQues === 'SINGLE CHOICE' || typeQues === 'MULTIPLE CHOICE' || typeQues === 'TRUE FALSE') && (
+          {((typeQues === 'SINGLE CHOICE' ||
+            typeQues === 'MULTIPLE CHOICE' ||
+            typeQues === 'TRUE FALSE' ||
+            typeQues === 'SORT') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
           )) || (
             <Form.Item
@@ -250,6 +259,11 @@ const DrawerQuestion = (props: Props) => {
 
           <Form.Item name='explanation' label='Giải thích'>
             <Input.TextArea placeholder='Nhập giải thích'></Input.TextArea>
+            {/* <CKEditor
+              editor={ClassicEditor}
+              data={content}
+              onChange={(_event: any, editor: any) => setContent(editor.getData())}
+            /> */}
           </Form.Item>
           <Form.Item name='hint' label='Gợi ý'>
             <Input.TextArea placeholder='Nhập gợi ý'></Input.TextArea>

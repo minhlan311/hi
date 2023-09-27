@@ -192,7 +192,7 @@ const DrawerExam = (props: Props) => {
           </Form.Item>
 
           <Form.Item
-            name='subjectId'
+            name='categoryId'
             label='Chọn khóa học'
             rules={[
               {

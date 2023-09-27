@@ -42,7 +42,7 @@ const MentorExamDetail = () => {
 
   useEffect(() => {
     if (examDetail) {
-      mutate(examDetail.subjectId)
+      mutate(examDetail.categoryId)
     }
   }, [examDetail])
 
@@ -54,21 +54,21 @@ const MentorExamDetail = () => {
       icon: <RiCheckboxMultipleLine />,
       iconColor: '#ced144',
       title: 'Số câu trắc nghiệm',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countSelectedResponseQuestions,
     },
     {
       icon: <TfiWrite style={{ fontSize: 24 }} />,
       iconColor: '#676767',
       title: 'Số câu tự luận',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countConstructedResponseQuestions,
     },
-    { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.tested },
-    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countQuestions },
+    { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.countUsersTested },
+    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countUsersDoned },
     {
       icon: <CgCloseO />,
       iconColor: '#e73434',
       title: 'Số chưa hoàn thành',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countUsersIncompleted,
     },
   ]
 
