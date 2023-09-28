@@ -15,7 +15,7 @@ import ListCourse from './components/ListCourse'
 export default function CourseCalender() {
   const queryClient = useQueryClient()
   const categoriesData = queryClient.getQueryData<any>(['topCategories'])
-  const [active, setActive] = useState('Tiếng Anh')
+  const [active, setActive] = useState('Tiếng Anh ')
   const [id, setId] = useState<string>()
 
   // console.log(categoriesData?.data?.docs[0]?._id, 'categoriesData?.data?.docs[0]')
