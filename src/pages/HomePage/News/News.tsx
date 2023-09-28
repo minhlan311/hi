@@ -2,9 +2,10 @@ import { Button, Image, Typography } from 'antd'
 import './News.scss'
 import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function News() {
+  const navigate = useNavigate()
   const { data } = useQuery({
     queryKey: ['news'],
     queryFn: () =>
@@ -61,7 +62,9 @@ export default function News() {
               </>
             ))}
         </div>
-        <Button className='buttonMore'>Xem tất cả</Button>
+        <Button className='buttonMore' onClick={() => navigate('/news')}>
+          Xem tất cả
+        </Button>
       </div>
     </div>
   )

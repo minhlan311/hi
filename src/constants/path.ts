@@ -13,6 +13,7 @@ export const PATH = {
   SUBJECTS_PAGE: '/subjects',
   PROFILES: '/profiles',
   NEWS: '/news/:id',
+  NEWS_PAGE: '/news/',
   PROFILES_DETAIL: '/profiles/:id',
 
   // COURSE_PAGE: '/courses',
