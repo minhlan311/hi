@@ -26,9 +26,10 @@ const DrawerQuestion = (props: Props) => {
   const { open, questionData = null, testId, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
-  const [isCheck, setCheck] = useState<boolean>()
+  const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState>()
   const [typeQues, setTypeQues] = useState<string>()
+  const [skillQues, setSkillQues] = useState<string>()
 
   useEffect(() => {
     if (questionData) {
@@ -61,8 +62,8 @@ const DrawerQuestion = (props: Props) => {
         status: status,
         message: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
       })
-      setOpen(false)
       resetData()
+      setOpen(false)
       form.resetFields()
     }
 
@@ -70,10 +71,6 @@ const DrawerQuestion = (props: Props) => {
       openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
   }, [status, data])
-
-  useEffect(() => {
-    setLoading && setLoading(isLoading)
-  }, [isLoading])
 
   // const [content, setContent] = useState('')
 
@@ -90,6 +87,16 @@ const DrawerQuestion = (props: Props) => {
     mutate(payload)
     onCloseDrawer()
   }
+
+  console.log(isLoading)
+  useEffect(() => {
+    if (isLoading && setLoading) {
+      setLoading(isLoading)
+      setTimeout(() => {
+        setLoading(false)
+      }, 200)
+    }
+  }, [isLoading])
 
   return (
     <div>
@@ -114,7 +121,12 @@ const DrawerQuestion = (props: Props) => {
           </Space>
         }
       >
-        <Form onFinish={onFinish} layout='vertical' form={form} initialValues={{ difficulty: 'EASY' }}>
+        <Form
+          onFinish={onFinish}
+          layout='vertical'
+          form={form}
+          initialValues={{ difficulty: 'EASY', skill: 'READING' }}
+        >
           <h3>Câu hỏi</h3>
           <Form.Item
             name='question'
@@ -194,11 +206,41 @@ const DrawerQuestion = (props: Props) => {
                   },
                   {
                     value: 'WRITING',
-                    label: 'Viết',
+                    label: 'Nhập câu trả lời',
                   },
                 ]}
                 onChange={(e) => setTypeQues(e)}
                 value={typeQues}
+              />
+            </Form.Item>
+            <Form.Item
+              name='skill'
+              label='Loại kỹ năng'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn loại kỹ năng',
+                },
+              ]}
+            >
+              <Select
+                placeholder='Chọn loại kỹ năng'
+                options={[
+                  {
+                    value: 'READING',
+                    label: 'Đọc',
+                  },
+                  {
+                    value: 'LISTENING',
+                    label: 'Nghe',
+                  },
+                  {
+                    value: 'WRITING',
+                    label: 'Viết',
+                  },
+                ]}
+                onChange={(e) => setSkillQues(e)}
+                value={skillQues}
               />
             </Form.Item>
             <Form.Item

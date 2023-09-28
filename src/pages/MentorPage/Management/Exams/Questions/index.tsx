@@ -4,18 +4,18 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
+import openNotification from '@/components/Notification'
 import TagCustom from '@/components/TagCustom/TagCustom'
+import { QuestionState } from '@/interface/question'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Popconfirm, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
+import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus, AiOutlineQuestionCircle } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
+import { MdOutlineDisabledVisible } from 'react-icons/md'
 import { useLocation } from 'react-router-dom'
 import DrawerQuestion from '../Drawer/DrawerQuestion'
 import css from './styles.module.scss'
-import { QuestionState } from '@/interface/question'
-import openNotification from '@/components/Notification'
-import { MdOutlineDisabledVisible } from 'react-icons/md'
 
 const MentorQuestions = () => {
   const location = useLocation()
@@ -57,27 +57,31 @@ const MentorQuestions = () => {
   const [questions, setQuestions] = useState<{ docs: QuestionState[] }>()
   const [selectQuestions, setSelectQuestions] = useState<QuestionState | null>(null)
 
-  return (
+  return !loading && examDetail ? (
     <Space direction='vertical' className={`${css.quesList} sp100`}>
       {/* <DragAndDrop /> */}
+
       <FilterAction
         type='question'
         apiFind={questionApi.findQuestion}
         callBackData={setQuestions}
         addOnButton={
           <Space>
-            <ButtonCustom type='primary' onClick={() => setOpen(true)}>
-              Thêm câu hỏi
-            </ButtonCustom>
-            <ButtonCustom icon={<HiOutlineUpload />}>Thêm file câu hỏi</ButtonCustom>
+            <ButtonCustom
+              type='primary'
+              onClick={() => setOpen(true)}
+              icon={<AiOutlinePlus />}
+              tooltip='Thêm câu hỏi'
+            ></ButtonCustom>
+
+            <ButtonCustom icon={<HiOutlineUpload />} tooltip='Thêm file câu hỏi'></ButtonCustom>
           </Space>
         }
-        filterQuery={{ categoryId: examDetail?.categoryId }}
+        filterQuery={{ testId: examDetail?._id }}
         resetFilter={resetFilter}
       />
-      {loading ? (
-        <LoadingCustom />
-      ) : !questions?.docs?.length ? (
+
+      {!questions?.docs?.length ? (
         <EmptyCustom description='Không có câu hỏi nào'></EmptyCustom>
       ) : (
         questions?.docs?.map((item, id) => (
@@ -170,6 +174,8 @@ const MentorQuestions = () => {
         setLoading={setLoading}
       />
     </Space>
+  ) : (
+    <LoadingCustom style={{ marginTop: 200 }} tip='Vui lòng chờ...' />
   )
 }
 
