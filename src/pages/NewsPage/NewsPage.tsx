@@ -10,7 +10,6 @@ import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { News } from '@/types/news.type'
-import Header from '@/components/layout/Header/Header'
 
 export default function NewsPage() {
   const queryClient = useQueryClient()
@@ -42,7 +41,7 @@ export default function NewsPage() {
       <div className='title-box'>
         <h2>{data?.data?.title}</h2>
       </div>
-      <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.description }}></div>
+      <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
       <div className='other-news'>
         <h3 className='other-news-title'>Bài viết liên quan</h3>
         <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>

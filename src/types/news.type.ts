@@ -10,6 +10,7 @@ export type News = {
   updatedById: string
   _id: string
   description: any
+  content?: any
 }
 export type ListNews = {
   categoryId: string
