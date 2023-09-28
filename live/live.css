@@ -5,9 +5,9 @@ body {
 
 .chat-col {
   background: white;
-  right: 1%;
-  bottom: 2%;
-  top: 8%;
+  right: 0%;
+  bottom: 3%;
+  top: 3%;
   z-index: 1000;
   position: fixed;
   color: #fff;
@@ -16,7 +16,6 @@ body {
   padding-bottom: 20px !important;
   padding-top: 30px;
   border-radius: 10px;
-  min-height: 500px;
 }
 
 .chat-col.chat-opened {
