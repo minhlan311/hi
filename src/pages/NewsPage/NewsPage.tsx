@@ -71,7 +71,7 @@ export default function NewsPage() {
             ))}
         </div>
       </div>
-      <h2 className='h2-title'>Tin túc</h2>
+      <h2 className='h2-title'>Tin tức</h2>
       {data?.data?.docs &&
         data?.data?.docs?.map((item) => (
           <>
