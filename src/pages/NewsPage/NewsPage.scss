@@ -7,9 +7,18 @@
 .title-box {
   text-align: center;
 }
+h3 {
+  color: #d72831;
+}
 .box-desc {
   padding: 30px 0;
   min-height: 50vh;
+}
+.other-news {
+  background-color: #f4f4f4 !important;
+  border: 2px solid #d72831;
+  border-radius: 10px;
+  padding: 50px 60px;
 }
 .other-news-title {
   font-size: 26px;

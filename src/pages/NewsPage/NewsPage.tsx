@@ -10,6 +10,7 @@ import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { News } from '@/types/news.type'
+import Header from '@/components/layout/Header/Header'
 
 export default function NewsPage() {
   const queryClient = useQueryClient()
@@ -72,7 +73,7 @@ export default function NewsPage() {
               </Card>
             </>
           ))}
-        </SliderCustom>
+        </SliderCustom>{' '}
       </div>
     </div>
   )
