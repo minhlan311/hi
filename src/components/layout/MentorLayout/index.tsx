@@ -1,6 +1,6 @@
 import Logo from '@/components/Logo/Logo'
 import { UserState } from '@/interface/user'
-import { CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
+import { CarryOutOutlined, DatabaseOutlined, BookOutlined } from '@ant-design/icons'
 
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import useResponsives from '@/hooks/useResponsives'
@@ -58,9 +58,9 @@ const MentorLayout = (props: Props) => {
   }
 
   const siderItems: SiderItem[] = [
-    getItem(<Link to='/mentor/questions'>Lịch giảng dạy</Link>, '/mentor/calendar', <AiOutlineCalendar />),
+    getItem(<Link to='/mentor/calendar'>Lịch giảng dạy</Link>, '/mentor/calendar', <AiOutlineCalendar />),
     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
-    // getItem(<Link to='/mentor/documents'>Quản lý tài liệu</Link>, '/mentor/documents', <SnippetsOutlined />),
+    getItem(<Link to='/mentor/class'>Quản lý lớp học</Link>, '/mentor/class', <BookOutlined />),
     getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />),
   ]
 

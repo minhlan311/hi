@@ -17,4 +17,23 @@
       margin-top: 5px;
     }
   }
+  .qItem {
+    position: relative;
+    transition: 0.3s;
+    .disable {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      color: var(--white);
+      background-color: rgba(0, 0, 0, 0.3);
+      font-size: 16px;
+      border-radius: 12px;
+      .iconDisable {
+        font-size: 30px;
+      }
+    }
+    &:hover .disable {
+      display: none;
+    }
+  }
 }

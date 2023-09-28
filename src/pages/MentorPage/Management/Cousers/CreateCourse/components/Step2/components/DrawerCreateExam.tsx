@@ -44,7 +44,8 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
         message: 'Thông báo',
         description: 'Thêm chuyên đề mới thành công',
       })
-
+      form.resetFields()
+      setContent('')
       queryClient.invalidateQueries({ queryKey: ['topicsAll'] })
     },
   })
@@ -55,9 +56,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     form.setFieldValue('descriptions', content)
   }, [content])
 
-  useEffect(() => {
-    form.setFieldValue('parentId', userId)
-  }, [userId])
+  form.setFieldValue('parentId', userId)
 
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
@@ -78,7 +77,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
   }
 
   return (
-    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm chuyên đề mới'}>
+    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Sửa chuyên đề'}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tên chuyên đề'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />

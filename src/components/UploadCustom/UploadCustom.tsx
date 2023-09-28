@@ -122,6 +122,7 @@ const UploadCustom = (props: Props) => {
           fileList={fileList}
           showUploadList={showUploadList}
           beforeUpload={handleBeforeUpload}
+          accept={accessType}
         >
           {children}
         </Upload>
@@ -139,6 +140,7 @@ const UploadCustom = (props: Props) => {
       fileList={fileList}
       showUploadList={showUploadList}
       beforeUpload={handleBeforeUpload}
+      accept={accessType}
     >
       <Space.Compact className={css.buttGr}>{children}</Space.Compact>
     </Upload>

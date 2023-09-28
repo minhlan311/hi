@@ -3,11 +3,10 @@ import categoryApi from '@/apis/categories.api'
 import { debounce } from '@/helpers/common'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form, Input, Row, Select, Space, Tooltip } from 'antd'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import { AppContext } from '@/contexts/app.context'
 
 type Props = {
   apiFind: any
@@ -18,7 +17,8 @@ type Props = {
   limit?: number
   page?: number
   className?: string
-  type?: 'course' | 'test' | 'question'
+  type: 'course' | 'test' | 'question'
+  filterQuery?: object
 }
 
 const FilterAction = (props: Props) => {
@@ -32,12 +32,16 @@ const FilterAction = (props: Props) => {
     limit = 8,
     page = 1,
     className,
+    filterQuery,
   } = props
-  const { profile } = useContext(AppContext)
-  const [filterData, setFilterData] = useState<{ filterQuery?: any; options: any }>({
-    filterQuery: {},
+
+  const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
+  const [form] = Form.useForm()
+
+  const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>({
+    filterQuery: filterQuery || {},
     options: {
-      limit: limit,
+      limit,
       page: page || 1,
       sort: {
         createdAt: '-1',
@@ -45,68 +49,42 @@ const FilterAction = (props: Props) => {
     },
   })
 
-  useEffect(() => {
-    setFilterData({
-      ...filterData,
-      options: {
-        limit: limit,
-        page: page,
-        sort: {
-          createdAt: '-1',
-        },
-      },
-    })
-  }, [page])
-
-  useEffect(() => {
-    setFilterData({
-      filterQuery: {
-        mentorId: profile?._id,
-      },
-      options: {
-        limit: limit,
-        page: page,
-        sort: {
-          createdAt: '-1',
-        },
-      },
-    })
-  }, [])
-
-  const [form] = Form.useForm()
-
   const { data: categoriesData } = useQuery({
-    queryKey: ['Categories'],
+    queryKey: ['categoriesList'],
     queryFn: () => {
       return categoryApi.getCategories({
         parentId: '64ffde9c746fe5413cf8d1af',
       })
     },
   })
-  const subjectList = categoriesData?.data?.docs?.map((sj) => {
-    return {
-      value: sj._id,
-      label: sj.name,
-    }
-  })
+
+  const subjectList = categoriesData?.data?.docs?.map((sj) => ({
+    value: sj._id,
+    label: sj.name,
+  }))
 
   const onChangeFilter = () => {
-    const { categoryId, plan, viewCountDownCount, status, createdAt, keyword } = form.getFieldsValue()
+    const { categoryId, plan, viewCountDownCount, keyword, type, skill, difficulty, score, status, createdAt } =
+      form.getFieldsValue()
 
     const body = {
-      categoryId: categoryId,
-      plan: plan,
-      status: status,
-      search: keyword ? keyword : undefined,
+      type,
+      skill,
+      difficulty,
+      score,
+      categoryId,
+      plan,
+      status,
+      search: keyword || undefined,
     }
 
     setFilterData({
-      filterQuery: body,
+      filterQuery: { ...filterQuery, ...body },
       options: {
-        limit: limit,
-        page: page,
+        limit,
+        page,
         sort: {
-          createdAt: createdAt,
+          createdAt,
           countAssessment: viewCountDownCount === 'highestRating' ? -1 : undefined,
           countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
         },
@@ -117,12 +95,10 @@ const FilterAction = (props: Props) => {
   const handleReset = () => {
     form.resetFields()
     setFilterData({
-      filterQuery: {
-        mentorId: profile?._id,
-      },
+      filterQuery: filterQuery || {},
       options: {
-        limit: limit,
-        page: page,
+        limit,
+        page,
         sort: {
           createdAt: -1,
         },
@@ -130,16 +106,15 @@ const FilterAction = (props: Props) => {
     })
   }
 
-  const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
-
   useEffect(() => {
     if (resetFilter) handleReset()
   }, [resetFilter])
 
   useEffect(() => {
-    mutate(filterData as unknown as any, {
-      onSuccess: (data) => {
-        callBackData(data as unknown as any[])
+    mutate(filterData as unknown as void, {
+      onSuccess: (data: any) => {
+        const res = data?.data
+        callBackData(res)
       },
     })
   }, [filterData])
@@ -230,55 +205,97 @@ const FilterAction = (props: Props) => {
             <>
               <Form.Item name='type'>
                 <Select
-                  style={{ width: 150 }}
+                  style={{ width: 140 }}
                   placeholder='Loại câu hỏi'
                   allowClear
                   onChange={onChangeFilter}
                   options={[
                     {
                       value: 'SINGLE CHOICE',
-                      label: 'SINGLE CHOICE',
+                      label: 'Một đáp án',
                     },
                     {
                       value: 'MULTIPLE CHOICE',
-                      label: 'MULTIPLE CHOICE',
+                      label: 'Nhiều đáp án',
                     },
                     {
                       value: 'TRUE FALSE',
-                      label: 'TRUE FALSE',
+                      label: 'Đúng / Sai',
                     },
                     {
                       value: 'SORT',
-                      label: 'SORT',
+                      label: 'Sắp xếp',
                     },
                     {
                       value: 'DRAG DROP',
-                      label: 'DRAG DROP',
+                      label: 'Kéo thả',
                     },
                     {
                       value: 'LIKERT SCALE',
-                      label: 'LIKERT SCALE',
+                      label: 'Đánh giá',
                     },
                     {
                       value: 'FILL BLANK',
-                      label: 'FILL BLANK',
+                      label: 'Điền vào ô trống',
                     },
                     {
                       value: 'MATCHING',
-                      label: 'MATCHING',
+                      label: 'Nối',
                     },
                     {
                       value: 'NUMERICAL',
-                      label: 'NUMERICAL',
+                      label: 'Điền số',
                     },
                     {
                       value: 'WRITING',
-                      label: 'WRITING',
+                      label: 'Nhập câu trả lời',
                     },
                   ]}
                 />
               </Form.Item>
-              <Form.Item name='sortNumber' style={{ width: 160 }}>
+              <Form.Item name='skill'>
+                <Select
+                  placeholder='Loại kỹ năng'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: 'READING',
+                      label: 'Đọc',
+                    },
+                    {
+                      value: 'LISTENING',
+                      label: 'Nghe',
+                    },
+                    {
+                      value: 'WRITING',
+                      label: 'Viết',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='difficulty'>
+                <Select
+                  placeholder='Loại kỹ năng'
+                  allowClear
+                  onChange={onChangeFilter}
+                  options={[
+                    {
+                      value: 'EASY',
+                      label: 'Dễ',
+                    },
+                    {
+                      value: 'MEDIUM',
+                      label: 'Vừa phải',
+                    },
+                    {
+                      value: 'DIFFICULT',
+                      label: 'Khó',
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name='score' style={{ width: 140 }}>
                 <Select
                   placeholder='Điểm số'
                   allowClear
@@ -331,38 +348,7 @@ const FilterAction = (props: Props) => {
               </Form.Item>
             </>
           )}
-          {/* <Form.Item name='subjectId' label='' style={{ width: 200 }}>
-            <Select
-              placeholder='Tìm kiếm và chọn môn học'
-              allowClear
-              showSearch
-              labelInValue
-              filterOption={false}
-              // onChange={onChangeFilter}
-              // notFoundContent={
-              //   subjectsData.status === 'loading' ? (
-              //     <div style={{ height: 120 }}>
-              //       <Spin
-              //         size='small'
-              //         style={{
-              //           marginTop: 50
-              //         }}
-              //         tip='Loading...'
-              //       >
-              //         <div className='content'></div>
-              //       </Spin>
-              //     </div>
-              //   ) : (
-              //     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
-              //   )
-              // }
-              // onSearch={debounce((text) => setSearchSj(text), 800)}
-              // options={subjectOption}
-              style={{
-                width: 200
-              }}
-            />
-          </Form.Item> */}
+
           <Form.Item>
             <Tooltip title='Xóa bộ lọc'>
               <ButtonCustom onClick={handleReset} icon={<LuFilterX size={22} />}></ButtonCustom>

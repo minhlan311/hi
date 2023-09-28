@@ -63,8 +63,8 @@ export default {
         video: true,
         audio: {
           echoCancellation: true,
-          noiseSuppression: true
-        }
+          noiseSuppression: true,
+        },
       })
     } else {
       throw new Error('User media not available')
@@ -76,8 +76,8 @@ export default {
       return navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
-          noiseSuppression: true
-        }
+          noiseSuppression: true,
+        },
       })
     }
 
@@ -90,13 +90,13 @@ export default {
     if (this.userMediaAvailable()) {
       return navigator.mediaDevices.getDisplayMedia({
         video: {
-          cursor: 'always'
+          cursor: 'always',
         },
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 44100
-        }
+          sampleRate: 44100,
+        },
       })
     } else {
       throw new Error('User media not available')
@@ -107,14 +107,14 @@ export default {
     return {
       iceServers: [
         {
-          urls: ['stun:103.90.228.54:3478']
+          urls: ['stun:103.90.228.54:3478'],
         },
         {
           username: 'cati',
           credential: 'Zxcv!',
-          urls: ['turn:103.90.228.54:3478?transport=udp', 'turn:103.90.228.54:3478?transport=tcp']
-        }
-      ]
+          urls: ['turn:103.90.228.54:3478?transport=udp', 'turn:103.90.228.54:3478?transport=tcp'],
+        },
+      ],
     }
   },
 
@@ -122,7 +122,7 @@ export default {
     let chatMsgDiv = document.querySelector('#chat-messages')
     let contentAlign = 'justify-content-end'
     let senderName = 'You'
-    let msgBg = 'bg-white'
+    let msgBg = ''
 
     if (senderType === 'remote') {
       contentAlign = 'justify-content-start'
@@ -248,21 +248,21 @@ export default {
       totalRemoteVideosDesktop <= 2
         ? '50%'
         : totalRemoteVideosDesktop == 3
-          ? '33.33%'
-          : totalRemoteVideosDesktop <= 8
-            ? '25%'
-            : totalRemoteVideosDesktop <= 15
-              ? '20%'
-              : totalRemoteVideosDesktop <= 18
-                ? '16%'
-                : totalRemoteVideosDesktop <= 23
-                  ? '15%'
-                  : totalRemoteVideosDesktop <= 32
-                    ? '12%'
-                    : '10%'
+        ? '33.33%'
+        : totalRemoteVideosDesktop <= 8
+        ? '25%'
+        : totalRemoteVideosDesktop <= 15
+        ? '20%'
+        : totalRemoteVideosDesktop <= 18
+        ? '16%'
+        : totalRemoteVideosDesktop <= 23
+        ? '15%'
+        : totalRemoteVideosDesktop <= 32
+        ? '12%'
+        : '10%'
 
     for (let i = 0; i < totalRemoteVideosDesktop; i++) {
       elem[i].style.width = newWidth
     }
-  }
+  },
 }

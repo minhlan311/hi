@@ -16,6 +16,8 @@ import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import type { ColumnsType } from 'antd/es/table'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import PageResult from '@/components/PageResult'
+import LoadingCustom from '@/components/LoadingCustom'
 interface DataType {
   _id: string
   name: string
@@ -28,18 +30,19 @@ interface DataType {
 const MentorExamDetail = () => {
   const location = useLocation()
   const examSlug = location.pathname.split('/')[3]
-  const { data: exam } = useQuery({
+  const { data: exam, isLoading } = useQuery({
     queryKey: ['examDetail'],
     queryFn: () => {
       return examApi.getExamDetail(examSlug)
     },
   })
+
   const examDetail = exam?.data
   const { data, mutate } = useMutation({ mutationFn: (id: string) => categoryApi.getCategorieDetail(id) })
 
   useEffect(() => {
     if (examDetail) {
-      mutate(examDetail.subjectId)
+      mutate(examDetail.categoryId)
     }
   }, [examDetail])
 
@@ -51,21 +54,21 @@ const MentorExamDetail = () => {
       icon: <RiCheckboxMultipleLine />,
       iconColor: '#ced144',
       title: 'Số câu trắc nghiệm',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countSelectedResponseQuestions,
     },
     {
       icon: <TfiWrite style={{ fontSize: 24 }} />,
       iconColor: '#676767',
       title: 'Số câu tự luận',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countConstructedResponseQuestions,
     },
-    { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.tested },
-    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countQuestions },
+    { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.countUsersTested },
+    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countUsersDoned },
     {
       icon: <CgCloseO />,
       iconColor: '#e73434',
       title: 'Số chưa hoàn thành',
-      data: examDetail?.countQuestions,
+      data: examDetail?.countUsersIncompleted,
     },
   ]
 
@@ -225,7 +228,25 @@ const MentorExamDetail = () => {
       children: <Table columns={absentColumn} dataSource={students} />,
     },
   ]
-  if (examDetail && subjectDetail)
+
+  if (isLoading) {
+    return <LoadingCustom />
+  }
+
+  if (!examDetail) {
+    return (
+      <PageResult
+        desc='Bộ đề không tồn tại hoặc đã bị xóa'
+        extra={
+          <ButtonCustom type='primary' href='/mentor/exams/'>
+            Trở về danh sách đề thi
+          </ButtonCustom>
+        }
+      />
+    )
+  }
+
+  if (!isLoading && examDetail && subjectDetail)
     return (
       <Space direction='vertical' size='large' className={css.exMain}>
         <Row justify='space-between'>

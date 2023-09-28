@@ -66,7 +66,7 @@ export default function CourseListMentor({ data, resetDatas }: any) {
     <>
       <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
         {data
-          ? data?.data?.docs?.map((item: any) => (
+          ? data?.docs?.map((item: any) => (
               <>
                 <Col>
                   {' '}
@@ -85,7 +85,12 @@ export default function CourseListMentor({ data, resetDatas }: any) {
                     }
                     actions={[
                       <>
-                        <EditOutlined key='edit' />
+                        <EditOutlined
+                          key='edit'
+                          onClick={() => {
+                            navigate(`/mentor/courses/update/${item._id}`)
+                          }}
+                        />
                       </>,
                       <PopConfirmAntd
                         desc='Bạn có muốn xóa khóa học này ?'

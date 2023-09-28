@@ -1,4 +1,4 @@
-import { Button, Card, Rate, Space } from 'antd'
+import { Button, Card, Rate, Space, Tooltip } from 'antd'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 import book from '../../../assets/icons/book.svg'
 import point2 from '../../../assets/icons/point2.svg'
@@ -21,7 +21,7 @@ const Mentor = () => {
       return userApi.findUser({
         filterQuery: {
           isMentor: true,
-          // mentorStatus: 'APPROVED',
+          mentorStatus: 'APPROVED',
         },
       })
     },
@@ -70,7 +70,9 @@ const Mentor = () => {
                         <Avatar avtUrl={item.avatarUrl} userData={item} size={140} />
                       </div>
                       <div>
-                        <h2>{item.fullName}</h2>
+                        <Tooltip title={item.fullName}>
+                          <h2 className='oneLine'>{item.fullName}</h2>
+                        </Tooltip>
                         <div>Chứng chỉ Teft</div>
                         <Rate value={4.5} allowHalf style={{ fontSize: 12 }} />
                         <p>

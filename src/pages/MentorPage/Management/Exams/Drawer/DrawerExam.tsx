@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import categoryApi from '@/apis/categories.api'
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
+import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { SuccessResponse } from '@/types/utils.type'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Drawer, Form, Input, Select, Space } from 'antd'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   open: boolean
@@ -37,14 +38,9 @@ const DrawerExam = (props: Props) => {
     setOpen(false)
   }
 
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categoriesList'],
-    queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
-      })
-    },
-  })
+  const queryClient = useQueryClient()
+
+  const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
 
   const subjectList = categoriesData?.data?.docs?.map((sj) => {
     return {
@@ -62,7 +58,7 @@ const DrawerExam = (props: Props) => {
     if (status === 'success') {
       openNotification({
         status: status,
-        message: action === 'create' ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
+        message: action === 'create' ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
       setOpen(false)
       resetData && resetData()
@@ -105,7 +101,7 @@ const DrawerExam = (props: Props) => {
               Hủy
             </ButtonCustom>
             <ButtonCustom onClick={() => form.submit()} type='primary'>
-              {action === 'create' ? 'Tạo bài thi' : 'Cập nhật'}
+              {action === 'create' ? 'Tạo bộ đề' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
         }
@@ -120,29 +116,29 @@ const DrawerExam = (props: Props) => {
         >
           <Form.Item
             name='name'
-            label='Tiêu đề bài thi'
+            label='Tiêu đề bộ đề'
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tiêu đề bài thi',
+                message: 'Vui lòng nhập tiêu đề bộ đề',
               },
             ]}
           >
-            <Input placeholder='Nhập tên tiêu đề bài thi' />
+            <Input placeholder='Nhập tên tiêu đề bộ đề' />
           </Form.Item>
 
           <Form.Item
             name='type'
-            label='Loại bài thi'
+            label='Loại bộ đề'
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn loại bài thi',
+                message: 'Vui lòng chọn loại bộ đề',
               },
             ]}
           >
             <Select
-              placeholder='Chọn loại bài thi'
+              placeholder='Chọn loại bộ đề'
               options={[
                 {
                   value: 'QUIZ',
@@ -196,7 +192,7 @@ const DrawerExam = (props: Props) => {
           </Form.Item>
 
           <Form.Item
-            name='subjectId'
+            name='categoryId'
             label='Chọn khóa học'
             rules={[
               {

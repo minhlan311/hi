@@ -193,8 +193,8 @@ table {
   display: flex;
   align-items: center;
   justify-content: center;
-  .anticon {
-    font-size: 20px !important;
+  & > svg {
+    font-size: 20px;
   }
 }
 
@@ -235,6 +235,10 @@ table {
 :where(.css-dev-only-do-not-override-1ld4x6i).ant-carousel .slick-dots li button {
   // background-color: var(--red);
 }
+
+.toastui-calendar-week-view .toastui-calendar-panel:not(.toastui-calendar-time) {
+  overflow-y: hidden;
+}
 .dangerHTMLTwoLine {
   white-space: break-spaces;
   overflow: hidden;
@@ -250,10 +254,6 @@ table {
 
 .sp100 {
   width: 100%;
-}
-
-.ic {
-  font-size: 22px;
 }
 
 .flag-select {

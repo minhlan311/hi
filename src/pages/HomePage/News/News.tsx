@@ -12,7 +12,6 @@ export default function News() {
         filterQuery: {},
         options: {
           limit: 4,
-          pagination: false,
           sort: { createdAt: -1 },
         },
       }),

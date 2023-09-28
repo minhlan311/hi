@@ -15,23 +15,22 @@ import ListCourse from './components/ListCourse'
 export default function CourseCalender() {
   const queryClient = useQueryClient()
   const categoriesData = queryClient.getQueryData<any>(['topCategories'])
-  const [active, setActive] = useState('')
-  const [id, setId] = useState<string>('')
-
-  const ArraySubject = categoriesData?.data?.docs
+  const [active, setActive] = useState('Tiếng Anh')
+  const [id, setId] = useState<string>()
 
   const { data: listData, isLoading } = useQuery({
-    queryKey: ['course', id],
+    queryKey: ['course', id, categoriesData?.data?.docs[0]?._id],
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
-          categoryId: id,
+          categoryId: id ? id : categoriesData?.data?.docs[0]?._id,
         },
         options: {
           limit: 6,
         },
       })
     },
+    // enabled: id || categoriesData?.data?.docs[0]?._id ? true : false,
   })
   console.log(isLoading)
 
@@ -46,29 +45,30 @@ export default function CourseCalender() {
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Lịch khai giảng khóa học online</h3>
         <div className='groupButton'>
-          {ArraySubject?.map((item: any) => (
-            <Button
-              disabled={isLoading}
-              className={active === item.name ? 'buttonActive' : 'button'}
-              onClick={() => {
-                handleActive(item.name, item.id)
-              }}
-              key={item.name}
-            >
-              {item.name === 'Tiếng Anh' ? (
-                <img src={engSVG} alt='' />
-              ) : item.name === 'Tiếng Nhật' ? (
-                <img src={japanSVG} alt='' />
-              ) : item.name === 'Tiếng Đức' ? (
-                <img src={germanySVG} alt='' />
-              ) : item.name === 'Tiếng Hàn' ? (
-                <img src={koreaSVG} alt='' />
-              ) : (
-                <img src={chinaSVG} alt='' />
-              )}
-              {item.name}
-            </Button>
-          ))}
+          {categoriesData?.data?.docs &&
+            categoriesData?.data?.docs?.map((item: any) => (
+              <Button
+                disabled={isLoading}
+                className={active === item.name ? 'buttonActive' : 'button'}
+                onClick={() => {
+                  handleActive(item.name, item.id)
+                }}
+                key={item.name}
+              >
+                {item.name === 'Tiếng Anh' ? (
+                  <img src={engSVG} alt='' />
+                ) : item.name === 'Tiếng Nhật' ? (
+                  <img src={japanSVG} alt='' />
+                ) : item.name === 'Tiếng Đức' ? (
+                  <img src={germanySVG} alt='' />
+                ) : item.name === 'Tiếng Hàn' ? (
+                  <img src={koreaSVG} alt='' />
+                ) : (
+                  <img src={chinaSVG} alt='' />
+                )}
+                {item.name}
+              </Button>
+            ))}
         </div>
         <ListCourse listData={listData?.data?.docs} />
       </div>

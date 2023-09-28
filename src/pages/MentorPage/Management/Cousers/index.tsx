@@ -3,23 +3,29 @@ import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import { Pagination, Row } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import './index.scss'
 import CourseListMentor from './CourseListMentor/CourseListMentor'
 import { PaginationProps } from 'antd/lib'
 import { useNavigate } from 'react-router-dom'
 import PATH from '@/constants/path'
+import LoadingCustom from '@/components/LoadingCustom'
+import { AppContext } from '@/contexts/app.context'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
   const [current, setCurrent] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [resetFilter, setResetFilter] = useState<boolean>(false)
   const navigate = useNavigate()
+  const { profile } = useContext(AppContext)
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page)
   }
+
+  console.log(data, 'data')
 
   const resetData = (value: boolean) => {
     setResetFilter(value)
@@ -31,6 +37,10 @@ const MentorCourses = () => {
   return (
     <div>
       <FilterAction
+        limit={10}
+        filterQuery={{ mentorId: profile?._id }}
+        type='course'
+        setLoading={setLoading}
         resetFilter={resetFilter}
         apiFind={courseApi.getCourses}
         callBackData={setData}
@@ -44,9 +54,17 @@ const MentorCourses = () => {
           </ButtonCustom>
         }
       />
-      <CourseListMentor data={data} resetDatas={resetData} />
+      {!loading ? (
+        <CourseListMentor data={data} resetDatas={resetData} />
+      ) : (
+        <LoadingCustom
+          style={{
+            marginTop: '50px',
+          }}
+        />
+      )}
       <div className='pagination'>
-        <Pagination current={current} defaultCurrent={1} onChange={onChange} />;
+        <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />;
       </div>
     </div>
   )
