@@ -50,7 +50,6 @@ export interface Owner {
 
 export interface ExamState {
   _id: string
-  position: number
   createdById: string
   updatedById: string
   categoryId: string
