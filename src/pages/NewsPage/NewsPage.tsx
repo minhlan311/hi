@@ -39,7 +39,7 @@ export default function NewsPage() {
   return (
     <div className='container-news'>
       <div className='title-box'>
-        <h2>{data?.data?.title}</h2>
+        <h1>{data?.data?.title}</h1>
       </div>
       <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
       <div className='other-news'>
