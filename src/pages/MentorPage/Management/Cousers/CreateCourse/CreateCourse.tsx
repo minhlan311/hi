@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
+import { AppContext } from '@/contexts/app.context'
 import { debounce } from '@/helpers/common'
 import { CourseForm } from '@/types/course.type'
 import { PlusOutlined } from '@ant-design/icons'
@@ -13,9 +15,6 @@ import { UploadFile } from 'antd/lib'
 import { useContext, useEffect, useState } from 'react'
 import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
-import { AppContext } from '@/contexts/app.context'
-import categoryApi from '@/apis/categories.api'
-import { Category } from '@/types/category.type'
 import { useParams } from 'react-router-dom'
 
 export default function CreateCourse({ next, dataIdCouser }: any) {
@@ -95,12 +94,12 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     key: category?._id,
     title: category?.name,
     value: category?._id,
-    children: category?.children?.map((item: Category) => {
+    children: category?.children?.map((item: any) => {
       return {
         key: item?._id,
         title: item?.name,
         value: item?._id,
-        children: item?.children?.map((item1) => {
+        children: item?.children?.map((item1: any) => {
           return {
             key: item1?._id,
             title: item1?.name,
