@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type News = {
   categoryId: string
   coverUrl: string
@@ -8,6 +9,7 @@ export type News = {
   updatedAt: string
   updatedById: string
   _id: string
+  description: any
 }
 export type ListNews = {
   categoryId: string
