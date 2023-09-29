@@ -17,7 +17,6 @@ const MentorCourses = () => {
   const [data, setData] = useState<any>([])
   const [current, setCurrent] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [resetFilter, setResetFilter] = useState<boolean>(false)
   const navigate = useNavigate()
   const { profile } = useContext(AppContext)
 
@@ -25,23 +24,14 @@ const MentorCourses = () => {
     setCurrent(page)
   }
 
-  console.log(data, 'data')
-
-  const resetData = (value: boolean) => {
-    setResetFilter(value)
-    setTimeout(() => {
-      setResetFilter(false)
-    }, 200)
-  }
-
   return (
     <div>
       <FilterAction
+        keyFilter='course'
         limit={10}
         filterQuery={{ mentorId: profile?._id }}
         type='course'
         setLoading={setLoading}
-        resetFilter={resetFilter}
         apiFind={courseApi.getCourses}
         callBackData={setData}
         page={current}
@@ -55,7 +45,7 @@ const MentorCourses = () => {
         }
       />
       {!loading ? (
-        <CourseListMentor data={data} resetDatas={resetData} />
+        <CourseListMentor data={data} />
       ) : (
         <LoadingCustom
           style={{
