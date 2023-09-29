@@ -6,6 +6,7 @@ import { TCourse } from '@/types/course.type'
 import { imageFallback } from '@/constants/utils'
 import './ListCourse.scss'
 import Paragraph from 'antd/es/typography/Paragraph'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 type Props = {
   listData?: TCourse[]
@@ -38,49 +39,29 @@ export default function ListCourse({ listData }: Props) {
             />
           </div>
           <div className='contentList'>
-            <Tooltip
-              title={
-                <>
-                  <p> {item.name}</p>
-                </>
-              }
-            >
-              {' '}
-              <Paragraph ellipsis={{ rows: 1 }} className='link-h4-config'>
-                {item.name}
-              </Paragraph>
-            </Tooltip>
+            <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
 
             {item?.class?.map((item) => (
               <>
                 <div className='flex'>
                   <img src={calenderSVG} className='icons' alt='' />
-                  <Tooltip
-                    title={
+                  <TextWithTooltip
+                    rows={1}
+                    children={
                       <>
-                        <p>
-                          Khai giảng {''}
-                          {formatDate(item?.startDate)}
-                          {''} - Thứ {''}
-                          {formatDaysOfWeek(item?.schedules).join('-')}
-                          {''} Từ {''} {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
-                        </p>
+                        {' '}
+                        Khai giảng {''}
+                        {formatDate(item?.startDate)}
+                        {''} - Thứ {''}
+                        {formatDaysOfWeek(item?.schedules).join('-')}
+                        {''} Từ {''} {formatHour(item?.startAt)} - {formatHour(item?.endAt)}
                       </>
                     }
-                  >
-                    <Paragraph ellipsis={true} className='text-date'>
-                      Khai giảng {''}
-                      {formatDate(item?.startDate)}
-                      {''} - Thứ {''}
-                      {formatDaysOfWeek(item?.schedules).join('-')}
-                      {''}
-                      Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
-                    </Paragraph>
-                  </Tooltip>
+                    className='text-date'
+                  />
                 </div>
               </>
             ))}
-
             <div className='flexPrice'>
               <span className='name'>Chi phí: </span>
               <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
