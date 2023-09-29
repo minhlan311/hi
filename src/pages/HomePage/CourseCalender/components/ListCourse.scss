@@ -12,16 +12,19 @@
         border: 1px solid rgba(0, 0, 0, 0.099);
         object-fit: cover;
         width: 390px;
-        height: 165px;
+        height: 200px !important;
         border-radius: 10px 10px 0 0;
       }
     }
     .contentList {
       .flex {
+        font-weight: 600;
+        max-width: 350px;
         gap: 10px;
         text-align: start;
         display: flex;
         justify-content: start;
+        align-items: center;
       }
       border: 1px solid rgba(0, 0, 0, 0.099);
       text-align: start;
@@ -41,9 +44,12 @@
         }
       }
       .link-h4-config {
+        max-width: 350px;
+        cursor: pointer;
+        font-weight: 700;
         font-size: 24px;
         color: #101010;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
       }
       .link-h4-config:hover {
         text-decoration: underline !important;
@@ -73,4 +79,12 @@
     grid-template-columns: 1fr;
     gap: 10px;
   }
+}
+.text-date {
+  font-size: 16px;
+  padding-top: 10px;
+}
+
+.courseCalender-container .container-1200px .listCourse .col .contentList {
+  min-height: 220px;
 }
