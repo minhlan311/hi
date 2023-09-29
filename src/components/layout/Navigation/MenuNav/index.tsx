@@ -219,7 +219,7 @@ export default function MenuNav({ user }: Props) {
       </div>
       {user?.isMentor && user?.mentorInfo === null && (
         <div className='verifyInfo'>
-          Hãy cập nhật đầy đủ thông tin để trở sử dụng đầy đủ những tính năng dành riêng cho bạn
+          Hãy cập nhật đầy đủ thông tin để sử dụng những tính năng dành riêng cho bạn
           <Button
             className='btn-ms'
             type='primary'
