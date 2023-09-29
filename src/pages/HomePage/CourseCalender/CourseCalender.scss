@@ -5,6 +5,11 @@
   width: 100%;
   min-height: 1228px;
   background: #f4f4f4;
+  @media screen and (max-width: 1280px) {
+    .courseCalender-container {
+      min-height: none;
+    }
+  }
   .container-1200px {
     max-width: 1200px;
     min-height: 800px;
@@ -20,6 +25,8 @@
       color: #101010;
     }
     .groupButton {
+      overflow: scroll;
+      scroll-snap-type: x mandatory;
       margin-top: 30px;
       justify-content: center;
       display: flex;
@@ -60,18 +67,7 @@
     .groupButton::-webkit-scrollbar-track {
       background-color: transparent;
     }
-    @media screen and (max-width: 1200px) {
-      .groupButton {
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        padding: 30px;
-        scrollbar-color: transparent;
-        justify-content: space-between;
-        display: flex;
-        gap: 10px;
-      }
-    }
+
     .listCourse {
       margin-top: 50px;
       display: grid;
@@ -155,6 +151,11 @@
         grid-template-columns: 1fr;
         gap: 10px;
       }
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .container-1200px {
+      min-height: 500px;
     }
   }
 }
