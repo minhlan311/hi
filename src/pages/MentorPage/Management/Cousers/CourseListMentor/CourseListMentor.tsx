@@ -6,18 +6,13 @@ import { imageFallback } from '@/constants/utils'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Image, Row } from 'antd'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function CourseListMentor({ data, resetDatas }: any) {
+export default function CourseListMentor({ data }: any) {
   const queryClient = useQueryClient()
 
-  const [resetData, setResetData] = useState(false)
   const [checkReset, setCheckReset] = useState<boolean>(false)
-
-  useEffect(() => {
-    resetDatas(resetData)
-  }, [resetData])
 
   const { mutate } = useMutation({
     mutationFn: (id: string) => courseApi.deleteCourses(id),
@@ -28,7 +23,6 @@ export default function CourseListMentor({ data, resetDatas }: any) {
         message: 'Thông báo',
         description: `Xóa khóa học ${value?.data?.name} thành công ! `,
       })
-      setResetData(true)
     },
     onError() {
       openNotification({
@@ -38,21 +32,6 @@ export default function CourseListMentor({ data, resetDatas }: any) {
       })
     },
   })
-
-  // const { data } = useQuery({
-  //   queryKey: ['course'],
-  //   queryFn: () =>
-  //     courseApi.getCourses({
-  //       filterQuery: {
-  //         mentorId: profile._id,
-  //       },
-  //       option: {
-  //         limit: 10,
-  //         pagination: false,
-  //         sort: { createdAt: -1 },
-  //       },
-  //     }),
-  // })
 
   const navigate = useNavigate()
   const { Meta } = Card
