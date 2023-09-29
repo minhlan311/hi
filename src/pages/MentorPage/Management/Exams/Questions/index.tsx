@@ -1,21 +1,24 @@
 import examApi from '@/apis/exam.api'
 import questionApi from '@/apis/question.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
-import openNotification from '@/components/Notification'
-import TagCustom from '@/components/TagCustom/TagCustom'
+import PaginationCustom from '@/components/PaginationCustom'
+import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import { ExamState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
+import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Card, Col, Popconfirm, Row, Space } from 'antd'
-import { useEffect, useState } from 'react'
-import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus, AiOutlineQuestionCircle } from 'react-icons/ai'
+import { Checkbox, Space } from 'antd'
+import { useState } from 'react'
+import { AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
-import { MdOutlineDisabledVisible } from 'react-icons/md'
 import { useLocation } from 'react-router-dom'
+import RenderQuestion from '../Components/RenderQuestion'
 import DrawerQuestion from '../Drawer/DrawerQuestion'
+import DrawerUpload from '../Drawer/DrawerUpload'
 import css from './styles.module.scss'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorQuestions = () => {
   const location = useLocation()
@@ -29,8 +32,12 @@ const MentorQuestions = () => {
 
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
+
+  const [openUpload, setOpenUpload] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [resetFilter, setResetFilter] = useState<boolean>(false)
+  const [myQues, setMyQues] = useState<boolean>(false)
+  console.log(myQues)
 
   const resetData = () => {
     setResetFilter(true)
@@ -39,141 +46,144 @@ const MentorQuestions = () => {
     }, 200)
   }
 
-  const { status, mutate, error } = useMutation({ mutationFn: (id: string) => questionApi.deleteQuestion(id) })
-  useEffect(() => {
-    if (status === 'success') {
-      openNotification({ status: status, message: 'Xóa câu hỏi thành công' })
-      resetData()
-    }
+  const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
+  const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
+  const [questionsSelectData, setQuestionsSelectData] = useState<QuestionState[]>([])
+  const [current, setCurrent] = useState<number>(1)
 
-    if (status === 'error' && error) {
-      openNotification({
-        status: status,
-        message: 'Thông báo',
-        description: ' Có lỗi xảy ra',
-      })
+  const questionsSelectId = questionsSelectData.map((item) => item._id)
+
+  const updateExam: any = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
+
+  const handleSave = () => {
+    if (examDetail && questionsSelectId.length > 0) {
+      const payload = {
+        _id: examDetail._id,
+        questions: questionsSelectId,
+      }
+
+      updateExam(payload)
     }
-  }, [status, error])
-  const [questions, setQuestions] = useState<{ docs: QuestionState[] }>()
-  const [selectQuestions, setSelectQuestions] = useState<QuestionState | null>(null)
+  }
+
+  const questionTabs = [
+    {
+      id: 'questions',
+      name: 'Câu hỏi đã chọn',
+      children: (
+        <Space direction='vertical' className={'sp100'}>
+          <Space size='large' className={css.infor}>
+            <Space>
+              <p>Số câu hỏi:</p>
+              <b>{questionsSelectData?.length}</b>
+            </Space>
+
+            <Space>
+              <ButtonCustom
+                onClick={() => setOpen(true)}
+                icon={<AiOutlinePlus />}
+                tooltip='Thêm câu hỏi'
+              ></ButtonCustom>
+
+              <ButtonCustom
+                icon={<HiOutlineUpload />}
+                tooltip='Thêm file câu hỏi'
+                onClick={() => setOpenUpload(true)}
+              ></ButtonCustom>
+
+              <ButtonCustom type='primary' disabled={!questionsSelectData?.length} onClick={handleSave}>
+                Lưu gói câu hỏi
+              </ButtonCustom>
+            </Space>
+          </Space>
+
+          {questionsSelectData && (
+            <RenderQuestion
+              data={questionsSelectData}
+              type='questionsSelect'
+              setOpen={setOpen}
+              setQuestionUpdate={setQuestionUpdate}
+              setQuestionsSelectData={setQuestionsSelectData}
+              resetData={resetData}
+            />
+          )}
+
+          <PaginationCustom
+            dataArr={questionsSelectData}
+            limit={10}
+            // callbackDataArr={setQuestionsData}
+            callbackCurrent={setCurrent}
+          />
+        </Space>
+      ),
+    },
+    {
+      id: 'bankQuestion',
+      name: 'Ngân hàng câu hỏi',
+      children: (
+        <Space direction='vertical' className={'sp100'}>
+          <Space size='large' className={css.infor}>
+            <Space size='small'>
+              <p>Số câu hỏi:</p>
+              <b>{questions?.totalDocs}</b>
+            </Space>
+            <Space size='small'>
+              <p>Số câu đã chọn:</p>
+              <b>{questionsSelectData?.length}</b>
+            </Space>
+            <Checkbox onChange={(e) => setMyQues(e.target.checked)}>Câu hỏi của tôi</Checkbox>
+          </Space>
+
+          {questions && (
+            <RenderQuestion
+              data={questions.docs}
+              type='questionsBank'
+              setOpen={setOpen}
+              setQuestionUpdate={setQuestionUpdate}
+              setQuestionsSelectData={setQuestionsSelectData}
+              resetData={resetData}
+            />
+          )}
+          <PaginationCustom callbackCurrent={setCurrent} totalData={questions?.totalDocs} limit={10} />
+        </Space>
+      ),
+    },
+  ]
+
+  console.log(questionsSelectData)
 
   return !loading && examDetail ? (
-    <Space direction='vertical' className={`${css.quesList} sp100`}>
+    <div className={`${css.quesList}`}>
       {/* <DragAndDrop /> */}
 
       <FilterAction
         type='question'
         apiFind={questionApi.findQuestion}
         callBackData={setQuestions}
-        addOnButton={
-          <Space>
-            <ButtonCustom
-              type='primary'
-              onClick={() => setOpen(true)}
-              icon={<AiOutlinePlus />}
-              tooltip='Thêm câu hỏi'
-            ></ButtonCustom>
-
-            <ButtonCustom icon={<HiOutlineUpload />} tooltip='Thêm file câu hỏi'></ButtonCustom>
-          </Space>
-        }
-        filterQuery={{ testId: examDetail?._id }}
+        filterQuery={{ testId: examDetail._id }}
+        limit={10}
+        page={current}
         resetFilter={resetFilter}
       />
+      <TabsCustom data={questionTabs}></TabsCustom>
 
-      {!questions?.docs?.length ? (
-        <EmptyCustom description='Không có câu hỏi nào'></EmptyCustom>
-      ) : (
-        questions?.docs?.map((item, id) => (
-          <div className={css.qItem}>
-            {item.status === 'INACTIVE' && (
-              <div className={css.disable}>
-                <Space direction='vertical' align='center' className={'p-center'}>
-                  <MdOutlineDisabledVisible className={css.iconDisable} />
-                  <div>Câu hỏi đang được ẩn</div>
-                </Space>
-              </div>
-            )}
-            <Card size='small' key={item._id}>
-              <Space direction='vertical' className={'sp100'}>
-                <Row justify='space-between'>
-                  <Col span={24} md={19}>
-                    <Space>
-                      <h3>Câu {id + 1}: </h3>
-                      <TagCustom content={item.type} />
-                      <TagCustom color='gold' content={`${item.point} Điểm`} />
-                      <TagCustom
-                        intArrType={['EASY', 'MEDIUM', 'DIFFICULT']}
-                        intColor={['green', 'blue', 'red']}
-                        intAlternativeType={['Dễ', 'Vừa phải', 'Khó']}
-                        content={item.difficulty}
-                      />
-                    </Space>
-                  </Col>
-                  <Col>
-                    <Space size='small'>
-                      <ButtonCustom
-                        shape='circle'
-                        type='text'
-                        icon={<AiOutlineEdit />}
-                        size='small'
-                        onClick={() => {
-                          setSelectQuestions(item)
-                          setOpen(true)
-                        }}
-                      ></ButtonCustom>
-                      <Popconfirm
-                        placement='right'
-                        title='Bạn có muốn xóa câu hỏi này?'
-                        onConfirm={() => mutate(item._id)}
-                        okText='Xóa'
-                        cancelText='Hủy'
-                      >
-                        <ButtonCustom
-                          shape='circle'
-                          type='text'
-                          icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
-                          size='small'
-                        ></ButtonCustom>
-                      </Popconfirm>
-                    </Space>
-                  </Col>
-                </Row>
-
-                <h4>{item.question}</h4>
-                <Card size='small' className={css.anws}>
-                  <Space className={'sp100'}>
-                    {item.choices.map((anw) => {
-                      if (anw.isCorrect) return <p className={css.isAnswer}>{anw.answer}</p>
-                    })}
-                    {item.choices.map((anw) => {
-                      if (!anw.isCorrect) return <p>{anw.answer}</p>
-                    })}
-                    {item.answer && item.answer}
-                  </Space>
-                </Card>
-                {item.hint && (
-                  <Space className={`${css.hint} sp100`} align='center'>
-                    <AiOutlineQuestionCircle />
-                    <p>{item.hint}</p>
-                  </Space>
-                )}
-              </Space>
-            </Card>
-          </div>
-        ))
-      )}
       <DrawerQuestion
         open={open}
-        questionData={selectQuestions ? selectQuestions : null}
-        testId={examDetail ? examDetail._id : ''}
+        questionData={questionUpdate ? questionUpdate : null}
         categoryId={examDetail ? examDetail.categoryId : ''}
         setOpen={setOpen}
-        setQuestionData={setSelectQuestions}
+        setQuestionData={setQuestionUpdate}
         resetData={resetData}
         setLoading={setLoading}
       />
-    </Space>
+      <DrawerUpload
+        open={openUpload}
+        setOpen={setOpenUpload}
+        resetData={resetData}
+        categoryId={examDetail ? examDetail.categoryId : ''}
+        setLoading={setLoading}
+      />
+    </div>
   ) : (
     <LoadingCustom style={{ marginTop: 200 }} tip='Vui lòng chờ...' />
   )

@@ -13,8 +13,9 @@ const LanguageChange = () => {
     { value: 'CHN', label: 'CHN', icon: <img src={chn} alt='flag' /> },
     { value: 'JPN', label: 'JPN', icon: <img src={jpn} alt='flag' /> },
     { value: 'KOR', label: 'KOR', icon: <img src={kor} alt='flag' /> },
-    { value: 'GER', label: 'GER', icon: <img src={ger} alt='flag' /> }
+    { value: 'GER', label: 'GER', icon: <img src={ger} alt='flag' /> },
   ]
+
   return <SelectCustom className='lang-change' defaultValue='VIE' options={flagList} suffixIcon={false} />
 }
 

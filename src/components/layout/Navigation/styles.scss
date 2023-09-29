@@ -5,22 +5,23 @@
 
 .uc-nav-main {
   position: relative;
-  display: none;
   background-color: var(--whiteBg);
-  @include respond-to(lg) {
-    display: block;
-  }
-  @include respond-to(xl) {
-    display: block;
-  }
-  @include respond-to(xxl) {
-    display: block;
-  }
   z-index: 999;
   transition: 0.3s;
   width: 100%;
   padding: 18px 0;
-
+  @include respond-to(xs) {
+    border-bottom: 2px solid var(--borderColor);
+    padding: 10px 0;
+  }
+  @include respond-to(sm) {
+    border-bottom: 2px solid var(--borderColor);
+    padding: 12px 0;
+  }
+  @include respond-to(md) {
+    border-bottom: 2px solid var(--borderColor);
+    padding: 15px 0;
+  }
   .title {
     font-size: 15px !important;
   }

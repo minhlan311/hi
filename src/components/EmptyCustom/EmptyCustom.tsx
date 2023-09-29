@@ -8,7 +8,7 @@ type Props = {
   buttonPrimaryHref?: string
   imageUrl?: string | null
   heightImage?: string | number
-  description?: string
+  description?: string | React.ReactNode
   margin?: string | number
 }
 

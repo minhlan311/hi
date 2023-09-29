@@ -1,28 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-// import DropdownCustom from '@/components/DropdownCustom/DropdownCustom'
-import LanguageChange from '@/components/LanguageChange'
-import Logo from '@/components/Logo/Logo'
-// import { MenuItemData } from '@/interface/menuItemData'
-import categoryApi from '@/apis/categories.api'
-import { CategoryState } from '@/interface/category'
-import { UserState } from '@/interface/user'
-import { DownOutlined } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
-import { Button, Col, Divider, Drawer, Row, Space } from 'antd'
-import { IoMenuSharp } from 'react-icons/io5'
-import { Link, useNavigate } from 'react-router-dom'
-import useResponsives from '../../../../hooks/useResponsives'
 import AvatarDropMenu from '../../AvatarDropMenu'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import categoryApi from '@/apis/categories.api'
 import Header from '../../Header/Header'
+import LanguageChange from '@/components/LanguageChange'
+import useResponsives from '../../../../hooks/useResponsives'
+import { BiSolidUserCircle } from 'react-icons/bi'
+import { Button, Divider, Drawer, Row, Space } from 'antd'
+import { CategoryState } from '@/interface/category'
+import { DownOutlined } from '@ant-design/icons'
+import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
+import { IoCalendar, IoCalendarOutline, IoSchoolOutline } from 'react-icons/io5'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { MdSchool } from 'react-icons/md'
+import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
+import { useQuery } from '@tanstack/react-query'
+import { UserState } from '@/interface/user'
 import './styles.scss'
-import userApi from '@/apis/user.api'
-import { useContext } from 'react'
-import { AppContext } from '@/contexts/app.context'
+import { useEffect, useState } from 'react'
+import Avatar from '@/components/Avatar/Avatar'
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   user?: UserState
 }
 
@@ -33,13 +30,10 @@ interface TransformedItem {
   href: string
 }
 
-export default function MenuPc({ open, setOpen }: Props) {
-  const { profile } = useContext(AppContext)
-
+export default function MenuNav({ user }: Props) {
   const navigate = useNavigate()
-
-  const query = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(profile?._id) })
-  const user = query?.data?.data
+  const location = useLocation()
+  const [open, setOpen] = useState<boolean>(false)
   const { sm, md } = useResponsives()
   const { data: categories } = useQuery({
     queryKey: ['categoriesList'],
@@ -47,6 +41,10 @@ export default function MenuPc({ open, setOpen }: Props) {
       return categoryApi.getCategories({ parentId: null })
     },
   })
+
+  useEffect(() => {
+    setOpen(false)
+  }, [location])
 
   const transformArray = (originalArray: CategoryState[]): TransformedItem[] => {
     return originalArray?.map((item) => ({
@@ -61,24 +59,52 @@ export default function MenuPc({ open, setOpen }: Props) {
     categories ? (categories?.data.docs as unknown as CategoryState[]) : [],
   )
 
+  const mobileMenu = [
+    { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
+    { label: 'Luyện thi', icon: <IoSchoolOutline />, activeIcon: <MdSchool />, href: '/luyen-thi' },
+    {
+      label: 'Lịch khai giảng',
+      icon: <IoCalendarOutline />,
+      activeIcon: <IoCalendar />,
+      href: '/lich-khai-giang',
+    },
+    { label: 'Trắc nghiệm', icon: <PiExam />, activeIcon: <PiExamFill />, href: '/trac-nghiem' },
+    { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
+  ]
+
   return (
     <>
       <div className='menu'>
         <Header type='fullsize'>
           {md ? (
-            <Row justify='space-between' align='middle' style={{ padding: '10px 12px' }}>
-              <Col span={16} className='menuItem'>
-                <Logo type='light' />
-              </Col>
-              <Col>
-                <ButtonCustom
-                  type='text'
-                  size='small'
-                  style={{ height: 40 }}
-                  onClick={() => setOpen(!open)}
-                  icon={<IoMenuSharp size={35} color='white' />}
-                ></ButtonCustom>
-              </Col>
+            <Row justify='space-between' align='middle' className='uc-container menuItem'>
+              {mobileMenu.map((item) =>
+                item.href ? (
+                  <NavLink
+                    key={`${item.href}`}
+                    to={`${item.href}`}
+                    className={({ isActive }) => `${isActive ? (open ? '' : 'navActive') : ''} navMb`}
+                  >
+                    <div className='labelItem'>
+                      <div className='labelIcon'>
+                        <div className='icon-unActive'>{item.icon}</div>
+                        <div className='icon-active'>{item.activeIcon}</div>
+                        <div className='title'>{item.label}</div>
+                      </div>
+                    </div>
+                  </NavLink>
+                ) : (
+                  <div className={`${open ? 'navActive' : ''} navMb`} onClick={() => setOpen(!open)}>
+                    <div className='labelItem'>
+                      <div className='labelIcon'>
+                        <div className='icon-unActive'>{item.icon}</div>
+                        <div className='icon-active'>{item.activeIcon}</div>
+                        <div className='title'>{item.label}</div>
+                      </div>
+                    </div>
+                  </div>
+                ),
+              )}
             </Row>
           ) : (
             <Row justify='space-between' align='middle' className='uc-container menuItem'>
@@ -143,7 +169,7 @@ export default function MenuPc({ open, setOpen }: Props) {
           )}
         </Header>
         <Drawer
-          placement={sm ? 'top' : 'right'}
+          placement='right'
           closable={sm}
           onClose={() => setOpen(!open)}
           open={!md ? false : open}
@@ -153,28 +179,27 @@ export default function MenuPc({ open, setOpen }: Props) {
           }}
           className='nav-drawer'
           size={sm ? 'large' : 'default'}
-          extra={
-            // user && (
-            //   <Space>
-            //     <h4 style={{ color: 'white' }}>{user?.fullName}</h4>
-            //     <Avatar avtUrl={user.avatarUrl} userData={user}></Avatar>
-            //   </Space>
-            // )
-            <div></div>
-          }
         >
           <Space direction='vertical'>
-            {categoriesData.map((item) => (
-              <Link to={`${item.href}`} key={`${item._id}`}>
-                <ButtonCustom type='text' size='small' style={{ width: '100%' }}>
-                  {item.label}
-                </ButtonCustom>
-              </Link>
-            ))}
-          </Space>
-
-          <Divider />
-          <Space direction='vertical'>
+            <Link to='/profile'>
+              <Space direction='vertical'>
+                <Avatar avtUrl={user?.avatarUrl} userData={user} size={65}></Avatar>
+                <h3>{user?.fullName}</h3>
+              </Space>
+            </Link>
+            <Link to='/profile#gioi-thieu'>
+              <ButtonCustom type='text'>Thông tin giới thiệu</ButtonCustom>
+            </Link>
+            <Link to='/profile?#phan-hoi'>
+              <ButtonCustom type='text'>Bằng cấp</ButtonCustom>
+            </Link>
+            <Link to='/profile?#phan-hoi'>
+              <ButtonCustom type='text'>Khóa học của tôi</ButtonCustom>
+            </Link>
+            <Link to='/profile?#phan-hoi'>
+              <ButtonCustom type='text'>Đánh giá</ButtonCustom>
+            </Link>
+            <Divider style={{ margin: '10px 0' }} />
             <LanguageChange />
             {!user ? (
               <Space>

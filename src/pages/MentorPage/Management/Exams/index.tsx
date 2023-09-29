@@ -132,10 +132,10 @@ const MentorExams = () => {
       },
     },
     {
-      title: 'DS làm bài',
+      title: 'Số người làm',
       align: 'center',
-      dataIndex: 'tested',
-      key: 'tested',
+      dataIndex: 'countUsersTested',
+      key: 'countUsersTested',
     },
     {
       title: 'Trạng thái',

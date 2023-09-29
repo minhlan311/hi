@@ -14,7 +14,6 @@ import { useMutation } from '@tanstack/react-query'
 type Props = {
   open: boolean
   questionData?: QuestionState | null
-  testId: string
   categoryId: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setQuestionData: React.Dispatch<React.SetStateAction<QuestionState | null>>
@@ -23,7 +22,7 @@ type Props = {
 }
 
 const DrawerQuestion = (props: Props) => {
-  const { open, questionData = null, testId, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
+  const { open, questionData = null, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
   const [isCheck, setCheck] = useState<boolean>(true)
@@ -80,7 +79,6 @@ const DrawerQuestion = (props: Props) => {
       id: data?._id,
       status: isCheck ? 'ACTIVE' : 'INACTIVE',
       point: parseInt(values.point),
-      testId: testId,
       choices: choice,
       categoryId: categoryId,
     }
@@ -88,7 +86,6 @@ const DrawerQuestion = (props: Props) => {
     onCloseDrawer()
   }
 
-  console.log(isLoading)
   useEffect(() => {
     if (isLoading && setLoading) {
       setLoading(isLoading)
@@ -222,6 +219,7 @@ const DrawerQuestion = (props: Props) => {
                   message: 'Vui lòng chọn loại kỹ năng',
                 },
               ]}
+              style={{ width: 120 }}
             >
               <Select
                 placeholder='Chọn loại kỹ năng'
@@ -237,6 +235,10 @@ const DrawerQuestion = (props: Props) => {
                   {
                     value: 'WRITING',
                     label: 'Viết',
+                  },
+                  {
+                    value: 'SPEAKING',
+                    label: 'Nói',
                   },
                 ]}
                 onChange={(e) => setSkillQues(e)}
