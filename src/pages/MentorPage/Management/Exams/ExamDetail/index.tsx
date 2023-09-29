@@ -230,7 +230,7 @@ const MentorExamDetail = () => {
   ]
 
   if (isLoading) {
-    return <LoadingCustom />
+    return <LoadingCustom tip='Vui lòng chờ' style={{ marginTop: 150 }} />
   }
 
   if (!examDetail) {

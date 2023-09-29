@@ -94,6 +94,22 @@ const FilterAction = (props: Props) => {
 
   const handleReset = () => {
     form.resetFields()
+    setFilterData((prev) => {
+      return {
+        filterQuery: filterQuery || {},
+        options: {
+          page,
+          ...prev?.options,
+        },
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (resetFilter) handleReset()
+  }, [resetFilter])
+
+  useEffect(() => {
     setFilterData({
       filterQuery: filterQuery || {},
       options: {
@@ -104,11 +120,7 @@ const FilterAction = (props: Props) => {
         },
       },
     })
-  }
-
-  useEffect(() => {
-    if (resetFilter) handleReset()
-  }, [resetFilter])
+  }, [page])
 
   useEffect(() => {
     mutate(filterData as unknown as void, {
@@ -253,7 +265,7 @@ const FilterAction = (props: Props) => {
                   ]}
                 />
               </Form.Item>
-              <Form.Item name='skill'>
+              <Form.Item name='skill' style={{ width: 120 }}>
                 <Select
                   placeholder='Loại kỹ năng'
                   allowClear
@@ -271,12 +283,16 @@ const FilterAction = (props: Props) => {
                       value: 'WRITING',
                       label: 'Viết',
                     },
+                    {
+                      value: 'SPEAKING',
+                      label: 'Nói',
+                    },
                   ]}
                 />
               </Form.Item>
-              <Form.Item name='difficulty'>
+              <Form.Item name='difficulty' style={{ width: 87 }}>
                 <Select
-                  placeholder='Loại kỹ năng'
+                  placeholder='Độ khó'
                   allowClear
                   onChange={onChangeFilter}
                   options={[
@@ -329,7 +345,7 @@ const FilterAction = (props: Props) => {
                   ]}
                 />
               </Form.Item>
-              <Form.Item name='createdAt'>
+              <Form.Item name='createdAt' style={{ width: 116 }}>
                 <Select
                   placeholder='Ngày tải lên'
                   onChange={onChangeFilter}

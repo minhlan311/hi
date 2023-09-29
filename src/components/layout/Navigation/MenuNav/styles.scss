@@ -1,3 +1,5 @@
+@import '../../../GlobalStyles/responsive.scss';
+
 .menu {
   position: relative;
   background-color: var(--green);
@@ -6,11 +8,54 @@
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.08),
     0 4px 12px rgba(0, 0, 0, 0.08);
+
+  @include respond-to(xs) {
+    background-color: var(--whiteBg);
+    color: var(--lighish-white);
+  }
+  @include respond-to(sm) {
+    background-color: var(--whiteBg);
+    color: var(--lighish-white);
+  }
   .menuItem {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .navMb {
+      padding: 10px 0;
+      .title {
+        font-size: 11px;
+      }
+      color: var(--light-gray3);
+      &:hover {
+        color: var(--green);
+      }
+      .labelIcon {
+        svg {
+          font-size: 25px;
+        }
+        * {
+          text-align: center;
+        }
+      }
 
+      .icon-active {
+        display: none;
+      }
+      .icon-unActive {
+        display: block;
+      }
+    }
+    .navActive {
+      color: var(--green);
+
+      .icon-unActive {
+        display: none;
+      }
+      .icon-active {
+        display: block;
+      }
+    }
     .menuLabel {
       transition: 0.3s;
       cursor: pointer;

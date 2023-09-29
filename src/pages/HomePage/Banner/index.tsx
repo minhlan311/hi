@@ -4,21 +4,22 @@ import './styles.scss'
 const banner = [
   {
     _id: 'asdhg21',
-    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-anh-tre-em-newsky.png'
+    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-anh-tre-em-newsky.png',
   },
   {
     _id: 'g21yujh',
-    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-trung-tai-newsky.png'
+    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-trung-tai-newsky.png',
   },
   {
     _id: 'dsffew3',
-    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-han-tai-newsky.png'
+    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-hoc-tieng-han-tai-newsky.png',
   },
   {
     _id: 'wqedasd',
-    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-tieng-anh-giao-tiep-newsky.png'
-  }
+    imageUrl: 'https://newsky.edu.vn/wp-content/uploads/khoa-tieng-anh-giao-tiep-newsky.png',
+  },
 ]
+
 const Banner = () => {
   return (
     <Header type='fullsize'>

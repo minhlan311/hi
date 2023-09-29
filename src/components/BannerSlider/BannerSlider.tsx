@@ -7,8 +7,10 @@ type Props = {
   dots?: boolean
   effect?: 'scrollx' | 'fade'
 }
+
 const BannerSlider = (props: Props) => {
   const { bannerData, dots = true, effect } = props
+
   return (
     <Carousel autoplay dots={dots} effect={effect} draggable speed={1500} autoplaySpeed={5000}>
       {bannerData.map((item) => (

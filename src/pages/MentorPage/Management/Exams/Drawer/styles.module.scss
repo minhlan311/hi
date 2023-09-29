@@ -1,0 +1,10 @@
+.uploadQues {
+  width: 100%;
+  .buttDown {
+    padding: 0 0;
+    color: var(--red);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

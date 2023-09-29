@@ -74,6 +74,7 @@ export default function SliderCustom(props: Props) {
   }
 
   const checkArr = dataLength - slidesToShow
+  console.log(slidesToShow)
 
   const NullArr = Array.from({ length: Math.abs(checkArr) }, (_, index) => index + 1)
 

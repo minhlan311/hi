@@ -2,6 +2,7 @@
   .anws {
     background-color: var(--lighish-white);
     min-width: 100%;
+    width: 100%;
   }
   .isAnswer {
     background-color: #0ec25c61;
@@ -35,5 +36,10 @@
     &:hover .disable {
       display: none;
     }
+  }
+  .infor {
+    position: absolute;
+    margin-top: -70px;
+    right: 0;
   }
 }
