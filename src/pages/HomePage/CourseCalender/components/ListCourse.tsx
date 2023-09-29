@@ -1,10 +1,11 @@
 import calenderSVG from '@/assets/icons/calendar.svg'
-import { Image } from 'antd'
+import { Image, Tooltip } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
 import { imageFallback } from '@/constants/utils'
 import './ListCourse.scss'
+import Paragraph from 'antd/es/typography/Paragraph'
 
 type Props = {
   listData?: TCourse[]
@@ -37,21 +38,45 @@ export default function ListCourse({ listData }: Props) {
             />
           </div>
           <div className='contentList'>
-            <h4 className='link-h4-config'>{item.name}</h4>
+            <Tooltip
+              title={
+                <>
+                  <p> {item.name}</p>
+                </>
+              }
+            >
+              {' '}
+              <Paragraph ellipsis={{ rows: 1 }} className='link-h4-config'>
+                {item.name}
+              </Paragraph>
+            </Tooltip>
 
             {item?.class?.map((item) => (
               <>
                 <div className='flex'>
                   <img src={calenderSVG} className='icons' alt='' />
-                  <p className='text-date'>
-                    Khai giảng {''}
-                    {formatDate(item?.startDate)}
-                    {''} - Thứ {''}
-                    {formatDaysOfWeek(item?.schedules).join('-')}
-                    {''}
-                    <br />
-                    Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
-                  </p>
+                  <Tooltip
+                    title={
+                      <>
+                        <p>
+                          Khai giảng {''}
+                          {formatDate(item?.startDate)}
+                          {''} - Thứ {''}
+                          {formatDaysOfWeek(item?.schedules).join('-')}
+                          {''} Từ {''} {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
+                        </p>
+                      </>
+                    }
+                  >
+                    <Paragraph ellipsis={true} className='text-date'>
+                      Khai giảng {''}
+                      {formatDate(item?.startDate)}
+                      {''} - Thứ {''}
+                      {formatDaysOfWeek(item?.schedules).join('-')}
+                      {''}
+                      Từ {formatHour(item?.startAt)} -{formatHour(item?.endAt)}
+                    </Paragraph>
+                  </Tooltip>
                 </div>
               </>
             ))}
