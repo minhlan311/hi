@@ -1,8 +1,9 @@
-import { Button, Image, Typography } from 'antd'
+import { Button, Image, Tooltip, Typography } from 'antd'
 import './News.scss'
 import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
 import { Link, useNavigate } from 'react-router-dom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 export default function News() {
   const navigate = useNavigate()
@@ -39,24 +40,20 @@ export default function News() {
                     />
                   </div>
                   <div className='content'>
-                    <Paragraph
-                      style={{
-                        width: '300px',
-                      }}
-                      className='titleNews'
-                      ellipsis={true}
-                    >
-                      <Link to={`/news/${item?.id}`}>{item?.title}</Link>
-                    </Paragraph>
-                    <Paragraph
-                      style={{
-                        width: '300px',
-                      }}
-                      className='text'
-                      ellipsis={{ rows: 3 }}
-                    >
-                      {item?.description}
-                    </Paragraph>
+                    <Tooltip title={item?.title}>
+                      {' '}
+                      <Paragraph
+                        style={{
+                          width: '300px',
+                        }}
+                        className='titleNews'
+                        ellipsis={true}
+                      >
+                        <Link to={`/news/${item?.id}`}>{item?.title}</Link>
+                      </Paragraph>
+                    </Tooltip>
+
+                    <TextWithTooltip rows={3} className='text' children={item?.description} />
                   </div>
                 </div>
               </>
