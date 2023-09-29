@@ -16,13 +16,14 @@ import { UserState } from '@/interface/user'
 import './styles.scss'
 import { useQuery } from '@tanstack/react-query'
 import userApi from '@/apis/user.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 
 type Props = {
   user?: UserState
 }
 
 export default function Navigation({ user }: Props) {
-  const { sm, md } = useResponsives()
+  const { sm, md, lg } = useResponsives()
   useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
 
   return (
@@ -36,24 +37,33 @@ export default function Navigation({ user }: Props) {
                   <Logo size={sm ? 115 : undefined} />
                 </Link>
               </Col>
-              {sm ? (
-                <p></p>
+
+              {md ? (
+                user?.isMentor && (
+                  // user?.mentorStatus === 'APPROVED'
+                  <Tooltip title='Chuyển qua màn Mentor'>
+                    <Link to='/mentor'>
+                      <ButtonCustom icon={<BiSolidDashboard />}>Mentor</ButtonCustom>
+                    </Link>
+                  </Tooltip>
+                )
               ) : (
                 <>
-                  <Col>
-                    <Space size='large'>
-                      <Button type='primary' size='small'>
-                        Tiếng Anh Offline
-                      </Button>
-                      <Button type='primary' size='small'>
-                        Tiếng Anh trực tuyến 1 kèm 1
-                      </Button>
-                      <Button type='primary' size='small'>
-                        Tiếng Anh trực tuyến
-                      </Button>
-                    </Space>
-                  </Col>
-
+                  {!lg && (
+                    <Col>
+                      <Space size='large'>
+                        <Button type='primary' size='small'>
+                          Tiếng Anh Offline
+                        </Button>
+                        <Button type='primary' size='small'>
+                          Tiếng Anh trực tuyến 1 kèm 1
+                        </Button>
+                        <Button type='primary' size='small'>
+                          Tiếng Anh trực tuyến
+                        </Button>
+                      </Space>
+                    </Col>
+                  )}
                   <Col>
                     <div className='menu-bar'>
                       <Space size='large'>
@@ -112,7 +122,7 @@ export default function Navigation({ user }: Props) {
         </Header>
       </div>
 
-      {sm && md ? (
+      {md ? (
         <AffixCustom type='fixed-bottom' zIndex={1020} style={{ left: 0, right: 0 }}>
           <MenuNav user={user} />
         </AffixCustom>

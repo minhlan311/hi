@@ -1,15 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ConfigProvider, FloatButton } from 'antd'
+import { ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx'
 import GlobalStyles from './components/GlobalStyles/globalStyles.tsx'
+import Perloader from './components/Perloader/index.tsx'
 import ScrollTop from './components/ScrollTop/ScrollTop.tsx'
 import { AppProvider } from './contexts/app.context.tsx'
 import { SocketProvider } from './lib/providers/socket.tsx'
-import Perloader from './components/Perloader/index.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,7 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <ScrollTop>
                     <App />
                   </ScrollTop>
-                  <FloatButton.BackTop />
+                  {/* <FloatButton.BackTop  /> */}
                 </Perloader>
               </ConfigProvider>
             </GlobalStyles>
