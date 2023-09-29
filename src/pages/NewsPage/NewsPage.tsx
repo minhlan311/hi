@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import './NewsPage.scss'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import { useState } from 'react'
+import './NewsPage.scss'
 
-import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
-import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { Pagination } from 'antd'
 import Paragraph from 'antd/es/typography/Paragraph'
+import { useNavigate } from 'react-router-dom'
 
 export default function NewsPage() {
   const [filter, setFilter] = useState({
