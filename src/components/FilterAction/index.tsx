@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
 import { debounce } from '@/helpers/common'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Form, Input, Row, Select, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
@@ -10,14 +10,14 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 type Props = {
   apiFind: any
+  keyFilter: string
   callBackData: React.Dispatch<React.SetStateAction<any>>
+  type: 'course' | 'test' | 'question'
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
-  resetFilter?: boolean
   addOnButton?: React.ReactNode
   limit?: number
   page?: number
   className?: string
-  type: 'course' | 'test' | 'question'
   filterQuery?: object
 }
 
@@ -25,9 +25,9 @@ const FilterAction = (props: Props) => {
   const {
     type = 'course',
     apiFind,
+    keyFilter,
     callBackData,
     setLoading,
-    resetFilter = false,
     addOnButton,
     limit = 8,
     page = 1,
@@ -35,7 +35,6 @@ const FilterAction = (props: Props) => {
     filterQuery,
   } = props
 
-  const { isLoading, mutate } = useMutation({ mutationFn: (body) => apiFind({ payload: body }) })
   const [form] = Form.useForm()
 
   const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>({
@@ -48,7 +47,6 @@ const FilterAction = (props: Props) => {
       },
     },
   })
-
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
@@ -106,30 +104,28 @@ const FilterAction = (props: Props) => {
   }
 
   useEffect(() => {
-    if (resetFilter) handleReset()
-  }, [resetFilter])
-
-  useEffect(() => {
     setFilterData({
       filterQuery: filterQuery || {},
       options: {
         limit,
         page,
         sort: {
-          createdAt: -1,
+          createdAt: '-1',
         },
       },
     })
   }, [page])
 
+  const { data: filterCallbackData, isLoading } = useQuery({
+    queryKey: [keyFilter, filterData],
+    queryFn: () => {
+      return apiFind(filterData)
+    },
+  })
+
   useEffect(() => {
-    mutate(filterData as unknown as void, {
-      onSuccess: (data: any) => {
-        const res = data?.data
-        callBackData(res)
-      },
-    })
-  }, [filterData])
+    callBackData(filterCallbackData?.data)
+  }, [filterCallbackData])
 
   useEffect(() => {
     setLoading && setLoading(isLoading)

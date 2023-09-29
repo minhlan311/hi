@@ -12,13 +12,13 @@ import { useEffect, useState } from 'react'
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  resetData?: () => void
+
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   examData?: ExamState
 }
 
 const DrawerExam = (props: Props) => {
-  const { open, setOpen, resetData, setLoading, examData } = props
+  const { open, setOpen, setLoading, examData } = props
 
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
@@ -48,11 +48,13 @@ const DrawerExam = (props: Props) => {
       label: sj.name,
     }
   })
-  const { isLoading, status, mutate, error } = useMutation(
-    action === 'create'
-      ? { mutationFn: (body) => examApi.createExam(body) }
-      : { mutationFn: (body) => examApi.putExam(body) },
-  )
+
+  const { isLoading, status, mutate, error } = useMutation({
+    mutationFn: (body) => (action === 'create' ? examApi.createExam(body) : examApi.putExam(body)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['examFilter'] })
+    },
+  })
 
   useEffect(() => {
     if (status === 'success') {
@@ -61,7 +63,7 @@ const DrawerExam = (props: Props) => {
         message: action === 'create' ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
       setOpen(false)
-      resetData && resetData()
+
       form.resetFields()
     }
 
