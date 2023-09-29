@@ -6,7 +6,7 @@ import { Choice } from '@/interface/test'
 import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
 import { QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 // import { CKEditor } from '@ckeditor/ckeditor5-react'
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -17,19 +17,19 @@ type Props = {
   categoryId: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setQuestionData: React.Dispatch<React.SetStateAction<QuestionState | null>>
-  resetData: () => void
+
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DrawerQuestion = (props: Props) => {
-  const { open, questionData = null, categoryId, setOpen, setQuestionData, resetData, setLoading } = props
+  const { open, questionData = null, categoryId, setOpen, setQuestionData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState>()
   const [typeQues, setTypeQues] = useState<string>()
   const [skillQues, setSkillQues] = useState<string>()
-
+  const queryClient = useQueryClient()
   useEffect(() => {
     if (questionData) {
       setData(questionData)
@@ -53,6 +53,9 @@ const DrawerQuestion = (props: Props) => {
 
   const { isLoading, status, mutate, error } = useMutation({
     mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+    },
   })
 
   useEffect(() => {
@@ -61,7 +64,6 @@ const DrawerQuestion = (props: Props) => {
         status: status,
         message: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
       })
-      resetData()
       setOpen(false)
       form.resetFields()
     }

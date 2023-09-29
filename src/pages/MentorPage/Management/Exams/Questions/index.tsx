@@ -35,16 +35,9 @@ const MentorQuestions = () => {
 
   const [openUpload, setOpenUpload] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [resetFilter, setResetFilter] = useState<boolean>(false)
+
   const [myQues, setMyQues] = useState<boolean>(false)
   console.log(myQues)
-
-  const resetData = () => {
-    setResetFilter(true)
-    setTimeout(() => {
-      setResetFilter(false)
-    }, 200)
-  }
 
   const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
   const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
@@ -104,7 +97,6 @@ const MentorQuestions = () => {
               setOpen={setOpen}
               setQuestionUpdate={setQuestionUpdate}
               setQuestionsSelectData={setQuestionsSelectData}
-              resetData={resetData}
             />
           )}
 
@@ -141,7 +133,6 @@ const MentorQuestions = () => {
               setOpen={setOpen}
               setQuestionUpdate={setQuestionUpdate}
               setQuestionsSelectData={setQuestionsSelectData}
-              resetData={resetData}
             />
           )}
           <PaginationCustom callbackCurrent={setCurrent} totalData={questions?.totalDocs} limit={10} />
@@ -163,7 +154,7 @@ const MentorQuestions = () => {
         filterQuery={{ testId: examDetail._id }}
         limit={10}
         page={current}
-        resetFilter={resetFilter}
+        keyFilter='questionFilter'
       />
       <TabsCustom data={questionTabs}></TabsCustom>
 
@@ -173,13 +164,11 @@ const MentorQuestions = () => {
         categoryId={examDetail ? examDetail.categoryId : ''}
         setOpen={setOpen}
         setQuestionData={setQuestionUpdate}
-        resetData={resetData}
         setLoading={setLoading}
       />
       <DrawerUpload
         open={openUpload}
         setOpen={setOpenUpload}
-        resetData={resetData}
         categoryId={examDetail ? examDetail.categoryId : ''}
         setLoading={setLoading}
       />

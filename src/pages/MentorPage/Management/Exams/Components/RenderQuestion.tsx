@@ -5,7 +5,7 @@ import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import openNotification from '@/components/Notification'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import { QuestionState } from '@/interface/question'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Checkbox, Col, Popconfirm, Row, Space } from 'antd'
 import { useEffect } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
@@ -17,18 +17,21 @@ type Props = {
   setQuestionsSelectData: React.Dispatch<React.SetStateAction<QuestionState[]>>
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  resetData: () => void
 }
 
 const RenderQuestion = (props: Props) => {
-  const { data, type, setQuestionsSelectData, setQuestionUpdate, setOpen, resetData } = props
-
-  const { status, mutate, error } = useMutation({ mutationFn: (id: string) => questionApi.deleteQuestion(id) })
+  const { data, type, setQuestionsSelectData, setQuestionUpdate, setOpen } = props
+  const queryClient = useQueryClient()
+  const { status, mutate, error } = useMutation({
+    mutationFn: (id: string) => questionApi.deleteQuestion(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+    },
+  })
 
   useEffect(() => {
     if (status === 'success') {
       openNotification({ status: status, message: 'Xóa câu hỏi thành công' })
-      resetData()
     }
 
     if (status === 'error' && error) {

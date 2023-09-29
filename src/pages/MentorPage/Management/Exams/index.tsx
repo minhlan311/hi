@@ -10,7 +10,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import DrawerExam from './Drawer/DrawerExam'
 import openNotification from '@/components/Notification'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AppContext } from '@/contexts/app.context'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -19,26 +19,22 @@ const MentorExams = () => {
   const [data, setData] = useState<{ docs: ExamState[] }>()
   const [loading, setLoading] = useState<boolean>(false)
   const [examData, setExamData] = useState<ExamState>()
-  const { status, mutate, error } = useMutation({ mutationFn: (id: string) => examApi.deleteExam(id) })
+  const queryClient = useQueryClient()
+  const { status, mutate, error } = useMutation({
+    mutationFn: (id: string) => examApi.deleteExam(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['examFilter'] })
+    },
+  })
   const { profile } = useContext(AppContext)
 
   const handleDelete = (id: string) => {
     mutate(id)
   }
 
-  const [resetFilter, setResetFilter] = useState<boolean>(false)
-
-  const resetData = () => {
-    setResetFilter(true)
-    setTimeout(() => {
-      setResetFilter(false)
-    }, 200)
-  }
-
   useEffect(() => {
     if (status === 'success') {
       openNotification({ status: status, message: 'Xóa bộ đề thành công' })
-      resetData()
     }
 
     if (status === 'error' && error) {
@@ -214,14 +210,14 @@ const MentorExams = () => {
           </ButtonCustom>
         }
         apiFind={examApi.findExam}
+        keyFilter='examFilter'
         type='test'
         callBackData={setData}
         setLoading={setLoading}
-        resetFilter={resetFilter}
         filterQuery={{ createdById: profile._id }}
       />
       <Table columns={columns} dataSource={data?.docs} loading={loading} bordered />
-      <DrawerExam open={open} setOpen={setOpen} resetData={resetData} setLoading={setLoading} examData={examData} />
+      <DrawerExam open={open} setOpen={setOpen} setLoading={setLoading} examData={examData} />
     </div>
   )
 }

@@ -7,22 +7,25 @@ import { useEffect, useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
 import css from './styles.module.scss'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import questionApi from '@/apis/question.api'
 
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  resetData: () => void
   categoryId: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DrawerUpload = (props: Props) => {
-  const { open, setOpen, resetData, categoryId, setLoading } = props
+  const { open, setOpen, categoryId, setLoading } = props
+  const queryClient = useQueryClient()
 
   const { isLoading, mutate } = useMutation({
     mutationFn: (body) => questionApi.importQuestion(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+    },
   })
   const [fileList, setFileList] = useState<any>()
 
@@ -38,8 +41,6 @@ const DrawerUpload = (props: Props) => {
       }
       mutate(payload as unknown as any)
       console.log(payload)
-
-      resetData()
       onCloseDrawer()
     }
   }
