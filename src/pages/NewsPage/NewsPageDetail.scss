@@ -1,0 +1,31 @@
+.container-news {
+  padding: 50px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.title-box {
+  text-align: center;
+}
+h3 {
+  color: #d72831;
+}
+.box-desc {
+  font-weight: normal;
+  padding: 30px 0;
+  min-height: 50vh;
+  line-height: 1.8;
+}
+.other-news {
+  background-color: #f4f4f4 !important;
+  border: 2px solid #d72831;
+  border-radius: 10px;
+  padding: 50px 60px;
+}
+.other-news-title {
+  font-size: 26px;
+  padding-bottom: 30px;
+}
+.link {
+  font-size: 18px;
+}

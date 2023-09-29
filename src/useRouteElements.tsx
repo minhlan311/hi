@@ -10,7 +10,6 @@ import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/ind
 import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import MentorLayout from './components/layout/MentorLayout/index.tsx'
-import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import PageResult from './components/PageResult/index.tsx'
 import PATH from './constants/path'
 import ProfilePage from './pages/ProfilePage/index.tsx'
@@ -20,6 +19,8 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { useContext } from 'react'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
+import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
+import NewsPage from './pages/NewsPage/NewsPage.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -209,6 +210,15 @@ export default function useRouteElements() {
         },
         {
           path: PATH.NEWS,
+          index: true,
+          element: (
+            <Layout user={profile} title='Bài viết'>
+              <NewsPageDetail />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.NEWS_PAGE,
           index: true,
           element: (
             <Layout user={profile} title='Bài viết'>

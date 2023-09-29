@@ -18,8 +18,8 @@ import DrawerCreateExam from './components/DrawerCreateExam'
 import DrawerCreateLession from './components/DrawerCreateLession'
 import DrawerUpdateLession from './components/DrawerUpdateLession'
 import DrawerUpdateTopic from './components/DrawerUpdateTopic'
+import { useNavigate, useParams } from 'react-router-dom'
 import DrawerQuizz from './components/DrawerQuizz'
-import { useParams } from 'react-router-dom'
 
 export type MyPageTableOptions<S> = ColumnsType<S>
 
@@ -37,6 +37,7 @@ const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
   const [dataColl, setDataColl] = useState<TopicList[] | []>([])
   const [dataCollLession, setDataCollLession] = useState<TopicList[] | []>([])
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const callApi = async () => {
@@ -206,6 +207,17 @@ const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
                 : ''}
             </Collapse>
           </div>
+          <Button
+            style={{
+              marginTop: '30px',
+            }}
+            type='primary'
+            onClick={() => {
+              navigate('/mentor/courses')
+            }}
+          >
+            Hoàn thành
+          </Button>
         </div>
       )}
 

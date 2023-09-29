@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 import { useState } from 'react'
 import chinaSVG from '../../../assets/icons/china_flag.svg'
 import engSVG from '../../../assets/icons/eng_flag.svg'
@@ -18,8 +18,6 @@ export default function CourseCalender() {
   const [active, setActive] = useState('Tiếng Anh')
   const [id, setId] = useState<string>()
 
-  // console.log(categoriesData?.data?.docs[0]?._id, 'categoriesData?.data?.docs[0]')
-
   const { data: listData, isLoading } = useQuery({
     queryKey: ['course', id, categoriesData?.data?.docs[0]?._id],
     queryFn: () => {
@@ -32,9 +30,7 @@ export default function CourseCalender() {
         },
       })
     },
-    // enabled: id || categoriesData?.data?.docs[0]?._id ? true : false,
   })
-  console.log(isLoading)
 
   const handleActive = (name: string, id: string) => {
     setActive(name)
@@ -72,7 +68,7 @@ export default function CourseCalender() {
               </Button>
             ))}
         </div>
-        <ListCourse listData={listData?.data?.docs} />
+        {isLoading ? <Skeleton active paragraph={{ rows: 20 }} /> : <ListCourse listData={listData?.data?.docs} />}
       </div>
     </div>
   )

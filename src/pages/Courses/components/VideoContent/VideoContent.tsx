@@ -10,6 +10,7 @@ import { formatPriceVND } from '@/helpers/common'
 type Props = {
   data?: TCourse
 }
+
 export default function VideoContent({ data }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
   const [visible, setVisible] = useState<boolean>(false)
@@ -37,6 +38,7 @@ export default function VideoContent({ data }: Props) {
 
     const handleScroll = () => {
       const currentScrollPos = window.scrollY
+
       if (currentScrollPos >= 501) {
         if (contentRef.current) {
           contentRef.current.style.opacity = '1'
@@ -46,6 +48,7 @@ export default function VideoContent({ data }: Props) {
           contentRef.current.style.top = '10px'
           setVisible(true)
         }
+
         prevScrollPos = currentScrollPos
       } else if (currentScrollPos >= 400 && currentScrollPos <= 500) {
         if (contentRef.current) {
@@ -53,6 +56,7 @@ export default function VideoContent({ data }: Props) {
           contentRef.current.style.transition = 'opacity 1s ease'
           setVisible(true)
         }
+
         prevScrollPos = currentScrollPos
       } else {
         if (prevScrollPos > currentScrollPos) {
@@ -65,15 +69,19 @@ export default function VideoContent({ data }: Props) {
             contentRef.current.style.top = ''
             contentRef.current.style.border = ''
           }
+
           prevScrollPos = currentScrollPos
         }
       }
     }
+
     window.addEventListener('scroll', handleScroll)
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
   return (
     <div className={style.col2}>
       <Modal
@@ -95,7 +103,7 @@ export default function VideoContent({ data }: Props) {
           <div onClick={showModal} className={style.video} hidden={visible}>
             <ImageCustom
               width='100%'
-              height='100%'
+              height='198px'
               preview={false}
               src={`${import.meta.env.VITE_FILE_ENDPOINT}/${datas?.coverMedia}`}
             />

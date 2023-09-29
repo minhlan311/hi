@@ -1,10 +1,12 @@
-import { Button, Image, Typography } from 'antd'
+import { Button, Image, Tooltip, Typography } from 'antd'
 import './News.scss'
 import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 export default function News() {
+  const navigate = useNavigate()
   const { data } = useQuery({
     queryKey: ['news'],
     queryFn: () =>
@@ -12,7 +14,6 @@ export default function News() {
         filterQuery: {},
         options: {
           limit: 4,
-          pagination: false,
           sort: { createdAt: -1 },
         },
       }),
@@ -33,36 +34,34 @@ export default function News() {
                   <div className='imgBox'>
                     <Image
                       width='280px'
-                      height='150px'
+                      height='160px'
                       className='imgIn'
                       src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
                     />
                   </div>
                   <div className='content'>
-                    <Paragraph
-                      style={{
-                        width: '300px',
-                      }}
-                      className='titleNews'
-                      ellipsis={true}
-                    >
-                      <Link to={`/news/${item?.id}`}>{item?.title}</Link>
-                    </Paragraph>
-                    <Paragraph
-                      style={{
-                        width: '300px',
-                      }}
-                      className='text'
-                      ellipsis={{ rows: 3 }}
-                    >
-                      {item?.description}
-                    </Paragraph>
+                    <Tooltip title={item?.title}>
+                      {' '}
+                      <Paragraph
+                        style={{
+                          width: '300px',
+                        }}
+                        className='titleNews'
+                        ellipsis={true}
+                      >
+                        <Link to={`/news/${item?.id}`}>{item?.title}</Link>
+                      </Paragraph>
+                    </Tooltip>
+
+                    <TextWithTooltip rows={3} className='text' children={item?.description} />
                   </div>
                 </div>
               </>
             ))}
         </div>
-        <Button className='buttonMore'>Xem tất cả</Button>
+        <Button className='buttonMore' onClick={() => navigate('/news')}>
+          Xem tất cả
+        </Button>
       </div>
     </div>
   )

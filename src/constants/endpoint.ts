@@ -16,6 +16,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
   NEWS: '/news/find',
+  GET_ONE_NEWS: '/news/',
 
   GET_USER_INFO: '/users/',
   FIND_USER_PATH: '/users/find',
