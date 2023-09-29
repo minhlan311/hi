@@ -1,11 +1,10 @@
 import calenderSVG from '@/assets/icons/calendar.svg'
-import { Image, Tooltip } from 'antd'
+import { Image } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
 import { imageFallback } from '@/constants/utils'
 import './ListCourse.scss'
-import Paragraph from 'antd/es/typography/Paragraph'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 type Props = {

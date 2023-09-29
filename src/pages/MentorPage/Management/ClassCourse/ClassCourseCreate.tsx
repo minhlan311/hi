@@ -40,13 +40,16 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
   })
 
   const { data: dataClass, isLoading } = useQuery({
-    queryKey: ['classOne', idClass, onOpen],
+    queryKey: ['classOne', idClass],
     queryFn: () => classApi.getOneClass(idClass),
+    enabled: idClass ? true : false,
   })
 
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['classOne'] })
-  }, [idClass])
+  // useEffect(() => {
+  //   if (idClass) {
+  //     queryClient.invalidateQueries({ queryKey: ['classOne'] })
+  //   }
+  // }, [idClass])
 
   const courseList = dataCource?.data?.docs?.map((item) => ({
     label: item?.name,

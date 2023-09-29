@@ -29,6 +29,7 @@ export default function CLassCourse() {
   const [filter, setFilter] = useState({
     filterQuery: {
       createdById: profile?._id,
+      search: '',
     },
     options: {
       limit: 10,
@@ -40,6 +41,7 @@ export default function CLassCourse() {
     setFilter({
       filterQuery: {
         createdById: profile?._id,
+        search: '',
       },
       options: {
         limit: 10,
@@ -100,6 +102,7 @@ export default function CLassCourse() {
       classApi.getClass({
         ...filter,
       }),
+    enabled: profile?._id ? true : false,
   })
 
   const setUpdate = (id: string) => {
