@@ -30,9 +30,7 @@ export default function CourseCalender() {
         },
       })
     },
-    enabled: categoriesData?.data?.docs[0]?._id ? true : false,
   })
-  console.log(isLoading)
 
   const handleActive = (name: string, id: string) => {
     setActive(name)
