@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, FloatButton } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -58,7 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <ScrollTop>
                     <App />
                   </ScrollTop>
-                  {/* <FloatButton.BackTop  /> */}
+                  <FloatButton.BackTop />
                 </Perloader>
               </ConfigProvider>
             </GlobalStyles>

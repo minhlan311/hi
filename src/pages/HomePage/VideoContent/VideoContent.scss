@@ -223,10 +223,16 @@
 }
 
 @media screen and (max-width: 1290px) {
+  .left-ves {
+    background-color: white !important;
+  }
   .img-mac {
     display: none;
   }
   .hr-class {
     display: none;
+  }
+  .right {
+    background-color: white !important;
   }
 }
