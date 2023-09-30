@@ -14,9 +14,9 @@ export default function TopCourses() {
     queryKey: ['topCategories'],
     queryFn: () => {
       return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
+        parentId: '64ffde9c746fe5413cf8d1af',
       })
-    }
+    },
   })
 
   return (

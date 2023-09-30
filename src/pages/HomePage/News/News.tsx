@@ -1,13 +1,14 @@
-import { Button, Image, Tooltip, Typography } from 'antd'
+import { Button, Col, Image, Row, Tooltip, Typography } from 'antd'
 import './News.scss'
 import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
 import { Link, useNavigate } from 'react-router-dom'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import LoadingCustom from '@/components/LoadingCustom'
 
 export default function News() {
   const navigate = useNavigate()
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['news'],
     queryFn: () =>
       newsApi.getNews({
@@ -26,11 +27,14 @@ export default function News() {
       <div className='container-1200px'>
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Tin tức và Góc học tập</h3>
-        <div className='title-container'>
-          {data?.data?.docs &&
+        <Row justify={'center'} gutter={[32, 32]}>
+          {isLoading ? (
+            <LoadingCustom />
+          ) : (
+            data?.data?.docs &&
             data?.data?.docs?.map((item) => (
               <>
-                <div className='col'>
+                <Col className='col'>
                   <div className='imgBox'>
                     <Image
                       width='280px'
@@ -41,24 +45,31 @@ export default function News() {
                   </div>
                   <div className='content'>
                     <Tooltip title={item?.title}>
-                      {' '}
                       <Paragraph
                         style={{
-                          width: '300px',
+                          maxWidth: '280px',
                         }}
                         className='titleNews'
                         ellipsis={true}
                       >
-                        <Link to={`/news/${item?.id}`}>{item?.title}</Link>
+                        <Link
+                          style={{
+                            maxWidth: '300px',
+                          }}
+                          to={`/news/${item?.id}`}
+                        >
+                          {item?.title}
+                        </Link>
                       </Paragraph>
                     </Tooltip>
 
                     <TextWithTooltip rows={3} className='text' children={item?.description} />
                   </div>
-                </div>
+                </Col>
               </>
-            ))}
-        </div>
+            ))
+          )}
+        </Row>
         <Button className='buttonMore' onClick={() => navigate('/news')}>
           Xem tất cả
         </Button>
