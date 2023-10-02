@@ -21,6 +21,7 @@ import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepC
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
+import CategogyDetail from './pages/Category/CategogyDetail.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -231,6 +232,14 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title=''>
               <ProfilePage profile={profile} />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.CATEGORY_DETAIL,
+          element: (
+            <Layout user={profile} title=''>
+              <CategogyDetail />
             </Layout>
           ),
         },

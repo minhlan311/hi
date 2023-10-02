@@ -65,3 +65,11 @@ export function formatHour(timeString: string) {
 
   return formattedTime
 }
+
+// convert để lấy id xuống từ url
+export function getIdFromUrl(url: string) {
+  const pathArr = url.split('/')
+  const id = pathArr[pathArr.length - 1]
+
+  return id
+}
