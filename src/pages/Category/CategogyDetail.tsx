@@ -32,7 +32,9 @@ export default function CategogyDetail() {
       ) : (
         <>
           <ImageCustom
-            preview={false}
+            styles={{
+              objectFit: 'cover',
+            }}
             width='100%'
             height='500px'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
