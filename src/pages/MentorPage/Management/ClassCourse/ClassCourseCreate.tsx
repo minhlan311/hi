@@ -45,12 +45,6 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
     enabled: idClass ? true : false,
   })
 
-  // useEffect(() => {
-  //   if (idClass) {
-  //     queryClient.invalidateQueries({ queryKey: ['classOne'] })
-  //   }
-  // }, [idClass])
-
   const courseList = dataCource?.data?.docs?.map((item) => ({
     label: item?.name,
     value: item?._id,
@@ -69,11 +63,12 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
     } else {
       form.resetFields()
     }
-  }, [dataClass])
+  }, [dataClass, typeForm])
 
   const mutation = useMutation({
     mutationFn: (body: FormClass) => classApi.createClass(body),
     onSuccess: () => {
+      form.resetFields([])
       queryClient.invalidateQueries({ queryKey: ['course'] })
       queryClient.invalidateQueries({ queryKey: ['dataClass'] })
       openNotification({
@@ -164,7 +159,12 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
       open={onOpen}
       onClose={() => onClose(false)}
     >
-      <Form disabled={isLoading} form={form} onFinish={onFinish} layout='vertical'>
+      <Form
+        disabled={typeForm === 'UPDATE' && isLoading ? true : false}
+        form={form}
+        onFinish={onFinish}
+        layout='vertical'
+      >
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item

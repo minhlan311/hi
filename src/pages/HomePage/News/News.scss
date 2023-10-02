@@ -1,11 +1,11 @@
 .news-container {
-  width: 100%;
   color: #101010;
   padding: 80px 0;
   text-align: center;
   background: white;
   .container-1200px {
-    max-width: 1200px;
+    padding: 0 20px;
+    max-width: 1800px;
     margin: auto;
     .text-xs {
       color: #101010;
@@ -15,45 +15,41 @@
       margin-top: 10px;
       font-size: 50px;
       font-weight: 700;
+      margin-bottom: 50px;
     }
-    .title-container {
-      margin-top: 50px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      .col {
-        .content {
-          .titleNews {
-            width: 300px;
-            font-size: 20px;
-            font-weight: 700;
-          }
-          h4:hover {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-          .text {
-            width: 300px;
-            margin-top: 10px;
-            color: #666666;
-            font-size: 16px;
-          }
+    .col {
+      .content {
+        .titleNews {
+          max-width: 300px;
+          font-size: 20px;
+          font-weight: 700;
         }
-        display: flex;
-        align-items: center;
-        text-align: start;
-        gap: 20px;
-        .imgBox {
-          .imgIn {
-            border-radius: 10px;
-            min-width: 235px;
-            min-height: 160px;
-          }
+        h4:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        .text {
+          max-width: 300px;
+          margin-top: 10px;
+          color: #666666;
+          font-size: 16px;
+        }
+      }
+      display: flex;
+      align-items: center;
+      text-align: start;
+      gap: 20px;
+      .imgBox {
+        .imgIn {
+          border-radius: 10px;
+          min-width: 235px;
+          min-height: 160px;
         }
       }
     }
   }
 }
+
 .buttonMore {
   border-radius: 10px;
   min-width: 110px;
@@ -65,13 +61,11 @@
 }
 .buttonMore:hover {
   color: white !important;
-  border-radius: 10px;
-  background-color: #f2184f;
+  background-color: #d72831 !important;
 }
 
 @media screen and (max-width: 900px) {
   .news-container {
-    width: 100%;
     color: #101010;
     padding: 80px 20px;
     text-align: center;
@@ -94,8 +88,6 @@
           .imgIn {
             border-radius: 10px;
             width: 100% !important;
-            // max-width: 235px;
-            // max-height: 160px;
           }
         }
       }

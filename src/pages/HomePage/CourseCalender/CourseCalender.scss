@@ -1,19 +1,13 @@
 .courseCalender-container {
   color: #101010;
-  padding: 80px 0;
+  padding: 80px 0px;
   text-align: center;
   width: 100%;
-  min-height: 1228px;
   background: #f4f4f4;
-  @media screen and (max-width: 1280px) {
-    .courseCalender-container {
-      min-height: none;
-    }
-  }
   .container-1200px {
+    min-height: 500px;
     max-width: 1200px;
-    min-height: 800px;
-    margin: auto;
+    margin: 0 auto;
     .text-xs {
       color: #101010;
       font-size: 20px;
@@ -25,13 +19,14 @@
       color: #101010;
     }
     .groupButton {
-      overflow: scroll;
-      scroll-snap-type: x mandatory;
       margin-top: 30px;
+      margin-bottom: 50px;
+      padding: 0 20px;
       justify-content: center;
       display: flex;
-      scrollbar-color: transparent;
       gap: 20px;
+      scroll-snap-type: mandatory;
+      overflow-x: auto;
       .button {
         border: 2px solid #e0e0e0;
         justify-content: center;
@@ -46,8 +41,8 @@
       }
       .buttonActive {
         background-color: #f2184f;
+        border: 2px solid #f2184f;
         color: white;
-        border: none;
         justify-content: center;
         min-width: 170px;
         border-radius: 30px;
@@ -59,103 +54,82 @@
         align-items: center;
       }
     }
+    @media screen and (max-width: 900px) {
+      .groupButton {
+        justify-content: start;
+      }
+    }
     .groupButton::-webkit-scrollbar-thumb {
       width: 10px;
-      background-color: transparent;
+      background-color: transparent !important;
     }
 
     .groupButton::-webkit-scrollbar-track {
-      background-color: transparent;
+      background-color: transparent !important;
     }
+  }
+}
 
-    .listCourse {
-      margin-top: 50px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 15px;
-      .col {
-        padding: 0;
-        margin: 0;
-        border-radius: 20px;
-        .imgCol {
-          .imgColin {
-            border: 1px solid rgba(0, 0, 0, 0.099);
-            object-fit: cover;
-            width: 390px;
-            height: 165px;
-            border-radius: 10px 10px 0 0;
-          }
-        }
-        .contentList {
-          border: 1px solid rgba(0, 0, 0, 0.099);
-          text-align: start;
-          border-radius: 0 0 10px 10px;
-          .flexPrice {
-            text-align: start;
-            margin-top: 15px;
-            .name {
-              color: #f2184f;
-              font-size: 16px;
-              font-weight: 600;
-            }
-            .price {
-              font-size: 24px;
-              font-weight: 700;
-            }
-          }
-          h4 {
-            font-size: 24px;
-            margin-bottom: 20px;
-          }
-          padding: 20px;
-          background-color: white;
-          .flex {
-            gap: 10px;
-            text-align: start;
-            display: flex;
-            justify-content: start;
-          }
-        }
-      }
-    }
-    @media screen and (max-width: 1280px) {
-      .listCourse {
-        padding: 0 20px;
-        margin-top: 50px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        .col {
-          padding: 0;
-          margin: 0;
-          border-radius: 20px;
-          .imgCol {
-            .ant-image {
-              width: 100%;
-            }
-            .imgColin {
-              border: 1px solid rgba(0, 0, 0, 0.099);
-              object-fit: cover;
-              width: 100%;
-              border-radius: 10px 10px 0 0;
-            }
-          }
-        }
-      }
-    }
-    @media screen and (max-width: 767px) {
-      .listCourse {
-        padding: 0 20px;
-        margin-top: 50px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-    }
+.col {
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 1280px) {
+  .col {
+    margin-top: 10px;
   }
-  @media screen and (max-width: 1200px) {
-    .container-1200px {
-      min-height: 500px;
-    }
+}
+
+@media screen and (max-width: 767px) {
+  .listCourse {
+    padding: 20px 30px;
+    scale: 0.8;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
+}
+.text-date {
+  font-size: 16px;
+  padding-top: 10px;
+}
+
+.flexPrice {
+  position: absolute;
+  bottom: 20px;
+  text-align: start;
+  margin-top: 15px;
+  .name {
+    color: #f2184f;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .price {
+    color: #101010;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.courseCalender-container .container-1200px .listCourse .col .contentList {
+  min-height: 220px;
+}
+.flex {
+  font-weight: 600;
+  max-width: 350px;
+  gap: 10px;
+  text-align: start;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.link-h4-config {
+  text-align: start;
+  margin: 0;
+  max-width: 350px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 22px;
+  color: #101010;
+  margin-bottom: 0px;
 }
