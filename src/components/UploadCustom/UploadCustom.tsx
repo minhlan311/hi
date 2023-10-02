@@ -55,18 +55,33 @@ const UploadCustom = (props: Props) => {
   //   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 100, height: 50, x: 0, y: 25 })
 
   const convertFilelist = (arr: any) => {
-    if (!Array.isArray(arr) || arr.length === 0) {
+    if (!arr) {
       return []
     }
 
-    const convertedArray = arr.map((item) => ({
-      uid: item.url,
-      name: item.name,
-      status: 'done',
-      url: item.url,
-    }))
+    console.log(arr)
 
-    return convertedArray
+    if (Array.isArray(arr)) {
+      const convertedArray = arr.map((item) => ({
+        uid: item.url,
+        name: item.name,
+        status: 'done',
+        url: item.url,
+      }))
+
+      return convertedArray
+    }
+
+    if (arr) {
+      const convertedArray = {
+        uid: arr.url,
+        name: arr.name,
+        status: 'done',
+        url: arr.url,
+      }
+
+      return [convertedArray]
+    }
   }
 
   const handleBeforeUpload = async (file: RcFile) => {
@@ -76,12 +91,12 @@ const UploadCustom = (props: Props) => {
       const max = file.size / 1024 / 1024 < maxFileSize
 
       if (!max) {
-        message.error(`Image must smaller than ${maxFileSize}MB!`)
+        message.error(
+          `File của bạn có kích thước quá lớn, vui lòng upload file có dung lượng từ ${maxFileSize}MB trở xuống!`,
+        )
+        setLoading && setLoading(false)
+        return false
       }
-
-      setLoading && setLoading(false)
-
-      return false
     }
 
     const reader = new FileReader()
@@ -102,19 +117,15 @@ const UploadCustom = (props: Props) => {
           ? import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_LARGE_IMAGE
           : import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
         formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
       )
       const newData = convertFilelist(response.data)
-      if (multiple) setFileList([...fileList, ...newData])
-      else setFileList(newData)
 
-      message.success('Đăng ảnh thành công')
+      if (multiple) setFileList([...fileList, ...(newData as unknown as any)])
+      else setFileList(newData as unknown as any)
+
+      message.success('Đăng tải thành công')
     } catch (error) {
-      message.error('Đăng ảnh lỗi')
+      message.error('Đăng tải lỗi')
     }
 
     setLoading && setLoading(false)
@@ -125,7 +136,6 @@ const UploadCustom = (props: Props) => {
       callBackFileList(fileList)
     }
   }, [fileList])
-  console.log(fileList)
 
   const uploadProps: UploadProps = {
     name: name,
@@ -144,7 +154,6 @@ const UploadCustom = (props: Props) => {
       <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
         {dropArea ? (
           <Dragger {...uploadProps}>
-            {' '}
             <p className={'ant-upload-drag-icon'}>
               <TbDragDrop style={{ fontSize: 40 }} />
             </p>

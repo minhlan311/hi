@@ -32,6 +32,7 @@ const DrawerUpload = (props: Props) => {
   const onCloseDrawer = () => {
     setOpen(false)
   }
+  console.log(fileList)
 
   const onFinish = () => {
     if (fileList && categoryId) {
@@ -40,7 +41,7 @@ const DrawerUpload = (props: Props) => {
         url: fileList[0]?.url,
       }
       mutate(payload as unknown as any)
-      console.log(payload)
+
       onCloseDrawer()
     }
   }
