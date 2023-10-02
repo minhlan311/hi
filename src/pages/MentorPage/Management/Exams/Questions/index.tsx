@@ -5,12 +5,13 @@ import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import PaginationCustom from '@/components/PaginationCustom'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import { AppContext } from '@/contexts/app.context'
 import { ExamState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Checkbox, Space } from 'antd'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
 import { useLocation } from 'react-router-dom'
@@ -32,7 +33,7 @@ const MentorQuestions = () => {
 
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
-
+  const { setQuestionList, questionList } = useContext(AppContext)
   const [openUpload, setOpenUpload] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -59,6 +60,10 @@ const MentorQuestions = () => {
     }
   }
 
+  useEffect(() => {
+    setQuestionList(questionsSelectData)
+  }, [questionsSelectData])
+
   const questionTabs = [
     {
       id: 'questions',
@@ -68,7 +73,7 @@ const MentorQuestions = () => {
           <Space size='large' className={css.infor}>
             <Space>
               <p>Số câu hỏi:</p>
-              <b>{questionsSelectData?.length}</b>
+              <b>{questionList?.length}</b>
             </Space>
 
             <Space>
@@ -84,15 +89,15 @@ const MentorQuestions = () => {
                 onClick={() => setOpenUpload(true)}
               ></ButtonCustom>
 
-              <ButtonCustom type='primary' disabled={!questionsSelectData?.length} onClick={handleSave}>
+              <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
             </Space>
           </Space>
 
-          {questionsSelectData && (
+          {questionList && (
             <RenderQuestion
-              data={questionsSelectData}
+              data={questionList}
               type='questionsSelect'
               setOpen={setOpen}
               setQuestionUpdate={setQuestionUpdate}
@@ -101,7 +106,7 @@ const MentorQuestions = () => {
           )}
 
           <PaginationCustom
-            dataArr={questionsSelectData}
+            dataArr={questionList}
             limit={10}
             // callbackDataArr={setQuestionsData}
             callbackCurrent={setCurrent}
@@ -140,8 +145,6 @@ const MentorQuestions = () => {
       ),
     },
   ]
-
-  console.log(questionsSelectData)
 
   return !loading && examDetail ? (
     <div className={`${css.quesList}`}>

@@ -1,26 +1,27 @@
+import { useContext } from 'react'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import PageResult from './components/PageResult/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
-import Courses from './pages/Courses/Courses.tsx'
-import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
-import HomePage from './pages/HomePage/index.tsx'
 import Layout from './components/layout/Layout.tsx'
+import MentorLayout from './components/layout/MentorLayout/index.tsx'
+import PATH from './constants/path'
+import { AppContext } from './contexts/app.context'
+import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 import Login from './pages/Auth/Login/index.tsx'
+import Register from './pages/Auth/Register/index.tsx'
+import Courses from './pages/Courses/Courses.tsx'
+import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
+import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
+import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
 import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
-import MentorLayout from './components/layout/MentorLayout/index.tsx'
-import PageResult from './components/PageResult/index.tsx'
-import PATH from './constants/path'
-import ProfilePage from './pages/ProfilePage/index.tsx'
-import Register from './pages/Auth/Register/index.tsx'
-import { AppContext } from './contexts/app.context'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import { useContext } from 'react'
-import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
-import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
-import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
+import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import TeacherPage from './pages/TeacherPage/index.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -234,6 +235,31 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
+        {
+          path: PATH.TEACHER_PAGE,
+          element: (
+            <Layout user={profile} title='Giáo viên'>
+              <TeacherPage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.TEACHER_DETAIL,
+          element: (
+            <Layout user={profile} title='Giáo viên'>
+              <TeacherPage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.TEACHER_DETAIL_CHILD,
+          element: (
+            <Layout user={profile} title='Giáo viên'>
+              <TeacherPage />
+            </Layout>
+          ),
+        },
+
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
         { path: '*', element: <PageResult code={404} /> },

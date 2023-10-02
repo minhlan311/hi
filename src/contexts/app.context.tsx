@@ -1,19 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useState } from 'react'
 import { CodeState } from '@/interface/code'
 import { CoursesState } from '@/interface/coursesData'
-import { UserState } from '@/interface/user'
+import { createContext, useState } from 'react'
 import { getAccessTokenFromLS, getProfileFromLS } from '@/utils/auth'
-import {
-  getCode,
-  getFavorite,
-  getOrder,
-  getWhiteList,
-  setCodeFromLS,
-  setFavoriteFromLS,
-  setOrderFromLS,
-  setWhiteListFromLS
-} from '@/utils/cart'
+import { QuestionState } from '@/interface/question'
+import { UserState } from '@/interface/user'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getCode, getFavorite, getOrder, setCodeFromLS, setFavoriteFromLS, setOrderFromLS } from '@/utils/cart'
+import { getQuestionsList, setQuestionsListFromLS } from '@/utils/questons'
 
 interface AppContextInterface {
   isAuthenticated: boolean
@@ -24,8 +17,8 @@ interface AppContextInterface {
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
   order: CoursesState[]
   setOrder: React.Dispatch<React.SetStateAction<CoursesState[]>>
-  whiteList: CoursesState[]
-  setWhiteList: React.Dispatch<React.SetStateAction<CoursesState[]>>
+  questionList: QuestionState[]
+  setQuestionList: React.Dispatch<React.SetStateAction<QuestionState[]>>
   favorite: CoursesState[]
   setFavorite: React.Dispatch<React.SetStateAction<CoursesState[]>>
   code: CodeState[]
@@ -41,12 +34,12 @@ const initialAppContext: AppContextInterface = {
   setProfile: () => {},
   order: getOrder(),
   setOrder: () => {},
-  whiteList: getWhiteList(),
-  setWhiteList: () => {},
+  questionList: getQuestionsList(),
+  setQuestionList: () => {},
   favorite: getFavorite(),
   setFavorite: () => {},
   code: getCode(),
-  setCode: () => {}
+  setCode: () => {},
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
@@ -59,7 +52,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [profile, setProfile] = useState<UserState>(initialAppContext.profile)
   const [order, setOrder] = useState<CoursesState[]>(initialAppContext.order)
-  const [whiteList, setWhiteList] = useState<CoursesState[]>(initialAppContext.whiteList)
+  const [questionList, setQuestionList] = useState<QuestionState[]>(initialAppContext.questionList)
   const [favorite, setFavorite] = useState<CoursesState[]>(initialAppContext.favorite)
   const [code, setCode] = useState<CodeState[]>(initialAppContext.code)
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
@@ -67,7 +60,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addItemToStateArray = (
     setStateFunction: React.Dispatch<React.SetStateAction<any>>,
     item: any,
-    setLocalFunction: React.Dispatch<React.SetStateAction<any>>
+    setLocalFunction: React.Dispatch<React.SetStateAction<any>>,
   ) => {
     setStateFunction((prevState: any) => {
       const newArr = Array.isArray(prevState) ? [...prevState, ...item] : item
@@ -87,12 +80,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setProfile,
         order,
         setOrder: (item) => addItemToStateArray(setOrder, item, setOrderFromLS),
-        whiteList,
-        setWhiteList: (item) => addItemToStateArray(setWhiteList, item, setWhiteListFromLS),
+        questionList,
+        setQuestionList: (item) => addItemToStateArray(setQuestionList, item, setQuestionsListFromLS),
         favorite,
         setFavorite: (item) => addItemToStateArray(setFavorite, item, setFavoriteFromLS),
         code,
-        setCode: (item) => addItemToStateArray(setCode, item, setCodeFromLS)
+        setCode: (item) => addItemToStateArray(setCode, item, setCodeFromLS),
       }}
     >
       {children}

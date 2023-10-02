@@ -1,6 +1,28 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export const handleLocalAction = (
+  setData: React.Dispatch<React.SetStateAction<any[]>>,
+  id: string,
+  type: 'update' | 'remove',
+  localKey?: string,
+) => {
+  setData((prevData: any) => {
+    if (type === 'update') {
+      const updatedData = prevData.map((item: any) => (item.id === id ? { ...item } : item))
+      if (localKey) localStorage.setItem(localKey, JSON.stringify(updatedData))
+
+      return updatedData
+    } else if (type === 'remove') {
+      const filteredData = prevData.filter((item: any) => item._id !== id)
+
+      if (localKey) localStorage.setItem(localKey, JSON.stringify(filteredData))
+
+      return filteredData
+    }
+  })
+}
+
 export const stateAction = (
   setData: React.Dispatch<React.SetStateAction<any[]>>,
   id: string,

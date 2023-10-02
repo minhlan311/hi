@@ -16,6 +16,10 @@ export const PATH = {
   NEWS_PAGE: '/news/',
   PROFILES_DETAIL: '/profiles/:id',
 
+  TEACHER_PAGE: '/giao-vien',
+  TEACHER_DETAIL: '/giao-vien/:parentSlug',
+  TEACHER_DETAIL_CHILD: '/giao-vien/:parentSlug/:childSlug',
+
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
   COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',
