@@ -18,6 +18,7 @@ export interface Parent {
 }
 
 export interface CategoryState {
+  content?: any
   _id: string
   parentId: string
   createdById: string
@@ -26,7 +27,7 @@ export interface CategoryState {
   createdAt: string
   updatedAt: string
   slug: string
-  description?: string
+  description?: any
   coverUrl?: string
   icon?: string
   parent: Parent

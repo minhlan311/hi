@@ -32,15 +32,18 @@ export default function CategogyDetail() {
       ) : (
         <>
           <ImageCustom
-            preview={false}
+            styles={{
+              objectFit: 'cover',
+            }}
             width='100%'
             height='500px'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
           />
+
           <div className='h2'>
             <div className='div-cate'>
               <h2>{data?.data?.name}</h2>
-              <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.description as any }}></div>
+              <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content as any }}></div>
             </div>
           </div>
         </>

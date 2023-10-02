@@ -14,7 +14,16 @@ type TImage = {
   onClick?: () => void
 }
 
-export default function ImageCustom({ src, size, width, preview, height, className, styles, onClick }: TImage) {
+export default function ImageCustom({
+  src,
+  size,
+  width,
+  preview,
+  height,
+  className,
+  styles = { objectFit: 'cover' },
+  onClick,
+}: TImage) {
   return (
     <div className={style.classImage}>
       <Image
