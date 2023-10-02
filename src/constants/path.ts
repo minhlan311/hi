@@ -15,7 +15,7 @@ export const PATH = {
   NEWS: '/news/:id',
   NEWS_PAGE: '/news/',
   PROFILES_DETAIL: '/profiles/:id',
-
+  CATEGORY_DETAIL: 'khoa-hoc/:categorySlug/:categoryDetailSlug',
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
   COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',
