@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
 import { getIdFromUrl } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
@@ -20,7 +21,7 @@ export default function CategogyDetail() {
   console.log(data?.data, '-----------------')
 
   return (
-    <div className='div-cate'>
+    <>
       {isLoading ? (
         <LoadingCustom
           tip='Đang tải thông tin Khóa học'
@@ -31,16 +32,19 @@ export default function CategogyDetail() {
       ) : (
         <>
           <ImageCustom
+            preview={false}
             width='100%'
             height='500px'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
           />
           <div className='h2'>
-            <h2>{data?.data?.name}</h2>
-            <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.description }}></div>
+            <div className='div-cate'>
+              <h2>{data?.data?.name}</h2>
+              <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.description as any }}></div>
+            </div>
           </div>
         </>
       )}
-    </div>
+    </>
   )
 }
