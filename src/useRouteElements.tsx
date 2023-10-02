@@ -236,7 +236,15 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: PATH.CATEGORY_DETAIL,
+          path: PATH.SUBMENU_2,
+          element: (
+            <Layout user={profile} title=''>
+              <CategogyDetail />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.SUBMENU_3,
           element: (
             <Layout user={profile} title=''>
               <CategogyDetail />
