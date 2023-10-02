@@ -1,49 +1,46 @@
-import questionApi from '@/apis/question.api'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { stateAction } from '@/common'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
-import openNotification from '@/components/Notification'
-import TagCustom from '@/components/TagCustom/TagCustom'
 import { QuestionState } from '@/interface/question'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Card, Checkbox, Col, Popconfirm, Row, Space } from 'antd'
-import { useEffect } from 'react'
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
-import { MdOutlineDisabledVisible } from 'react-icons/md'
-import css from '../Questions/styles.module.scss'
+import { Space } from 'antd'
+import { useContext, useEffect, useState } from 'react'
+import RenderItem from './RenderItem'
+import { AppContext } from '@/contexts/app.context'
 type Props = {
   data: QuestionState[] | undefined
   type: 'questionsSelect' | 'questionsBank'
-  setQuestionsSelectData: React.Dispatch<React.SetStateAction<QuestionState[]>>
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  checkAll?: boolean
 }
 
 const RenderQuestion = (props: Props) => {
-  const { data, type, setQuestionsSelectData, setQuestionUpdate, setOpen } = props
-  const queryClient = useQueryClient()
-  const { status, mutate, error } = useMutation({
-    mutationFn: (id: string) => questionApi.deleteQuestion(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
-    },
-  })
+  const { data, type, setQuestionUpdate, setOpen, checkAll } = props
+  const { setQuestionList, questionList } = useContext(AppContext)
+  const [selectData, handleSelectData] = useState<QuestionState[]>([])
 
   useEffect(() => {
-    if (status === 'success') {
-      openNotification({ status: status, message: 'Xóa câu hỏi thành công' })
-    }
+    const dataActive = data?.filter((item) => item.status === 'ACTIVE')
+    if (questionList) handleSelectData(questionList)
+    if (checkAll && dataActive) handleSelectData(dataActive)
+    if (!checkAll) handleSelectData([])
+  }, [checkAll])
 
-    if (status === 'error' && error) {
-      openNotification({
-        status: status,
-        message: 'Thông báo',
-        description: ' Có lỗi xảy ra',
-      })
-    }
-  }, [status, error])
+  useEffect(() => {
+    setQuestionList(selectData)
+    console.log(selectData)
+  }, [selectData])
 
-  return !data?.length ? (
+  const handleCardClick = (id: string, item: QuestionState) => {
+    if (id)
+      if (selectData.find((item) => item._id === id)) {
+        stateAction(handleSelectData, id, item, 'remove')
+      } else {
+        stateAction(handleSelectData, id, item, 'add')
+      }
+  }
+
+  return !data?.length || !data ? (
     <EmptyCustom
       description={
         type === 'questionsSelect' ? (
@@ -57,91 +54,15 @@ const RenderQuestion = (props: Props) => {
     ></EmptyCustom>
   ) : (
     <Space direction='vertical' className={'sp100'}>
-      {data?.map((item, id) => (
-        <div className={css.qItem}>
-          {item.status === 'INACTIVE' && (
-            <div className={css.disable}>
-              <Space direction='vertical' align='center' className={'p-center'}>
-                <MdOutlineDisabledVisible className={css.iconDisable} />
-                <div>Câu hỏi đang được ẩn</div>
-              </Space>
-            </div>
-          )}
-          <Card size='small' key={item._id} className={'sp100'}>
-            <Checkbox
-              onChange={(e) =>
-                e.target.checked
-                  ? stateAction(setQuestionsSelectData, item._id, item, 'add')
-                  : stateAction(setQuestionsSelectData, item._id, null, 'remove')
-              }
-            >
-              <Space direction='vertical' className={'sp100'} style={{ minWidth: '74vw' }}>
-                <Row justify='space-between'>
-                  <Col span={24} md={19}>
-                    <Space>
-                      <h3>Câu {id + 1}: </h3>
-                      <TagCustom content={item.type} />
-                      <TagCustom color='gold' content={`${item.point} Điểm`} />
-                      <TagCustom
-                        intArrType={['EASY', 'MEDIUM', 'DIFFICULT']}
-                        intColor={['green', 'blue', 'red']}
-                        intAlternativeType={['Dễ', 'Vừa phải', 'Khó']}
-                        content={item.difficulty}
-                      />
-                    </Space>
-                  </Col>
-                  <Col>
-                    <Space size='small'>
-                      <ButtonCustom
-                        shape='circle'
-                        type='text'
-                        icon={<AiOutlineEdit />}
-                        size='small'
-                        onClick={() => {
-                          setQuestionUpdate(item)
-                          setOpen(true)
-                        }}
-                      ></ButtonCustom>
-                      <Popconfirm
-                        placement='right'
-                        title='Bạn có muốn xóa câu hỏi này?'
-                        onConfirm={() => mutate(item._id)}
-                        okText='Xóa'
-                        cancelText='Hủy'
-                      >
-                        <ButtonCustom
-                          shape='circle'
-                          type='text'
-                          icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
-                          size='small'
-                        ></ButtonCustom>
-                      </Popconfirm>
-                    </Space>
-                  </Col>
-                </Row>
-
-                <h4>{item.question}</h4>
-                <Card size='small' className={css.anws}>
-                  <Space className={'sp100'}>
-                    {item.choices.map((anw) => {
-                      if (anw.isCorrect) return <p className={css.isAnswer}>{anw.answer}</p>
-                    })}
-                    {item.choices.map((anw) => {
-                      if (!anw.isCorrect) return <p>{anw.answer}</p>
-                    })}
-                    {item.answer && item.answer}
-                  </Space>
-                </Card>
-                {item.hint && (
-                  <Space className={`${css.hint} sp100`} align='center'>
-                    <AiOutlineQuestionCircle />
-                    <p>{item.hint}</p>
-                  </Space>
-                )}
-              </Space>
-            </Checkbox>
-          </Card>
-        </div>
+      {data?.map((item) => (
+        <RenderItem
+          key={item._id}
+          data={item}
+          setOpen={setOpen}
+          setQuestionUpdate={setQuestionUpdate}
+          handleSave={handleCardClick}
+          selectData={selectData}
+        ></RenderItem>
       ))}
     </Space>
   )

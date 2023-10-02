@@ -5,12 +5,13 @@ import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import PaginationCustom from '@/components/PaginationCustom'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import { AppContext } from '@/contexts/app.context'
 import { ExamState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Checkbox, Space } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
 import { useLocation } from 'react-router-dom'
@@ -32,19 +33,20 @@ const MentorQuestions = () => {
 
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
+  const { questionList } = useContext(AppContext)
 
   const [openUpload, setOpenUpload] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
   const [myQues, setMyQues] = useState<boolean>(false)
+  const [checkAll, setCheckAll] = useState<boolean>(false)
   console.log(myQues)
 
   const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
   const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
-  const [questionsSelectData, setQuestionsSelectData] = useState<QuestionState[]>([])
   const [current, setCurrent] = useState<number>(1)
 
-  const questionsSelectId = questionsSelectData.map((item) => item._id)
+  const questionsSelectId = questionList?.map((item) => item._id)
 
   const updateExam: any = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
 
@@ -64,11 +66,11 @@ const MentorQuestions = () => {
       id: 'questions',
       name: 'Câu hỏi đã chọn',
       children: (
-        <Space direction='vertical' className={'sp100'}>
+        <div>
           <Space size='large' className={css.infor}>
             <Space>
               <p>Số câu hỏi:</p>
-              <b>{questionsSelectData?.length}</b>
+              <b>{!questionList ? 0 : questionList?.length}</b>
             </Space>
 
             <Space>
@@ -84,36 +86,35 @@ const MentorQuestions = () => {
                 onClick={() => setOpenUpload(true)}
               ></ButtonCustom>
 
-              <ButtonCustom type='primary' disabled={!questionsSelectData?.length} onClick={handleSave}>
+              <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
             </Space>
           </Space>
 
-          {questionsSelectData && (
+          <Space direction='vertical' size='large' className={'sp100'}>
             <RenderQuestion
-              data={questionsSelectData}
+              data={questionList}
               type='questionsSelect'
               setOpen={setOpen}
               setQuestionUpdate={setQuestionUpdate}
-              setQuestionsSelectData={setQuestionsSelectData}
             />
-          )}
 
-          <PaginationCustom
-            dataArr={questionsSelectData}
-            limit={10}
-            // callbackDataArr={setQuestionsData}
-            callbackCurrent={setCurrent}
-          />
-        </Space>
+            <PaginationCustom
+              dataArr={questionList}
+              limit={10}
+              // callbackDataArr={setQuestionsData}
+              callbackCurrent={setCurrent}
+            />
+          </Space>
+        </div>
       ),
     },
     {
       id: 'bankQuestion',
       name: 'Ngân hàng câu hỏi',
       children: (
-        <Space direction='vertical' className={'sp100'}>
+        <div>
           <Space size='large' className={css.infor}>
             <Space size='small'>
               <p>Số câu hỏi:</p>
@@ -121,27 +122,27 @@ const MentorQuestions = () => {
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
-              <b>{questionsSelectData?.length}</b>
+              <b>{!questionList ? 0 : questionList?.length}</b>
             </Space>
             <Checkbox onChange={(e) => setMyQues(e.target.checked)}>Câu hỏi của tôi</Checkbox>
+            <Checkbox onChange={(e) => setCheckAll(e.target.checked)}>Chọn tất cả</Checkbox>
           </Space>
-
-          {questions && (
-            <RenderQuestion
-              data={questions.docs}
-              type='questionsBank'
-              setOpen={setOpen}
-              setQuestionUpdate={setQuestionUpdate}
-              setQuestionsSelectData={setQuestionsSelectData}
-            />
-          )}
-          <PaginationCustom callbackCurrent={setCurrent} totalData={questions?.totalDocs} limit={10} />
-        </Space>
+          <Space direction='vertical' size='large' className={'sp100'}>
+            {questions && (
+              <RenderQuestion
+                data={questions.docs}
+                type='questionsBank'
+                setOpen={setOpen}
+                setQuestionUpdate={setQuestionUpdate}
+                checkAll={checkAll}
+              />
+            )}
+            <PaginationCustom callbackCurrent={setCurrent} totalData={questions?.totalDocs} limit={10} />
+          </Space>
+        </div>
       ),
     },
   ]
-
-  console.log(questionsSelectData)
 
   return !loading && examDetail ? (
     <div className={`${css.quesList}`}>

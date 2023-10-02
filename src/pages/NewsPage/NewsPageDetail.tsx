@@ -62,7 +62,7 @@ export default function NewsPageDetail() {
               >
                 <Meta
                   title={
-                    <Link className='link' to={`/news/${item?.id}`}>
+                    <Link className='dt-link' to={`/news/${item?.id}`}>
                       {item?.title}
                     </Link>
                   }
