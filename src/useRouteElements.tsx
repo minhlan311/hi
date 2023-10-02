@@ -20,7 +20,10 @@ import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/i
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
-import NewsPage from './pages/NewsPage/NewsPage.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
+import TeacherPage from './pages/TeacherPage/index.tsx'
+import CategogyDetail from './pages/Category/CategogyDetail.tsx'
+
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -231,6 +234,30 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title=''>
               <ProfilePage profile={profile} />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.TEACHER_PAGE,
+          element: (
+            <Layout user={profile} title='Giáo viên'>
+              <TeacherPage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.TEACHER_DETAIL,
+          element: (
+            <Layout user={profile}>
+              <TeacherPage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.CATEGORY_DETAIL,
+          element: (
+            <Layout>
+              <CategogyDetail />
             </Layout>
           ),
         },

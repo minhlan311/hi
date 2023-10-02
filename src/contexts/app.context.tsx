@@ -65,6 +65,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setStateFunction((prevState: any) => {
       const newArr = Array.isArray(prevState) ? [...prevState, ...item] : item
       setLocalFunction(newArr)
+
       return newArr
     })
   }

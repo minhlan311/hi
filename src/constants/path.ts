@@ -17,8 +17,7 @@ export const PATH = {
   PROFILES_DETAIL: '/profiles/:id',
 
   TEACHER_PAGE: '/giao-vien',
-  TEACHER_DETAIL: '/giao-vien/:parentSlug',
-  TEACHER_DETAIL_CHILD: '/giao-vien/:parentSlug/:childSlug',
+  TEACHER_DETAIL: '/giao-vien/:parentSlug/:childSlug',
 
   CATEGORY_DETAIL: 'khoa-hoc/:categorySlug/:categoryDetailSlug',
   // COURSE_PAGE: '/courses',

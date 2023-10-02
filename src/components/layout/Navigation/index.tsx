@@ -49,7 +49,7 @@ export default function Navigation({ user }: Props) {
                 )
               ) : (
                 <>
-                  {xl && xxl && (
+                  {(xl || xxl) && (
                     <Col>
                       <Space size='large'>
                         <Button type='primary' size='small'>

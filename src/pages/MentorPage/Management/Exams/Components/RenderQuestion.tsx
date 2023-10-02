@@ -1,36 +1,46 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { stateAction } from '@/common'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import { QuestionState } from '@/interface/question'
 import { Space } from 'antd'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import RenderItem from './RenderItem'
+import { AppContext } from '@/contexts/app.context'
 type Props = {
   data: QuestionState[] | undefined
   type: 'questionsSelect' | 'questionsBank'
-  setQuestionsSelectData: React.Dispatch<React.SetStateAction<QuestionState[]>>
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  checkAll?: boolean
 }
 
 const RenderQuestion = (props: Props) => {
-  const { data, type, setQuestionsSelectData, setQuestionUpdate, setOpen } = props
-
+  const { data, type, setQuestionUpdate, setOpen, checkAll } = props
+  const { setQuestionList, questionList } = useContext(AppContext)
   const [selectData, handleSelectData] = useState<QuestionState[]>([])
+
+  useEffect(() => {
+    const dataActive = data?.filter((item) => item.status === 'ACTIVE')
+    if (questionList) handleSelectData(questionList)
+    if (checkAll && dataActive) handleSelectData(dataActive)
+    if (!checkAll) handleSelectData([])
+  }, [checkAll])
+
+  useEffect(() => {
+    setQuestionList(selectData)
+    console.log(selectData)
+  }, [selectData])
 
   const handleCardClick = (id: string, item: QuestionState) => {
     if (id)
-      if (selectData.includes(id as unknown as any)) {
-        // Xóa card khỏi danh sách lưu trữ
-        handleSelectData(selectData.filter((id) => id._id !== item._id))
+      if (selectData.find((item) => item._id === id)) {
+        stateAction(handleSelectData, id, item, 'remove')
       } else {
-        // Thêm card vào danh sách lưu trữ
-        handleSelectData([...selectData, item])
+        stateAction(handleSelectData, id, item, 'add')
       }
   }
 
-  console.log(selectData)
-
-  return !data?.length ? (
+  return !data?.length || !data ? (
     <EmptyCustom
       description={
         type === 'questionsSelect' ? (
@@ -51,7 +61,7 @@ const RenderQuestion = (props: Props) => {
           setOpen={setOpen}
           setQuestionUpdate={setQuestionUpdate}
           handleSave={handleCardClick}
-          setQuestionsSelectData={setQuestionsSelectData}
+          selectData={selectData}
         ></RenderItem>
       ))}
     </Space>
