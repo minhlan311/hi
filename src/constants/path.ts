@@ -12,14 +12,12 @@ export const PATH = {
   ERROR_PAGE: '/error-page',
   SUBJECTS_PAGE: '/subjects',
   PROFILES: '/profiles',
-  NEWS: '/news/:id',
-  NEWS_PAGE: '/news/',
+  NEWS: '/tin-tuc/:id',
+  NEWS_PAGE: '/tin-tuc/',
   PROFILES_DETAIL: '/profiles/:id',
+  SUBMENU_3: ':menuSlug/:categorySlug/:categoryDetailSlug',
+  SUBMENU_2: ':menuSlug/:categorySlug/',
 
-  TEACHER_PAGE: '/giao-vien',
-  TEACHER_DETAIL: '/giao-vien/:parentSlug/:childSlug',
-
-  CATEGORY_DETAIL: 'khoa-hoc/:categorySlug/:categoryDetailSlug',
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
   COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',

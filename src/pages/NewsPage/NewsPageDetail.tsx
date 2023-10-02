@@ -42,7 +42,7 @@ export default function NewsPageDetail() {
       </div>
       <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
       <div className='other-news'>
-        <h3 className='other-news-title'>Bài viết liên quan</h3>
+        <h3 className='other-news-title '>Bài viết liên quan</h3>
         <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
           {dataNewsAll?.data?.docs?.map((item) => (
             <>
