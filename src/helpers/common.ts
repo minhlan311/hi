@@ -67,9 +67,10 @@ export function formatHour(timeString: string) {
 }
 
 // convert để lấy id xuống từ url
-export function getIdFromUrl(url: string) {
-  const pathArr = url.split('/')
-  const id = pathArr[pathArr.length - 1]
 
-  return id
+export function getIdFromUrl(path: string) {
+  const segments = path.split('/')
+  const lastSegment = segments.pop()
+  const lastSegmentWithoutHyphen = lastSegment?.substring(lastSegment.lastIndexOf('-') + 1)
+  return lastSegmentWithoutHyphen
 }
