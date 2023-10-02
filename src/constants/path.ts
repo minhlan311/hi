@@ -20,6 +20,7 @@ export const PATH = {
   TEACHER_DETAIL: '/giao-vien/:parentSlug',
   TEACHER_DETAIL_CHILD: '/giao-vien/:parentSlug/:childSlug',
 
+  CATEGORY_DETAIL: 'khoa-hoc/:categorySlug/:categoryDetailSlug',
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
   COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',

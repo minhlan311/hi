@@ -20,8 +20,7 @@ import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/i
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
-import TeacherPage from './pages/TeacherPage/index.tsx'
+import NewsPage from './pages/NewsPage/NewsPage.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -235,31 +234,6 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.TEACHER_PAGE,
-          element: (
-            <Layout user={profile} title='Giáo viên'>
-              <TeacherPage />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.TEACHER_DETAIL,
-          element: (
-            <Layout user={profile} title='Giáo viên'>
-              <TeacherPage />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.TEACHER_DETAIL_CHILD,
-          element: (
-            <Layout user={profile} title='Giáo viên'>
-              <TeacherPage />
-            </Layout>
-          ),
-        },
-
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
         { path: '*', element: <PageResult code={404} /> },

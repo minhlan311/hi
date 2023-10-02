@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserState } from '@/interface/user'
-import { Button, Col, DatePicker, Divider, Form, Input, Row, Space, Spin } from 'antd'
+import { Button, Col, DatePicker, Divider, Form, Input, Modal, Row, Space, Spin } from 'antd'
 import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
@@ -12,6 +12,7 @@ import userApi from '@/apis/user.api'
 import openNotification from '@/components/Notification'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
+import { useState } from 'react'
 type Props = { user: UserState; checkOk: any }
 
 type FieldType = {
@@ -24,8 +25,17 @@ type FieldType = {
 }
 
 const UpdateMentor = ({ user, checkOk }: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const queryClient = useQueryClient()
   const { id } = useParams()
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   const mutation = useMutation((dataForm: UserState) => {
     return userApi.updateUser(dataForm)
@@ -61,7 +71,14 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
     console.log('Failed:', errorInfo)
   }
 
+  const onFinishSocial = (values: any) => {
+    console.log('values:=====', values)
+    setIsModalOpen(false)
+    form.resetFields([''])
+  }
+
   const [form] = Form.useForm()
+  const [formSocial] = Form.useForm()
 
   form.setFieldsValue({
     fullName: user?.fullName,
@@ -141,12 +158,26 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                         name='social'
                         // rules={[{ required: true, message: 'Vui lòng điền đầy đủ họ tên' }]}
                       >
-                        <Input
-                          size='middle'
-                          style={{
-                            width: '150px',
-                          }}
-                        />
+                        <Modal title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
+                          <Form form={formSocial} onFinish={onFinishSocial}>
+                            <Form.Item name='facebook' label='Facebook'>
+                              <Input></Input>
+                            </Form.Item>
+                            <Form.Item name='instagram' label='Instagram'>
+                              <Input></Input>
+                            </Form.Item>
+                            <Form.Item name='tiktok' label='Tiktok'>
+                              <Input></Input>
+                            </Form.Item>
+                            <Form.Item name='youtube' label='Youtube'>
+                              <Input></Input>
+                            </Form.Item>
+                          </Form>
+                        </Modal>
+                        <Button type='dashed' className='dashed' onClick={showModal}>
+                          {' '}
+                          Mạng xã hội{' '}
+                        </Button>
                       </Form.Item>
                     </Space>
                   </Space>
