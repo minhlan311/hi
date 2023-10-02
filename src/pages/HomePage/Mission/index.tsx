@@ -6,6 +6,7 @@ import useResponsives from '@/hooks/useResponsives'
 
 export default function Mission() {
   const { sm } = useResponsives()
+
   return (
     <Header background='var(--lighish-white)'>
       <Space direction='vertical' className='sp100 ms-main'>

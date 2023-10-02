@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { UploadFile } from 'antd/lib'
 import { useState } from 'react'
-import { UploadOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Input, Popconfirm, Row, Select, Upload, UploadProps, message } from 'antd'
-import { ENDPOINT } from '@/constants/endpoint'
+import { UploadOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Col, Divider, Form, Input, Popconfirm, Row, Select, Upload } from 'antd'
 import { MentorForm, MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import userApi from '@/apis/user.api'
@@ -24,28 +22,15 @@ export default function UpdateCertificate() {
   const queryClient = useQueryClient()
 
   const [form] = Form.useForm()
-  const [fileList, setFileList] = useState<UploadFile[]>([])
 
-  const propsImageDocument: UploadProps = {
-    name: 'image',
-    multiple: true,
-    listType: 'picture-card',
-    action: import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
-    onChange(info) {
-      const { status } = info.file
-      setFileList(info.fileList)
-
-      if (status === 'done') {
-        message.success(`Tải file ${info.file.name} thành công.`)
-      } else if (status === 'error') {
-        message.error(`Tải file ${info.file.name} thất bại.`)
+  const diplomaData =
+    data?.diploma?.length &&
+    data?.diploma?.map((item: { schoolName: string; image: any }) => {
+      return {
+        schoolName: item.schoolName,
+        image: item?.image?.file?.response?.url,
       }
-    },
-  }
-  const diplomaData = data?.diploma?.fileList?.map((item: any) => ({
-    image: item?.response?.url,
-    schoolName: data?.schoolName,
-  }))
+    })
 
   const certificateData = data?.certificates?.fileList?.map((item: any) => item?.response?.url)
   const imageBefore = data?.imageBefore?.fileList?.map((item: any) => item?.response?.url)
@@ -59,6 +44,8 @@ export default function UpdateCertificate() {
   const result = diplomaData?.concat(otherDiplomaData)
 
   const onFinish = async (values: TMentorForm) => {
+    console.log(values, 'valuesvalues')
+
     setData(values)
   }
 
@@ -126,23 +113,64 @@ export default function UpdateCertificate() {
         >
           <Select size='large' placeholder='Học vị của bạn là ' options={optionsEducationType} />
         </Form.Item>
-        <Form.Item<TMentorForm>
-          label='Tên trường'
-          name='schoolName'
-          rules={[{ required: true, message: 'Vui lòng cập nhật trường của bạn' }]}
-        >
-          <Input size='large' placeholder='Tên trường của bạn' />
-        </Form.Item>
-
-        <Form.Item<TMentorForm>
-          label='Bằng cấp '
+        <br />
+        <Form.List
           name='diploma'
-          rules={[{ required: true, message: 'Vui lòng cập nhật bằng cấp' }]}
+          rules={[
+            {
+              validator: async (_, names) => {
+                if (!names || names.length < 2) {
+                  return Promise.reject(new Error('At least 2 passengers'))
+                }
+              },
+            },
+          ]}
         >
-          <Upload listType='picture-card' {...propsImageDocument} fileList={fileList}>
-            {fileList.length >= 8 ? null : <Button icon={<UploadOutlined />}></Button>}
-          </Upload>
-        </Form.Item>
+          {(fields, { add, remove }) => {
+            return (
+              <div>
+                {fields.map((field, index) => (
+                  <div key={field.key}>
+                    <Divider>Bằng cấp {index + 1}</Divider>
+                    <Form.Item noStyle name={[index, 'schoolName']} label='Tên bằng cấp'>
+                      <Input size='large' placeholder='Tên bằng cấp' />
+                    </Form.Item>
+                    <br />
+                    <br />
+                    <Form.Item label='Hình ảnh' name={[index, 'image']}>
+                      <Upload
+                        name='image'
+                        action={import.meta.env.VITE_FILE_ENDPOINT + '/upload/image'}
+                        listType='picture'
+                        maxCount={1}
+                      >
+                        <Button type='dashed' className='dashed' icon={<UploadOutlined />}>
+                          Tải hình ảnh
+                        </Button>
+                      </Upload>
+                    </Form.Item>
+                    {fields.length > 1 ? (
+                      <Button
+                        type='dashed'
+                        className='dashed'
+                        onClick={() => remove(field.name)}
+                        icon={<MinusCircleOutlined />}
+                      >
+                        Xóa bằng cấp
+                      </Button>
+                    ) : null}
+                  </div>
+                ))}
+                <Divider />
+                <Form.Item>
+                  <Button type='dashed' className='dashed' onClick={() => add()} style={{ width: '100%' }}>
+                    <PlusOutlined /> Thêm bằng cấp
+                  </Button>
+                </Form.Item>
+              </div>
+            )
+          }}
+        </Form.List>
         <Row gutter={64}>
           <Col>
             <UploadCer />
