@@ -22,6 +22,7 @@ import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.t
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import CategogyDetail from './pages/Category/CategogyDetail.tsx'
+import CategorySub from './pages/Category/CategorySub/CategorySub.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -239,7 +240,7 @@ export default function useRouteElements() {
           path: PATH.SUBMENU_2,
           element: (
             <Layout user={profile} title=''>
-              <CategogyDetail />
+              <CategorySub />
             </Layout>
           ),
         },
