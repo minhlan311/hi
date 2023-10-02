@@ -1,45 +1,7 @@
 .quesList {
-  .anws {
-    background-color: var(--lighish-white);
-    min-width: 100%;
-    width: 100%;
-  }
-  .isAnswer {
-    background-color: #0ec25c61;
-    border: 1px solid var(--green-2);
-    border-radius: 15px;
-    padding: 2px 10px;
-  }
-  .hint {
-    color: 12px;
-    color: var(--light-gray);
-    align-items: center;
-    & svg {
-      margin-top: 5px;
-    }
-  }
-  .qItem {
-    position: relative;
-    transition: 0.3s;
-    .disable {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      color: var(--white);
-      background-color: rgba(0, 0, 0, 0.3);
-      font-size: 16px;
-      border-radius: 12px;
-      .iconDisable {
-        font-size: 30px;
-      }
-    }
-    &:hover .disable {
-      display: none;
-    }
-  }
   .infor {
     position: absolute;
-    margin-top: -70px;
+    margin-top: -52px;
     right: 0;
   }
 }
