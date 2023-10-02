@@ -66,7 +66,13 @@ const Avatar = (props: Props) => {
           {nameParts[nameParts?.length - 1].charAt(0)}
         </Avt>
         {uploadImg && (
-          <UploadCustom cropBeforeUpload cropAspect={1} cropShape='round' callBackFileList={setFileList}>
+          <UploadCustom
+            cropBeforeUpload
+            cropAspect={1}
+            cropShape='round'
+            callBackFileList={setFileList}
+            maxFileSize={1}
+          >
             <div className={css.iconAdd}>
               <div className={css.icon}>
                 <LuImagePlus />

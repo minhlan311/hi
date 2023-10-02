@@ -34,7 +34,6 @@ const AffixCustom = (props: Props) => {
       const handleScroll = () => {
         const currentScrollPosition = window.scrollY
         const check = currentScrollPosition >= hiddenOffsetTop && currentScrollPosition > prevScrollPosition
-
         setHidden((type === 'down-hidden' && check) || (type === 'up-hidden' && !check))
         prevScrollPosition = currentScrollPosition
       }

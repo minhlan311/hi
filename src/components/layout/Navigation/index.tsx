@@ -23,7 +23,7 @@ type Props = {
 }
 
 export default function Navigation({ user }: Props) {
-  const { sm, md, lg } = useResponsives()
+  const { sm, md, xl, xxl } = useResponsives()
   useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
 
   return (
@@ -49,7 +49,7 @@ export default function Navigation({ user }: Props) {
                 )
               ) : (
                 <>
-                  {!lg && (
+                  {xl && xxl && (
                     <Col>
                       <Space size='large'>
                         <Button type='primary' size='small'>
@@ -123,7 +123,7 @@ export default function Navigation({ user }: Props) {
       </div>
 
       {md ? (
-        <AffixCustom type='fixed-bottom' zIndex={1020} style={{ left: 0, right: 0 }}>
+        <AffixCustom type='fixed-bottom' zIndex={9999} style={{ left: 0, right: 0 }}>
           <MenuNav user={user} />
         </AffixCustom>
       ) : (

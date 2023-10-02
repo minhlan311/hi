@@ -40,7 +40,7 @@ const ProfilePage = ({ profile }: Props) => {
   })
   const user = userData?.data
 
-  if (user) document.title = 'Thầy ' + user?.fullName + ' | Ucam'
+  if (user) document.title = (user.isMentor ? 'Thầy ' : '') + user?.fullName + ' | Ucam'
 
   const { data, mutate } = useMutation({ mutationFn: (body: UserState) => userApi.updateUser(body) })
 

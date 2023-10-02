@@ -6,10 +6,11 @@ import useResponsives from '@/hooks/useResponsives'
 
 export default function Mission() {
   const { sm } = useResponsives()
+
   return (
     <Header background='var(--lighish-white)'>
       <Space direction='vertical' className='sp100 ms-main'>
-        <Row justify='space-between' gutter={[24, 24]}>
+        <Row justify='space-between' gutter={[12, 24]}>
           <Col span={24} md={12}>
             <div className='ms-item'>
               <img
