@@ -32,7 +32,6 @@ const DrawerUpload = (props: Props) => {
   const onCloseDrawer = () => {
     setOpen(false)
   }
-  console.log(fileList)
 
   const onFinish = () => {
     if (fileList && categoryId) {
