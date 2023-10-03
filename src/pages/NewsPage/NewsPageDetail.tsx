@@ -9,13 +9,14 @@ import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { News } from '@/types/news.type'
+import LoadingCustom from '@/components/LoadingCustom'
 
 export default function NewsPageDetail() {
   const queryClient = useQueryClient()
   const { id } = useParams()
   const dataAllNews = queryClient.getQueryData<News>(['news'])
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['oneNew', id],
     queryFn: () => newsApi.getOneNews(id!),
   })
@@ -37,42 +38,49 @@ export default function NewsPageDetail() {
 
   return (
     <div className='container-news'>
-      <div className='title-box'>
-        <h1>{data?.data?.title}</h1>
-      </div>
-      <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
-      <div className='other-news'>
-        <h3 className='other-news-title'>Bài viết liên quan</h3>
-        <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
-          {dataNewsAll?.data?.docs?.map((item) => (
-            <>
-              {' '}
-              <Card
-                style={{
-                  height: '320px',
-                  margin: '0 8px',
-                }}
-                cover={
-                  <ImageCustom
-                    width='100%'
-                    height='150px'
-                    src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
-                  />
-                }
-              >
-                <Meta
-                  title={
-                    <Link className='dt-link' to={`/news/${item?.id}`}>
-                      {item?.title}
-                    </Link>
-                  }
-                  description={<Paragraph ellipsis={{ rows: 4 }}>{item?.description}</Paragraph>}
-                />
-              </Card>
-            </>
-          ))}
-        </SliderCustom>{' '}
-      </div>
+      {isLoading ? (
+        <LoadingCustom tip='Vui lòng chờ ...' />
+      ) : (
+        <>
+          {' '}
+          <div className='title-box'>
+            <h1>{data?.data?.title}</h1>
+          </div>
+          <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
+          <div className='other-news'>
+            <h3 className='other-news-title '>Bài viết liên quan</h3>
+            <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
+              {dataNewsAll?.data?.docs?.map((item) => (
+                <>
+                  {' '}
+                  <Card
+                    style={{
+                      height: '320px',
+                      margin: '0 8px',
+                    }}
+                    cover={
+                      <ImageCustom
+                        width='100%'
+                        height='150px'
+                        src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
+                      />
+                    }
+                  >
+                    <Meta
+                      title={
+                        <Link className='dt-link' to={`/news/${item?.id}`}>
+                          {item?.title}
+                        </Link>
+                      }
+                      description={<Paragraph ellipsis={{ rows: 4 }}>{item?.description}</Paragraph>}
+                    />
+                  </Card>
+                </>
+              ))}
+            </SliderCustom>{' '}
+          </div>
+        </>
+      )}
     </div>
   )
 }

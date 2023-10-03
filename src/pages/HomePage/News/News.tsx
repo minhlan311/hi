@@ -27,14 +27,14 @@ export default function News() {
       <div className='container-1200px'>
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Tin tức và Góc học tập</h3>
-        <Row justify={'center'} gutter={[32, 32]}>
+        <Row justify={'center'} gutter={[64, 32]}>
           {isLoading ? (
             <LoadingCustom />
           ) : (
             data?.data?.docs &&
             data?.data?.docs?.map((item) => (
               <>
-                <Col className='col'>
+                <Col md={12} span={24} className='col'>
                   <div className='imgBox'>
                     <Image
                       width='280px'
@@ -56,7 +56,7 @@ export default function News() {
                           style={{
                             maxWidth: '300px',
                           }}
-                          to={`/news/${item?.id}`}
+                          to={`/tin-tuc/${item?.id}`}
                         >
                           {item?.title}
                         </Link>
@@ -70,7 +70,7 @@ export default function News() {
             ))
           )}
         </Row>
-        <Button className='buttonMore' onClick={() => navigate('/news')}>
+        <Button className='buttonMore' onClick={() => navigate('/tin-tuc')}>
           Xem tất cả
         </Button>
       </div>
