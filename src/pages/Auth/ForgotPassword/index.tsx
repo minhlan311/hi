@@ -9,6 +9,7 @@ const ForgotPassword = () => {
   const onFinish = (values: any) => {
     authApi.forgot(values)
   }
+
   return (
     <Form form={form} name='forgot' onFinish={onFinish} layout='vertical'>
       <Form.Item
@@ -17,8 +18,8 @@ const ForgotPassword = () => {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập Email hoặc số điện thoại'
-          }
+            message: 'Vui lòng nhập Email hoặc số điện thoại',
+          },
         ]}
       >
         <Input placeholder='Nhập Email hoặc số điện thoại' size='large' />

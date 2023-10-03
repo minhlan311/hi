@@ -56,7 +56,7 @@ export default function News() {
                           style={{
                             maxWidth: '300px',
                           }}
-                          to={`/news/${item?.id}`}
+                          to={`/tin-tuc/${item?.id}`}
                         >
                           {item?.title}
                         </Link>
@@ -70,7 +70,7 @@ export default function News() {
             ))
           )}
         </Row>
-        <Button className='buttonMore' onClick={() => navigate('/news')}>
+        <Button className='buttonMore' onClick={() => navigate('/tin-tuc')}>
           Xem tất cả
         </Button>
       </div>
