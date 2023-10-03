@@ -61,11 +61,7 @@ export default function NewsPage() {
                     />
                   </div>
                   <div className='title-ellipsis-fixed'>
-                    <Paragraph
-                      ellipsis={true}
-                      onClick={() => navigate(`/tin-tuc-chi-tiet/${item?.id}`)}
-                      className='title-new'
-                    >
+                    <Paragraph ellipsis={true} onClick={() => navigate(`/tin-tuc/${item?.id}`)} className='title-new'>
                       {item?.title}
                     </Paragraph>
                     <Paragraph ellipsis={{ rows: 2 }}>{item?.description}</Paragraph>
