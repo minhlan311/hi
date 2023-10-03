@@ -6,6 +6,7 @@ import './CategoryDetail.scss'
 import { useLocation } from 'react-router-dom'
 import LoadingCustom from '@/components/LoadingCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import courseApi from '@/apis/course.api'
 
 export default function CategogyDetail() {
   const location = useLocation()
@@ -18,7 +19,23 @@ export default function CategogyDetail() {
     enabled: id ? true : false,
   })
 
-  console.log(data?.data, '-----------------')
+  const { data: listData } = useQuery({
+    queryKey: ['courseCalendar', currentPath],
+    queryFn: () => {
+      return courseApi.getCourses({
+        filterQuery: {
+          categoryId: id,
+        },
+        options: {
+          pagination: true,
+          limit: 10,
+        },
+      })
+    },
+    enabled: id ? true : false,
+  })
+
+  console.log(listData, 'listDatalistData')
 
   return (
     <>

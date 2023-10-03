@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Pagination } from 'antd'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { useNavigate } from 'react-router-dom'
+import LoadingCustom from '@/components/LoadingCustom'
 
 export default function NewsPage() {
   const [filter, setFilter] = useState({
@@ -16,7 +17,7 @@ export default function NewsPage() {
 
   const navigate = useNavigate()
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryFn: () => {
       return newsApi.getNews(filter)
     },
@@ -49,7 +50,10 @@ export default function NewsPage() {
       <div className='fixed'>
         <div className=''>
           <h2 className='h2'>Bài viết xem nhiều</h2>
-          {dataLimit?.data?.docs &&
+          {isLoading ? (
+            <LoadingCustom tip='Vui lòng chờ ...' />
+          ) : (
+            dataLimit?.data?.docs &&
             dataLimit?.data?.docs?.map((item) => (
               <>
                 <div className='flex-col-fixed'>
@@ -68,11 +72,15 @@ export default function NewsPage() {
                   </div>
                 </div>
               </>
-            ))}
+            ))
+          )}
         </div>
       </div>
       <h2 className='h2-title'>Tin tức</h2>
-      {data?.data?.docs &&
+      {isLoading ? (
+        <LoadingCustom tip='Vui lòng chờ ...' />
+      ) : (
+        data?.data?.docs &&
         data?.data?.docs?.map((item) => (
           <>
             <div className='flex-col'>
@@ -91,7 +99,9 @@ export default function NewsPage() {
               </div>
             </div>
           </>
-        ))}
+        ))
+      )}
+
       <div className='pagi'>
         <Pagination onChange={onchange} current={data?.data?.page} defaultCurrent={1} total={data?.data?.totalDocs} />
       </div>

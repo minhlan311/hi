@@ -17,6 +17,7 @@ export const PATH = {
   PROFILES_DETAIL: '/profiles/:id',
   SUBMENU_3: ':menuSlug/:categorySlug/:categoryDetailSlug',
   SUBMENU_2: ':menuSlug/:categorySlug/',
+  INTRODUCE: '/gioi-thieu',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
