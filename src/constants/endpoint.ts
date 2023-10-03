@@ -6,6 +6,7 @@ export const ENDPOINT = {
   REGISTER: '/auth/signup',
   LOGOUT: '/auth/logout',
   MENTOR: '/mentorInfo/',
+  CHANGE_PASSWORD: '/users/change-password/',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',

@@ -23,4 +23,10 @@ export type AuthResponse = {
   accessToken: string
 }
 
+export type ChangePassword = {
+  oldPassword: string
+  password: string
+  confirmPassword: string
+  id: string
+}
 // export type RefreshTokenReponse = SuccessResponse<{ access_token: string }>
