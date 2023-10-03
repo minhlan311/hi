@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Space } from 'antd'
+import { Button, Card, Col, Row, Space, Tooltip } from 'antd'
 import { BsArrowRightCircle } from 'react-icons/bs'
 import ball from '../../../assets/icons/ball.svg'
 import bird from '../../../assets/icons/bird.svg'
@@ -8,6 +8,7 @@ import categoryApi from '@/apis/categories.api'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
+import useResponsives from '@/hooks/useResponsives'
 
 export default function TopCourses() {
   const { data: categoriesData } = useQuery({
@@ -18,6 +19,7 @@ export default function TopCourses() {
       })
     },
   })
+  const { xl } = useResponsives()
 
   return (
     <Header size='sm' title='' desc='' padding='60px 0' background='var(--lighish-white)'>
@@ -62,7 +64,12 @@ export default function TopCourses() {
                         {item.countCourse > 0 ? `${item.countCourse}+ Khóa` : 'Chưa có khóa học nào'}
                       </Button>
                     </div>
-                    <div>{item.description}</div>
+                    <Tooltip title={item.description}>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                        className={xl ? undefined : 'dangerHTMLThreeLine'}
+                      ></div>
+                    </Tooltip>
                     <Button type='link' size='small'>
                       <Space>
                         <p>Xem thêm</p>
