@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { stateAction } from '@/common'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import RenderItem from './RenderItem'
+import { AppContext } from '@/contexts/app.context'
 import { QuestionState } from '@/interface/question'
 import { Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
-import RenderItem from './RenderItem'
-import { AppContext } from '@/contexts/app.context'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
-  data: QuestionState[] | undefined
+  data?: QuestionState[] | undefined
   type: 'questionsSelect' | 'questionsBank'
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -16,53 +15,39 @@ type Props = {
 
 const RenderQuestion = (props: Props) => {
   const { data, type, setQuestionUpdate, setOpen, checkAll } = props
-  const { setQuestionList, questionList } = useContext(AppContext)
-  const [selectData, handleSelectData] = useState<QuestionState[]>([])
+  const { setQuestionList } = useContext(AppContext)
+  const [dataActive, handleDataActive] = useState<string[]>([])
 
   useEffect(() => {
-    const dataActive = data?.filter((item) => item.status === 'ACTIVE')
-    if (questionList) handleSelectData(questionList)
-    if (checkAll && dataActive) handleSelectData(dataActive)
-    if (!checkAll) handleSelectData([])
+    if (type === 'questionsBank' && data?.length) {
+      const dataActive = data.filter((item) => item.status === 'ACTIVE')
+      const questionsSelectId = dataActive?.map((item) => item._id)
+      handleDataActive(questionsSelectId)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (checkAll && dataActive) setQuestionList(dataActive)
   }, [checkAll])
 
-  useEffect(() => {
-    setQuestionList(selectData)
-    console.log(selectData)
-  }, [selectData])
-
-  const handleCardClick = (id: string, item: QuestionState) => {
-    if (id)
-      if (selectData.find((item) => item._id === id)) {
-        stateAction(handleSelectData, id, item, 'remove')
-      } else {
-        stateAction(handleSelectData, id, item, 'add')
-      }
-  }
-
   return !data?.length || !data ? (
-    <EmptyCustom
-      description={
-        type === 'questionsSelect' ? (
-          <p>
-            Không có câu hỏi nào. <p>Có thể tạo câu hỏi hoặc thêm câu hỏi tại ngân hàng câu hỏi.</p>
-          </p>
-        ) : (
-          'Không có câu hỏi nào'
-        )
-      }
-    ></EmptyCustom>
+    <div style={{ marginTop: 100 }}>
+      <EmptyCustom
+        description={
+          type === 'questionsSelect' ? (
+            <p>
+              Không có câu hỏi nào. <p>Có thể tạo câu hỏi hoặc thêm câu hỏi tại ngân hàng câu hỏi.</p>
+            </p>
+          ) : (
+            'Không có câu hỏi nào'
+          )
+        }
+      ></EmptyCustom>
+    </div>
   ) : (
     <Space direction='vertical' className={'sp100'}>
       {data?.map((item) => (
-        <RenderItem
-          key={item._id}
-          data={item}
-          setOpen={setOpen}
-          setQuestionUpdate={setQuestionUpdate}
-          handleSave={handleCardClick}
-          selectData={selectData}
-        ></RenderItem>
+        <RenderItem key={item._id} data={item} setOpen={setOpen} setQuestionUpdate={setQuestionUpdate}></RenderItem>
       ))}
     </Space>
   )

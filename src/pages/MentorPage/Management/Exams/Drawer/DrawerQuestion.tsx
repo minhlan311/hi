@@ -89,11 +89,8 @@ const DrawerQuestion = (props: Props) => {
   }
 
   useEffect(() => {
-    if (isLoading && setLoading) {
+    if (setLoading) {
       setLoading(isLoading)
-      setTimeout(() => {
-        setLoading(false)
-      }, 200)
     }
   }, [isLoading])
 

@@ -114,7 +114,7 @@ const FilterAction = (props: Props) => {
         },
       },
     })
-  }, [page])
+  }, [page, filterQuery])
 
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
@@ -128,7 +128,9 @@ const FilterAction = (props: Props) => {
   }, [filterCallbackData])
 
   useEffect(() => {
-    setLoading && setLoading(isLoading)
+    if (setLoading) {
+      setLoading(isLoading)
+    }
   }, [isLoading])
 
   return (

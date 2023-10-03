@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const handleLocalAction = (
+export const localAction = (
   setData: React.Dispatch<React.SetStateAction<any[]>>,
   id: string,
   type: 'update' | 'remove',
