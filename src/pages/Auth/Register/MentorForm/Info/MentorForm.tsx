@@ -99,16 +99,12 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
             message: 'Vui lòng nhập mật khẩu',
           },
           {
-            min: 8,
-            message: 'Mật khẩu phải có ít nhất 8 ký tự',
+            min: 6,
+            message: 'Mật khẩu phải có ít nhất 6 ký tự',
           },
           {
             max: 32,
             message: 'Mật khẩu không quá 32 ký tự',
-          },
-          {
-            pattern: REGEX_PATTERN.regexPassword,
-            message: `Mật khẩu bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt`,
           },
         ]}
       >
@@ -125,17 +121,14 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
             message: 'Vui lòng nhập lại mật khẩu',
           },
           {
-            min: 8,
-            message: 'Mật khẩu phải có ít nhất 8 ký tự',
+            min: 6,
+            message: 'Mật khẩu phải có ít nhất 6 ký tự',
           },
           {
             max: 32,
             message: 'Mật khẩu không quá 32 ký tự',
           },
-          {
-            pattern: REGEX_PATTERN.regexPassword,
-            message: `Mật khẩu bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt`,
-          },
+
           ({ getFieldValue }) => ({
             validator(_, value) {
               if (!value || getFieldValue('password') === value) {

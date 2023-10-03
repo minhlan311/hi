@@ -7,6 +7,7 @@ export const PATH = {
   DOCUMENTS_DETAIL: '/documents/:id',
   QUIZZES: '/quizzes',
   TESTS: '/tests',
+  CHANGE_PASSWORD: '/change-password',
   QUIZZES_DETAIL: '/quizzes/:id',
   TESTS_DETAIL: '/tests/:id',
   ERROR_PAGE: '/error-page',

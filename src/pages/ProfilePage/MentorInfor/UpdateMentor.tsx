@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserState } from '@/interface/user'
-import { Button, Col, DatePicker, Divider, Form, Input, Modal, Row, Space, Spin } from 'antd'
+import { Button, Col, DatePicker, Divider, Form, Input, Modal, Row, Space, Spin, Tooltip } from 'antd'
+import { CheckCircleOutlined, StopOutlined } from '@ant-design/icons'
 import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
@@ -12,7 +13,7 @@ import userApi from '@/apis/user.api'
 import openNotification from '@/components/Notification'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 type Props = { user: UserState; checkOk: any }
 
 type FieldType = {
@@ -26,8 +27,11 @@ type FieldType = {
 
 const UpdateMentor = ({ user, checkOk }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [DataSocial, setDataSocial] = useState<{ type: string; url: string }[]>([])
   const queryClient = useQueryClient()
   const { id } = useParams()
+  const [form] = Form.useForm()
+  const [formSocial] = Form.useForm()
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -37,6 +41,10 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
     setIsModalOpen(false)
   }
 
+  useEffect(() => {
+    setDataSocial(user.socials)
+  }, [user])
+
   const mutation = useMutation((dataForm: UserState) => {
     return userApi.updateUser(dataForm)
   })
@@ -45,7 +53,7 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
     console.log('Success:', values)
 
     mutation.mutate(
-      { ...values, _id: id },
+      { ...values, _id: id, socials: DataSocial },
       {
         onSuccess: () => {
           openNotification({
@@ -58,7 +66,7 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
         },
         onError: () => {
           openNotification({
-            status: 'success',
+            status: 'error',
             message: 'Thông báo',
             description: 'Có lỗi xảy ra,vui lòng thử lại sau !',
           })
@@ -72,18 +80,28 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
   }
 
   const onFinishSocial = (values: any) => {
-    console.log('values:=====', values)
+    const tempArray = []
+
+    for (const [key, value] of Object.entries(values)) {
+      tempArray.push({ type: key, url: value })
+    }
+
+    setDataSocial(tempArray as any)
     setIsModalOpen(false)
     form.resetFields([''])
   }
-
-  const [form] = Form.useForm()
-  const [formSocial] = Form.useForm()
 
   form.setFieldsValue({
     fullName: user?.fullName,
     phoneNumber: user?.phoneNumber,
     email: user?.email,
+  })
+
+  formSocial.setFieldsValue({
+    facebook: user?.socials?.find((item) => item.type === 'facebook')?.url,
+    instagram: user?.socials?.find((item) => item.type === 'instagram')?.url,
+    tiktok: user?.socials?.find((item) => item.type === 'tiktok')?.url,
+    youtube: user?.socials?.find((item) => item.type === 'youtube')?.url,
   })
 
   return (
@@ -113,6 +131,30 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                       </Form.Item>
                     </Space>
                   </Space>
+                </Col>
+                <Col>
+                  {' '}
+                  <div className={css.flexButton}>
+                    <Tooltip title='Hủy bỏ'>
+                      {' '}
+                      <Button
+                        htmlType='button'
+                        type='dashed'
+                        className='dashed'
+                        onClick={() => {
+                          checkOk(false)
+                        }}
+                      >
+                        <StopOutlined />
+                      </Button>
+                    </Tooltip>
+
+                    <Tooltip title='Cập nhật'>
+                      <Button type='primary' htmlType='submit'>
+                        {mutation.isLoading ? <Spin /> : <CheckCircleOutlined />}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </Col>
               </Row>
               <Divider />
@@ -154,12 +196,15 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                     </div>
                     <Space direction='vertical'>
                       <b>Mạng xã hội</b>
-                      <Form.Item<FieldType>
-                        name='social'
-                        // rules={[{ required: true, message: 'Vui lòng điền đầy đủ họ tên' }]}
-                      >
-                        <Modal title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
-                          <Form form={formSocial} onFinish={onFinishSocial}>
+                      <Form.Item<FieldType> name='social'>
+                        <Modal
+                          destroyOnClose
+                          footer={[]}
+                          title='Mạng xã hội của bạn'
+                          open={isModalOpen}
+                          onCancel={handleCancel}
+                        >
+                          <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>
                             <Form.Item name='facebook' label='Facebook'>
                               <Input></Input>
                             </Form.Item>
@@ -172,6 +217,9 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                             <Form.Item name='youtube' label='Youtube'>
                               <Input></Input>
                             </Form.Item>
+                            <Button type='primary' htmlType='submit'>
+                              Đồng ý
+                            </Button>
                           </Form>
                         </Modal>
                         <Button type='dashed' className='dashed' onClick={showModal}>
@@ -238,20 +286,6 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                 </Col>
               </Row>
             </Space>
-          </div>
-          <div className={css.flexButton}>
-            <Button
-              htmlType='button'
-              type='dashed'
-              onClick={() => {
-                checkOk(false)
-              }}
-            >
-              Hủy bỏ
-            </Button>
-            <Button htmlType='submit' type='primary'>
-              Cập nhật {mutation.isLoading && <Spin />}
-            </Button>
           </div>
         </Col>
       </Form>
