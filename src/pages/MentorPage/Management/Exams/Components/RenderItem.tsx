@@ -1,28 +1,27 @@
-import { useEffect, useState } from 'react'
-import css from './RenderIten.module.scss'
-
-import questionApi from '@/apis/question.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import css from './RenderIten.module.scss'
 import openNotification from '@/components/Notification'
+import questionApi from '@/apis/question.api'
 import TagCustom from '@/components/TagCustom/TagCustom'
-import { QuestionState } from '@/interface/question'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Popconfirm, Row, Space } from 'antd'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
+import { AppContext } from '@/contexts/app.context'
+import { Card, Col, Popconfirm, Row, Space } from 'antd'
 import { MdOutlineDisabledVisible } from 'react-icons/md'
+import { QuestionState } from '@/interface/question'
 import { RiCloseCircleFill } from 'react-icons/ri'
+import { useContext, useEffect, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 type Props = {
   data: QuestionState
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  handleSave: (id: string, item: QuestionState) => void
-  selectData: QuestionState[]
 }
 
 const RenderItem = (props: Props) => {
-  const { data, setQuestionUpdate, setOpen, handleSave, selectData } = props
+  const { data, setQuestionUpdate, setOpen } = props
+  const { setQuestionList, questionList } = useContext(AppContext)
 
-  const [isSaved, setIsSaved] = useState(false)
   const [isHover, setIsHover] = useState(false)
   const queryClient = useQueryClient()
 
@@ -47,35 +46,29 @@ const RenderItem = (props: Props) => {
     }
   }, [status, error])
 
-  useEffect(() => {
-    if (selectData?.findIndex((val) => val._id === data._id)) {
-      setIsSaved(!isSaved)
-    }
-  }, [selectData])
+  if (data) {
+    const check = questionList?.includes(data._id)
 
-  if (data)
     return (
       <div className={css.qItem}>
         <div
-          className={`${data.status === 'INACTIVE' && css.disable} ${isSaved ? css.unSave : css.save}`}
+          className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
           onClick={() => {
-            setIsSaved(!isSaved)
-            handleSave(data._id, data)
+            setQuestionList(data._id as unknown as string[])
+            // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
           }}
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
           <Space direction='vertical' align='center' className={'p-center'}>
             {data.status === 'INACTIVE' && <MdOutlineDisabledVisible className={css.iconDisable} />}
-            <h3>
-              {data.status === 'INACTIVE' ? 'Câu hỏi đang được ẩn' : isSaved ? 'Xóa khỏi bộ đề' : 'Thêm vào bộ đề'}
-            </h3>
+            <h3>{data.status === 'INACTIVE' ? 'Câu hỏi đang được ẩn' : check ? 'Xóa khỏi bộ đề' : 'Thêm vào bộ đề'}</h3>
           </Space>
           <div className={css.iconCheck}>
-            {isHover && isSaved ? (
+            {isHover && check ? (
               <RiCloseCircleFill className={css.unCheck} />
             ) : (
-              isSaved && <b className={css.check}>{selectData?.findIndex((val) => val._id === data._id) + 1}</b>
+              check && <b className={css.check}>{questionList?.findIndex((val) => val === data._id) + 1}</b>
             )}
           </div>
         </div>
@@ -126,14 +119,21 @@ const RenderItem = (props: Props) => {
               </Col>
             </Row>
 
-            <h4>{data.question}</h4>
+            <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
             <Card size='small' className={css.anws}>
               <Space className={'sp100'}>
                 {data.choices.map((anw) => {
-                  if (anw.isCorrect) return <p className={css.isAnswer}>{anw.answer}</p>
+                  if (anw.isCorrect)
+                    return (
+                      <div
+                        className={css.isAnswer}
+                        key={anw._id}
+                        dangerouslySetInnerHTML={{ __html: anw.answer }}
+                      ></div>
+                    )
                 })}
                 {data.choices.map((anw) => {
-                  if (!anw.isCorrect) return <p>{anw.answer}</p>
+                  if (!anw.isCorrect) return <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
                 })}
                 {data.answer && data.answer}
               </Space>
@@ -141,13 +141,14 @@ const RenderItem = (props: Props) => {
             {data.hint && (
               <Space className={`${css.hint} sp100`} align='center'>
                 <AiOutlineQuestionCircle />
-                <p>{data.hint}</p>
+                <p dangerouslySetInnerHTML={{ __html: data.hint }}></p>
               </Space>
             )}
           </Space>
         </Card>
       </div>
     )
+  }
 }
 
 export default RenderItem

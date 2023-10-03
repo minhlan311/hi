@@ -1,5 +1,3 @@
-import { QuestionState } from '@/interface/question'
-
 export const LocalStorageEventTarget = new EventTarget()
 
 export const remoteQuestionsList = () => {
@@ -14,6 +12,6 @@ export const getQuestionsList = () => {
   return result ? JSON.parse(result) : null
 }
 
-export const setQuestionsListFromLS = (questionsList: QuestionState[]) => {
+export const setQuestionsListFromLS = (questionsList: string[]) => {
   localStorage.setItem('questionsList', JSON.stringify(questionsList))
 }
