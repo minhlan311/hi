@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   data?: QuestionState[] | undefined
-  type: 'questionsSelect' | 'questionsBank'
+  type: 'questionsSelected' | 'questionsBank'
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   checkAll?: boolean
@@ -34,7 +34,7 @@ const RenderQuestion = (props: Props) => {
     <div style={{ marginTop: 100 }}>
       <EmptyCustom
         description={
-          type === 'questionsSelect' ? (
+          type === 'questionsSelected' ? (
             <p>
               Không có câu hỏi nào. <p>Có thể tạo câu hỏi hoặc thêm câu hỏi tại ngân hàng câu hỏi.</p>
             </p>
@@ -47,7 +47,13 @@ const RenderQuestion = (props: Props) => {
   ) : (
     <Space direction='vertical' className={'sp100'}>
       {data?.map((item) => (
-        <RenderItem key={item._id} data={item} setOpen={setOpen} setQuestionUpdate={setQuestionUpdate}></RenderItem>
+        <RenderItem
+          type={type}
+          key={item._id}
+          data={item}
+          setOpen={setOpen}
+          setQuestionUpdate={setQuestionUpdate}
+        ></RenderItem>
       ))}
     </Space>
   )

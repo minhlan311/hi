@@ -1,16 +1,11 @@
-.text-area-custom {
-  border: 1px solid var(--gray);
-  .ql-toolbar {
-    padding: 0;
-    border-bottom: 1px solid var(--gray);
-    button {
-      width: 40px;
-      height: 40px;
-      padding: 10px;
-    }
-    .ql-active {
-      background-color: var(--gray);
-      color: var(--white) !important;
-    }
+.ck-custom {
+  position: relative;
+  .ck-placeholder {
+    color: #999;
+    position: absolute;
+    top: 52px;
+    left: 10px;
+    pointer-events: none;
+    z-index: 2;
   }
 }

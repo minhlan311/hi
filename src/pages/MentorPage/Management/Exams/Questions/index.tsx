@@ -145,7 +145,7 @@ const MentorQuestions = () => {
             <Space direction='vertical' size='large' className={'sp100'}>
               <RenderQuestion
                 data={questionsSelected?.docs}
-                type='questionsSelect'
+                type='questionsSelected'
                 setOpen={setOpen}
                 setQuestionUpdate={setQuestionUpdate}
               />

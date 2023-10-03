@@ -1,14 +1,15 @@
+import questionApi from '@/apis/question.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
-import questionApi from '@/apis/question.api'
-import TableAddonQues from '../Components/TableAddonQues'
-import { Choice } from '@/interface/test'
-import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { QuestionState } from '@/interface/question'
-import { useEffect, useState } from 'react'
+import { Choice } from '@/interface/test'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-// import { CKEditor } from '@ckeditor/ckeditor5-react'
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { Drawer, Form, Input, Select, Space, Switch } from 'antd'
+import { useEffect, useState } from 'react'
+import TableAddonQues from '../Components/TableAddonQues'
+// import { default } from '@default/default5-react'
+// import ClassicEditor from '@default/default5-build-classic'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -17,7 +18,6 @@ type Props = {
   categoryId: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setQuestionData: React.Dispatch<React.SetStateAction<QuestionState | null>>
-
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -54,7 +54,7 @@ const DrawerQuestion = (props: Props) => {
   const { isLoading, status, mutate, error } = useMutation({
     mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+      queryClient.invalidateQueries({ queryKey: ['questionsBank'] })
     },
   })
 
@@ -62,7 +62,8 @@ const DrawerQuestion = (props: Props) => {
     if (status === 'success') {
       openNotification({
         status: status,
-        message: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
+        message: 'Thông báo',
+        description: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
       })
       setOpen(false)
       form.resetFields()
@@ -94,6 +95,12 @@ const DrawerQuestion = (props: Props) => {
     }
   }, [isLoading])
 
+  useEffect(() => {
+    if (!open) {
+      setData(undefined)
+    }
+  }, [open])
+
   return (
     <div>
       <Drawer
@@ -124,18 +131,15 @@ const DrawerQuestion = (props: Props) => {
           initialValues={{ difficulty: 'EASY', skill: 'READING' }}
         >
           <h3>Câu hỏi</h3>
-          <Form.Item
+
+          <TextAreaCustom
             name='question'
             label='Nội dung câu hỏi'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập nội dung câu hỏi',
-              },
-            ]}
-          >
-            <Input placeholder='Nhập nội dung câu hỏi' />
-          </Form.Item>
+            type='default'
+            placeholder='Nhập nội dung câu hỏi'
+            required
+            data={data}
+          />
 
           <Space className='sp100'>
             <Form.Item
@@ -273,7 +277,7 @@ const DrawerQuestion = (props: Props) => {
                 ]}
               />
             </Form.Item>
-            {questionData && (
+            {data && (
               <Form.Item name='status' label='Trạng thái'>
                 <Switch checked={isCheck} onChange={() => setCheck(!isCheck)} />
               </Form.Item>
@@ -286,31 +290,31 @@ const DrawerQuestion = (props: Props) => {
             typeQues === 'SORT') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
           )) || (
-            <Form.Item
+            <TextAreaCustom
               name='answer'
               label='Đáp án'
-              rules={[
-                {
-                  required: true,
-                  message: 'Vui lòng nhập đáp án',
-                },
-              ]}
-            >
-              <Input placeholder='Nhập đáp án' />
-            </Form.Item>
+              type='default'
+              placeholder='Nhập đáp án'
+              required
+              data={data}
+            />
           )}
 
-          <Form.Item name='explanation' label='Giải thích'>
-            <Input.TextArea placeholder='Nhập giải thích'></Input.TextArea>
-            {/* <CKEditor
-              editor={ClassicEditor}
-              data={content}
-              onChange={(_event: any, editor: any) => setContent(editor.getData())}
-            /> */}
-          </Form.Item>
-          <Form.Item name='hint' label='Gợi ý'>
-            <Input.TextArea placeholder='Nhập gợi ý'></Input.TextArea>
-          </Form.Item>
+          <TextAreaCustom
+            name='explanation'
+            label='Giải thích'
+            type='default'
+            placeholder='Nhập giải thích'
+            data={data}
+          />
+
+          <TextAreaCustom
+            name='hint'
+            label='Gợi ý'
+            type='default'
+            placeholder='Nhập gợi ý'
+            data={data}
+          ></TextAreaCustom>
         </Form>
       </Drawer>
     </div>
