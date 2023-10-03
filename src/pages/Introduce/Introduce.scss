@@ -1,0 +1,60 @@
+.div-intro-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  .row-div {
+    margin: 50px 0;
+    padding-bottom: 50px;
+  }
+  .intro {
+    color: #d72831;
+  }
+  .title-UCAM {
+    padding: 10px 0;
+    font-size: 40px;
+    font-weight: 700;
+  }
+  .desc-UCAM {
+    padding-top: 10px;
+    line-height: 1.8;
+    font-size: 15px;
+    color: #999999;
+    max-width: 530px;
+  }
+  .group {
+    text-align: center;
+  }
+
+  .mb {
+    margin-bottom: 30px;
+  }
+}
+.div-slider {
+  padding: 10px 30px;
+}
+.res-introduce {
+  padding: 30px;
+  min-height: 200px;
+  background-color: #d72831;
+  text-align: center;
+  color: white;
+  .res-box-1200 {
+    max-width: 900px;
+    margin: auto;
+    text-align: start;
+    .res {
+      text-align: start;
+      font-size: 18px;
+    }
+  }
+  .div-input {
+    margin-top: 30px;
+    display: flex;
+    gap: 25px;
+  }
+  .btn-pri {
+    background-color: white;
+    color: #d72831;
+    // font-weight: 700;
+  }
+}
