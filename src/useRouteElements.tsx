@@ -9,7 +9,7 @@ import { AppContext } from './contexts/app.context'
 import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 import Login from './pages/Auth/Login/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
-import Courses from './pages/Courses/Courses.tsx'
+import Courses from './pages/CoursesPage/Courses.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
@@ -21,9 +21,10 @@ import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
-import CategogyDetail from './pages/Category/CategogyDetail.tsx'
-import CategorySub from './pages/Category/CategorySub/CategorySub.tsx'
-import Introduce from './pages/Introduce/Introduce.tsx'
+import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
+import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
+import Introduce from './pages/IntroducePage/Introduce.tsx'
+import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -183,6 +184,20 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
+        {
+          path: PATH.CHANGE_PASSWORD,
+          element: (
+            <AuthLayout
+              title='Thay đổi mật khẩu'
+              imgSize={14}
+              titleForm='Thay đổi mật khẩu'
+              descForm='Thay đổi mật khẩu của bạn'
+            >
+              <ChangePassword />
+            </AuthLayout>
+          ),
+        },
+
         // {
         //   path: PATH.PEDAGOGYS,
         //   element: (

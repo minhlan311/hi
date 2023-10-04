@@ -19,4 +19,8 @@ export interface UserState {
   educationType?: string
   birthday: string
   mentorInfo: MentorInfo
+  socials: {
+    type: string
+    url: string
+  }[]
 }

@@ -1,6 +1,6 @@
 import { ENDPOINT } from '@/constants/endpoint'
 import { UserState } from '@/interface/user'
-import { AuthResponse } from '@/types/auth.type'
+import { AuthResponse, ChangePassword } from '@/types/auth.type'
 import { Register } from '@/types/mentor.type'
 import { RegisterMentor } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
@@ -19,11 +19,14 @@ const authApi = {
   logout() {
     return http.post(ENDPOINT.LOGOUT)
   },
+  changePassword(body: ChangePassword) {
+    return http.put(ENDPOINT.CHANGE_PASSWORD + body.id, body)
+  },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   forgot(data: any) {
     return http.post<SuccessResponse<UserState[]>>(ENDPOINT.LOGIN, data)
-  }
+  },
 }
 
 export default authApi

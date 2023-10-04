@@ -21,6 +21,11 @@ import MentorInfor from './MentorInfor'
 import MentorVideo from './MentorVideo'
 import MyCourses from './MyCourses'
 import css from './styles.module.scss'
+import facebook from '../../assets/icons/facebook-logo.svg'
+import tiktok from '../../assets/icons/tiktok-icon.svg'
+import youtube from '../../assets/icons/youtube-logo.svg'
+import insta from '../../assets/icons/insta.png'
+
 type Props = {
   profile: UserState
 }
@@ -32,12 +37,14 @@ const ProfilePage = ({ profile }: Props) => {
   const [payload, setPayload] = useState<UserState>()
   const userId = location.pathname.split('/')[2]
   const { sm, md } = useResponsives()
+
   const { data: userData, isLoading } = useQuery({
     queryKey: ['userDetail'],
     queryFn: () => {
       return userApi.getUserDetail(userId)
     },
   })
+
   const user = userData?.data
 
   if (user) document.title = (user.isMentor ? 'Thầy ' : '') + user?.fullName + ' | Ucam'
@@ -120,6 +127,34 @@ const ProfilePage = ({ profile }: Props) => {
             <Space direction='vertical' className={css.inf}>
               {sm ? <h3>{user.fullName}</h3> : <h1>{user.fullName}</h1>}
               <p>Giảng viên Ielts</p>
+              <div className={css.flexSocials}>
+                {user?.socials &&
+                  user?.socials?.length > 0 &&
+                  user?.socials?.map((item) => (
+                    <>
+                      {item?.type === 'facebook' && item?.url && (
+                        <a href={item?.url} target='_blank' rel='noopener noreferrer'>
+                          <img width={20} src={facebook} />
+                        </a>
+                      )}
+                      {item?.type === 'tiktok' && item?.url && (
+                        <a href={item?.url} target='_blank' rel='noopener noreferrer'>
+                          <img width={20} src={tiktok} />
+                        </a>
+                      )}
+                      {item?.type === 'youtube' && item?.url && (
+                        <a href={item?.url} target='_blank' rel='noopener noreferrer'>
+                          <img width={20} src={youtube} />
+                        </a>
+                      )}
+                      {item?.type === 'instagram' && item?.url && (
+                        <a href={item?.url} target='_blank' rel='noopener noreferrer'>
+                          <img width={20} src={insta} />
+                        </a>
+                      )}
+                    </>
+                  ))}
+              </div>
             </Space>
           </Space>
         </Row>

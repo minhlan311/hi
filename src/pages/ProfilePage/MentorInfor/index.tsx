@@ -1,11 +1,12 @@
 import Header from '@/components/layout/Header/Header'
 import { UserState } from '@/interface/user'
 import { useState } from 'react'
-import { Button, Card, Col, Divider, Image, Row, Space } from 'antd'
+import { Button, Card, Col, Divider, Image, Row, Space, Tooltip } from 'antd'
 import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import { BsFillTelephoneFill } from 'react-icons/bs'
+import { FiEdit } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
 import malePic from '../../../assets/images/examimg/male-teacher.png'
@@ -70,7 +71,32 @@ const MentorInfor = ({ user }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                    <Col span={24} md={12}></Col>
+                    <Col span={24} md={12}>
+                      {' '}
+                      {!update && (
+                        <div
+                          style={{
+                            margin: ' 0 10px  10px 0',
+                            textAlign: 'end',
+                          }}
+                        >
+                          <Tooltip title='Thay đổi thông tin'>
+                            <Button
+                              type='dashed'
+                              className='dashed'
+                              onClick={() => {
+                                setUpdate(!update)
+                              }}
+                              style={{
+                                marginRight: '10px',
+                              }}
+                            >
+                              <FiEdit />
+                            </Button>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </Col>
                   </Row>
                   <Divider />
                   <Row justify='space-between'>
@@ -137,26 +163,6 @@ const MentorInfor = ({ user }: Props) => {
               </div>
             ) : (
               <UpdateMentor user={user} checkOk={setUpdate} />
-            )}
-            {!update && (
-              <div
-                style={{
-                  margin: ' 0 10px  10px 0',
-                  textAlign: 'end',
-                }}
-              >
-                <Button
-                  type='primary'
-                  onClick={() => {
-                    setUpdate(!update)
-                  }}
-                  style={{
-                    marginRight: '10px',
-                  }}
-                >
-                  Thay đổi thông tin
-                </Button>
-              </div>
             )}
           </Col>
         </Row>
