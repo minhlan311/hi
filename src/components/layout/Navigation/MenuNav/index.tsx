@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AvatarDropMenu from '../../AvatarDropMenu'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import categoryApi from '@/apis/categories.api'
@@ -13,7 +14,7 @@ import { IoCalendar, IoCalendarOutline, IoSchoolOutline } from 'react-icons/io5'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { MdSchool } from 'react-icons/md'
 import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { UserState } from '@/interface/user'
 import './styles.scss'
 import { useEffect, useState } from 'react'
@@ -45,6 +46,9 @@ export default function MenuNav({ user }: Props) {
   useEffect(() => {
     setOpen(false)
   }, [location])
+  const queryClient = useQueryClient()
+
+  const userData = queryClient.getQueryData<any>(['userDetail'])
 
   const transformArray = (originalArray: CategoryState[]): TransformedItem[] => {
     return originalArray?.map((item) => ({
@@ -230,14 +234,14 @@ export default function MenuNav({ user }: Props) {
           </Space>
         </Drawer>
       </div>
-      {user?.isMentor && user?.mentorInfo === null && (
+      {userData?.data?.isMentor && userData?.data?.mentorInfo === null && (
         <div className='verifyInfo'>
           Hãy cập nhật đầy đủ thông tin để sử dụng những tính năng dành riêng cho bạn
           <Button
             className='btn-ms'
             type='primary'
             onClick={() => {
-              navigate('/profiles/' + `${user._id}`)
+              navigate('/profiles/' + `${userData?.data?._id}`)
             }}
           >
             Cập nhật ngay
