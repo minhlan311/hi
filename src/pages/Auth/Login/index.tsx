@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
-import { REGEX_PATTERN } from '@/constants/utils'
 import { AuthState } from '@/interface/auth'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Checkbox, Form, Input, Space } from 'antd'
@@ -56,13 +55,10 @@ const Login = () => {
             message: 'Vui lòng nhập mật khẩu',
           },
           {
-            min: 8,
+            min: 6,
             message: 'Mật khẩu phải có ít nhất 8 ký tự',
           },
-          {
-            pattern: REGEX_PATTERN.regexPassword,
-            message: `Mật khẩu bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt`,
-          },
+      
         ]}
       >
         <Input.Password placeholder='Nhập mật khẩu' size='large' />

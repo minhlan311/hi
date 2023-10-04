@@ -24,6 +24,7 @@ export default function UpdateCertificate() {
   const [form] = Form.useForm()
 
   const diplomaData =
+    data?.diploma &&
     data?.diploma?.length &&
     data?.diploma?.map((item: { schoolName: string; image: any }) => {
       return {
@@ -83,7 +84,7 @@ export default function UpdateCertificate() {
             openNotification({
               status: 'error',
               message: 'Thông báo',
-              description: 'Có lỗi xảy ra,vui lòng thử lại sau !',
+              description: 'Vui lòng kiểm tra lại tất cả thông tin và thử lại sau !',
             })
           },
         },
@@ -118,15 +119,16 @@ export default function UpdateCertificate() {
           name='diploma'
           rules={[
             {
-              validator: async (_, names) => {
-                if (!names || names.length < 2) {
-                  return Promise.reject(new Error('At least 2 passengers'))
+              validator: (_, items) => {
+                if (!items || items.length === 0) {
+                  return Promise.reject(new Error('Bạn cần ít nhất một bằng cấp'))
                 }
+                return Promise.resolve()
               },
             },
           ]}
         >
-          {(fields, { add, remove }) => {
+          {(fields, { add, remove }, { errors }) => {
             return (
               <div>
                 {fields.map((field, index) => (
@@ -137,7 +139,11 @@ export default function UpdateCertificate() {
                     </Form.Item>
                     <br />
                     <br />
-                    <Form.Item label='Hình ảnh' name={[index, 'image']}>
+                    <Form.Item
+                      label='Hình ảnh'
+                      name={[index, 'image']}
+                      rules={[{ required: true, message: 'Vui lòng cập nhật bằng cấp của bạn' }]}
+                    >
                       <Upload
                         name='image'
                         action={import.meta.env.VITE_FILE_ENDPOINT + '/upload/image'}
@@ -166,6 +172,7 @@ export default function UpdateCertificate() {
                   <Button type='dashed' className='dashed' onClick={() => add()} style={{ width: '100%' }}>
                     <PlusOutlined /> Thêm bằng cấp
                   </Button>
+                  <Form.ErrorList errors={errors} />
                 </Form.Item>
               </div>
             )

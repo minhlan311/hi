@@ -20,7 +20,7 @@ const authApi = {
     return http.post(ENDPOINT.LOGOUT)
   },
   changePassword(body: ChangePassword) {
-    return http.put(ENDPOINT.CHANGE_PASSWORD + body.id)
+    return http.put(ENDPOINT.CHANGE_PASSWORD + body.id, body)
   },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

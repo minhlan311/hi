@@ -1,16 +1,24 @@
-.text-area-custom {
-  border: 1px solid var(--gray);
-  .ql-toolbar {
-    padding: 0;
-    border-bottom: 1px solid var(--gray);
-    button {
-      width: 40px;
-      height: 40px;
-      padding: 10px;
-    }
-    .ql-active {
-      background-color: var(--gray);
-      color: var(--white) !important;
+.ck-custom {
+  position: relative;
+  .ck-placeholder {
+    color: #999;
+    position: absolute;
+    top: 52px;
+    left: 10px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+  .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    min-height: 80px !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+
+  .ck-sticky-panel__content > * {
+    border-radius: 12px 12px 0 0 !important;
+    & :not(.ck-reset_all-excluded *) {
+      border-radius: 12px !important;
     }
   }
 }

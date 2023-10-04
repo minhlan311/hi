@@ -13,13 +13,14 @@ import { useContext, useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 type Props = {
+  type: 'questionsSelected' | 'questionsBank'
   data: QuestionState
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RenderItem = (props: Props) => {
-  const { data, setQuestionUpdate, setOpen } = props
+  const { type, data, setQuestionUpdate, setOpen } = props
   const { setQuestionList, questionList } = useContext(AppContext)
 
   const [isHover, setIsHover] = useState(false)
@@ -28,7 +29,7 @@ const RenderItem = (props: Props) => {
   const { status, mutate, error } = useMutation({
     mutationFn: (id: string) => questionApi.deleteQuestion(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+      queryClient.invalidateQueries({ queryKey: [type] })
     },
   })
 
@@ -135,7 +136,8 @@ const RenderItem = (props: Props) => {
                 {data.choices.map((anw) => {
                   if (!anw.isCorrect) return <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
                 })}
-                {data.answer && data.answer}
+
+                {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
               </Space>
             </Card>
             {data.hint && (

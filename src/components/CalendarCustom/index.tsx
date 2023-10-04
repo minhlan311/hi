@@ -10,9 +10,11 @@ import 'tui-time-picker/dist/tui-time-picker.css'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { ISchedule } from 'tui-calendar'
+import useResponsives from '@/hooks/useResponsives'
 
 const CalendarCustom = () => {
   const calRef = useRef(null)
+  const { xl, xxl } = useResponsives()
   const [openModal, setOpenModal] = useState(false)
   const [view, setView] = useState<string>('week')
   const [alltime, setAllTime] = useState(false)
@@ -132,7 +134,7 @@ const CalendarCustom = () => {
       </Row>
       <TuiCalendar
         ref={calRef}
-        height='500px'
+        height={(xl && '67vh') || (xxl && '75vh') || '80vh'}
         events={events}
         view={view}
         calendars={[
