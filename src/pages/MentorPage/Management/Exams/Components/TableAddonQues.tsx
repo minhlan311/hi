@@ -2,14 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
-import { Form, FormInstance, Input, InputRef, Popconfirm, Space, Table, message } from 'antd'
-
-import React, { useContext, useEffect, useId, useRef, useState } from 'react'
-import { AiOutlineDelete } from 'react-icons/ai'
-import { BiImageAdd } from 'react-icons/bi'
-import { MdPlaylistAdd } from 'react-icons/md'
-import { IoMusicalNoteOutline } from 'react-icons/io5'
 import { Choice } from '@/interface/test'
+import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { Form, FormInstance, Input, InputRef, Popconfirm, Space, Table, message } from 'antd'
+import React, { useContext, useEffect, useId, useRef, useState } from 'react'
+import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
+import { BiImageAdd } from 'react-icons/bi'
+import { IoMusicalNoteOutline } from 'react-icons/io5'
+import { MdPlaylistAdd } from 'react-icons/md'
 
 type Props = {
   selectionType:
@@ -27,7 +30,7 @@ type Props = {
   data: Choice[] | any
   isClose: boolean
 }
-
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {}
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
 
 interface Item {
@@ -39,6 +42,59 @@ interface Item {
 
 interface EditableRowProps {
   index: number
+  'data-row-key': string
+}
+
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  index: number
+  'data-row-key': string
+}
+
+interface EditableCellProps {
+  title: React.ReactNode
+  editable: boolean
+  children: React.ReactNode
+  dataIndex: keyof Item
+  record: Item
+  handleSave: (record: Item) => void
+}
+
+const EditableRowDragDrop = ({ children, index, ...props }: RowProps) => {
+  const [form] = Form.useForm()
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
+    id: props['data-row-key'],
+  })
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+    transition,
+    ...(isDragging ? { position: 'relative', zIndex: 9999 } : {}),
+  }
+
+  return (
+    <Form form={form} component={false}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} ref={setNodeRef} style={style} {...attributes}>
+          {React.Children.map(children, (child) => {
+            if ((child as React.ReactElement).key === 'sort') {
+              return React.cloneElement(child as React.ReactElement, {
+                children: (
+                  <AiOutlineMenu
+                    ref={setActivatorNodeRef}
+                    style={{ touchAction: 'none', cursor: 'move' }}
+                    {...listeners}
+                  />
+                ),
+              })
+            }
+
+            return child
+          })}
+        </tr>
+      </EditableContext.Provider>
+    </Form>
+  )
 }
 
 const EditableRow = ({ index, ...props }: EditableRowProps) => {
@@ -51,15 +107,6 @@ const EditableRow = ({ index, ...props }: EditableRowProps) => {
       </EditableContext.Provider>
     </Form>
   )
-}
-
-interface EditableCellProps {
-  title: React.ReactNode
-  editable: boolean
-  children: React.ReactNode
-  dataIndex: keyof Item
-  record: Item
-  handleSave: (record: Item) => void
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -164,7 +211,7 @@ const TableAddonQues = (props: Props) => {
     setDataSource(newData)
   }
 
-  const defaultColumns: (any & { editable?: boolean; dataIndex: string })[] = [
+  const [defaultColumns, setDefaultColumns] = useState<any[]>([
     {
       title: 'Đáp án',
       dataIndex: 'answer',
@@ -204,33 +251,36 @@ const TableAddonQues = (props: Props) => {
           </Popconfirm>
         ),
     },
-  ]
+  ])
+  useEffect(() => {
+    if (selectionType === 'SORT') {
+      const newOj = {
+        key: 'sort',
+      }
+      setDefaultColumns((prev) => [newOj, ...prev])
+    }
 
-  const fillBlankColumns: (any & { editable?: boolean; dataIndex: string })[] = [
-    {
-      title: 'Ô trống',
-      key: 'sst',
-      align: 'center',
-    },
-    {
-      title: 'Đáp án',
-      key: 'answer',
-      dataIndex: 'answer',
-      width: '65%',
-      editable: true,
-    },
-    {
-      title: 'Hành dộng',
-      align: 'center',
-      key: 'action',
-      render: (_: any, record: Choice) =>
-        dataSource.length >= 1 && (
-          <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
-            <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
-          </Popconfirm>
-        ),
-    },
-  ]
+    if (selectionType === 'FILL BLANK') {
+      const newOj = {
+        title: 'Ô trống',
+        key: 'sst',
+        align: 'center',
+      }
+
+      setDefaultColumns((prev) => [newOj, ...prev])
+    }
+  }, [selectionType])
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    if (active.id !== over?.id) {
+      setDataSource((previous) => {
+        const activeIndex = previous.findIndex((i) => i.key === active.id)
+        const overIndex = previous.findIndex((i) => i.key === over?.id)
+
+        return arrayMove(previous, activeIndex, overIndex)
+      })
+    }
+  }
 
   const handleAdd = () => {
     const newData: Choice = {
@@ -255,12 +305,12 @@ const TableAddonQues = (props: Props) => {
 
   const components = {
     body: {
-      row: EditableRow,
+      row: selectionType === 'SORT' ? EditableRowDragDrop : EditableRow,
       cell: EditableCell,
     },
   }
 
-  const columns = defaultColumns.map((col) => {
+  const columns = defaultColumns?.map((col) => {
     if (!col.editable) {
       return col
     }
@@ -322,28 +372,32 @@ const TableAddonQues = (props: Props) => {
       ])
   }, [isClose])
 
-  // const sortData = {
-  //   id:
-  // }
-
   return (
     <Space direction='vertical' className='sp100'>
       {selectionType === 'SORT' ? (
-        <Table
-          components={components}
-          rowClassName={() => 'editable-row'}
-          bordered
-          dataSource={dataSource}
-          columns={columns as ColumnTypes}
-          pagination={false}
-        />
+        <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
+          <SortableContext
+            items={dataSource.map((i) => i.key) as unknown as any[]}
+            strategy={verticalListSortingStrategy}
+          >
+            <Table
+              components={components}
+              rowClassName={() => 'editable-row'}
+              rowKey='key'
+              bordered
+              dataSource={dataSource}
+              columns={columns as ColumnTypes}
+              pagination={false}
+            />
+          </SortableContext>
+        </DndContext>
       ) : (
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
-          columns={selectionType === 'FILL BLANK' ? fillBlankColumns : (columns as ColumnTypes)}
+          columns={columns as ColumnTypes}
           pagination={false}
           rowSelection={{
             type:
