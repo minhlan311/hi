@@ -55,7 +55,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
 
   console.log(content, 'contentcontent')
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 200)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   console.log(content, 'content')
 
