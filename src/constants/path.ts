@@ -18,7 +18,11 @@ export const PATH = {
   PROFILES_DETAIL: '/profiles/:id',
   SUBMENU_3: ':menuSlug/:categorySlug/:categoryDetailSlug',
   SUBMENU_2: ':menuSlug/:categorySlug/',
+  SUBMENU_1: ':menuSlug/',
   INTRODUCE: '/gioi-thieu',
+  COURSE_SUB: '/khoa-hoc',
+  CHOICE_PAGE: '/trac-nghiem',
+  QA_PAGE: '/hoi-dap',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
