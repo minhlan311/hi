@@ -50,7 +50,7 @@ const TextAreaCustom = (props: Props) => {
             ]
           : []
       }
-      getValueFromEvent={(event, editor) => {
+      getValueFromEvent={(_event, editor) => {
         const data = editor.getData()
         setEditorContent(data)
 
