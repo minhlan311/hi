@@ -111,7 +111,17 @@ export default function MenuNav({ user }: Props) {
               {categoriesData.map((item) => (
                 <div key={`${item._id}`} className='menuLabel'>
                   <div className='labelItem'>
-                    <Link to={`${item.href}`} className='title'>
+                    <Link
+                      to={`${
+                        item.label === 'Giáo viên' ||
+                        item.label === 'Khóa học' ||
+                        item.label === 'Luyện thi' ||
+                        item.label === 'Lịch khai giảng'
+                          ? '#'
+                          : item.href
+                      } `}
+                      className='title'
+                    >
                       <Space style={{ width: '100%' }} size='small'>
                         {item?.href ? item.label : <div className='title'>{item.label}</div>}
                         {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}

@@ -15,6 +15,8 @@ export default function CategorySub() {
   const currentPath = location.pathname
   const id = getIdFromUrl(currentPath)
 
+  console.log('currentPath')
+
   const { data } = useQuery({
     queryKey: ['cateSub', currentPath],
     queryFn: () =>

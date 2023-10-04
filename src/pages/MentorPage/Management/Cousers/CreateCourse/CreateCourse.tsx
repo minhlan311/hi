@@ -22,6 +22,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -38,6 +39,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
+
     setContent(data)
   }
 
@@ -163,7 +165,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     },
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 300)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   return (
     <div>
