@@ -170,10 +170,13 @@ const TableAddonQues = (props: Props) => {
       dataIndex: 'answer',
       width: '65%',
       editable: true,
+      key: 'answer',
     },
     {
       title: 'Hình ảnh / Âm thanh',
       align: 'center',
+      key: 'upload',
+
       render: (_: any, record: Choice) => {
         console.log(record)
 
@@ -192,6 +195,34 @@ const TableAddonQues = (props: Props) => {
     {
       title: 'Hành dộng',
       align: 'center',
+
+      key: 'action',
+      render: (_: any, record: Choice) =>
+        dataSource.length >= 1 && (
+          <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
+            <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
+          </Popconfirm>
+        ),
+    },
+  ]
+
+  const fillBlankColumns: (any & { editable?: boolean; dataIndex: string })[] = [
+    {
+      title: 'Ô trống',
+      key: 'sst',
+      align: 'center',
+    },
+    {
+      title: 'Đáp án',
+      key: 'answer',
+      dataIndex: 'answer',
+      width: '65%',
+      editable: true,
+    },
+    {
+      title: 'Hành dộng',
+      align: 'center',
+      key: 'action',
       render: (_: any, record: Choice) =>
         dataSource.length >= 1 && (
           <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
@@ -312,15 +343,13 @@ const TableAddonQues = (props: Props) => {
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
-          columns={columns as ColumnTypes}
+          columns={selectionType === 'FILL BLANK' ? fillBlankColumns : (columns as ColumnTypes)}
           pagination={false}
           rowSelection={{
             type:
-              selectionType === 'MULTIPLE CHOICE'
-                ? 'checkbox'
-                : selectionType === 'SINGLE CHOICE'
-                ? 'radio'
-                : undefined,
+              (selectionType === 'MULTIPLE CHOICE' && 'checkbox') ||
+              (selectionType === 'SINGLE CHOICE' && 'radio') ||
+              undefined,
             onChange: handleSelect,
             selectedRowKeys: selectKey,
           }}

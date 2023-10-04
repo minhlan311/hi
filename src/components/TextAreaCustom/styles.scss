@@ -8,4 +8,17 @@
     pointer-events: none;
     z-index: 2;
   }
+
+  .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+  .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    min-height: 80px !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+
+  .ck-sticky-panel__content > * {
+    border-radius: 12px 12px 0 0 !important;
+    & :not(.ck-reset_all-excluded *) {
+      border-radius: 12px !important;
+    }
+  }
 }
