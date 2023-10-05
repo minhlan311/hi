@@ -1,3 +1,4 @@
+/* eslint-disable padding-line-between-statements */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
 import { AuthState } from '@/interface/auth'
@@ -8,11 +9,13 @@ import { useContext } from 'react'
 import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
 import openNotification from '@/components/Notification'
+import { validatePassword } from '@/constants/utils'
 
 const Login = () => {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const [form] = Form.useForm()
   const navitage = useNavigate()
+
   const { isLoading, mutate } = useMutation({ mutationFn: (body: AuthState) => authApi.login(body) })
 
   const onFinish = (values: AuthState) => {
@@ -51,14 +54,8 @@ const Login = () => {
         label='Mật khẩu'
         rules={[
           {
-            required: true,
-            message: 'Vui lòng nhập mật khẩu',
+            validator: validatePassword,
           },
-          {
-            min: 6,
-            message: 'Mật khẩu phải có ít nhất 8 ký tự',
-          },
-      
         ]}
       >
         <Input.Password placeholder='Nhập mật khẩu' size='large' />

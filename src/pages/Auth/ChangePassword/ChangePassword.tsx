@@ -6,6 +6,7 @@ import { AppContext } from '@/contexts/app.context'
 import authApi from '@/apis/auth.api'
 import { ChangePassword } from '@/types/auth.type'
 import openNotification from '@/components/Notification'
+import { validatePassword } from '@/constants/utils'
 
 export default function ChangePassword() {
   const { profile } = useContext(AppContext)
@@ -67,16 +68,7 @@ export default function ChangePassword() {
           label={'Mật khẩu mới'}
           rules={[
             {
-              required: true,
-              message: 'Vui lòng nhập mật khẩu',
-            },
-            {
-              min: 6,
-              message: 'Mật khẩu phải có ít nhất 6 ký tự',
-            },
-            {
-              max: 32,
-              message: 'Mật khẩu không quá 32 ký tự',
+              validator: validatePassword,
             },
           ]}
         >
@@ -89,16 +81,7 @@ export default function ChangePassword() {
           label={'Nhập lại mật khẩu'}
           rules={[
             {
-              required: true,
-              message: 'Vui lòng nhập lại mật khẩu',
-            },
-            {
-              min: 6,
-              message: 'Mật khẩu phải có ít nhất 6 ký tự',
-            },
-            {
-              max: 32,
-              message: 'Mật khẩu không quá 32 ký tự',
+              validator: validatePassword,
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
