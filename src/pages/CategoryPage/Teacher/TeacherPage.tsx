@@ -2,37 +2,33 @@
 import categoryApi from '@/apis/categories.api'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import { getIdFromUrl } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
-import './CategorySub.scss'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { Card, Col, Row } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function CategorySub() {
+export default function TeacherPage() {
   const location = useLocation()
   const currentPath = location.pathname
   const id = getIdFromUrl(currentPath)
 
-  console.log('currentPath')
-
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['cateSub', currentPath],
     queryFn: () =>
       categoryApi.getCategories({
-        parentId: id,
+        parentId: '650002b9dffb95727e9cb9e6',
       }),
     enabled: id ? true : false,
   })
 
-  const { data: detailData, isLoading } = useQuery({
+  const { data: detailData } = useQuery({
     queryKey: ['cateDetail', currentPath],
-    queryFn: () => categoryApi.getCategorieDetail(id!),
+    queryFn: () => categoryApi.getCategorieDetail('650002b9dffb95727e9cb9e6'),
     enabled: id ? true : false,
   })
   const navigate = useNavigate()
-  console.log(data?.data, '-----------------')
 
   return (
     <>

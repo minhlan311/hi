@@ -19,6 +19,13 @@ const queryClient = new QueryClient({
     },
   },
 })
+// const nextPage = (href: string, label: string) => {
+//   if (label === 'Giáo viên' || label === 'Khóa học' || label === 'Luyện thi' || label === 'Lịch khai giảng') {
+//     navigate('#')
+//   } else {
+//     navigate(href)
+//   }
+// }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

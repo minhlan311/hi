@@ -63,7 +63,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 200)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
     mutation.mutate(values)

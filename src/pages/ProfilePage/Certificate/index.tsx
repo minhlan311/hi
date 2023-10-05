@@ -40,6 +40,7 @@ const Certificate = ({ user }: Props) => {
                     <ImageCustom
                       styles={{
                         border: '1px solid',
+                        objectFit: 'contain',
                       }}
                       width='200px'
                       height='150px'
@@ -61,6 +62,7 @@ const Certificate = ({ user }: Props) => {
                   <ImageCustom
                     styles={{
                       border: '1px solid',
+                      objectFit: 'contain',
                     }}
                     width='200px'
                     height='150px'

@@ -114,7 +114,7 @@ export default function DrawerUpdateLession({
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 200)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
     delete values.document

@@ -25,6 +25,10 @@ import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
 import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
 import Introduce from './pages/IntroducePage/Introduce.tsx'
 import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
+import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
+import QAPage from './pages/QAPage/QAPage.tsx'
+import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
+
 /* eslint-disable react-refresh/only-export-components */
 
 function RejectedMentorRoute() {
@@ -185,6 +189,14 @@ export default function useRouteElements() {
           ),
         },
         {
+          path: PATH.MY_COURSE_LEARNING,
+          element: (
+            <Layout user={profile} title='Khóa học đã mua'>
+              <MycoursesLearning />
+            </Layout>
+          ),
+        },
+        {
           path: PATH.CHANGE_PASSWORD,
           element: (
             <AuthLayout
@@ -269,10 +281,27 @@ export default function useRouteElements() {
           ),
         },
         {
+          path: PATH.CHOICE_PAGE,
+          element: (
+            <Layout user={profile} title=''>
+              <ChoiceQuestionPage />
+            </Layout>
+          ),
+        },
+
+        {
           path: PATH.SUBMENU_3,
           element: (
             <Layout user={profile}>
               <CategogyDetail />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.QA_PAGE,
+          element: (
+            <Layout user={profile}>
+              <QAPage />
             </Layout>
           ),
         },
