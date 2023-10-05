@@ -31,13 +31,13 @@
 
 .expandableContent {
   width: 100%;
-  max-height: 200px;
+  max-height: 300px;
   overflow: hidden;
   transition: max-height 0.25s cubic-bezier(0, 1, 0, 1); /* Adjust cubic-bezier values */
 }
 
 .expanded {
-  max-height: 1000px; /* Adjust as needed */
+  max-height: none; /* Adjust as needed */
   transition: max-height 0.25s cubic-bezier(0, 0, 0, 0); /* Adjust cubic-bezier values */
 }
 
