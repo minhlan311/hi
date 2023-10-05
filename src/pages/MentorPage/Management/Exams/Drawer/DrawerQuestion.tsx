@@ -5,9 +5,13 @@ import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { QuestionState } from '@/interface/question'
 import { Choice } from '@/interface/test'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, Drawer, Form, Input, Row, Select, Space, Switch } from 'antd'
+import { Card, Col, Drawer, Form, Input, Row, Select, Space, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import TableAddonQues from '../Components/TableAddonQues'
+import { IoClose } from 'react-icons/io5'
+import { stateAction } from '@/common'
+import { debounce } from '@/helpers/common'
+import useResponsives from '@/hooks/useResponsives'
 // import {'ckeditor } from ''ckeditor5-react'
 // import ClassicEditor from ''ckeditor5-build-classic'
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -21,15 +25,118 @@ type Props = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<React.SetStateAction<any>> }) => {
+  const initData = {
+    answer: '',
+    isCorrect: false,
+    isChosen: false,
+  }
+  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+
+  const handleAdd = (type: 'row' | 'col') => {
+    if (type === 'row') {
+      setAddRow([...addRow, { ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+    } else {
+      setAddCol([...addCol, { ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+    }
+  }
+
+  const handleInputChange = (type: 'row' | 'col', id: string, value: string) => {
+    const updatedData = (type === 'row' ? addRow : addCol).map((item) => {
+      if (item._id === id) {
+        return {
+          ...item,
+          answer: value,
+        }
+      }
+
+      return item
+    })
+
+    if (type === 'row') {
+      setAddRow(updatedData)
+    } else {
+      setAddCol(updatedData)
+    }
+  }
+
+  useEffect(() => {
+    callBackChoices([{ rows: addRow, cols: addCol }])
+  }, [addRow, addCol])
+
+  return (
+    <div style={{ margin: '20px 0 30px' }}>
+      <Row gutter={12}>
+        <Col span={24} md={12}>
+          <Card size='small' title={'Hàng'}>
+            <Space direction='vertical' className='sp100'>
+              {addRow.map((item, id) => (
+                <Space key={item._id} className='sp100'>
+                  <b>{id + 1}</b>{' '}
+                  <Input
+                    placeholder='Nhập nội dung hàng'
+                    autoFocus
+                    className='sp100'
+                    onChange={(e) => debounce(handleInputChange('row', String(item._id), e.target.value), 500)}
+                  ></Input>
+                  {addRow.length > 1 && (
+                    <ButtonCustom
+                      icon={<IoClose />}
+                      type='text'
+                      onClick={() => stateAction(setAddRow, String(item._id), null, 'remove')}
+                    ></ButtonCustom>
+                  )}
+                </Space>
+              ))}
+              <ButtonCustom size='small' onClick={() => handleAdd('row')}>
+                Thêm hàng
+              </ButtonCustom>
+            </Space>
+          </Card>
+        </Col>
+        <Col span={24} md={12}>
+          <Card size='small' title={'Cột'}>
+            <Space direction='vertical' className='sp100'>
+              {addCol.map((item, id) => (
+                <Space key={item._id} className='sp100'>
+                  <b>{id + 1}</b>{' '}
+                  <Input
+                    placeholder='Nhập nội dung cột'
+                    autoFocus
+                    className='sp100'
+                    onChange={(e) => debounce(handleInputChange('col', String(item._id), e.target.value), 500)}
+                  ></Input>
+                  {addCol.length > 1 && (
+                    <ButtonCustom
+                      icon={<IoClose />}
+                      type='text'
+                      onClick={() => stateAction(setAddCol, String(item._id), null, 'remove')}
+                    ></ButtonCustom>
+                  )}
+                </Space>
+              ))}
+              <ButtonCustom size='small' onClick={() => handleAdd('col')}>
+                Thêm cột
+              </ButtonCustom>
+            </Space>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  )
+}
+
 const DrawerQuestion = (props: Props) => {
   const { open, questionData = null, categoryId, setOpen, setQuestionData, setLoading } = props
   const [form] = Form.useForm()
   const [choice, setChoice] = useState<Choice[]>([])
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState | null>(null)
-  const [typeQues, setTypeQues] = useState<string>()
+  const [typeQues, setTypeQues] = useState<string | null>(null)
   const [skillQues, setSkillQues] = useState<string>()
   const queryClient = useQueryClient()
+  const { sm, lg, xl, xxl } = useResponsives()
   useEffect(() => {
     if (questionData) {
       setData(questionData)
@@ -49,6 +156,7 @@ const DrawerQuestion = (props: Props) => {
     setData(null)
     setChoice([])
     setQuestionData(null)
+    setTypeQues(null)
   }
 
   const { isLoading, status, mutate, error, isSuccess } = useMutation({
@@ -74,8 +182,6 @@ const DrawerQuestion = (props: Props) => {
     }
   }, [isLoading])
 
-  // const [content, setContent] = useState('')
-
   const onFinish = (values: any) => {
     const payload = {
       ...values,
@@ -100,6 +206,7 @@ const DrawerQuestion = (props: Props) => {
   useEffect(() => {
     if (!open) {
       setData(null)
+      setTypeQues(null)
     }
   }, [open])
 
@@ -107,9 +214,9 @@ const DrawerQuestion = (props: Props) => {
     <div>
       <Drawer
         title={!data ? 'Thêm câu hỏi' : 'Chỉnh sửa câu hỏi'}
-        width={'45%'}
         onClose={onCloseDrawer}
         open={open}
+        width={(sm && '100vw') || (lg && '65vw') || (xl && '45vw') || (xxl && '42vw') || '100vw'}
         extra={
           <Space>
             <ButtonCustom
@@ -117,10 +224,11 @@ const DrawerQuestion = (props: Props) => {
                 setOpen(false)
                 form.resetFields()
               }}
+              size={sm ? 'small' : undefined}
             >
               Hủy
             </ButtonCustom>
-            <ButtonCustom onClick={() => form.submit()} type='primary'>
+            <ButtonCustom onClick={() => form.submit()} type='primary' size={sm ? 'small' : undefined}>
               {!data ? 'Tạo câu hỏi' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
@@ -297,11 +405,28 @@ const DrawerQuestion = (props: Props) => {
             typeQues === 'MULTIPLE CHOICE' ||
             typeQues === 'TRUE FALSE' ||
             typeQues === 'SORT' ||
-            typeQues === 'FILL BLANK') && (
+            typeQues === 'FILL BLANK' ||
+            typeQues === 'DRAG DROP' ||
+            typeQues === 'MATCHING') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
           )) ||
-            (typeQues === 'WRTING' && (
+            (typeQues === 'WRITING' && (
               <TextAreaCustom name='answer' label='Đáp án' placeholder='Nhập đáp án' required data={data} />
+            )) ||
+            (typeQues === 'LIKERT SCALE' && <LinkertScale callBackChoices={setChoice} />) ||
+            (typeQues === 'NUMERICAL' && (
+              <Form.Item
+                name='answer'
+                label='Đáp án'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập đáp án',
+                  },
+                ]}
+              >
+                <Input type='number' placeholder='Nhập đáp án' />
+              </Form.Item>
             )) || <></>}
 
           <TextAreaCustom name='explanation' label='Giải thích' placeholder='Nhập giải thích' data={data} />

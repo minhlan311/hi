@@ -74,9 +74,8 @@ export default function SliderCustom(props: Props) {
   }
 
   const checkArr = dataLength - slidesToShow
-  console.log(slidesToShow)
 
-  const NullArr = Array.from({ length: Math.abs(checkArr) }, (_, index) => index + 1)
+  const NullArr = checkArr > 0 ? [] : Array.from({ length: Math.abs(checkArr) }, (_, index) => index + 1)
 
   return (
     <div className={style.containerModule}>

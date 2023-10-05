@@ -12,7 +12,7 @@ import RenderQuestion from '../Components/RenderQuestion'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import { AiOutlineDelete, AiOutlinePlus } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { Checkbox, Space } from 'antd'
+import { Checkbox, Popconfirm, Space } from 'antd'
 import { ExamState } from '@/interface/exam'
 import { HiOutlineUpload } from 'react-icons/hi'
 import { QuestionState } from '@/interface/question'
@@ -87,6 +87,11 @@ const MentorQuestions = () => {
   const quesId = dataActive?.map((it) => it._id)
 
   const indeterminate = quesId?.every((e) => questionList?.includes(e))
+  const [tabChange, setTabChange] = useState<string>()
+
+  const handleChangeTab = (e: string) => {
+    setTabChange(e)
+  }
 
   const questionTabs = [
     {
@@ -94,7 +99,7 @@ const MentorQuestions = () => {
       name: 'Câu hỏi đã chọn',
       children: (
         <div>
-          {examDetail && questionList && (
+          {examDetail && (
             <FilterAction
               type='question'
               apiFind={questionApi.findQuestion}
@@ -104,6 +109,7 @@ const MentorQuestions = () => {
               page={currentSelected}
               keyFilter='questionsSelected'
               setLoading={setLoading}
+              checkQuery={tabChange}
             />
           )}
           <Space size='large' className={css.infor}>
@@ -113,27 +119,26 @@ const MentorQuestions = () => {
             </Space>
 
             <Space>
-              <ButtonCustom
-                onClick={() => setOpen(true)}
-                icon={<AiOutlinePlus />}
-                tooltip='Thêm câu hỏi'
-              ></ButtonCustom>
-
-              <ButtonCustom
-                icon={<HiOutlineUpload />}
-                tooltip='Thêm file câu hỏi'
-                onClick={() => setOpenUpload(true)}
-              ></ButtonCustom>
-              <ButtonCustom
-                disabled={!questionList?.length}
-                icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
-                tooltip='Xóa tất cả câu hỏi'
-                onClick={() => {
+              <Popconfirm
+                placement='right'
+                title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
+                onConfirm={() => {
                   handleSave()
                   setRemove(true)
+                  setTabChange('')
                   setQuestionList(questionList)
                 }}
-              ></ButtonCustom>
+                okText='Xóa'
+                cancelText='Hủy'
+              >
+                <ButtonCustom
+                  disabled={!questionList?.length}
+                  icon={<AiOutlineDelete />}
+                  tooltip='Xóa tất cả câu hỏi'
+                  danger
+                ></ButtonCustom>
+              </Popconfirm>
+
               <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
@@ -176,7 +181,7 @@ const MentorQuestions = () => {
               // setLoading={setLoading}
             />
           )}
-          <Space size='large' className={css.infor}>
+          <Space className={css.infor}>
             <Space size='small'>
               <p>Số câu hỏi:</p>
               <b>{questions?.totalDocs}</b>
@@ -197,6 +202,19 @@ const MentorQuestions = () => {
             >
               {!indeterminate ? 'Chọn' : 'Bỏ chọn'} tất cả
             </Checkbox>
+
+            <ButtonCustom
+              icon={<HiOutlineUpload />}
+              tooltip='Thêm file câu hỏi'
+              onClick={() => setOpenUpload(true)}
+            ></ButtonCustom>
+
+            <ButtonCustom
+              onClick={() => setOpen(true)}
+              icon={<AiOutlinePlus />}
+              tooltip='Thêm câu hỏi'
+              type='primary'
+            ></ButtonCustom>
           </Space>
           {loading ? (
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
@@ -223,7 +241,7 @@ const MentorQuestions = () => {
     <div className={`${css.quesList}`}>
       {/* <DragAndDrop /> */}
 
-      <TabsCustom data={questionTabs} />
+      <TabsCustom data={questionTabs} setting={{ onChange: handleChangeTab }} />
 
       <DrawerQuestion
         open={open}

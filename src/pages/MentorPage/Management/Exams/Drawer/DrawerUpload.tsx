@@ -24,13 +24,14 @@ const DrawerUpload = (props: Props) => {
   const { isLoading, mutate } = useMutation({
     mutationFn: (body) => questionApi.importQuestion(body),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questionFilter'] })
+      queryClient.invalidateQueries({ queryKey: ['questionsBank'] })
     },
   })
-  const [fileList, setFileList] = useState<any>()
+  const [fileList, setFileList] = useState<any | null>(null)
 
   const onCloseDrawer = () => {
     setOpen(false)
+    setFileList(null)
   }
 
   const onFinish = () => {

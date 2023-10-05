@@ -27,7 +27,6 @@ const Mentor = () => {
     },
   })
   const mentorData = userData?.data.docs
-  console.log(mentorData)
 
   return (
     <Header
@@ -52,7 +51,7 @@ const Mentor = () => {
                 autoplay
                 arrows
                 autoHitdenArrow
-                slidesToScroll={2}
+                slidesToScroll={sm ? 1 : 2}
                 slidesToShow={sm ? 1 : 4}
                 infinite
                 dots

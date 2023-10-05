@@ -30,9 +30,15 @@
   .unSave {
     opacity: 1;
     border: 2px solid var(--green);
+    h3 {
+      opacity: 0;
+    }
     &:hover {
       border: 2px solid var(--red);
       background-color: rgba(168, 109, 109, 0.6);
+      h3 {
+        opacity: 1;
+      }
     }
   }
   .disable {
@@ -41,6 +47,9 @@
     border: 2px solid transparent;
     &:hover .disable {
       display: none;
+    }
+    h3 {
+      opacity: 1;
     }
   }
 

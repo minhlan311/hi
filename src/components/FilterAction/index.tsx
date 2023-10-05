@@ -19,6 +19,7 @@ type Props = {
   page?: number
   className?: string
   filterQuery?: object
+  checkQuery?: boolean | any
 }
 
 const FilterAction = (props: Props) => {
@@ -33,6 +34,7 @@ const FilterAction = (props: Props) => {
     page = 1,
     className,
     filterQuery,
+    checkQuery,
   } = props
 
   const [form] = Form.useForm()
@@ -114,7 +116,7 @@ const FilterAction = (props: Props) => {
         },
       },
     })
-  }, [page, filterQuery])
+  }, [page, checkQuery])
 
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
