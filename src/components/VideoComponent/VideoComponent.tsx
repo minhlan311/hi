@@ -58,7 +58,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
     playbackRate: 1.0,
     volume: 1,
     loop: false,
-    seeking: false
+    seeking: false,
   })
   // const playerRef = useRef<HTMLDataElement | null>(null);
   const { playing, light, muted, loop, playbackRate, pip, volume } = state
@@ -112,7 +112,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
     setState({
       ...state,
       volume: parseFloat(e as string) / 100,
-      muted: e === 0 ? true : false
+      muted: e === 0 ? true : false,
     })
   }
 
@@ -167,15 +167,15 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
             onProgress={handleProgress}
             style={{
               width: '1200px',
-              height: '800px'
+              height: '800px',
             }}
             url={video}
             config={{
               file: {
                 attributes: {
-                  crossorigin: 'anonymous'
-                }
-              }
+                  crossorigin: 'anonymous',
+                },
+              },
             }}
           />
 

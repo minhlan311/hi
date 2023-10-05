@@ -28,6 +28,7 @@ export const PATH = {
   COURSE_DETAIL: '/courses/:id',
   COURSE_DETAIL_LEARNING: '/learning/:subjectSlug/:courseSlug/:topicSlug',
   MENTOR_PAGE: '/mentor',
+  MY_COURSE_LEARNING: '/myCourseLearning',
   MENTOR_COURSES: '/mentor/courses',
   MENTOR_CLASS: '/mentor/class',
   MENTOR_COURSES_CREATE: '/mentor/courses/create',
