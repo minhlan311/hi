@@ -25,7 +25,7 @@ export default function CourseCalender() {
   const [id, setId] = useState<string>()
 
   const { data: listData, isLoading } = useQuery({
-    queryKey: ['course', id, categoriesData?.data?.docs[0]?._id],
+    queryKey: ['course', id, categoriesData],
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
