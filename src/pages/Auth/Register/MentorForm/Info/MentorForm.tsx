@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useState } from 'react'
 import { DatePicker, Form, Input } from 'antd'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
-import { REGEX_PATTERN } from '@/constants/utils'
+import { REGEX_PATTERN, validatePassword } from '@/constants/utils'
 import { MentorForm as TMentorForm } from '../../constants'
 import { ROLE } from '../../Roles/constants'
 import { useNavigate } from 'react-router-dom'
@@ -95,16 +95,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         name='password'
         rules={[
           {
-            required: true,
-            message: 'Vui lòng nhập mật khẩu',
-          },
-          {
-            min: 6,
-            message: 'Mật khẩu phải có ít nhất 6 ký tự',
-          },
-          {
-            max: 32,
-            message: 'Mật khẩu không quá 32 ký tự',
+            validator: validatePassword,
           },
         ]}
       >
@@ -117,16 +108,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         hasFeedback
         rules={[
           {
-            required: true,
-            message: 'Vui lòng nhập lại mật khẩu',
-          },
-          {
-            min: 6,
-            message: 'Mật khẩu phải có ít nhất 6 ký tự',
-          },
-          {
-            max: 32,
-            message: 'Mật khẩu không quá 32 ký tự',
+            validator: validatePassword,
           },
 
           ({ getFieldValue }) => ({
