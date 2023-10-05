@@ -27,6 +27,7 @@ import Introduce from './pages/IntroducePage/Introduce.tsx'
 import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
 import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
+import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -184,6 +185,14 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Trang chủ'>
               <Courses />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.MY_COURSE_LEARNING,
+          element: (
+            <Layout user={profile} title='Khóa học đã mua'>
+              <MycoursesLearning />
             </Layout>
           ),
         },
