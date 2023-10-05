@@ -232,8 +232,9 @@ table {
   // }
 }
 
-:where(.css-dev-only-do-not-override-1ld4x6i).ant-carousel .slick-dots li button {
-  // background-color: var(--red);
+:where(.css-dev-only-do-not-override-1ld4x6i).ant-tooltip .ant-tooltip-inner {
+  min-height: auto;
+  min-width: auto;
 }
 
 .toastui-calendar-week-view .toastui-calendar-panel:not(.toastui-calendar-time) {

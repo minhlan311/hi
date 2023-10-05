@@ -7,7 +7,7 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Form, FormInstance, Input, InputRef, Popconfirm, Space, Table, message } from 'antd'
+import { Col, Form, FormInstance, Input, InputRef, Popconfirm, Row, Space, Table, message } from 'antd'
 import React, { useContext, useEffect, useId, useRef, useState } from 'react'
 import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
 import { BiImageAdd } from 'react-icons/bi'
@@ -211,7 +211,7 @@ const TableAddonQues = (props: Props) => {
     setDataSource(newData)
   }
 
-  const [defaultColumns, setDefaultColumns] = useState<any[]>([
+  const initColumns = [
     {
       title: 'Đáp án',
       dataIndex: 'answer',
@@ -251,8 +251,12 @@ const TableAddonQues = (props: Props) => {
           </Popconfirm>
         ),
     },
-  ])
+  ]
+
+  const [defaultColumns, setDefaultColumns] = useState<any[]>([])
   useEffect(() => {
+    setDefaultColumns(initColumns)
+
     if (selectionType === 'SORT') {
       const newOj = {
         key: 'sort',
@@ -374,7 +378,7 @@ const TableAddonQues = (props: Props) => {
 
   return (
     <Space direction='vertical' className='sp100'>
-      {selectionType === 'SORT' ? (
+      {(selectionType === 'SORT' && (
         <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
           <SortableContext
             items={dataSource.map((i) => i.key) as unknown as any[]}
@@ -391,24 +395,36 @@ const TableAddonQues = (props: Props) => {
             />
           </SortableContext>
         </DndContext>
-      ) : (
-        <Table
-          components={components}
-          rowClassName={() => 'editable-row'}
-          bordered
-          dataSource={dataSource}
-          columns={columns as ColumnTypes}
-          pagination={false}
-          rowSelection={{
-            type:
-              (selectionType === 'MULTIPLE CHOICE' && 'checkbox') ||
-              (selectionType === 'SINGLE CHOICE' && 'radio') ||
-              undefined,
-            onChange: handleSelect,
-            selectedRowKeys: selectKey,
-          }}
-        />
-      )}
+      )) ||
+        (selectionType === 'MATCHING' && (
+          <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            rowKey='key'
+            bordered
+            dataSource={dataSource}
+            columns={columns as ColumnTypes}
+            pagination={false}
+          />
+        )) || (
+          <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            bordered
+            dataSource={dataSource}
+            columns={columns as ColumnTypes}
+            pagination={false}
+            rowSelection={
+              selectionType === 'FILL BLANK'
+                ? undefined
+                : {
+                    type: selectionType === 'SINGLE CHOICE' ? 'radio' : 'checkbox',
+                    onChange: handleSelect,
+                    selectedRowKeys: selectKey,
+                  }
+            }
+          />
+        )}
       <ButtonCustom onClick={handleAdd} type='dashed' icon={<MdPlaylistAdd />} className='sp100'>
         Thêm đáp án
       </ButtonCustom>

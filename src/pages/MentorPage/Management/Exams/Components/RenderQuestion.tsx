@@ -1,11 +1,9 @@
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
-import RenderItem from './RenderItem'
 import { AppContext } from '@/contexts/app.context'
 import { QuestionState } from '@/interface/question'
-import { Space } from 'antd'
+import { Col, Row, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import { AiOutlinePlus } from 'react-icons/ai'
+import RenderItem from './RenderItem'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   data?: QuestionState[] | undefined
@@ -40,9 +38,6 @@ const RenderQuestion = (props: Props) => {
             <Space direction='vertical'>
               <p>Không có câu hỏi nào. </p>
               <p>Có thể tạo câu hỏi hoặc thêm câu hỏi tại ngân hàng câu hỏi.</p>{' '}
-              <ButtonCustom type='primary' onClick={() => setOpen(true)} icon={<AiOutlinePlus />}>
-                Thêm câu hỏi
-              </ButtonCustom>
             </Space>
           ) : (
             'Không có câu hỏi nào'
@@ -51,17 +46,21 @@ const RenderQuestion = (props: Props) => {
       ></EmptyCustom>
     </div>
   ) : (
-    <Space direction='vertical' className={'sp100'}>
+    <Row gutter={24}>
       {data?.map((item) => (
-        <RenderItem
-          type={type}
-          key={item._id}
-          data={item}
-          setOpen={setOpen}
-          setQuestionUpdate={setQuestionUpdate}
-        ></RenderItem>
+        <Col xxl={12} span={24}>
+          <Space direction='vertical' className={'sp100'}>
+            <RenderItem
+              type={type}
+              key={item._id}
+              data={item}
+              setOpen={setOpen}
+              setQuestionUpdate={setQuestionUpdate}
+            ></RenderItem>{' '}
+          </Space>
+        </Col>
       ))}
-    </Space>
+    </Row>
   )
 }
 

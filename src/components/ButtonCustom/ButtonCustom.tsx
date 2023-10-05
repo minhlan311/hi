@@ -19,6 +19,7 @@ type Props = {
   background?: string
   color?: string
   tooltip?: string
+  danger?: boolean
 }
 
 const ButtonCustom = (props: Props) => {
@@ -39,6 +40,7 @@ const ButtonCustom = (props: Props) => {
     background,
     color,
     tooltip,
+    danger,
   } = props
 
   return href ? (
@@ -54,6 +56,7 @@ const ButtonCustom = (props: Props) => {
           style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
           form={form}
           htmlType={htmlType}
+          danger={danger}
         >
           <div className={'custom-butt-icon'}>
             {icon} {children}
@@ -73,6 +76,7 @@ const ButtonCustom = (props: Props) => {
         style={{ fontWeight: fontWeight, ...style }}
         form={form}
         htmlType={htmlType}
+        danger={danger}
       >
         <div className={'custom-butt-icon'}>
           {icon} {children}

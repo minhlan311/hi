@@ -112,8 +112,9 @@ const RenderItem = (props: Props) => {
                     <ButtonCustom
                       shape='circle'
                       type='text'
-                      icon={<AiOutlineDelete style={{ color: 'var(--red)' }} />}
+                      icon={<AiOutlineDelete />}
                       size='small'
+                      danger
                     ></ButtonCustom>
                   </Popconfirm>
                 </Space>
