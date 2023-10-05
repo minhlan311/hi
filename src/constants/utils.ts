@@ -18,3 +18,13 @@ export const validatePassword = (_rule: any, value: any, callback: any) => {
     callback()
   }
 }
+
+export const validateName = (_rule: any, value: any, callback: any) => {
+  const regex = /^[a-zA-ZÀ-ỹ ]{2,}$/
+
+  if (!regex.test(value)) {
+    callback('Tên phải có 2 ký tự trở lên, không chứa ký tự đặc biệt và số !')
+  } else {
+    callback()
+  }
+}

@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useState } from 'react'
 import { DatePicker, Form, Input } from 'antd'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '@/apis/auth.api'
-import { REGEX_PATTERN, validatePassword } from '@/constants/utils'
+import { REGEX_PATTERN, validateName, validatePassword } from '@/constants/utils'
 import { MentorForm as TMentorForm } from '../../constants'
 import { ROLE } from '../../Roles/constants'
 import { useNavigate } from 'react-router-dom'
@@ -68,7 +68,11 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
       <Form.Item<TMentorForm>
         label='Họ tên'
         name='fullName'
-        rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+        rules={[
+          {
+            validator: validateName,
+          },
+        ]}
       >
         <Input size='large' placeholder='Nhập họ và tên của bạn' />
       </Form.Item>
