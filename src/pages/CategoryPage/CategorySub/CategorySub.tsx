@@ -56,7 +56,9 @@ export default function CategorySub() {
           <div className='h2'>
             <div className='div-cate'>
               <h2>{detailData?.data?.name}</h2>
+
               <div className='box-desc' dangerouslySetInnerHTML={{ __html: detailData?.data?.content as any }}></div>
+
               <div>
                 <Row gutter={[32, 32]} justify={'center'}>
                   {data?.data?.docs?.map((item) => (

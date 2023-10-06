@@ -22,7 +22,7 @@ export default function WrapMore({
   // titleSize,
   wrapper,
   maxWidth,
-  maxHeight
+  maxHeight,
 }: Props) {
   const [expanded, setExpanded] = useState(false)
   const [buttonRef, setButtonRef] = useState(false)
@@ -46,7 +46,7 @@ export default function WrapMore({
   return (
     <div
       style={{
-        maxWidth: maxWidth
+        maxWidth: maxWidth,
       }}
       className={wrapper === 'border' ? `${style.wrapper}` : `${style.wrapperNoneBorder}`}
     >
@@ -62,7 +62,7 @@ export default function WrapMore({
       <div className={style.App}>
         <div
           style={{
-            maxHeight: maxHeight
+            maxHeight: maxHeight,
           }}
           className={`${style.expandableContent} ${expanded ? `${style.expanded}` : ''}`}
         >
@@ -72,7 +72,7 @@ export default function WrapMore({
           <div className={style.flexButton}>
             <div>
               <span className={style.expandButton} onClick={toggleExpand}>
-                {expanded ? '表示件数を減らす' : 'もっと見る'}
+                {expanded ? 'thu gọn' : 'Xem thêm'}
               </span>
             </div>
             {!expanded ? <DownOutlined className={style.icons} /> : <UpOutlined className={style.icons} />}
