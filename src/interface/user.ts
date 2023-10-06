@@ -12,6 +12,7 @@ export interface UserState {
   emailStatus: string
   phoneStatus: string
   isMentor: boolean
+  mentorStatus?: string
   role: string[]
   refreshToken: string
   updatedById: string

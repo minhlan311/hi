@@ -13,6 +13,7 @@ export const PATH = {
   ERROR_PAGE: '/error-page',
   SUBJECTS_PAGE: '/subjects',
   PROFILES: '/profiles',
+  SCHEDULE: '/schedule',
   NEWS: '/tin-tuc/:id',
   NEWS_PAGE: '/tin-tuc/',
   PROFILES_DETAIL: '/profiles/:id',

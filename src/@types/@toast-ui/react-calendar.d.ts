@@ -4,10 +4,11 @@ declare module '@toast-ui/react-calendar' {
   import TuiCalendar, { ISchedule, IEvents, IOptions, IWeekOptions } from 'tui-calendar'
 
   type EventNameMapping = {
-    onAfterRenderSchedule: 'afterRenderSchedule'
-    onBeforeCreateSchedule: 'beforeCreateSchedule'
-    onBeforeDeleteSchedule: 'beforeDeleteSchedule'
-    onBeforeUpdateSchedule: 'beforeUpdateSchedule'
+    useFormPopup: 'useFormPopup'
+    onBeforeCreateEvent: 'beforeCreateEvent'
+    onBeforeUpdateEvent: 'beforeUpdateEvent'
+    onBeforeDeleteEvent: 'beforeDeleteEvent'
+    onAfterRenderEvent: 'afterRenderEvent'
     onClickDayname: 'clickDayname'
     onClickMore: 'clickMore'
     onClickSchedule: 'clickSchedule'

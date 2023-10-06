@@ -22,6 +22,10 @@ const AvatarDropMenu = (props: Props) => {
       key: 'profiles',
       label: <Link to={'/profiles/' + userData._id}>Trang cá nhân</Link>,
     },
+    !userData.isMentor && {
+      key: 'schedule',
+      label: <Link to='/schedule'>Lịnh học của tôi</Link>,
+    },
     {
       key: 'myCourseLearning',
       label: <Link to='/myCourseLearning'>Khóa học đã mua</Link>,

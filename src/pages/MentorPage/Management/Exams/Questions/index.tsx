@@ -52,8 +52,19 @@ const MentorQuestions = () => {
 
   const { mutate, status, error } = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
 
+  const dataActive = questions?.docs?.filter((item) => item.status === 'ACTIVE')
+
+  const quesId = dataActive?.map((it) => it._id)
+
+  const indeterminate = quesId?.every((e) => questionList?.includes(e))
+  const [tabChange, setTabChange] = useState<string>()
+
+  const handleChangeTab = (e: string) => {
+    setTabChange(e)
+  }
+
   const handleSave = () => {
-    if (examDetail && questionList.length > 0) {
+    if (examDetail) {
       const payload = {
         id: examDetail._id,
         questions: questionList,
@@ -81,17 +92,6 @@ const MentorQuestions = () => {
       })
     }
   }, [status, error])
-
-  const dataActive = questions?.docs?.filter((item) => item.status === 'ACTIVE')
-
-  const quesId = dataActive?.map((it) => it._id)
-
-  const indeterminate = quesId?.every((e) => questionList?.includes(e))
-  const [tabChange, setTabChange] = useState<string>()
-
-  const handleChangeTab = (e: string) => {
-    setTabChange(e)
-  }
 
   const questionTabs = [
     {

@@ -1,18 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import UploadCustom from '@/components/UploadCustom/UploadCustom'
-import { Choice } from '@/interface/test'
-import { DndContext, DragEndEvent } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { Form, FormInstance, Input, InputRef, Popconfirm, Space, Table, message } from 'antd'
 import React, { useContext, useEffect, useId, useRef, useState } from 'react'
+import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { BiImageAdd } from 'react-icons/bi'
+import { Choice } from '@/interface/test'
+import { CSS } from '@dnd-kit/utilities'
+import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { Form, FormInstance, Input, InputRef, message, Popconfirm, Space, Table } from 'antd'
 import { IoMusicalNoteOutline } from 'react-icons/io5'
 import { MdPlaylistAdd } from 'react-icons/md'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
   selectionType:

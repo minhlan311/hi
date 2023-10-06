@@ -6,7 +6,7 @@ import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 const classApi = {
   getClass(body: any) {
-    return http.post<SuccessResponse<Class>>(ENDPOINT.FIND_CLASS_PATH, body)
+    return http.post<SuccessResponse<Class[]>>(ENDPOINT.FIND_CLASS_PATH, body)
   },
   createClass(body: any) {
     return http.post<Class>(ENDPOINT.CLASS_PATH, body)
