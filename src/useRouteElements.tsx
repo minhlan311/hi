@@ -28,6 +28,7 @@ import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
 import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
 import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
+import SchedulePage from './pages/SchedulePage/index.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -207,6 +208,15 @@ export default function useRouteElements() {
             >
               <ChangePassword />
             </AuthLayout>
+          ),
+        },
+
+        {
+          path: PATH.SCHEDULE,
+          element: (
+            <Layout user={profile} title='Lịnh học của tôi'>
+              <SchedulePage />
+            </Layout>
           ),
         },
 

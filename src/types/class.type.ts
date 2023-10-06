@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Class {
+  createdById: string
+  createdBy: any
   _id?: string
+  title?: string
+  description?: string
   startDate?: string
   endDate?: string
   courseId?: string
@@ -13,6 +17,8 @@ export interface Class {
 }
 export interface ClassList {
   _id: string
+  title?: string
+  description?: string
   startDate: string
   endDate: string
   courseId: string

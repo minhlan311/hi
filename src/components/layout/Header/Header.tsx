@@ -46,7 +46,7 @@ const Header = (props: Props) => {
     style,
     size,
     theme,
-    styleChild
+    styleChild,
   } = props
 
   return (
@@ -57,7 +57,7 @@ const Header = (props: Props) => {
         background: background || `${theme === 'dark' && ' var(--gray)'}`,
         color: theme === 'dark' ? 'var(--white)' : undefined,
         margin: margin,
-        ...style
+        ...style,
       }}
     >
       <div
@@ -68,7 +68,7 @@ const Header = (props: Props) => {
       >
         <div
           style={{
-            background: backgroundTitle
+            background: backgroundTitle,
           }}
           className={css.typo}
         >
