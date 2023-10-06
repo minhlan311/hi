@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
+import { ClassState } from '@/interface/class'
 import { Class } from '@/types/class.type'
 
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 const classApi = {
   getClass(body: any) {
-    return http.post<SuccessResponse<Class[]>>(ENDPOINT.FIND_CLASS_PATH, body)
+    return http.post<SuccessResponse<ClassState[]>>(ENDPOINT.FIND_CLASS_PATH, body)
   },
   createClass(body: any) {
     return http.post<Class>(ENDPOINT.CLASS_PATH, body)

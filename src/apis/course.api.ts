@@ -18,7 +18,7 @@ type TopicsForm = {
 const courseApi = {
   getCourses(props: Props) {
     const {
-      filterQuery = { categoryId: '64ffe02e746fe5413cf8d1d5' },
+      filterQuery = {},
       options = {
         pagination: false,
         sort: { createdAt: -1 },
