@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
@@ -7,15 +8,50 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import { TCourse } from '@/types/course.type'
 import { formatPriceVND } from '@/helpers/common'
+import { AppContext } from '@/contexts/app.context'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import cartApi from '@/apis/cart.api'
+import openNotification from '@/components/Notification'
 type Props = {
   data?: TCourse
 }
 
 export default function VideoContent({ data }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
+  const [disable, setDisable] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { profile } = useContext(AppContext)
+
+  const queryClient = useQueryClient()
+  const mutate = useMutation({
+    mutationFn: (body: any) => {
+      return cartApi.addtoCart(body)
+    },
+    onSuccess: (data: any) => {
+      openNotification({
+        message: 'Thông báo',
+        status: data?.data?.message ? 'warning' : 'success',
+        description: data?.data?.message ? data?.data?.message : 'Thêm khóa học vào giỏ hàng thành công !',
+        duration: 1.5,
+      })
+      setDisable(true)
+      queryClient.invalidateQueries({ queryKey: ['dataCart'] })
+    },
+    onError: () => ({
+      message: 'Thông báo',
+      status: 'error',
+      description: 'Có lỗi xảy ra',
+    }),
+  })
+
+  const addCart = (id: string) => {
+    mutate.mutate({
+      userId: profile._id,
+      courseId: id,
+    })
+  }
 
   useEffect(() => {
     setDatas(data)
@@ -82,6 +118,8 @@ export default function VideoContent({ data }: Props) {
     }
   }, [])
 
+  console.log(datas, 'datasdatas')
+
   return (
     <div className={style.col2}>
       <Modal
@@ -135,10 +173,18 @@ export default function VideoContent({ data }: Props) {
             </p>
             <p>この価格で購入できるのは、あと2日!</p>
           </div>
-          <div className={style.boxButton}>
-            <ButtonCustom className={style.buttonCart} children='Thêm vào giỏ hàng' />
-            <ButtonCustom className={style.buttonDetail} children={'今すぐ購入する'} />
+
+          <div hidden={disable}>
+            <ButtonCustom
+              htmlType='submit'
+              className={style.buttonCart}
+              children='Thêm vào giỏ hàng'
+              onClick={() => {
+                addCart(datas!._id)
+              }}
+            />
           </div>
+          <ButtonCustom className={style.buttonDetail} children={'今すぐ購入する'} />
           <p className={style.refund}>30日間返金保証</p>
           <div className={style.boxLessonContent}>
             <div className={style.tagBox}>

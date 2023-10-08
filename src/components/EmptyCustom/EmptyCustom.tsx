@@ -1,5 +1,7 @@
 import { Empty, Space } from 'antd'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import { Link } from 'react-router-dom'
+import './EmptyCustom.scss'
 
 type Props = {
   buttonText?: string
@@ -26,10 +28,18 @@ const EmptyCustom = (props: Props) => {
       description={description}
     >
       <Space>
-        {buttonText && <ButtonCustom href={buttonHref}>{buttonText}</ButtonCustom>}
+        {buttonText && (
+          <ButtonCustom>
+            <Link className='white-text' to={buttonHref || '#'}>
+              {buttonText}
+            </Link>
+          </ButtonCustom>
+        )}
         {buttonPrimaryText && (
           <ButtonCustom type='primary' href={buttonPrimaryHref}>
-            {buttonPrimaryText}
+            <Link className='white-text' to={buttonHref || '#'}>
+              {buttonPrimaryText}
+            </Link>
           </ButtonCustom>
         )}
       </Space>
