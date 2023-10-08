@@ -1,7 +1,7 @@
 export interface CoursesState {
   _id: string
   name: string
-  coverUrl?: string
+  coverMedia?: string
   mentor: string
   type: 'BESS SELLER' | 'REVISION' | 'NEW'
   avgRating: number
