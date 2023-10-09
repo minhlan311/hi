@@ -61,8 +61,8 @@ export interface ExamState {
   slug: string
   owner: Owner
   countQuestions: number
-  countSelectedResponseQuestions: number
-  countConstructedResponseQuestions: number
+  countSelectedResponseQuestions: number[]
+  countConstructedResponseQuestions: number[]
   countUsersTested: number
   countUsersDoned: number
   countUsersIncompleted: number

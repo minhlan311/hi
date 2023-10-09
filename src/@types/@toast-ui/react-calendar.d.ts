@@ -11,8 +11,10 @@ declare module '@toast-ui/react-calendar' {
     onAfterRenderEvent: 'afterRenderEvent'
     onClickDayname: 'clickDayname'
     onClickMore: 'clickMore'
+    onClickEvent: 'clickEvent'
     onClickSchedule: 'clickSchedule'
     onClickTimezonesCollapseBtn: 'clickTimezonesCollapseBtn'
+    onSelectDateTime: 'selectDateTime'
   }
 
   type EventMaps = {

@@ -1,4 +1,3 @@
-import { CategoryState } from './category'
 import { UserState } from './user'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -34,22 +33,21 @@ export interface ClassState {
   _id: string
   createdById: string
   updatedById: string
+  _destroy: boolean
   title: string
   description: string
-  start: string
-  end: string
-  categoryId: string
-  students: any[]
+  courseId: string
+  students: string[]
   status: string
-  weekly: boolean
   plan: string
-  cost?: any
+  startDate: string
+  endDate: string
+  startAt: string
+  endAt: string
+  schedules: number[]
+  isRepeat: boolean
   createdAt: string
   updatedAt: string
-  category: CategoryState
-  course?: any
-  courseId?: string
-  owner: UserState
-  countStudents: number
   id: string
+  owner: UserState
 }
