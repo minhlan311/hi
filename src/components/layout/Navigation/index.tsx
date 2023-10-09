@@ -10,21 +10,37 @@ import youtube from '../../../assets/icons/youtube-logo.svg'
 import zalo from '../../../assets/icons/zalo.png'
 import { BiSolidDashboard } from 'react-icons/bi'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { Button, Col, Row, Space, Tooltip } from 'antd'
-import { Link } from 'react-router-dom'
+import { Badge, Button, Col, Row, Space, Tooltip } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 import { UserState } from '@/interface/user'
 import './styles.scss'
 import { useQuery } from '@tanstack/react-query'
 import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import { useContext } from 'react'
+import { AppContext } from '@/contexts/app.context'
+import cartApi from '@/apis/cart.api'
 
 type Props = {
   user?: UserState
 }
 
 export default function Navigation({ user }: Props) {
+  const navigate = useNavigate()
   const { sm, md, xl, xxl } = useResponsives()
   useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
+  const { profile } = useContext(AppContext)
+
+  const { data } = useQuery({
+    queryKey: ['dataCart'],
+    queryFn: () =>
+      cartApi.getCartList({
+        filterQuery: {
+          userId: profile?._id,
+        },
+      }),
+    enabled: profile?._id ? true : false,
+  })
 
   return (
     <div>
@@ -100,9 +116,11 @@ export default function Navigation({ user }: Props) {
                                 </Tooltip>
                               )
                             : null}
-                          <div className='cartIcon'>
-                            <BsFillCartFill />
-                          </div>
+                          <Badge color='#D72831' count={data?.data?.totalDocs}>
+                            <div className='cartIcon' onClick={() => navigate('/cart-page')}>
+                              <BsFillCartFill />
+                            </div>
+                          </Badge>
                           <div className='phoneIcon'>
                             <BsFillTelephoneFill />
                           </div>

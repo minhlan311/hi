@@ -41,7 +41,7 @@ export default function WrapMoreDetail({ children }: Props) {
                 onClick={toggleExpand}
                 style={{ fontSize: '14px', fontWeight: '700', color: '#000' }}
               >
-                {expanded ? '表示件数を減らす' : 'もっと見る'}
+                {expanded ? 'Thu gọn' : 'Xem thêm'}
               </Button>
             </div>
           </div>

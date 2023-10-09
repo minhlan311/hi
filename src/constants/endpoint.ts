@@ -57,6 +57,11 @@ export const ENDPOINT = {
   FIND_NOTE_PATH: '/edu/notes/find',
   NOTE_PATH: '/edu/notes',
 
+  // :::::::::::::::::::: CART PATH :::::::::::::::::::::
+  CART_FIND: '/cart/find',
+  CART_DELETE_COURSE: '/cart/delete-course/',
+  CART_ADD: '/cart/add-to-cart',
+
   // :::::::::::::::::::: SUBJECT PATH :::::::::::::::::::::
   SUBJECT_PATH: '/subjects/find',
 

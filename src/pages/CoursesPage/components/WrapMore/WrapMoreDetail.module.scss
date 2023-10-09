@@ -30,7 +30,7 @@ body {
 
 .expandableContent {
   width: 100%;
-  max-height: 670px;
+  max-height: 700px;
   overflow: hidden;
   transition: max-height 0.25s cubic-bezier(0, 1, 0, 1); /* Adjust cubic-bezier values */
 }
