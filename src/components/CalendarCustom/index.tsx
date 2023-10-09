@@ -16,6 +16,9 @@ import 'tui-time-picker/dist/tui-time-picker.css'
 import openNotification from '../Notification'
 import { EventObject } from '@/interface/class'
 import { ISchedule } from 'tui-calendar'
+import courseApi from '@/apis/course.api'
+import SelectCustom from '../SelectCustom/SelectCustom'
+import userApi from '@/apis/user.api'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const CalendarCustom = () => {
@@ -28,8 +31,12 @@ const CalendarCustom = () => {
   const [events, setEvents] = useState<ISchedule[]>([])
   const [eventDetail, setEventDetail] = useState<ISchedule>()
 
-  const { data: courses } = useQuery({
-    queryKey: ['courses'],
+  const { mutate, isLoading, status, isSuccess } = useMutation({
+    mutationFn: (body) => classApi.createClass(body),
+  })
+
+  const { data: categorys } = useQuery({
+    queryKey: ['categorys'],
     queryFn: () => {
       return categoryApi.getCategories({
         parentId: '64ffde9c746fe5413cf8d1af',
@@ -38,7 +45,7 @@ const CalendarCustom = () => {
   })
 
   const { data: classEvents } = useQuery({
-    queryKey: ['classEvents'],
+    queryKey: ['classEvents', isSuccess],
     queryFn: () => {
       return classApi.getClass({
         createdById: profile._id,
@@ -50,8 +57,8 @@ const CalendarCustom = () => {
     if (classEvents?.data?.totalDocs) {
       const newEvent = classEvents?.data?.docs?.map((item) => {
         const currentTime = moment()
-        const startTime = moment(item.startAt)
-        const endTime = moment(item.endAt)
+        const startTime = moment(item.start)
+        const endTime = moment(item.end)
         const between = currentTime.isBetween(startTime, endTime)
         const endClass = currentTime.isAfter(endTime)
 
@@ -62,13 +69,13 @@ const CalendarCustom = () => {
           title: item.title,
           body: item.description,
           calendarId: item.courseId,
-          start: item.startAt,
-          end: item.endAt,
+          start: item.start,
+          end: item.end,
           backgroundColor: '#019d44b5',
           color: 'var(--white)',
           location: 'Class online',
           category: 'time',
-          attendees: [item.createdBy.fullName],
+          attendees: [item?.owner?.fullName],
           isReadOnly: profile._id !== item.createdById,
           isPrivate: true,
           recurrenceRule: between ? '1' : '',
@@ -78,13 +85,9 @@ const CalendarCustom = () => {
 
       setEvents(newEvent as unknown as ISchedule[])
     }
-  }, [classEvents])
+  }, [classEvents, status])
 
-  const { mutate, isLoading, status, isSuccess } = useMutation({
-    mutationFn: (body) => classApi.createClass(body),
-  })
-
-  const subjectList = courses?.data?.docs?.map((sj) => ({
+  const subjectList = categorys?.data?.docs?.map((sj) => ({
     value: sj._id,
     label: sj.name,
   }))
@@ -98,11 +101,13 @@ const CalendarCustom = () => {
       title: values.title,
       description: values.description,
       courseId: values.courseId,
-      startDate: values.time[0].$d,
-      endDate: values.time[1].$d,
-      startAt: values.time[0].$d,
-      endAt: values.time[1].$d,
-      schedules: [2, 4, 6],
+      start: values.time[0].$d,
+      end: values.time[1].$d,
+      categoryId: values.categoryId,
+      students: [],
+      weekly: values.weekly ? true : false,
+      plan: values.plan,
+      cost: parseInt(values.cost),
     }
 
     mutate(payload as unknown as any)
@@ -338,8 +343,32 @@ const CalendarCustom = () => {
           <Form.Item label='Mô tả' name='description'>
             <Input.TextArea placeholder='Nhập mô tả' />
           </Form.Item>
-          <Form.Item label='Khóa học' name='courseId' rules={[{ required: true }]}>
-            <Select placeholder='Chọn khóa học' options={subjectList} />
+
+          <Form.Item label='Chọn loại' name='plan' rules={[{ required: true }]}>
+            <SelectCustom
+              placeholder='Chọn loại'
+              options={[
+                { value: 'FREE', label: 'Miễn phí' },
+                { value: 'PREMIUM', label: 'Trả phí' },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item label='Giá' name='cost'>
+            <Input type='number' placeholder='Nhập giá' />
+          </Form.Item>
+
+          <Form.Item label='Khóa học' name='courseId'>
+            <SelectCustom
+              placeholder='Tìm kiếm khóa học'
+              type='search'
+              searchKey='courses'
+              apiFind={courseApi.getCourses}
+              filterQuery={{ createdById: profile._id }}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item label='Môn học' name='categoryId' rules={[{ required: true }]}>
+            <Select placeholder='Chọn môn học' options={subjectList} />
           </Form.Item>
           <Form.Item label='Thời gian cuộc họp' name='time' rules={[{ required: true }]}>
             <DatePicker.RangePicker
@@ -350,15 +379,24 @@ const CalendarCustom = () => {
               format={'HH:mm DD/MM/YYYY'}
             />
           </Form.Item>
-
-          <Space>
+          <Space.Compact>
             <Form.Item name='allDay'>
               <Checkbox>Cả ngày</Checkbox>
             </Form.Item>
-            <Form.Item name='everyWeek'>
+            <Form.Item name='weekly'>
               <Checkbox>Hàng tuần</Checkbox>
             </Form.Item>
-          </Space>
+          </Space.Compact>
+          <Form.Item label='Thêm người tham dự' name='students'>
+            <SelectCustom
+              placeholder='Tìm kiếm tham người dự'
+              type='search'
+              searchKey='user'
+              apiFind={userApi.findUser}
+              mode='multiple'
+              allowClear
+            />
+          </Form.Item>
         </Form>
       </Modal>
     </Space>

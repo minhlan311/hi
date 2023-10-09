@@ -1,3 +1,6 @@
+import { CategoryState } from './category'
+import { UserState } from './user'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface EventObject {
   id?: string
@@ -26,18 +29,27 @@ export interface EventObject {
   customStyle?: React.CSSProperties
   raw?: any
 }
+
 export interface ClassState {
   _id: string
   createdById: string
   updatedById: string
-  _destroy: boolean
-  startDate: string
-  endDate: string
-  startAt: string
-  endAt: string
-  courseId: string
-  schedules: number[]
+  title: string
+  description: string
+  start: string
+  end: string
+  categoryId: string
+  students: any[]
+  status: string
+  weekly: boolean
+  plan: string
+  cost?: any
   createdAt: string
   updatedAt: string
+  category: CategoryState
+  course?: any
+  courseId?: string
+  owner: UserState
+  countStudents: number
   id: string
 }
