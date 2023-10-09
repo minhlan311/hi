@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type TCourse = {
-  _id: string
+  data: any
+  _id?: string
   createdById: string
   updatedById: string
   _destroy: boolean

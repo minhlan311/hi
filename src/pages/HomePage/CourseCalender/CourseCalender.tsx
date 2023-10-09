@@ -89,7 +89,7 @@ export default function CourseCalender() {
             listData?.data?.docs?.map((item) => (
               <Col className='col'>
                 <Card
-                  onClick={() => handleClickCourse(item?._id)}
+                  onClick={() => handleClickCourse(item._id!)}
                   hoverable
                   style={{ width: 340, height: 410 }}
                   cover={

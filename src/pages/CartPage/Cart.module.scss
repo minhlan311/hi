@@ -2,9 +2,15 @@
   max-width: 1200px;
   margin: auto;
 }
+.pagina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 @import '../../components/GlobalStyles/globalStyles.scss';
 .cart {
   padding: 30px 0;
+  min-height: 90vh;
   .renderCart {
     margin-top: 32px;
 
@@ -22,19 +28,17 @@
       flex-direction: column-reverse;
     }
     .cartLeft {
-      // li {
-      //   display: block;
-      // }
-
+      max-height: 600px;
+      overflow-y: scroll;
       .cart {
         width: 100%;
-        margin-bottom: 25px;
+        // margin-bottom: 25px;
       }
       .favorite {
         width: 100%;
       }
       .divider {
-        margin: 5px 0;
+        margin-top: 50px;
       }
     }
 

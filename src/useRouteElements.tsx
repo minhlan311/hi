@@ -183,14 +183,6 @@ export default function useRouteElements() {
       element: <ProtectedRoute />,
       children: [
         {
-          path: PATH.COURSE_DETAIL,
-          element: (
-            <Layout user={profile} title='Trang chủ'>
-              <Courses />
-            </Layout>
-          ),
-        },
-        {
           path: PATH.CART,
           element: (
             <Layout user={profile} title='Giỏ hàng của bạn'>
@@ -228,26 +220,20 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-
-        // {
-        //   path: PATH.PEDAGOGYS,
-        //   element: (
-        //     <AuthLayout
-        //       title='Cập nhật thông tin'
-        //       imgSize={14}
-        //       titleForm='Cập nhật thông tin'
-        //       descForm='Hãy cập nhật đầy đủ thông tin của bạn , để trải nghiệm đầy đủ các tính năng !'
-        //     >
-        //       <FormUpdateProfile />
-        //     </AuthLayout>
-        //   ),
-        // },
       ],
     },
     {
       // public
 
       children: [
+        {
+          path: PATH.COURSE_DETAIL,
+          element: (
+            <Layout user={profile} title='Trang chủ'>
+              <Courses />
+            </Layout>
+          ),
+        },
         {
           path: PATH.HOME,
           index: true,

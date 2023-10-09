@@ -11,11 +11,12 @@ export default function Request() {
     { id: 6, title: 'JavaScriptでif文、for文、関数、変数を使ったことがあるレベルの方。' },
     { id: 7, title: '簡単なHTMLを書いたことがある方。' },
     { id: 8, title: '他のプログラミング言語を使ったことがある方。' },
-    { id: 9, title: 'JavaScriptでなにか開発してみたいと考えている方。' }
+    { id: 9, title: 'JavaScriptでなにか開発してみたいと考えている方。' },
   ]
+
   return (
     <div className={style.boxRequest}>
-      <Header title='要件' titleSize={22} titleStyle={{ marginBottom: '20px' }}>
+      <Header title='Mô tả' titleSize={22} titleStyle={{ marginBottom: '20px' }}>
         <ul className={style.ulBox}>{listRequest?.map((item) => <li key={item.id}>{item.title}</li>)}</ul>
       </Header>
     </div>

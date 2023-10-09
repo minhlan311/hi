@@ -26,7 +26,7 @@ export default function CategogyDetail() {
 
   const [filter, setFilter] = useState({
     filterQuery: {
-      categoryId: idc,
+      categoryId: id,
     },
     options: {
       limit: 6,
@@ -39,7 +39,7 @@ export default function CategogyDetail() {
     setFilter((prevFilter) => ({
       ...prevFilter,
       filterQuery: {
-        categoryId: idc,
+        categoryId: id,
       },
     }))
   }, [id, idc])
@@ -70,8 +70,10 @@ export default function CategogyDetail() {
     queryFn: () => {
       return courseApi.getCourses(filter)
     },
-    enabled: idc ? true : false,
+    enabled: id ? true : false,
   })
+
+  console.log(listCourse, 'listCourselistCourse')
 
   const handleClickCourse = (id: string) => {
     navigate({
@@ -79,7 +81,8 @@ export default function CategogyDetail() {
     })
   }
 
-  const listDataCourse = listCourse?.data?.docs?.filter((obj) => obj?.class && obj?.class?.length > 0)
+  const listDataCourse = listCourse?.data?.docs
+  // const listDataCourse = listCourse?.data?.docs?.filter((obj) => obj?.class && obj?.class?.length > 0)
 
   return (
     <>
@@ -114,13 +117,13 @@ export default function CategogyDetail() {
               ></WrapMore>
 
               <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ xs: 0, sm: 0, md: 24, lg: 32 }}>
-                {Loading ? (
+                {Loading && id ? (
                   <LoadingCustom />
                 ) : (
                   listDataCourse?.map((item) => (
                     <Col className='col'>
                       <Card
-                        onClick={() => handleClickCourse(item?._id)}
+                        onClick={() => handleClickCourse(item?._id as string)}
                         hoverable
                         style={{ width: 340, height: 410 }}
                         cover={
@@ -175,7 +178,7 @@ export default function CategogyDetail() {
                   ))
                 )}
               </Row>
-              {idc && (
+              {id && listDataCourse && (
                 <div className='pagi'>
                   <Pagination pageSize={6} onChange={onChange} current={page} total={listCourse?.data?.totalDocs} />
                 </div>

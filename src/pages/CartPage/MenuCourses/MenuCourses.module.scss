@@ -1,12 +1,9 @@
 .menuBox {
   margin-top: 10px;
-  max-width: 660px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  max-width: 100%;
+  // margin-bottom: 20px;
+
   border-bottom: 1px solid #d1d7dc;
-}
-.boxContainer {
-  min-height: 20vh;
 }
 
 .boxContent {
@@ -15,7 +12,6 @@
   display: flex;
   justify-content: space-between;
 }
-
 .boxContent:hover {
   background-color: #f2f5f8;
 }
@@ -28,7 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 320px;
+  max-width: 420px;
 }
 .title {
   font-weight: 700;
@@ -36,10 +32,9 @@
   margin-bottom: 0;
   line-height: 1.2;
 }
-
 .title:hover {
-  color: #d72831;
   text-decoration: underline;
+  color: #d72831;
 }
 .img {
   border: 1px solid #d1d7dc;
@@ -75,10 +70,10 @@
   margin-right: 16px;
 }
 .marginRightPrice {
-  margin-top: 18px;
+  margin-top: 17px;
   font-weight: 800;
   position: relative;
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 16px;
 }
 

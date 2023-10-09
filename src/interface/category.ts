@@ -18,6 +18,7 @@ export interface Parent {
 }
 
 export interface CategoryState {
+  cost: any
   content?: any
   _id: string
   parentId: string
