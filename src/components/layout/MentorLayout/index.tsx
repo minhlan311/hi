@@ -75,7 +75,7 @@ const MentorLayout = (props: Props) => {
           width={sm ? 200 : 240}
           collapsedWidth={sm ? 55 : 80}
         >
-          <Logo href='/mentor' className={`${collapsed && css.logoCrop} ${css.logo}`} />
+          <Logo href='/' className={`${collapsed && css.logoCrop} ${css.logo}`} />
           <Menu
             theme='light'
             mode='inline'

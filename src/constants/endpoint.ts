@@ -59,7 +59,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: CART PATH :::::::::::::::::::::
   CART_FIND: '/cart/find',
-  CART: '/cart/',
+  CART_DELETE_COURSE: '/cart/delete-course/',
   CART_ADD: '/cart/add-to-cart',
 
   // :::::::::::::::::::: SUBJECT PATH :::::::::::::::::::::

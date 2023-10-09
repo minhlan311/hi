@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import cartApi from '@/apis/cart.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import LoadingCustom from '@/components/LoadingCustom'
+import openNotification from '@/components/Notification'
+import VideoComponent from '@/components/VideoComponent/VideoComponent'
+import { AppContext } from '@/contexts/app.context'
+import { formatPriceVND } from '@/helpers/common'
+import { TCourse } from '@/types/course.type'
+import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
-import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
-import { Modal, Spin } from 'antd'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import VideoComponent from '@/components/VideoComponent/VideoComponent'
-import { TCourse } from '@/types/course.type'
-import { formatPriceVND } from '@/helpers/common'
-import { AppContext } from '@/contexts/app.context'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import cartApi from '@/apis/cart.api'
-import openNotification from '@/components/Notification'
 type Props = {
   data?: TCourse
 }
@@ -47,10 +48,18 @@ export default function VideoContent({ data }: Props) {
   })
 
   const addCart = (id: string) => {
-    mutate.mutate({
-      userId: profile._id,
-      courseId: id,
-    })
+    if (!profile) {
+      openNotification({
+        status: 'warning',
+        message: 'Thông báo',
+        description: 'Bạn cần đăng nhập để thực hiện chức năng này',
+      })
+    } else {
+      mutate.mutate({
+        userId: profile._id,
+        courseId: id,
+      })
+    }
   }
 
   useEffect(() => {
@@ -158,7 +167,11 @@ export default function VideoContent({ data }: Props) {
             </div>
           </div>
         ) : (
-          <Spin />
+          <LoadingCustom
+            style={{
+              marginTop: '30px',
+            }}
+          />
         )}
 
         {/* end ảnh video  */}
@@ -180,15 +193,15 @@ export default function VideoContent({ data }: Props) {
               className={style.buttonCart}
               children='Thêm vào giỏ hàng'
               onClick={() => {
-                addCart(datas!._id)
+                addCart(datas!._id!)
               }}
             />
           </div>
-          <ButtonCustom className={style.buttonDetail} children={'今すぐ購入する'} />
+          <ButtonCustom className={style.buttonDetail} children={'Mua ngay'} />
           <p className={style.refund}>30日間返金保証</p>
           <div className={style.boxLessonContent}>
             <div className={style.tagBox}>
-              <h4 className={style.tag}>タグ</h4>
+              <h4 className={style.tag}>Từ khóa</h4>
               <p className={style.tagDesc}>#Python</p>
               <p className={style.tagDesc}>#Excel</p>
               <p className={style.tagDesc}>#Java Script</p>

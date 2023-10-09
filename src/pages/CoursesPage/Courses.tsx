@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import style from './courses.module.scss'
 import Detail from './components/Detail/Detail'
 // import FixedElement from './components/FixedElement/FixedElement'
@@ -20,7 +21,7 @@ export default function Courses() {
     queryKey: ['products', id],
     queryFn: () => {
       return courseApi.getOneCourse(id!)
-    }
+    },
   })
 
   console.log(dataCourse, 'dataCoursedataCourse')
@@ -54,9 +55,9 @@ export default function Courses() {
             >
               <LayoutGrid item={items} />
             </WrapMore> */}
-            <div className={style.titleText}>同じカテゴリのコース</div>
+            <div className={style.titleText}>Khóa học liên quan</div>
             <WrapMoreDetail>
-              <MenuCourses />
+              <MenuCourses dataCourses={dataCourse as any} />
             </WrapMoreDetail>
             <Request />
 

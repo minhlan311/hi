@@ -35,7 +35,9 @@ export default function Navigation({ user }: Props) {
     queryKey: ['dataCart'],
     queryFn: () =>
       cartApi.getCartList({
-        userId: profile?._id,
+        filterQuery: {
+          userId: profile?._id,
+        },
       }),
     enabled: profile?._id ? true : false,
   })

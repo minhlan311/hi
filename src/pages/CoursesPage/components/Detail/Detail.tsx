@@ -5,6 +5,7 @@ import { Breadcrumb } from 'antd'
 import { Link } from 'react-router-dom'
 import { CreditCardOutlined, GlobalOutlined, WarningFilled } from '@ant-design/icons'
 import { TCourse } from '@/types/course.type'
+import Paragraph from 'antd/es/typography/Paragraph'
 
 type Props = {
   data?: TCourse
@@ -13,17 +14,17 @@ type Props = {
 export default function Detail({ data }: Props) {
   const items = [
     {
-      title: <p className={style.breadCrumbs}>開発</p>,
-      href: '/'
+      title: <p className={style.breadCrumbs}>Trang chủ</p>,
+      href: '#',
     },
     {
-      title: <p className={style.breadCrumbs}>データサイエンス</p>,
-      href: ''
+      title: <p className={style.breadCrumbs}>Khóa học</p>,
+      href: '#',
     },
     {
-      title: <p className={style.breadCrumbs}>Python</p>,
-      href: ''
-    }
+      title: <p className={style.breadCrumbs}>-</p>,
+      href: '#',
+    },
   ]
 
   return (
@@ -36,7 +37,9 @@ export default function Detail({ data }: Props) {
         <h2 className={style.title}>{data?.name}</h2>
       </div>
       <div className={style.boxDesc}>
-        <p className={style.desc}>{data?.descriptions || 'Không có mô tả'}</p>
+        <Paragraph ellipsis={true} className={style.desc}>
+          {data?.descriptions || 'Không có mô tả'}
+        </Paragraph>
       </div>
       <div className={style.detailPrice} style={{ marginTop: '10px' }}>
         <div className={style.specialPrice}>ベストセラー</div>
