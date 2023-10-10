@@ -24,8 +24,6 @@ export default function Courses() {
     },
   })
 
-  console.log(dataCourse, 'dataCoursedataCourse')
-
   return (
     <>
       {/* Thanh màu đen   */}

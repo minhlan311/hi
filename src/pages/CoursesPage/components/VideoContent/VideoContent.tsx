@@ -10,22 +10,30 @@ import { formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Modal } from 'antd'
+import { Button, Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
+import { useParams } from 'react-router-dom'
 type Props = {
   data?: TCourse
 }
 
 export default function VideoContent({ data }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
-  const [disable, setDisable] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [check, setCheck] = useState(false)
   const { profile } = useContext(AppContext)
+  const { id } = useParams()
 
   const queryClient = useQueryClient()
+  const cartData = queryClient.getQueryData<any>(['dataCart'])
+
+  useEffect(() => {
+    setCheck(cartData?.data?.docs?.some((item: any) => item.id === id))
+  }, [id, cartData])
+
   const mutate = useMutation({
     mutationFn: (body: any) => {
       return cartApi.addtoCart(body)
@@ -37,8 +45,8 @@ export default function VideoContent({ data }: Props) {
         description: data?.data?.message ? data?.data?.message : 'Thêm khóa học vào giỏ hàng thành công !',
         duration: 1.5,
       })
-      setDisable(true)
       queryClient.invalidateQueries({ queryKey: ['dataCart'] })
+      setCheck(true)
     },
     onError: () => ({
       message: 'Thông báo',
@@ -127,8 +135,6 @@ export default function VideoContent({ data }: Props) {
     }
   }, [])
 
-  console.log(datas, 'datasdatas')
-
   return (
     <div className={style.col2}>
       <Modal
@@ -187,15 +193,20 @@ export default function VideoContent({ data }: Props) {
             <p>この価格で購入できるのは、あと2日!</p>
           </div>
 
-          <div hidden={disable}>
-            <ButtonCustom
-              htmlType='submit'
-              className={style.buttonCart}
-              children='Thêm vào giỏ hàng'
-              onClick={() => {
-                addCart(datas!._id!)
-              }}
-            />
+          <div>
+            {check ? (
+              <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
+            ) : (
+              <Button
+                loading={mutate.isLoading}
+                htmlType='submit'
+                className={style.buttonCart}
+                children='Thêm vào giỏ hàng'
+                onClick={() => {
+                  addCart(datas!._id!)
+                }}
+              />
+            )}
           </div>
           <ButtonCustom className={style.buttonDetail} children={'Mua ngay'} />
           <p className={style.refund}>30日間返金保証</p>
