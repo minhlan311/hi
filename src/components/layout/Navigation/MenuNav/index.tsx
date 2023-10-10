@@ -220,13 +220,13 @@ export default function MenuNav({ user }: Props) {
             <LanguageChange />
             {!user ? (
               <Space>
-                <Link to='/login'>
-                  <ButtonCustom type='text'>Đăng nhâp</ButtonCustom>
-                </Link>
+                <ButtonCustom type='text' href='/login'>
+                  Đăng nhâp
+                </ButtonCustom>
                 /
-                <Link to='/register'>
-                  <ButtonCustom type='text'>Đăng ký</ButtonCustom>
-                </Link>
+                <ButtonCustom type='text' href='/register'>
+                  Đăng ký
+                </ButtonCustom>
               </Space>
             ) : (
               <AvatarDropMenu userData={user} renderMenu />

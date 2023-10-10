@@ -5,8 +5,9 @@ import courseApi from '@/apis/course.api'
 import userApi from '@/apis/user.api'
 import { AppContext } from '@/contexts/app.context'
 import { EventState } from '@/interface/event'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker } from 'antd'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Switch, TimePicker } from 'antd'
+import dayjs from 'dayjs'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
@@ -27,9 +28,10 @@ const EventActionModal = (props: Props) => {
   const [allDay, setAllDay] = useState(false)
   const [repeat, setRepeat] = useState(false)
   const [plan, setPlan] = useState('')
-
+  const queryClient = useQueryClient()
   const { mutate, isLoading, status, isSuccess } = useMutation({
-    mutationFn: (body) => classApi.createClass(body),
+    mutationFn: (body) => (eventDetail ? classApi.updateClass(body) : classApi.createClass(body)),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['eventsData'] }),
   })
 
   const { data: categorys } = useQuery({
@@ -96,8 +98,25 @@ const EventActionModal = (props: Props) => {
     { label: 'T7', value: 6 },
     { label: 'CN', value: 0 },
   ]
+  const [check, setCheck] = useState(false)
 
-  console.log(eventDetail)
+  useEffect(() => {
+    if (eventDetail) {
+      setCheck(eventDetail.status === 'ACTIVE')
+
+      const oldData = eventDetail.classData
+      setPlan(oldData.plan)
+      setRepeat(oldData.isRepeat)
+      form.setFieldsValue({
+        title: oldData.title,
+        description: oldData.description,
+        cost: oldData.cost,
+        courseId: oldData.courseId,
+        categoryId: oldData.categoryId,
+        students: oldData.students,
+      })
+    }
+  }, [eventDetail])
 
   return (
     <Modal
@@ -106,15 +125,27 @@ const EventActionModal = (props: Props) => {
       onCancel={() => setOpen(!open)}
       onOk={handleSubmit}
       width={'50vw'}
+      okText={eventDetail ? 'Lưu thay đổi' : 'Tạo cuộc họp'}
     >
       <Form onFinish={handleFinish} form={form} layout='vertical'>
-        <Form.Item
-          label='Tiêu đề cuộc họp'
-          name='title'
-          rules={[{ required: true, message: 'Vui nhập tiêu đề cuộc họp' }]}
-        >
-          <Input placeholder='Nhập tiêu đề' />
-        </Form.Item>
+        <Row gutter={24}>
+          <Col span={eventDetail ? 20 : 24}>
+            <Form.Item
+              label='Tiêu đề cuộc họp'
+              name='title'
+              rules={[{ required: true, message: 'Vui nhập tiêu đề cuộc họp' }]}
+            >
+              <Input placeholder='Nhập tiêu đề' />
+            </Form.Item>
+          </Col>
+          {eventDetail && (
+            <Col span={4}>
+              <Form.Item label='Trạng thái' name='status'>
+                <Switch checked={check} onChange={() => setCheck(!check)} />
+              </Form.Item>
+            </Col>
+          )}
+        </Row>
 
         <Form.Item label='Mô tả' name='description'>
           <Input.TextArea placeholder='Nhập mô tả' />
@@ -130,6 +161,7 @@ const EventActionModal = (props: Props) => {
                   { value: 'PREMIUM', label: 'Trả phí' },
                 ]}
                 onChange={(e) => setPlan(e)}
+                defaultValue={plan}
               />
             </Form.Item>
           </Col>
@@ -178,12 +210,21 @@ const EventActionModal = (props: Props) => {
               name='time'
               rules={[{ required: !allDay, message: 'Vui lòng chọn thời gian' }]}
             >
-              <TimePicker.RangePicker className='sp100' format={'HH:mm'} disabled={allDay} />
+              <TimePicker.RangePicker
+                className='sp100'
+                defaultValue={[dayjs(eventDetail?.classData?.startAt), dayjs(eventDetail?.classData?.endAt)]}
+                format={'HH:mm'}
+                disabled={allDay}
+              />
             </Form.Item>
           </Col>
           <Col span={24} md={10}>
             <Form.Item label='Ngày cuộc họp' name='date' rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}>
-              <DatePicker.RangePicker className='sp100' format={'DD/MM/YYYY'} />
+              <DatePicker.RangePicker
+                className='sp100'
+                defaultValue={[dayjs(eventDetail?.classData?.startDate), dayjs(eventDetail?.classData?.endDate)]}
+                format={'DD/MM/YYYY'}
+              />
             </Form.Item>
           </Col>
           <Col span={24} md={7}>

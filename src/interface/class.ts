@@ -1,3 +1,4 @@
+import { CategoryState } from './category'
 import { UserState } from './user'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -50,4 +51,7 @@ export interface ClassState {
   updatedAt: string
   id: string
   owner: UserState
+  categoryId: string
+  category: CategoryState
+  cost?: number
 }

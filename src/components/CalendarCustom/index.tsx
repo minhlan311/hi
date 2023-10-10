@@ -91,7 +91,7 @@ const CalendarCustom = () => {
 
       setEvents(newEvent as unknown as ISchedule[])
     }
-  }, [eventsData, status])
+  }, [eventsData])
 
   useEffect(() => {
     if (calAction) {
@@ -141,7 +141,10 @@ const CalendarCustom = () => {
               }}
             ></ButtonCustom>
             <Select
-              onChange={(e) => setView(e)}
+              onChange={(e) => {
+                setView(e)
+                getDate()
+              }}
               defaultValue='week'
               options={[
                 {
@@ -204,13 +207,8 @@ const CalendarCustom = () => {
         // onSelectDateTime={(e) => console.log(e)}
         isReadOnly={!profile.isMentor}
       />
-      <EventDetailModal
-        open={Boolean(eventId)}
-        setOpen={setEventId}
-        eventDetail={eventData ? eventData : null}
-        setOpenModal={setOpenModal}
-      />
-      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={eventData ? eventData : null} />
+      <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
+      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={null} />
     </Space>
   )
 }
