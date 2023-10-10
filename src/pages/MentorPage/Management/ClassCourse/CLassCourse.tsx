@@ -209,8 +209,6 @@ export default function CLassCourse() {
     }))
   }
 
-  console.log(data?.data, 'data?.data?.docs')
-
   return (
     <div>
       <Form form={form} layout='vertical'>
