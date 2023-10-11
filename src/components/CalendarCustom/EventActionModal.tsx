@@ -16,7 +16,7 @@ type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   eventDetail: EventState | null
-  selectTime: { start: Date; end: Date } | null
+  selectTime?: { start: Date; end: Date } | null
 }
 
 const EventActionModal = (props: Props) => {
