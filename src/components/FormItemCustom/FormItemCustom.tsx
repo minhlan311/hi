@@ -8,7 +8,7 @@ export interface RowState {
 type Props = {
   name?: string
   settingForm?: any
-  lable?: string | React.ReactNode
+  label?: string | React.ReactNode
   lableSize?: string | number
   lableRight?: string | React.ReactNode
   lableRightSize?: string | number
@@ -18,18 +18,18 @@ type Props = {
 }
 
 const FormItemCustom = (props: Props) => {
-  const { name, settingForm, lable, lableSize, lableRight, lableRightSize, children, style, wrapperCol } = props
+  const { name, settingForm, label, lableSize, lableRight, lableRightSize, children, style, wrapperCol } = props
   return (
     <Form.Item
       name={name}
-      label={!lableRight ? lable : null}
+      label={!lableRight ? label : null}
       style={{ ...style, marginBottom: 5 }}
       wrapperCol={wrapperCol}
       {...settingForm}
     >
       {lableRight && (
         <Row justify='space-between' className={css.label}>
-          <h4 style={{ fontSize: lableSize }}>{lable}</h4>
+          <h4 style={{ fontSize: lableSize }}>{label}</h4>
           <div style={{ fontSize: lableRightSize }}>{lableRight}</div>
         </Row>
       )}

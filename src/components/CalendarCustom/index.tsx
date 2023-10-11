@@ -1,24 +1,21 @@
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import Calendar from '@toast-ui/react-calendar'
-import categoryApi from '@/apis/categories.api'
-import classApi from '@/apis/class.api'
-import moment from 'moment-timezone'
-import useResponsives from '@/hooks/useResponsives'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import eventApi from '@/apis/event.api'
 import { AppContext } from '@/contexts/app.context'
-import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space } from 'antd'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import useResponsives from '@/hooks/useResponsives'
+import { EventObject } from '@/interface/class'
+import { useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
+import Calendar from '@toast-ui/react-calendar'
+import { Col, Input, Row, Select, Space } from 'antd'
+import moment from 'moment-timezone'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import { ISchedule } from 'tui-calendar'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
-import openNotification from '../Notification'
-import { EventObject } from '@/interface/class'
-import { ISchedule } from 'tui-calendar'
-import courseApi from '@/apis/course.api'
-import SelectCustom from '../SelectCustom/SelectCustom'
-import userApi from '@/apis/user.api'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import EventActionModal from './EventActionModal'
+import EventDetailModal from './EventDetailModal'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const CalendarCustom = () => {
@@ -27,56 +24,65 @@ const CalendarCustom = () => {
   const { xl, xxl } = useResponsives()
   const [openModal, setOpenModal] = useState(false)
   const [view, setView] = useState<string>('week')
-  const [form] = Form.useForm()
   const [events, setEvents] = useState<ISchedule[]>([])
-  const [eventDetail, setEventDetail] = useState<ISchedule>()
+  const [eventId, setEventId] = useState<string | null>(null)
 
-  const { mutate, isLoading, status, isSuccess } = useMutation({
-    mutationFn: (body) => classApi.createClass(body),
-  })
-
-  const { data: categorys } = useQuery({
-    queryKey: ['categorys'],
+  const { data: eventDetail } = useQuery({
+    queryKey: ['eventsDetail', eventId],
     queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
+      if (eventId) return eventApi.getOneEvent(eventId)
+    },
+  })
+  const eventData = eventDetail?.data
+
+  const [timeSelect, setTimeSelect] = useState<{ startDate: string; endDate: string }>()
+
+  const calAction: any = calRef?.current?.calendarInstance
+
+  const getDate = () => {
+    if (calAction) {
+      const startDate = calAction.getDateRangeStart()
+      const endDate = calAction.getDateRangeEnd()
+      setTimeSelect({
+        startDate: moment(startDate.d.d).format('YYYY-MM-DD'),
+        endDate: moment(endDate.d.d).format('YYYY-MM-DD'),
+      })
+    }
+  }
+
+  const { data: eventsData } = useQuery({
+    queryKey: ['eventsData', timeSelect],
+    queryFn: () => {
+      return eventApi.getEvent({
+        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate },
+        options: { pagination: false },
       })
     },
   })
-
-  const { data: classEvents } = useQuery({
-    queryKey: ['classEvents', isSuccess],
-    queryFn: () => {
-      return classApi.getClass({
-        createdById: profile._id,
-      })
-    },
-  })
-
   useEffect(() => {
-    if (classEvents?.data?.totalDocs) {
-      const newEvent = classEvents?.data?.docs?.map((item) => {
+    getDate()
+
+    if (eventsData?.data?.totalDocs) {
+      const newEvent = eventsData?.data?.docs?.map((item) => {
         const currentTime = moment()
         const startTime = moment(item.start)
         const endTime = moment(item.end)
         const between = currentTime.isBetween(startTime, endTime)
         const endClass = currentTime.isAfter(endTime)
 
-        console.log(between, endClass)
-
         return {
           id: item._id,
-          title: item.title,
-          body: item.description,
-          calendarId: item.courseId,
+          title: item.classData.title,
+          body: item.classData.description,
+          calendarId: item.classData.courseId,
           start: item.start,
           end: item.end,
           backgroundColor: '#019d44b5',
           color: 'var(--white)',
           location: 'Class online',
           category: 'time',
-          attendees: [item?.owner?.fullName],
-          isReadOnly: profile._id !== item.createdById,
+          attendees: [`Giảng viên: ${item.classData.owner.fullName}`, `Học viên: ${item.classData.students.length}`],
+          isReadOnly: profile._id !== item.classData.createdById,
           isPrivate: true,
           recurrenceRule: between ? '1' : '',
           dueDateClass: endClass ? '1' : '',
@@ -85,49 +91,7 @@ const CalendarCustom = () => {
 
       setEvents(newEvent as unknown as ISchedule[])
     }
-  }, [classEvents, status])
-
-  const subjectList = categorys?.data?.docs?.map((sj) => ({
-    value: sj._id,
-    label: sj.name,
-  }))
-
-  const handleSubmit = () => {
-    form.submit()
-  }
-
-  const handleFinish = (values: any) => {
-    const payload = {
-      title: values.title,
-      description: values.description,
-      courseId: values.courseId,
-      start: values.time[0].$d,
-      end: values.time[1].$d,
-      categoryId: values.categoryId,
-      students: [],
-      weekly: values.weekly ? true : false,
-      plan: values.plan,
-      cost: parseInt(values.cost),
-    }
-
-    mutate(payload as unknown as any)
-    setOpenModal(!openModal)
-    form.resetFields()
-  }
-
-  useEffect(() => {
-    if (status === 'success' && (isSuccess || !eventDetail)) {
-      openNotification({
-        status: status,
-        message: 'Thông báo',
-        description: eventDetail ? 'Cập nhật lịch thành công' : 'Tạo lịch thành công',
-      })
-
-      form.resetFields()
-    }
-  }, [isLoading])
-
-  const calAction: any = calRef?.current?.calendarInstance
+  }, [eventsData])
 
   useEffect(() => {
     if (calAction) {
@@ -139,69 +103,6 @@ const CalendarCustom = () => {
         },
       })
       calAction.setOptions({
-        template: {
-          popupIsAllday() {
-            return 'Cả ngày'
-          },
-          popupStateFree() {
-            return 'Miễn phí'
-          },
-          popupStateBusy() {
-            return 'Có phí'
-          },
-          titlePlaceholder() {
-            return 'Tiêu đề cuộc họp'
-          },
-          startDatePlaceholder() {
-            return 'Thời gian bắt đầu'
-          },
-          endDatePlaceholder() {
-            return 'Thời gian kết thúc'
-          },
-          popupSave() {
-            return 'Tạo lịch'
-          },
-          popupUpdate() {
-            return 'Cập nhật'
-          },
-          popupEdit() {
-            return 'Sửa'
-          },
-          popupDelete() {
-            return 'Xóa'
-          },
-          popupDetailTitle({ title }: EventObject) {
-            return title
-          },
-          popupDetailDate({ start, end }: EventObject) {
-            return (
-              <b style={{ color: 'var(--light-gray-2)' }}>{`${moment(start.d.d as unknown as string).format(
-                'HH:mm DD/MM/YY',
-              )} - ${moment(end.d.d as unknown as string).format('HH:mm DD/MM/YY')}`}</b>
-            )
-          },
-
-          popupDetailAttendees({ attendees = [] }) {
-            return <b>{attendees.join(', ')}</b>
-          },
-          popupDetailLocation({ location }: EventObject) {
-            return <b>{location}</b>
-          },
-          popupDetailState({ state }: EventObject) {
-            return <b>{state === 'Busy' ? 'Có phí' : 'Miễn phí'}</b>
-          },
-          popupDetailBody({ recurrenceRule, dueDateClass, id, body }: ISchedule) {
-            return `<Space direction='vertical'>
-                <p>${body}</p>
-                ${
-                  recurrenceRule && !dueDateClass
-                    ? `<a href="/live/index.html?room_id=${id}"><button class="buttJoin">Tham gia</button></a>`
-                    : '<button class="buttJoin disabledButt">Tham gia</button>'
-                }
-              
-              </Space>`
-          },
-        },
         week: {
           dayNames: ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
         },
@@ -212,62 +113,38 @@ const CalendarCustom = () => {
     }
   }, [calAction])
 
-  const onBeforeCreateEvent = (eventData: any): void => {
-    const { calendar } = eventData
-    const event: any = {
-      id: Math.random().toString(),
-      title: eventData.title,
-      isAllDay: eventData.isAllDay,
-      start: eventData.start,
-      end: eventData.end,
-      category: eventData.isAllDay ? 'allday' : 'time',
-      dueDateClass: '',
-      location: eventData.location,
-      state: eventData.state,
-      backgroundColor: '#019d44b5',
-      color: 'white',
-    }
-
-    if (calendar) {
-      event.calendarId = calendar.id
-      event.color = calendar.color
-      event.bgColor = calendar.bgColor
-      event.borderColor = calendar.borderColor
-    }
-
-    calAction.createEvents([event])
-  }
-
-  const onBeforeUpdateEvent = (res: any) => {
-    const { event, changes } = res
-    const payload = {
-      id: event.id,
-      title: changes ? changes.title : event.title,
-      description: changes ? changes.body : event.body,
-      startDate: changes ? changes.start : event.start,
-      startAt: changes ? changes.start : event.start,
-      endDate: changes ? changes.end : event.end,
-      endAt: changes ? changes.end : event.end,
-      schedules: [1, 2],
-    }
-    setEventDetail(payload)
-    calAction.updateEvent(event.id, event.calendarId, changes)
-  }
-
-  const onBeforeDeleteEvent = (res: any) => {
-    calAction.deleteEvent(res.id, res.calendarId)
-  }
-
   return (
     <Space direction='vertical' className='sp100'>
       <Row justify='space-between'>
         <Col span={10}>
           <Space>
-            <ButtonCustom onClick={() => calAction.today()}>Hôm nay</ButtonCustom>
-            <ButtonCustom icon={<AiOutlineLeft />} onClick={() => calAction.prev()}></ButtonCustom>
-            <ButtonCustom icon={<AiOutlineRight />} onClick={() => calAction.next()}></ButtonCustom>
+            <ButtonCustom
+              onClick={() => {
+                calAction.today()
+                getDate()
+              }}
+            >
+              Hôm nay
+            </ButtonCustom>
+            <ButtonCustom
+              icon={<AiOutlineLeft />}
+              onClick={() => {
+                calAction.prev()
+                getDate()
+              }}
+            ></ButtonCustom>
+            <ButtonCustom
+              icon={<AiOutlineRight />}
+              onClick={() => {
+                calAction.next()
+                getDate()
+              }}
+            ></ButtonCustom>
             <Select
-              onChange={(e) => setView(e)}
+              onChange={(e) => {
+                setView(e)
+                getDate()
+              }}
               defaultValue='week'
               options={[
                 {
@@ -325,80 +202,13 @@ const CalendarCustom = () => {
           eventView: ['time'],
         }}
         usageStatistics={false}
-        useCreationPopup={true}
-        useFormPopup={true}
-        useDetailPopup={true}
         disableDblClick={false}
-        onBeforeCreateEvent={onBeforeCreateEvent}
-        onBeforeUpdateEvent={onBeforeUpdateEvent}
-        onBeforeDeleteEvent={onBeforeDeleteEvent}
+        onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
+        // onSelectDateTime={(e) => console.log(e)}
         isReadOnly={!profile.isMentor}
       />
-
-      <Modal title='Tạo cuộc họp' open={openModal} onCancel={() => setOpenModal(!openModal)} onOk={handleSubmit}>
-        <Form onFinish={handleFinish} form={form} layout='vertical'>
-          <Form.Item label='Tiêu đề cuộc họp' name='title' rules={[{ required: true }]}>
-            <Input placeholder='Nhập tiêu đề' />
-          </Form.Item>
-          <Form.Item label='Mô tả' name='description'>
-            <Input.TextArea placeholder='Nhập mô tả' />
-          </Form.Item>
-
-          <Form.Item label='Chọn loại' name='plan' rules={[{ required: true }]}>
-            <SelectCustom
-              placeholder='Chọn loại'
-              options={[
-                { value: 'FREE', label: 'Miễn phí' },
-                { value: 'PREMIUM', label: 'Trả phí' },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item label='Giá' name='cost'>
-            <Input type='number' placeholder='Nhập giá' />
-          </Form.Item>
-
-          <Form.Item label='Khóa học' name='courseId'>
-            <SelectCustom
-              placeholder='Tìm kiếm khóa học'
-              type='search'
-              searchKey='courses'
-              apiFind={courseApi.getCourses}
-              filterQuery={{ createdById: profile._id }}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item label='Môn học' name='categoryId' rules={[{ required: true }]}>
-            <Select placeholder='Chọn môn học' options={subjectList} />
-          </Form.Item>
-          <Form.Item label='Thời gian cuộc họp' name='time' rules={[{ required: true }]}>
-            <DatePicker.RangePicker
-              className='sp100'
-              showTime={{
-                format: 'HH:mm',
-              }}
-              format={'HH:mm DD/MM/YYYY'}
-            />
-          </Form.Item>
-          <Space.Compact>
-            <Form.Item name='allDay'>
-              <Checkbox>Cả ngày</Checkbox>
-            </Form.Item>
-            <Form.Item name='weekly'>
-              <Checkbox>Hàng tuần</Checkbox>
-            </Form.Item>
-          </Space.Compact>
-          <Form.Item label='Thêm người tham dự' name='students'>
-            <SelectCustom
-              placeholder='Tìm kiếm tham người dự'
-              type='search'
-              searchKey='user'
-              apiFind={userApi.findUser}
-              mode='multiple'
-              allowClear
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
+      <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
+      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={null} />
     </Space>
   )
 }

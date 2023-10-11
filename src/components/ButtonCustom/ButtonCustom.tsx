@@ -20,6 +20,7 @@ type Props = {
   color?: string
   tooltip?: string
   danger?: boolean
+  linkTarget?: '_self' | '_blank' | '_parent' | '_top'
 }
 
 const ButtonCustom = (props: Props) => {
@@ -41,17 +42,21 @@ const ButtonCustom = (props: Props) => {
     color,
     tooltip,
     danger,
+    linkTarget,
   } = props
 
   return href ? (
     <Tooltip title={tooltip}>
-      <Link to={`${href}`}>
+      {linkTarget ? (
         <Button
           size={size}
           type={type}
           shape={shape}
           disabled={disabled}
-          onClick={onClick}
+          onClick={() => {
+            onClick
+            window.open(href, linkTarget)
+          }}
           className={`${className} ${htmlType === 'submit' ? css.submitButton : null}`}
           style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
           form={form}
@@ -62,7 +67,26 @@ const ButtonCustom = (props: Props) => {
             {icon} {children}
           </div>
         </Button>
-      </Link>
+      ) : (
+        <Link to={`${href}`}>
+          <Button
+            size={size}
+            type={type}
+            shape={shape}
+            disabled={disabled}
+            onClick={onClick}
+            className={`${className} ${htmlType === 'submit' ? css.submitButton : null}`}
+            style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
+            form={form}
+            htmlType={htmlType}
+            danger={danger}
+          >
+            <div className={'custom-butt-icon'}>
+              {icon} {children}
+            </div>
+          </Button>
+        </Link>
+      )}
     </Tooltip>
   ) : (
     <Tooltip title={tooltip}>

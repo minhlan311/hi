@@ -26,7 +26,7 @@ type Props = {
   className?: string
   size?: 'large' | 'middle' | 'small'
   defaultValue?: string | string[]
-  onChange?: () => void
+  onChange?: (e: any) => void
   options?: OptionType[]
   allowClear?: boolean
   loading?: boolean
