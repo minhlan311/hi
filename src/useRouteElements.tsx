@@ -30,6 +30,7 @@ import QAPage from './pages/QAPage/QAPage.tsx'
 import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import CartPage from './pages/CartPage/CartPage.tsx'
+import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -182,6 +183,14 @@ export default function useRouteElements() {
       path: '',
       element: <ProtectedRoute />,
       children: [
+        {
+          path: PATH.VNPAY_CALLBACK,
+          element: (
+            // <Layout user={profile} title='Đang kiểm tra thanh toán'>
+            <VnpayPage />
+            // </Layout>
+          ),
+        },
         {
           path: PATH.CART,
           element: (

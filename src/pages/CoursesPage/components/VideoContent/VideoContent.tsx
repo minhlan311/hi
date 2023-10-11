@@ -14,6 +14,7 @@ import { Button, Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
 import { useParams } from 'react-router-dom'
+import vnpayApi from '@/apis/vnpay.api'
 type Props = {
   data?: TCourse
 }
@@ -86,6 +87,13 @@ export default function VideoContent({ data }: Props) {
     setIsModalOpen(false)
   }
 
+  const mutationPay = useMutation({
+    mutationFn: (body: { value: number }) => vnpayApi.pay(body),
+    onSuccess: (data: any) => {
+      window.open(data?.data?.url, '_blank')
+    },
+  })
+
   useEffect(() => {
     let prevScrollPos = window.scrollY
 
@@ -109,7 +117,6 @@ export default function VideoContent({ data }: Props) {
           contentRef.current.style.transition = 'opacity 1s ease'
           setVisible(true)
         }
-
         prevScrollPos = currentScrollPos
       } else {
         if (prevScrollPos > currentScrollPos) {
@@ -122,11 +129,12 @@ export default function VideoContent({ data }: Props) {
             contentRef.current.style.top = ''
             contentRef.current.style.border = ''
           }
-
           prevScrollPos = currentScrollPos
         }
       }
     }
+
+    console.log(datas, 'datas?.cost')
 
     window.addEventListener('scroll', handleScroll)
 
@@ -194,21 +202,45 @@ export default function VideoContent({ data }: Props) {
           </div>
 
           <div>
-            {check ? (
-              <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
+            {datas?.cost ? (
+              <>
+                {check ? (
+                  <>
+                    <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
+                    <ButtonCustom
+                      className={style.buttonDetail}
+                      children={'Mua ngay'}
+                      onClick={() => mutationPay.mutate({ value: datas?.cost })}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      loading={mutate.isLoading}
+                      htmlType='submit'
+                      className={style.buttonCart}
+                      children='Thêm vào giỏ hàng'
+                      onClick={() => {
+                        addCart(datas!._id!)
+                      }}
+                    />
+                    <ButtonCustom
+                      className={style.buttonDetail}
+                      children={'Mua ngay'}
+                      onClick={() => mutationPay.mutate({ value: datas?.cost })}
+                    />
+                  </>
+                )}
+              </>
             ) : (
-              <Button
-                loading={mutate.isLoading}
-                htmlType='submit'
+              <ButtonCustom
                 className={style.buttonCart}
-                children='Thêm vào giỏ hàng'
-                onClick={() => {
-                  addCart(datas!._id!)
-                }}
+                children={'Tham gia lớp học'}
+                // onClick={() => mutationPay.mutate({ value: datas?.cost })}
               />
             )}
           </div>
-          <ButtonCustom className={style.buttonDetail} children={'Mua ngay'} />
+
           <p className={style.refund}>30日間返金保証</p>
           <div className={style.boxLessonContent}>
             <div className={style.tagBox}>

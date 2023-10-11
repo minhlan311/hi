@@ -3,6 +3,7 @@
   margin: auto;
 }
 .pagina {
+  margin-top: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,8 +29,8 @@
       flex-direction: column-reverse;
     }
     .cartLeft {
-      max-height: 600px;
-      overflow-y: scroll;
+      // max-height: 600px;
+      // overflow-y: scroll;
       .cart {
         width: 100%;
         // margin-bottom: 25px;

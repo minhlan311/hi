@@ -69,6 +69,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     enabled: id ? true : false,
   })
 
+  console.log(courseDetail?.data?.categoryId, 'courseDetail?.data?.name')
+
   useEffect(() => {
     if (courseDetail && id) {
       form.setFieldValue('plan', courseDetail?.data?.plan)

@@ -1,5 +1,6 @@
 export const PATH = {
   HOME: '/',
+  VNPAY_CALLBACK: '/payment-callback',
   LOGIN: '/login',
   FORGOT_PASS: '/forgot-password',
   REGISTER: '/register',
