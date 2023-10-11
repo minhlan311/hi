@@ -1,9 +1,19 @@
+.boxScroll {
+  max-height: 1000px;
+  overflow: scroll;
+}
 .menuBox {
-  margin-top: 10px;
   max-width: 100%;
-  // margin-bottom: 20px;
-
   border-bottom: 1px solid #d1d7dc;
+}
+.divFlexBox {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.divFlexBox:hover {
+  background-color: #f2f5f8;
 }
 
 .boxContent {
@@ -12,13 +22,13 @@
   display: flex;
   justify-content: space-between;
 }
-.boxContent:hover {
-  background-color: #f2f5f8;
-}
+
 .onbox {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
+
 .flexCol {
   margin-right: 30px;
   display: flex;
@@ -54,6 +64,13 @@
   height: 3px;
   background-color: #1e6055;
 }
+.flexSelectAll {
+  font-weight: 700;
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+}
+
 .flex {
   display: flex;
   font-size: 12px;
@@ -70,7 +87,7 @@
   margin-right: 16px;
 }
 .marginRightPrice {
-  margin-top: 17px;
+  margin-top: 30px;
   font-weight: 800;
   position: relative;
   font-size: 14px;

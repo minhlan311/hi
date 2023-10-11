@@ -122,4 +122,8 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: CONFIGS PATH :::::::::::::::::::::
   CONFIGS_PATH: '/configs',
+
+  // :::::::::::::::::::: VNPAY PATH :::::::::::::::::::::
+  PAY_PATH: '/vnpay/checkout',
+  CALLBACK_PATH: '/vnpay/callback',
 }

@@ -1,21 +1,26 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import css from './Cart.module.scss'
 // import SliderCustom from '@/components/SliderCustom'
 // import { coursesData } from '@/fakedata/fakedata'
 
 import cartApi from '@/apis/cart.api'
+import vnpayApi from '@/apis/vnpay.api'
+import LoadingCustom from '@/components/LoadingCustom'
 import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import Header from '@/components/layout/Header/Header'
 import { AppContext } from '@/contexts/app.context'
-import { useQuery } from '@tanstack/react-query'
+import { SendOutlined } from '@ant-design/icons'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Col, Divider, Row } from 'antd'
 import MenuCourses from './MenuCourses/MenuCourses'
-import LoadingCustom from '@/components/LoadingCustom'
 
 export default function CartPage() {
+  const [price, setPrice] = useState<number>(0)
+
+  const [disable, setCheckDisable] = useState<[]>([])
   const { profile } = useContext(AppContext)
   const { data, isLoading } = useQuery({
     queryKey: ['dataCart'],
@@ -25,7 +30,7 @@ export default function CartPage() {
           userId: profile?._id,
         },
         options: {
-          paginate: false,
+          pagination: false,
         },
       }),
     enabled: profile?._id ? true : false,
@@ -33,13 +38,12 @@ export default function CartPage() {
 
   const orderData = data?.data.docs && data?.data.docs
 
-  const totalCost = orderData?.reduce((acc, product) => {
-    if (product?.cost) {
-      return acc + product?.cost
-    }
-
-    return acc
-  }, 0)
+  const mutationPay = useMutation({
+    mutationFn: (body: { value: number }) => vnpayApi.pay(body),
+    onSuccess: (data: any) => {
+      window.open(data?.data?.url, '_blank')
+    },
+  })
 
   return (
     <div className={css.cart}>
@@ -60,19 +64,28 @@ export default function CartPage() {
 
                   <>
                     <Col className={css.cartLeft} span={24}>
-                      <MenuCourses coursesData={orderData as any} />
+                      <MenuCourses
+                        coursesData={orderData as any}
+                        setselectLength={setCheckDisable}
+                        setPriceParent={setPrice}
+                      />{' '}
                     </Col>
                   </>
-                  {/* ))} */}
                 </Row>
               </Col>
               {data?.data.totalDocs > 0 && (
                 <Col className={css.cartRight} span={24} xl={7}>
                   <div className={css.title}>Thành tiền :</div>
                   <div className={css.price}>
-                    <PriceCalculator price={totalCost!} priceSize={32} showTotal showDiscount direction='column' />
+                    <PriceCalculator price={price!} priceSize={32} showTotal showDiscount direction='column' />
                   </div>
-                  <Button type='primary'>Thanh toán ngay</Button>
+                  <Button
+                    disabled={!disable?.length}
+                    type='primary'
+                    onClick={() => mutationPay.mutate({ value: price })}
+                  >
+                    Thanh toán ngay <SendOutlined />
+                  </Button>
                 </Col>
               )}
             </Row>

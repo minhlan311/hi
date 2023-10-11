@@ -5,12 +5,11 @@ import courseApi from '@/apis/course.api'
 import openNotification from '@/components/Notification'
 import { FORM_TYPE } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
-import { formatDate, formatHour } from '@/helpers/common'
+import { formatDate } from '@/helpers/common'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Checkbox, Col, DatePicker, Drawer, Form, Row, Select, TimePicker } from 'antd'
+import { Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
-import moment from 'moment-timezone'
 import { Dispatch, SetStateAction, useContext, useEffect } from 'react'
 
 type Props = {
@@ -52,13 +51,12 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
 
   useEffect(() => {
     if (dataClass && typeForm === 'UPDATE') {
-      form.setFieldValue('courseId', dataClass?.data?.courseId)
+      form.setFieldValue('courseId', dataClass?.data?.courseId._id)
       form.setFieldValue('startDate', dayjs(formatDate(dataClass?.data?.startDate as string), 'DD/MM/YYYY'))
       form.setFieldValue('endDate', dayjs(formatDate(dataClass?.data?.endDate as string), 'DD/MM/YYYY'))
-      form.setFieldValue('startAt', moment(formatHour(dataClass?.data?.startAt as string), 'HH:mm'))
-      form.setFieldValue('endAt', moment(formatHour(dataClass?.data?.endAt as string), 'HH:mm'))
       form.setFieldValue('schedules', dataClass?.data?.schedules)
-      form.setFieldValue('courseId', dataClass?.data?.courseId)
+      form.setFieldValue('limitStudent', dataClass?.data?.limitStudent)
+      form.setFieldValue('title', dataClass?.data?.title)
       form.setFieldValue('id', idClass)
     } else {
       form.resetFields()
@@ -105,37 +103,6 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
     },
   })
 
-  const dateInWeek = [
-    {
-      label: 'Thứ 2',
-      value: 1,
-    },
-    {
-      label: 'Thứ 3',
-      value: 2,
-    },
-    {
-      label: 'Thứ 4',
-      value: 3,
-    },
-    {
-      label: 'Thứ 5',
-      value: 4,
-    },
-    {
-      label: 'Thứ 6',
-      value: 5,
-    },
-    {
-      label: 'Thứ 7',
-      value: 6,
-    },
-    {
-      label: 'Chủ nhật',
-      value: 0,
-    },
-  ]
-
   const onFinish = async (values: any) => {
     onClose(false)
 
@@ -176,6 +143,16 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <Select options={courseList} />
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <Form.Item
+              name='title'
+              label='Tên lớp học'
+              required
+              rules={[{ required: true, message: 'Vui lòng chọn tên lớp học' }]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
           <Col span={6}>
             <Form.Item
               name='startDate'
@@ -208,15 +185,38 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
           </Col>
           <Col span={6}>
             <Form.Item
+              required
+              rules={[
+                {
+                  type: 'number',
+                  message: 'Hãy nhập số',
+                },
+                {
+                  validator(_, value) {
+                    if (!value || value <= 0) {
+                      return Promise.reject(new Error('Số lượng học viên ít nhất là 1'))
+                    }
+                    return Promise.resolve()
+                  },
+                },
+              ]}
+              name='limitStudent'
+              label='Giới hạn số lượng học viên'
+            >
+              <InputNumber />
+            </Form.Item>
+          </Col>
+          {/* <Col span={6}>
+            <Form.Item
               name='startAt'
               label='Thời gian bắt đầu'
               required
               rules={[{ required: true, message: 'Vui lòng chọn thời gian bắt đầu' }]}
             >
-              <TimePicker placeholder='Thời gian bắt đầu' format='HH:mm' />
+              <Checkbox placeholder='Thời gian bắt đầu' format='HH:mm' />
             </Form.Item>
-          </Col>
-          <Col span={6}>
+          </Col> */}
+          {/* <Col span={6}>
             <Form.Item
               name='endAt'
               label='Thời gian kết thúc'
@@ -235,18 +235,9 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
             >
               <TimePicker placeholder='Thời gian kết thúc' format='HH:mm' />
             </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item
-              name='schedules'
-              label='Lịch khai giảng'
-              required
-              rules={[{ required: true, message: 'Vui lòng chọn lịch khai giảng' }]}
-            >
-              <Checkbox.Group options={dateInWeek} />
-            </Form.Item>
-            <Form.Item name='id' hidden />
-          </Col>
+          </Col> */}
+
+          <Form.Item name='id' hidden />
         </Row>
       </Form>
     </Drawer>
