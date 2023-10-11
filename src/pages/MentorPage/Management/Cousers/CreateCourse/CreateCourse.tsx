@@ -207,7 +207,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   name='cost'
                   rules={[{ required: typePlan === PlanEnum.PREMIUM, message: 'Hãy nhập số tiền' }]}
                 >
-                  <InputNumber min={1} max={10} disabled={typePlan === PlanEnum.FREE} />
+                  <InputNumber min={1} disabled={typePlan === PlanEnum.FREE} />
                 </Form.Item>
               </Col>
               <Col span={9}>

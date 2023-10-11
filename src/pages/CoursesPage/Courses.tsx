@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import style from './courses.module.scss'
 import Detail from './components/Detail/Detail'
+
+import { useContext } from 'react'
 // import FixedElement from './components/FixedElement/FixedElement'
 import VideoContent from './components/VideoContent/VideoContent'
 // import { LayoutGrid } from './components/LayoutGrid/LayoutGrid'
@@ -13,14 +15,30 @@ import Feedback from './components/Feedback/Feedback'
 import { useQuery } from '@tanstack/react-query'
 import courseApi from '@/apis/course.api'
 import { useParams } from 'react-router-dom'
+import { AppContext } from '@/contexts/app.context'
+import enrollsApi from '@/apis/enrolls.api'
 
 export default function Courses() {
   const { id } = useParams()
+  const { profile } = useContext(AppContext)
 
   const { data: dataCourse } = useQuery({
     queryKey: ['products', id],
     queryFn: () => {
       return courseApi.getOneCourse(id!)
+    },
+  })
+
+  const { data: checkEnrolls } = useQuery({
+    queryKey: ['enrolls', id],
+    queryFn: () => {
+      return enrollsApi.getEnroll({
+        filterQuery: {
+          userId: profile._id,
+          targetId: id,
+          targetModel: 'COURSE',
+        },
+      })
     },
   })
 
@@ -37,7 +55,7 @@ export default function Courses() {
             {/* cột bên trái */}
             <Detail data={dataCourse?.data} />
             {/* cột bên phải  */}
-            <VideoContent data={dataCourse?.data} />
+            <VideoContent data={dataCourse?.data} checkEnrolls={checkEnrolls} />
             {/* end cột bên phải  */}
           </div>
           {/* end grid 2/1 */}
@@ -66,7 +84,7 @@ export default function Courses() {
               titleStyle={{ fontWeight: '600', fontSize: '24px', padding: '20px 20px 10px 0', margin: '0' }}
             >
               {' '}
-              <CommentDetail />
+              <CommentDetail data={dataCourse?.data as any} />
             </WrapMore>
             <Feedback />
           </div>
