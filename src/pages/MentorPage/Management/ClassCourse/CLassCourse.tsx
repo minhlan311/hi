@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Col, Input, Popconfirm, Row, Space, Table, Tooltip, DatePicker, Form } from 'antd'
 import { DeleteOutlined, PlusCircleOutlined, EditOutlined } from '@ant-design/icons'
-import { useState, useContext, useEffect, ChangeEvent } from 'react'
+import { useState, useContext, ChangeEvent } from 'react'
 import './CLassCourse.scss'
 import { debounce, formatDate } from '@/helpers/common'
 import { MyPageTableOptions } from '@/types/page.type'
@@ -172,16 +172,16 @@ export default function CLassCourse() {
   //   })
   // }
 
-  const onPageChange = (page: number, limit?: number) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      options: {
-        ...prevFilter.options,
-        page: page!,
-        limit: limit!,
-      },
-    }))
-  }
+  // const onPageChange = (page: number, limit?: number) => {
+  //   setFilter((prevFilter) => ({
+  //     ...prevFilter,
+  //     options: {
+  //       ...prevFilter.options,
+  //       page: page!,
+  //       limit: limit!,
+  //     },
+  //   }))
+  // }
 
   return (
     <div>
@@ -236,7 +236,7 @@ export default function CLassCourse() {
             current: data?.data?.page,
             pageSize: data?.data?.limit,
             total: data?.data?.totalDocs,
-            onChange: onPageChange,
+            // onChange: onPageChange,
           }}
           loading={isLoading}
           columns={tableColumns}

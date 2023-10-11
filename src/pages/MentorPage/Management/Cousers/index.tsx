@@ -15,7 +15,7 @@ import { AppContext } from '@/contexts/app.context'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(1)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { profile } = useContext(AppContext)
