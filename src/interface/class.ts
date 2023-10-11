@@ -30,28 +30,32 @@ export interface EventObject {
   raw?: any
 }
 
+export interface CourseId {
+  _id: string
+  name: string
+  countStudents: number
+  countTopics: number
+  countTests: number
+  mentor?: any
+  category?: any
+  avgAssessment: number
+  id: string
+}
+
 export interface ClassState {
   _id: string
   createdById: string
   updatedById: string
   _destroy: boolean
   title: string
-  description: string
-  courseId: string
-  students: string[]
-  status: string
-  plan: string
+  limitStudent: number
   startDate: string
   endDate: string
-  startAt: string
-  endAt: string
-  schedules: number[]
-  isRepeat: boolean
+  courseId: string
+  students: string[]
   createdAt: string
   updatedAt: string
-  id: string
   owner: UserState
-  categoryId: string
-  category: CategoryState
-  cost?: number
+  category?: CategoryState
+  id: string
 }

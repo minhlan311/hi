@@ -6,6 +6,7 @@ export interface EventState {
   start: string
   end: string
   status: string
+  students: string[]
   createdAt: string
   updatedAt: string
   classData: ClassState

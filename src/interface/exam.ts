@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { UserState } from './user'
+
 export interface Diploma {
   image: string
   schoolName: string
@@ -22,32 +24,6 @@ export interface MentorInfo {
   id: string
 }
 
-export interface Owner {
-  _id: string
-  _destroy: boolean
-  fullName: string
-  avatarUrl: string
-  coverUrl: string
-  email: string
-  password: string
-  birthday: string
-  phoneNumber: string
-  referralCode: string
-  accountStatus: string
-  emailStatus: string
-  phoneStatus: string
-  isMentor: boolean
-  role: string[]
-  mentorStatus: string
-  createdAt: string
-  updatedAt: string
-  refreshToken: string
-  updatedById: string
-  group?: any
-  mentorInfo: MentorInfo
-  id: string
-}
-
 export interface ExamState {
   _id: string
   createdById: string
@@ -59,7 +35,7 @@ export interface ExamState {
   type: string
   cost?: any
   slug: string
-  owner: Owner
+  owner: UserState
   countQuestions: number
   countSelectedResponseQuestions: number[]
   countConstructedResponseQuestions: number[]

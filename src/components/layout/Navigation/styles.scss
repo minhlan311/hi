@@ -62,6 +62,7 @@
   .lang-change {
     width: 90px;
     .ant-select-selection-item {
+      display: flex;
       padding-inline-end: 0;
     }
   }

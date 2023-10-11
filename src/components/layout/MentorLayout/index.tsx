@@ -1,19 +1,18 @@
-import Logo from '@/components/Logo/Logo'
-import { UserState } from '@/interface/user'
-import { CarryOutOutlined, DatabaseOutlined, BookOutlined } from '@ant-design/icons'
-
+import AffixCustom from '@/components/AffixCustom'
+import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import Logo from '@/components/Logo/Logo'
 import useResponsives from '@/hooks/useResponsives'
-import { Button, Layout, Menu, Row, Space } from 'antd'
+import { UserState } from '@/interface/user'
+import { BookOutlined, CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
+import { Button, Drawer, Layout, Menu, Row, Space } from 'antd'
 import { useState } from 'react'
+import { AiOutlineCalendar } from 'react-icons/ai'
 import { FiHome } from 'react-icons/fi'
 import { LuLayoutDashboard, LuPanelLeftOpen, LuPanelRightOpen } from 'react-icons/lu'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AvatarDropMenu from '../AvatarDropMenu'
 import css from './styles.module.scss'
-import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
-import { AiOutlineCalendar } from 'react-icons/ai'
-import AffixCustom from '@/components/AffixCustom'
 
 type Props = {
   user: UserState
@@ -33,11 +32,11 @@ const { Header, Sider, Content } = Layout
 
 const MentorLayout = (props: Props) => {
   const { user, title, children } = props
+  window.document.title = title + ' | Ucam Mentor'
   const location = useLocation()
   const navitage = useNavigate()
-  window.document.title = title + ' | Ucam'
   const { sm } = useResponsives()
-  const [collapsed, setCollapsed] = useState(sm ? true : false)
+  const [collapsed, setCollapsed] = useState(true)
 
   const getItem = (
     label: React.ReactNode,
@@ -66,25 +65,29 @@ const MentorLayout = (props: Props) => {
 
   return (
     <Layout className={css.layout}>
-      <AffixCustom type='fixed' offsetTop={0}>
-        <Sider
-          trigger={null}
-          collapsed={collapsed}
-          className={css.navLeft}
-          style={{ background: 'var(--white)' }}
-          width={sm ? 200 : 240}
-          collapsedWidth={sm ? 55 : 80}
-        >
-          <Logo href='/' className={`${collapsed && css.logoCrop} ${css.logo}`} />
-          <Menu
-            theme='light'
-            mode='inline'
-            selectedKeys={[location.pathname]}
-            items={siderItems}
-            inlineIndent={sm ? 10 : 24}
-          />
-        </Sider>
-      </AffixCustom>
+      {sm ? (
+        <Drawer open={!collapsed} onClose={() => setCollapsed(!collapsed)} placement='left'></Drawer>
+      ) : (
+        <AffixCustom type='fixed' offsetTop={0}>
+          <Sider
+            trigger={null}
+            collapsed={collapsed}
+            className={css.navLeft}
+            style={{ background: 'var(--white)' }}
+            width={sm ? 200 : 240}
+            collapsedWidth={sm ? 55 : 80}
+          >
+            <Logo href='/' className={`${collapsed && css.logoCrop} ${css.logo}`} />
+            <Menu
+              theme='light'
+              mode='inline'
+              selectedKeys={[location.pathname]}
+              items={siderItems}
+              inlineIndent={sm ? 10 : 24}
+            />
+          </Sider>
+        </AffixCustom>
+      )}
       <Layout className={css.main}>
         <Header className={css.navTop}>
           <Row justify='space-between' align='middle'>
