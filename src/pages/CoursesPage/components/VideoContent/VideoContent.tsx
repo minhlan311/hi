@@ -15,11 +15,15 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
 import { useParams } from 'react-router-dom'
 import vnpayApi from '@/apis/vnpay.api'
+import { TargetModelEnum } from '@/types/utils.type'
+import enrollsApi from '@/apis/enrolls.api'
+import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 type Props = {
   data?: TCourse
+  checkEnrolls?: any
 }
 
-export default function VideoContent({ data }: Props) {
+export default function VideoContent({ data, checkEnrolls }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
@@ -88,9 +92,22 @@ export default function VideoContent({ data }: Props) {
   }
 
   const mutationPay = useMutation({
-    mutationFn: (body: { value: number }) => vnpayApi.pay(body),
+    mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
     onSuccess: (data: any) => {
-      window.open(data?.data?.url, '_blank')
+      window.open(data?.data?.url)
+    },
+  })
+
+  const mutationLocked = useMutation({
+    mutationFn: (body: any) => enrollsApi.createEnroll(body),
+    onSuccess: () => {
+      openNotification({
+        description: 'Tham gia khóa học thành công',
+        status: 'success',
+        message: 'Thông báo',
+      })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['enrolls'] })
     },
   })
 
@@ -134,14 +151,14 @@ export default function VideoContent({ data }: Props) {
       }
     }
 
-    console.log(datas, 'datas?.cost')
-
     window.addEventListener('scroll', handleScroll)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const checkLession = datas?.topics?.some((item: any) => item?.countLessons > 0)
 
   return (
     <div className={style.col2}>
@@ -202,42 +219,80 @@ export default function VideoContent({ data }: Props) {
           </div>
 
           <div>
-            {datas?.cost ? (
-              <>
-                {check ? (
+            {datas?.topics && datas?.topics?.length > 0 && checkLession ? (
+              checkEnrolls?.data?.docs?.length === 0 ? (
+                datas?.cost ? (
                   <>
-                    <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
-                    <ButtonCustom
-                      className={style.buttonDetail}
-                      children={'Mua ngay'}
-                      onClick={() => mutationPay.mutate({ value: datas?.cost })}
-                    />
+                    {check ? (
+                      <>
+                        <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
+                        <ButtonCustom
+                          className={style.buttonDetail}
+                          children={'Mua ngay'}
+                          onClick={() =>
+                            mutationPay.mutate({
+                              value: datas?.cost,
+                              targetModel: TargetModelEnum.COURSE,
+                              targetId: datas._id!,
+                            })
+                          }
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          loading={mutate.isLoading}
+                          htmlType='submit'
+                          className={style.buttonCart}
+                          children='Thêm vào giỏ hàng'
+                          onClick={() => {
+                            addCart(datas!._id!)
+                          }}
+                        />
+                        <ButtonCustom
+                          className={style.buttonDetail}
+                          children={'Mua ngay'}
+                          onClick={() =>
+                            mutationPay.mutate({
+                              value: datas?.cost,
+                              targetModel: TargetModelEnum.COURSE,
+                              targetId: datas._id!,
+                            })
+                          }
+                        />
+                      </>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <Button
-                      loading={mutate.isLoading}
-                      htmlType='submit'
-                      className={style.buttonCart}
-                      children='Thêm vào giỏ hàng'
-                      onClick={() => {
-                        addCart(datas!._id!)
-                      }}
-                    />
-                    <ButtonCustom
-                      className={style.buttonDetail}
-                      children={'Mua ngay'}
-                      onClick={() => mutationPay.mutate({ value: datas?.cost })}
-                    />
-                  </>
-                )}
-              </>
+                  <PopConfirmAntd
+                    onConfirm={() =>
+                      mutationLocked.mutate({
+                        targetId: datas?._id,
+                        targetModel: 'COURSE',
+                        type: 'STUDENT',
+                        userIds: [profile._id],
+                      })
+                    }
+                    desc='Bạn có chắc chắn muốn tham gia khóa học này'
+                  >
+                    <ButtonCustom className={style.buttonCart} children={'Tham gia khóa học này'} />
+                  </PopConfirmAntd>
+                )
+              ) : (
+                <ButtonCustom
+                  className={style.buttonCart}
+                  children={'Vào khóa học'}
+                  // onClick={() => mutationPay.mutate({ value: datas?.cost })}
+                />
+              )
             ) : (
-              <ButtonCustom
-                className={style.buttonCart}
-                children={'Tham gia lớp học'}
-                // onClick={() => mutationPay.mutate({ value: datas?.cost })}
-              />
+              <div
+                style={{
+                  padding: '20px 0',
+                }}
+              >
+                <h3>Khóa học đang hoàn thiện</h3>
+              </div>
             )}
           </div>
 

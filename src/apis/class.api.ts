@@ -2,6 +2,7 @@
 import { ENDPOINT } from '@/constants/endpoint'
 import { ClassState } from '@/interface/class'
 import { Class } from '@/types/class.type'
+import { findUserEnroll } from '@/types/eroll.type'
 
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
@@ -12,14 +13,17 @@ const classApi = {
   createClass(body: any) {
     return http.post<Class>(ENDPOINT.CLASS_PATH, body)
   },
-  deleteClass(id: any) {
+  deleteClass(id: string) {
     return http.delete<SuccessResponse<Class>>(ENDPOINT.CLASS_PATH + id)
   },
-  getOneClass(id: any) {
+  getOneClass(id: string) {
     return http.get<Class>(ENDPOINT.CLASS_PATH + id)
   },
   updateClass(body: any) {
     return http.put<Class>(ENDPOINT.CLASS_PATH + body.id, body)
+  },
+  arrangeClass(body: { courseId: string; userId: string }) {
+    return http.post<SuccessResponse<findUserEnroll>>(ENDPOINT.ARRANGE_PATH, body)
   },
 }
 

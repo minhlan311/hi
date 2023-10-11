@@ -48,6 +48,9 @@ const courseApi = {
   getOneCourse(ids: string) {
     return http.get<TCourse>(ENDPOINT.COURSES_PATH + `${ids}`)
   },
+  getUserErolls(body: any) {
+    return http.post<SuccessResponse<TCourse>>(ENDPOINT.ENROLL_PATH_USER, body)
+  },
 }
 
 export default courseApi

@@ -22,3 +22,13 @@ export interface ErrorResponse {
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
 }
+
+export enum TargetModelEnum {
+  TOPIC = 'TOPIC',
+  COURSE = 'COURSE',
+  TEST = 'TEST',
+  QUIZ = 'QUIZ',
+  DOCUMENT = 'DOCUMENT',
+  QUESTION = 'QUESTION',
+  ANSWER = 'ANSWER',
+}
