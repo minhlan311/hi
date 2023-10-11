@@ -2,7 +2,7 @@ import eventApi from '@/apis/event.api'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { EventObject } from '@/interface/class'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 import Calendar from '@toast-ui/react-calendar'
 import { Col, Input, Row, Select, Space } from 'antd'
@@ -27,13 +27,15 @@ const CalendarCustom = () => {
   const [events, setEvents] = useState<ISchedule[]>([])
   const [eventId, setEventId] = useState<string | null>(null)
 
-  const { data: eventDetail } = useQuery({
-    queryKey: ['eventsDetail', eventId],
-    queryFn: () => {
-      if (eventId) return eventApi.getOneEvent(eventId)
-    },
+  const { mutate, data } = useMutation({
+    mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
-  const eventData = eventDetail?.data
+
+  useEffect(() => {
+    if (eventId) mutate(eventId)
+  }, [eventId])
+
+  const eventData = data?.data
 
   const [timeSelect, setTimeSelect] = useState<{ startDate: string; endDate: string }>()
 
@@ -59,33 +61,20 @@ const CalendarCustom = () => {
       })
     },
   })
+
   useEffect(() => {
     getDate()
 
     if (eventsData?.data?.totalDocs) {
       const newEvent = eventsData?.data?.docs?.map((item) => {
-        const currentTime = moment()
-        const startTime = moment(item.start)
-        const endTime = moment(item.end)
-        const between = currentTime.isBetween(startTime, endTime)
-        const endClass = currentTime.isAfter(endTime)
-
         return {
           id: item._id,
           title: item.classData.title,
-          body: item.classData.description,
-          calendarId: item.classData.courseId,
           start: item.start,
           end: item.end,
           backgroundColor: '#019d44b5',
           color: 'var(--white)',
-          location: 'Class online',
-          category: 'time',
-          attendees: [`Giảng viên: ${item.classData.owner.fullName}`, `Học viên: ${item.classData.students.length}`],
           isReadOnly: profile._id !== item.classData.createdById,
-          isPrivate: true,
-          recurrenceRule: between ? '1' : '',
-          dueDateClass: endClass ? '1' : '',
         }
       })
 
@@ -112,6 +101,13 @@ const CalendarCustom = () => {
       })
     }
   }, [calAction])
+
+  const [selectTime, setSelectTime] = useState<{ start: Date; end: Date } | null>(null)
+
+  const handleCreateSelect = (e: { start: Date; end: Date }) => {
+    setSelectTime({ start: e.start, end: e.end })
+    setOpenModal(true)
+  }
 
   return (
     <Space direction='vertical' className='sp100'>
@@ -204,11 +200,11 @@ const CalendarCustom = () => {
         usageStatistics={false}
         disableDblClick={false}
         onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
-        // onSelectDateTime={(e) => console.log(e)}
+        onSelectDateTime={handleCreateSelect}
         isReadOnly={!profile.isMentor}
       />
       <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
-      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={null} />
+      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={null} selectTime={selectTime} />
     </Space>
   )
 }

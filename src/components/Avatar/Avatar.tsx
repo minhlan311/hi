@@ -51,17 +51,18 @@ const Avatar = (props: Props) => {
     ]
 
     return (
-      <div className={uploadImg ? css.avt : undefined}>
+      <>
         <Avt
           style={{
             background: avtUrl ? 'var(--green)' : colorList[firstNumber as unknown as number],
             fontWeight: 700,
             fontSize: size ? (size > 50 ? 36 : size - 18) : 14,
+            height: '100%',
             ...style,
           }}
           size={size}
           src={avtUrl ? import.meta.env.VITE_FILE_ENDPOINT + '/' + avtUrl : undefined}
-          className={className}
+          className={`${className} ${uploadImg && css.avt}`}
         >
           {nameParts[nameParts?.length - 1].charAt(0)}
         </Avt>
@@ -80,7 +81,7 @@ const Avatar = (props: Props) => {
             </div>
           </UploadCustom>
         )}
-      </div>
+      </>
     )
   }
 }

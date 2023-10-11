@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { debounce } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
-import { Select, Space } from 'antd'
+import { Col, Row, Select, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Avatar from '../Avatar/Avatar'
 import EmptyCustom from '../EmptyCustom/EmptyCustom'
@@ -78,15 +78,8 @@ const SelectCustom = (props: Props) => {
     if (status === 'success' && data) {
       const optionFind: OptionType[] = data.data.docs.map((ops: any) => ({
         value: ops._id,
-        label:
-          searchKey === 'user' ? (
-            <Space>
-              <Avatar avtUrl={ops.avatarUrl} userData={ops} />
-              {ops.fullName}
-            </Space>
-          ) : (
-            ops?.[labelKey]
-          ),
+        label: searchKey === 'user' ? ops.fullName : ops?.[labelKey],
+        icon: searchKey === 'user' ? <Avatar avtUrl={ops.avatarUrl} userData={ops} /> : ops.icon,
       }))
 
       return setCallBOptions(optionFind)
@@ -139,18 +132,18 @@ const SelectCustom = (props: Props) => {
         <Option
           value={item.value}
           label={
-            <Space>
-              {item.icon && <div style={{ display: 'flex' }}>{item.icon}</div>}
-              {item.label}
-            </Space>
+            <Row align='middle' gutter={10}>
+              <Col>{item.icon && <div style={{ display: 'flex', width: 20, height: 20 }}>{item.icon}</div>}</Col>
+              <Col>{item.label}</Col>
+            </Row>
           }
           key={item.value}
           disabled={item.disabled}
         >
-          <Space>
-            {item.icon && item.icon}
-            {item.label}
-          </Space>
+          <Row align='middle' gutter={10}>
+            <Col>{item.icon && <div style={{ display: 'flex', width: 40, height: 40 }}>{item.icon}</div>}</Col>
+            <Col>{item.label}</Col>
+          </Row>
         </Option>
       ))}
     </Select>

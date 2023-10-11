@@ -29,11 +29,11 @@ interface DataType {
 
 const MentorExamDetail = () => {
   const location = useLocation()
-  const examSlug = location.pathname.split('/')[3]
+  const id = location.pathname.split('/')[3]
   const { data: exam, isLoading } = useQuery({
     queryKey: ['examDetail'],
     queryFn: () => {
-      return examApi.getExamDetail(examSlug)
+      return examApi.getExamDetail(id)
     },
   })
 
@@ -54,13 +54,17 @@ const MentorExamDetail = () => {
       icon: <RiCheckboxMultipleLine />,
       iconColor: '#ced144',
       title: 'Số câu trắc nghiệm',
-      data: examDetail?.countSelectedResponseQuestions?.filter((num) => num === 1).length,
+      data: Array.isArray(examDetail?.countSelectedResponseQuestions)
+        ? examDetail?.countSelectedResponseQuestions?.filter((num) => num === 1).length
+        : examDetail?.countSelectedResponseQuestions,
     },
     {
       icon: <TfiWrite style={{ fontSize: 24 }} />,
       iconColor: '#676767',
       title: 'Số câu tự luận',
-      data: examDetail?.countConstructedResponseQuestions?.filter((num) => num === 1).length,
+      data: Array.isArray(examDetail?.countConstructedResponseQuestions)
+        ? examDetail?.countConstructedResponseQuestions?.filter((num) => num === 1).length
+        : examDetail?.countConstructedResponseQuestions,
     },
     { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.countUsersTested },
     { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countUsersDoned },

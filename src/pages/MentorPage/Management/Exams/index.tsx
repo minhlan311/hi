@@ -63,7 +63,7 @@ const MentorExams = () => {
       dataIndex: 'name',
       key: 'name',
       width: '30%',
-      render: (_: any, record: any) => <Link to={record.slug}>{record.name}</Link>,
+      render: (_: any, record: any) => <Link to={record._id}>{record.name}</Link>,
     },
     {
       title: 'Phí',
@@ -165,7 +165,7 @@ const MentorExams = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           <Tooltip title='Danh sách câu hỏi'>
-            <Link to={`/mentor/exams/${record.slug}/questions`}>
+            <Link to={`/mentor/exams/${record._id}/questions`}>
               <BsListUl className='list-question-icon' />
             </Link>
           </Tooltip>
