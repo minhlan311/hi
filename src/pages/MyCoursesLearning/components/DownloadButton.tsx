@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'antd'
-import React from 'react'
 
 function DownloadButton({ fileUrl, fileName }: any) {
   const downloadFile = (url: string, name: string) => {
