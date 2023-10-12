@@ -8,7 +8,7 @@ import EmptyCustom from '../EmptyCustom/EmptyCustom'
 import LoadingCustom from '../LoadingCustom'
 
 interface OptionType {
-  value: string
+  value: any
   label: string | React.ReactNode
   icon?: React.ReactNode
   disabled?: boolean
@@ -33,6 +33,7 @@ type Props = {
   selectAll?: boolean
   selectAllLabel?: string
   suffixIcon?: boolean
+  callBackDataSearch?: React.Dispatch<React.SetStateAction<any>>
 }
 
 const SelectCustom = (props: Props) => {
@@ -56,9 +57,10 @@ const SelectCustom = (props: Props) => {
     selectAllLabel = 'Select All',
     suffixIcon,
     labelKey = 'name',
+    callBackDataSearch,
   } = props
   const { Option } = Select
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
+  const [selectedValues, setSelectedValues] = useState<string[] | number[]>([])
   const [selectAllVal, setSelectAll] = useState(false)
   const [searchText, setSearchText] = useState<string>()
   const [callBOption, setCallBOptions] = useState<OptionType[]>([])
@@ -81,7 +83,7 @@ const SelectCustom = (props: Props) => {
         label: searchKey === 'user' ? ops.fullName : ops?.[labelKey],
         icon: searchKey === 'user' ? <Avatar avtUrl={ops.avatarUrl} userData={ops} /> : ops.icon,
       }))
-
+      callBackDataSearch && callBackDataSearch(data.data.docs)
       return setCallBOptions(optionFind)
     }
   }, [status, data])

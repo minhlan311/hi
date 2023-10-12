@@ -6,11 +6,17 @@ import Layout from './components/layout/Layout.tsx'
 import MentorLayout from './components/layout/MentorLayout/index.tsx'
 import PATH from './constants/path'
 import { AppContext } from './contexts/app.context'
+import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
 import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 import Login from './pages/Auth/Login/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
+import CartPage from './pages/CartPage/CartPage.tsx'
+import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
+import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
+import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
 import Courses from './pages/CoursesPage/Courses.tsx'
 import HomePage from './pages/HomePage/index.tsx'
+import Introduce from './pages/IntroducePage/Introduce.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
@@ -18,18 +24,13 @@ import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
 import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
 import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
+import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
-import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
-import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
-import Introduce from './pages/IntroducePage/Introduce.tsx'
-import ChangePassword from './pages/Auth/ChangePassword/ChangePassword.tsx'
-import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
-import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
-import CartPage from './pages/CartPage/CartPage.tsx'
+import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
@@ -226,6 +227,14 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Lịnh học của tôi'>
               <SchedulePage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.TEST_PAGE,
+          element: (
+            <Layout user={profile} title='Làm bài thi Online'>
+              <TestPage />
             </Layout>
           ),
         },

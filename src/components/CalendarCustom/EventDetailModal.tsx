@@ -7,11 +7,15 @@ import { Descriptions, Modal, Space } from 'antd'
 import moment from 'moment-timezone'
 import { useContext, useState } from 'react'
 import { AiOutlineClockCircle, AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
+import { BiTimer } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import openNotification from '../Notification'
 import PopConfirmAntd from '../PopConfirmAntd/PopConfirmAntd'
-import EventActionModal from './EventActionModal'
 import PopoverCustom from '../PopoverCustom'
+import TagCustom from '../TagCustom/TagCustom'
+import EventActionModal from './EventActionModal'
+import dayjs from 'dayjs'
 
 type Props = {
   open: boolean
@@ -22,7 +26,7 @@ type Props = {
 const EventDetailModal = (props: Props) => {
   const { open, setOpen, eventDetail } = props
   const { profile } = useContext(AppContext)
-
+  const navigate = useNavigate()
   const [openUpload, setOpenUpload] = useState<boolean>(false)
 
   const { mutate } = useMutation({
@@ -61,12 +65,27 @@ const EventDetailModal = (props: Props) => {
     const between = currentTime.isBetween(startTime, endTime)
     const endClass = currentTime.isAfter(endTime)
 
+    const testTime = [
+      { label: '15 phút', value: 15 },
+      { label: '35 phút', value: 35 },
+      { label: '45 phút', value: 45 },
+      { label: '60 phút', value: 60 },
+      { label: '90 phút', value: 90 },
+      { label: '120 phút', value: 120 },
+    ]
+
+    const examTime = dayjs(eventDetail.end).diff(dayjs(eventDetail.start)) / 60000
+    const selectedOption = testTime.find(
+      (item) =>
+        item.value <= examTime && (testTime[testTime.indexOf(item) + 1]?.value > examTime || item.value === examTime),
+    )
+
     return (
       <>
         <Modal title='Chi tiết cuộc họp' open={open} onCancel={() => setOpen(!open)} footer={<p></p>}>
           <Space direction='vertical' className='sp100'>
             <div>
-              <h2>{eventDetail.classData?.title}</h2>
+              <h2>{`${eventDetail.testId ? 'Buổi thi Online ' : ''}${eventDetail.classData?.title}`}</h2>
               <Space>
                 <b className='custom-butt-icon' style={{ color: 'var(--light-gray-2)' }}>
                   <AiOutlineClockCircle size='18' style={{ marginRight: 5 }} />
@@ -76,16 +95,18 @@ const EventDetailModal = (props: Props) => {
                     {moment(eventDetail.end).format('DD/MM/YYYY')}
                   </Space>
                 </b>
-                {/* {eventDetail.classData?.isRepeat && (
+                {endClass && <TagCustom color='gray' content={'Đã kết thúc'}></TagCustom>}
+                {eventDetail.testId && (
                   <TagCustom
                     color='yellow'
                     content={
                       <div className='custom-butt-icon'>
-                        <TbRepeat size='15' style={{ marginRight: 5 }} /> {mappedLabels} hàng tuần
+                        <BiTimer size='15' style={{ marginRight: 5 }} />
+                        {endTime.diff(startTime) / 60000} phút
                       </div>
                     }
                   ></TagCustom>
-                )} */}
+                )}
               </Space>
             </div>
 
@@ -115,44 +136,66 @@ const EventDetailModal = (props: Props) => {
               </Space>
             )}
             <Space direction='vertical' className='sp100'>
-              <div>
-                <Descriptions>
-                  {/* <Descriptions.Item label='Môn học'>
+              <Descriptions column={2}>
+                {/* <Descriptions.Item label='Môn học'>
                     <b>{eventDetail.classData?.category.name}</b>
                   </Descriptions.Item> */}
-                  <Descriptions.Item label='Giảng viên'>
-                    <PopoverCustom type='showProfile' userData={eventDetail.classData?.owner} trigger='click'>
-                      <ButtonCustom type='link' style={{ padding: 0, height: 0 }}>
-                        <b>{eventDetail.classData?.owner.fullName}</b>
-                      </ButtonCustom>
-                    </PopoverCustom>
-                  </Descriptions.Item>
-                  <Descriptions.Item label='Sĩ số'>
-                    <b>{eventDetail.classData?.students.length}</b>
-                  </Descriptions.Item>
-                </Descriptions>
-                {/* {eventDetail.classData?.description && (
+                <Descriptions.Item label='Giảng viên'>
+                  <PopoverCustom type='showProfile' userData={eventDetail.classData?.owner} trigger='click'>
+                    <ButtonCustom type='link' style={{ padding: 0, height: 0 }}>
+                      <b>{eventDetail.classData?.owner.fullName}</b>
+                    </ButtonCustom>
+                  </PopoverCustom>
+                </Descriptions.Item>
+                <Descriptions.Item label='Sĩ số'>
+                  <b>{eventDetail.classData?.students.length}</b>
+                </Descriptions.Item>
+              </Descriptions>
+              {/* {eventDetail.classData?.description && (
                   <Descriptions column={1}>
                     <Descriptions.Item label='Ghi chú' className='sp100'>
                       <p>{eventDetail.classData?.description}</p>
                     </Descriptions.Item>
                   </Descriptions>
                 )} */}
-              </div>
+
               <Space>
-                <ButtonCustom
-                  type='primary'
-                  disabled={!between || endClass}
-                  href={`/live/index.html?room_id=${eventDetail._id}`}
-                  linkTarget='_parent'
-                >
-                  Tham gia
-                </ButtonCustom>
+                {eventDetail.testId && selectedOption ? (
+                  <ButtonCustom
+                    type='primary'
+                    disabled={!between || endClass}
+                    onClick={() =>
+                      navigate('/lam-bai-thi-online', {
+                        state: {
+                          testId: eventDetail.testId,
+                          testTime: selectedOption.label,
+                          addTime: examTime - selectedOption?.value,
+                        },
+                      })
+                    }
+                  >
+                    Làm bài thi
+                  </ButtonCustom>
+                ) : (
+                  <ButtonCustom
+                    type='primary'
+                    disabled={!between || endClass}
+                    href={`/live/index.html?room_id=${eventDetail._id}`}
+                    linkTarget='_parent'
+                  >
+                    Tham gia
+                  </ButtonCustom>
+                )}
               </Space>
             </Space>
           </Space>
         </Modal>
-        <EventActionModal open={openUpload} setOpen={setOpenUpload} eventDetail={eventDetail ? eventDetail : null} />
+        <EventActionModal
+          open={openUpload}
+          type={eventDetail.testId ? 'test' : 'event'}
+          setOpen={setOpenUpload}
+          eventDetail={eventDetail ? eventDetail : null}
+        />
       </>
     )
   }

@@ -30,6 +30,7 @@ export interface ExamState {
   updatedById: string
   categoryId: string
   name: string
+  description: string
   plan: string | number
   status: string
   type: string

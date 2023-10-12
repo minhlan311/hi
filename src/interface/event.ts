@@ -3,6 +3,7 @@ import { ClassState } from './class'
 export interface EventState {
   _id: string
   classId: string
+  testId: string
   start: string
   end: string
   status: string

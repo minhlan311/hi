@@ -5,7 +5,7 @@ import { EventObject } from '@/interface/class'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 import Calendar from '@toast-ui/react-calendar'
-import { Col, Input, Row, Select, Space } from 'antd'
+import { Col, Input, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
@@ -14,6 +14,7 @@ import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import SelectCustom from '../SelectCustom/SelectCustom'
 import EventActionModal from './EventActionModal'
 import EventDetailModal from './EventDetailModal'
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -22,8 +23,10 @@ const CalendarCustom = () => {
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
   const { xl, xxl } = useResponsives()
+  const [modalType, setModalType] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
   const [view, setView] = useState<string>('week')
+  const [type, setType] = useState<string>()
   const [events, setEvents] = useState<ISchedule[]>([])
   const [eventId, setEventId] = useState<string | null>(null)
 
@@ -53,10 +56,10 @@ const CalendarCustom = () => {
   }
 
   const { data: eventsData } = useQuery({
-    queryKey: ['eventsData', timeSelect],
+    queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
       return eventApi.getEvent({
-        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate },
+        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type },
         options: { pagination: false },
       })
     },
@@ -67,12 +70,14 @@ const CalendarCustom = () => {
 
     if (eventsData?.data?.totalDocs) {
       const newEvent = eventsData?.data?.docs?.map((item) => {
+        const between = moment().isAfter(item.end)
+
         return {
           id: item._id,
-          title: item.classData.title,
+          title: item.testId ? 'Buổi thi ' + item.classData.title : item.classData.title,
           start: item.start,
           end: item.end,
-          backgroundColor: '#019d44b5',
+          backgroundColor: (item.testId && '#d72831a8') || (between && '#757575b5') || '#019d44b5',
           color: 'var(--white)',
           isReadOnly: profile._id !== item.classData.createdById,
         }
@@ -106,8 +111,10 @@ const CalendarCustom = () => {
 
   const handleCreateSelect = (e: { start: Date; end: Date }) => {
     setSelectTime({ start: e.start, end: e.end })
+    setModalType('event')
     setOpenModal(true)
   }
+  console.log(selectTime)
 
   return (
     <Space direction='vertical' className='sp100'>
@@ -136,7 +143,7 @@ const CalendarCustom = () => {
                 getDate()
               }}
             ></ButtonCustom>
-            <Select
+            <SelectCustom
               onChange={(e) => {
                 setView(e)
                 getDate()
@@ -157,6 +164,25 @@ const CalendarCustom = () => {
                 },
               ]}
             />
+            <SelectCustom
+              onChange={(e) => {
+                setType(e)
+                getDate()
+              }}
+              placeholder='Loại sự kiện'
+              options={[
+                {
+                  value: 'CLASS',
+                  label: 'Cuộc họp',
+                },
+                {
+                  value: 'TEST',
+                  label: 'Lịch thi',
+                },
+              ]}
+              allowClear
+              style={{ width: 115 }}
+            />
           </Space>
         </Col>
         <Col>
@@ -165,9 +191,26 @@ const CalendarCustom = () => {
             {!profile.isMentor ? (
               <></>
             ) : (
-              <ButtonCustom type='primary' onClick={() => setOpenModal(true)}>
-                Tạo cuộc họp
-              </ButtonCustom>
+              <Space.Compact>
+                <ButtonCustom
+                  onClick={() => {
+                    setOpenModal(true)
+                    setModalType('test')
+                  }}
+                  type='primary'
+                >
+                  Tạo lịch thi
+                </ButtonCustom>
+                <ButtonCustom
+                  type='primary'
+                  onClick={() => {
+                    setOpenModal(true)
+                    setModalType('event')
+                  }}
+                >
+                  Tạo sự kiện
+                </ButtonCustom>
+              </Space.Compact>
             )}
           </Space>
         </Col>
@@ -204,7 +247,15 @@ const CalendarCustom = () => {
         isReadOnly={!profile.isMentor}
       />
       <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
-      <EventActionModal open={openModal} setOpen={setOpenModal} eventDetail={null} selectTime={selectTime} />
+      <EventActionModal
+        open={openModal}
+        setOpen={setOpenModal}
+        setType={setModalType}
+        type={modalType}
+        eventDetail={null}
+        selectTime={selectTime}
+        setSelectTime={setSelectTime}
+      />
     </Space>
   )
 }
