@@ -55,9 +55,9 @@ export default function MyCourse() {
               listData?.map((item: any) => (
                 <Col className='col'>
                   <Card
-                    // onClick={() => handleClickCourse(item._id!)}
+                    onClick={() => navigate('/myCourseLearning/' + item?.course?._id)}
                     hoverable
-                    style={{ width: 340, height: 410 }}
+                    style={{ width: 340, height: 300 }}
                     cover={
                       <ImageCustom
                         preview={false}
@@ -71,40 +71,8 @@ export default function MyCourse() {
                       description={
                         <>
                           <TextWithTooltip rows={1} children={item?.course?.name} className='link-h4-config' />
-                          {/* {item?.class?.map((item: any) => (
-                            <>
-                              <div className='flex'>
-                                <img src={calenderSVG} className='icons' alt='' /> */}
-                          {/* <TextWithTooltip
-                                  rows={1}
-                                  children={
-                                    <>
-                                      {item?.startDate && item?.schedules ? (
-                                        <>
-                                          {' '}
-                                          Khai giảng {''}
-                                          {formatDate(item?.startDate)}
-                                          {''} - Thứ {''}
-                                          {formatDaysOfWeek(item?.schedules).join('-')}
-                                          {''} Từ {''} {formatHour(item?.startAt)} - {formatHour(item?.endAt)}{' '}
-                                        </>
-                                      ) : (
-                                        'Đang cập nhật'
-                                      )}
-                                    </>
-                                  }
-                                  className='text-date'
-                                /> */}
-                          {/* </div> */}
-                          {/* </>
-                          ))} */}
                           <div className='flexButton-mycourse'>
-                            <Button
-                              type='primary'
-                              onClick={() => {
-                                navigate('/myCourseLearning/' + item?.course?._id)
-                              }}
-                            >
+                            <Button type='primary'>
                               Vào học ngay
                               <SendOutlined />
                             </Button>

@@ -1,39 +1,62 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import courseApi from '@/apis/course.api'
 import topicApi from '@/apis/topic.api'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import { AppContext } from '@/contexts/app.context'
-import { DownloadOutlined, FolderOutlined } from '@ant-design/icons'
+import FileSaver from 'file-saver'
+import { DownloadOutlined, FolderOutlined, VideoCameraOutlined, FileOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Collapse, Popover } from 'antd'
-import { useContext, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import WrapMoreDetail from '../CoursesPage/components/WrapMore/WrapMoreDetail'
+import { useContext, useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
+import LoadingCustom from '@/components/LoadingCustom'
+import enrollsApi from '@/apis/enrolls.api'
+import openNotification from '@/components/Notification'
+import { Promise } from 'bluebird'
+import JSZip from 'jszip'
 
 export default function MycoursesLearning() {
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
-
-  console.log(id, 'ididid')
-
+  const [type, setType] = useState('')
+  const [document, setDocuemnt] = useState<any>()
+  const { profile } = useContext(AppContext)
+  const navigate = useNavigate()
   const [active, setActive] = useState<string>('')
   const { scaleScreen } = useContext(AppContext)
 
-  const { data } = useQuery({
-    queryKey: ['oneCourseslearn', id],
+  const { data: checkEnrolls, isSuccess } = useQuery({
+    queryKey: ['enrollsss', id],
     queryFn: () => {
-      return courseApi.getOneCourse(id!)
+      return enrollsApi.getEnroll({
+        filterQuery: {
+          userId: profile._id,
+          targetId: id,
+          targetModel: 'COURSE',
+        },
+      })
     },
-    enabled: id ? true : false,
+    enabled: profile._id && id ? true : false,
   })
 
-  const { data: topics } = useQuery({
-    queryKey: ['topicLearning', id],
+  useEffect(() => {
+    if (isSuccess && !checkEnrolls?.data?.docs?.length) {
+      openNotification({
+        status: 'error',
+        description: 'Bạn chưa mua khóa học này',
+        message: 'Thông báo',
+      })
+      navigate('/')
+    }
+  }, [isSuccess, checkEnrolls?.data?.docs?.length])
+
+  const { data: topics, isLoading } = useQuery({
+    queryKey: ['topicLearning', id, checkEnrolls?.data?.docs?.length],
     queryFn: () => {
       return topicApi.getAllTopic({
         filterQuery: {
@@ -41,10 +64,8 @@ export default function MycoursesLearning() {
         },
       })
     },
-    enabled: id ? true : false,
+    enabled: checkEnrolls?.data?.docs?.length ? true : false,
   })
-
-  console.log(data, 'datadata')
 
   // const dataCourse = data?.data?.topics
   const dataTopics = topics?.data?.docs
@@ -101,20 +122,77 @@ export default function MycoursesLearning() {
       ),
     },
   ]
+
   const { Panel } = Collapse
 
   const handleVideo = (name: string, video: string) => {
     setActive(name)
     setNameVideo(name)
     setVideo(video)
+    setType('video')
+  }
+
+  const handleDocument = (name: string, desc: string) => {
+    setType('document')
+    setDocuemnt(desc)
+    setActive(name)
+  }
+
+  const download = (url: any) => {
+    return fetch(url).then((resp) => resp.blob())
+  }
+
+  const downloadByGroup = (urls: any, files_per_group = 10) => {
+    return Promise?.map(
+      urls,
+      async (url: any) => {
+        if (!url) return
+        await download(url)
+      },
+      { concurrency: files_per_group },
+    )
+  }
+
+  const exportZip = (blobs: any, files: any) => {
+    const zip = JSZip()
+    blobs.forEach((blob: any, i: any) => {
+      zip.file(`${files[i].name}`, blob)
+    })
+    zip.generateAsync({ type: 'blob' }).then((zipFile) => {
+      const currentDate = new Date().getTime()
+      const fileName = `Tài liệu-${currentDate}.zip`
+
+      return FileSaver.saveAs(zipFile, fileName)
+    })
+  }
+
+  const handleDownload = (link: any) => {
+    downloadByGroup(
+      link.map((e: any) => {
+        if (e.url) {
+          return `${import.meta.env.VITE_SERVICE_ENDPOINT}/${e?.url}`
+        } else {
+          return null
+        }
+      }),
+      10,
+    ).then((blobs: any) => {
+      exportZip(blobs, link)
+    })
   }
 
   return (
     <div className={`  ${!scaleScreen ? style.boxContainerFalse : style.boxContainerTrue} `}>
       <div className={style.col1}>
-        <div className={style.boxVideoContent}>
-          <VideoComponent video={video} names={nameVideo} />
-        </div>
+        {type === 'video' ? (
+          <div className={style.boxVideoContent}>
+            <VideoComponent video={video} names={nameVideo} />
+          </div>
+        ) : (
+          <div className={style.document}>
+            <div dangerouslySetInnerHTML={{ __html: document }}></div>
+          </div>
+        )}
 
         <div className={style.boxTabs}>
           <WrapMore maxWidth='100%' wrapper={'nonBorder'} title=''>
@@ -127,10 +205,16 @@ export default function MycoursesLearning() {
           <div>
             <h4 className={style.h4Col2}>Nội dung khóa học</h4>
           </div>
-          <WrapMoreDetail>
+          {isLoading ? (
+            <LoadingCustom
+              style={{
+                marginTop: '30px',
+              }}
+            />
+          ) : (
             <div className={style.scroll}>
               {
-                <Collapse>
+                <Collapse destroyInactivePanel>
                   {Array.isArray(dataTopics) && dataTopics?.length > 0
                     ? dataTopics?.map((item, index) => (
                         <>
@@ -146,13 +230,17 @@ export default function MycoursesLearning() {
                               ></div>
                             }
                           >
-                            {' '}
                             {item?.lessons?.map((lession: any) => (
                               <>
                                 <div
+                                  style={{
+                                    marginTop: '20px',
+                                  }}
                                   className={active === lession?.name ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
-                                    handleVideo(lession?.name, lession?.media)
+                                    lession?.media !== 'null'
+                                      ? handleVideo(lession?.name, lession?.media)
+                                      : handleDocument(lession?.name, lession?.descriptions)
                                   }}
                                 >
                                   <div>{lession?.name}</div>
@@ -166,9 +254,20 @@ export default function MycoursesLearning() {
                                   ></div>
                                 </div>
                                 <div className={style.flexBest}>
-                                  <div>
-                                    <p>Thời lượng : {lession?.length} phút</p>
-                                  </div>
+                                  {lession?.media !== 'null' ? (
+                                    <div>
+                                      <p>
+                                        Thời lượng : {lession?.length} phút {''}
+                                      </p>
+                                      Thể loại : <VideoCameraOutlined /> : video
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <p>
+                                        Thể loại : <FileOutlined /> : Văn bản
+                                      </p>
+                                    </>
+                                  )}
 
                                   <div>
                                     <Popover
@@ -178,40 +277,33 @@ export default function MycoursesLearning() {
                                       }}
                                       title={
                                         <>
-                                          <div>
-                                            <Button
-                                              style={{
-                                                width: '150px',
-                                              }}
-                                            >
-                                              {' '}
-                                              <DownloadOutlined />
-                                              Tài liệu 1
-                                            </Button>
-                                          </div>
-                                          <div
-                                            style={{
-                                              marginTop: '10px',
-                                            }}
-                                          >
-                                            <Button
-                                              style={{
-                                                width: '150px',
-                                              }}
-                                            >
-                                              {' '}
-                                              <DownloadOutlined />
-                                              Tài liệu 2
-                                            </Button>
-                                          </div>
+                                          {lession?.documents?.map((item: any) => (
+                                            <>
+                                              <Button
+                                                style={{
+                                                  width: '150px',
+                                                }}
+                                                onClick={() => handleDownload(item?.files)}
+                                              >
+                                                <DownloadOutlined />
+                                                tài liệu
+                                              </Button>
+                                            </>
+                                          ))}
                                         </>
                                       }
                                       trigger={'click'}
                                     >
-                                      <Button>
-                                        <FolderOutlined />
-                                        Tài liệu
-                                      </Button>
+                                      {lession?.documents?.map((item: any) => (
+                                        <>
+                                          {item?.files?.length && (
+                                            <Button>
+                                              <FolderOutlined />
+                                              Tài liệu
+                                            </Button>
+                                          )}
+                                        </>
+                                      ))}
                                     </Popover>
                                   </div>
                                 </div>
@@ -224,7 +316,7 @@ export default function MycoursesLearning() {
                 </Collapse>
               }
             </div>
-          </WrapMoreDetail>
+          )}
         </div>
       </div>
     </div>

@@ -42,6 +42,8 @@ export default function Courses() {
     },
   })
 
+  console.log(checkEnrolls, 'checkEnrollscheckEnrolls')
+
   return (
     <>
       {/* Thanh màu đen   */}

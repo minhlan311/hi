@@ -44,7 +44,7 @@ export default function DrawerUpdateLession({
     form.setFieldValue('length', dataUpdateLession?.length)
     form.setFieldValue('parentId', dataUpdateLession?.parentId)
     form.setFieldValue('id', dataUpdateLession?.id)
-    // setContent(dataUpdateLession?.descriptions)
+    setContent(dataUpdateLession?.descriptions)
   }, [dataUpdateLession])
 
   useEffect(() => {
@@ -76,7 +76,9 @@ export default function DrawerUpdateLession({
     },
   }
 
-  const newArray = fileList?.map((item) => item?.response)
+  const newArray = fileList?.map((item) => item?.response).flat()
+
+  console.log(newArray, 'newArraynewArraynewArray')
 
   const mutation = useMutation({
     mutationFn: (body: Lession) => lessionApi.updateLession(body),
@@ -117,6 +119,7 @@ export default function DrawerUpdateLession({
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
+    console.log(values, 'valuesvaluesvaluesvalues')
     delete values.document
     mutation.mutate(values)
     mutationDocument.mutate({
@@ -126,6 +129,7 @@ export default function DrawerUpdateLession({
       type: 'CURRICULUM',
       files: newArray,
       courseId: userId,
+      lessonId: values.id,
     })
     form.resetFields()
     setContent('')
@@ -143,15 +147,15 @@ export default function DrawerUpdateLession({
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />
         </Form.Item>
-        <Form.Item label={'Link video'} name='media' rules={[{ required: true, message: 'Hãy nhập link video' }]}>
+        <Form.Item label={'Link video'} name='media'>
           <Input placeholder='Nhập Link video' allowClear />
         </Form.Item>
-        <Form.Item label={'Thời lượng'} name='length' rules={[{ required: true, message: 'Hãy nhập thời lượng' }]}>
+        <Form.Item label={'Thời lượng'} name='length'>
           <InputNumber
             style={{
               width: '100%',
             }}
-            placeholder='Nhập thời lượng bài thi'
+            placeholder='Nhập thời lượng video nếu có'
           />
         </Form.Item>
         <Form.Item

@@ -38,7 +38,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
       form.setFieldValue('name', dataUpdateTopic?.name)
       form.setFieldValue('parentId', dataUpdateTopic?.parentId)
       form.setFieldValue('id', dataUpdateTopic?.id)
-      //   setContent(dataUpdateTopic?.descriptions)
+      setContent(dataUpdateTopic?.descriptions)
     }
     return
   }, [dataUpdateTopic])

@@ -187,7 +187,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
             />
             <div className={style.videoPosition}>
               <div className={style.videoPositionText}>
-                <p>このコースをプレビュー</p>
+                <p>Video giới thiệu khóa học</p>
               </div>
             </div>
             <div>

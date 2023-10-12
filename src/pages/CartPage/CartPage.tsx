@@ -20,7 +20,7 @@ import MenuCourses from './MenuCourses/MenuCourses'
 export default function CartPage() {
   const [price, setPrice] = useState<number>(0)
 
-  const [disable, setCheckDisable] = useState<[]>([])
+  const [dataCallback, setDataCallback] = useState<[]>([])
   const { profile } = useContext(AppContext)
   const { data, isLoading } = useQuery({
     queryKey: ['dataCart'],
@@ -66,7 +66,7 @@ export default function CartPage() {
                     <Col className={css.cartLeft} span={24}>
                       <MenuCourses
                         coursesData={orderData as any}
-                        setselectLength={setCheckDisable}
+                        setselectLength={setDataCallback}
                         setPriceParent={setPrice}
                       />{' '}
                     </Col>
@@ -80,9 +80,15 @@ export default function CartPage() {
                     <PriceCalculator price={price!} priceSize={32} showTotal showDiscount direction='column' />
                   </div>
                   <Button
-                    disabled={!disable?.length}
+                    disabled={!dataCallback?.length}
                     type='primary'
-                    onClick={() => mutationPay.mutate({ value: price })}
+                    onClick={() =>
+                      mutationPay.mutate({
+                        value: price,
+                        targetModel: 'COURSE',
+                        targetId: dataCallback,
+                      })
+                    }
                   >
                     Thanh toán ngay <SendOutlined />
                   </Button>
