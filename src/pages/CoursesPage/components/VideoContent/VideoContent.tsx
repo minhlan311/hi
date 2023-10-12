@@ -166,7 +166,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
         destroyOnClose
         zIndex={9999989999}
         maskClosable={false}
-        title='Basic Modal'
+        title='Giới thiệu khóa học'
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

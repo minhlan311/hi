@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useContext } from 'react'
-import style from './MycoursesLearning.module.scss'
-import { AppContext } from '@/contexts/app.context'
-import TabsCustom from '@/components/TabsCustom/TabsCustom'
-import WrapMoreDetail from '../CoursesPage/components/WrapMore/WrapMoreDetail'
-import WrapMore from '@/components/WrapMore/WrapMore'
-import { useQuery } from '@tanstack/react-query'
 import courseApi from '@/apis/course.api'
-import { useParams } from 'react-router-dom'
-import { Button, Collapse, Popover } from 'antd'
 import topicApi from '@/apis/topic.api'
-import { FolderOutlined, DownloadOutlined } from '@ant-design/icons'
+import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
+import WrapMore from '@/components/WrapMore/WrapMore'
+import { AppContext } from '@/contexts/app.context'
+import { DownloadOutlined, FolderOutlined } from '@ant-design/icons'
+import { useQuery } from '@tanstack/react-query'
+import { Button, Collapse, Popover } from 'antd'
+import { useContext, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import WrapMoreDetail from '../CoursesPage/components/WrapMore/WrapMoreDetail'
 import './MycoursesLearning.module.scss'
-
-type ActiveState = {
-  video?: string
-  active?: number | string
-}
+import style from './MycoursesLearning.module.scss'
 
 export default function MycoursesLearning() {
   const { id } = useParams()
@@ -51,7 +46,7 @@ export default function MycoursesLearning() {
 
   console.log(data, 'datadata')
 
-  const dataCourse = data?.data?.topics
+  // const dataCourse = data?.data?.topics
   const dataTopics = topics?.data?.docs
 
   const myTabs = [
@@ -108,11 +103,6 @@ export default function MycoursesLearning() {
   ]
   const { Panel } = Collapse
 
-  const handleActive = (item: any) => {
-    console.log(item, 'item')
-
-    setState({ ...state, video: item.video, active: item.id })
-  }
   const handleVideo = (name: string, video: string) => {
     setActive(name)
     setNameVideo(name)
@@ -141,7 +131,7 @@ export default function MycoursesLearning() {
             <div className={style.scroll}>
               {
                 <Collapse>
-                  {dataTopics && dataTopics?.length > 0
+                  {Array.isArray(dataTopics) && dataTopics?.length > 0
                     ? dataTopics?.map((item, index) => (
                         <>
                           <Panel

@@ -41,7 +41,7 @@ type Props = {
 type VideoProps = {
   video?: string
   dataLession?: any[]
-  names: string
+  names?: string
 }
 
 export default function VideoComponent({ video, names, dataLession }: VideoProps) {
