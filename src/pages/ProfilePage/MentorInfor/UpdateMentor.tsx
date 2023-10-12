@@ -50,8 +50,6 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
   })
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
-
     mutation.mutate(
       { ...values, _id: id, socials: DataSocial },
       {

@@ -23,7 +23,7 @@ export default function MycoursesLearning() {
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
-  const [type, setType] = useState('')
+  const [type, setType] = useState('video')
   const [document, setDocuemnt] = useState<any>()
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
@@ -190,7 +190,12 @@ export default function MycoursesLearning() {
           </div>
         ) : (
           <div className={style.document}>
-            <div dangerouslySetInnerHTML={{ __html: document }}></div>
+            <div
+              style={{
+                lineHeight: '1.4',
+              }}
+              dangerouslySetInnerHTML={{ __html: document }}
+            ></div>
           </div>
         )}
 
@@ -238,7 +243,7 @@ export default function MycoursesLearning() {
                                   }}
                                   className={active === lession?.name ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
-                                    lession?.media !== 'null'
+                                    lession?.media
                                       ? handleVideo(lession?.name, lession?.media)
                                       : handleDocument(lession?.name, lession?.descriptions)
                                   }}
@@ -254,17 +259,17 @@ export default function MycoursesLearning() {
                                   ></div>
                                 </div>
                                 <div className={style.flexBest}>
-                                  {lession?.media !== 'null' ? (
+                                  {lession?.media ? (
                                     <div>
                                       <p>
                                         Thời lượng : {lession?.length} phút {''}
                                       </p>
-                                      Thể loại : <VideoCameraOutlined /> : video
+                                      Thể loại : <VideoCameraOutlined /> video
                                     </div>
                                   ) : (
                                     <>
                                       <p>
-                                        Thể loại : <FileOutlined /> : Văn bản
+                                        Thể loại : <FileOutlined /> Văn bản
                                       </p>
                                     </>
                                   )}
@@ -296,7 +301,7 @@ export default function MycoursesLearning() {
                                     >
                                       {lession?.documents?.map((item: any) => (
                                         <>
-                                          {item?.files?.length && (
+                                          {item?.files && (
                                             <Button>
                                               <FolderOutlined />
                                               Tài liệu

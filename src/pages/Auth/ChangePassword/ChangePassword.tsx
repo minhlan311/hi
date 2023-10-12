@@ -13,7 +13,6 @@ export default function ChangePassword() {
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    console.log(values, 'values')
     mutate.mutate(values)
   }
 

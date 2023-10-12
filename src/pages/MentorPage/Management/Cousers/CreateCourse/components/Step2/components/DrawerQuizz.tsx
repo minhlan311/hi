@@ -59,8 +59,6 @@ export default function DrawerQuizz({ onOpen, onClose, dataUpdateLession }: any)
     enabled: dataUpdateLession?.id ? true : false,
   })
 
-  console.log(dataQuestion, 'dataUpdateLessiondataUpdateLession')
-
   const uploadQuestionProps: UploadProps = {
     name: 'attachment',
     multiple: false,
@@ -180,13 +178,10 @@ export default function DrawerQuizz({ onOpen, onClose, dataUpdateLession }: any)
     }
   }
 
-  console.log(content, 'content')
-
   const onFinish = (values: any) => {
     mutation.mutate(values)
     form.resetFields()
     setContent('')
-    console.log(values, 'values')
   }
 
   const onFinishFailed = (values: any) => {
