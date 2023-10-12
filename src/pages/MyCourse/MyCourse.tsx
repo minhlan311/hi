@@ -11,11 +11,12 @@ import { Button, Card, Col, Pagination, Row } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import { useContext, useState } from 'react'
 import './MyCourse.scss'
+import { useNavigate } from 'react-router-dom'
 
 export default function MyCourse() {
   const { profile } = useContext(AppContext)
   const [current, setCurrent] = useState<number>(1)
-
+  const navigate = useNavigate()
   const { data, isLoading } = useQuery({
     queryKey: ['myCourse', current],
     queryFn: () =>
@@ -31,6 +32,8 @@ export default function MyCourse() {
   })
 
   const listData = data?.data?.docs
+
+  console.log(listData, '==-=-=-=-')
 
   const onChange = (page: number) => {
     setCurrent(page)
@@ -96,7 +99,12 @@ export default function MyCourse() {
                           {/* </>
                           ))} */}
                           <div className='flexButton-mycourse'>
-                            <Button type='primary'>
+                            <Button
+                              type='primary'
+                              onClick={() => {
+                                navigate('/myCourseLearning/' + item?.course?._id)
+                              }}
+                            >
                               Vào học ngay
                               <SendOutlined />
                             </Button>

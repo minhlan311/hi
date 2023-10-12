@@ -14,9 +14,11 @@ const format = (seconds: number) => {
   const hh = date.getUTCHours()
   const mm = date.getUTCMinutes()
   const ss = date.getUTCSeconds().toString().padStart(2, '0')
+
   if (hh) {
     return `${hh}:${mm.toString().padStart(2, '0')}:${ss}`
   }
+
   return `${mm}:${ss}`
 }
 
@@ -39,9 +41,10 @@ type Props = {
 type VideoProps = {
   video?: string
   dataLession?: any[]
+  names: string
 }
 
-export default function VideoComponent({ video, dataLession }: VideoProps) {
+export default function VideoComponent({ video, names, dataLession }: VideoProps) {
   const playerRef = useRef<any>(null)
   const controlsRef = useRef<any>(null)
   const playerContainerRef = useRef<any>(null)
@@ -75,10 +78,12 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
 
   const handleProgress = (state: any) => {
     setPlayeds(state.played)
+
     if (count > 2) {
       controlsRef.current.style.visibility = 'hidden'
       count = 0
     }
+
     if (controlsRef.current.style.visibility == 'visible') {
       count += 1
     }
@@ -94,10 +99,12 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
   const handleRewind = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10)
   }
+
   // tua nhanh
   const handleFastForward = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10)
   }
+
   // mute âm
   const handleMute = () => {
     setState({ ...state, muted: !state.muted })
@@ -107,6 +114,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
   const handleVolumeSeekDown = (e: string) => {
     setState({ ...state, seeking: false, volume: parseFloat(e) / 100 })
   }
+
   // chinh volume
   const onVolumeChange = (e: string | number) => {
     setState({
@@ -119,6 +127,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
   const handleDuration = (duration: number) => {
     setState({ ...state, duration })
   }
+
   const handleSeekChange = (e: string) => {
     setState({ ...state, played: parseFloat(e) / 100 })
   }
@@ -143,6 +152,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
   const toggleFullScreen = () => {
     screenfull.toggle(playerContainerRef.current)
   }
+
   return (
     <>
       <div className={style.boxContainer}>
@@ -180,6 +190,7 @@ export default function VideoComponent({ video, dataLession }: VideoProps) {
           />
 
           <Controls
+            names={names}
             dataLession={dataLession}
             ref={controlsRef}
             onSeek={handleSeekChange}

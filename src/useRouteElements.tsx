@@ -210,6 +210,14 @@ export default function useRouteElements() {
           ),
         },
         {
+          path: PATH.MY_COURSE_LEARNING,
+          element: (
+            <Layout user={profile} title='Khóa học của bạn'>
+              <MycoursesLearning />
+            </Layout>
+          ),
+        },
+        {
           path: PATH.MY_COURSE,
           element: (
             <Layout user={profile} title='Giỏ hàng của bạn'>

@@ -11,6 +11,7 @@ import { AppContext } from '@/contexts/app.context'
 const Controls = forwardRef(
   (
     {
+      names,
       handlePlaybackRate,
       playbackRate,
       handleSeekMouseUp,
@@ -26,9 +27,9 @@ const Controls = forwardRef(
       onChangeDispayFormat,
       volume,
       onVolumeChange,
-      toggleFullScreen
+      toggleFullScreen,
     }: any,
-    ref: any
+    ref: any,
   ) => {
     const { scaleScreen, setScaleScreen } = useContext(AppContext)
 
@@ -36,7 +37,7 @@ const Controls = forwardRef(
       <div ref={ref} className={style.controlsWrapper}>
         {/* top  */}
         <div className={style.top}>
-          <p style={{ color: '#fff' }}>みんなのAI講座 ゼロからPythonで学ぶ人工知能と機械学習 【2023年最新版】</p>
+          <p style={{ color: '#fff' }}>{names}</p>
         </div>
         {/* mid  */}
         <div className={style.mid}>
@@ -67,7 +68,7 @@ const Controls = forwardRef(
                 value={played * 100}
                 tooltip={{ formatter: () => <>{elapsedTime}</> }}
                 style={{
-                  margin: '0 15px'
+                  margin: '0 15px',
                 }}
                 onChange={handleSeekMouseUp}
               />
@@ -84,7 +85,7 @@ const Controls = forwardRef(
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '5px'
+                    gap: '5px',
                   }}
                 >
                   {muted ? (
@@ -104,7 +105,7 @@ const Controls = forwardRef(
                   onChange={onVolumeChange}
                   style={{
                     width: '80px',
-                    marginTop: '12px'
+                    marginTop: '12px',
                   }}
                   //   onMouseDown={onSeekMouseDown}
                   //   onChangeCommitted={onVolumeSeekDown}
@@ -127,7 +128,7 @@ const Controls = forwardRef(
                         style={{
                           cursor: 'pointer',
                           display: 'flex',
-                          flexDirection: 'column'
+                          flexDirection: 'column',
                         }}
                       >
                         {[0.5, 1, 1.5, 2].map((rate) => (
@@ -153,6 +154,6 @@ const Controls = forwardRef(
         </div>
       </div>
     )
-  }
+  },
 )
 export default Controls
