@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classApi from '@/apis/class.api'
 import eventApi from '@/apis/event.api'
+import examApi from '@/apis/exam.api'
 import userApi from '@/apis/user.api'
 import { AppContext } from '@/contexts/app.context'
 import { EventState } from '@/interface/event'
@@ -11,8 +12,6 @@ import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
-import examApi from '@/apis/exam.api'
-import { ClassState } from '@/interface/class'
 
 type Props = {
   open: boolean
@@ -29,7 +28,7 @@ const EventActionModal = (props: Props) => {
   const { profile } = useContext(AppContext)
   const [form] = Form.useForm()
   const [allDay, setAllDay] = useState(false)
-  const [callBackClass, setCallBackClass] = useState<ClassState[]>([])
+
   const [initVal, setInitVal] = useState<any>()
 
   const queryClient = useQueryClient()
@@ -64,7 +63,6 @@ const EventActionModal = (props: Props) => {
       }
       mutate(payload as unknown as any)
     } else {
-      const students = callBackClass.find((e) => e._id === values.classId)?.students
       const date = moment(values.date.$d).format('YYYY-MM-DD')
       const time = moment(values.time.$d).format('HH:mm')
       const start = date + ' ' + time
@@ -75,18 +73,16 @@ const EventActionModal = (props: Props) => {
 
       const end = date + ' ' + newTime
 
-      if (students) {
-        const payload = {
-          id: eventDetail?._id,
-          classId: values.classId,
-          testId: values.testId,
-          type: 'TEST',
-          start: start,
-          end: end,
-          students: students,
-        }
-        mutate(payload as unknown as any)
+      const payload = {
+        id: eventDetail?._id,
+        classId: values.classId,
+        testId: values.testId,
+        type: 'TEST',
+        start: start,
+        end: end,
+        students: values.students,
       }
+      mutate(payload as unknown as any)
     }
 
     setOpen(!open)
@@ -143,7 +139,11 @@ const EventActionModal = (props: Props) => {
       })
   }, [selectTime])
 
-  console.log(initVal)
+  useEffect(() => {
+    if (initVal) {
+      form.setFieldsValue(initVal)
+    }
+  }, [initVal])
 
   return (
     <Modal
@@ -161,7 +161,7 @@ const EventActionModal = (props: Props) => {
       width={'40vw'}
       okText={eventDetail ? 'Lưu thay đổi' : `Tạo ${type === 'test' ? 'lịch thi' : 'sự kiện'}`}
     >
-      <Form onFinish={handleFinish} form={form} layout='vertical'>
+      <Form onFinish={handleFinish} form={form} layout='vertical' initialValues={initVal}>
         <Row gutter={12}>
           <Col span={24} md={eventDetail ? 9 : 12}>
             <Form.Item label='Lớp học' name='classId' rules={[{ required: true, message: 'Vui lòng chọn lớp' }]}>
@@ -173,62 +173,63 @@ const EventActionModal = (props: Props) => {
                 apiFind={classApi.getClass}
                 filterQuery={{ createdById: profile._id }}
                 allowClear
-                callBackDataSearch={setCallBackClass}
               />
             </Form.Item>
           </Col>
-
-          {type === 'event' ? (
-            <Col span={24} md={eventDetail ? 9 : 12}>
-              <Form.Item
-                label='Thêm người tham dự'
-                name='students'
-                rules={[{ required: true, message: 'Vui lòng chọn người dự' }]}
-              >
-                <SelectCustom
-                  placeholder='Tìm kiếm tham người dự'
-                  type='search'
-                  searchKey='user'
-                  apiFind={userApi.findUser}
-                  filterQuery={{ _id: profile._id }}
-                  defaultValue={eventDetail?.classData.students}
-                  mode='multiple'
-                  allowClear
-                  selectAll
-                  selectAllLabel='Chọn tất cả'
-                />
-              </Form.Item>
-            </Col>
-          ) : (
-            <Col span={24} md={eventDetail ? 9 : 12}>
-              <Form.Item label='Bài thi' name='testId' rules={[{ required: true, message: 'Vui lòng chọn bài thi' }]}>
-                <SelectCustom
-                  placeholder='Tìm kiếm bài thi'
-                  type='search'
-                  searchKey='exams'
-                  apiFind={examApi.findExam}
-                  filterQuery={{ createdById: profile._id }}
-                  defaultValue={eventDetail?.classData.students}
-                />
-              </Form.Item>
-            </Col>
-          )}
-
-          {eventDetail && (
-            <Col span={6}>
-              <Form.Item label='Trạng thái' name='status'>
-                <SelectCustom
-                  placeholder='Chọn trạng thái'
-                  defaultValue={eventDetail?.status}
-                  options={[
-                    { label: 'Hoạt động', value: 'ACTIVE' },
-                    { label: 'Ẩn', value: 'INACTIVE' },
-                    { label: 'Khóa', value: 'LOCK' },
-                    { label: 'Hủy', value: 'CANCEL' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
+          <Col span={24} md={eventDetail ? 9 : 12}>
+            <Form.Item
+              label='Thêm người tham dự'
+              name='students'
+              rules={[{ required: true, message: 'Vui lòng chọn người dự' }]}
+            >
+              <SelectCustom
+                placeholder='Tìm kiếm tham người dự'
+                type='search'
+                searchKey='user'
+                apiFind={userApi.findUser}
+                filterQuery={{ _id: profile._id }}
+                defaultValue={eventDetail?.classData.students}
+                mode='multiple'
+                allowClear
+                selectAll
+                selectAllLabel='Chọn tất cả'
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label='Trạng thái' name='status'>
+              <SelectCustom
+                placeholder='Chọn trạng thái'
+                defaultValue={eventDetail?.status}
+                options={[
+                  { label: 'Hoạt động', value: 'ACTIVE' },
+                  { label: 'Ẩn', value: 'INACTIVE' },
+                  { label: 'Khóa', value: 'LOCK' },
+                  { label: 'Hủy', value: 'CANCEL' },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+          {type === 'test' && (
+            <>
+              <Col span={24} md={12}>
+                <Form.Item label='Bài thi' name='testId' rules={[{ required: true, message: 'Vui lòng chọn bài thi' }]}>
+                  <SelectCustom
+                    placeholder='Tìm kiếm bài thi'
+                    type='search'
+                    searchKey='exams'
+                    apiFind={examApi.findExam}
+                    filterQuery={{ createdById: profile._id }}
+                    defaultValue={eventDetail?.classData.students}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={24} md={12}>
+                <Form.Item label='Ngày thi' name='date' rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}>
+                  <DatePicker className='sp100' placeholder='Chọn ngày thi' format={'DD-MM-YYYY'} />
+                </Form.Item>
+              </Col>
+            </>
           )}
         </Row>
 
@@ -253,11 +254,6 @@ const EventActionModal = (props: Props) => {
           </Row>
         ) : (
           <Row gutter={12}>
-            <Col span={24}>
-              <Form.Item label='Ngày thi' name='date' rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}>
-                <DatePicker className='sp100' placeholder='Chọn ngày thi' format={'DD-MM-YYYY'} />
-              </Form.Item>
-            </Col>
             <Col span={24} md={8}>
               <Form.Item
                 label='Thời gian thi'

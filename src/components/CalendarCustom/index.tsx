@@ -59,7 +59,7 @@ const CalendarCustom = () => {
     queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
       return eventApi.getEvent({
-        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type },
+        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, students: [profile._id] },
         options: { pagination: false },
       })
     },
@@ -77,7 +77,7 @@ const CalendarCustom = () => {
           title: item.testId ? 'Buổi thi ' + item.classData.title : item.classData.title,
           start: item.start,
           end: item.end,
-          backgroundColor: (item.testId && '#d72831a8') || (between && '#757575b5') || '#019d44b5',
+          backgroundColor: (between && '#757575b5') || (item.testId && '#d72831a8') || '#019d44b5',
           color: 'var(--white)',
           isReadOnly: profile._id !== item.classData.createdById,
         }
@@ -114,7 +114,6 @@ const CalendarCustom = () => {
     setModalType('event')
     setOpenModal(true)
   }
-  console.log(selectTime)
 
   return (
     <Space direction='vertical' className='sp100'>
