@@ -33,8 +33,6 @@ export default function MyCourse() {
 
   const listData = data?.data?.docs
 
-  console.log(listData, '==-=-=-=-')
-
   const onChange = (page: number) => {
     setCurrent(page)
   }

@@ -73,8 +73,6 @@ export default function CategogyDetail() {
     enabled: id ? true : false,
   })
 
-  console.log(listCourse, 'listCourselistCourse')
-
   const handleClickCourse = (id: string) => {
     navigate({
       pathname: `/courses/` + id,

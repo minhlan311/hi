@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import topicApi from '@/apis/topic.api'
 import openNotification from '@/components/Notification'
@@ -63,12 +64,9 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
     mutation.mutate(values)
     form.resetFields()
     setContent('')
-    console.log(values, 'values')
   }
 
-  const onFinishFailed = (values: any) => {
-    console.log(values, 'values')
-  }
+  const onFinishFailed = (_values: any) => {}
 
   return (
     <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm chuyên đề mới'}>

@@ -50,8 +50,6 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     },
   })
 
-  // console.log(dataDrawer, 'dataDrawerdataDrawer')
-
   useEffect(() => {
     form.setFieldValue('descriptions', content)
   }, [content])

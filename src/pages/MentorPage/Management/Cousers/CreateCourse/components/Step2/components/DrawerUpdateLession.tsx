@@ -78,8 +78,6 @@ export default function DrawerUpdateLession({
 
   const newArray = fileList?.map((item) => item?.response).flat()
 
-  console.log(newArray, 'newArraynewArraynewArray')
-
   const mutation = useMutation({
     mutationFn: (body: Lession) => lessionApi.updateLession(body),
     onSuccess: (value: any) => {
@@ -109,8 +107,6 @@ export default function DrawerUpdateLession({
     },
   })
 
-  //   console.log(dataDrawer, 'dataDrawerdataDrawer')
-
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
     setContent(data)
@@ -119,7 +115,6 @@ export default function DrawerUpdateLession({
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
-    console.log(values, 'valuesvaluesvaluesvalues')
     delete values.document
     mutation.mutate(values)
     mutationDocument.mutate({
@@ -134,12 +129,9 @@ export default function DrawerUpdateLession({
     form.resetFields()
     setContent('')
     onClose(false)
-    // console.log(values, 'values')
   }
 
-  const onFinishFailed = (values: any) => {
-    console.log(values, 'values')
-  }
+  const onFinishFailed = (_values: any) => {}
 
   return (
     <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Sửa bài học '}>
@@ -174,7 +166,6 @@ export default function DrawerUpdateLession({
           </Dragger>
         </Form.Item>
         <Form.Item hidden name='parentId' />
-        <Form.Item hidden name='id' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
           <Button type='primary' htmlType='submit' className='btn-sn'>
