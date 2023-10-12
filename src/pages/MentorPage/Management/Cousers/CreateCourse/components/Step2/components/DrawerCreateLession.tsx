@@ -52,7 +52,9 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
       console.log('Dropped files', e.dataTransfer.files)
     },
   }
-  const newArray = fileList?.map((item) => item?.response)
+  const newArray = fileList?.map((item) => item?.response).flat()
+
+  console.log(newArray, 'newArraynewArraynewArray')
 
   const mutation = useMutation({
     mutationFn: (body: LessionForm) => lessionApi.createLession(body),
@@ -84,6 +86,8 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
+    console.log(values, 'valuesvaluesvaluesvalues')
+
     delete values.document
     mutation.mutate(values)
     mutationDocument.mutate({
@@ -93,6 +97,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
       type: 'CURRICULUM',
       files: newArray,
       courseId: userId,
+      lessonId: values.id,
     })
     form.resetFields()
     setContent('')
@@ -110,15 +115,15 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />
         </Form.Item>
-        <Form.Item label={'Link video'} name='media' rules={[{ required: true, message: 'Hãy nhập link video' }]}>
+        <Form.Item label={'Link video'} name='media'>
           <Input placeholder='Nhập Link video' allowClear />
         </Form.Item>
-        <Form.Item label={'Thời lượng'} name='length' rules={[{ required: true, message: 'Hãy nhập thời lượng' }]}>
+        <Form.Item label={'Thời lượng'} name='length'>
           <InputNumber
             style={{
               width: '100%',
             }}
-            placeholder='Nhập thời lượng bài thi'
+            placeholder='Nhập thời lượng video nếu có'
           />
         </Form.Item>
         <Form.Item

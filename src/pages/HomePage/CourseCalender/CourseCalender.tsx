@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
+import { formatDate, formatPriceVND } from '@/helpers/common'
 import LoadingCustom from '@/components/LoadingCustom'
 
 export default function CourseCalender() {
@@ -49,6 +49,7 @@ export default function CourseCalender() {
       pathname: `/courses/` + id,
     })
   }
+  console.log(listData, 'listDatalistData')
 
   return (
     <div className='courseCalender-container'>
@@ -113,14 +114,11 @@ export default function CourseCalender() {
                                 rows={1}
                                 children={
                                   <>
-                                    {item?.startDate && item?.schedules ? (
+                                    {item?.startDate ? (
                                       <>
                                         {' '}
                                         Khai giảng {''}
                                         {formatDate(item?.startDate)}
-                                        {''} - Thứ {''}
-                                        {formatDaysOfWeek(item?.schedules).join('-')}
-                                        {''} Từ {''} {formatHour(item?.startAt)} - {formatHour(item?.endAt)}{' '}
                                       </>
                                     ) : (
                                       'Đang cập nhật'

@@ -40,6 +40,8 @@
   padding-bottom: 20px;
 }
 .onBoxCol2 {
+  overflow: scroll;
+  height: 85vh;
   padding: 20px;
 }
 .scroll {
@@ -107,5 +109,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d1d7dc;
   font-weight: 600 !important;
+}
+.document {
+  border-bottom: 1px solid #d1d7dc;
+  padding: 30px 70px;
+  height: 65vh;
+  max-width: 1100px;
+  overflow: scroll;
 }

@@ -6,26 +6,34 @@ import { MyPageTableOptions } from '@/types/page.type'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Space, Table, Tooltip } from 'antd'
 import { ReconciliationOutlined, EditOutlined } from '@ant-design/icons'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import classApi from '@/apis/class.api'
 import openNotification from '@/components/Notification'
 import { findUserEnroll } from '@/types/eroll.type'
 
 export default function MyStudent() {
+  const [current, setCurrent] = useState<number>(1)
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
+
   const { data, isLoading } = useQuery({
-    queryKey: ['dataUserEnroll'],
+    queryKey: ['dataUserEnroll', current],
     queryFn: () =>
       courseApi.getUserErolls({
         filterQuery: {
           mentorId: profile._id,
         },
         options: {
-          pagination: false,
+          page: current,
+          limit: 10,
         },
       }),
+    keepPreviousData: true,
   })
+
+  const onChange = (page: any) => {
+    setCurrent(page.current)
+  }
 
   const mutate = useMutation({
     mutationFn: (body: { courseId: string; userId: string }) => {
@@ -135,10 +143,11 @@ export default function MyStudent() {
           rowKey={'key'}
           dataSource={data?.data?.docs as any}
           pagination={{
-            current: data?.data?.page,
-            pageSize: data?.data?.limit,
+            current: current,
+            pageSize: 10,
             total: data?.data?.totalDocs,
           }}
+          onChange={onChange}
           loading={isLoading || mutate.isLoading}
           columns={tableColumns}
         />
