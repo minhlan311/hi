@@ -31,8 +31,8 @@ const examApi = {
     return http.post<SuccessResponse<ExamState[]>>(ENDPOINT.FIND_EXAM_PATH, payload ? payload : data)
   },
 
-  getExamDetail(slug: string) {
-    return http.get<ExamState>(ENDPOINT.EXAM_PATH + slug)
+  getExamDetail(id: string) {
+    return http.get<ExamState>(ENDPOINT.EXAM_PATH + id)
   },
 
   putExam(data: any) {

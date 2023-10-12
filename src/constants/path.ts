@@ -25,6 +25,7 @@ export const PATH = {
   COURSE_SUB: '/khoa-hoc',
   CHOICE_PAGE: '/trac-nghiem',
   QA_PAGE: '/hoi-dap',
+  TEST_PAGE: '/lam-bai-thi-online',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',

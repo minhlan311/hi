@@ -2,6 +2,7 @@
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
@@ -128,6 +129,8 @@ const DrawerExam = (props: Props) => {
           >
             <Input placeholder='Nhập tên tiêu đề bộ đề' />
           </Form.Item>
+
+          <TextAreaCustom name='description' label='Chú thích' data={examData?.description} />
 
           <Form.Item
             name='type'
