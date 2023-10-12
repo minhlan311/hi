@@ -106,10 +106,13 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
         status: 'success',
         message: 'Thông báo',
       })
-      queryClient.invalidateQueries({ queryKey: ['products'] })
-      queryClient.invalidateQueries({ queryKey: ['enrolls'] })
     },
   })
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['products'] })
+    queryClient.invalidateQueries({ queryKey: ['enrolls'] })
+  }, [mutationLocked.isSuccess])
 
   useEffect(() => {
     let prevScrollPos = window.scrollY
