@@ -16,6 +16,7 @@ export type TCourse = {
   startDate: string
   cost: number
   startAt: string
+  targetModel: string
   endAt: string
   createdAt: string
   updatedAt: string
@@ -25,6 +26,7 @@ export type TCourse = {
   countAssessment: number
   countTests: number
   document?: never[]
+  isLocked?: boolean
   class?: [
     {
       courseId: string

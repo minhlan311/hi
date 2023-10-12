@@ -51,7 +51,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
 
   useEffect(() => {
     if (dataClass && typeForm === 'UPDATE') {
-      form.setFieldValue('courseId', dataClass?.data?.courseId._id)
+      form.setFieldValue('courseId', dataClass?.data?.courseId?._id)
       form.setFieldValue('startDate', dayjs(formatDate(dataClass?.data?.startDate as string), 'DD/MM/YYYY'))
       form.setFieldValue('endDate', dayjs(formatDate(dataClass?.data?.endDate as string), 'DD/MM/YYYY'))
       form.setFieldValue('schedules', dataClass?.data?.schedules)

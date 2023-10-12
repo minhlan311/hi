@@ -4,13 +4,12 @@
 import vnpayApi from '@/apis/vnpay.api'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import './VnpayPage.scss'
 
 export default function VnpayPage() {
   const location = useLocation()
   const [status, setStatus] = useState('')
-  const navigate = useNavigate()
 
   function convertSearchParamsToObject(searchParams: any) {
     const obj: any = {}
@@ -24,14 +23,16 @@ export default function VnpayPage() {
 
   const paymentData = convertSearchParamsToObject(queryParams)
 
-  console.log(paymentData, 'paymentData')
-
   const mutate = useMutation({
     mutationFn: (body: { value: any }) => vnpayApi.callback(body),
     onSuccess: (data) => {
       setStatus(data?.data?.status as any)
       setTimeout(() => {
-        navigate('/')
+        window.close()
+
+        if (window.opener) {
+          window.opener.window.location.reload()
+        }
       }, 3000)
     },
   })
@@ -44,7 +45,7 @@ export default function VnpayPage() {
     <div className='div-flex-vnpay'>
       {status === 'SUCCESS' ? (
         <>
-          <h1>Thanh toán đơn hàng thành công ! trở về trang chủ sau 3s</h1>
+          <h1>Thanh toán đơn hàng thành công ! tự động chuyển hướng về khóa học sau 3s</h1>
         </>
       ) : (
         <h1>Đang kiểm tra thanh toán...</h1>

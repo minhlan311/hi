@@ -45,6 +45,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: Course PATH :::::::::::::::::::::
   COURSES_PATH: '/courses/',
+  ENROLL_PATH_USER: '/courses/findUser',
   FIND_COURSES_PATH: '/courses/find',
   COURSES_QUIZ_PATH: '/exam/questions/find',
   PROGRESSIONS_PATH: '/edu/progressions/',
@@ -71,6 +72,7 @@ export const ENDPOINT = {
   // :::::::::::::::::::: CLASS PATH :::::::::::::::::::::
   FIND_CLASS_PATH: '/class/find',
   CLASS_PATH: '/class/',
+  ARRANGE_PATH: '/class/arrange',
 
   // :::::::::::::::::::: EVENT PATH :::::::::::::::::::::
   FIND_EVENT_PATH: '/event/find',
@@ -94,7 +96,8 @@ export const ENDPOINT = {
   ACTIVATION_CODE_PATH: '/edu/activations',
 
   // :::::::::::::::::::: Enroll PATH :::::::::::::::::::::
-  ENROLL_PATH: '/edu/enrolls/find',
+  ENROLL_PATH_FIND: '/enrolls/find',
+  ENROLL_PATH: '/enrolls/',
 
   // :::::::::::::::::::: ANNOUNCEMENT PATH :::::::::::::::::::::
   ANNOUNCEMENT_PATH: '/announcements/find',

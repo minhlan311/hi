@@ -1,0 +1,21 @@
+.div-mycourse {
+  max-width: 1200px;
+  padding: 50px 20px;
+  margin: auto;
+  .h1-title {
+    text-align: center;
+    padding-bottom: 50px;
+  }
+  .pagina {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+}
+.flexButton-mycourse {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: end;
+}

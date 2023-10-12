@@ -1,10 +1,10 @@
 import AffixCustom from '@/components/AffixCustom'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import Logo from '@/components/Logo/Logo'
-import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
-import { BookOutlined, CarryOutOutlined, DatabaseOutlined } from '@ant-design/icons'
+import { CarryOutOutlined, DatabaseOutlined, BookOutlined, TeamOutlined } from '@ant-design/icons'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import useResponsives from '@/hooks/useResponsives'
 import { Button, Drawer, Layout, Menu, Row, Space } from 'antd'
 import { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
@@ -61,6 +61,7 @@ const MentorLayout = (props: Props) => {
     getItem(<Link to='/mentor/courses'>Quản lý khóa học</Link>, '/mentor/courses', <DatabaseOutlined />),
     getItem(<Link to='/mentor/class'>Quản lý lớp học</Link>, '/mentor/class', <BookOutlined />),
     getItem(<Link to='/mentor/exams'>Quản lý đề thi thử</Link>, '/mentor/exams', <CarryOutOutlined />),
+    getItem(<Link to='/mentor/student'>Quản lý học viên</Link>, '/mentor/student', <TeamOutlined />),
   ]
 
   return (

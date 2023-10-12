@@ -7,13 +7,17 @@ export interface Class {
   description?: string
   startDate?: string
   endDate?: string
-  courseId?: string
+  courseId?: {
+    name: string
+    _id?: string
+  }
   schedules?: string[]
   startAt?: string
   endAt?: string
   course?: {
     name?: string
   }
+  limitStudent?: string
 }
 export interface ClassList {
   _id: string

@@ -1,3 +1,5 @@
+import { Class } from './class.type'
+
 export type UserInfo = {
   _id: string
   _destroy: boolean
@@ -15,4 +17,5 @@ export type UserInfo = {
   createdAt: string
   updatedAt: string
   refreshToken: string
+  classData?: Class[]
 }

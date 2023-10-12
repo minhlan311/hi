@@ -27,8 +27,8 @@ const AvatarDropMenu = (props: Props) => {
       label: <Link to='/schedule'>Lịnh học của tôi</Link>,
     },
     {
-      key: 'myCourseLearning',
-      label: <Link to='/myCourseLearning'>Khóa học đã mua</Link>,
+      key: 'myCourse',
+      label: <Link to='/myCourse'>Khóa học đã mua</Link>,
     },
     {
       key: 'change-password',

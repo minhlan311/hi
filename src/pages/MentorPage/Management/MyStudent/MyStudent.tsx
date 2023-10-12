@@ -1,0 +1,148 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import courseApi from '@/apis/course.api'
+import { AppContext } from '@/contexts/app.context'
+import { MyPageTableOptions } from '@/types/page.type'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, Space, Table, Tooltip } from 'antd'
+import { ReconciliationOutlined, EditOutlined } from '@ant-design/icons'
+import { useContext } from 'react'
+import classApi from '@/apis/class.api'
+import openNotification from '@/components/Notification'
+import { findUserEnroll } from '@/types/eroll.type'
+
+export default function MyStudent() {
+  const { profile } = useContext(AppContext)
+  const queryClient = useQueryClient()
+  const { data, isLoading } = useQuery({
+    queryKey: ['dataUserEnroll'],
+    queryFn: () =>
+      courseApi.getUserErolls({
+        filterQuery: {
+          mentorId: profile._id,
+        },
+        options: {
+          pagination: false,
+        },
+      }),
+  })
+
+  const mutate = useMutation({
+    mutationFn: (body: { courseId: string; userId: string }) => {
+      return classApi.arrangeClass(body)
+    },
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        description: 'Xếp lớp thành công!',
+        message: 'thông báo',
+      })
+      queryClient.invalidateQueries({ queryKey: ['dataUserEnroll'] })
+    },
+    onError: (data: any) => {
+      console.log(data, 'datadata')
+
+      openNotification({
+        status: 'error',
+        description: data?.response?.data?.message,
+        message: 'thông báo',
+      })
+    },
+  })
+
+  const tableColumns: MyPageTableOptions<any> = [
+    {
+      title: 'Học viên',
+      dataIndex: 'limitStudent',
+      key: 'limitStudent',
+      render: (_: any, record: findUserEnroll) => <span>{record?.user?.fullName}</span>,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'limitStudent',
+      key: 'limitStudent',
+      render: (_: any, record: findUserEnroll) => <span>{record?.user?.email}</span>,
+    },
+    {
+      title: 'Khóa học đã mua',
+      dataIndex: 'courseName',
+      key: 'courseName',
+      render: (_: any, record: findUserEnroll) => <span>{record?.course?.name}</span>,
+    },
+    {
+      title: 'Lớp học',
+      dataIndex: 'courseName',
+      key: 'courseName',
+      render: (_: any, record: findUserEnroll) => {
+        const filterClassName = record?.user?.classData?.filter((item) => item?.courseId === record?.course?._id)
+
+        return (
+          <>
+            <span>{filterClassName?.map((item) => item?.title)}</span>
+          </>
+        )
+      },
+
+      //
+    },
+    {
+      title: 'Hành động',
+      dataIndex: 'action',
+      key: 'x',
+      width: '10%',
+      align: 'center' as const,
+      render: (_: string, record: findUserEnroll) => {
+        const filterClassName = record?.user?.classData?.filter((item) => item?.courseId === record?.course?._id)
+
+        return (
+          <>
+            {filterClassName && filterClassName.length ? (
+              <Tooltip placement='top' title='Đổi lịch học'>
+                <Button type='dashed' className='dashed'>
+                  <EditOutlined />
+                </Button>
+              </Tooltip>
+            ) : (
+              <div>
+                <Space size='middle'>
+                  <Tooltip placement='top' title='Xếp lớp tự động'>
+                    <Button
+                      type='dashed'
+                      className={'dashed'}
+                      onClick={() =>
+                        mutate.mutate({
+                          courseId: record?.course?._id,
+                          userId: record?.user?._id,
+                        } as any)
+                      }
+                    >
+                      <ReconciliationOutlined className='icon-button' />
+                    </Button>
+                  </Tooltip>
+                </Space>
+              </div>
+            )}
+          </>
+        )
+      },
+    },
+  ]
+
+  return (
+    <div>
+      <div className='div-table'>
+        <Table
+          rowKey={'key'}
+          dataSource={data?.data?.docs as any}
+          pagination={{
+            current: data?.data?.page,
+            pageSize: data?.data?.limit,
+            total: data?.data?.totalDocs,
+          }}
+          loading={isLoading || mutate.isLoading}
+          columns={tableColumns}
+        />
+      </div>
+    </div>
+  )
+}

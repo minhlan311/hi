@@ -32,6 +32,8 @@ import QAPage from './pages/QAPage/QAPage.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
+import MyCourse from './pages/MyCourse/MyCourse.tsx'
+import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -177,6 +179,14 @@ export default function useRouteElements() {
             </MentorLayout>
           ),
         },
+        {
+          path: PATH.MENTOR_MY_STUDENT,
+          element: (
+            <MentorLayout user={profile} title='Quản lý học viên'>
+              <MyStudent />
+            </MentorLayout>
+          ),
+        },
       ],
     },
     {
@@ -197,6 +207,22 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Giỏ hàng của bạn'>
               <CartPage />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.MY_COURSE_LEARNING,
+          element: (
+            <Layout user={profile} title='Khóa học của bạn'>
+              <MycoursesLearning />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.MY_COURSE,
+          element: (
+            <Layout user={profile} title='Giỏ hàng của bạn'>
+              <MyCourse />
             </Layout>
           ),
         },
