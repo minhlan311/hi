@@ -39,7 +39,7 @@ const ProfilePage = ({ profile }: Props) => {
   const { sm, md } = useResponsives()
 
   const { data: userData, isLoading } = useQuery({
-    queryKey: ['userDetail'],
+    queryKey: ['userDetail', location],
     queryFn: () => {
       return userApi.getUserDetail(userId)
     },
@@ -126,7 +126,7 @@ const ProfilePage = ({ profile }: Props) => {
             />
             <Space direction='vertical' className={css.inf}>
               {sm ? <h3>{user.fullName}</h3> : <h1>{user.fullName}</h1>}
-              <p>Giảng viên Ielts</p>
+              {user.isMentor && <p>Giảng viên Ielts</p>}
               <div className={css.flexSocials}>
                 {user?.socials &&
                   user?.socials?.length > 0 &&

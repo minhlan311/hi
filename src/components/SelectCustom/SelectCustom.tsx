@@ -84,6 +84,7 @@ const SelectCustom = (props: Props) => {
         icon: searchKey === 'user' ? <Avatar avtUrl={ops.avatarUrl} userData={ops} /> : ops.icon,
       }))
       callBackDataSearch && callBackDataSearch(data.data.docs)
+
       return setCallBOptions(optionFind)
     }
   }, [status, data])
@@ -135,7 +136,7 @@ const SelectCustom = (props: Props) => {
           value={item.value}
           label={
             <Row align='middle' gutter={10}>
-              <Col>{item.icon && <div style={{ display: 'flex', width: 20, height: 20 }}>{item.icon}</div>}</Col>
+              {searchKey !== 'user' ? <Col>{item.icon}</Col> : null}
               <Col>{item.label}</Col>
             </Row>
           }
