@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import vnpayApi from '@/apis/vnpay.api'
 import { TargetModelEnum } from '@/types/utils.type'
 import enrollsApi from '@/apis/enrolls.api'
@@ -31,7 +31,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const [check, setCheck] = useState(false)
   const { profile } = useContext(AppContext)
   const { id } = useParams()
-
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const cartData = queryClient.getQueryData<any>(['dataCart'])
 
@@ -166,7 +166,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
         destroyOnClose
         zIndex={9999989999}
         maskClosable={false}
-        title='Basic Modal'
+        title='Giới thiệu khóa học'
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -282,7 +282,9 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
                 <ButtonCustom
                   className={style.buttonCart}
                   children={'Vào khóa học'}
-                  // onClick={() => mutationPay.mutate({ value: datas?.cost })}
+                  onClick={() => {
+                    navigate('/myCourseLearning/' + datas._id)
+                  }}
                 />
               )
             ) : (
