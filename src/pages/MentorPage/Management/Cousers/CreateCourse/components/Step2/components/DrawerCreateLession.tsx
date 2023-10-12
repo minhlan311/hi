@@ -27,7 +27,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
-
+  const [id, setId] = useState<string>()
   useEffect(() => {
     dataCollapLession(dataDrawer)
   }, [dataDrawer])
@@ -54,20 +54,33 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   }
   const newArray = fileList?.map((item) => item?.response).flat()
 
-  console.log(newArray, 'newArraynewArraynewArray')
-
   const mutation = useMutation({
     mutationFn: (body: LessionForm) => lessionApi.createLession(body),
-    onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['topicAll'] })
+    onSuccess: (value: any) => {
+      setId(value?.data?._id)
+      setDataDrawer(value?.data?._id)
     },
   })
+
+  useEffect(() => {
+    if (mutation.isSuccess && fileList.length > 0) {
+      mutationDocument.mutate({
+        isDownloadable: true,
+        name: ` Tài liệu `,
+        description: content,
+        type: 'CURRICULUM',
+        files: newArray,
+        courseId: userId,
+        lessonId: id,
+      })
+      setFileList([])
+    }
+  }, [mutation.isSuccess, id])
 
   const mutationDocument = useMutation({
     mutationFn: (body: any) => documentApi.createDocument(body),
     onSuccess: (value: any) => {
       const newDataDrawer = [...dataDrawer, { name: value?.data?.name, _id: idLessCheck }]
-
       setDataDrawer(newDataDrawer)
     },
   })
@@ -77,6 +90,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   }, [content])
 
   form.setFieldValue('parentId', idLessCheck)
+  form.setFieldValue('id', idLessCheck)
 
   function handleEditorChange(_event: any, editor: any) {
     const data = editor.getData()
@@ -86,23 +100,12 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
   const onFinish = (values: any) => {
-    console.log(values, 'valuesvaluesvaluesvalues')
-
     delete values.document
     mutation.mutate(values)
-    mutationDocument.mutate({
-      isDownloadable: true,
-      name: ` Tài liệu ${values.name}`,
-      description: values.descriptions,
-      type: 'CURRICULUM',
-      files: newArray,
-      courseId: userId,
-      lessonId: values.id,
-    })
+
     form.resetFields()
     setContent('')
     onClose(false)
-    // console.log(values, 'values')
   }
 
   const onFinishFailed = (values: any) => {
@@ -142,6 +145,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
           </Dragger>
         </Form.Item>
         <Form.Item hidden name='parentId' />
+        <Form.Item hidden name='lessonid' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
           <Button type='primary' htmlType='submit' className='btn-sn'>

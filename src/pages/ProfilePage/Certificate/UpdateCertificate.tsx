@@ -45,8 +45,6 @@ export default function UpdateCertificate() {
   const result = diplomaData?.concat(otherDiplomaData)
 
   const onFinish = async (values: TMentorForm) => {
-    console.log(values, 'valuesvalues')
-
     setData(values)
   }
 
