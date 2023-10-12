@@ -39,7 +39,7 @@ export default function CartPage() {
   const orderData = data?.data.docs && data?.data.docs
 
   const mutationPay = useMutation({
-    mutationFn: (body: { value: number }) => vnpayApi.pay(body),
+    mutationFn: (body: any) => vnpayApi.pay(body),
     onSuccess: (data: any) => {
       window.open(data?.data?.url, '_blank')
     },
