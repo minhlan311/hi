@@ -18,8 +18,11 @@ import SelectCustom from '../SelectCustom/SelectCustom'
 import EventActionModal from './EventActionModal'
 import EventDetailModal from './EventDetailModal'
 /* eslint-disable @typescript-eslint/no-explicit-any */
+type Props = {
+  calendarType: 'student' | 'mentor'
+}
 
-const CalendarCustom = () => {
+const CalendarCustom = ({ calendarType }: Props) => {
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
   const { xl, xxl } = useResponsives()
@@ -59,7 +62,10 @@ const CalendarCustom = () => {
     queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
       return eventApi.getEvent({
-        filterQuery: { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, students: [profile._id] },
+        filterQuery:
+          calendarType === 'mentor'
+            ? { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, createdById: profile._id }
+            : { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, students: [profile._id] },
         options: { pagination: false },
       })
     },

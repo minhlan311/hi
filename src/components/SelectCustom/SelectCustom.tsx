@@ -126,7 +126,7 @@ const SelectCustom = (props: Props) => {
       optionLabelProp='label'
       suffixIcon={suffixIcon}
     >
-      {selectAll && (
+      {selectAll && callBOption.length > 0 && (
         <Option key='all' label={selectAllLabel}>
           <div onClick={handleSelectAll}>{selectAllLabel}</div>
         </Option>

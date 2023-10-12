@@ -28,7 +28,8 @@ const EventActionModal = (props: Props) => {
   const { profile } = useContext(AppContext)
   const [form] = Form.useForm()
   const [allDay, setAllDay] = useState(false)
-
+  const [classSelect, setClassSelect] = useState()
+  const [classData, setClassData] = useState<any>()
   const [initVal, setInitVal] = useState<any>()
 
   const queryClient = useQueryClient()
@@ -47,6 +48,8 @@ const EventActionModal = (props: Props) => {
       setType && setType('event')
     },
   })
+
+  const studentsId = classData?.find((e: any) => e._id === classSelect)?.students
 
   const handleSubmit = () => {
     form.submit()
@@ -172,6 +175,8 @@ const EventActionModal = (props: Props) => {
                 labelKey='title'
                 apiFind={classApi.getClass}
                 filterQuery={{ createdById: profile._id }}
+                callBackDataSearch={setClassData}
+                onChange={(e) => setClassSelect(e)}
                 allowClear
               />
             </Form.Item>
@@ -187,29 +192,32 @@ const EventActionModal = (props: Props) => {
                 type='search'
                 searchKey='user'
                 apiFind={userApi.findUser}
-                filterQuery={{ _id: profile._id }}
+                filterQuery={{ _id: studentsId?.length > 0 ? studentsId : '6516853835d1230f9a1fe1da' }}
                 defaultValue={eventDetail?.classData.students}
                 mode='multiple'
                 allowClear
                 selectAll
                 selectAllLabel='Chọn tất cả'
+                disabled={classSelect ? false : true}
               />
             </Form.Item>
           </Col>
-          <Col span={6}>
-            <Form.Item label='Trạng thái' name='status'>
-              <SelectCustom
-                placeholder='Chọn trạng thái'
-                defaultValue={eventDetail?.status}
-                options={[
-                  { label: 'Hoạt động', value: 'ACTIVE' },
-                  { label: 'Ẩn', value: 'INACTIVE' },
-                  { label: 'Khóa', value: 'LOCK' },
-                  { label: 'Hủy', value: 'CANCEL' },
-                ]}
-              />
-            </Form.Item>
-          </Col>
+          {eventDetail && (
+            <Col span={6}>
+              <Form.Item label='Trạng thái' name='status'>
+                <SelectCustom
+                  placeholder='Chọn trạng thái'
+                  defaultValue={eventDetail?.status}
+                  options={[
+                    { label: 'Hoạt động', value: 'ACTIVE' },
+                    { label: 'Ẩn', value: 'INACTIVE' },
+                    { label: 'Khóa', value: 'LOCK' },
+                    { label: 'Hủy', value: 'CANCEL' },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+          )}
           {type === 'test' && (
             <>
               <Col span={24} md={12}>
