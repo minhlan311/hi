@@ -80,9 +80,9 @@ const CalendarCustom = ({ calendarType }: Props) => {
 
         return {
           id: item._id,
-          title: item.testId ? 'Buổi thi ' + item.classData.title : item.classData.title,
-          start: item.start,
-          end: item.end,
+          title: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
           backgroundColor: (between && '#757575b5') || (item.testId && '#d72831a8') || '#019d44b5',
           color: 'var(--white)',
           isReadOnly: profile._id !== item.classData.createdById,
@@ -92,6 +92,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
       setEvents(newEvent as unknown as ISchedule[])
     }
   }, [eventsData])
+  console.log(events)
 
   useEffect(() => {
     if (calAction) {

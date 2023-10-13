@@ -34,6 +34,7 @@ type Props = {
   selectAllLabel?: string
   suffixIcon?: boolean
   callBackDataSearch?: React.Dispatch<React.SetStateAction<any>>
+  callBackSelected?: React.Dispatch<React.SetStateAction<any>>
 }
 
 const SelectCustom = (props: Props) => {
@@ -58,6 +59,7 @@ const SelectCustom = (props: Props) => {
     suffixIcon,
     labelKey = 'name',
     callBackDataSearch,
+    callBackSelected,
   } = props
   const { Option } = Select
   const [selectedValues, setSelectedValues] = useState<string[] | number[]>([])
@@ -89,15 +91,27 @@ const SelectCustom = (props: Props) => {
     }
   }, [status, data])
 
-  const handleSelectAll = () => {
+  useEffect(() => {
     if (selectAllVal) {
-      setSelectedValues([])
-    } else {
       setSelectedValues(options ? options.map((option) => option.value) : callBOption?.map((option) => option.value))
+    } else {
+      setSelectedValues([])
+    }
+  }, [selectAllVal])
+
+  const handleChange = (e: any) => {
+    if (mode === 'multiple') {
+      const selectData = e.map((v: any) => v.value)
+      callBackSelected && callBackSelected(selectData)
     }
 
-    setSelectAll(!selectAllVal)
+    onChange && onChange(e?.value)
+    setSelectedValues(e.value)
   }
+
+  useEffect(() => {
+    callBackSelected && callBackSelected(selectedValues)
+  }, [selectedValues])
 
   return type === 'search' ? (
     <Select
@@ -105,14 +119,18 @@ const SelectCustom = (props: Props) => {
       placeholder={placeholder}
       style={style}
       className={className}
-      value={selectedValues.length > 0 ? selectedValues : undefined}
+      value={selectedValues}
       defaultValue={defaultValue}
-      onChange={onChange}
+      onChange={handleChange}
       allowClear={allowClear}
       mode={mode}
       size={size}
       disabled={disabled}
       maxTagCount='responsive'
+      labelInValue
+      filterOption={false}
+      onClear={() => selectedValues?.length > 0 && setSelectedValues([])}
+      onSelect={(e) => e.key === 'all' && setSelectAll(!selectAllVal)}
       notFoundContent={
         isLoading || loading ? (
           <div style={{ padding: '100px 0' }}>
@@ -127,8 +145,8 @@ const SelectCustom = (props: Props) => {
       suffixIcon={suffixIcon}
     >
       {selectAll && callBOption.length > 0 && (
-        <Option key='all' label={selectAllLabel}>
-          <div onClick={handleSelectAll}>{selectAllLabel}</div>
+        <Option label={selectAllLabel} key='all'>
+          {selectAllLabel}
         </Option>
       )}
       {callBOption.map((item) => (
@@ -155,22 +173,21 @@ const SelectCustom = (props: Props) => {
       placeholder={placeholder}
       style={style}
       className={className}
-      value={selectedValues.length > 0 ? selectedValues : undefined}
+      value={selectedValues}
       defaultValue={defaultValue}
-      onChange={onChange}
+      onChange={handleChange}
       allowClear={allowClear}
       mode={mode}
       size={size}
       disabled={disabled}
       maxTagCount='responsive'
+      labelInValue
+      filterOption={false}
       optionLabelProp='label'
       suffixIcon={suffixIcon}
+      onClear={() => selectedValues?.length > 0 && setSelectedValues([])}
     >
-      {selectAll && (
-        <Option key='all' label={selectAllLabel}>
-          <div onClick={handleSelectAll}>{selectAllLabel}</div>
-        </Option>
-      )}
+      {selectAll && <Option label={selectAllLabel}>{selectAllLabel}</Option>}
       {options &&
         options.map((item) => (
           <Option
