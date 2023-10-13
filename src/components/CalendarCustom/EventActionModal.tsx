@@ -30,6 +30,8 @@ const EventActionModal = (props: Props) => {
   const [form] = Form.useForm()
   const [allDay, setAllDay] = useState(false)
   const [classSelect, setClassSelect] = useState()
+  const [studentIds, setStudentIds] = useState()
+
   const [classData, setClassData] = useState<any>()
   const [initVal, setInitVal] = useState<any>()
 
@@ -51,6 +53,7 @@ const EventActionModal = (props: Props) => {
   })
 
   const studentsId = classData?.find((e: any) => e._id === classSelect)?.students
+  console.log(studentsId)
 
   const handleSubmit = () => {
     form.submit()
@@ -65,7 +68,7 @@ const EventActionModal = (props: Props) => {
         classId: values.classId,
         start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
         end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
-        students: values.students,
+        students: studentIds,
       }
       mutate(payload as unknown as any)
     } else {
@@ -88,7 +91,7 @@ const EventActionModal = (props: Props) => {
         type: 'TEST',
         start: start,
         end: end,
-        students: values.students,
+        students: studentIds,
       }
       mutate(payload as unknown as any)
     }
@@ -189,7 +192,7 @@ const EventActionModal = (props: Props) => {
                 apiFind={classApi.getClass}
                 filterQuery={{ createdById: profile._id }}
                 callBackDataSearch={setClassData}
-                onChange={(e) => setClassSelect(e)}
+                onChange={setClassSelect}
                 allowClear
               />
             </Form.Item>
@@ -198,20 +201,21 @@ const EventActionModal = (props: Props) => {
             <Form.Item
               label='Thêm người tham dự'
               name='students'
-              rules={[{ required: true, message: 'Vui lòng chọn người dự' }]}
+              // rules={[{ required: true, message: 'Vui lòng chọn người dự' }]}
             >
               <SelectCustom
                 placeholder='Tìm kiếm tham người dự'
                 type='search'
                 searchKey='user'
                 apiFind={userApi.findUser}
-                filterQuery={{ _id: studentsId?.length > 0 ? studentsId : '6516853835d1230f9a1fe1da' }}
+                filterQuery={{ _id: studentsId }}
                 defaultValue={eventDetail?.classData.students}
                 mode='multiple'
                 allowClear
                 selectAll
                 selectAllLabel='Chọn tất cả'
                 disabled={classSelect ? false : true}
+                callBackSelected={setStudentIds}
               />
             </Form.Item>
           </Col>
