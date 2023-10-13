@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import documentApi from '@/apis/document.type'
 import lessionApi from '@/apis/lession.api'
+import { TypeLessonEnum } from '@/constants'
 import { ENDPOINT } from '@/constants/endpoint'
 import { debounce } from '@/helpers/common'
 import { LessionForm } from '@/types/lession.type'
@@ -9,7 +10,7 @@ import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { useMutation } from '@tanstack/react-query'
-import { Button, Drawer, Form, Input, InputNumber, UploadFile, message } from 'antd'
+import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
 import { useEffect, useState } from 'react'
@@ -26,6 +27,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [form] = Form.useForm()
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [hidden, setHidden] = useState<boolean>(false)
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [id, setId] = useState<string>()
   useEffect(() => {
@@ -108,6 +110,14 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     onClose(false)
   }
 
+  const onChange = (value: string) => {
+    if (value !== 'VIDEO') {
+      setHidden(true)
+    } else {
+      setHidden(false)
+    }
+  }
+
   const onFinishFailed = (values: any) => {
     console.log(values, 'values')
   }
@@ -118,17 +128,38 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />
         </Form.Item>
-        <Form.Item label={'Link video'} name='media'>
-          <Input placeholder='Nhập Link video' allowClear />
-        </Form.Item>
-        <Form.Item label={'Thời lượng'} name='length'>
-          <InputNumber
-            style={{
-              width: '100%',
-            }}
-            placeholder='Nhập thời lượng video nếu có'
+        <Form.Item
+          initialValue={TypeLessonEnum.VIDEO_LESSON}
+          label={'Loại bài học'}
+          name='type'
+          rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}
+        >
+          <Select
+            onChange={onChange}
+            options={[
+              { value: TypeLessonEnum.VIDEO_LESSON, label: TypeLessonEnum.VIDEO_LESSON },
+              { value: TypeLessonEnum.DOCUMENT_LESSON, label: TypeLessonEnum.DOCUMENT_LESSON },
+              { value: TypeLessonEnum.LIVE_LESSON, label: TypeLessonEnum.LIVE_LESSON },
+            ]}
           />
         </Form.Item>
+        {!hidden && (
+          <>
+            {' '}
+            <Form.Item label={'Link video'} name='media'>
+              <Input placeholder='Nhập Link video' allowClear />
+            </Form.Item>
+            <Form.Item label={'Thời lượng'} name='length'>
+              <InputNumber
+                style={{
+                  width: '100%',
+                }}
+                placeholder='Nhập thời lượng video nếu có'
+              />
+            </Form.Item>
+          </>
+        )}
+
         <Form.Item
           label={'Nội dung giới thiệu'}
           name='descriptions'
