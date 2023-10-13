@@ -9,14 +9,11 @@ type Props = {
   name: string
   data: any | null
   label?: string
-  placeholder?: string
   required?: boolean
-  uploadCkUrl?: string
 }
 
 const TextAreaCustom = (props: Props) => {
-  const { placeholder, name, data, uploadCkUrl, label, required = false } = props
-  console.log(placeholder, uploadCkUrl)
+  const { name, data, label, required = false } = props
 
   const [editorContent, setEditorContent] = useState<string>('<p></p>')
 

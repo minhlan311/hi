@@ -114,7 +114,6 @@ const EventActionModal = (props: Props) => {
       form.setFieldsValue(initVal)
     }
   }, [initVal])
-  console.log(studentIds)
 
   const handleFinish = (values: any) => {
     if (type === 'event') {

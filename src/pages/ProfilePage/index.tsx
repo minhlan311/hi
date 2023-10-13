@@ -10,7 +10,7 @@ import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
 import { setProfileToLS } from '@/utils/auth'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Row, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { LuImagePlus } from 'react-icons/lu'
@@ -37,6 +37,7 @@ const ProfilePage = ({ profile }: Props) => {
   const [payload, setPayload] = useState<UserState>()
   const userId = location.pathname.split('/')[2]
   const { sm, md } = useResponsives()
+  const queryClient = useQueryClient()
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ['userDetail', location],
@@ -60,6 +61,7 @@ const ProfilePage = ({ profile }: Props) => {
             const newData = { ...profile, ...payload }
             setProfile(newData)
             setProfileToLS(newData)
+            queryClient.invalidateQueries({ queryKey: ['userDetail'] })
             openNotification({ status: 'success', message: 'Thông báo', description: 'Cập nhật thông tin thành công!' })
           },
         },
