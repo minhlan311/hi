@@ -12,7 +12,7 @@ export default function LanguageSystem() {
             <Image
               className='img-learn'
               preview={false}
-              src='https://scontent.xx.fbcdn.net/v/t1.15752-9/373353651_3549756531940240_3759955053989404732_n.jpg?stp=dst-jpg_p206x206&_nc_cat=104&ccb=1-7&_nc_sid=aee45a&_nc_ohc=MlD-yJ3LnuoAX8kYULo&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdRSFPCOSN7Cn_emH06HMTUeM4m3e3BuFV7yWb5bLmDa4w&oe=6520C657'
+              src='https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=626&ext=jpg&ga=GA1.2.1251102529.1695866662&semt=sph'
             />
             <Button className='button-row'>Xem chi tiết</Button>
           </div>
@@ -23,7 +23,7 @@ export default function LanguageSystem() {
             <Image
               className='img-learn'
               preview={false}
-              src='https://scontent.xx.fbcdn.net/v/t1.15752-9/373353651_3549756531940240_3759955053989404732_n.jpg?stp=dst-jpg_p206x206&_nc_cat=104&ccb=1-7&_nc_sid=aee45a&_nc_ohc=MlD-yJ3LnuoAX8kYULo&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdRSFPCOSN7Cn_emH06HMTUeM4m3e3BuFV7yWb5bLmDa4w&oe=6520C657'
+              src='https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=626&ext=jpg&ga=GA1.2.1251102529.1695866662&semt=sph'
             />
             <Button className='button-row'>Xem chi tiết</Button>
           </div>
@@ -34,7 +34,7 @@ export default function LanguageSystem() {
             <Image
               className='img-learn'
               preview={false}
-              src='https://scontent.xx.fbcdn.net/v/t1.15752-9/373353651_3549756531940240_3759955053989404732_n.jpg?stp=dst-jpg_p206x206&_nc_cat=104&ccb=1-7&_nc_sid=aee45a&_nc_ohc=MlD-yJ3LnuoAX8kYULo&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdRSFPCOSN7Cn_emH06HMTUeM4m3e3BuFV7yWb5bLmDa4w&oe=6520C657'
+              src='https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=626&ext=jpg&ga=GA1.2.1251102529.1695866662&semt=sph'
             />
             <Button className='button-row'>Xem chi tiết</Button>
           </div>
@@ -45,7 +45,7 @@ export default function LanguageSystem() {
             <Image
               className='img-learn'
               preview={false}
-              src='https://scontent.xx.fbcdn.net/v/t1.15752-9/373353651_3549756531940240_3759955053989404732_n.jpg?stp=dst-jpg_p206x206&_nc_cat=104&ccb=1-7&_nc_sid=aee45a&_nc_ohc=MlD-yJ3LnuoAX8kYULo&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdRSFPCOSN7Cn_emH06HMTUeM4m3e3BuFV7yWb5bLmDa4w&oe=6520C657'
+              src='https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=626&ext=jpg&ga=GA1.2.1251102529.1695866662&semt=sph'
             />
             <Button className='button-row'>Xem chi tiết</Button>
           </div>
