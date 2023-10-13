@@ -131,17 +131,17 @@ export default function MycoursesLearning() {
 
   const { Panel } = Collapse
 
-  const handleVideo = (name: string, video: string) => {
-    setActive(name)
+  const handleVideo = (id: string, name: string, video: string) => {
+    setActive(id)
     setNameVideo(name)
     setVideo(video)
     setType('video')
   }
 
-  const handleDocument = (name: string, desc: string) => {
+  const handleDocument = (id: string, desc: string) => {
     setType('document')
     setDocuemnt(desc)
-    setActive(name)
+    setActive(id)
   }
 
   async function mapWithConcurrency<T, R>(
@@ -278,7 +278,7 @@ export default function MycoursesLearning() {
                                   className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
                                     lession?.media
-                                      ? handleVideo(lession?._id, lession?.media)
+                                      ? handleVideo(lession?._id, lession?.name, lession?.media)
                                       : handleDocument(lession?._id, lession?.descriptions)
                                   }}
                                 >
