@@ -30,7 +30,7 @@ const EventActionModal = (props: Props) => {
   const [form] = Form.useForm()
   const [allDay, setAllDay] = useState(false)
   const [classSelect, setClassSelect] = useState()
-  const [studentIds, setStudentIds] = useState()
+  const [studentIds, setStudentIds] = useState<string[]>([])
 
   const [classData, setClassData] = useState<any>()
   const [initVal, setInitVal] = useState<any>()
@@ -53,51 +53,9 @@ const EventActionModal = (props: Props) => {
   })
 
   const studentsId = classData?.find((e: any) => e._id === classSelect)?.students
-  console.log(studentsId)
 
   const handleSubmit = () => {
     form.submit()
-  }
-
-  const handleFinish = (values: any) => {
-    if (type === 'event') {
-      const payload = {
-        id: eventDetail?._id,
-        name: values.name,
-        description: values.description,
-        classId: values.classId,
-        start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
-        end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
-        students: studentIds,
-      }
-      mutate(payload as unknown as any)
-    } else {
-      const date = moment(values.date.$d).format('YYYY-MM-DD')
-      const time = moment(values.time.$d).format('HH:mm')
-      const start = date + ' ' + time
-
-      const newTime = moment(values.time.$d)
-        .add(values.timeTest + parseInt(values.timeAdd), 'minutes')
-        .format('HH:mm')
-
-      const end = date + ' ' + newTime
-
-      const payload = {
-        id: eventDetail?._id,
-        name: values.name,
-        description: values.description,
-        classId: values.classId,
-        testId: values.testId,
-        type: 'TEST',
-        start: start,
-        end: end,
-        students: studentIds,
-      }
-      mutate(payload as unknown as any)
-    }
-
-    setOpen(!open)
-    form.resetFields()
   }
 
   const testTime = [
@@ -131,6 +89,7 @@ const EventActionModal = (props: Props) => {
           })
       } else
         setInitVal({
+          title: eventDetail.title,
           classId: eventDetail.classId,
           students: eventDetail.students,
           status: eventDetail.status,
@@ -155,6 +114,48 @@ const EventActionModal = (props: Props) => {
       form.setFieldsValue(initVal)
     }
   }, [initVal])
+  console.log(studentIds)
+
+  const handleFinish = (values: any) => {
+    if (type === 'event') {
+      const payload = {
+        id: eventDetail?._id,
+        name: values.name,
+        description: values.description,
+        classId: values.classId,
+        start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
+        end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
+        students: studentIds,
+      }
+      mutate(payload as unknown as any)
+    } else {
+      const date = moment(values.date.$d).format('YYYY-MM-DD')
+      const time = moment(values.time.$d).format('HH:mm')
+      const start = date + ' ' + time
+
+      const newTime = moment(values.time.$d)
+        .add(values.timeTest + parseInt(values.timeAdd), 'minutes')
+        .format('HH:mm')
+
+      const end = date + ' ' + newTime
+
+      const payload = {
+        id: eventDetail?._id,
+        name: values.name,
+        description: values.description,
+        classId: values.classId,
+        testId: values.testId,
+        type: 'TEST',
+        start: new Date(start),
+        end: new Date(end),
+        students: studentIds,
+      }
+      mutate(payload as unknown as any)
+    }
+
+    setOpen(!open)
+    form.resetFields()
+  }
 
   return (
     <Modal

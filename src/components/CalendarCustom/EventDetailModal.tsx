@@ -42,26 +42,7 @@ const EventDetailModal = (props: Props) => {
     },
   })
 
-  // const daysOfWeek = [
-  //   { label: 'T2', value: 1 },
-  //   { label: 'T3', value: 2 },
-  //   { label: 'T4', value: 3 },
-  //   { label: 'T5', value: 4 },
-  //   { label: 'T6', value: 5 },
-  //   { label: 'T7', value: 6 },
-  //   { label: 'CN', value: 0 },
-  // ]
-
   if (eventDetail) {
-    // const mappedLabels = eventDetail.classData?.schedules
-    //   .map((value) => {
-    //     const foundDay = daysOfWeek.find((day) => day.value === value)
-
-    //     return foundDay ? foundDay.label : ''
-    //   })
-    //   .filter(Boolean)
-    //   .join(', ')
-
     const currentTime = moment()
     const startTime = moment(eventDetail.start)
     const endTime = moment(eventDetail.end)
@@ -139,9 +120,6 @@ const EventDetailModal = (props: Props) => {
             )}
             <Space direction='vertical' className='sp100'>
               <Descriptions column={2}>
-                {/* <Descriptions.Item label='Môn học'>
-                    <b>{eventDetail.classData?.category.name}</b>
-                  </Descriptions.Item> */}
                 <Descriptions.Item label='Giảng viên'>
                   <PopoverCustom type='showProfile' userData={eventDetail.classData?.owner} trigger='click'>
                     <ButtonCustom type='link' style={{ padding: 0, height: 0 }}>
@@ -156,7 +134,11 @@ const EventDetailModal = (props: Props) => {
               {eventDetail.description && (
                 <Descriptions column={1}>
                   <Descriptions.Item label='Ghi chú' className='sp100'>
-                    <p>{eventDetail.description}</p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: eventDetail.description !== '<p></p>' ? eventDetail.description : 'Không có ghi chú',
+                      }}
+                    ></div>
                   </Descriptions.Item>
                 </Descriptions>
               )}

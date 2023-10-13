@@ -100,9 +100,13 @@ const SelectCustom = (props: Props) => {
   }, [selectAllVal])
 
   const handleChange = (e: any) => {
-    if (mode === 'multiple') setSelectedValues(e.map((i: any) => i.value))
+    if (mode === 'multiple') {
+      const selectData = e.map((v: any) => v.value)
+      callBackSelected && callBackSelected(selectData)
+    }
+
     onChange && onChange(e?.value)
-    setSelectedValues(e?.value)
+    setSelectedValues(e.value)
   }
 
   useEffect(() => {
@@ -169,7 +173,7 @@ const SelectCustom = (props: Props) => {
       placeholder={placeholder}
       style={style}
       className={className}
-      value={selectedValues.length > 0 ? selectedValues : undefined}
+      value={selectedValues}
       defaultValue={defaultValue}
       onChange={handleChange}
       allowClear={allowClear}
@@ -181,6 +185,7 @@ const SelectCustom = (props: Props) => {
       filterOption={false}
       optionLabelProp='label'
       suffixIcon={suffixIcon}
+      onClear={() => selectedValues?.length > 0 && setSelectedValues([])}
     >
       {selectAll && <Option label={selectAllLabel}>{selectAllLabel}</Option>}
       {options &&
