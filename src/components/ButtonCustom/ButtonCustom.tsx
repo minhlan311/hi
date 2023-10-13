@@ -1,7 +1,6 @@
 import { Button, Tooltip } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import css from './ButtonCustom.module.scss'
 type Props = {
   type?: 'default' | 'primary' | 'dashed' | 'link' | 'text'
   icon?: React.ReactNode
@@ -21,6 +20,7 @@ type Props = {
   tooltip?: string
   danger?: boolean
   linkTarget?: '_self' | '_blank' | '_parent' | '_top'
+  loading?: boolean
 }
 
 const ButtonCustom = (props: Props) => {
@@ -43,6 +43,7 @@ const ButtonCustom = (props: Props) => {
     tooltip,
     danger,
     linkTarget,
+    loading,
   } = props
 
   return href ? (
@@ -57,11 +58,12 @@ const ButtonCustom = (props: Props) => {
             onClick
             window.open(href, linkTarget)
           }}
-          className={`${className} ${htmlType === 'submit' ? css.submitButton : null}`}
+          className={`${className}`}
           style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
           form={form}
           htmlType={htmlType}
           danger={danger}
+          loading={loading}
         >
           <div className={'custom-butt-icon'}>
             {icon} {children}
@@ -75,10 +77,11 @@ const ButtonCustom = (props: Props) => {
             shape={shape}
             disabled={disabled}
             onClick={onClick}
-            className={`${className} ${htmlType === 'submit' ? css.submitButton : null}`}
+            className={`${className} `}
             style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
             form={form}
             htmlType={htmlType}
+            loading={loading}
             danger={danger}
           >
             <div className={'custom-butt-icon'}>
@@ -96,11 +99,12 @@ const ButtonCustom = (props: Props) => {
         shape={shape}
         disabled={disabled}
         onClick={onClick}
-        className={`${className} ${htmlType === 'submit' ? css.submitButton : null}`}
+        className={`${className} `}
         style={{ fontWeight: fontWeight, ...style }}
         form={form}
         htmlType={htmlType}
         danger={danger}
+        loading={loading}
       >
         <div className={'custom-butt-icon'}>
           {icon} {children}
