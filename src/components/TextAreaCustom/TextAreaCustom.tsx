@@ -16,6 +16,7 @@ type Props = {
 
 const TextAreaCustom = (props: Props) => {
   const { placeholder, name, data, uploadCkUrl, label, required = false } = props
+  console.log(placeholder, uploadCkUrl)
 
   const [editorContent, setEditorContent] = useState<string>('<p></p>')
 
@@ -60,16 +61,16 @@ const TextAreaCustom = (props: Props) => {
     >
       {/* {editorContent.length === 0 && <div className='ck-placeholder'>{placeholder}</div>} */}
       <CKEditor
-        name={name}
+        // name={name}
         editor={ClassicEditor}
         data={editorContent}
-        config={{
-          ckfinder: {
-            uploadCkUrl: uploadCkUrl,
-          },
-        }}
+        // config={{
+        //   ckfinder: {
+        //     uploadCkUrl: uploadCkUrl,
+        //   },
+        // }}
         onChange={debounce(handleEditorChange, 500)}
-        placeholder={placeholder}
+        // placeholder={placeholder}
       ></CKEditor>
     </Form.Item>
   )
