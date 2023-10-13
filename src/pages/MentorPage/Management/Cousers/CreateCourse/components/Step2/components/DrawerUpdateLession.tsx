@@ -3,6 +3,7 @@
 import documentApi from '@/apis/document.type'
 import lessionApi from '@/apis/lession.api'
 import openNotification from '@/components/Notification'
+import { TypeLessonEnum } from '@/constants'
 import { ENDPOINT } from '@/constants/endpoint'
 import { debounce } from '@/helpers/common'
 import { Lession } from '@/types/lession.type'
@@ -10,7 +11,7 @@ import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { useMutation } from '@tanstack/react-query'
-import { Button, Drawer, Form, Input, InputNumber, UploadFile, message } from 'antd'
+import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
 import { useEffect, useState } from 'react'
@@ -37,19 +38,29 @@ export default function DrawerUpdateLession({
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [refetch, setRefetch] = useState('')
+  const [hidden, setHidden] = useState<boolean>(false)
 
   useEffect(() => {
     form.setFieldValue('name', dataUpdateLession?.name)
     form.setFieldValue('media', dataUpdateLession?.media)
     form.setFieldValue('length', dataUpdateLession?.length)
     form.setFieldValue('parentId', dataUpdateLession?.parentId)
-    form.setFieldValue('id', dataUpdateLession?.id)
+    form.setFieldValue('id', dataUpdateLession?._id)
+    form.setFieldValue('type', dataUpdateLession?.type)
     setContent(dataUpdateLession?.descriptions)
   }, [dataUpdateLession])
 
   useEffect(() => {
     reFetchData(refetch)
   }, [refetch])
+
+  useEffect(() => {
+    if (dataUpdateLession?.type !== 'VIDEO') {
+      setHidden(true)
+    } else {
+      setHidden(false)
+    }
+  }, [dataUpdateLession?.type])
 
   useEffect(() => {
     form.setFieldValue('descriptions', content)
@@ -102,7 +113,6 @@ export default function DrawerUpdateLession({
     mutationFn: (body: any) => documentApi.createDocument(body),
     onSuccess: (value: any) => {
       const newDataDrawer = [...dataDrawer, { name: value?.data?.name, _id: idLessCheck }]
-
       setDataDrawer(newDataDrawer)
     },
   })
@@ -114,21 +124,37 @@ export default function DrawerUpdateLession({
 
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
 
+  useEffect(() => {
+    if (mutation.isSuccess && newArray.length > 0) {
+      mutationDocument.mutate({
+        isDownloadable: true,
+        name: ` Tài liệu `,
+        description: content,
+        type: 'CURRICULUM',
+        files: newArray,
+        courseId: userId,
+        lessonId: dataUpdateLession._id,
+      })
+      form.resetFields([''])
+      setContent('')
+      setFileList([])
+    }
+  }, [mutation.isSuccess])
+
   const onFinish = (values: any) => {
     delete values.document
     mutation.mutate(values)
-    mutationDocument.mutate({
-      isDownloadable: true,
-      name: ` Tài liệu ${values.name}`,
-      description: values.descriptions,
-      type: 'CURRICULUM',
-      files: newArray,
-      courseId: userId,
-      lessonId: values.id,
-    })
-    form.resetFields()
+    form.resetFields([''])
     setContent('')
     onClose(false)
+  }
+
+  const onChange = (value: string) => {
+    if (value !== 'VIDEO') {
+      setHidden(true)
+    } else {
+      setHidden(false)
+    }
   }
 
   const onFinishFailed = (_values: any) => {}
@@ -139,17 +165,32 @@ export default function DrawerUpdateLession({
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên bài thi' allowClear />
         </Form.Item>
-        <Form.Item label={'Link video'} name='media'>
-          <Input placeholder='Nhập Link video' allowClear />
-        </Form.Item>
-        <Form.Item label={'Thời lượng'} name='length'>
-          <InputNumber
-            style={{
-              width: '100%',
-            }}
-            placeholder='Nhập thời lượng video nếu có'
+        <Form.Item label={'Loại bài học'} name='type' rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}>
+          <Select
+            onChange={onChange}
+            options={[
+              { value: TypeLessonEnum.VIDEO_LESSON, label: TypeLessonEnum.VIDEO_LESSON },
+              { value: TypeLessonEnum.DOCUMENT_LESSON, label: TypeLessonEnum.DOCUMENT_LESSON },
+              { value: TypeLessonEnum.LIVE_LESSON, label: TypeLessonEnum.LIVE_LESSON },
+            ]}
           />
         </Form.Item>
+        {!hidden && (
+          <>
+            {' '}
+            <Form.Item label={'Link video'} name='media'>
+              <Input placeholder='Nhập Link video' allowClear />
+            </Form.Item>
+            <Form.Item label={'Thời lượng'} name='length'>
+              <InputNumber
+                style={{
+                  width: '100%',
+                }}
+                placeholder='Nhập thời lượng video nếu có'
+              />
+            </Form.Item>
+          </>
+        )}
         <Form.Item
           label={'Nội dung giới thiệu'}
           name='descriptions'
@@ -166,6 +207,7 @@ export default function DrawerUpdateLession({
           </Dragger>
         </Form.Item>
         <Form.Item hidden name='parentId' />
+        <Form.Item hidden name='id' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
           <Button type='primary' htmlType='submit' className='btn-sn'>

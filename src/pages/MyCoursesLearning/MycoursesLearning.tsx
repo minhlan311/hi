@@ -6,7 +6,13 @@ import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import { AppContext } from '@/contexts/app.context'
 import FileSaver from 'file-saver'
-import { DownloadOutlined, FolderOutlined, VideoCameraOutlined, FileOutlined } from '@ant-design/icons'
+import {
+  DownloadOutlined,
+  FolderOutlined,
+  VideoCameraOutlined,
+  FileOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Collapse, Popover } from 'antd'
 import { useContext, useState, useEffect } from 'react'
@@ -298,12 +304,13 @@ export default function MycoursesLearning() {
                                       <p>
                                         Thời lượng : {lession?.length} phút {''}
                                       </p>
-                                      Thể loại : <VideoCameraOutlined /> video
+                                      Thể loại : <PlayCircleOutlined /> video
                                     </div>
                                   ) : (
                                     <>
                                       <p>
                                         Thể loại : <FileOutlined /> Văn bản
+                                        <VideoCameraOutlined />
                                       </p>
                                     </>
                                   )}

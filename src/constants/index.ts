@@ -23,3 +23,9 @@ export const FORM_TYPE = {
   CREATE: 'CREATE',
   UPDATE: 'UPDATE',
 }
+
+export enum TypeLessonEnum {
+  VIDEO_LESSON = 'VIDEO',
+  LIVE_LESSON = 'LIVE',
+  DOCUMENT_LESSON = 'DOCUMENT',
+}
