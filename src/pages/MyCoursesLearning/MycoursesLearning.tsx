@@ -16,9 +16,14 @@ import style from './MycoursesLearning.module.scss'
 import LoadingCustom from '@/components/LoadingCustom'
 import enrollsApi from '@/apis/enrolls.api'
 import openNotification from '@/components/Notification'
-import * as Bluebird from 'bluebird'
 
 import JSZip from 'jszip'
+
+interface FileItem {
+  name: string
+  url?: string
+  type?: string
+}
 
 export default function MycoursesLearning() {
   const { id } = useParams()
@@ -139,46 +144,73 @@ export default function MycoursesLearning() {
     setActive(name)
   }
 
-  const download = (url: any) => {
+  async function mapWithConcurrency<T, R>(
+    items: T[],
+    mapper: (item: T) => Promise<R>,
+    concurrency: number,
+  ): Promise<R[]> {
+    const results: R[] = []
+    let current = 0
+
+    const executeNext = async (): Promise<void> => {
+      if (current >= items.length) return
+
+      const item = items[current]
+      current++
+
+      results.push(await mapper(item))
+
+      return executeNext()
+    }
+
+    const workers = Array.from({ length: concurrency }).map(() => executeNext())
+    await Promise.all(workers)
+
+    return results
+  }
+
+  const download = (url: string): Promise<Blob> => {
     return fetch(url).then((resp) => resp.blob())
   }
 
-  const downloadByGroup = (urls: any, files_per_group = 10) => {
-    return Bluebird.map(
+  const downloadByGroup = async (urls: (string | null)[], files_per_group = 10): Promise<(Blob | undefined)[]> => {
+    return mapWithConcurrency(
       urls,
-      async (url: any) => {
+      async (url) => {
         if (!url) return
 
         return await download(url)
       },
-      { concurrency: files_per_group },
+      files_per_group,
     )
   }
 
-  const exportZip = (blobs: any, files: any) => {
-    const zip = JSZip()
-    blobs.forEach((blob: any, i: any) => {
-      zip.file(`${files[i].name}`, blob)
+  const exportZip = (blobs: (Blob | undefined)[], files: FileItem[]): void => {
+    const zip = new JSZip()
+
+    blobs.forEach((blob, i) => {
+      if (blob) {
+        zip.file(`${files[i].name}`, blob)
+      }
     })
+
     zip.generateAsync({ type: 'blob' }).then((zipFile) => {
       const currentDate = new Date().getTime()
       const fileName = `Tài liệu-${currentDate}.zip`
-
-      return FileSaver.saveAs(zipFile, fileName)
+      FileSaver.saveAs(zipFile, fileName)
     })
   }
 
-  const handleDownload = (listFile: any) => {
-    downloadByGroup(
-      listFile.map((e: any) => {
-        if (e.url) {
-          return `${import.meta.env.VITE_FILE_ENDPOINT}/${e?.url}`
-        } else {
-          return null
-        }
-      }),
-      10,
-    ).then((blobs: any) => {
+  const handleDownload = (listFile: FileItem[]): void => {
+    const validUrls = listFile.map((e) => {
+      if (e.url) {
+        return `${import.meta.env.VITE_FILE_ENDPOINT}/${e.url}`
+      }
+
+      return null
+    })
+
+    downloadByGroup(validUrls, 10).then((blobs) => {
       exportZip(blobs, listFile)
     })
   }
