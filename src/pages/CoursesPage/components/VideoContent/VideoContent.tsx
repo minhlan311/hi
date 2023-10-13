@@ -101,6 +101,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const mutationLocked = useMutation({
     mutationFn: (body: any) => enrollsApi.createEnroll(body),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['enrolls'] })
       openNotification({
         description: 'Tham gia khóa học thành công',
         status: 'success',
@@ -111,7 +112,6 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['products'] })
-    queryClient.invalidateQueries({ queryKey: ['enrolls'] })
   }, [mutationLocked.isSuccess])
 
   useEffect(() => {
