@@ -98,7 +98,7 @@ export default function CategogyDetail() {
               objectFit: 'cover',
             }}
             width='100%'
-            height='100%'
+            height='600px'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
           />
 
