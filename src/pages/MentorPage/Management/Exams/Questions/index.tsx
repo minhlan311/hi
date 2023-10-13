@@ -123,10 +123,16 @@ const MentorQuestions = () => {
                 placement='right'
                 title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
                 onConfirm={() => {
-                  handleSave()
                   setRemove(true)
                   setTabChange('')
                   setQuestionList(questionList)
+
+                  const payload = {
+                    id: examDetail?._id,
+                    questions: [],
+                  }
+
+                  mutate(payload as unknown as any)
                 }}
                 okText='Xóa'
                 cancelText='Hủy'

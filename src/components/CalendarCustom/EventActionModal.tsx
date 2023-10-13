@@ -12,6 +12,7 @@ import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
+import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
 
 type Props = {
   open: boolean
@@ -59,6 +60,8 @@ const EventActionModal = (props: Props) => {
     if (type === 'event') {
       const payload = {
         id: eventDetail?._id,
+        name: values.name,
+        description: values.description,
         classId: values.classId,
         start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
         end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
@@ -78,6 +81,8 @@ const EventActionModal = (props: Props) => {
 
       const payload = {
         id: eventDetail?._id,
+        name: values.name,
+        description: values.description,
         classId: values.classId,
         testId: values.testId,
         type: 'TEST',
@@ -165,6 +170,14 @@ const EventActionModal = (props: Props) => {
       okText={eventDetail ? 'Lưu thay đổi' : `Tạo ${type === 'test' ? 'lịch thi' : 'sự kiện'}`}
     >
       <Form onFinish={handleFinish} form={form} layout='vertical' initialValues={initVal}>
+        <Form.Item
+          label={`Tiêu đề ${type === 'test' ? 'lịch thi' : 'sự kiện'}`}
+          name='name'
+          rules={[{ required: true, message: 'Vui lòng nhập tiêu đề' }]}
+        >
+          <Input placeholder='Nhập tiêu đề' />
+        </Form.Item>
+        <TextAreaCustom name='description' data={eventDetail?.description} label='Ghi chú' />
         <Row gutter={12}>
           <Col span={24} md={eventDetail ? 9 : 12}>
             <Form.Item label='Lớp học' name='classId' rules={[{ required: true, message: 'Vui lòng chọn lớp' }]}>
