@@ -37,6 +37,7 @@ export interface ExamState {
   cost?: any
   slug: string
   owner: UserState
+  questions: string[]
   countQuestions: number
   countSelectedResponseQuestions: number[]
   countConstructedResponseQuestions: number[]

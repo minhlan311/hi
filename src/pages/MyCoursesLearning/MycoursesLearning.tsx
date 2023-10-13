@@ -6,7 +6,13 @@ import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import { AppContext } from '@/contexts/app.context'
 import FileSaver from 'file-saver'
-import { DownloadOutlined, FolderOutlined, VideoCameraOutlined, FileOutlined } from '@ant-design/icons'
+import {
+  DownloadOutlined,
+  FolderOutlined,
+  VideoCameraOutlined,
+  FileOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Collapse, Popover } from 'antd'
 import { useContext, useState, useEffect } from 'react'
@@ -18,6 +24,7 @@ import enrollsApi from '@/apis/enrolls.api'
 import openNotification from '@/components/Notification'
 
 import JSZip from 'jszip'
+import { TypeLessonEnum } from '@/constants'
 
 interface FileItem {
   name: string
@@ -293,19 +300,21 @@ export default function MycoursesLearning() {
                                   ></div>
                                 </div>
                                 <div className={style.flexBest}>
-                                  {lession?.media ? (
+                                  {lession?.type === TypeLessonEnum.VIDEO_LESSON ? (
                                     <div>
                                       <p>
                                         Thời lượng : {lession?.length} phút {''}
                                       </p>
-                                      Thể loại : <VideoCameraOutlined /> video
+                                      Thể loại : <PlayCircleOutlined /> video
                                     </div>
+                                  ) : lession?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                    <p>
+                                      Thể loại : <FileOutlined /> Văn bản
+                                    </p>
                                   ) : (
-                                    <>
-                                      <p>
-                                        Thể loại : <FileOutlined /> Văn bản
-                                      </p>
-                                    </>
+                                    <p>
+                                      Thể loại : <VideoCameraOutlined /> live
+                                    </p>
                                   )}
 
                                   <div>
