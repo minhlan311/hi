@@ -16,7 +16,8 @@ import style from './MycoursesLearning.module.scss'
 import LoadingCustom from '@/components/LoadingCustom'
 import enrollsApi from '@/apis/enrolls.api'
 import openNotification from '@/components/Notification'
-import { Promise } from 'bluebird'
+import * as Bluebird from 'bluebird'
+
 import JSZip from 'jszip'
 
 export default function MycoursesLearning() {
@@ -143,11 +144,12 @@ export default function MycoursesLearning() {
   }
 
   const downloadByGroup = (urls: any, files_per_group = 10) => {
-    return Promise?.map(
+    return Bluebird.map(
       urls,
       async (url: any) => {
         if (!url) return
-        await download(url)
+
+        return await download(url)
       },
       { concurrency: files_per_group },
     )
@@ -166,18 +168,18 @@ export default function MycoursesLearning() {
     })
   }
 
-  const handleDownload = (link: any) => {
+  const handleDownload = (listFile: any) => {
     downloadByGroup(
-      link.map((e: any) => {
+      listFile.map((e: any) => {
         if (e.url) {
-          return `${import.meta.env.VITE_SERVICE_ENDPOINT}/${e?.url}`
+          return `${import.meta.env.VITE_FILE_ENDPOINT}/${e?.url}`
         } else {
           return null
         }
       }),
       10,
     ).then((blobs: any) => {
-      exportZip(blobs, link)
+      exportZip(blobs, listFile)
     })
   }
 
@@ -241,11 +243,11 @@ export default function MycoursesLearning() {
                                   style={{
                                     marginTop: '20px',
                                   }}
-                                  className={active === lession?.name ? 'div-flex-active' : 'div-flex'}
+                                  className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
                                     lession?.media
-                                      ? handleVideo(lession?.name, lession?.media)
-                                      : handleDocument(lession?.name, lession?.descriptions)
+                                      ? handleVideo(lession?._id, lession?.media)
+                                      : handleDocument(lession?._id, lession?.descriptions)
                                   }}
                                 >
                                   <div>{lession?.name}</div>
@@ -278,20 +280,21 @@ export default function MycoursesLearning() {
                                     <Popover
                                       placement='bottomLeft'
                                       style={{
-                                        width: '100px',
+                                        maxWidth: '100px',
                                       }}
                                       title={
                                         <>
-                                          {lession?.documents?.map((item: any) => (
+                                          {lession?.documents?.map((item: any, index: number) => (
                                             <>
                                               <Button
                                                 style={{
                                                   width: '150px',
+                                                  margin: '0 5px',
                                                 }}
                                                 onClick={() => handleDownload(item?.files)}
                                               >
                                                 <DownloadOutlined />
-                                                tài liệu
+                                                Tài liệu {index + 1}
                                               </Button>
                                             </>
                                           ))}
@@ -299,16 +302,15 @@ export default function MycoursesLearning() {
                                       }
                                       trigger={'click'}
                                     >
-                                      {lession?.documents?.map((item: any) => (
-                                        <>
-                                          {item?.files && (
-                                            <Button>
-                                              <FolderOutlined />
-                                              Tài liệu
-                                            </Button>
-                                          )}
-                                        </>
-                                      ))}
+                                      {' '}
+                                      <>
+                                        {lession?.documents.length > 0 && (
+                                          <Button>
+                                            <FolderOutlined />
+                                            Tài liệu
+                                          </Button>
+                                        )}
+                                      </>
                                     </Popover>
                                   </div>
                                 </div>
