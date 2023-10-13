@@ -43,28 +43,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setStateFunction: React.Dispatch<React.SetStateAction<any>>,
     setLocalFunction: React.Dispatch<React.SetStateAction<any>>,
   ) => {
-    // setStateFunction((prevData: string[]) => {
-    //   if (prevData) {
-    //     const check = prevData.includes(item)
-
-    //     if (check) {
-    //       const newData = prevData.filter((data) => data !== item)
-    //       setLocalFunction(newData)
-
-    //       return newData
-    //     } else {
-    //       const newData = [...prevData, item]
-
-    //       setLocalFunction(newData)
-
-    //       return newData
-    //     }
-    //   } else {
-    //     setLocalFunction([item])
-
-    //     return [item]
-    //   }
-    // })
     setStateFunction((prevData: string[]) => {
       if (prevData) {
         let newData: string[] = [...prevData]
