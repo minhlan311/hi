@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { debounce } from '@/helpers/common'
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Form } from 'antd'
 import { useEffect, useState } from 'react'
