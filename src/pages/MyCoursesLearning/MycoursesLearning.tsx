@@ -24,6 +24,7 @@ import enrollsApi from '@/apis/enrolls.api'
 import openNotification from '@/components/Notification'
 
 import JSZip from 'jszip'
+import { TypeLessonEnum } from '@/constants'
 
 interface FileItem {
   name: string
@@ -299,20 +300,21 @@ export default function MycoursesLearning() {
                                   ></div>
                                 </div>
                                 <div className={style.flexBest}>
-                                  {lession?.media ? (
+                                  {lession?.type === TypeLessonEnum.VIDEO_LESSON ? (
                                     <div>
                                       <p>
                                         Thời lượng : {lession?.length} phút {''}
                                       </p>
                                       Thể loại : <PlayCircleOutlined /> video
                                     </div>
+                                  ) : lession?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                    <p>
+                                      Thể loại : <FileOutlined /> Văn bản
+                                    </p>
                                   ) : (
-                                    <>
-                                      <p>
-                                        Thể loại : <FileOutlined /> Văn bản
-                                        <VideoCameraOutlined />
-                                      </p>
-                                    </>
+                                    <p>
+                                      Thể loại : <VideoCameraOutlined /> live
+                                    </p>
                                   )}
 
                                   <div>
