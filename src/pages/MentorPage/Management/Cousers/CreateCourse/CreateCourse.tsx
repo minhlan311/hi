@@ -69,8 +69,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     enabled: id ? true : false,
   })
 
-  console.log(courseDetail?.data?.categoryId, 'courseDetail?.data?.name')
-
   useEffect(() => {
     if (courseDetail && id) {
       form.setFieldValue('plan', courseDetail?.data?.plan)
@@ -91,8 +89,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       setContent('')
     }
   }, [courseDetail, id])
-
-  console.log(subjectData?.data?.docs, 'subjectData?.data?.docs')
 
   const subjectOptions = subjectData?.data?.docs?.map((category: any) => ({
     key: category?._id,

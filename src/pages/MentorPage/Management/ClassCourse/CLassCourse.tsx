@@ -18,30 +18,12 @@ import { FORM_TYPE } from '@/constants'
 export default function CLassCourse() {
   const { profile } = useContext(AppContext)
   const [onOpen, setOnOpen] = useState(false)
-  // const [time, setTime] = useState<{ startDate: string; endDate: string } | undefined>(undefined)
   const [idClass, setIdClass] = useState('')
   const [reset, setReset] = useState(false)
   const [search, setSearch] = useState('')
   const [typeForm, setTypeForm] = useState<string | undefined>(undefined)
 
   const [form] = Form.useForm()
-
-  // const [filter, setFilter] = useState()
-
-  // useEffect(() => {
-  //   setFilter({
-  //     filterQuery: {
-  //       createdById: profile?._id,
-  //       search: '',
-  //     },
-  //     options: {
-  //       limit: 10,
-  //       page: 1,
-  //     },
-  //   })
-  //   form.setFieldValue('time', '')
-  //   form.setFieldValue('search', '')
-  // }, [reset])
 
   const mutationDelete = useMutation({
     mutationFn: (id: string) => classApi.deleteClass(id),
