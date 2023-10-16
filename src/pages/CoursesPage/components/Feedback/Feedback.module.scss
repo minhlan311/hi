@@ -77,7 +77,7 @@
 .tooltipTitle:hover {
   cursor: pointer;
   padding: 10px 5px;
-  color: #9f40e0;
+  color: #d72831;
   font-weight: 600;
 }
 .paragraph {
@@ -86,8 +86,9 @@
 .buttonPara {
   margin-top: 5px;
   display: inline-block;
-  font-weight: 600;
+  font-weight: 500;
   padding: none;
+  font-size: 14px;
   border: none;
   text-decoration: underline;
 }
@@ -98,7 +99,8 @@
   gap: 10px;
 }
 .textLike {
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: normal;
 }
 .like {
   font-size: 18px;

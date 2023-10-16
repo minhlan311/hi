@@ -2,34 +2,32 @@
 import categoryApi from '@/apis/categories.api'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
-import { getIdFromUrl } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
 import './CategorySub.scss'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Card, Col, Row } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import WrapMore from '@/components/WrapMore/WrapMore'
 
 export default function CategorySub() {
-  const location = useLocation()
-  const currentPath = location.pathname
-  const id = getIdFromUrl(currentPath)
-
-  const { data } = useQuery({
-    queryKey: ['cateSub', currentPath],
-    queryFn: () =>
-      categoryApi.getCategories({
-        parentId: id,
-      }),
-    enabled: id ? true : false,
-  })
+  const { categorySlug } = useParams()
 
   const { data: detailData, isLoading } = useQuery({
-    queryKey: ['cateDetail', currentPath],
-    queryFn: () => categoryApi.getCategorieDetail(id!),
-    enabled: id ? true : false,
+    queryKey: ['cateDetail', categorySlug],
+    queryFn: () => categoryApi.getCategorieDetail(categorySlug!),
+    enabled: categorySlug ? true : false,
   })
   const navigate = useNavigate()
+
+  const { data } = useQuery({
+    queryKey: ['cateSub', categorySlug],
+    queryFn: () =>
+      categoryApi.getCategories({
+        parentId: detailData?.data?._id,
+      }),
+    enabled: detailData?.data?._id ? true : false,
+  })
 
   return (
     <>
@@ -54,10 +52,19 @@ export default function CategorySub() {
             <div className='div-cate'>
               <h2>{detailData?.data?.name}</h2>
 
-              <div className='box-desc' dangerouslySetInnerHTML={{ __html: detailData?.data?.content as any }}></div>
-
+              <WrapMore
+                title=''
+                maxWidth='100%'
+                children={
+                  <div
+                    className='box-desc'
+                    dangerouslySetInnerHTML={{ __html: detailData?.data?.content as any }}
+                  ></div>
+                }
+                wrapper={'nonBorder'}
+              ></WrapMore>
               <div>
-                <Row gutter={[32, 32]} justify={'center'}>
+                <Row style={{ marginTop: '100px' }} gutter={[32, 32]} justify={'center'}>
                   {data?.data?.docs?.map((item) => (
                     <Col>
                       <Card

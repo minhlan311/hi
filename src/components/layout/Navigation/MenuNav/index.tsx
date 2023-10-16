@@ -140,15 +140,12 @@ export default function MenuNav({ user }: Props) {
                           {item.children.map((chil) => (
                             <div className='chil' key={`${chil._id}`}>
                               <Space direction='vertical'>
-                                <Link to={`${item.href + chil.href + '-i-' + chil._id}`}>
+                                <Link to={`${item.href + chil.href}`}>
                                   <h3 className='chilTitle'>{chil.label}</h3>
                                 </Link>
                                 {chil?.children?.map((menuChil) => (
                                   <Space className='sp100' direction='vertical' key={`${menuChil._id}`}>
-                                    <Link
-                                      to={`${item.href + chil.href + menuChil.href + '-i-' + menuChil._id}`}
-                                      className='lastTitle'
-                                    >
+                                    <Link to={`${item.href + chil.href + menuChil.href}`} className='lastTitle'>
                                       {menuChil.label}
                                     </Link>
                                   </Space>

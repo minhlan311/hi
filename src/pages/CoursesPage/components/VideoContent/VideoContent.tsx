@@ -107,6 +107,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
         status: 'success',
         message: 'Thông báo',
       })
+      navigate('/myCourse')
     },
   })
 
@@ -218,7 +219,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
             <p>
               <ClockCircleOutlined />
             </p>
-            <p>この価格で購入できるのは、あと2日!</p>
+            <p>Chỉ còn 2 ngày để nhận ưu đãi này!</p>
           </div>
 
           <div>
@@ -301,7 +302,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
             )}
           </div>
 
-          <p className={style.refund}>30日間返金保証</p>
+          <p className={style.refund}>30 ngày cam kết hoàn tiền</p>
           <div className={style.boxLessonContent}>
             <div className={style.tagBox}>
               <h4 className={style.tag}>Từ khóa</h4>

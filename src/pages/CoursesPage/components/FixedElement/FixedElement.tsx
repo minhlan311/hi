@@ -34,7 +34,7 @@ export default function FixedElement() {
         <p>
           {' '}
           <div className={style.detailPrice}>
-            <div className={style.specialPrice}>ベストセラー</div>
+            <div className={style.specialPrice}>Best seller</div>
             <div className={style.flex}>
               <div className={style.flexStar}>
                 <div> {4.5}</div>

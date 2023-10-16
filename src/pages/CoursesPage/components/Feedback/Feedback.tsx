@@ -4,38 +4,42 @@ import { FiMoreVertical } from 'react-icons/fi'
 import style from './Feedback.module.scss'
 import { Avatar, Tooltip } from 'antd'
 import ProductRating from '@/components/ProductRating'
-import { DislikeOutlined, LikeOutlined } from '@ant-design/icons'
+import { DislikeOutlined, LikeOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import Paragraph from 'antd/es/typography/Paragraph'
 
 const item = [
   {
     id: 1,
-    name: 'AAA',
+    name: 'Yamada',
+    img: 'https://picsum.photos/200/300',
     score: 4.5,
-    some: '1週間前',
-    desc: '当方、プログラミング歴30年近くの者です。Pythonを深く理解したくて本コースを購入させて頂きました。Pythonプログラミングの基礎的な部分は元より、プログラマーとして知っておくと良いトレンドを踏まえた講義がふんだんに収録されていて、とても有り難かったです。ただ「プログラミング初学者」にとっては、途中から急にハードルがあがるかな、という内容だと感じましたので、初学者の方はコンピューターの基礎的な理解はされた方がよろしいかと思います。'
+    some: '1 tuần trước',
+    desc: 'Tôi đã lập trình được gần 30 năm. Tôi mua khóa học này vì tôi muốn hiểu sâu về Python. Ngoài việc trình bày những kiến ​​thức cơ bản về lập trình Python, còn có rất nhiều bài giảng dựa trên các xu hướng mà các lập trình viên nên biết, điều mà tôi rất biết ơn. Tuy nhiên, tôi cảm thấy rằng những rào cản sẽ đột ngột xuất hiện giữa chừng đối với "những người mới bắt đầu lập trình", vì vậy tôi nghĩ tốt nhất là những người mới bắt đầu nên có hiểu biết cơ bản về máy tính.',
   },
   {
     id: 2,
-    name: 'BBB',
+    name: 'Obito',
     score: 4,
-    some: '2週間前',
-    desc: '当方、プログラミング歴30年近くの者です。Pythonを深く理解したくて本コースを購入させて頂きました。Pythonプログラミングの基礎的な部分は元より、プログラマーとして知っておくと良いトレンドを踏まえた講義がふんだんに収録されていて、とても有り難かったです。ただ「プログラミング初学者」にとっては、途中から急にハードルがあがるかな、という内容だと感じましたので、初学者の方はコンピューターの基礎的な理解はされた方がよろしいかと思います。'
+    img: 'https://picsum.photos/200/301',
+    some: '2 tuần trước',
+    desc: 'Tôi đã lập trình được gần 30 năm. Tôi mua khóa học này vì tôi muốn hiểu sâu về Python. Ngoài việc trình bày những kiến ​​thức cơ bản về lập trình Python, còn có rất nhiều bài giảng dựa trên các xu hướng mà các lập trình viên nên biết, điều mà tôi rất biết ơn. Tuy nhiên, tôi cảm thấy rằng những rào cản sẽ đột ngột xuất hiện giữa chừng đối với "những người mới bắt đầu lập trình", vì vậy tôi nghĩ tốt nhất là những người mới bắt đầu nên có hiểu biết cơ bản về máy tính.',
   },
   {
     id: 3,
     name: 'CCC',
     score: 4.5,
-    some: '3週間前',
-    desc: 'にとっては、途中から急にハードルがあがるかな、という内容だと感じましたので、初学者の方はコンピューターの基礎的な理解はされた方がよろしいかと思います。'
+    img: 'https://picsum.photos/201/300',
+    some: '3 tuần trước',
+    desc: 'Tôi cảm thấy những trở ngại đột ngột tăng lên giữa chừng khóa học, vì vậy tôi nghĩ tốt nhất những người mới bắt đầu nên có hiểu biết cơ bản về máy tính.',
   },
   {
     id: 4,
     name: 'DDD',
     score: 5,
-    some: '4週間前',
-    desc: '当方、プログラミング歴30年近くの者です。Pythonを深く理解したくて本コースを購入させて頂きました。Pythonプログラミングの基礎的な部分は元より、プログラマーとして知っておくと良いトレンドを踏まえた講義がふんだんに収録されていて、とても有り難かったです。ただ「プログラミング初学者」にとっては、途中から急にハードルがあがるかな、という内容だと感じましたので、初学者の方はコンピューターの基礎的な理解はされた方がよろしいかと思います。'
-  }
+    img: 'https://picsum.photos/201/301',
+    some: '4 tuần trước',
+    desc: 'Tôi cảm thấy những trở ngại đột ngột tăng lên giữa chừng khóa học, vì vậy tôi nghĩ tốt nhất những người mới bắt đầu nên có hiểu biết cơ bản về máy tính.',
+  },
 ]
 
 export default function Feedback() {
@@ -48,7 +52,7 @@ export default function Feedback() {
         </div>
         <div>
           {' '}
-          <p className={style.flexText}> コース評価: 4.4 評価: 21K</p>
+          <p className={style.flexText}> Xếp hạng khóa học : 4.4 - Lượt đánh giá: 21K</p>
         </div>
       </div>
 
@@ -60,11 +64,7 @@ export default function Feedback() {
                 {/* left */}
                 <div className={style.topBoxFeedbackLeft}>
                   <div>
-                    <Avatar
-                      src={
-                        'https://upload.wikimedia.org/wikipedia/vi/thumb/e/e0/Avatar_D%C3%B2ng_ch%E1%BA%A3y_c%E1%BB%A7a_n%C6%B0%E1%BB%9Bc_-_Poster_ch%C3%ADnh_th%E1%BB%A9c.jpg/220px-Avatar_D%C3%B2ng_ch%E1%BA%A3y_c%E1%BB%A7a_n%C6%B0%E1%BB%9Bc_-_Poster_ch%C3%ADnh_th%E1%BB%A9c.jpg'
-                      }
-                    />
+                    <Avatar src={item.img} />
                   </div>
                   <div>
                     <div className={style.name}>{item.name}</div>
@@ -83,7 +83,11 @@ export default function Feedback() {
                     title={
                       <div className={style.tooltipTitle}>
                         {' '}
-                        <span>レポート</span>
+                        <span>
+                          {' '}
+                          <ExclamationCircleOutlined style={{ marginRight: '5px' }} />
+                          Báo cáo
+                        </span>
                       </div>
                     }
                     arrow={false}
@@ -99,7 +103,7 @@ export default function Feedback() {
                   ellipsis={{
                     rows: 5,
                     expandable: true,
-                    symbol: <span className={style.buttonPara}>もっと見る</span>
+                    symbol: <span className={style.buttonPara}>Xem thêm</span>,
                   }}
                 >
                   {item.desc}
@@ -107,7 +111,7 @@ export default function Feedback() {
               </div>
               {/* like  */}
               <div className={style.boxLike}>
-                <div className={style.textLike}>役に立ちましたか？</div>
+                <div className={style.textLike}>Bình luận có hữu ích không ?</div>
                 <div>
                   <LikeOutlined className={style.like} />
                 </div>

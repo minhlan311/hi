@@ -49,7 +49,6 @@ export default function CourseCalender() {
       pathname: `/courses/` + id,
     })
   }
-  console.log(listData, 'listDatalistData')
 
   return (
     <div className='courseCalender-container'>
