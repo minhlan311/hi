@@ -116,6 +116,14 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     } else {
       setHidden(false)
     }
+
+    if (value === 'LIVE') {
+      setContent(
+        '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
+      )
+    } else {
+      setContent('')
+    }
   }
 
   const onFinishFailed = (values: any) => {

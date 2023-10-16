@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
-import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND, getIdFromUrl } from '@/helpers/common'
+import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
 import './CategoryDetail.scss'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import LoadingCustom from '@/components/LoadingCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import courseApi from '@/apis/course.api'
-import { getIdLetter } from '@/constants/menuCalendar'
 import { Card, Col, Pagination, Row } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
@@ -16,17 +15,15 @@ import calenderSVG from '@/assets/icons/calendar.svg'
 import WrapMore from '@/components/WrapMore/WrapMore'
 
 export default function CategogyDetail() {
-  const location = useLocation()
-  const currentPath = location.pathname
+  const { categoryDetailSlug } = useParams()
+
   const [page, setPage] = useState(1)
-  const id = getIdFromUrl(currentPath)
-  const idc = getIdLetter(id!)
 
   const navigate = useNavigate()
 
   const [filter, setFilter] = useState({
     filterQuery: {
-      categoryId: id,
+      slug: categoryDetailSlug,
     },
     options: {
       limit: 6,
@@ -39,10 +36,10 @@ export default function CategogyDetail() {
     setFilter((prevFilter) => ({
       ...prevFilter,
       filterQuery: {
-        categoryId: id,
+        slug: 'trung-hoc-co-so',
       },
     }))
-  }, [id, idc])
+  }, [])
 
   useEffect(() => {
     setFilter((prevFilter) => ({
@@ -51,6 +48,7 @@ export default function CategogyDetail() {
         limit: 6,
         page: page,
         pagination: true,
+        sort: { createdAt: -1 },
       },
     }))
   }, [page])
@@ -60,17 +58,25 @@ export default function CategogyDetail() {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['cateDetail', currentPath],
-    queryFn: () => categoryApi.getCategorieDetail(id!),
-    enabled: id ? true : false,
+    queryKey: ['cateDetail', categoryDetailSlug],
+    queryFn: () => categoryApi.getCategorieDetail(categoryDetailSlug!),
   })
 
   const { data: listCourse, isLoading: Loading } = useQuery({
-    queryKey: ['courseCate', id, filter],
+    queryKey: ['courseCate', filter, data],
     queryFn: () => {
-      return courseApi.getCourses(filter)
+      return courseApi.getCourses({
+        filterQuery: {
+          categoryId: data?.data?._id,
+        },
+        options: {
+          limit: 9,
+          page: page,
+          sort: { createdAt: -1 },
+        },
+      })
     },
-    enabled: id ? true : false,
+    enabled: data?.data?.parentId ? true : false,
   })
 
   const handleClickCourse = (id: string) => {
@@ -98,7 +104,7 @@ export default function CategogyDetail() {
               objectFit: 'cover',
             }}
             width='100%'
-            height='600px'
+            height='500px'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
           />
 
@@ -115,7 +121,7 @@ export default function CategogyDetail() {
               ></WrapMore>
 
               <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ xs: 0, sm: 0, md: 24, lg: 32 }}>
-                {Loading && id ? (
+                {Loading ? (
                   <LoadingCustom />
                 ) : (
                   listDataCourse?.map((item) => (
@@ -145,14 +151,11 @@ export default function CategogyDetail() {
                                       rows={1}
                                       children={
                                         <>
-                                          {item?.startDate && item?.schedules ? (
+                                          {item?.startDate ? (
                                             <>
                                               {' '}
                                               Khai giảng {''}
                                               {formatDate(item?.startDate)}
-                                              {''} - Thứ {''}
-                                              {formatDaysOfWeek(item?.schedules).join('-')}
-                                              {''} Từ {''} {formatHour(item?.startAt)} - {formatHour(item?.endAt)}{' '}
                                             </>
                                           ) : (
                                             'Đang cập nhật'
@@ -176,9 +179,9 @@ export default function CategogyDetail() {
                   ))
                 )}
               </Row>
-              {id && listDataCourse && (
+              {listDataCourse && (
                 <div className='pagi'>
-                  <Pagination pageSize={6} onChange={onChange} current={page} total={listCourse?.data?.totalDocs} />
+                  <Pagination pageSize={9} onChange={onChange} current={page} total={listCourse?.data?.totalDocs} />
                 </div>
               )}
             </div>

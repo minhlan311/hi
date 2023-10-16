@@ -7,9 +7,7 @@ import { useContext } from 'react'
 import VideoContent from './components/VideoContent/VideoContent'
 // import { LayoutGrid } from './components/LayoutGrid/LayoutGrid'
 import MenuCourses from './components/MenuCourses/MenuCourses'
-import WrapMore from '@/components/WrapMore/WrapMore'
 import WrapMoreDetail from './components/WrapMore/WrapMoreDetail'
-import Request from './components/Request/Request'
 import CommentDetail from './components/Comment/CommentDetail'
 import Feedback from './components/Feedback/Feedback'
 import { useQuery } from '@tanstack/react-query'
@@ -73,21 +71,20 @@ export default function Courses() {
             >
               <LayoutGrid item={items} />
             </WrapMore> */}
-            <div className={style.titleText}>Khóa học liên quan</div>
-            <WrapMoreDetail>
-              <MenuCourses dataCourses={dataCourse as any} />
-            </WrapMoreDetail>
-            <Request />
-
-            <WrapMore
-              padding={0}
-              wrapper='nonBorder'
-              title='解説'
-              titleStyle={{ fontWeight: '600', fontSize: '24px', padding: '20px 20px 10px 0', margin: '0' }}
+            <div
+              style={{
+                margin: '40px 0',
+              }}
             >
-              {' '}
+              <div className={style.titleText}>Khóa học liên quan</div>
+              <WrapMoreDetail>
+                <MenuCourses dataCourses={dataCourse as any} />
+              </WrapMoreDetail>
+            </div>
+
+            <WrapMoreDetail>
               <CommentDetail data={dataCourse?.data as any} />
-            </WrapMore>
+            </WrapMoreDetail>
             <Feedback />
           </div>
           <div className={style.col22}>

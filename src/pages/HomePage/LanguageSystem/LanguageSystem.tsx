@@ -1,4 +1,4 @@
-import { Button, Col, Image, Row, Typography } from 'antd'
+import { Button, Col, Image, Row } from 'antd'
 import './LanguageSystem.scss'
 
 export default function LanguageSystem() {
@@ -8,7 +8,7 @@ export default function LanguageSystem() {
       <Row className='row-antd-grid' gutter={[16, 16]} justify='center'>
         <Col className='gutter-row' xs={24} sm={12} md={8} lg={6}>
           <div className='div-card'>
-            <Typography className='title-row'>KHÓA HỌC OFFLINE</Typography>
+            <p className='title-row'>KHÓA HỌC OFFLINE</p>
             <Image
               className='img-learn'
               preview={false}

@@ -130,7 +130,7 @@ export default function MenuCourses({ coursesData, setPriceParent, setselectLeng
                             <TagCustom
                               intArrType={['BESS SELLER', 'REVISION', 'NEW']}
                               intColor={['var(--yellowish-green)', 'var(--teal)', 'var(--red)']}
-                              intAlternativeType={['ベストセラー', '改訂', '話題・新着']}
+                              intAlternativeType={['Best seller', '改訂', '話題・新着']}
                               content={'BESS SELLER'}
                               colorText='var(--black)'
                             />

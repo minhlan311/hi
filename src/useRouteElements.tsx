@@ -251,7 +251,7 @@ export default function useRouteElements() {
         {
           path: PATH.SCHEDULE,
           element: (
-            <Layout user={profile} title='Lịnh học của tôi'>
+            <Layout user={profile} title='Lịch học của tôi'>
               <SchedulePage />
             </Layout>
           ),
