@@ -42,18 +42,29 @@ const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
   useEffect(() => {
     const callApi = async () => {
       setLoading(true)
-      const data = await topicApi.getAllTopic({
-        filterQuery: { parentId: id ? id : dataId },
-        options: { limit: 10, createAt: 1 },
-      })
-      setLoading(false)
-      setDataColl(data?.data?.docs as any)
+
+      try {
+        const data = await topicApi.getAllTopic({
+          filterQuery: { parentId: id ? id : dataId },
+          options: { limit: 15, createAt: 1 },
+        })
+
+        localStorage.setItem('apiData', JSON.stringify(data?.data?.docs))
+
+        setLoading(false)
+        setDataColl(data?.data?.docs as any)
+      } catch (error) {
+        console.error('Lỗi khi gọi API: ', error)
+        setLoading(false)
+      }
     }
 
-    dataId ? callApi() : ''
-
-    return
+    callApi()
   }, [dataId, reFetch, dataCollLession, id])
+
+  useEffect(() => {
+    localStorage.setItem('apiData', JSON.stringify(dataColl))
+  }, [dataColl])
 
   const mutation = useMutation({
     mutationFn: (id: string) => topicApi.deleteTopic(id!),
