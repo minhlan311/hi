@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
-import { formatDate, formatDaysOfWeek, formatHour, formatPriceVND } from '@/helpers/common'
+import { formatDate, formatPriceVND } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
 import './CategoryDetail.scss'
 import { useEffect, useState } from 'react'
