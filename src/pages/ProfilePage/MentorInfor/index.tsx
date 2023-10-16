@@ -1,24 +1,28 @@
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import SliderCustom from '@/components/SliderCustom'
 import Header from '@/components/layout/Header/Header'
+import { formatDate } from '@/helpers/common'
 import { UserState } from '@/interface/user'
+import { Card, Col, Divider, Image, Row, Space, Tooltip } from 'antd'
+import Paragraph from 'antd/es/typography/Paragraph'
 import { useState } from 'react'
-import { Button, Card, Col, Divider, Image, Row, Space, Tooltip } from 'antd'
+import { BsFillTelephoneFill } from 'react-icons/bs'
 import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
 import { FaEarthAsia } from 'react-icons/fa6'
-import { MdEmail } from 'react-icons/md'
-import { BsFillTelephoneFill } from 'react-icons/bs'
 import { FiEdit } from 'react-icons/fi'
+import { MdEmail } from 'react-icons/md'
+import { VscDebugBreakpointLog } from 'react-icons/vsc'
 import { Link } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
 import malePic from '../../../assets/images/examimg/male-teacher.png'
-import css from './styles.module.scss'
-import { VscDebugBreakpointLog } from 'react-icons/vsc'
-import SliderCustom from '@/components/SliderCustom'
 import UpdateMentor from './UpdateMentor'
-import { formatDate } from '@/helpers/common'
-import Paragraph from 'antd/es/typography/Paragraph'
-type Props = { user: UserState }
+import css from './styles.module.scss'
+type Props = {
+  user: UserState
+  profileId: string
+}
 
-const MentorInfor = ({ user }: Props) => {
+const MentorInfor = ({ user, profileId }: Props) => {
   const [update, setUpdate] = useState(false)
   const gender = 'male'
   const data = [
@@ -72,8 +76,7 @@ const MentorInfor = ({ user }: Props) => {
                       </Space>
                     </Col>
                     <Col span={24} md={12}>
-                      {' '}
-                      {!update && (
+                      {!update && profileId === user._id && (
                         <div
                           style={{
                             margin: ' 0 10px  10px 0',
@@ -81,18 +84,13 @@ const MentorInfor = ({ user }: Props) => {
                           }}
                         >
                           <Tooltip title='Thay đổi thông tin'>
-                            <Button
-                              type='dashed'
-                              className='dashed'
+                            <ButtonCustom
+                              type='primary'
+                              icon={<FiEdit />}
                               onClick={() => {
                                 setUpdate(!update)
                               }}
-                              style={{
-                                marginRight: '10px',
-                              }}
-                            >
-                              <FiEdit />
-                            </Button>
+                            ></ButtonCustom>
                           </Tooltip>
                         </div>
                       )}

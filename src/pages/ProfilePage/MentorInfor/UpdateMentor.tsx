@@ -14,6 +14,7 @@ import openNotification from '@/components/Notification'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
 import { useState, useEffect } from 'react'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 type Props = { user: UserState; checkOk: any }
 
 type FieldType = {
@@ -131,28 +132,22 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                   </Space>
                 </Col>
                 <Col>
-                  {' '}
-                  <div className={css.flexButton}>
-                    <Tooltip title='Hủy bỏ'>
-                      {' '}
-                      <Button
-                        htmlType='button'
-                        type='dashed'
-                        className='dashed'
-                        onClick={() => {
-                          checkOk(false)
-                        }}
-                      >
-                        <StopOutlined />
-                      </Button>
-                    </Tooltip>
+                  <Space>
+                    <ButtonCustom
+                      htmlType='button'
+                      onClick={() => {
+                        checkOk(false)
+                      }}
+                      icon={<StopOutlined />}
+                      tooltip='Hủy bỏ'
+                    >
+                      Hủy
+                    </ButtonCustom>
 
-                    <Tooltip title='Cập nhật'>
-                      <Button type='primary' htmlType='submit'>
-                        {mutation.isLoading ? <Spin /> : <CheckCircleOutlined />}
-                      </Button>
-                    </Tooltip>
-                  </div>
+                    <ButtonCustom type='primary' htmlType='submit' icon={<CheckCircleOutlined />} tooltip='Lưu'>
+                      Lưu
+                    </ButtonCustom>
+                  </Space>
                 </Col>
               </Row>
               <Divider />
@@ -220,7 +215,7 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                             </Button>
                           </Form>
                         </Modal>
-                        <Button type='dashed' className='dashed' onClick={showModal}>
+                        <Button type='dashed' className={css.dashed} onClick={showModal}>
                           {' '}
                           Mạng xã hội{' '}
                         </Button>

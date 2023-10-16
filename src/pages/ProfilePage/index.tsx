@@ -10,7 +10,7 @@ import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
 import { setProfileToLS } from '@/utils/auth'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Row, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { LuImagePlus } from 'react-icons/lu'
@@ -25,6 +25,7 @@ import facebook from '../../assets/icons/facebook-logo.svg'
 import tiktok from '../../assets/icons/tiktok-icon.svg'
 import youtube from '../../assets/icons/youtube-logo.svg'
 import insta from '../../assets/icons/insta.png'
+import PageResult from '@/components/PageResult'
 
 type Props = {
   profile: UserState
@@ -37,6 +38,7 @@ const ProfilePage = ({ profile }: Props) => {
   const [payload, setPayload] = useState<UserState>()
   const userId = location.pathname.split('/')[2]
   const { sm, md } = useResponsives()
+  const queryClient = useQueryClient()
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ['userDetail', location],
@@ -60,12 +62,44 @@ const ProfilePage = ({ profile }: Props) => {
             const newData = { ...profile, ...payload }
             setProfile(newData)
             setProfileToLS(newData)
+            queryClient.invalidateQueries({ queryKey: ['userDetail'] })
             openNotification({ status: 'success', message: 'Thông báo', description: 'Cập nhật thông tin thành công!' })
           },
         },
       )
     }
   }, [payload])
+
+  const tabData = [
+    {
+      id: '1',
+      name: 'Video',
+      children: <MentorVideo />,
+    },
+    {
+      id: '2',
+      name: 'Thông tin',
+      children: <>{user ? <MentorInfor user={user} profileId={profile._id} /> : ''}</>,
+    },
+    {
+      id: '3',
+      name: 'Bằng cấp',
+      children: <>{user?.isMentor ? <Certificate user={user} /> : ''}</>,
+    },
+    {
+      id: '4',
+      name: 'Khóa học',
+      children: <>{user ? <MyCourses user={user} /> : ''}</>,
+    },
+  ]
+
+  if (user?.isMentor) {
+    tabData.push({
+      id: '5',
+      name: 'Đánh giá',
+      children: <Feedback />,
+    })
+  }
 
   return isLoading ? (
     <LoadingCustom tip='Vui lòng chờ...' className={css.loading} />
@@ -161,33 +195,7 @@ const ProfilePage = ({ profile }: Props) => {
       </div>
       <Header background='var(--whiteBg)' padding='0 0 50px 0'>
         <TabsCustom
-          data={[
-            {
-              id: '1',
-              name: 'Video',
-              children: <MentorVideo />,
-            },
-            {
-              id: '2',
-              name: 'Thông tin',
-              children: <MentorInfor user={user} />,
-            },
-            {
-              id: '3',
-              name: 'Bằng cấp',
-              children: <>{user.isMentor ? <Certificate user={user} /> : ''}</>,
-            },
-            {
-              id: '4',
-              name: 'Khóa học',
-              children: <MyCourses user={user} />,
-            },
-            {
-              id: '5',
-              name: 'Đánh giá',
-              children: <Feedback />,
-            },
-          ]}
+          data={tabData}
           setting={{
             size: 'large',
           }}
@@ -196,7 +204,7 @@ const ProfilePage = ({ profile }: Props) => {
       </Header>
     </div>
   ) : (
-    <div>Không tìm thấy giảng viên</div>
+    <PageResult code={404} title='Không tìm thấy người dùng' desc='Người dùng không tồn tại!' />
   )
 }
 
