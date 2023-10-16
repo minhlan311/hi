@@ -1,16 +1,14 @@
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import React, { useContext, useEffect, useId, useRef, useState } from 'react'
-import UploadCustom from '@/components/UploadCustom/UploadCustom'
-import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { BiImageAdd } from 'react-icons/bi'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice } from '@/interface/test'
-import { CSS } from '@dnd-kit/utilities'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
-import { Form, FormInstance, Input, InputRef, message, Popconfirm, Space, Table } from 'antd'
-import { IoMusicalNoteOutline } from 'react-icons/io5'
-import { MdPlaylistAdd } from 'react-icons/md'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { Form, FormInstance, InputRef, Popconfirm, Space, Table, message } from 'antd'
+import React, { useContext, useEffect, useId, useRef, useState } from 'react'
+import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
+import { MdPlaylistAdd } from 'react-icons/md'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -121,11 +119,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const [editing, setEditing] = useState(false)
   const inputRef = useRef<InputRef>(null)
   const form = useContext(EditableContext)!
-  useEffect(() => {
-    if (editing) {
-      inputRef.current!.focus()
-    }
-  }, [editing])
+  // useEffect(() => {
+  //   if (editing) {
+  //     // inputRef.current!.focus()
+  //     console.log(inputRef.current)
+  //   }
+
+  // }, [editing])
 
   const toggleEdit = () => {
     setEditing(!editing)
@@ -148,18 +148,28 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   if (editable) {
     childNode = editing ? (
-      <Form.Item
-        style={{ margin: 0 }}
+      // <Form.Item
+      //   style={{ margin: 0 }}
+      //   name={dataIndex}
+      //   rules={[
+      //     {
+      //       required: true,
+      //       message: 'Vui lòng nhập đáp án',
+      //     },
+      //   ]}
+      // >
+      //   <Input.TextArea ref={inputRef} onPressEnter={save} onBlur={save} placeholder='Nhập đáp án' />
+      // </Form.Item>
+      <TextAreaCustom
+        ref={inputRef}
+        onReady={(editor: any) => {
+          editor.focus()
+        }}
+        onBlur={save}
         name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: 'Vui lòng nhập đáp án',
-          },
-        ]}
-      >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} placeholder='Nhập đáp án' />
-      </Form.Item>
+        data={record}
+        required
+      />
     ) : (
       <div className='editable-cell-value-wrap' style={{ paddingRight: 24 }} onClick={toggleEdit}>
         {children}
@@ -214,35 +224,35 @@ const TableAddonQues = (props: Props) => {
   const initColumns = [
     {
       title: 'Đáp án',
+      render: (_: any, record: Choice) => {
+        return <div dangerouslySetInnerHTML={{ __html: record.answer }}></div>
+      },
       dataIndex: 'answer',
-      width: '65%',
       editable: true,
       key: 'answer',
     },
+    // {
+    //   title: 'Hình ảnh / Âm thanh',
+    //   align: 'center',
+    //   key: 'upload',
+
+    //   render: (_: any, record: Choice) => {
+    //     return (
+    //       <Space>
+    //         <UploadCustom accessType='image/*' name='image'>
+    //           <ButtonCustom icon={<BiImageAdd />} type='text' size='small' />
+    //         </UploadCustom>
+    //         <UploadCustom accessType='audio/*' name='audio'>
+    //           <ButtonCustom icon={<IoMusicalNoteOutline />} type='text' size='small' />
+    //         </UploadCustom>
+    //       </Space>
+    //     )
+    //   },
+    // },
     {
-      title: 'Hình ảnh / Âm thanh',
+      title: 'Hành động',
       align: 'center',
-      key: 'upload',
-
-      render: (_: any, record: Choice) => {
-        console.log(record)
-
-        return (
-          <Space>
-            <UploadCustom accessType='image/*' name='image'>
-              <ButtonCustom icon={<BiImageAdd />} type='text' size='small' />
-            </UploadCustom>
-            <UploadCustom accessType='audio/*' name='audio'>
-              <ButtonCustom icon={<IoMusicalNoteOutline />} type='text' size='small' />
-            </UploadCustom>
-          </Space>
-        )
-      },
-    },
-    {
-      title: 'Hành dộng',
-      align: 'center',
-
+      width: '110px',
       key: 'action',
       render: (_: any, record: Choice) =>
         dataSource.length >= 1 && (
@@ -260,6 +270,7 @@ const TableAddonQues = (props: Props) => {
     if (selectionType === 'SORT') {
       const newOj = {
         key: 'sort',
+        width: '45px',
       }
       setDefaultColumns((prev) => [newOj, ...prev])
     }
@@ -269,6 +280,7 @@ const TableAddonQues = (props: Props) => {
         title: 'Ô trống',
         key: 'sst',
         align: 'center',
+        width: '50px',
       }
 
       setDefaultColumns((prev) => [newOj, ...prev])

@@ -2,10 +2,15 @@
 import { debounce } from '@/helpers/common'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { Form } from 'antd'
+import { Form, InputRef } from 'antd'
 import { useEffect, useState } from 'react'
 import './styles.scss'
+import uploadPlugin from './upload.plugin'
 type Props = {
+  ref?: React.RefObject<HTMLDivElement> | React.RefObject<InputRef>
+  config?: any
+  onBlur?: () => void
+  onReady?: (e: any) => void
   name: string
   data: any | null
   label?: string
@@ -13,7 +18,7 @@ type Props = {
 }
 
 const TextAreaCustom = (props: Props) => {
-  const { name, data, label, required = false } = props
+  const { ref, onBlur, onReady, config, name, data, label, required = false } = props
 
   const [editorContent, setEditorContent] = useState<string>('<p></p>')
 
@@ -58,16 +63,20 @@ const TextAreaCustom = (props: Props) => {
     >
       {/* {editorContent.length === 0 && <div className='ck-placeholder'>{placeholder}</div>} */}
       <CKEditor
-        // name={name}
+        ref={ref}
+        onBlur={onBlur}
+        name={name}
         editor={ClassicEditor}
         data={editorContent}
-        // config={{
-        //   ckfinder: {
-        //     uploadCkUrl: uploadCkUrl,
-        //   },
-        // }}
+        config={{
+          ...config,
+          extraPlugins: [uploadPlugin],
+          toolbar: {
+            shouldNotGroupWhenFull: true,
+          },
+        }}
         onChange={debounce(handleEditorChange, 500)}
-        // placeholder={placeholder}
+        onReady={onReady}
       ></CKEditor>
     </Form.Item>
   )
