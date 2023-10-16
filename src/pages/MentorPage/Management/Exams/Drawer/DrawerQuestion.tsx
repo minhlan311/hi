@@ -242,13 +242,7 @@ const DrawerQuestion = (props: Props) => {
         >
           <h3>Câu hỏi</h3>
 
-          <TextAreaCustom
-            name='question'
-            label='Nội dung câu hỏi'
-            placeholder='Nhập nội dung câu hỏi'
-            required
-            data={data}
-          />
+          <TextAreaCustom name='question' label='Nội dung câu hỏi' required data={!data ? undefined : data} />
 
           <Row justify='space-between' gutter={12}>
             <Col span={24} md={6}>
@@ -411,7 +405,7 @@ const DrawerQuestion = (props: Props) => {
             <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
           )) ||
             (typeQues === 'WRITING' && (
-              <TextAreaCustom name='answer' label='Đáp án' placeholder='Nhập đáp án' required data={data} />
+              <TextAreaCustom name='answer' label='Đáp án' required data={!data ? undefined : data} />
             )) ||
             (typeQues === 'LIKERT SCALE' && <LinkertScale callBackChoices={setChoice} />) ||
             (typeQues === 'NUMERICAL' && (
@@ -429,9 +423,9 @@ const DrawerQuestion = (props: Props) => {
               </Form.Item>
             )) || <></>}
 
-          <TextAreaCustom name='explanation' label='Giải thích' placeholder='Nhập giải thích' data={data} />
+          <TextAreaCustom name='explanation' label='Giải thích' data={!data ? undefined : data} />
 
-          <TextAreaCustom name='hint' label='Gợi ý' placeholder='Nhập gợi ý' data={data}></TextAreaCustom>
+          <TextAreaCustom name='hint' label='Gợi ý' data={!data ? undefined : data}></TextAreaCustom>
         </Form>
       </Drawer>
     </div>

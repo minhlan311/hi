@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Choice {
   answer: string
   isCorrect: boolean
@@ -19,7 +20,7 @@ export interface QuestionState {
   difficulty: string
   answer?: string
   hint?: string
-  explanation?: string
+  explanation?: any
   createdAt: string
   updatedAt: string
   id: string

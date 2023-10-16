@@ -21,7 +21,7 @@ type Props = {
 
 const RenderItem = (props: Props) => {
   const { type, data, setQuestionUpdate, setOpen } = props
-  const { setQuestionList, questionList } = useContext(AppContext)
+  const { setQuestionList, questionList, profile } = useContext(AppContext)
 
   const [isHover, setIsHover] = useState(false)
   const queryClient = useQueryClient()
@@ -90,35 +90,37 @@ const RenderItem = (props: Props) => {
                   />
                 </Space>
               </Col>
-              <Col className={css.buttAction}>
-                <Space size='small'>
-                  <ButtonCustom
-                    shape='circle'
-                    type='text'
-                    icon={<AiOutlineEdit />}
-                    size='small'
-                    onClick={() => {
-                      setQuestionUpdate(data)
-                      setOpen(true)
-                    }}
-                  ></ButtonCustom>
-                  <Popconfirm
-                    placement='right'
-                    title='Bạn có muốn xóa câu hỏi này?'
-                    onConfirm={() => mutate(data._id)}
-                    okText='Xóa'
-                    cancelText='Hủy'
-                  >
+              {profile._id === data.createdById && (
+                <Col className={css.buttAction}>
+                  <Space size='small'>
                     <ButtonCustom
                       shape='circle'
                       type='text'
-                      icon={<AiOutlineDelete />}
+                      icon={<AiOutlineEdit />}
                       size='small'
-                      danger
+                      onClick={() => {
+                        setQuestionUpdate(data)
+                        setOpen(true)
+                      }}
                     ></ButtonCustom>
-                  </Popconfirm>
-                </Space>
-              </Col>
+                    <Popconfirm
+                      placement='right'
+                      title='Bạn có muốn xóa câu hỏi này?'
+                      onConfirm={() => mutate(data._id)}
+                      okText='Xóa'
+                      cancelText='Hủy'
+                    >
+                      <ButtonCustom
+                        shape='circle'
+                        type='text'
+                        icon={<AiOutlineDelete />}
+                        size='small'
+                        danger
+                      ></ButtonCustom>
+                    </Popconfirm>
+                  </Space>
+                </Col>
+              )}
             </Row>
 
             <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
@@ -141,10 +143,10 @@ const RenderItem = (props: Props) => {
                 {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
               </Space>
             </Card>
-            {data.hint && (
-              <Space className={`${css.hint} sp100`} align='center'>
+            {data.explanation !== '<p></p>' && (
+              <Space className={`${css.hint} sp100 `}>
                 <AiOutlineQuestionCircle />
-                <p dangerouslySetInnerHTML={{ __html: data.hint }}></p>
+                <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
               </Space>
             )}
           </Space>
