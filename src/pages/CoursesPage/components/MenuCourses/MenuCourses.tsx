@@ -75,18 +75,18 @@ export default function MenuCourses({ dataCourses }: Props) {
                         <div>
                           <TagCustom
                             intArrType={['BESS SELLER', 'REVISION', 'NEW']}
-                            intColor={['var(--yellowish-green)', 'var(--teal)', 'var(--red)']}
-                            intAlternativeType={['ベストセラー', '改訂', '話題・新着']}
+                            intColor={['#eceb98', 'var(--teal)', 'var(--red)']}
+                            intAlternativeType={['BEST SELLER', '改訂', '話題・新着']}
                             content={'BESS SELLER'}
                             colorText='var(--black)'
                           />
                         </div>
                         <div className={style.flex}>
                           <div className={style.marginRight}>
-                            <span>合計7.5時間</span> <span className={style.dot}></span>
+                            <span>Tổng cộng : 7.5 giờ</span> <span className={style.dot}></span>
                           </div>
                           <div>
-                            <span>更新済み2023/7</span>
+                            <span>Cập nhật 10/2023</span>
                           </div>
                         </div>
                       </div>

@@ -27,6 +27,7 @@ export default function MyCourse() {
         options: {
           page: current,
           limit: 6,
+          sort: { createdAt: -1 },
         },
       }),
   })

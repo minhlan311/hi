@@ -61,6 +61,7 @@ const SelectCustom = (props: Props) => {
     callBackDataSearch,
     callBackSelected,
   } = props
+
   const { Option } = Select
   const [selectedValues, setSelectedValues] = useState<string[] | number[]>([])
   const [selectAllVal, setSelectAll] = useState(false)
@@ -113,6 +114,10 @@ const SelectCustom = (props: Props) => {
     callBackSelected && callBackSelected(selectedValues)
   }, [selectedValues])
 
+  useEffect(() => {
+    if (defaultValue) setSelectedValues(defaultValue as unknown as any)
+  }, [defaultValue])
+
   return type === 'search' ? (
     <Select
       showSearch={type === 'search'}
@@ -130,7 +135,7 @@ const SelectCustom = (props: Props) => {
       labelInValue
       filterOption={false}
       onClear={() => selectedValues?.length > 0 && setSelectedValues([])}
-      onSelect={(e) => e.key === 'all' && setSelectAll(!selectAllVal)}
+      onSelect={(e: any) => e.key === 'all' && setSelectAll(!selectAllVal)}
       notFoundContent={
         isLoading || loading ? (
           <div style={{ padding: '100px 0' }}>

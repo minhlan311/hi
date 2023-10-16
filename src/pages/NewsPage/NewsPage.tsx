@@ -10,18 +10,21 @@ import { useNavigate } from 'react-router-dom'
 import LoadingCustom from '@/components/LoadingCustom'
 
 export default function NewsPage() {
-  const [filter, setFilter] = useState({
-    filterQuery: {},
-    options: { sort: { createdAt: -1 }, limit: 10 },
-  })
+  const [current, setCurrent] = useState<number>(1)
 
   const navigate = useNavigate()
 
   const { data, isLoading } = useQuery({
     queryFn: () => {
-      return newsApi.getNews(filter)
+      return newsApi.getNews({
+        filterQuery: {},
+        options: {
+          limit: 6,
+          page: current,
+        },
+      })
     },
-    queryKey: ['newALL', filter],
+    queryKey: ['newALL', current],
   })
 
   const { data: dataLimit } = useQuery({
@@ -34,22 +37,15 @@ export default function NewsPage() {
     queryKey: ['newLimit'],
   })
 
-  const onchange = (page: number, limit: number) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      options: {
-        ...prevFilter.options,
-        page: page!,
-        limit: limit!,
-      },
-    }))
+  const onchange = (page: number) => {
+    setCurrent(page)
   }
 
   return (
     <div className='news-page-container'>
       <div className='fixed'>
         <div className=''>
-          <h2 className='h2'>Bài viết xem nhiều</h2>
+          <h2 className='h2'>Bài viết mới nhất</h2>
           {isLoading ? (
             <LoadingCustom tip='Vui lòng chờ ...' />
           ) : (
@@ -103,7 +99,13 @@ export default function NewsPage() {
       )}
 
       <div className='pagi'>
-        <Pagination onChange={onchange} current={data?.data?.page} defaultCurrent={1} total={data?.data?.totalDocs} />
+        <Pagination
+          onChange={onchange}
+          current={current}
+          pageSize={6}
+          defaultCurrent={1}
+          total={data?.data?.totalDocs}
+        />
       </div>
     </div>
   )

@@ -20,6 +20,7 @@ import { SuccessResponse } from '@/types/utils.type'
 import { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { setQuestionsListFromLS } from '@/utils/questons'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorQuestions = () => {
@@ -35,28 +36,39 @@ const MentorQuestions = () => {
 
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
-  const { questionList, setQuestionList } = useContext(AppContext)
 
+  // question select
+  const { questionList } = useContext(AppContext)
+
+  const [questionsSelectCallback, setQuestionsSelectCallback] = useState<SuccessResponse<QuestionState[]>>()
+
+  useEffect(() => {
+    if (examDetail && examDetail.questions.length > 0) {
+      setQuestionsListFromLS(examDetail.questions)
+    } else {
+      setQuestionsListFromLS([])
+    }
+  }, [examDetail])
+
+  // action question
   const [openUpload, setOpenUpload] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [remove, setRemove] = useState<boolean>(false)
+
+  const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
+  const [current, setCurrent] = useState<number>(1)
+  const [currentSelected, setSelectedCurrent] = useState<number>(1)
+  const examMutation = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
+
+  // bank questons
+  const [questionsCallback, setQuestionsCallback] = useState<SuccessResponse<QuestionState[]>>()
+  const dataActive = questionsCallback?.docs?.filter((item) => item.status === 'ACTIVE')
+  const quesId = dataActive?.map((it) => it._id)
+  const indeterminate = quesId?.every((e) => questionList?.includes(e))
   const [myQues, setMyQues] = useState<boolean>(false)
   const [checkAll, setCheckAll] = useState<boolean>(false)
   console.log(myQues)
 
-  const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
-  const [questionsSelected, setQuestionsSelected] = useState<SuccessResponse<QuestionState[]>>()
-  const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
-  const [current, setCurrent] = useState<number>(1)
-  const [currentSelected, setSelectedCurrent] = useState<number>(1)
-
-  const { mutate, status, error } = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
-
-  const dataActive = questions?.docs?.filter((item) => item.status === 'ACTIVE')
-
-  const quesId = dataActive?.map((it) => it._id)
-
-  const indeterminate = quesId?.every((e) => questionList?.includes(e))
   const [tabChange, setTabChange] = useState<string>()
 
   const handleChangeTab = (e: string) => {
@@ -70,28 +82,28 @@ const MentorQuestions = () => {
         questions: questionList,
       }
 
-      mutate(payload as unknown as any)
+      examMutation.mutate(payload as unknown as any)
     }
   }
 
   useEffect(() => {
-    if (status === 'success') {
+    if (examMutation.status === 'success') {
       openNotification({
-        status: status,
+        status: examMutation.status,
         message: 'Thông báo',
         description: remove ? 'Xóa câu hỏi khỏi bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
       setRemove(false)
     }
 
-    if (status === 'error' && error) {
+    if (examMutation.status === 'error' && examMutation.error) {
       openNotification({
-        status: status,
+        status: examMutation.status,
         message: 'Thông báo',
         description: ' Có lỗi xảy ra',
       })
     }
-  }, [status, error])
+  }, [examMutation])
 
   const questionTabs = [
     {
@@ -103,11 +115,13 @@ const MentorQuestions = () => {
             <FilterAction
               type='question'
               apiFind={questionApi.findQuestion}
-              callBackData={setQuestionsSelected}
-              filterQuery={{ testId: examDetail._id, _id: questionList }}
+              callBackData={setQuestionsSelectCallback}
+              filterQuery={{
+                _id: questionList.length > 0 ? questionList : [],
+              }}
               limit={10}
               page={currentSelected}
-              keyFilter='questionsSelected'
+              keyFilter='questionsSelect'
               setLoading={setLoading}
               checkQuery={tabChange}
             />
@@ -115,7 +129,7 @@ const MentorQuestions = () => {
           <Space size='large' className={css.infor}>
             <Space>
               <p>Số câu hỏi:</p>
-              <b>{questionsSelected?.totalDocs}</b>
+              <b>{questionsSelectCallback?.totalDocs}</b>
             </Space>
 
             <Space>
@@ -125,14 +139,14 @@ const MentorQuestions = () => {
                 onConfirm={() => {
                   setRemove(true)
                   setTabChange('')
-                  setQuestionList(questionList)
+                  setQuestionsListFromLS([])
 
                   const payload = {
                     id: examDetail?._id,
                     questions: [],
                   }
 
-                  mutate(payload as unknown as any)
+                  examMutation.mutate(payload as unknown as any)
                 }}
                 okText='Xóa'
                 cancelText='Hủy'
@@ -155,14 +169,14 @@ const MentorQuestions = () => {
           ) : (
             <Space direction='vertical' size='large' className={'sp100'}>
               <RenderQuestion
-                data={questionsSelected?.docs}
+                data={questionsSelectCallback?.docs}
                 type='questionsSelected'
                 setOpen={setOpen}
                 setQuestionUpdate={setQuestionUpdate}
               />
               <PaginationCustom
                 callbackCurrent={setSelectedCurrent}
-                totalData={questionsSelected?.totalDocs}
+                totalData={questionsSelectCallback?.totalDocs}
                 limit={10}
               />
             </Space>
@@ -179,18 +193,17 @@ const MentorQuestions = () => {
             <FilterAction
               type='question'
               apiFind={questionApi.findQuestion}
-              callBackData={setQuestions}
-              filterQuery={{ testId: examDetail._id }}
+              callBackData={setQuestionsCallback}
+              filterQuery={{ categoryId: examDetail.categoryId }}
               limit={10}
               page={current}
               keyFilter='questionsBank'
-              // setLoading={setLoading}
             />
           )}
           <Space className={css.infor}>
             <Space size='small'>
               <p>Số câu hỏi:</p>
-              <b>{questions?.totalDocs}</b>
+              <b>{questionsCallback?.totalDocs}</b>
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
@@ -201,7 +214,7 @@ const MentorQuestions = () => {
             <Checkbox
               onClick={() => {
                 setCheckAll(!checkAll)
-                queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
+                queryClient.invalidateQueries({ queryKey: ['questionsSelect'] })
               }}
               checked={!dataActive?.length ? Boolean(dataActive?.length) : indeterminate}
               disabled={!dataActive?.length}
@@ -226,16 +239,16 @@ const MentorQuestions = () => {
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
           ) : (
             <Space direction='vertical' size='large' className={'sp100'}>
-              {questions && (
+              {questionsCallback && (
                 <RenderQuestion
-                  data={questions.docs}
+                  data={questionsCallback.docs}
                   type='questionsBank'
                   setOpen={setOpen}
                   setQuestionUpdate={setQuestionUpdate}
                   checkAll={checkAll}
                 />
               )}
-              <PaginationCustom callbackCurrent={setCurrent} totalData={questions?.totalDocs} limit={10} />
+              <PaginationCustom callbackCurrent={setCurrent} totalData={questionsCallback?.totalDocs} limit={10} />
             </Space>
           )}
         </div>
