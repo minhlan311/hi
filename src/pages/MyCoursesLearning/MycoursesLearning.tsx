@@ -7,7 +7,6 @@ import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
-import WrapMore from '@/components/WrapMore/WrapMore'
 import { TypeLessonEnum } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
 import {
@@ -21,7 +20,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Collapse, Popover, Tooltip } from 'antd'
+import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
 import FileSaver from 'file-saver'
 import JSZip from 'jszip'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -102,12 +101,21 @@ export default function MycoursesLearning() {
       id: '1',
       name: 'Tổng quan',
       children: (
-        <div
-          style={{
-            lineHeight: '1.4',
-          }}
-          dangerouslySetInnerHTML={{ __html: document }}
-        ></div>
+        <>
+          <h3>アプリ開発から業務効率化まで、仕事の幅が広がる「Python」</h3>
+          <p>
+            [May 2023 Update]: Over 20 videos have been refreshed/added to keep up with the AWS UI changes and exam
+            changes [September 2022 Update - SAA-C03]: Over 80 videos have been updated to reflect the NEW SAA-C03 exam
+            [April 2022 Update]: Over 30 videos have been refreshed/added to keep up with the AWS UI changes and exam
+            changes [October 2021 Update]: Over 100 videos have been refreshed/added to keep up with the AWS UI changes
+            and exam changes [April 2021 Update]: Over 100 videos have been refreshed/added to keep up with the AWS UI
+            changes and exam changes [Dec 2020 Update]: The S3 section has been entirely re-recorded to accommodate for
+            the AWS UI changes [May 2020 Update]: 20+ videos have been updated to keep up with AWS UI changes. [February
+            2020 Update - SAA-C02]: The course has been updated for the NEW 2020 exam version. Overall, 80 videos have
+            been added or updated, and the course is now 22 hours long. Happy learning! [July 2019 Update]: Few lectures
+            refreshed, including AWS Budgets and EC2 placement groups.
+          </p>
+        </>
       ),
     },
     {
@@ -242,210 +250,215 @@ export default function MycoursesLearning() {
   }
 
   return (
-    <div className={`  ${!scaleScreen ? style.boxContainerFalse : style.boxContainerTrue} `}>
-      <div className={style.col1}>
-        {type === TypeLessonEnum.VIDEO_LESSON ? (
-          <div className={style.boxVideoContent}>
-            <VideoComponent video={video} names={nameVideo} />
-          </div>
-        ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
-          <>
-            <div className={style.document}>
-              {/* <h3>Bài TEXT</h3> */}
+    <div className={style.containerDivQuest}>
+      <Row gutter={16}>
+        <Col span={scaleScreen ? 24 : 18} className={style.col1}>
+          {type === TypeLessonEnum.VIDEO_LESSON ? (
+            <div className={style.boxVideoContent}>
+              <VideoComponent video={video} names={nameVideo} />
+            </div>
+          ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
+            <>
+              <div className={style.document}>
+                {/* <h3>Bài TEXT</h3> */}
+                <div
+                  ref={examDivRef}
+                  style={{
+                    lineHeight: '1.4',
+                    overflowY: 'auto',
+                    height: '100%',
+                    background: 'white',
+                    padding: '50px',
+                  }}
+                  dangerouslySetInnerHTML={{ __html: document }}
+                ></div>
+              </div>
+              <div className={style.divTool}>
+                <Tooltip title='Cài đặt'>
+                  <SettingOutlined className={style.iconScale} />
+                </Tooltip>
+                <Tooltip title='Toàn màn hình'>
+                  <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+                </Tooltip>
+              </div>
+            </>
+          ) : type === TypeLessonEnum.LIVE_LESSON ? (
+            <div
+              className={style.document}
+              style={{
+                marginTop: '50px',
+              }}
+            >
+              {/* <h3>Bài LIVE</h3> */}
               <div
-                ref={examDivRef}
                 style={{
                   lineHeight: '1.4',
-                  overflowY: 'auto',
-                  height: '100%',
-                  background: 'white',
-                  padding: '50px',
                 }}
                 dangerouslySetInnerHTML={{ __html: document }}
               ></div>
             </div>
-            <div className={style.divTool}>
-              <Tooltip title='Cài đặt'>
-                <SettingOutlined className={style.iconScale} />
-              </Tooltip>
-              <Tooltip title='Toàn màn hình'>
-                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
-              </Tooltip>
-            </div>
-          </>
-        ) : type === TypeLessonEnum.LIVE_LESSON ? (
-          <div
-            className={style.document}
-            style={{
-              marginTop: '50px',
-            }}
-          >
-            {/* <h3>Bài LIVE</h3> */}
-            <div
-              style={{
-                lineHeight: '1.4',
-              }}
-              dangerouslySetInnerHTML={{ __html: document }}
-            ></div>
-          </div>
-        ) : (
-          <>
-            <div className={style.document}>
-              {/* <h3>Bài test</h3> */}
-              <div
-                className='scroll-div'
-                ref={examDivRef}
-                style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
-              >
-                <ExamCourse data={exam} />
-              </div>
-            </div>
-            <div className={style.divTool}>
-              <Tooltip title='Cài đặt'>
-                <SettingOutlined className={style.iconScale} />
-              </Tooltip>
-              <Tooltip title='Toàn màn hình'>
-                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
-              </Tooltip>
-            </div>
-          </>
-        )}
-
-        <div className={style.boxTabs}>
-          <WrapMore title='' wrapper='nonBorder'>
-            <TabsCustom data={myTabs} />
-          </WrapMore>
-        </div>
-      </div>
-      <div hidden={scaleScreen} className={style.col2}>
-        <div className={style.onBoxCol2}>
-          <div>
-            <h4 className={style.h4Col2}>Nội dung khóa học</h4>
-          </div>
-          {isLoading ? (
-            <LoadingCustom
-              style={{
-                marginTop: '30px',
-              }}
-            />
           ) : (
-            <div className={style.scroll}>
-              {
-                <Collapse destroyInactivePanel>
-                  {Array.isArray(dataTopics) && dataTopics?.length > 0
-                    ? dataTopics?.map((item, index) => (
-                        <>
-                          <Panel
-                            key={index}
-                            header={<h4>{item?.name}</h4>}
-                            extra={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  gap: '10px',
-                                }}
-                              ></div>
-                            }
-                          >
-                            {item?.lessons?.map((lession: any) => (
-                              <>
+            <>
+              <div className={style.document}>
+                {/* <h3>Bài test</h3> */}
+                <div
+                  className='scroll-div'
+                  ref={examDivRef}
+                  style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
+                >
+                  <ExamCourse data={exam} />
+                </div>
+              </div>
+              <div className={style.divTool}>
+                <Tooltip title='Cài đặt'>
+                  <SettingOutlined className={style.iconScale} />
+                </Tooltip>
+                <Tooltip title='Toàn màn hình'>
+                  <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+                </Tooltip>
+              </div>
+            </>
+          )}
+
+          <div className={style.boxTabs}>
+            <TabsCustom data={myTabs} />
+          </div>
+        </Col>
+        <Col span={!scaleScreen ? 6 : 0} className={style.col2}>
+          <div className={style.onBoxCol2}>
+            <div>
+              <h4 className={style.h4Col2}>Nội dung khóa học</h4>
+            </div>
+            {isLoading ? (
+              <LoadingCustom
+                style={{
+                  marginTop: '30px',
+                }}
+              />
+            ) : (
+              <div className={style.scroll}>
+                {
+                  <Collapse destroyInactivePanel>
+                    {Array.isArray(dataTopics) && dataTopics?.length > 0
+                      ? dataTopics?.map((item, index) => (
+                          <>
+                            <Panel
+                              key={index}
+                              header={<h4>{item?.name}</h4>}
+                              extra={
                                 <div
                                   style={{
-                                    marginTop: '20px',
+                                    display: 'flex',
+                                    gap: '10px',
                                   }}
-                                  className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
-                                  onClick={() => {
-                                    lession?.type === TypeLessonEnum.VIDEO_LESSON
-                                      ? handleVideo(lession?._id, lession?.name, lession?.media, lession?.descriptions)
-                                      : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
-                                      ? handleDocument(lession?._id, lession?.descriptions)
-                                      : lession?.type === TypeLessonEnum.LIVE_LESSON
-                                      ? handleLive(lession?._id, lession?.descriptions)
-                                      : handleExam(lession?._id, lession?.test)
-                                  }}
-                                >
-                                  <div>{lession?.name}</div>
+                                ></div>
+                              }
+                            >
+                              {item?.lessons?.map((lession: any) => (
+                                <>
                                   <div
                                     style={{
-                                      display: 'flex',
-                                      justifyContent: 'space-between',
-                                      alignItems: 'center',
-                                      gap: '10px',
+                                      marginTop: '20px',
                                     }}
-                                  ></div>
-                                </div>
-                                <div className={style.flexBest}>
-                                  {lession?.type === TypeLessonEnum.VIDEO_LESSON ? (
-                                    <div>
-                                      <p>
-                                        Thời lượng : {lession?.length} phút {''}
-                                      </p>
-                                      Thể loại : <PlayCircleOutlined /> video
-                                    </div>
-                                  ) : lession?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
-                                    <p>
-                                      Thể loại : <FileOutlined /> Văn bản
-                                    </p>
-                                  ) : lession?.type === TypeLessonEnum.LIVE_LESSON ? (
-                                    <p>
-                                      Thể loại : <VideoCameraOutlined /> live
-                                    </p>
-                                  ) : (
-                                    <p>
-                                      Thể loại : <FileTextOutlined /> Bài kiểm tra
-                                    </p>
-                                  )}
-
-                                  <div>
-                                    <Popover
-                                      placement='bottomLeft'
+                                    className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
+                                    onClick={() => {
+                                      lession?.type === TypeLessonEnum.VIDEO_LESSON
+                                        ? handleVideo(
+                                            lession?._id,
+                                            lession?.name,
+                                            lession?.media,
+                                            lession?.descriptions,
+                                          )
+                                        : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
+                                        ? handleDocument(lession?._id, lession?.descriptions)
+                                        : lession?.type === TypeLessonEnum.LIVE_LESSON
+                                        ? handleLive(lession?._id, lession?.descriptions)
+                                        : handleExam(lession?._id, lession?.test)
+                                    }}
+                                  >
+                                    <div>{lession?.name}</div>
+                                    <div
                                       style={{
-                                        maxWidth: '100px',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        gap: '10px',
                                       }}
-                                      title={
-                                        <>
-                                          {lession?.documents?.map((item: any, index: number) => (
-                                            <>
-                                              <Button
-                                                style={{
-                                                  width: '150px',
-                                                  margin: '0 5px',
-                                                }}
-                                                onClick={() => handleDownload(item?.files)}
-                                              >
-                                                <DownloadOutlined />
-                                                Tài liệu {index + 1}
-                                              </Button>
-                                            </>
-                                          ))}
-                                        </>
-                                      }
-                                      trigger={'click'}
-                                    >
-                                      {' '}
-                                      <>
-                                        {lession?.documents?.length > 0 && (
-                                          <Button>
-                                            <FolderOutlined />
-                                            Tài liệu
-                                          </Button>
-                                        )}
-                                      </>
-                                    </Popover>
+                                    ></div>
                                   </div>
-                                </div>
-                              </>
-                            ))}{' '}
-                          </Panel>
-                        </>
-                      ))
-                    : ''}
-                </Collapse>
-              }
-            </div>
-          )}
-        </div>
-      </div>
+                                  <div className={style.flexBest}>
+                                    {lession?.type === TypeLessonEnum.VIDEO_LESSON ? (
+                                      <div>
+                                        <p>
+                                          Thời lượng : {lession?.length} phút {''}
+                                        </p>
+                                        Thể loại : <PlayCircleOutlined /> video
+                                      </div>
+                                    ) : lession?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                      <p>
+                                        Thể loại : <FileOutlined /> Văn bản
+                                      </p>
+                                    ) : lession?.type === TypeLessonEnum.LIVE_LESSON ? (
+                                      <p>
+                                        Thể loại : <VideoCameraOutlined /> live
+                                      </p>
+                                    ) : (
+                                      <p>
+                                        Thể loại : <FileTextOutlined /> Bài kiểm tra
+                                      </p>
+                                    )}
+
+                                    <div>
+                                      <Popover
+                                        placement='bottomLeft'
+                                        style={{
+                                          maxWidth: '100px',
+                                        }}
+                                        title={
+                                          <>
+                                            {lession?.documents?.map((item: any, index: number) => (
+                                              <>
+                                                <Button
+                                                  style={{
+                                                    width: '150px',
+                                                    margin: '0 5px',
+                                                  }}
+                                                  onClick={() => handleDownload(item?.files)}
+                                                >
+                                                  <DownloadOutlined />
+                                                  Tài liệu {index + 1}
+                                                </Button>
+                                              </>
+                                            ))}
+                                          </>
+                                        }
+                                        trigger={'click'}
+                                      >
+                                        {' '}
+                                        <>
+                                          {lession?.documents?.length > 0 && (
+                                            <Button>
+                                              <FolderOutlined />
+                                              Tài liệu
+                                            </Button>
+                                          )}
+                                        </>
+                                      </Popover>
+                                    </div>
+                                  </div>
+                                </>
+                              ))}{' '}
+                            </Panel>
+                          </>
+                        ))
+                      : ''}
+                  </Collapse>
+                }
+              </div>
+            )}
+          </div>
+        </Col>
+      </Row>
     </div>
   )
 }
