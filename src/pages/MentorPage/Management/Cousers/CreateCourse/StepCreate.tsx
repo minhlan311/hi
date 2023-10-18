@@ -16,7 +16,7 @@ const StepCreate: React.FC = () => {
     },
     {
       title: 'Lộ trình học',
-      content: <CreateSteps2 dataId={dataIdCouser} stepPrev={setCurrent} stepNext={setCurrent} />,
+      content: <CreateSteps2 dataId={dataIdCouser} />,
     },
   ]
 

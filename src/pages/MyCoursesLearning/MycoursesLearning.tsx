@@ -8,25 +8,27 @@ import openNotification from '@/components/Notification'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
+import { TypeLessonEnum } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
 import {
   DownloadOutlined,
+  ExpandOutlined,
   FileOutlined,
   FileTextOutlined,
   FolderOutlined,
   PlayCircleOutlined,
+  SettingOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Collapse, Popover } from 'antd'
+import { Button, Collapse, Popover, Tooltip } from 'antd'
 import FileSaver from 'file-saver'
-import { useContext, useEffect, useState } from 'react'
+import JSZip from 'jszip'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import screenfull from 'screenfull'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
-
-import { TypeLessonEnum } from '@/constants'
-import JSZip from 'jszip'
 import ExamCourse from './components/ExamCourse'
 
 interface FileItem {
@@ -46,6 +48,15 @@ export default function MycoursesLearning() {
   const [exam, setExam] = useState([])
   const [active, setActive] = useState<string>('')
   const { scaleScreen } = useContext(AppContext)
+  const examDivRef = useRef<HTMLDivElement | null>(null)
+
+  const toggleFullScreenForExamDiv = () => {
+    if (screenfull.isEnabled && examDivRef.current) {
+      screenfull.toggle(examDivRef.current)
+    } else {
+      console.error('Screenfull không hỗ trợ trình duyệt này !')
+    }
+  }
 
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],
@@ -91,21 +102,12 @@ export default function MycoursesLearning() {
       id: '1',
       name: 'Tổng quan',
       children: (
-        <div>
-          <h3>デッサンを学んでクリエイティブスキルを高める</h3>
-          <p>
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-          </p>
-          <hr className={style.hr} />
-          <h3>デッサンを学んでクリエイティブスキルを高める</h3>
-          <p>
-            {' '}
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-          </p>
-        </div>
+        <div
+          style={{
+            lineHeight: '1.4',
+          }}
+          dangerouslySetInnerHTML={{ __html: document }}
+        ></div>
       ),
     },
     {
@@ -141,11 +143,12 @@ export default function MycoursesLearning() {
 
   const { Panel } = Collapse
 
-  const handleVideo = (id: string, name: string, video: string) => {
+  const handleVideo = (id: string, name: string, video: string, document: any) => {
     setActive(id)
     setNameVideo(name)
     setVideo(video)
     setType(TypeLessonEnum.VIDEO_LESSON)
+    setDocuemnt(document)
   }
 
   const handleDocument = (id: string, desc: string) => {
@@ -157,29 +160,15 @@ export default function MycoursesLearning() {
   const handleExam = (id: string, test: any) => {
     setType(TypeLessonEnum.EXAM)
     setActive(id)
+    setDocuemnt('')
     setExam(test)
   }
 
-  const handleLive = (id: string) => {
+  const handleLive = (id: string, desc: string) => {
     setType(TypeLessonEnum.LIVE_LESSON)
     setActive(id)
+    setDocuemnt(desc)
   }
-
-  // const extractQuestions = (data: any) => {
-  //   let questionsArray: any[] = []
-
-  //   data?.forEach((course: any) => {
-  //     course.lessons.forEach((lesson: any) => {
-  //       lesson.test.forEach((test: any) => {
-  //         questionsArray = questionsArray?.concat(test.questions)
-  //       })
-  //     })
-  //   })
-
-  //   return questionsArray
-  // }
-
-  // const questions = extractQuestions(topics?.data?.docs)
 
   async function mapWithConcurrency<T, R>(
     items: T[],
@@ -260,17 +249,37 @@ export default function MycoursesLearning() {
             <VideoComponent video={video} names={nameVideo} />
           </div>
         ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
-          <div className={style.document}>
-            {/* <h3>Bài TEXT</h3> */}
-            <div
-              style={{
-                lineHeight: '1.4',
-              }}
-              dangerouslySetInnerHTML={{ __html: document }}
-            ></div>
-          </div>
+          <>
+            <div className={style.document}>
+              {/* <h3>Bài TEXT</h3> */}
+              <div
+                ref={examDivRef}
+                style={{
+                  lineHeight: '1.4',
+                  overflowY: 'auto',
+                  height: '100%',
+                  background: 'white',
+                  padding: '50px',
+                }}
+                dangerouslySetInnerHTML={{ __html: document }}
+              ></div>
+            </div>
+            <div className={style.divTool}>
+              <Tooltip title='Cài đặt'>
+                <SettingOutlined className={style.iconScale} />
+              </Tooltip>
+              <Tooltip title='Toàn màn hình'>
+                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+              </Tooltip>
+            </div>
+          </>
         ) : type === TypeLessonEnum.LIVE_LESSON ? (
-          <div className={style.document}>
+          <div
+            className={style.document}
+            style={{
+              marginTop: '50px',
+            }}
+          >
             {/* <h3>Bài LIVE</h3> */}
             <div
               style={{
@@ -280,16 +289,30 @@ export default function MycoursesLearning() {
             ></div>
           </div>
         ) : (
-          <div className={style.document}>
-            {/* <h3>Bài test</h3> */}
-            <div>
-              <ExamCourse data={exam} />
+          <>
+            <div className={style.document}>
+              {/* <h3>Bài test</h3> */}
+              <div
+                className='scroll-div'
+                ref={examDivRef}
+                style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
+              >
+                <ExamCourse data={exam} />
+              </div>
             </div>
-          </div>
+            <div className={style.divTool}>
+              <Tooltip title='Cài đặt'>
+                <SettingOutlined className={style.iconScale} />
+              </Tooltip>
+              <Tooltip title='Toàn màn hình'>
+                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+              </Tooltip>
+            </div>
+          </>
         )}
 
         <div className={style.boxTabs}>
-          <WrapMore maxWidth='100%' wrapper={'nonBorder'} title=''>
+          <WrapMore title='' wrapper='nonBorder'>
             <TabsCustom data={myTabs} />
           </WrapMore>
         </div>
@@ -333,11 +356,11 @@ export default function MycoursesLearning() {
                                   className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
                                     lession?.type === TypeLessonEnum.VIDEO_LESSON
-                                      ? handleVideo(lession?._id, lession?.name, lession?.media)
+                                      ? handleVideo(lession?._id, lession?.name, lession?.media, lession?.descriptions)
                                       : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
                                       ? handleDocument(lession?._id, lession?.descriptions)
                                       : lession?.type === TypeLessonEnum.LIVE_LESSON
-                                      ? handleLive(lession?._id)
+                                      ? handleLive(lession?._id, lession?.descriptions)
                                       : handleExam(lession?._id, lession?.test)
                                   }}
                                 >

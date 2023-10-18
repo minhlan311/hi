@@ -41,8 +41,6 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     queryFn: () => examApi.findExam({}),
   })
 
-  console.log(dataExamLession, 'dataExamLession')
-
   const optionsLession = dataExamLession?.data?.docs?.map((item) => ({
     label: item.name,
     value: item._id,
@@ -133,7 +131,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
 
     if (value === TypeLessonEnum.LIVE_LESSON) {
       setContent(
-        '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
+        '<p>Đây là bài học sẽ học tại lớp học online <b><a href="/schedule">CLICK VÀO ĐÂY</a></b> để xem lịch học của bạn</p>',
       )
     } else {
       setContent('')

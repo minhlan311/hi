@@ -119,13 +119,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const [editing, setEditing] = useState(false)
   const inputRef = useRef<InputRef>(null)
   const form = useContext(EditableContext)!
-  // useEffect(() => {
-  //   if (editing) {
-  //     // inputRef.current!.focus()
-  //     console.log(inputRef.current)
-  //   }
-
-  // }, [editing])
 
   const toggleEdit = () => {
     setEditing(!editing)
@@ -344,8 +337,6 @@ const TableAddonQues = (props: Props) => {
   })
 
   const handleSelect = (newSelectedRowKeys: any) => {
-    console.log(newSelectedRowKeys)
-
     const newData = dataSource.map((item: Choice) => {
       if (newSelectedRowKeys.includes(item.key)) {
         return {

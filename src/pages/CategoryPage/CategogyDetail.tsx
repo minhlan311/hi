@@ -179,7 +179,7 @@ export default function CategogyDetail() {
                   ))
                 )}
               </Row>
-              {listDataCourse && (
+              {listDataCourse && listDataCourse?.length > 0 && (
                 <div className='pagi'>
                   <Pagination pageSize={9} onChange={onChange} current={page} total={listCourse?.data?.totalDocs} />
                 </div>
