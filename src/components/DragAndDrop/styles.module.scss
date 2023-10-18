@@ -3,3 +3,41 @@
     background-color: var(--lighish-white);
   }
 }
+
+.graggable {
+  cursor: grab;
+}
+
+.grabbing {
+  cursor: grabbing;
+}
+
+.droppabel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  padding: 15px;
+  background-color: var(--lighish-white);
+  border-radius: 12px;
+  border: 2px solid var(--borderColor);
+  font-weight: 500;
+  color: var(--light-gray);
+  transition: 0.3s;
+
+  &:hover {
+    border: 2px solid var(--green);
+    color: var(--light-gray-2);
+  }
+}
+
+.move {
+  & > * {
+    background: var(--light-gray);
+    opacity: 0.3;
+    border: 1px solid var(--green);
+  }
+}

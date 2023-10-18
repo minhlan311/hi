@@ -1,4 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import css from './styles.module.scss'
 
 interface DraggableItemProps {
   children: React.ReactNode
@@ -10,20 +12,22 @@ const DraggableItem: React.FC<DraggableItemProps> = ({ children, id }) => {
     id,
   })
 
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  }
+
+  if (isDragging)
+    return (
+      <div ref={setNodeRef} style={style} className={css.move} {...attributes} {...listeners}>
+        {children}
+      </div>
+    )
+
   return (
-    <div
-      ref={setNodeRef}
-      style={{
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-        transition: transition ? 'transform 0.2s' : undefined,
-        position: isDragging ? 'relative' : undefined,
-        zIndex: isDragging ? 9999 : undefined,
-      }}
-      {...attributes}
-      {...listeners}
-    >
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {children}
-      <div ref={setActivatorNodeRef}>#</div>
+      <div ref={setActivatorNodeRef}></div>
     </div>
   )
 }

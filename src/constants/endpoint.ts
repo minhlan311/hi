@@ -31,7 +31,7 @@ export const ENDPOINT = {
   UPLOAD_LARGE_IMAGE: '/upload/large-image',
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
-  CATEGORIES_PATH: '/category/detail/',
+  CATEGORIES_PATH: '/category/',
   FIND_CATEGORIES_PATH: '/category/find',
 
   // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::
