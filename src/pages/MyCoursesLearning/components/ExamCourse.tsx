@@ -9,6 +9,7 @@ import {
   LeftCircleOutlined,
   RightCircleOutlined,
   SendOutlined,
+  UndoOutlined,
 } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Radio } from 'antd'
@@ -35,6 +36,7 @@ export default function ExamCourse({ data }: Props) {
   const [currentPage, setCurrentPage] = useState(0)
   const currentQuestion = questions[currentPage]
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number | null>(null)
+  const [showDetails, setShowDetails] = useState(false)
 
   const queryClient = useQueryClient()
 
@@ -142,6 +144,7 @@ export default function ExamCourse({ data }: Props) {
   const resetQuiz = () => {
     setHasSubmitted(false)
     setCurrentPage(0)
+    setShowDetails(false)
 
     const resettedQuestions = questions.map((q) => ({
       ...q,
@@ -242,66 +245,82 @@ export default function ExamCourse({ data }: Props) {
               <p className='result-text'>
                 Bạn đã trả lời đúng {correctAnswersCount} / {questions.length} câu hỏi.
               </p>
+              <Button
+                onClick={() => setShowDetails(!showDetails)}
+                style={{ marginTop: '20px', width: '150px' }}
+                type='dashed'
+                className='dashed'
+              >
+                Xem chi tiết
+              </Button>
+              <Button
+                onClick={resetQuiz}
+                style={{ marginTop: '20px', width: '100px', marginLeft: '20px' }}
+                type='primary'
+              >
+                <UndoOutlined /> Làm lại
+              </Button>
             </div>
-            {questions.map((question, questionIndex) => (
-              <div key={questionIndex}>
-                <h4
-                  style={{
-                    margin: '20px 0',
-                  }}
-                >
-                  Câu hỏi số {questionIndex + 1}:{' '}
-                </h4>
-                <div
-                  style={{
-                    fontWeight: '700',
-                    fontSize: '16px',
-                  }}
-                  dangerouslySetInnerHTML={{ __html: question.name }}
-                />
+            {showDetails &&
+              questions.map((question, questionIndex) => (
+                <div key={questionIndex}>
+                  <h4
+                    style={{
+                      margin: '20px 0',
+                    }}
+                  >
+                    Câu hỏi số {questionIndex + 1}:{' '}
+                  </h4>
+                  <div
+                    style={{
+                      fontWeight: '700',
+                      fontSize: '16px',
+                    }}
+                    dangerouslySetInnerHTML={{ __html: question.name }}
+                  />
 
-                {question.choices.map((choice: any, choiceIndex: number) => {
-                  let bgColor = 'white' // màu nền mặc định
-                  let textColor = 'black' // màu chữ mặc định
-                  let icon = null // biểu tượng mặc định
+                  {question.choices.map((choice: any, choiceIndex: number) => {
+                    let bgColor = 'white' // màu nền mặc định
+                    let textColor = 'black' // màu chữ mặc định
+                    let icon = null // biểu tượng mặc định
 
-                  if (choice.isChosen) {
-                    textColor = 'red' // màu chữ cho đáp án đã chọn
-                    icon = <CloseCircleOutlined style={{ marginLeft: '5px' }} />
+                    if (choice.isChosen) {
+                      textColor = 'red' // màu chữ cho đáp án đã chọn
+                      icon = <CloseCircleOutlined style={{ marginLeft: '5px' }} />
+
+                      if (choice.isCorrect) {
+                        textColor = 'green' // màu chữ cho đáp án đúng
+                        icon = <CheckCircleOutlined style={{ marginLeft: '5px' }} />
+                      }
+                    }
 
                     if (choice.isCorrect) {
                       textColor = 'green' // màu chữ cho đáp án đúng
-                      icon = <CheckCircleOutlined style={{ marginLeft: '5px' }} />
                     }
-                  }
 
-                  if (choice.isCorrect) {
-                    textColor = 'green' // màu chữ cho đáp án đúng
-                  }
-
-                  return (
-                    <>
-                      <div
-                        key={choiceIndex}
-                        style={{
-                          backgroundColor: bgColor,
-                          color: textColor,
-                          padding: '5px',
-                          margin: '5px 0',
-                          minWidth: '50px',
-                        }}
-                      >
-                        <span dangerouslySetInnerHTML={{ __html: choice.answer }} />
-                        {icon}
-                      </div>
-                    </>
-                  )
-                })}
-              </div>
-            ))}
-            <Button onClick={resetQuiz} style={{ marginTop: '20px', width: '100px' }} type='primary'>
-              Làm lại
-            </Button>
+                    return (
+                      <>
+                        <div className='div-answerR' key={choiceIndex}>
+                          <Radio
+                            disabled
+                            checked={choice.isChosen}
+                            value={choiceIndex}
+                            style={{
+                              backgroundColor: bgColor,
+                              color: textColor,
+                              padding: '5px',
+                              margin: '5px 0',
+                              minWidth: '50px',
+                            }}
+                          >
+                            <span dangerouslySetInnerHTML={{ __html: choice.answer }} /> {icon}
+                          </Radio>
+                        </div>
+                      </>
+                    )
+                  })}
+                </div>
+              ))}
           </div>
         </>
       )}
