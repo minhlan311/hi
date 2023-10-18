@@ -53,9 +53,11 @@ const MentorCourses = () => {
           }}
         />
       )}
-      <div className='pagination'>
-        <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />
-      </div>
+      {data && data?.length > 0 && (
+        <div className='pagination'>
+          <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />
+        </div>
+      )}
     </div>
   )
 }

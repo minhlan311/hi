@@ -26,6 +26,7 @@ export const FORM_TYPE = {
 
 export enum TypeLessonEnum {
   VIDEO_LESSON = 'VIDEO',
+  EXAM = 'TEST',
   LIVE_LESSON = 'LIVE',
   DOCUMENT_LESSON = 'DOCUMENT',
 }

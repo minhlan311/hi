@@ -48,8 +48,6 @@ export default function MyStudent() {
       queryClient.invalidateQueries({ queryKey: ['dataUserEnroll'] })
     },
     onError: (data: any) => {
-      console.log(data, 'datadata')
-
       openNotification({
         status: 'error',
         description: data?.response?.data?.message,

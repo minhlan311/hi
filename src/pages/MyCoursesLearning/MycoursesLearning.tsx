@@ -1,30 +1,35 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import enrollsApi from '@/apis/enrolls.api'
 import topicApi from '@/apis/topic.api'
+import LoadingCustom from '@/components/LoadingCustom'
+import openNotification from '@/components/Notification'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
+import { TypeLessonEnum } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
-import FileSaver from 'file-saver'
 import {
   DownloadOutlined,
-  FolderOutlined,
-  VideoCameraOutlined,
+  ExpandOutlined,
   FileOutlined,
+  FileTextOutlined,
+  FolderOutlined,
   PlayCircleOutlined,
+  SettingOutlined,
+  VideoCameraOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Collapse, Popover } from 'antd'
-import { useContext, useState, useEffect } from 'react'
+import { Button, Collapse, Popover, Tooltip } from 'antd'
+import FileSaver from 'file-saver'
+import JSZip from 'jszip'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import screenfull from 'screenfull'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
-import LoadingCustom from '@/components/LoadingCustom'
-import enrollsApi from '@/apis/enrolls.api'
-import openNotification from '@/components/Notification'
-
-import JSZip from 'jszip'
-import { TypeLessonEnum } from '@/constants'
+import ExamCourse from './components/ExamCourse'
 
 interface FileItem {
   name: string
@@ -36,12 +41,22 @@ export default function MycoursesLearning() {
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
-  const [type, setType] = useState('video')
+  const [type, setType] = useState('VIDEO')
   const [document, setDocuemnt] = useState<any>()
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
+  const [exam, setExam] = useState([])
   const [active, setActive] = useState<string>('')
   const { scaleScreen } = useContext(AppContext)
+  const examDivRef = useRef<HTMLDivElement | null>(null)
+
+  const toggleFullScreenForExamDiv = () => {
+    if (screenfull.isEnabled && examDivRef.current) {
+      screenfull.toggle(examDivRef.current)
+    } else {
+      console.error('Screenfull không hỗ trợ trình duyệt này !')
+    }
+  }
 
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],
@@ -80,7 +95,6 @@ export default function MycoursesLearning() {
     enabled: checkEnrolls?.data?.docs?.length ? true : false,
   })
 
-  // const dataCourse = data?.data?.topics
   const dataTopics = topics?.data?.docs
 
   const myTabs = [
@@ -88,21 +102,12 @@ export default function MycoursesLearning() {
       id: '1',
       name: 'Tổng quan',
       children: (
-        <div>
-          <h3>デッサンを学んでクリエイティブスキルを高める</h3>
-          <p>
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-          </p>
-          <hr className={style.hr} />
-          <h3>デッサンを学んでクリエイティブスキルを高める</h3>
-          <p>
-            {' '}
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-          </p>
-        </div>
+        <div
+          style={{
+            lineHeight: '1.4',
+          }}
+          dangerouslySetInnerHTML={{ __html: document }}
+        ></div>
       ),
     },
     {
@@ -138,17 +143,31 @@ export default function MycoursesLearning() {
 
   const { Panel } = Collapse
 
-  const handleVideo = (id: string, name: string, video: string) => {
+  const handleVideo = (id: string, name: string, video: string, document: any) => {
     setActive(id)
     setNameVideo(name)
     setVideo(video)
-    setType('video')
+    setType(TypeLessonEnum.VIDEO_LESSON)
+    setDocuemnt(document)
   }
 
   const handleDocument = (id: string, desc: string) => {
-    setType('document')
+    setType(TypeLessonEnum.DOCUMENT_LESSON)
     setDocuemnt(desc)
     setActive(id)
+  }
+
+  const handleExam = (id: string, test: any) => {
+    setType(TypeLessonEnum.EXAM)
+    setActive(id)
+    setDocuemnt('')
+    setExam(test)
+  }
+
+  const handleLive = (id: string, desc: string) => {
+    setType(TypeLessonEnum.LIVE_LESSON)
+    setActive(id)
+    setDocuemnt(desc)
   }
 
   async function mapWithConcurrency<T, R>(
@@ -160,7 +179,7 @@ export default function MycoursesLearning() {
     let current = 0
 
     const executeNext = async (): Promise<void> => {
-      if (current >= items.length) return
+      if (current >= items?.length) return
 
       const item = items[current]
       current++
@@ -225,12 +244,43 @@ export default function MycoursesLearning() {
   return (
     <div className={`  ${!scaleScreen ? style.boxContainerFalse : style.boxContainerTrue} `}>
       <div className={style.col1}>
-        {type === 'video' ? (
+        {type === TypeLessonEnum.VIDEO_LESSON ? (
           <div className={style.boxVideoContent}>
             <VideoComponent video={video} names={nameVideo} />
           </div>
-        ) : (
-          <div className={style.document}>
+        ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
+          <>
+            <div className={style.document}>
+              {/* <h3>Bài TEXT</h3> */}
+              <div
+                ref={examDivRef}
+                style={{
+                  lineHeight: '1.4',
+                  overflowY: 'auto',
+                  height: '100%',
+                  background: 'white',
+                  padding: '50px',
+                }}
+                dangerouslySetInnerHTML={{ __html: document }}
+              ></div>
+            </div>
+            <div className={style.divTool}>
+              <Tooltip title='Cài đặt'>
+                <SettingOutlined className={style.iconScale} />
+              </Tooltip>
+              <Tooltip title='Toàn màn hình'>
+                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+              </Tooltip>
+            </div>
+          </>
+        ) : type === TypeLessonEnum.LIVE_LESSON ? (
+          <div
+            className={style.document}
+            style={{
+              marginTop: '50px',
+            }}
+          >
+            {/* <h3>Bài LIVE</h3> */}
             <div
               style={{
                 lineHeight: '1.4',
@@ -238,10 +288,31 @@ export default function MycoursesLearning() {
               dangerouslySetInnerHTML={{ __html: document }}
             ></div>
           </div>
+        ) : (
+          <>
+            <div className={style.document}>
+              {/* <h3>Bài test</h3> */}
+              <div
+                className='scroll-div'
+                ref={examDivRef}
+                style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
+              >
+                <ExamCourse data={exam} />
+              </div>
+            </div>
+            <div className={style.divTool}>
+              <Tooltip title='Cài đặt'>
+                <SettingOutlined className={style.iconScale} />
+              </Tooltip>
+              <Tooltip title='Toàn màn hình'>
+                <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+              </Tooltip>
+            </div>
+          </>
         )}
 
         <div className={style.boxTabs}>
-          <WrapMore maxWidth='100%' wrapper={'nonBorder'} title=''>
+          <WrapMore title='' wrapper='nonBorder'>
             <TabsCustom data={myTabs} />
           </WrapMore>
         </div>
@@ -284,9 +355,13 @@ export default function MycoursesLearning() {
                                   }}
                                   className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
-                                    lession?.media
-                                      ? handleVideo(lession?._id, lession?.name, lession?.media)
-                                      : handleDocument(lession?._id, lession?.descriptions)
+                                    lession?.type === TypeLessonEnum.VIDEO_LESSON
+                                      ? handleVideo(lession?._id, lession?.name, lession?.media, lession?.descriptions)
+                                      : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
+                                      ? handleDocument(lession?._id, lession?.descriptions)
+                                      : lession?.type === TypeLessonEnum.LIVE_LESSON
+                                      ? handleLive(lession?._id, lession?.descriptions)
+                                      : handleExam(lession?._id, lession?.test)
                                   }}
                                 >
                                   <div>{lession?.name}</div>
@@ -311,9 +386,13 @@ export default function MycoursesLearning() {
                                     <p>
                                       Thể loại : <FileOutlined /> Văn bản
                                     </p>
-                                  ) : (
+                                  ) : lession?.type === TypeLessonEnum.LIVE_LESSON ? (
                                     <p>
                                       Thể loại : <VideoCameraOutlined /> live
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Thể loại : <FileTextOutlined /> Bài kiểm tra
                                     </p>
                                   )}
 
@@ -345,7 +424,7 @@ export default function MycoursesLearning() {
                                     >
                                       {' '}
                                       <>
-                                        {lession?.documents.length > 0 && (
+                                        {lession?.documents?.length > 0 && (
                                           <Button>
                                             <FolderOutlined />
                                             Tài liệu

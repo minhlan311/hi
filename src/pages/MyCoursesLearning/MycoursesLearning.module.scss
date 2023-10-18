@@ -115,8 +115,37 @@
 }
 .document {
   border-bottom: 1px solid #d1d7dc;
+  padding: 0px 70px;
+  height: 65vh;
+  max-width: 1500px;
+  overflow: scroll;
+}
+.boxExam {
+  border-bottom: 1px solid #d1d7dc;
   padding: 30px 70px;
   height: 65vh;
   max-width: 1500px;
+  overflow: scroll;
+}
+.divTool {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  border-bottom: 1px solid #d1d7dc;
+  padding: 0 20px;
+  height: 50px;
+}
+
+.iconScale {
+  scale: 1.5;
+  margin: 0 12px;
+  cursor: pointer;
+}
+
+.iconScale:hover {
+  scale: 1.8;
+  margin: 0 12px;
+}
+.scroll-div {
   overflow: scroll;
 }
