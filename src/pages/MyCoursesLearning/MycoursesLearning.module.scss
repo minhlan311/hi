@@ -1,16 +1,8 @@
-.boxContainerFalse {
-  display: grid;
-  grid-template-columns: 9fr 3fr;
-  gap: 10px;
+.containerDivQuest {
   min-height: 150vh;
-  padding: 0 10px 100px 10px;
-  // max-width: 1600px;
-  margin: auto;
+  padding: 0 10px;
 }
-.boxContainerTrue {
-  min-height: 150vh;
-  padding: 0 10px 100px 10px;
-}
+
 .col1 {
   //   background-color: red;
 }
@@ -117,7 +109,7 @@
   border-bottom: 1px solid #d1d7dc;
   padding: 0px 70px;
   height: 65vh;
-  max-width: 1500px;
+  width: 100%;
   overflow: scroll;
 }
 .boxExam {
