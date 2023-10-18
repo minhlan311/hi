@@ -58,8 +58,6 @@ export default function DrawerUpdateLession({
     setContent(dataUpdateLession?.descriptions)
   }, [dataUpdateLession])
 
-  console.log(content, 'content===================')
-
   useEffect(() => {
     reFetchData(refetch)
   }, [refetch])
@@ -71,9 +69,9 @@ export default function DrawerUpdateLession({
       setHidden(false)
     }
 
-    if (dataUpdateLession?.type !== 'LIVE') {
+    if (dataUpdateLession?.type === 'LIVE') {
       setContent(
-        '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
+        '<p>Đây là bài học sẽ học tại lớp học online <b><a href="/schedule">CLICK VÀO ĐÂY</a></b> để xem lịch học của bạn</p>',
       )
     }
   }, [dataUpdateLession?.type])
@@ -178,7 +176,7 @@ export default function DrawerUpdateLession({
 
     if (value === TypeLessonEnum.LIVE_LESSON) {
       setContent(
-        '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
+        '<p>Đây là bài học sẽ học tại lớp học online <b><a href="/schedule">CLICK VÀO ĐÂY</a></b> để xem lịch học của bạn</p>',
       )
     } else {
       setContent('')

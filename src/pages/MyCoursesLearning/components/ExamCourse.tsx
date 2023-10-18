@@ -59,6 +59,10 @@ export default function ExamCourse({ data }: Props) {
     )
   }
 
+  const isCurrentQuestionAnswered = () => {
+    return currentQuestion?.choices?.some((choice) => choice.isChosen)
+  }
+
   const getAnswerColor = (choice: any) => {
     if (hasSubmitted) {
       if (choice.isChosen) {
@@ -78,8 +82,6 @@ export default function ExamCourse({ data }: Props) {
       return 'black'
     }
   }
-
-  console.log(questions, '9999999999999')
 
   useEffect(() => {
     if (data && data[0] && data[0].questions) {
@@ -106,7 +108,7 @@ export default function ExamCourse({ data }: Props) {
 
   const handleRadioChange = (questionIndex: any, choiceIndex: any) => {
     const newQuestions = [...questions]
-    newQuestions[questionIndex].choices.forEach((choice, idx) => {
+    newQuestions[questionIndex]?.choices?.forEach((choice, idx) => {
       choice.isChosen = idx === choiceIndex
     })
     setQuestion(newQuestions)
@@ -120,7 +122,7 @@ export default function ExamCourse({ data }: Props) {
   })
 
   const allQuestionsAnswered = () => {
-    return questions.every((question) => question.choices.some((choice) => choice.isChosen))
+    return questions.every((question) => question?.choices?.some((choice) => choice.isChosen))
   }
 
   const handleSubmit = () => {
@@ -159,10 +161,9 @@ export default function ExamCourse({ data }: Props) {
   }
 
   const countCorrectAnswers = (): number => {
-    return questions.filter((question) => question.choices.some((choice) => choice.isChosen && choice.isCorrect)).length
+    return questions.filter((question) => question?.choices?.some((choice) => choice.isChosen && choice.isCorrect))
+      .length
   }
-
-  console.log(currentQuestion, 'currentQuestioncurrentQuestioncurrentQuestion')
 
   return (
     <>
@@ -178,28 +179,36 @@ export default function ExamCourse({ data }: Props) {
             </h3>
             {currentQuestion && (
               <div>
+                <h4>Câu hỏi số {currentPage + 1} : </h4>
                 <div className='div-start-question'>
-                  <h4>Câu hỏi số {currentPage + 1} : </h4>
                   <h3 style={{ marginLeft: '10px' }} dangerouslySetInnerHTML={{ __html: currentQuestion.question }} />
+
+                  {/* <QuestionCircleOutlined
+                    style={{
+                      paddingLeft: '10px',
+                    }}
+                  /> */}
                 </div>
+
                 <Radio.Group
                   onChange={(e: any) => handleRadioChange(currentPage, e.target.value)}
-                  value={currentQuestion.choices.findIndex((choice: any) => choice.isChosen)}
+                  value={currentQuestion?.choices?.findIndex((choice: any) => choice.isChosen)}
                 >
-                  {currentQuestion.choices.map((choice: any, choiceIndex: number) => (
-                    <div
-                      className='div-answer'
-                      key={choiceIndex}
-                      onClick={() => handleRadioChange(currentPage, choiceIndex)}
-                    >
-                      <Radio value={choiceIndex} style={{ pointerEvents: 'none' }}>
-                        <div
-                          dangerouslySetInnerHTML={{ __html: choice.answer }}
-                          style={{ color: getAnswerColor(choice) }}
-                        ></div>
-                      </Radio>
-                    </div>
-                  ))}
+                  {currentQuestion &&
+                    currentQuestion?.choices?.map((choice: any, choiceIndex: number) => (
+                      <div
+                        className='div-answer'
+                        key={choiceIndex}
+                        onClick={() => handleRadioChange(currentPage, choiceIndex)}
+                      >
+                        <Radio value={choiceIndex} style={{ pointerEvents: 'none' }}>
+                          <div
+                            dangerouslySetInnerHTML={{ __html: choice.answer }}
+                            style={{ color: getAnswerColor(choice) }}
+                          ></div>
+                        </Radio>
+                      </div>
+                    ))}
                 </Radio.Group>
               </div>
             )}
@@ -217,15 +226,22 @@ export default function ExamCourse({ data }: Props) {
               </div>
               <div>
                 {currentPage >= questions.length - 1 ? (
-                  <Button onClick={handleSubmit} style={{ width: '120px' }} type='primary'>
+                  <Button
+                    disabled={!isCurrentQuestionAnswered()}
+                    onClick={handleSubmit}
+                    style={{ width: '120px' }}
+                    type='primary'
+                  >
                     Hoàn thành <SendOutlined />
                   </Button>
                 ) : (
                   <Button
                     type='dashed'
                     className='dashed'
-                    disabled={currentPage >= questions.length - 1}
-                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage >= questions.length - 1 || !isCurrentQuestionAnswered()}
+                    onClick={() => {
+                      setCurrentPage(currentPage + 1)
+                    }}
                   >
                     <RightCircleOutlined /> Câu tiếp theo
                   </Button>
@@ -262,6 +278,7 @@ export default function ExamCourse({ data }: Props) {
               </Button>
             </div>
             {showDetails &&
+              questions &&
               questions.map((question, questionIndex) => (
                 <div key={questionIndex}>
                   <h4
@@ -279,7 +296,7 @@ export default function ExamCourse({ data }: Props) {
                     dangerouslySetInnerHTML={{ __html: question.name }}
                   />
 
-                  {question.choices.map((choice: any, choiceIndex: number) => {
+                  {question?.choices?.map((choice: any, choiceIndex: number) => {
                     let bgColor = 'white' // màu nền mặc định
                     let textColor = 'black' // màu chữ mặc định
                     let icon = null // biểu tượng mặc định

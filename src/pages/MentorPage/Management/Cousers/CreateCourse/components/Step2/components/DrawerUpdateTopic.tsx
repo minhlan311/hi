@@ -15,8 +15,6 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
   const [refetch, setRefetch] = useState('')
   //   const [dataDrawer, setDataDrawer] = useState<TopicList | []>([])
 
-  console.log(dataUpdateTopic, 'dataUpdateTopicdataUpdateTopic')
-
   const mutation = useMutation({
     mutationFn: (body: any) => topicApi.updateTopic(body),
     onSuccess: () => {
@@ -54,11 +52,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
     setContent(data)
   }
 
-  console.log(content, 'contentcontent')
-
   const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
-
-  console.log(content, 'content')
 
   const onFinish = (values: any) => {
     mutation.mutate(values)
