@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import documentApi from '@/apis/document.type'
+import examApi from '@/apis/exam.api'
 import lessionApi from '@/apis/lession.api'
 import { TypeLessonEnum } from '@/constants'
 import { ENDPOINT } from '@/constants/endpoint'
@@ -9,7 +10,7 @@ import { LessionForm } from '@/types/lession.type'
 import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
@@ -28,11 +29,24 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [hidden, setHidden] = useState<boolean>(false)
+  const [questionShow, setQuestionShow] = useState<boolean>(true)
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [id, setId] = useState<string>()
   useEffect(() => {
     dataCollapLession(dataDrawer)
   }, [dataDrawer])
+
+  const { data: dataExamLession } = useQuery({
+    queryKey: ['queryExam'],
+    queryFn: () => examApi.findExam({}),
+  })
+
+  console.log(dataExamLession, 'dataExamLession')
+
+  const optionsLession = dataExamLession?.data?.docs?.map((item) => ({
+    label: item.name,
+    value: item._id,
+  }))
 
   const props: UploadProps = {
     name: 'attachment',
@@ -111,18 +125,24 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   }
 
   const onChange = (value: string) => {
-    if (value !== 'VIDEO') {
+    if (value !== TypeLessonEnum.VIDEO_LESSON) {
       setHidden(true)
     } else {
       setHidden(false)
     }
 
-    if (value === 'LIVE') {
+    if (value === TypeLessonEnum.LIVE_LESSON) {
       setContent(
         '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
       )
     } else {
       setContent('')
+    }
+
+    if (value === TypeLessonEnum.EXAM) {
+      setQuestionShow(false)
+    } else {
+      setQuestionShow(true)
     }
   }
 
@@ -145,9 +165,10 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
           <Select
             onChange={onChange}
             options={[
-              { value: TypeLessonEnum.VIDEO_LESSON, label: TypeLessonEnum.VIDEO_LESSON },
-              { value: TypeLessonEnum.DOCUMENT_LESSON, label: TypeLessonEnum.DOCUMENT_LESSON },
-              { value: TypeLessonEnum.LIVE_LESSON, label: TypeLessonEnum.LIVE_LESSON },
+              { value: TypeLessonEnum.VIDEO_LESSON, label: 'VIDEO' },
+              { value: TypeLessonEnum.DOCUMENT_LESSON, label: 'VĂN BẢN' },
+              { value: TypeLessonEnum.LIVE_LESSON, label: 'TRỰC TUYẾN' },
+              { value: TypeLessonEnum.EXAM, label: 'BÀI TEST' },
             ]}
           />
         </Form.Item>
@@ -175,6 +196,11 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         >
           <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
         </Form.Item>
+        {!questionShow && (
+          <Form.Item label={'Thêm bộ câu hỏi'} name='testId' rules={[{ required: true, message: 'Hãy chọn câu hỏi' }]}>
+            <Select options={optionsLession} placeholder='Thêm bộ câu hỏi cho bài học này' />
+          </Form.Item>
+        )}
         <Form.Item label={'Tài liệu'} name='document'>
           <Dragger {...props}>
             <p className='ant-upload-drag-icon'>

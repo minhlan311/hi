@@ -34,6 +34,9 @@ const examApi = {
   getExamDetail(id: string) {
     return http.get<ExamState>(ENDPOINT.EXAM_PATH + id)
   },
+  examSubmit(body: any) {
+    return http.post<ExamState>(ENDPOINT.FIND_EXAM_SUBMIT + body._id, body)
+  },
 
   putExam(data: any) {
     return http.put<ExamState>(ENDPOINT.EXAM_PATH + data.id, data)

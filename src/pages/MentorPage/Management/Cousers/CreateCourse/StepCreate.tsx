@@ -2,7 +2,6 @@ import { Steps, theme } from 'antd'
 import React, { useState } from 'react'
 import CreateCourse from './CreateCourse'
 import CreateSteps2 from './components/Step2/CreateSteps2'
-import UploadQuestion from './components/step3/UploadQuestion'
 
 const StepCreate: React.FC = () => {
   const { token } = theme.useToken()
@@ -18,10 +17,6 @@ const StepCreate: React.FC = () => {
     {
       title: 'Lộ trình học',
       content: <CreateSteps2 dataId={dataIdCouser} stepPrev={setCurrent} stepNext={setCurrent} />,
-    },
-    {
-      title: 'Bài kiểm tra',
-      content: <UploadQuestion />,
     },
   ]
 

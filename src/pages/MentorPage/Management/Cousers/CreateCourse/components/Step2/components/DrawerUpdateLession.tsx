@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import documentApi from '@/apis/document.type'
+import examApi from '@/apis/exam.api'
 import lessionApi from '@/apis/lession.api'
 import openNotification from '@/components/Notification'
 import { TypeLessonEnum } from '@/constants'
@@ -10,7 +11,7 @@ import { Lession } from '@/types/lession.type'
 import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
@@ -39,6 +40,12 @@ export default function DrawerUpdateLession({
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [refetch, setRefetch] = useState('')
   const [hidden, setHidden] = useState<boolean>(false)
+  const [questionShow, setQuestionShow] = useState<boolean>(true)
+
+  const { data: dataExamLession } = useQuery({
+    queryKey: ['queryExam'],
+    queryFn: () => examApi.findExam({}),
+  })
 
   useEffect(() => {
     form.setFieldValue('name', dataUpdateLession?.name)
@@ -47,6 +54,7 @@ export default function DrawerUpdateLession({
     form.setFieldValue('parentId', dataUpdateLession?.parentId)
     form.setFieldValue('id', dataUpdateLession?._id)
     form.setFieldValue('type', dataUpdateLession?.type)
+    form.setFieldValue('testId', dataUpdateLession?.testId)
     setContent(dataUpdateLession?.descriptions)
   }, [dataUpdateLession])
 
@@ -94,6 +102,10 @@ export default function DrawerUpdateLession({
       console.log('Dropped files', e.dataTransfer.files)
     },
   }
+  const optionsLession = dataExamLession?.data?.docs?.map((item) => ({
+    label: item.name,
+    value: item._id,
+  }))
 
   const newArray = fileList?.map((item) => item?.response).flat()
 
@@ -158,10 +170,24 @@ export default function DrawerUpdateLession({
   }
 
   const onChange = (value: string) => {
-    if (value !== 'VIDEO') {
+    if (value !== TypeLessonEnum.VIDEO_LESSON) {
       setHidden(true)
     } else {
       setHidden(false)
+    }
+
+    if (value === TypeLessonEnum.LIVE_LESSON) {
+      setContent(
+        '<p>Đây là bài học sẽ học tại lớp học online <a href="/schedule">CLICK VÀO ĐÂY</a> để xem lịch học của bạn</p>',
+      )
+    } else {
+      setContent('')
+    }
+
+    if (value === TypeLessonEnum.EXAM) {
+      setQuestionShow(false)
+    } else {
+      setQuestionShow(true)
     }
   }
 
@@ -177,9 +203,10 @@ export default function DrawerUpdateLession({
           <Select
             onChange={onChange}
             options={[
-              { value: TypeLessonEnum.VIDEO_LESSON, label: TypeLessonEnum.VIDEO_LESSON },
-              { value: TypeLessonEnum.DOCUMENT_LESSON, label: TypeLessonEnum.DOCUMENT_LESSON },
-              { value: TypeLessonEnum.LIVE_LESSON, label: TypeLessonEnum.LIVE_LESSON },
+              { value: TypeLessonEnum.VIDEO_LESSON, label: 'VIDEO' },
+              { value: TypeLessonEnum.DOCUMENT_LESSON, label: 'VĂN BẢN' },
+              { value: TypeLessonEnum.LIVE_LESSON, label: 'TRỰC TUYẾN' },
+              { value: TypeLessonEnum.EXAM, label: 'BÀI KIỂM TRA' },
             ]}
           />
         </Form.Item>
@@ -198,6 +225,12 @@ export default function DrawerUpdateLession({
               />
             </Form.Item>
           </>
+        )}
+
+        {!questionShow && (
+          <Form.Item label={'Thêm bộ câu hỏi'} name='testId' rules={[{ required: true, message: 'Hãy chọn câu hỏi' }]}>
+            <Select options={optionsLession} placeholder='Thêm bộ câu hỏi cho bài học này' />
+          </Form.Item>
         )}
         <Form.Item
           label={'Nội dung giới thiệu'}

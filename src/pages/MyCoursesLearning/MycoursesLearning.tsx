@@ -1,30 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import enrollsApi from '@/apis/enrolls.api'
 import topicApi from '@/apis/topic.api'
+import LoadingCustom from '@/components/LoadingCustom'
+import openNotification from '@/components/Notification'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import { AppContext } from '@/contexts/app.context'
-import FileSaver from 'file-saver'
 import {
   DownloadOutlined,
-  FolderOutlined,
-  VideoCameraOutlined,
   FileOutlined,
+  FileTextOutlined,
+  FolderOutlined,
   PlayCircleOutlined,
+  VideoCameraOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Collapse, Popover } from 'antd'
-import { useContext, useState, useEffect } from 'react'
+import FileSaver from 'file-saver'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
-import LoadingCustom from '@/components/LoadingCustom'
-import enrollsApi from '@/apis/enrolls.api'
-import openNotification from '@/components/Notification'
 
-import JSZip from 'jszip'
 import { TypeLessonEnum } from '@/constants'
+import JSZip from 'jszip'
+import ExamCourse from './components/ExamCourse'
 
 interface FileItem {
   name: string
@@ -36,10 +39,11 @@ export default function MycoursesLearning() {
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
-  const [type, setType] = useState('video')
+  const [type, setType] = useState('VIDEO')
   const [document, setDocuemnt] = useState<any>()
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
+  const [exam, setExam] = useState([])
   const [active, setActive] = useState<string>('')
   const { scaleScreen } = useContext(AppContext)
 
@@ -80,7 +84,6 @@ export default function MycoursesLearning() {
     enabled: checkEnrolls?.data?.docs?.length ? true : false,
   })
 
-  // const dataCourse = data?.data?.topics
   const dataTopics = topics?.data?.docs
 
   const myTabs = [
@@ -142,14 +145,41 @@ export default function MycoursesLearning() {
     setActive(id)
     setNameVideo(name)
     setVideo(video)
-    setType('video')
+    setType(TypeLessonEnum.VIDEO_LESSON)
   }
 
   const handleDocument = (id: string, desc: string) => {
-    setType('document')
+    setType(TypeLessonEnum.DOCUMENT_LESSON)
     setDocuemnt(desc)
     setActive(id)
   }
+
+  const handleExam = (id: string, test: any) => {
+    setType(TypeLessonEnum.EXAM)
+    setActive(id)
+    setExam(test)
+  }
+
+  const handleLive = (id: string) => {
+    setType(TypeLessonEnum.LIVE_LESSON)
+    setActive(id)
+  }
+
+  // const extractQuestions = (data: any) => {
+  //   let questionsArray: any[] = []
+
+  //   data?.forEach((course: any) => {
+  //     course.lessons.forEach((lesson: any) => {
+  //       lesson.test.forEach((test: any) => {
+  //         questionsArray = questionsArray?.concat(test.questions)
+  //       })
+  //     })
+  //   })
+
+  //   return questionsArray
+  // }
+
+  // const questions = extractQuestions(topics?.data?.docs)
 
   async function mapWithConcurrency<T, R>(
     items: T[],
@@ -160,7 +190,7 @@ export default function MycoursesLearning() {
     let current = 0
 
     const executeNext = async (): Promise<void> => {
-      if (current >= items.length) return
+      if (current >= items?.length) return
 
       const item = items[current]
       current++
@@ -225,18 +255,36 @@ export default function MycoursesLearning() {
   return (
     <div className={`  ${!scaleScreen ? style.boxContainerFalse : style.boxContainerTrue} `}>
       <div className={style.col1}>
-        {type === 'video' ? (
+        {type === TypeLessonEnum.VIDEO_LESSON ? (
           <div className={style.boxVideoContent}>
             <VideoComponent video={video} names={nameVideo} />
           </div>
-        ) : (
+        ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
           <div className={style.document}>
+            {/* <h3>Bài TEXT</h3> */}
             <div
               style={{
                 lineHeight: '1.4',
               }}
               dangerouslySetInnerHTML={{ __html: document }}
             ></div>
+          </div>
+        ) : type === TypeLessonEnum.LIVE_LESSON ? (
+          <div className={style.document}>
+            {/* <h3>Bài LIVE</h3> */}
+            <div
+              style={{
+                lineHeight: '1.4',
+              }}
+              dangerouslySetInnerHTML={{ __html: document }}
+            ></div>
+          </div>
+        ) : (
+          <div className={style.document}>
+            {/* <h3>Bài test</h3> */}
+            <div>
+              <ExamCourse data={exam} />
+            </div>
           </div>
         )}
 
@@ -284,9 +332,13 @@ export default function MycoursesLearning() {
                                   }}
                                   className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
                                   onClick={() => {
-                                    lession?.media
+                                    lession?.type === TypeLessonEnum.VIDEO_LESSON
                                       ? handleVideo(lession?._id, lession?.name, lession?.media)
-                                      : handleDocument(lession?._id, lession?.descriptions)
+                                      : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
+                                      ? handleDocument(lession?._id, lession?.descriptions)
+                                      : lession?.type === TypeLessonEnum.LIVE_LESSON
+                                      ? handleLive(lession?._id)
+                                      : handleExam(lession?._id, lession?.test)
                                   }}
                                 >
                                   <div>{lession?.name}</div>
@@ -311,9 +363,13 @@ export default function MycoursesLearning() {
                                     <p>
                                       Thể loại : <FileOutlined /> Văn bản
                                     </p>
-                                  ) : (
+                                  ) : lession?.type === TypeLessonEnum.LIVE_LESSON ? (
                                     <p>
                                       Thể loại : <VideoCameraOutlined /> live
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Thể loại : <FileTextOutlined /> Bài kiểm tra
                                     </p>
                                   )}
 
@@ -345,7 +401,7 @@ export default function MycoursesLearning() {
                                     >
                                       {' '}
                                       <>
-                                        {lession?.documents.length > 0 && (
+                                        {lession?.documents?.length > 0 && (
                                           <Button>
                                             <FolderOutlined />
                                             Tài liệu
