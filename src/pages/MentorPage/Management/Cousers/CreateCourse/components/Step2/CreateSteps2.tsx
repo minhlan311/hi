@@ -23,7 +23,7 @@ import DrawerQuizz from './components/DrawerQuizz'
 
 export type MyPageTableOptions<S> = ColumnsType<S>
 
-const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
+const CreateSteps2 = ({ dataId }: any) => {
   const [idLess, setIdLess] = useState('')
   const { id } = useParams()
   const [onOpenExam, setOnOpenExam] = useState(false)
@@ -118,32 +118,6 @@ const CreateSteps2 = ({ dataId, stepNext, stepPrev }: any) => {
           <Button onClick={() => setOnOpenExam(true)} type='dashed' className='dashed'>
             <PlusCircleOutlined />
             Thêm chuyên đề mới
-          </Button>
-        </div>
-        <div>
-          <Button
-            style={{
-              marginTop: '30px',
-            }}
-            type='dashed'
-            className='dashed'
-            onClick={() => {
-              stepPrev(0)
-            }}
-          >
-            Quay lại
-          </Button>
-          <Button
-            style={{
-              marginTop: '30px',
-              marginLeft: '20px',
-            }}
-            type='primary'
-            onClick={() => {
-              stepNext(2)
-            }}
-          >
-            Tiếp theo
           </Button>
         </div>
       </div>

@@ -37,6 +37,7 @@ export const ENDPOINT = {
   // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::
   EXAM_PATH: '/exam/tests/',
   FIND_EXAM_PATH: '/exam/tests/find',
+  FIND_EXAM_SUBMIT: '/exam/tests/submit/',
 
   // :::::::::::::::::::: QUESTION PATH :::::::::::::::::::::
   QUESTION_PATH: '/exam/questions/',
