@@ -36,7 +36,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const cartData = queryClient.getQueryData<any>(['dataCart'])
 
   useEffect(() => {
-    setCheck(cartData?.data?.docs?.some((item: any) => item.id === id))
+    setCheck(cartData?.data?.docs?.some((item: any) => item?._id === id))
   }, [id, cartData])
 
   const mutate = useMutation({
@@ -162,7 +162,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
     }
   }, [])
 
-  const checkLession = datas?.topics?.some((item: any) => item?.countLessons > 0)
+  const checkLession = datas?.topics && datas?.topics?.some((item: any) => item?.countLessons > 0)
 
   return (
     <div className={style.col2}>
