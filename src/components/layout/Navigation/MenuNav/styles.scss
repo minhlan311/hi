@@ -11,15 +11,12 @@
 
   @include respond-to(xs) {
     background-color: var(--whiteBg);
-    color: var(--lighish-white);
   }
   @include respond-to(sm) {
     background-color: var(--whiteBg);
-    color: var(--lighish-white);
   }
   @include respond-to(md) {
     background-color: var(--whiteBg);
-    color: var(--lighish-white);
   }
   .menuItem {
     display: flex;
