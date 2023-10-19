@@ -63,16 +63,23 @@ export default function MenuNav({ user }: Props) {
     categories ? (categories?.data.docs as unknown as CategoryState[]) : [],
   )
 
+  console.log(categoriesData)
+
   const mobileMenu = [
     { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
-    { label: 'Luyện thi', icon: <IoSchoolOutline />, activeIcon: <MdSchool />, href: '/luyen-thi' },
+    {
+      label: 'Luyện thi',
+      icon: <IoSchoolOutline />,
+      activeIcon: <MdSchool />,
+      href: '/luyen-thi-743j7/tieng-anh-au6xd',
+    },
     {
       label: 'Lịch khai giảng',
       icon: <IoCalendarOutline />,
       activeIcon: <IoCalendar />,
-      href: '/lich-khai-giang',
+      href: '/lich-khai-giang-blbah/tieng-anh-iejqi',
     },
-    { label: 'Trắc nghiệm', icon: <PiExam />, activeIcon: <PiExamFill />, href: '/trac-nghiem' },
+    { label: 'Trắc nghiệm', icon: <PiExam />, activeIcon: <PiExamFill />, href: '/trac-nghiem-jshrw/a' },
     { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
   ]
 

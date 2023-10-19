@@ -1,5 +1,5 @@
 import React from 'react'
-import { Drawer as Draw } from 'antd'
+import { Drawer as Draw, Space } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 import css from './Drawer.module.scss'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
@@ -15,7 +15,23 @@ const Drawer = (props: Props) => {
   const { children, title, placement, onClose, open } = props
 
   return (
-    <Draw className={css.drawer} title={title} placement={placement} closable={false} onClose={onClose} open={open}>
+    <Draw
+      className={css.drawer}
+      title={title}
+      placement={placement}
+      closable={false}
+      onClose={onClose}
+      open={open}
+      extra={
+        title ? (
+          <Space>
+            <ButtonCustom type='primary' onClick={onClose}>
+              OK
+            </ButtonCustom>
+          </Space>
+        ) : undefined
+      }
+    >
       {
         <ButtonCustom
           shape='circle'

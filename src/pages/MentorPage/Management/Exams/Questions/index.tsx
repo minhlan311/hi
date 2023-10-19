@@ -1,26 +1,28 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import css from './styles.module.scss'
-import DrawerQuestion from '../Drawer/DrawerQuestion'
-import DrawerUpload from '../Drawer/DrawerUpload'
 import examApi from '@/apis/exam.api'
+import questionApi from '@/apis/question.api'
+import { stateAction } from '@/common'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import PaginationCustom from '@/components/PaginationCustom'
-import questionApi from '@/apis/question.api'
-import RenderQuestion from '../Components/RenderQuestion'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
-import { AiOutlineDelete, AiOutlinePlus } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { Checkbox, Popconfirm, Space } from 'antd'
 import { ExamState } from '@/interface/exam'
-import { HiOutlineUpload } from 'react-icons/hi'
 import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
-import { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { setQuestionsListFromLS } from '@/utils/questons'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Checkbox, Popconfirm, Space } from 'antd'
+import { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { useContext, useEffect, useState } from 'react'
+import { AiOutlineDelete, AiOutlinePlus } from 'react-icons/ai'
+import { HiOutlineUpload } from 'react-icons/hi'
+import { useLocation } from 'react-router-dom'
+import RenderQuestion from '../Components/RenderQuestion'
+import DrawerQuestion from '../Drawer/DrawerQuestion'
+import DrawerUpload from '../Drawer/DrawerUpload'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorQuestions = () => {
@@ -32,21 +34,31 @@ const MentorQuestions = () => {
       return examApi.getExamDetail(examSlug)
     },
   })
-  const queryClient = useQueryClient()
 
   const examDetail = exam?.data
   const [open, setOpen] = useState<boolean>(false)
 
   // question select
-  const { questionList } = useContext(AppContext)
+  const { setQuestionList, profile } = useContext(AppContext)
+  const [load, setLoad] = useState<boolean>(false)
 
   const [questionsSelectCallback, setQuestionsSelectCallback] = useState<SuccessResponse<QuestionState[]>>()
+  const [questionsSelect, setQuestionsSelect] = useState<string[]>([])
+  useEffect(() => {
+    setQuestionList([])
+    setQuestionsSelect([])
+    setQuestionsListFromLS([])
+  }, [examSlug])
 
   useEffect(() => {
-    if (examDetail && examDetail.questions.length > 0) {
+    if (examDetail) {
       setQuestionsListFromLS(examDetail.questions)
-    } else {
-      setQuestionsListFromLS([])
+      setQuestionsSelect(examDetail.questions)
+      setQuestionList(examDetail.questions)
+      setLoad(true)
+      setTimeout(() => {
+        setLoad(false)
+      }, 500)
     }
   }, [examDetail])
 
@@ -62,12 +74,26 @@ const MentorQuestions = () => {
 
   // bank questons
   const [questionsCallback, setQuestionsCallback] = useState<SuccessResponse<QuestionState[]>>()
+
+  const [myQues, setMyQues] = useState<boolean>(false)
+
   const dataActive = questionsCallback?.docs?.filter((item) => item.status === 'ACTIVE')
   const quesId = dataActive?.map((it) => it._id)
-  const indeterminate = quesId?.every((e) => questionList?.includes(e))
-  const [myQues, setMyQues] = useState<boolean>(false)
-  const [checkAll, setCheckAll] = useState<boolean>(false)
-  console.log(myQues)
+
+  const checkAll = quesId?.length === questionsSelect.length
+
+  const [indeterminate, setIndeterminate] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (questionsSelect && questionsSelect.length > 0)
+      setIndeterminate(questionsSelect.some((e) => questionsCallback?.docs?.some((it) => it._id === e)) && !checkAll)
+  }, [questionsSelect, checkAll])
+
+  const onCheckAllChange = (e: CheckboxChangeEvent) => {
+    e.target.checked
+      ? stateAction(setQuestionsSelect, null, quesId, 'add', setQuestionsListFromLS)
+      : stateAction(setQuestionsSelect, null, quesId, 'remove', setQuestionsListFromLS)
+  }
 
   const [tabChange, setTabChange] = useState<string>()
 
@@ -79,7 +105,7 @@ const MentorQuestions = () => {
     if (examDetail) {
       const payload = {
         id: examDetail._id,
-        questions: questionList,
+        questions: questionsSelect,
       }
 
       examMutation.mutate(payload as unknown as any)
@@ -87,7 +113,7 @@ const MentorQuestions = () => {
   }
 
   useEffect(() => {
-    if (examMutation.status === 'success') {
+    if (examMutation.status === 'success' && !examMutation.isLoading) {
       openNotification({
         status: examMutation.status,
         message: 'Thông báo',
@@ -103,7 +129,18 @@ const MentorQuestions = () => {
         description: ' Có lỗi xảy ra',
       })
     }
-  }, [examMutation])
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
+
+  useEffect(() => {
+    scrollToTop()
+  }, [current, currentSelected])
 
   const questionTabs = [
     {
@@ -117,13 +154,13 @@ const MentorQuestions = () => {
               apiFind={questionApi.findQuestion}
               callBackData={setQuestionsSelectCallback}
               filterQuery={{
-                _id: questionList.length > 0 ? questionList : [],
+                _id: questionsSelect,
               }}
               limit={10}
               page={currentSelected}
               keyFilter='questionsSelect'
               setLoading={setLoading}
-              checkQuery={tabChange}
+              checkQuery={tabChange === 'questions' || load === true}
             />
           )}
           <Space size='large' className={css.infor}>
@@ -140,6 +177,7 @@ const MentorQuestions = () => {
                   setRemove(true)
                   setTabChange('')
                   setQuestionsListFromLS([])
+                  setQuestionsSelect([])
 
                   const payload = {
                     id: examDetail?._id,
@@ -152,19 +190,19 @@ const MentorQuestions = () => {
                 cancelText='Hủy'
               >
                 <ButtonCustom
-                  disabled={!questionList?.length}
+                  disabled={!questionsSelect?.length}
                   icon={<AiOutlineDelete />}
                   tooltip='Xóa tất cả câu hỏi'
                   danger
                 ></ButtonCustom>
               </Popconfirm>
 
-              <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
+              <ButtonCustom type='primary' disabled={!questionsSelect?.length} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
             </Space>
           </Space>
-          {loading ? (
+          {load ? (
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
           ) : (
             <Space direction='vertical' size='large' className={'sp100'}>
@@ -173,6 +211,7 @@ const MentorQuestions = () => {
                 type='questionsSelected'
                 setOpen={setOpen}
                 setQuestionUpdate={setQuestionUpdate}
+                questionsSelect={questionsSelect}
               />
               <PaginationCustom
                 callbackCurrent={setSelectedCurrent}
@@ -194,10 +233,11 @@ const MentorQuestions = () => {
               type='question'
               apiFind={questionApi.findQuestion}
               callBackData={setQuestionsCallback}
-              filterQuery={{ categoryId: examDetail.categoryId }}
+              filterQuery={{ categoryId: examDetail.categoryId, createdById: myQues ? profile._id : undefined }}
               limit={10}
               page={current}
               keyFilter='questionsBank'
+              checkQuery={myQues}
             />
           )}
           <Space className={css.infor}>
@@ -207,18 +247,11 @@ const MentorQuestions = () => {
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
-              <b>{!questionList ? 0 : questionList?.length}</b>
+              <b>{!questionsSelect ? 0 : questionsSelect?.length}</b>
             </Space>
             <Checkbox onChange={(e) => setMyQues(e.target.checked)}>Câu hỏi của tôi</Checkbox>
 
-            <Checkbox
-              onClick={() => {
-                setCheckAll(!checkAll)
-                queryClient.invalidateQueries({ queryKey: ['questionsSelect'] })
-              }}
-              checked={!dataActive?.length ? Boolean(dataActive?.length) : indeterminate}
-              disabled={!dataActive?.length}
-            >
+            <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
               {!indeterminate ? 'Chọn' : 'Bỏ chọn'} tất cả
             </Checkbox>
 
@@ -245,7 +278,8 @@ const MentorQuestions = () => {
                   type='questionsBank'
                   setOpen={setOpen}
                   setQuestionUpdate={setQuestionUpdate}
-                  checkAll={checkAll}
+                  setQuestionsSelect={setQuestionsSelect}
+                  questionsSelect={questionsSelect}
                 />
               )}
               <PaginationCustom callbackCurrent={setCurrent} totalData={questionsCallback?.totalDocs} limit={10} />

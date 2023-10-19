@@ -11,17 +11,21 @@ import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-i
 import { MdOutlineDisabledVisible } from 'react-icons/md'
 import { RiCloseCircleFill } from 'react-icons/ri'
 import css from './RenderIten.module.scss'
+import { stateAction } from '@/common'
+import { setQuestionsListFromLS } from '@/utils/questons'
 
 type Props = {
   type: 'questionsSelected' | 'questionsBank'
   data: QuestionState
   setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
+  setQuestionsSelect?: React.Dispatch<React.SetStateAction<string[]>>
+  questionsSelect: string[]
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RenderItem = (props: Props) => {
-  const { type, data, setQuestionUpdate, setOpen } = props
-  const { setQuestionList, questionList, profile } = useContext(AppContext)
+  const { type, data, setQuestionUpdate, setQuestionsSelect, questionsSelect, setOpen } = props
+  const { setQuestionList, profile } = useContext(AppContext)
 
   const [isHover, setIsHover] = useState(false)
   const queryClient = useQueryClient()
@@ -48,7 +52,7 @@ const RenderItem = (props: Props) => {
   }, [status, error])
 
   if (data) {
-    const check = questionList?.includes(data._id)
+    const check = questionsSelect.includes(data._id)
 
     return (
       <div className={css.qItem}>
@@ -56,6 +60,7 @@ const RenderItem = (props: Props) => {
           className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
           onClick={() => {
             setQuestionList(data._id as unknown as string[])
+            setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'add', setQuestionsListFromLS)
             // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
           }}
           onMouseEnter={() => setIsHover(true)}
@@ -69,7 +74,11 @@ const RenderItem = (props: Props) => {
             {isHover && check ? (
               <RiCloseCircleFill className={css.unCheck} />
             ) : (
-              check && <b className={css.check}>{questionList?.findIndex((val) => val === data._id) + 1}</b>
+              check && (
+                <b className={css.check}>
+                  {questionsSelect && questionsSelect.findIndex((val) => val === data._id) + 1}
+                </b>
+              )
             )}
           </div>
         </div>
