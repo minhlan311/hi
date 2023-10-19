@@ -25,7 +25,7 @@ type Props = {
 const CalendarCustom = ({ calendarType }: Props) => {
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
-  const { xl, xxl } = useResponsives()
+  const { sm, xl, xxl } = useResponsives()
   const [modalType, setModalType] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
   const [view, setView] = useState<string>('week')
@@ -92,7 +92,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
       setEvents(newEvent as unknown as ISchedule[])
     }
   }, [eventsData])
-  console.log(events)
 
   useEffect(() => {
     if (calAction) {
@@ -105,7 +104,9 @@ const CalendarCustom = ({ calendarType }: Props) => {
       })
       calAction.setOptions({
         week: {
-          dayNames: ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+          dayNames: sm
+            ? ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+            : ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
         },
         month: {
           dayNames: ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
@@ -124,7 +125,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
 
   return (
     <Space direction='vertical' className='sp100'>
-      <Row justify='space-between'>
+      <Row justify='space-between' gutter={[12, 12]}>
         <Col span={10}>
           <Space>
             <ButtonCustom
@@ -170,25 +171,27 @@ const CalendarCustom = ({ calendarType }: Props) => {
                 },
               ]}
             />
-            <SelectCustom
-              onChange={(e) => {
-                setType(e)
-                getDate()
-              }}
-              placeholder='Loại sự kiện'
-              options={[
-                {
-                  value: 'CLASS',
-                  label: 'Cuộc họp',
-                },
-                {
-                  value: 'TEST',
-                  label: 'Lịch thi',
-                },
-              ]}
-              allowClear
-              style={{ width: 115 }}
-            />
+            {!sm && (
+              <SelectCustom
+                onChange={(e) => {
+                  setType(e)
+                  getDate()
+                }}
+                placeholder='Loại sự kiện'
+                options={[
+                  {
+                    value: 'CLASS',
+                    label: 'Cuộc họp',
+                  },
+                  {
+                    value: 'TEST',
+                    label: 'Lịch thi',
+                  },
+                ]}
+                allowClear
+                style={{ width: 115 }}
+              />
+            )}
           </Space>
         </Col>
         <Col>
@@ -196,7 +199,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
             <Input.Search placeholder='Tìm kiếm' />
             {!profile.isMentor ? (
               <></>
-            ) : (
+            ) : !sm ? (
               <Space.Compact>
                 <ButtonCustom
                   onClick={() => {
@@ -217,6 +220,39 @@ const CalendarCustom = ({ calendarType }: Props) => {
                   Tạo sự kiện
                 </ButtonCustom>
               </Space.Compact>
+            ) : (
+              <>
+                {!sm && (
+                  <SelectCustom
+                    onChange={(e) => {
+                      setType(e)
+                      getDate()
+                    }}
+                    placeholder='Loại sự kiện'
+                    options={[
+                      {
+                        value: 'CLASS',
+                        label: 'Cuộc họp',
+                      },
+                      {
+                        value: 'TEST',
+                        label: 'Lịch thi',
+                      },
+                    ]}
+                    allowClear
+                    style={{ width: 115 }}
+                  />
+                )}
+                <ButtonCustom
+                  onClick={() => {
+                    setOpenModal(true)
+                    setModalType('test')
+                  }}
+                  type='primary'
+                >
+                  Thêm
+                </ButtonCustom>
+              </>
             )}
           </Space>
         </Col>

@@ -67,7 +67,16 @@ const MentorLayout = (props: Props) => {
   return (
     <Layout className={css.layout}>
       {sm ? (
-        <Drawer open={!collapsed} onClose={() => setCollapsed(!collapsed)} placement='left'></Drawer>
+        <Drawer open={!collapsed} onClose={() => setCollapsed(!collapsed)} placement='left'>
+          <Menu
+            theme='light'
+            mode='inline'
+            selectedKeys={[location.pathname]}
+            items={siderItems}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ position: 'absolute', left: 10, top: 55, width: '96%' }}
+          />
+        </Drawer>
       ) : (
         <AffixCustom type='fixed' offsetTop={0}>
           <Sider

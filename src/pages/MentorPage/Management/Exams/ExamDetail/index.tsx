@@ -224,12 +224,28 @@ const MentorExamDetail = () => {
     {
       id: 'attended',
       name: 'Đã hoàn thành',
-      children: <Table columns={attendedColumn} dataSource={students} />,
+      children: (
+        <Table
+          columns={attendedColumn}
+          dataSource={students}
+          scroll={{
+            x: 1024,
+          }}
+        />
+      ),
     },
     {
       id: 'absent',
       name: 'Chưa hoàn thành',
-      children: <Table columns={absentColumn} dataSource={students} />,
+      children: (
+        <Table
+          columns={absentColumn}
+          dataSource={students}
+          scroll={{
+            x: 1024,
+          }}
+        />
+      ),
     },
   ]
 
@@ -255,7 +271,7 @@ const MentorExamDetail = () => {
       <Space direction='vertical' size='large' className={css.exMain}>
         <Row justify='space-between'>
           <Col span={24} md={18}>
-            <Space direction='vertical'>
+            <Space direction='vertical' className={'sp100'}>
               <p className={css.exTitle}>Bộ đề: {examDetail.name}</p>
               <p>
                 Môn học: <b>{subjectDetail.name}</b>
@@ -282,7 +298,7 @@ const MentorExamDetail = () => {
         </Row>
         <Row justify='space-between' gutter={[24, 24]}>
           {labelData.map((item, id) => (
-            <Col span={24} md={8} key={id}>
+            <Col span={24} md={12} lg={8} key={id}>
               <Card className={css.cardItem} size='small'>
                 <Space className={'sp100'} size='large'>
                   <div className={css.icon} style={{ color: item.iconColor, background: `${item.iconColor}4f` }}>

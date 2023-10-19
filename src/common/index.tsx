@@ -25,13 +25,14 @@ export const localAction = (
 
 export const stateAction = (
   setData: React.Dispatch<React.SetStateAction<any[]>>,
-  id: string,
-  dataUpdate: object | null,
+  id: string | null,
+  dataUpdate: any | null,
   actionType: 'update' | 'remove' | 'edit' | 'add',
+  setLocalFunction?: React.Dispatch<React.SetStateAction<any>>,
   key?: string,
 ) => {
   setData((prevData: any[]) => {
-    const newData = [...prevData]
+    let newData = [...prevData]
 
     switch (actionType) {
       case 'update':
@@ -40,9 +41,21 @@ export const stateAction = (
         return updatedData
 
       case 'remove':
-        const filteredData = newData.filter((item) => item._id !== id)
+        if (Array.isArray(dataUpdate)) {
+          dataUpdate.forEach((i) => {
+            if (newData.includes(i)) {
+              newData = newData.filter((data) => data !== i)
+            }
+          })
+        } else {
+          if (newData.includes(dataUpdate)) {
+            newData = newData.filter((data) => data !== dataUpdate)
+          }
+        }
 
-        return filteredData
+        setLocalFunction && setLocalFunction(newData)
+
+        return newData
 
       case 'edit':
         const editedData = newData.map((item) => {
@@ -59,11 +72,37 @@ export const stateAction = (
         return editedData
 
       case 'add':
-        if (!newData.some((item) => item.id === id)) {
-          newData.push(dataUpdate)
-        }
+        if (newData) {
+          if (Array.isArray(dataUpdate)) {
+            dataUpdate.forEach((i) => {
+              if (newData.includes(i)) {
+                newData = newData.filter((data) => data !== i)
+              } else {
+                newData.push(i)
+              }
+            })
+          } else {
+            if (newData.includes(dataUpdate)) {
+              newData = newData.filter((data) => data !== dataUpdate)
+            } else {
+              newData.push(dataUpdate)
+            }
+          }
 
-        return newData
+          setLocalFunction && setLocalFunction(newData)
+
+          return newData
+        } else {
+          if (Array.isArray(dataUpdate)) {
+            setLocalFunction && setLocalFunction(dataUpdate)
+
+            return dataUpdate
+          }
+
+          setLocalFunction && setLocalFunction([dataUpdate])
+
+          return [dataUpdate]
+        }
 
       default:
         return prevData

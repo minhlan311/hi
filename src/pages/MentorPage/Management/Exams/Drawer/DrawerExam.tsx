@@ -13,13 +13,13 @@ import { useEffect, useState } from 'react'
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   examData?: ExamState
+  size?: string
 }
 
 const DrawerExam = (props: Props) => {
-  const { open, setOpen, setLoading, examData } = props
+  const { open, setOpen, setLoading, examData, size } = props
 
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
@@ -90,7 +90,7 @@ const DrawerExam = (props: Props) => {
     <div>
       <Drawer
         title={action === 'create' ? 'Thêm bộ đề' : 'Chỉnh sửa'}
-        width={'50%'}
+        width={size}
         onClose={onCloseDrawer}
         open={open}
         extra={
