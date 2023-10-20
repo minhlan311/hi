@@ -286,7 +286,7 @@ export default function ExamCourse({ data }: Props) {
                       margin: '20px 0',
                     }}
                   >
-                    Câu hỏi số {questionIndex + 1}:{' '}
+                    Câu hỏi số {questionIndex + 1}:
                   </h4>
                   <div
                     style={{

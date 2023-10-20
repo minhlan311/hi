@@ -143,7 +143,7 @@ const Register: React.FC = () => {
           )}
 
           <p className='res'>
-            Bạn đã có tài khoản ?{' '}
+            Bạn đã có tài khoản ?
             <Link className='link' to={'/login'}>
               Đăng nhập ngay
             </Link>

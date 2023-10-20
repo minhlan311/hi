@@ -164,7 +164,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
             )}
           </Col>
         </Row>
-      </div>{' '}
+      </div>
       <SliderCustom dataLength={data.length} arrows autoHitdenArrow slidesToScroll={1} slidesToShow={1}>
         {data.map((item, id) => (
           <Card key={id}>

@@ -25,7 +25,6 @@ export default function Gift() {
           <Col className='col-left' xs={24} sm={24} md={12} lg={12}>
             <div className='col-left-in'>
               <div className='top'>
-                {' '}
                 <p>THỜI GIAN CHỈ CÒN</p>
               </div>
 

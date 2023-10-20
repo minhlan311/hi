@@ -48,7 +48,6 @@ export default function CourseListMentor({ data }: any) {
           ? data?.docs?.map((item: any) => (
               <>
                 <Col>
-                  {' '}
                   <Card
                     style={{ width: 300 }}
                     cover={

@@ -153,7 +153,6 @@ export default function CategogyDetail() {
                                         <>
                                           {item?.startDate ? (
                                             <>
-                                              {' '}
                                               Khai giảng {''}
                                               {formatDate(item?.startDate)}
                                             </>

@@ -18,7 +18,6 @@ export default function VideoContent() {
             <div className='div-inContent'>
               <div className='left'>01</div>
               <div className='mid'>
-                {' '}
                 <strong>Linh hoạt thời gian</strong> - phù hợp với người bận rộn
               </div>
               <div className='right'></div>
@@ -71,7 +70,6 @@ export default function VideoContent() {
       <div className='div-title-bottom'>
         <span className='number'>500.000+ </span>
         <span className='desc'>
-          {' '}
           Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao tiếp tiếng Anh thành công, còn bạn...?
         </span>
         <div className='button'>

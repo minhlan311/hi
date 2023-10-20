@@ -73,7 +73,7 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
             <Space direction='vertical' className='sp100'>
               {addRow.map((item, id) => (
                 <Space key={item._id} className='sp100'>
-                  <b>{id + 1}</b>{' '}
+                  <b>{id + 1}</b>
                   <Input
                     placeholder='Nhập nội dung hàng'
                     autoFocus
@@ -100,7 +100,7 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
             <Space direction='vertical' className='sp100'>
               {addCol.map((item, id) => (
                 <Space key={item._id} className='sp100'>
-                  <b>{id + 1}</b>{' '}
+                  <b>{id + 1}</b>
                   <Input
                     placeholder='Nhập nội dung cột'
                     autoFocus

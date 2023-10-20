@@ -185,7 +185,7 @@ const CreateSteps2 = ({ dataId }: any) => {
                               </Button>
                             </div>
                           </div>
-                        ))}{' '}
+                        ))}
                       </Panel>
                     </>
                   ))

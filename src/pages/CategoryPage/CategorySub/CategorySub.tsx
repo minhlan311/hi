@@ -86,7 +86,6 @@ export default function CategorySub() {
                         <Meta
                           description={
                             <>
-                              {' '}
                               <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
                               <TextWithTooltip rows={5} children={item?.description} className='p-config' />
                             </>
