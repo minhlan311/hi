@@ -55,7 +55,6 @@ const Certificate = ({ user }: Props) => {
             <h3 className={css.h3}>Chứng chỉ của tôi</h3>
           </div>
           <div className={css.gridCertificate}>
-            {' '}
             {dataCertificates &&
               dataCertificates.map((item) => (
                 <>

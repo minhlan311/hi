@@ -29,7 +29,6 @@ export default function Detail({ data }: Props) {
   return (
     <div className={style.col1}>
       <div>
-        {' '}
         <Breadcrumb separator={<span className={style.breadCrumbs}>{'>'}</span>} items={items} />
       </div>
       <div className={style.boxStyle}>
@@ -60,17 +59,14 @@ export default function Detail({ data }: Props) {
       </Link>
       <div className={style.info}>
         <div className={style.flexBoxInfo}>
-          {' '}
           <WarningFilled />
           <p>Ngày bắt đầu: 7/2023</p>
         </div>
         <div className={style.flexBoxInfo}>
-          {' '}
           <GlobalOutlined />
           <p>Việt Nam</p>
         </div>
         <div className={style.flexBoxInfo}>
-          {' '}
           <CreditCardOutlined />
           <p>Tiếng Việt</p>
         </div>

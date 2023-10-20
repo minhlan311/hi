@@ -89,7 +89,7 @@ const Feedback = () => {
                 <Space direction='vertical'>
                   <h3>{item.title}</h3>
                   <span>
-                    "{item.desc}" -{' '}
+                    "{item.desc}" -
                     <b>
                       {item.fullName} ({item.cityAddress})
                     </b>

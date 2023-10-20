@@ -2,21 +2,25 @@ import eventApi from '@/apis/event.api'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { EventObject } from '@/interface/class'
+import { EventSchedule } from '@/interface/event'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 import Calendar from '@toast-ui/react-calendar'
 import { Col, Input, Row, Space } from 'antd'
-import moment from 'moment-timezone'
+import moment, { Moment } from 'moment-timezone'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
-import { ISchedule } from 'tui-calendar'
+import { AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import DropdownCustom from '../DropdownCustom/DropdownCustom'
 import SelectCustom from '../SelectCustom/SelectCustom'
 import EventActionModal from './EventActionModal'
 import EventDetailModal from './EventDetailModal'
+import RenderDateOfWeek from './RenderDateOfWeek'
+import { HiOutlineUserGroup } from 'react-icons/hi2'
+import { PiExam } from 'react-icons/pi'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -25,14 +29,14 @@ type Props = {
 const CalendarCustom = ({ calendarType }: Props) => {
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
-  const { sm, xl, xxl } = useResponsives()
+  const { sm, md, xl, xxl } = useResponsives()
   const [modalType, setModalType] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
-  const [view, setView] = useState<string>('week')
+  const [view, setView] = useState<'day' | 'week' | 'month'>('week')
   const [type, setType] = useState<string>()
-  const [events, setEvents] = useState<ISchedule[]>([])
+  const [events, setEvents] = useState<EventSchedule[]>([])
   const [eventId, setEventId] = useState<string | null>(null)
-
+  const [callBackWeekSelect, setCallBackWeekSelect] = useState<any>()
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
@@ -43,7 +47,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
 
   const eventData = data?.data
 
-  const [timeSelect, setTimeSelect] = useState<{ startDate: string; endDate: string }>()
+  const [timeSelect, setTimeSelect] = useState<{ startDate: Moment; endDate: Moment }>()
 
   const calAction: any = calRef?.current?.calendarInstance
 
@@ -51,21 +55,44 @@ const CalendarCustom = ({ calendarType }: Props) => {
     if (calAction) {
       const startDate = calAction.getDateRangeStart()
       const endDate = calAction.getDateRangeEnd()
+
       setTimeSelect({
-        startDate: moment(startDate.d.d).format('YYYY-MM-DD'),
-        endDate: moment(endDate.d.d).format('YYYY-MM-DD'),
+        startDate: moment(startDate.d.d).startOf(view),
+        endDate: moment(endDate.d.d).endOf(view),
       })
     }
   }
 
+  useEffect(() => {
+    if (callBackWeekSelect) {
+      setTimeSelect({
+        startDate: callBackWeekSelect.start ? callBackWeekSelect.start : moment(callBackWeekSelect).startOf('day'),
+        endDate: callBackWeekSelect.end ? callBackWeekSelect.end : moment(callBackWeekSelect).endOf('day'),
+      })
+    }
+  }, [callBackWeekSelect])
+
   const { data: eventsData } = useQuery({
-    queryKey: ['eventsData', timeSelect, type],
+    queryKey: ['eventsData', callBackWeekSelect, timeSelect],
     queryFn: () => {
+      const filter =
+        calendarType === 'mentor'
+          ? {
+              start: timeSelect?.startDate,
+              end: timeSelect?.endDate,
+              createdById: profile._id,
+              type: type,
+            }
+          : {
+              start: timeSelect?.startDate,
+              end: timeSelect?.endDate,
+              students: [profile._id],
+              type: type,
+            }
+
       return eventApi.getEvent({
-        filterQuery:
-          calendarType === 'mentor'
-            ? { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, createdById: profile._id }
-            : { start: timeSelect?.startDate, end: timeSelect?.endDate, type: type, students: [profile._id] },
+        filterQuery: filter,
+
         options: { pagination: false },
       })
     },
@@ -89,7 +116,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
         }
       })
 
-      setEvents(newEvent as unknown as ISchedule[])
+      setEvents(newEvent as unknown as EventSchedule[])
     }
   }, [eventsData])
 
@@ -123,83 +150,122 @@ const CalendarCustom = ({ calendarType }: Props) => {
     setOpenModal(true)
   }
 
+  const items = [
+    {
+      label: (
+        <ButtonCustom
+          onClick={() => {
+            setOpenModal(true)
+            setModalType('event')
+          }}
+          type='link'
+          size='small'
+        >
+          Tạo cuộc họp
+        </ButtonCustom>
+      ),
+      key: 'class',
+      icon: <HiOutlineUserGroup size={20} />,
+    },
+    {
+      label: (
+        <ButtonCustom
+          onClick={() => {
+            setOpenModal(true)
+            setModalType('test')
+          }}
+          type='link'
+          size='small'
+        >
+          Tạo lịch thi
+        </ButtonCustom>
+      ),
+
+      key: 'test',
+      icon: <PiExam size={20} />,
+    },
+  ]
+
   return (
     <Space direction='vertical' className='sp100'>
+      {sm && md && <Input.Search placeholder='Tìm kiếm' />}
       <Row justify='space-between' gutter={[12, 12]}>
-        <Col span={10}>
-          <Space>
-            <ButtonCustom
-              onClick={() => {
-                calAction.today()
-                getDate()
-              }}
-            >
-              Hôm nay
-            </ButtonCustom>
-            <ButtonCustom
-              icon={<AiOutlineLeft />}
-              onClick={() => {
-                calAction.prev()
-                getDate()
-              }}
-            ></ButtonCustom>
-            <ButtonCustom
-              icon={<AiOutlineRight />}
-              onClick={() => {
-                calAction.next()
-                getDate()
-              }}
-            ></ButtonCustom>
-            <SelectCustom
-              onChange={(e) => {
-                setView(e)
-                getDate()
-              }}
-              defaultValue='week'
-              options={[
-                {
-                  value: 'day',
-                  label: 'Ngày',
-                },
-                {
-                  value: 'week',
-                  label: 'Tuần',
-                },
-                {
-                  value: 'month',
-                  label: 'Tháng',
-                },
-              ]}
-            />
-            {!sm && (
-              <SelectCustom
-                onChange={(e) => {
-                  setType(e)
+        {!sm && (
+          <Col span={10}>
+            <Space>
+              <ButtonCustom
+                onClick={() => {
+                  calAction.today()
                   getDate()
                 }}
-                placeholder='Loại sự kiện'
+              >
+                Hôm nay
+              </ButtonCustom>
+              <ButtonCustom
+                icon={<AiOutlineLeft />}
+                onClick={() => {
+                  calAction.prev()
+                  getDate()
+                }}
+              ></ButtonCustom>
+              <ButtonCustom
+                icon={<AiOutlineRight />}
+                onClick={() => {
+                  calAction.next()
+                  getDate()
+                }}
+              ></ButtonCustom>
+              <SelectCustom
+                onChange={(e) => {
+                  setView(e)
+                  getDate()
+                }}
+                defaultValue='week'
                 options={[
                   {
-                    value: 'CLASS',
-                    label: 'Cuộc họp',
+                    value: 'day',
+                    label: 'Ngày',
                   },
                   {
-                    value: 'TEST',
-                    label: 'Lịch thi',
+                    value: 'week',
+                    label: 'Tuần',
+                  },
+                  {
+                    value: 'month',
+                    label: 'Tháng',
                   },
                 ]}
-                allowClear
-                style={{ width: 115 }}
               />
-            )}
-          </Space>
-        </Col>
+              {!md && (
+                <SelectCustom
+                  onChange={(e) => {
+                    setType(e)
+                    getDate()
+                  }}
+                  placeholder='Loại sự kiện'
+                  options={[
+                    {
+                      value: 'CLASS',
+                      label: 'Cuộc họp',
+                    },
+                    {
+                      value: 'TEST',
+                      label: 'Lịch thi',
+                    },
+                  ]}
+                  allowClear
+                  style={{ width: 115 }}
+                />
+              )}
+            </Space>
+          </Col>
+        )}
         <Col>
           <Space>
-            <Input.Search placeholder='Tìm kiếm' />
+            {!sm && !md && <Input.Search placeholder='Tìm kiếm' />}
             {!profile.isMentor ? (
               <></>
-            ) : !sm ? (
+            ) : !md ? (
               <Space.Compact>
                 <ButtonCustom
                   onClick={() => {
@@ -217,7 +283,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
                     setModalType('event')
                   }}
                 >
-                  Tạo sự kiện
+                  Tạo cuộc họp
                 </ButtonCustom>
               </Space.Compact>
             ) : (
@@ -243,51 +309,52 @@ const CalendarCustom = ({ calendarType }: Props) => {
                     style={{ width: 115 }}
                   />
                 )}
-                <ButtonCustom
-                  onClick={() => {
-                    setOpenModal(true)
-                    setModalType('test')
-                  }}
-                  type='primary'
-                >
-                  Thêm
-                </ButtonCustom>
+                {!sm && (
+                  <DropdownCustom items={items} trigger='click'>
+                    <ButtonCustom type='primary'>
+                      Thêm <AiOutlinePlus />
+                    </ButtonCustom>
+                  </DropdownCustom>
+                )}
               </>
             )}
           </Space>
         </Col>
       </Row>
-      <Calendar
-        ref={calRef}
-        height={(xl && '67vh') || (xxl && '75vh') || '80vh'}
-        events={events}
-        view={view}
-        calendars={[
-          {
-            id: '0',
-            name: 'Private',
-            bgColor: '#9e5fff',
-            borderColor: '#9e5fff',
-          },
-          {
-            id: '1',
-            name: 'Company',
-            bgColor: '#00a9ff',
-            borderColor: '#00a9ff',
-          },
-        ]}
-        week={{
-          showTimezoneCollapseButton: true,
-          timezonesCollapsed: true,
-          taskView: false,
-          eventView: ['time'],
-        }}
-        usageStatistics={false}
-        disableDblClick={false}
-        onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
-        onSelectDateTime={handleCreateSelect}
-        isReadOnly={!profile.isMentor}
-      />
+      {sm ? (
+        <RenderDateOfWeek
+          events={events}
+          selectDate={callBackWeekSelect}
+          setCallBackWeekSelect={setCallBackWeekSelect}
+          setEventId={setEventId}
+          buttonAdd={
+            <DropdownCustom items={items} trigger='click'>
+              <ButtonCustom type='primary'>
+                Thêm <AiOutlinePlus />
+              </ButtonCustom>
+            </DropdownCustom>
+          }
+        />
+      ) : (
+        <Calendar
+          ref={calRef}
+          height={(xl && '67vh') || (xxl && '75vh') || '20vh'}
+          events={events as unknown as any[]}
+          view={view}
+          week={{
+            showTimezoneCollapseButton: true,
+            timezonesCollapsed: true,
+            taskView: false,
+            workweek: false,
+            eventView: ['time'],
+          }}
+          usageStatistics={false}
+          disableDblClick={false}
+          onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
+          onSelectDateTime={handleCreateSelect}
+          isReadOnly={!profile.isMentor}
+        />
+      )}
       <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
       <EventActionModal
         open={openModal}

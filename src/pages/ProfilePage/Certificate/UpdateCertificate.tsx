@@ -205,7 +205,6 @@ export default function UpdateCertificate() {
               okText='Đồng ý'
               cancelText='Hủy bỏ'
             >
-              {' '}
               <Button type='primary' htmlType='submit'>
                 Cập nhật
               </Button>

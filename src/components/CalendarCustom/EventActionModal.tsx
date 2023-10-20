@@ -13,6 +13,7 @@ import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
 import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
+import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   open: boolean
@@ -44,8 +45,8 @@ const EventActionModal = (props: Props) => {
         status: 'success',
         message: 'Thông báo',
         description: eventDetail
-          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'sự kiện'} thành công`
-          : `Tạo ${type === 'test' ? 'lịch thi' : 'sự kiện'} thành công`,
+          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`
+          : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`,
       })
       form.resetFields()
       setType && setType('event')
@@ -125,10 +126,11 @@ const EventActionModal = (props: Props) => {
         start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
         end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
         students: studentIds,
+        mentorId: eventDetail?._id,
       }
       mutate(payload as unknown as any)
     } else {
-      const date = moment(values.date.$d).format('YYYY-MM-DD')
+      const date = moment(values.date.$d).format('YYYY/MM/DD')
       const time = moment(values.time.$d).format('HH:mm')
       const start = date + ' ' + time
 
@@ -148,6 +150,7 @@ const EventActionModal = (props: Props) => {
         start: new Date(start),
         end: new Date(end),
         students: studentIds,
+        mentorId: eventDetail?._id,
       }
       mutate(payload as unknown as any)
     }
@@ -156,12 +159,14 @@ const EventActionModal = (props: Props) => {
     form.resetFields()
   }
 
+  const { sm } = useResponsives()
+
   return (
     <Modal
       title={
         eventDetail
-          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'sự kiện'}`
-          : `Tạo ${type === 'test' ? 'lịch thi' : 'sự kiện'}`
+          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'cuộc họp'}`
+          : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'}`
       }
       open={open}
       onCancel={() => {
@@ -169,12 +174,12 @@ const EventActionModal = (props: Props) => {
         setSelectTime && setSelectTime(null)
       }}
       onOk={handleSubmit}
-      width={'40vw'}
-      okText={eventDetail ? 'Lưu thay đổi' : `Tạo ${type === 'test' ? 'lịch thi' : 'sự kiện'}`}
+      width={sm ? undefined : '40vw'}
+      okText={eventDetail ? 'Lưu thay đổi' : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'}`}
     >
       <Form onFinish={handleFinish} form={form} layout='vertical' initialValues={initVal}>
         <Form.Item
-          label={`Tiêu đề ${type === 'test' ? 'lịch thi' : 'sự kiện'}`}
+          label={`Tiêu đề ${type === 'test' ? 'lịch thi' : 'cuộc họp'}`}
           name='name'
           rules={[{ required: true, message: 'Vui lòng nhập tiêu đề' }]}
         >

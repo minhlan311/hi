@@ -32,7 +32,6 @@ export default function FixedElement() {
       <div className={style.fixedBox}>
         <p className={style.titleFixed}>ゼロから始めるデータ分析】 ビジネスケースで学ぶPythonデータサイエンス入門</p>
         <p>
-          {' '}
           <div className={style.detailPrice}>
             <div className={style.specialPrice}>Best seller</div>
             <div className={style.flex}>

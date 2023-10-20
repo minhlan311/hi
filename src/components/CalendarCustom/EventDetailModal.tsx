@@ -16,6 +16,7 @@ import PopoverCustom from '../PopoverCustom'
 import TagCustom from '../TagCustom/TagCustom'
 import EventActionModal from './EventActionModal'
 import dayjs from 'dayjs'
+import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   open: boolean
@@ -41,6 +42,7 @@ const EventDetailModal = (props: Props) => {
       setOpen(false)
     },
   })
+  const { sm } = useResponsives()
 
   if (eventDetail) {
     const currentTime = moment()
@@ -69,7 +71,7 @@ const EventDetailModal = (props: Props) => {
           <Space direction='vertical' className='sp100'>
             <div>
               <h2>{eventDetail.name}</h2>
-              <Space>
+              <Space direction={sm ? 'vertical' : 'horizontal'}>
                 <b className='custom-butt-icon' style={{ color: 'var(--light-gray-2)' }}>
                   <AiOutlineClockCircle size='18' style={{ marginRight: 5 }} />
 
@@ -78,18 +80,21 @@ const EventDetailModal = (props: Props) => {
                     {moment(eventDetail.end).format('DD/MM/YYYY')}
                   </Space>
                 </b>
-                {endClass && <TagCustom color='gray' content={'Đã kết thúc'}></TagCustom>}
-                {eventDetail.testId && (
-                  <TagCustom
-                    color='yellow'
-                    content={
-                      <div className='custom-butt-icon'>
-                        <BiTimer size='15' style={{ marginRight: 5 }} />
-                        {endTime.diff(startTime) / 60000} phút
-                      </div>
-                    }
-                  ></TagCustom>
-                )}
+
+                <Space>
+                  {endClass && <TagCustom color='gray' content={'Đã kết thúc'}></TagCustom>}
+                  {eventDetail.testId && (
+                    <TagCustom
+                      color='yellow'
+                      content={
+                        <div className='custom-butt-icon'>
+                          <BiTimer size='15' style={{ marginRight: 5 }} />
+                          {endTime.diff(startTime) / 60000} phút
+                        </div>
+                      }
+                    ></TagCustom>
+                  )}
+                </Space>
               </Space>
             </div>
 
@@ -119,7 +124,7 @@ const EventDetailModal = (props: Props) => {
               </Space>
             )}
             <Space direction='vertical' className='sp100'>
-              <Descriptions column={2}>
+              <Descriptions column={sm ? 1 : 2}>
                 <Descriptions.Item label='Giảng viên'>
                   <PopoverCustom type='showProfile' userData={eventDetail.classData?.owner} trigger='click'>
                     <ButtonCustom type='link' style={{ padding: 0, height: 0 }}>

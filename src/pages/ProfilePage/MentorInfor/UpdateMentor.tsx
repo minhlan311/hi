@@ -216,8 +216,7 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
                           </Form>
                         </Modal>
                         <Button type='dashed' className={css.dashed} onClick={showModal}>
-                          {' '}
-                          Mạng xã hội{' '}
+                          Mạng xã hội
                         </Button>
                       </Form.Item>
                     </Space>

@@ -68,7 +68,7 @@ export default function CartPage() {
                         coursesData={orderData as any}
                         setselectLength={setDataCallback}
                         setPriceParent={setPrice}
-                      />{' '}
+                      />
                     </Col>
                   </>
                 </Row>

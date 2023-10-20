@@ -172,7 +172,6 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         </Form.Item>
         {!hidden && (
           <>
-            {' '}
             <Form.Item label={'Link video'} name='media'>
               <Input placeholder='Nhập Link video' allowClear />
             </Form.Item>
