@@ -32,7 +32,8 @@ export default function MyCourse() {
       }),
   })
 
-  const listData = data?.data?.docs
+  const erollData = data?.data?.docs
+  const listData = erollData?.filter((item: any) => item.course)
 
   const onChange = (page: number) => {
     setCurrent(page)
