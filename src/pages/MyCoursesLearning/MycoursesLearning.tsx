@@ -18,6 +18,9 @@ import {
   PlayCircleOutlined,
   SettingOutlined,
   VideoCameraOutlined,
+  LeftCircleOutlined,
+  RightCircleOutlined,
+  WarningOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
@@ -29,6 +32,7 @@ import screenfull from 'screenfull'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
 import ExamCourse from './components/ExamCourse'
+import { Topic } from '@/types/course.type'
 
 interface FileItem {
   name: string
@@ -40,7 +44,8 @@ export default function MycoursesLearning() {
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
-  const [type, setType] = useState('VIDEO')
+  const [type, setType] = useState('DOCUMENT')
+  const [nameExam, setNameExam] = useState('')
   const [document, setDocuemnt] = useState<any>()
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
@@ -48,6 +53,7 @@ export default function MycoursesLearning() {
   const [active, setActive] = useState<string>('')
   const { scaleScreen } = useContext(AppContext)
   const examDivRef = useRef<HTMLDivElement | null>(null)
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
 
   const toggleFullScreenForExamDiv = () => {
     if (screenfull.isEnabled && examDivRef.current) {
@@ -94,7 +100,15 @@ export default function MycoursesLearning() {
     enabled: checkEnrolls?.data?.docs?.length ? true : false,
   })
 
-  const dataTopics = topics?.data?.docs
+  const dataTopics: Topic | undefined = topics?.data?.docs
+  const lessonsFlat =
+    dataTopics && Array.isArray(dataTopics) && dataTopics?.map((course: any) => course.lessons)?.flat()
+
+  useEffect(() => {
+    if (lessonsFlat && lessonsFlat.length > 0) {
+      handleLessonType(lessonsFlat[0])
+    }
+  }, []) //
 
   const myTabs = [
     {
@@ -103,18 +117,6 @@ export default function MycoursesLearning() {
       children: (
         <>
           <h3>アプリ開発から業務効率化まで、仕事の幅が広がる「Python」</h3>
-          <p>
-            [May 2023 Update]: Over 20 videos have been refreshed/added to keep up with the AWS UI changes and exam
-            changes [September 2022 Update - SAA-C03]: Over 80 videos have been updated to reflect the NEW SAA-C03 exam
-            [April 2022 Update]: Over 30 videos have been refreshed/added to keep up with the AWS UI changes and exam
-            changes [October 2021 Update]: Over 100 videos have been refreshed/added to keep up with the AWS UI changes
-            and exam changes [April 2021 Update]: Over 100 videos have been refreshed/added to keep up with the AWS UI
-            changes and exam changes [Dec 2020 Update]: The S3 section has been entirely re-recorded to accommodate for
-            the AWS UI changes [May 2020 Update]: 20+ videos have been updated to keep up with AWS UI changes. [February
-            2020 Update - SAA-C02]: The course has been updated for the NEW 2020 exam version. Overall, 80 videos have
-            been added or updated, and the course is now 22 hours long. Happy learning! [July 2019 Update]: Few lectures
-            refreshed, including AWS Budgets and EC2 placement groups.
-          </p>
         </>
       ),
     },
@@ -133,15 +135,7 @@ export default function MycoursesLearning() {
             絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
           </p>
           <hr className={style.hr} />
-          <h3>アプリ開発から業務効率化まで、仕事の幅が広がる「Python」</h3>
-          <p>
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-            絵を描くことはあらゆる芸術の基礎ですが、ストレス解消や創造性の発展にとっても効果を発揮します。絵を描くことで、対象を観察して、細部に注意を向け、自分自身を表現する方法を習得できます。
-          </p>
+          <h3>アプリ開発から業務効率化まで、仕事の幅が広がる「Python」</h3>{' '}
         </>
       ),
     },
@@ -163,11 +157,12 @@ export default function MycoursesLearning() {
     setActive(id)
   }
 
-  const handleExam = (id: string, test: any) => {
+  const handleExam = (id: string, test: any, name: string) => {
     setType(TypeLessonEnum.EXAM)
     setActive(id)
     setDocuemnt('')
     setExam(test)
+    setNameExam(name)
   }
 
   const handleLive = (id: string, desc: string) => {
@@ -247,14 +242,81 @@ export default function MycoursesLearning() {
     })
   }
 
+  const handleLessonType = (lesson: any) => {
+    if (!lesson) {
+      console.error('Bài học không tồn tại!')
+      return
+    }
+
+    if (lesson.type === TypeLessonEnum.VIDEO_LESSON) {
+      handleVideo(lesson._id, lesson.name, lesson.media, lesson.descriptions)
+    } else if (lesson.type === TypeLessonEnum.DOCUMENT_LESSON) {
+      handleDocument(lesson._id, lesson.descriptions)
+    } else if (lesson.type === TypeLessonEnum.LIVE_LESSON) {
+      handleLive(lesson._id, lesson.descriptions)
+    } else {
+      handleExam(lesson._id, lesson.test, lesson.name)
+    }
+  }
+
+  const getNextLesson = () => {
+    if (lessonsFlat && currentLessonIndex + 1 < lessonsFlat.length) {
+      setCurrentLessonIndex((prevIndex) => prevIndex + 1)
+      handleLessonType(lessonsFlat && lessonsFlat[currentLessonIndex + 1])
+    } else {
+      console.log('Hết khóa học')
+    }
+  }
+
+  const getPreviousLesson = () => {
+    if (currentLessonIndex > 0) {
+      setCurrentLessonIndex((prevIndex) => prevIndex - 1)
+      handleLessonType(lessonsFlat && lessonsFlat[currentLessonIndex - 1])
+    } else {
+      console.log('Đã ở bài học đầu tiên')
+    }
+  }
+
+  const handleLessonClick = (courseIndex: number, lessonIndex: number, lesson: any) => {
+    let flatIndex = 0
+
+    for (let i = 0; i < courseIndex; i++) {
+      if (dataTopics && Array.isArray(dataTopics)) {
+        flatIndex += dataTopics[i]?.lessons?.length || 0
+      }
+    }
+
+    flatIndex += lessonIndex
+
+    setCurrentLessonIndex(flatIndex)
+    handleLessonType(lesson)
+  }
+
   return (
     <div className={style.containerDivQuest}>
       <Row gutter={16}>
         <Col span={scaleScreen ? 24 : 18} className={style.col1}>
           {type === TypeLessonEnum.VIDEO_LESSON ? (
-            <div className={style.boxVideoContent}>
-              <VideoComponent video={video} names={nameVideo} />
-            </div>
+            <>
+              <div className={style.boxVideoContent}>
+                <VideoComponent video={video} names={nameVideo} />
+              </div>
+              <div className={style.divTool}>
+                <Tooltip title='Bài học trước'>
+                  <LeftCircleOutlined className={style.iconScale} onClick={getPreviousLesson} />
+                </Tooltip>
+                <Tooltip title='Bài học tiếp '>
+                  <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
+                </Tooltip>
+
+                <Tooltip title='Cài đặt'>
+                  <SettingOutlined className={style.iconScale} />
+                </Tooltip>
+                <Tooltip title='Báo cáo video không phù hợp'>
+                  <WarningOutlined className={style.iconScale} />
+                </Tooltip>
+              </div>
+            </>
           ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
             <>
               <div className={style.document}>
@@ -272,6 +334,13 @@ export default function MycoursesLearning() {
                 ></div>
               </div>
               <div className={style.divTool}>
+                <Tooltip title='Bài học trước'>
+                  <LeftCircleOutlined className={style.iconScale} onClick={getPreviousLesson} />
+                </Tooltip>
+                <Tooltip title='Bài học tiếp '>
+                  <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
+                </Tooltip>
+
                 <Tooltip title='Cài đặt'>
                   <SettingOutlined className={style.iconScale} />
                 </Tooltip>
@@ -281,20 +350,37 @@ export default function MycoursesLearning() {
               </div>
             </>
           ) : type === TypeLessonEnum.LIVE_LESSON ? (
-            <div
-              className={style.document}
-              style={{
-                marginTop: '50px',
-              }}
-            >
-              {/* <h3>Bài LIVE</h3> */}
+            <>
               <div
+                className={style.document}
                 style={{
-                  lineHeight: '1.4',
+                  paddingTop: '50px',
                 }}
-                dangerouslySetInnerHTML={{ __html: document }}
-              ></div>
-            </div>
+              >
+                {/* <h3>Bài LIVE</h3> */}
+                <div
+                  style={{
+                    lineHeight: '1.4',
+                  }}
+                  dangerouslySetInnerHTML={{ __html: document }}
+                ></div>
+              </div>
+              <div className={style.divTool}>
+                <Tooltip title='Bài học trước'>
+                  <LeftCircleOutlined className={style.iconScale} onClick={getPreviousLesson} />
+                </Tooltip>
+                <Tooltip title='Bài học tiếp '>
+                  <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
+                </Tooltip>
+
+                <Tooltip title='Cài đặt'>
+                  <SettingOutlined className={style.iconScale} />
+                </Tooltip>
+                <Tooltip title='Toàn màn hình'>
+                  <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
+                </Tooltip>
+              </div>
+            </>
           ) : (
             <>
               <div className={style.document}>
@@ -304,10 +390,17 @@ export default function MycoursesLearning() {
                   ref={examDivRef}
                   style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
                 >
-                  <ExamCourse data={exam} />
+                  <ExamCourse data={exam} name={nameExam} />
                 </div>
               </div>
               <div className={style.divTool}>
+                <Tooltip title='Bài học trước'>
+                  <LeftCircleOutlined className={style.iconScale} onClick={getPreviousLesson} />
+                </Tooltip>
+                <Tooltip title='Bài học tiếp '>
+                  <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
+                </Tooltip>
+
                 <Tooltip title='Cài đặt'>
                   <SettingOutlined className={style.iconScale} />
                 </Tooltip>
@@ -338,11 +431,11 @@ export default function MycoursesLearning() {
                 {
                   <Collapse destroyInactivePanel>
                     {Array.isArray(dataTopics) && dataTopics?.length > 0
-                      ? dataTopics?.map((item, index) => (
+                      ? dataTopics?.map((course, courseIndex) => (
                           <>
                             <Panel
-                              key={index}
-                              header={<h4>{item?.name}</h4>}
+                              key={courseIndex}
+                              header={<h4>{course?.name}</h4>}
                               extra={
                                 <div
                                   style={{
@@ -352,29 +445,17 @@ export default function MycoursesLearning() {
                                 ></div>
                               }
                             >
-                              {item?.lessons?.map((lession: any) => (
+                              {course?.lessons?.map((lesson: any, lessonIndex: number) => (
                                 <>
                                   <div
+                                    key={lesson._id}
+                                    onClick={() => handleLessonClick(courseIndex, lessonIndex, lesson)}
                                     style={{
                                       marginTop: '20px',
                                     }}
-                                    className={active === lession?._id ? 'div-flex-active' : 'div-flex'}
-                                    onClick={() => {
-                                      lession?.type === TypeLessonEnum.VIDEO_LESSON
-                                        ? handleVideo(
-                                            lession?._id,
-                                            lession?.name,
-                                            lession?.media,
-                                            lession?.descriptions,
-                                          )
-                                        : lession?.type === TypeLessonEnum.DOCUMENT_LESSON
-                                        ? handleDocument(lession?._id, lession?.descriptions)
-                                        : lession?.type === TypeLessonEnum.LIVE_LESSON
-                                        ? handleLive(lession?._id, lession?.descriptions)
-                                        : handleExam(lession?._id, lession?.test)
-                                    }}
+                                    className={active === lesson?._id ? 'div-flex-active' : 'div-flex'}
                                   >
-                                    <div>{lession?.name}</div>
+                                    <div>{lesson?.name}</div>
                                     <div
                                       style={{
                                         display: 'flex',
@@ -385,18 +466,18 @@ export default function MycoursesLearning() {
                                     ></div>
                                   </div>
                                   <div className={style.flexBest}>
-                                    {lession?.type === TypeLessonEnum.VIDEO_LESSON ? (
+                                    {lesson?.type === TypeLessonEnum.VIDEO_LESSON ? (
                                       <div>
                                         <p>
-                                          Thời lượng : {lession?.length} phút {''}
+                                          Thời lượng : {lesson?.length} phút {''}
                                         </p>
                                         Thể loại : <PlayCircleOutlined /> video
                                       </div>
-                                    ) : lession?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                    ) : lesson?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
                                       <p>
                                         Thể loại : <FileOutlined /> Văn bản
                                       </p>
-                                    ) : lession?.type === TypeLessonEnum.LIVE_LESSON ? (
+                                    ) : lesson?.type === TypeLessonEnum.LIVE_LESSON ? (
                                       <p>
                                         Thể loại : <VideoCameraOutlined /> live
                                       </p>
@@ -414,7 +495,7 @@ export default function MycoursesLearning() {
                                         }}
                                         title={
                                           <>
-                                            {lession?.documents?.map((item: any, index: number) => (
+                                            {lesson?.documents?.map((item: any, index: number) => (
                                               <>
                                                 <Button
                                                   style={{
@@ -433,7 +514,7 @@ export default function MycoursesLearning() {
                                         trigger={'click'}
                                       >
                                         <>
-                                          {lession?.documents?.length > 0 && (
+                                          {lesson?.documents?.length > 0 && (
                                             <Button>
                                               <FolderOutlined />
                                               Tài liệu
