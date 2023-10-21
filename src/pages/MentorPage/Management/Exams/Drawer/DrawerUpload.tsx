@@ -100,7 +100,7 @@ const DrawerUpload = (props: Props) => {
           <Space align='center'>
             <AiOutlineQuestionCircle />
             <p>
-              Tải mẫu form câu hỏi{' '}
+              Tải mẫu form câu hỏi
               <ButtonCustom type='link' size='small' className={css.buttDown} onClick={handleDownload}>
                 tại đây
               </ButtonCustom>

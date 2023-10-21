@@ -304,6 +304,23 @@ table {
   background-color: var(--green-2);
 }
 
+.toastui-calendar-week-view {
+  .toastui-calendar-panel {
+    overflow-x: hidden;
+
+    .toastui-calendar-day-name__date {
+      @include respond-to(xs) {
+        margin-left: -50px;
+
+        font-size: 15px;
+      }
+    }
+    .toastui-calendar-day-name__name {
+      margin-left: -5px;
+    }
+  }
+}
+
 .toastui-calendar-column {
   .toastui-calendar-grid-selection {
     .toastui-calendar-grid-selection-label {
@@ -338,6 +355,7 @@ table {
 /* Hide the scrollbar track */
 ::-webkit-scrollbar {
   width: 6px; /* Adjust the width as per your preference */
+  height: 6px;
   background-color: transparent; /* Set the background color of the scrollbar track */
 }
 

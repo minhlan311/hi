@@ -12,6 +12,7 @@ import { BsListUl } from 'react-icons/bs'
 import { MdDeleteOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import DrawerExam from './Drawer/DrawerExam'
+import useResponsives from '@/hooks/useResponsives'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
@@ -227,6 +228,7 @@ const MentorExams = () => {
   //   },
   //   { id: 'col3', name: 'col3', children: [] },
   // ])
+  const { sm } = useResponsives()
 
   return (
     <div>
@@ -241,10 +243,10 @@ const MentorExams = () => {
       /> */}
       <FilterAction
         addOnButton={
-          <ButtonCustom type='primary' onClick={onPressCreate}>
+          <ButtonCustom type='primary' onClick={onPressCreate} tooltip={sm ? 'Thêm bộ đề mới' : undefined}>
             <Row align='middle'>
               <BiPlus size={22} />
-              Thêm bộ đề mới
+              {!sm && 'Thêm bộ đề mới'}
             </Row>
           </ButtonCustom>
         }
@@ -255,8 +257,22 @@ const MentorExams = () => {
         setLoading={setLoading}
         filterQuery={{ createdById: profile._id }}
       />
-      <Table columns={columns} dataSource={data?.docs} loading={loading} bordered />
-      <DrawerExam open={open} setOpen={setOpen} setLoading={setLoading} examData={examData} />
+      <Table
+        columns={columns}
+        dataSource={data?.docs}
+        loading={loading}
+        bordered
+        scroll={{
+          x: 1024,
+        }}
+      />
+      <DrawerExam
+        size={!sm ? '50%' : undefined}
+        open={open}
+        setOpen={setOpen}
+        setLoading={setLoading}
+        examData={examData}
+      />
     </div>
   )
 }

@@ -36,8 +36,10 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const cartData = queryClient.getQueryData<any>(['dataCart'])
 
   useEffect(() => {
-    setCheck(cartData?.data?.docs?.some((item: any) => item?._id === id))
+    setCheck(cartData?.data?.docs?.some((item: any) => item?.id === id))
   }, [id, cartData])
+
+  console.log(profile, 'profile')
 
   const mutate = useMutation({
     mutationFn: (body: any) => {
@@ -273,7 +275,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
                       mutationLocked.mutate({
                         targetId: datas?._id,
                         targetModel: 'COURSE',
-                        type: 'STUDENT',
+                        type: profile.isMentor ? 'MENTOR' : 'STUDENT',
                         userIds: [profile._id],
                       })
                     }

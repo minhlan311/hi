@@ -210,7 +210,6 @@ export default function DrawerUpdateLession({
         </Form.Item>
         {!hidden && (
           <>
-            {' '}
             <Form.Item label={'Link video'} name='media'>
               <Input placeholder='Nhập Link video' allowClear />
             </Form.Item>

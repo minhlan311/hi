@@ -1,5 +1,9 @@
+@import '../../../../../components/GlobalStyles/responsive.scss';
 .exMain {
   width: 100%;
+  @include respond-to(xs) {
+    width: 97% !important;
+  }
   .exTitle {
     font-size: 24px;
   }

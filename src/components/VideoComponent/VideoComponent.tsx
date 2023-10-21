@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import ReactPlayer from 'react-player'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
 import screenfull from 'screenfull'
+import { ForwardOutlined, BackwardOutlined, StarOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { Button, Popover } from 'antd'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -21,8 +23,6 @@ const format = (seconds: number) => {
 
   return `${mm}:${ss}`
 }
-
-let count = 0
 
 type Props = {
   pip: boolean
@@ -49,6 +49,67 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   const controlsRef = useRef<any>(null)
   const playerContainerRef = useRef<any>(null)
   const [playeds, setPlayeds] = useState<number | string>(0)
+  const [bookmarks, setBookmarks] = useState<{ time: number; note: string }[]>([])
+  const [volumeNotification, setVolumeNotification] = useState<{ show: boolean; volume: number }>({
+    show: false,
+    volume: 0,
+  })
+  const [seekNotification, setSeekNotification] = useState<{ show: boolean; type: 'forward' | 'rewind' }>({
+    show: false,
+    type: 'forward',
+  })
+
+  const handleDeleteBookmark = (index: number) => {
+    const newBookmarks = [...bookmarks]
+    newBookmarks.splice(index, 1)
+    setBookmarks(newBookmarks)
+
+    // Cập nhật localStorage ngay sau khi cập nhật state
+    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+    localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: newBookmarks }))
+  }
+
+  let hideControlsTimeout: string | number | NodeJS.Timeout | undefined
+
+  const handleMouseMove = () => {
+    controlsRef.current.style.visibility = 'visible'
+    if (hideControlsTimeout) {
+      clearTimeout(hideControlsTimeout)
+    }
+    hideControlsTimeout = setTimeout(() => {
+      controlsRef.current.style.visibility = 'hidden'
+    }, 3000) // ẩn sau 3 giây
+  }
+
+  useEffect(() => {
+    return () => {
+      if (hideControlsTimeout) {
+        clearTimeout(hideControlsTimeout)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (seekNotification.show || volumeNotification.show) {
+      const timeout = setTimeout(() => {
+        setSeekNotification((prev) => ({ ...prev, show: false }))
+        setVolumeNotification((prev) => ({ ...prev, show: false }))
+      }, 500)
+      return () => clearTimeout(timeout)
+    }
+  }, [seekNotification, volumeNotification])
+
+  useEffect(() => {
+    // Lấy tất cả bookmarks từ localStorage
+    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+
+    // Nếu có bookmarks cho video hiện tại, cập nhật state, nếu không đặt danh sách rỗng
+    if (Object.prototype.hasOwnProperty.call(allBookmarks, video!)) {
+      setBookmarks(allBookmarks[video!])
+    } else {
+      setBookmarks([]) // Đặt bookmarks về mảng trống nếu không có bookmarks cho video
+    }
+  }, [video]) // Dependency là video, nghĩa là useEffect sẽ chạy mỗi khi video thay đổi
 
   const [state, setState] = useState<Props>({
     pip: false,
@@ -66,28 +127,8 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   // const playerRef = useRef<HTMLDataElement | null>(null);
   const { playing, light, muted, loop, playbackRate, pip, volume } = state
 
-  const handleMouseMove = () => {
-    controlsRef.current.style.visibility = 'visible'
-    count = 0
-  }
-
-  const hanldeMouseLeave = () => {
-    // controlsRef.current.style.visibility = 'hidden'
-    count = 0
-  }
-
   const handleProgress = (state: any) => {
     setPlayeds(state.played)
-
-    if (count > 2) {
-      controlsRef.current.style.visibility = 'hidden'
-      count = 0
-    }
-
-    if (controlsRef.current.style.visibility == 'visible') {
-      count += 1
-    }
-
     if (state.played === 1) setState({ ...state, playing: false })
   }
 
@@ -98,11 +139,13 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   //  tua nguocj
   const handleRewind = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10)
+    setSeekNotification({ show: true, type: 'rewind' })
   }
 
   // tua nhanh
   const handleFastForward = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10)
+    setSeekNotification({ show: true, type: 'forward' })
   }
 
   // mute âm
@@ -117,11 +160,13 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
 
   // chinh volume
   const onVolumeChange = (e: string | number) => {
+    const newVolume = parseFloat(e as string) / 100
     setState({
       ...state,
-      volume: parseFloat(e as string) / 100,
+      volume: newVolume,
       muted: e === 0 ? true : false,
     })
+    setVolumeNotification({ show: true, volume: Math.round(newVolume * 100) })
   }
 
   const handleDuration = (duration: number) => {
@@ -137,7 +182,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     playerRef.current.seekTo(e / 100, 'fraction')
   }
 
-  const currentTime = playerRef && playerRef.current ? playerRef.current.getCurrentTime() : '00:00'
+  const currentTime = playerRef && playerRef.current ? playerRef.current.getCurrentTime() : 0
 
   const duration = playerRef && playerRef.current ? playerRef.current.getDuration() : '00:00'
 
@@ -153,15 +198,55 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     screenfull.toggle(playerContainerRef.current)
   }
 
+  const handleAddBookmark = () => {
+    const note = prompt('Ghi chú :')
+
+    if (note) {
+      const newBookmark = { time: currentTime, note }
+      const updatedBookmarks = [...bookmarks, newBookmark]
+      setBookmarks(updatedBookmarks)
+
+      // Cập nhật localStorage ngay sau khi cập nhật state
+      const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+      localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: updatedBookmarks }))
+    }
+  }
+
+  console.log(bookmarks, 'prevBookmarks')
+
+  const handleGoToBookmark = (time: number) => {
+    if (playerRef && playerRef.current) {
+      playerRef.current.seekTo(time)
+    }
+  }
+
   return (
     <>
       <div className={style.boxContainer}>
-        <div
-          ref={playerContainerRef}
-          className={style.container}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={hanldeMouseLeave}
-        >
+        <div ref={playerContainerRef} className={style.container} onMouseMove={handleMouseMove}>
+          {volumeNotification.show ? (
+            <div className={style.volumeNotification} style={{ opacity: volumeNotification.show ? 1 : 0 }}>
+              {`Âm lượng: ${Math.round(volume * 100)}%`}
+            </div>
+          ) : null}
+
+          {seekNotification.show ? (
+            <div className={style.seekNotification} style={{ opacity: seekNotification.show ? 1 : 0 }}>
+              {seekNotification.type === 'forward' ? (
+                <ForwardOutlined
+                  style={{
+                    scale: '1.5',
+                  }}
+                />
+              ) : (
+                <BackwardOutlined
+                  style={{
+                    scale: '1.5',
+                  }}
+                />
+              )}
+            </div>
+          ) : null}
           <ReactPlayer
             width='100%'
             height='100%'
@@ -215,6 +300,48 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             playbackRate={playbackRate}
             volume={volume}
           />
+        </div>
+        <div
+          className='flex'
+          style={{
+            marginTop: '5px',
+          }}
+        >
+          <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
+            <PlusCircleOutlined /> Thêm ghi chú
+          </Button>
+          <Popover
+            trigger={'click'}
+            title={
+              <>
+                <div>
+                  <ul>
+                    {bookmarks?.map((bookmark, index) => (
+                      <li key={index}>
+                        Time: {format(bookmark.time)} - Note: {bookmark.note}
+                        <button onClick={() => handleGoToBookmark(bookmark.time)}>Go to</button>
+                        <button onClick={() => handleDeleteBookmark(index)}>Xóa</button>
+                      </li>
+                    )) || 'Không có ghi chú nào'}
+                  </ul>
+                </div>
+              </>
+            }
+          >
+            <Button
+              style={{
+                cursor: 'pointer',
+              }}
+              type='primary'
+            >
+              <StarOutlined
+                style={{
+                  scale: '1.5',
+                }}
+              />
+              Danh sách ghi chú{' '}
+            </Button>
+          </Popover>
         </div>
       </div>
     </>

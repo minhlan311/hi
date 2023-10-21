@@ -43,10 +43,10 @@ const MentorInfor = ({ user, profileId }: Props) => {
       size='sm'
     >
       <div className={css.card}>
-        <Row>
-          <Col span={24} md={7} xl={10} className={css.avt}>
+        <Row align={'middle'}>
+          <Col span={24} md={10} className={css.avt}>
             <Image
-              height={'520px'}
+              width={'100%'}
               src={
                 user.avatarUrl
                   ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
@@ -57,13 +57,13 @@ const MentorInfor = ({ user, profileId }: Props) => {
               alt='avt'
             />
           </Col>
-          <Col span={24} md={17} xl={14}>
+          <Col span={24} md={14}>
             {!update ? (
               <div className={css.infor}>
                 <Space direction='vertical' className={'sp100'}>
-                  <Row justify='space-between'>
-                    <Col span={24} md={8}>
-                      <Space>
+                  <Row justify='space-between' align='middle'>
+                    <Col>
+                      <Space className={'sp100'}>
                         <div className={css.icon}>
                           <FaUserAlt />
                         </div>
@@ -75,7 +75,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                    <Col span={24} md={12}>
+                    <Col>
                       {!update && profileId === user._id && (
                         <div
                           style={{
@@ -98,29 +98,29 @@ const MentorInfor = ({ user, profileId }: Props) => {
                   </Row>
                   <Divider />
                   <Row justify='space-between'>
-                    <Col span={24} md={8}>
-                      <Space>
+                    <Col span={24} lg={8}>
+                      <Space className={'sp100'}>
                         <div className={css.icon}>
                           <MdEmail />
                         </div>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' className={'sp100'}>
                           <b>Email</b>
 
-                          <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
+                          <Paragraph ellipsis={true} className={css.data}>
                             <Link to={'#'}>{user.email}</Link>
                           </Paragraph>
                         </Space>
                       </Space>
                     </Col>
-                    <Col span={24} md={12}>
-                      <Space>
+                    <Col span={24} lg={12}>
+                      <Space className={'sp100'}>
                         <div className={css.icon}>
                           <FaEarthAsia />
                         </div>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' className={'sp100'}>
                           <b>Mạng xã hội</b>
                           <div className={css.data}>
-                            <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
+                            <Paragraph ellipsis={true} className={css.data}>
                               <Link to={'#'}>https://www.facebook.com/</Link>
                             </Paragraph>
                           </div>
@@ -129,9 +129,9 @@ const MentorInfor = ({ user, profileId }: Props) => {
                     </Col>
                   </Row>
                   <Divider />
-                  <Row justify='space-between'>
-                    <Col span={24} md={8}>
-                      <Space>
+                  <Row justify='space-between' gutter={[0, 12]}>
+                    <Col span={24} lg={8}>
+                      <Space className={'sp100'}>
                         <div className={css.icon}>
                           <BsFillTelephoneFill />
                         </div>
@@ -143,8 +143,8 @@ const MentorInfor = ({ user, profileId }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                    <Col span={24} md={12}>
-                      <Space>
+                    <Col span={24} lg={12}>
+                      <Space className={'sp100'}>
                         <div className={css.icon}>
                           <FaBirthdayCake />
                         </div>
@@ -164,7 +164,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
             )}
           </Col>
         </Row>
-      </div>{' '}
+      </div>
       <SliderCustom dataLength={data.length} arrows autoHitdenArrow slidesToScroll={1} slidesToShow={1}>
         {data.map((item, id) => (
           <Card key={id}>

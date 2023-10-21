@@ -1,0 +1,29 @@
+.week {
+  width: 100%;
+  overflow-x: scroll;
+  padding-bottom: 5px;
+  .days {
+    height: 60px;
+    width: 50px;
+    padding: 10px;
+    .dayName {
+      font-size: 12px;
+    }
+    .dayNum {
+      font-size: 16px;
+    }
+  }
+  .selectDay {
+    background-color: var(--green-2);
+    color: var(--white);
+  }
+  .today {
+    border: 2px solid var(--green-2);
+    & * {
+      font-weight: bold;
+    }
+  }
+  .weekend {
+    color: var(--red);
+  }
+}

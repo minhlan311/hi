@@ -42,7 +42,6 @@ export default function NewsPageDetail() {
         <LoadingCustom tip='Vui lòng chờ ...' />
       ) : (
         <>
-          {' '}
           <div className='title-box'>
             <h1>{data?.data?.title}</h1>
           </div>
@@ -52,7 +51,6 @@ export default function NewsPageDetail() {
             <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
               {dataNewsAll?.data?.docs?.map((item) => (
                 <>
-                  {' '}
                   <Card
                     style={{
                       height: '320px',
@@ -77,7 +75,7 @@ export default function NewsPageDetail() {
                   </Card>
                 </>
               ))}
-            </SliderCustom>{' '}
+            </SliderCustom>
           </div>
         </>
       )}

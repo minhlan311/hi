@@ -115,7 +115,6 @@ export default function CourseCalender() {
                                   <>
                                     {item?.startDate ? (
                                       <>
-                                        {' '}
                                         Khai giảng {''}
                                         {formatDate(item?.startDate)}
                                       </>

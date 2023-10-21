@@ -35,6 +35,7 @@ export interface Menu {
   placement?: 'bottomRight'
 }
 const { useToken } = theme
+
 const DropdownCustom = (props: Props) => {
   const {
     children,
@@ -46,7 +47,7 @@ const DropdownCustom = (props: Props) => {
     placement,
     trigger = 'hover',
     menuChildren,
-    arrow = false
+    arrow = false,
   } = props
   const { token } = useToken()
   const menuStyle: React.CSSProperties = {
@@ -56,8 +57,9 @@ const DropdownCustom = (props: Props) => {
   const contentStyle: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
     borderRadius: token.borderRadiusLG,
-    boxShadow: token.boxShadowSecondary
+    boxShadow: token.boxShadowSecondary,
   }
+
   return (
     <Drop
       menu={{ items }}

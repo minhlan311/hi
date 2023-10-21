@@ -184,7 +184,7 @@ export default function CLassCourse() {
           <Col span={10}>
             <Form.Item label='Tìm kiếm theo khoảng thời gian' name={'time'}>
               <RangePicker
-                format='YYYY-MM-DD'
+                format='YYYY/MM/DD'
                 style={{
                   marginTop: '10px',
                 }}

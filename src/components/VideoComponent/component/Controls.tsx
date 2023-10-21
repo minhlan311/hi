@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { forwardRef, useContext } from 'react'
+import { forwardRef, useContext, useEffect } from 'react'
 import { Slider, Tooltip, Typography } from 'antd'
 import { TbPlayerTrackPrevFilled, TbPlayerTrackNextFilled, TbArrowsRightLeft } from 'react-icons/tb'
 import { BsPlayFill, BsFillPauseFill, BsArrowsFullscreen } from 'react-icons/bs'
@@ -32,6 +32,34 @@ const Controls = forwardRef(
     ref: any,
   ) => {
     const { scaleScreen, setScaleScreen } = useContext(AppContext)
+
+    useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'ArrowUp') {
+          event.preventDefault() // Thêm dòng này
+          const newVolume = Math.min(volume + 0.1, 1)
+          onVolumeChange(newVolume * 100)
+        } else if (event.key === 'ArrowDown') {
+          event.preventDefault() // Thêm dòng này
+          const newVolume = Math.max(volume - 0.1, 0)
+          onVolumeChange(newVolume * 100)
+        } else if (event.key === 'ArrowLeft') {
+          handleRewind()
+        } else if (event.key === 'ArrowRight') {
+          handleFastForward()
+        } else if (event.key === 'Space' || event.key === ' ') {
+          event.preventDefault()
+          handlePlayPause()
+          return
+        }
+      }
+      document.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+        // Loại bỏ sự kiện khi component bị unmount
+        document.removeEventListener('keydown', handleKeyDown)
+      }
+    }, [onVolumeChange, volume, handleRewind, handleFastForward])
 
     return (
       <div ref={ref} className={style.controlsWrapper}>
@@ -107,8 +135,6 @@ const Controls = forwardRef(
                     width: '80px',
                     marginTop: '12px',
                   }}
-                  //   onMouseDown={onSeekMouseDown}
-                  //   onChangeCommitted={onVolumeSeekDown}
                 />
                 <div onClick={onChangeDispayFormat}>
                   <Typography style={{ color: '#fff', marginLeft: 16 }}>
@@ -119,6 +145,7 @@ const Controls = forwardRef(
 
               <div style={{ cursor: 'pointer' }} className={style.botRight}>
                 <Tooltip
+                  getPopupContainer={(triggerNode) => triggerNode.parentElement || triggerNode}
                   placement='top'
                   trigger={'click'}
                   color='white'

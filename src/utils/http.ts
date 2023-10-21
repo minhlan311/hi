@@ -42,7 +42,11 @@ class Http {
           setProfileToLS(data)
         } else if (url === ENDPOINT.LOGOUT) {
           this.accessToken = ''
+          const tempValue = localStorage.getItem('bookmarks-video')
           clearLS()
+          if (tempValue) {
+            localStorage.setItem('bookmarks-video', tempValue)
+          }
         }
 
         return response

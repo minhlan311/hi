@@ -47,11 +47,9 @@ export default function Feedback() {
     <div className={style.boxFeedback}>
       <div className={style.flex}>
         <div>
-          {' '}
           <AiFillStar className={style.icon} />
         </div>
         <div>
-          {' '}
           <p className={style.flexText}> Xếp hạng khóa học : 4.4 - Lượt đánh giá: 21K</p>
         </div>
       </div>
@@ -82,9 +80,7 @@ export default function Feedback() {
                     trigger={'click'}
                     title={
                       <div className={style.tooltipTitle}>
-                        {' '}
                         <span>
-                          {' '}
                           <ExclamationCircleOutlined style={{ marginRight: '5px' }} />
                           Báo cáo
                         </span>
