@@ -4,8 +4,8 @@ stages:
 deploy:
   stage: deploy
   script:
-    - apt-get update -qy
-    - apt-get install -y sshpass
+    - sudo apt-get update -qy
+    - sudo apt-get install -y sshpass
     - sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "cd /home/ucam-ui && git pull origin develop && npm install && npm run build"
   only:
     - develop
