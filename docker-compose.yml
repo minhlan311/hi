@@ -1,6 +1,0 @@
-version: '3'
-services:
-  twitter:
-    image: haitn2806/ucamui:v0
-    ports:
-      - '3000:3000'
