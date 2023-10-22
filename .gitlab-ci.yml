@@ -6,9 +6,6 @@ variables:
   IMAGE_NAME: haitn2806/ucam-ui
   IMAGE_TAG: v0
 
-  services:
-    - docker:dind
-
 before_script:
   - docker info
 
