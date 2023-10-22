@@ -11,13 +11,15 @@
   .row-antd-grid {
     .gutter-row {
       .div-card {
-        height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        gap: 20px;
+        height: 345px;
         padding: 20px 5px;
         border: 2px solid #e9011d;
         border-radius: 20px;
-        .img-learn {
-          margin: 20px 0;
-        }
         .title-row {
           font-weight: 700;
           font-size: 16px;
