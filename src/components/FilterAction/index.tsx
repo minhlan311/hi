@@ -406,7 +406,7 @@ const FilterAction = (props: Props) => {
   else
     return (
       <Row justify='space-between' style={{ marginBottom: 20 }}>
-        <Col span={12} lg={8} md={8}>
+        <Col span={9} lg={8} md={8}>
           <Input
             placeholder='Tìm kiếm...'
             prefix={<BiSearch size={20} />}

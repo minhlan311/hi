@@ -263,9 +263,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
         <Col>
           <Space>
             {!sm && !md && <Input.Search placeholder='Tìm kiếm' />}
-            {!profile.isMentor ? (
-              <></>
-            ) : !md ? (
+            {!profile.isMentor ? null : !md ? (
               <Space.Compact>
                 <ButtonCustom
                   onClick={() => {

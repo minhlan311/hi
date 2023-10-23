@@ -18,7 +18,6 @@ type Props = {
 const RenderDateOfWeek = (props: Props) => {
   const { events, buttonAdd, selectDate, setCallBackWeekSelect, setEventId } = props
   const [dateOfWeek, setDateOfWeek] = useState<Dayjs[]>([])
-  console.log(selectDate)
 
   return (
     <Space direction='vertical' size='large' className='sp100'>

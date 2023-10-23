@@ -67,9 +67,9 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
 
   return (
     <div style={{ margin: '20px 0 30px' }}>
-      <Row gutter={12}>
+      <Row gutter={[12, 12]}>
         <Col span={24} md={12}>
-          <Card size='small' title={'Hàng'}>
+          <Card size='small' title='Hàng'>
             <Space direction='vertical' className='sp100'>
               {addRow.map((item, id) => (
                 <Space key={item._id} className='sp100'>
@@ -96,7 +96,7 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
           </Card>
         </Col>
         <Col span={24} md={12}>
-          <Card size='small' title={'Cột'}>
+          <Card size='small' title='Cột'>
             <Space direction='vertical' className='sp100'>
               {addCol.map((item, id) => (
                 <Space key={item._id} className='sp100'>

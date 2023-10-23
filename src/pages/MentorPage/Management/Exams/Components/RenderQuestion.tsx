@@ -1,6 +1,6 @@
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import { QuestionState } from '@/interface/question'
-import { Col, Row, Space } from 'antd'
+import { Space } from 'antd'
 import RenderItem from './RenderItem'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
@@ -31,23 +31,19 @@ const RenderQuestion = (props: Props) => {
       ></EmptyCustom>
     </div>
   ) : (
-    <Row gutter={24}>
+    <Space direction='vertical' className='sp100'>
       {data.map((item) => (
-        <Col xxl={12} span={24} key={item._id}>
-          <Space direction='vertical' className={'sp100'}>
-            <RenderItem
-              type={type}
-              key={item._id}
-              data={item}
-              setOpen={setOpen}
-              setQuestionUpdate={setQuestionUpdate}
-              setQuestionsSelect={setQuestionsSelect && setQuestionsSelect}
-              questionsSelect={questionsSelect}
-            ></RenderItem>
-          </Space>
-        </Col>
+        <RenderItem
+          type={type}
+          key={item._id}
+          data={item}
+          setOpen={setOpen}
+          setQuestionUpdate={setQuestionUpdate}
+          setQuestionsSelect={setQuestionsSelect && setQuestionsSelect}
+          questionsSelect={questionsSelect}
+        ></RenderItem>
       ))}
-    </Row>
+    </Space>
   )
 }
 
