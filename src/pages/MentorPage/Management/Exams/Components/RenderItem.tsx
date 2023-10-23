@@ -66,7 +66,7 @@ const RenderItem = (props: Props) => {
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
-          <Space direction='vertical' align='center' className={'p-center'}>
+          <Space direction='vertical' align='center' className={'p-center sp100'}>
             {data.status === 'INACTIVE' && <MdOutlineDisabledVisible className={css.iconDisable} />}
             <h3>{data.status === 'INACTIVE' ? 'Câu hỏi đang được ẩn' : check ? 'Xóa khỏi bộ đề' : 'Thêm vào bộ đề'}</h3>
           </Space>
@@ -85,8 +85,8 @@ const RenderItem = (props: Props) => {
 
         <Card size='small' hoverable>
           <Space direction='vertical' className={'sp100'}>
-            <Row justify='space-between'>
-              <Col span={24} md={19}>
+            <Row justify='space-between' align='middle'>
+              <Col span={18} md={19}>
                 <Space>
                   {/* <h3>Câu {id + 1}: </h3> */}
                   <TagCustom content={data.type} />
@@ -134,30 +134,40 @@ const RenderItem = (props: Props) => {
 
             <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
             <Card size='small' className={css.anws}>
-              <Space className={'sp100'}>
+              <Row gutter={[12, 12]}>
                 {data.choices.map((anw) => {
                   if (anw.isCorrect)
                     return (
-                      <div
-                        className={css.isAnswer}
-                        key={anw._id}
-                        dangerouslySetInnerHTML={{ __html: anw.answer }}
-                      ></div>
+                      <Col span={24} md={12} xl={6}>
+                        <div
+                          className={css.isAnswer}
+                          key={anw._id}
+                          dangerouslySetInnerHTML={{ __html: anw.answer }}
+                        ></div>
+                      </Col>
                     )
                 })}
-                {data.choices.map((anw) => {
-                  if (!anw.isCorrect) return <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
-                })}
 
-                {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
-              </Space>
+                {data.choices.map((anw) => {
+                  if (!anw.isCorrect)
+                    return (
+                      <Col span={24} md={12} xl={6}>
+                        <Card size='small'>
+                          <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
+                        </Card>
+                      </Col>
+                    )
+                })}
+              </Row>
+              {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
             </Card>
-            {data.explanation !== '<p></p>' && (
-              <Space className={`${css.hint} sp100 `}>
-                <AiOutlineQuestionCircle />
-                <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
-              </Space>
-            )}
+            {data.explanation !== '<p></p>' ||
+              (undefined && (
+                <Space className={`${css.hint} sp100 `}>
+                  <AiOutlineQuestionCircle />
+                  <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
+                </Space>
+              ))}
           </Space>
         </Card>
       </div>

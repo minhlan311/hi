@@ -272,7 +272,9 @@ const MentorExamDetail = () => {
         <Row justify='space-between'>
           <Col span={24} md={18}>
             <Space direction='vertical' className={'sp100'}>
-              <p className={css.exTitle}>Bộ đề: {examDetail.name}</p>
+              <p className={css.exTitle}>
+                Bộ đề: <b>{examDetail.name}</b>
+              </p>
               <p>
                 Môn học: <b>{subjectDetail.name}</b>
               </p>

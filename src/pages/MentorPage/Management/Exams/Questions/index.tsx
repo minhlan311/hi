@@ -1,28 +1,32 @@
-import examApi from '@/apis/exam.api'
-import questionApi from '@/apis/question.api'
-import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import css from './styles.module.scss'
+import DrawerQuestion from '../Drawer/DrawerQuestion'
+import DrawerUpload from '../Drawer/DrawerUpload'
+import examApi from '@/apis/exam.api'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import PaginationCustom from '@/components/PaginationCustom'
+import questionApi from '@/apis/question.api'
+import RenderQuestion from '../Components/RenderQuestion'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import { AiOutlineDelete, AiOutlineOrderedList, AiOutlinePlus } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { ExamState } from '@/interface/exam'
-import { QuestionState } from '@/interface/question'
-import { SuccessResponse } from '@/types/utils.type'
-import { setQuestionsListFromLS } from '@/utils/questons'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { BsListCheck } from 'react-icons/bs'
 import { Checkbox, Popconfirm, Space } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { useContext, useEffect, useState } from 'react'
-import { AiOutlineDelete, AiOutlinePlus } from 'react-icons/ai'
+import { ExamState } from '@/interface/exam'
+import { FiSave } from 'react-icons/fi'
 import { HiOutlineUpload } from 'react-icons/hi'
+import { MdClear, MdDoneAll } from 'react-icons/md'
+import { QuestionState } from '@/interface/question'
+import { setQuestionsListFromLS } from '@/utils/questons'
+import { stateAction } from '@/common'
+import { SuccessResponse } from '@/types/utils.type'
+import { TbUserQuestion } from 'react-icons/tb'
+import { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import RenderQuestion from '../Components/RenderQuestion'
-import DrawerQuestion from '../Drawer/DrawerQuestion'
-import DrawerUpload from '../Drawer/DrawerUpload'
-import css from './styles.module.scss'
+import { useMutation, useQuery } from '@tanstack/react-query'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorQuestions = () => {
@@ -161,15 +165,53 @@ const MentorQuestions = () => {
               keyFilter='questionsSelect'
               setLoading={setLoading}
               checkQuery={tabChange === 'questions' || load === true}
+              addOnButton={
+                <Space className={css.mb}>
+                  <Popconfirm
+                    placement='right'
+                    title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
+                    onConfirm={() => {
+                      setRemove(true)
+                      setTabChange('')
+                      setQuestionsListFromLS([])
+                      setQuestionsSelect([])
+
+                      const payload = {
+                        id: examDetail?._id,
+                        questions: [],
+                      }
+
+                      examMutation.mutate(payload as unknown as any)
+                    }}
+                    okText='Xóa'
+                    cancelText='Hủy'
+                  >
+                    <ButtonCustom
+                      disabled={!questionsSelect?.length}
+                      icon={<AiOutlineDelete />}
+                      tooltip='Xóa tất cả câu hỏi'
+                      danger
+                    ></ButtonCustom>
+                  </Popconfirm>
+
+                  <ButtonCustom
+                    type='primary'
+                    disabled={!questionsSelect?.length}
+                    onClick={handleSave}
+                    icon={<FiSave />}
+                    tooltip='Lưu gói câu hỏi'
+                  ></ButtonCustom>
+                </Space>
+              }
             />
           )}
           <Space size='large' className={css.infor}>
             <Space>
               <p>Số câu hỏi:</p>
-              <b>{questionsSelectCallback?.totalDocs}</b>
+              <b>{questionsSelect?.length}</b>
             </Space>
 
-            <Space>
+            <Space className={css.pc}>
               <Popconfirm
                 placement='right'
                 title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
@@ -205,13 +247,14 @@ const MentorQuestions = () => {
           {load ? (
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
           ) : (
-            <Space direction='vertical' size='large' className={'sp100'}>
+            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 15 }}>
               <RenderQuestion
                 data={questionsSelectCallback?.docs}
                 type='questionsSelected'
                 setOpen={setOpen}
                 setQuestionUpdate={setQuestionUpdate}
                 questionsSelect={questionsSelect}
+                setQuestionsSelect={setQuestionsSelect}
               />
               <PaginationCustom
                 callbackCurrent={setSelectedCurrent}
@@ -238,16 +281,32 @@ const MentorQuestions = () => {
               page={current}
               keyFilter='questionsBank'
               checkQuery={myQues}
+              addOnButton={
+                <Space className={css.mb}>
+                  <ButtonCustom
+                    icon={<HiOutlineUpload />}
+                    tooltip='Thêm file câu hỏi'
+                    onClick={() => setOpenUpload(true)}
+                  ></ButtonCustom>
+
+                  <ButtonCustom
+                    onClick={() => setOpen(true)}
+                    icon={<AiOutlinePlus />}
+                    tooltip='Thêm câu hỏi'
+                    type='primary'
+                  ></ButtonCustom>
+                </Space>
+              }
             />
           )}
-          <Space className={css.infor}>
+          <Space className={`${css.infor} ${css.pc}`}>
             <Space size='small'>
               <p>Số câu hỏi:</p>
               <b>{questionsCallback?.totalDocs}</b>
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
-              <b>{!questionsSelect ? 0 : questionsSelect?.length}</b>
+              <b>{questionsSelect?.length}</b>
             </Space>
             <Checkbox onChange={(e) => setMyQues(e.target.checked)}>Câu hỏi của tôi</Checkbox>
 
@@ -255,23 +314,61 @@ const MentorQuestions = () => {
               {!indeterminate ? 'Chọn' : 'Bỏ chọn'} tất cả
             </Checkbox>
 
-            <ButtonCustom
-              icon={<HiOutlineUpload />}
-              tooltip='Thêm file câu hỏi'
-              onClick={() => setOpenUpload(true)}
-            ></ButtonCustom>
+            <Space className={css.pc}>
+              <ButtonCustom
+                icon={<HiOutlineUpload />}
+                tooltip='Thêm file câu hỏi'
+                onClick={() => setOpenUpload(true)}
+              ></ButtonCustom>
 
-            <ButtonCustom
-              onClick={() => setOpen(true)}
-              icon={<AiOutlinePlus />}
-              tooltip='Thêm câu hỏi'
-              type='primary'
-            ></ButtonCustom>
+              <ButtonCustom
+                onClick={() => setOpen(true)}
+                icon={<AiOutlinePlus />}
+                tooltip='Thêm câu hỏi'
+                type='primary'
+              ></ButtonCustom>
+            </Space>
+          </Space>
+          <Space className={`${css.infor} ${css.mb}`}>
+            <Space size='small' className={css.cardInfor}>
+              <AiOutlineOrderedList size={22} />
+              <b>{questionsCallback?.totalDocs}</b>
+            </Space>
+            <Space size='small' className={css.cardInfor}>
+              <BsListCheck size={22} />
+              <b>{questionsSelect?.length}</b>
+            </Space>
+            <Checkbox onChange={(e) => setMyQues(e.target.checked)}>
+              <TbUserQuestion size={22} />
+            </Checkbox>
+
+            <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+              {questionsSelect.some((e) => questionsCallback?.docs?.some((it) => it._id === e)) ? (
+                <MdClear size={22} />
+              ) : (
+                <MdDoneAll size={22} />
+              )}
+            </Checkbox>
+
+            <Space className={css.pc}>
+              <ButtonCustom
+                icon={<HiOutlineUpload />}
+                tooltip='Thêm file câu hỏi'
+                onClick={() => setOpenUpload(true)}
+              ></ButtonCustom>
+
+              <ButtonCustom
+                onClick={() => setOpen(true)}
+                icon={<AiOutlinePlus />}
+                tooltip='Thêm câu hỏi'
+                type='primary'
+              ></ButtonCustom>
+            </Space>
           </Space>
           {loading ? (
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
           ) : (
-            <Space direction='vertical' size='large' className={'sp100'}>
+            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 15 }}>
               {questionsCallback && (
                 <RenderQuestion
                   data={questionsCallback.docs}
