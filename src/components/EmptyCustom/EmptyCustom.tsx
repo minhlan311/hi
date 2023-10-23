@@ -12,11 +12,21 @@ type Props = {
   heightImage?: string | number
   description?: string | React.ReactNode
   margin?: string | number
+  style?: React.CSSProperties
 }
 
 const EmptyCustom = (props: Props) => {
-  const { buttonText, buttonHref, buttonPrimaryText, buttonPrimaryHref, imageUrl, heightImage, description, margin } =
-    props
+  const {
+    buttonText,
+    buttonHref,
+    buttonPrimaryText,
+    buttonPrimaryHref,
+    imageUrl,
+    heightImage,
+    description,
+    margin,
+    style,
+  } = props
 
   return (
     <Empty
@@ -26,6 +36,7 @@ const EmptyCustom = (props: Props) => {
         margin: margin,
       }}
       description={description}
+      style={style}
     >
       <Space>
         {buttonText && (

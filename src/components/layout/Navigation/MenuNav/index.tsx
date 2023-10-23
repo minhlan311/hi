@@ -63,8 +63,6 @@ export default function MenuNav({ user }: Props) {
     categories ? (categories?.data.docs as unknown as CategoryState[]) : [],
   )
 
-  console.log(categoriesData)
-
   const mobileMenu = [
     { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
     {

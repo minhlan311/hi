@@ -1,13 +1,14 @@
+import eventApi from '@/apis/event.api'
 import examApi from '@/apis/exam.api'
+import testBg from '@/assets/images/examimg/online-test.png'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import PageResult from '@/components/PageResult'
+import Header from '@/components/layout/Header/Header'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Descriptions, Row, Space } from 'antd'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import testBg from '@/assets/images/examimg/online-test.png'
-import Header from '@/components/layout/Header/Header'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 
 const TestPage = () => {
   const location = useLocation()
@@ -16,6 +17,13 @@ const TestPage = () => {
     queryKey: ['examData', location],
     queryFn: () => {
       return examApi.getExamDetail(location.state.testId)
+    },
+  })
+
+  const { data: eventData } = useQuery({
+    queryKey: ['eventData', testData],
+    queryFn: () => {
+      return eventApi.getEvent({ filterQuery: { testId: location.state.testId } })
     },
   })
 
@@ -30,6 +38,7 @@ const TestPage = () => {
       window.onbeforeunload = null
     }
   }, [testData])
+  const event = eventData?.data?.docs
 
   const data = testData?.data
 
@@ -43,7 +52,7 @@ const TestPage = () => {
           </Col>
           <Col span={24} md={8}>
             <Space direction='vertical' size='large'>
-              <h1>{data.name}</h1>
+              <h1>{event?.[0].name}</h1>
               <div>
                 <Descriptions size='small'>
                   <Descriptions.Item label='Số câu hỏi'>
@@ -61,7 +70,12 @@ const TestPage = () => {
                 <Descriptions size='small'>
                   <Descriptions.Item label='Chú thích'>
                     <div
-                      dangerouslySetInnerHTML={{ __html: data.description ? data.description : 'Không có chú thích.' }}
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          event?.[0].description && event?.[0].description !== '<p></p>'
+                            ? event?.[0].description
+                            : 'Không có chú thích.',
+                      }}
                     ></div>
                   </Descriptions.Item>
                 </Descriptions>
