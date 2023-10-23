@@ -212,8 +212,6 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     }
   }
 
-  console.log(bookmarks, 'prevBookmarks')
-
   const handleGoToBookmark = (time: number) => {
     if (playerRef && playerRef.current) {
       playerRef.current.seekTo(time)

@@ -14,6 +14,7 @@ import openNotification from '@/components/Notification'
 // import { DatePickerProps } from 'antd/lib'
 // import { RangePickerProps } from 'antd/es/date-picker'
 import { FORM_TYPE } from '@/constants'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 export default function CLassCourse() {
   const { profile } = useContext(AppContext)
@@ -80,13 +81,17 @@ export default function CLassCourse() {
       title: 'Lớp học',
       dataIndex: 'title',
       key: 'title',
-      render: (_: any, record: Class) => <span>{record?.title}</span>,
+      render: (_: any, record: Class) => (
+        <TextWithTooltip rows={1} children={record?.title as string}></TextWithTooltip>
+      ),
     },
     {
       title: 'Khóa học',
       dataIndex: 'courseName',
       key: 'courseName',
-      render: (_: any, record: Class) => <span>{record?.courseId?.name}</span>,
+      render: (_: any, record: Class) => (
+        <TextWithTooltip rows={1} children={record?.courseId?.name as string}></TextWithTooltip>
+      ),
     },
     {
       title: 'Ngày bắt đầu',
@@ -168,20 +173,13 @@ export default function CLassCourse() {
   return (
     <div>
       <Form form={form} layout='vertical'>
-        <Row gutter={32}>
-          <Col span={10}>
+        <Row gutter={16}>
+          <Col xs={24} xl={12} xxl={10}>
             <Form.Item label='Tìm kiếm ' name={'search'}>
-              <Input
-                onChange={debouncedHandleEditorChange}
-                placeholder='Tìm kiếm'
-                style={{
-                  marginTop: '10px',
-                  width: '400px',
-                }}
-              />
+              <Input onChange={debouncedHandleEditorChange} placeholder='Tìm kiếm' className='input-class' />
             </Form.Item>
           </Col>
-          <Col span={10}>
+          <Col xs={24} xl={12} xxl={10}>
             <Form.Item label='Tìm kiếm theo khoảng thời gian' name={'time'}>
               <RangePicker
                 format='YYYY/MM/DD'
@@ -192,7 +190,7 @@ export default function CLassCourse() {
               />
             </Form.Item>
           </Col>
-          <Col span={4}>
+          <Col xs={24} xl={24} xxl={4}>
             <div className='class-course'>
               <Button
                 type='dashed'
@@ -213,6 +211,7 @@ export default function CLassCourse() {
       </Form>
       <div className='div-table'>
         <Table
+          scroll={{ x: 500, y: 300 }} // Đặt chiều cao cuộn ở đây (300px)
           dataSource={data?.data?.docs as any}
           pagination={{
             current: data?.data?.page,

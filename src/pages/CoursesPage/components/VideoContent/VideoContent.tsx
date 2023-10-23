@@ -39,8 +39,6 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
     setCheck(cartData?.data?.docs?.some((item: any) => item?.id === id))
   }, [id, cartData])
 
-  console.log(profile, 'profile')
-
   const mutate = useMutation({
     mutationFn: (body: any) => {
       return cartApi.addtoCart(body)

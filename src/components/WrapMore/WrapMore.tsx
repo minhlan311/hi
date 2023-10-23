@@ -34,7 +34,6 @@ export default function WrapMore({
   useEffect(() => {
     if (refCon.current) {
       const height = refCon.current.clientHeight
-      console.log(height)
       if (height > 200) {
         setButtonRef(false)
       } else {

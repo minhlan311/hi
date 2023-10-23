@@ -8,18 +8,18 @@ import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 import { TopicList } from '@/interface/topic'
 import { Topic } from '@/types/course.type'
 import { Lession } from '@/types/lession.type'
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Collapse } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import './CretaeSteps2.scss'
 import DrawerCreateExam from './components/DrawerCreateExam'
 import DrawerCreateLession from './components/DrawerCreateLession'
+import DrawerQuizz from './components/DrawerQuizz'
 import DrawerUpdateLession from './components/DrawerUpdateLession'
 import DrawerUpdateTopic from './components/DrawerUpdateTopic'
-import { useNavigate, useParams } from 'react-router-dom'
-import DrawerQuizz from './components/DrawerQuizz'
 
 export type MyPageTableOptions<S> = ColumnsType<S>
 
@@ -106,11 +106,6 @@ const CreateSteps2 = ({ dataId }: any) => {
     setOnOpenUpdateLession(true)
   }
 
-  const updateQuizz = (item: Lession) => {
-    setDataUpdateLession(item)
-    setOnOpenQuizz(true)
-  }
-
   return (
     <>
       <div className='text-end'>
@@ -179,9 +174,6 @@ const CreateSteps2 = ({ dataId }: any) => {
                               </PopConfirmAntd>
                               <Button type='dashed' className='dashed' onClick={() => updateLession(lession)}>
                                 <EditOutlined />
-                              </Button>
-                              <Button type='dashed' className='dashed' onClick={() => updateQuizz(lession)}>
-                                <QuestionCircleOutlined />
                               </Button>
                             </div>
                           </div>
