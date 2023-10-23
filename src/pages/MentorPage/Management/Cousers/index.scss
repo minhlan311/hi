@@ -3,3 +3,11 @@
   justify-content: center;
   margin-top: 100px;
 }
+
+@media screen and (max-width: 800px) {
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

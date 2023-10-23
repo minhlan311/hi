@@ -34,8 +34,6 @@ export default function NewsPageDetail() {
       }),
   })
 
-  console.log(dataAllNews, 'dataAllNews')
-
   return (
     <div className='container-news'>
       {isLoading ? (

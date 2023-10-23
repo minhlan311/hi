@@ -10,6 +10,7 @@ import { useContext, useState } from 'react'
 import classApi from '@/apis/class.api'
 import openNotification from '@/components/Notification'
 import { findUserEnroll } from '@/types/eroll.type'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 export default function MyStudent() {
   const [current, setCurrent] = useState<number>(1)
@@ -61,19 +62,25 @@ export default function MyStudent() {
       title: 'Học viên',
       dataIndex: 'limitStudent',
       key: 'limitStudent',
-      render: (_: any, record: findUserEnroll) => <span>{record?.user?.fullName}</span>,
+      render: (_: any, record: findUserEnroll) => (
+        <TextWithTooltip rows={1} children={record?.user?.fullName as string}></TextWithTooltip>
+      ),
     },
     {
       title: 'Email',
       dataIndex: 'limitStudent',
       key: 'limitStudent',
-      render: (_: any, record: findUserEnroll) => <span>{record?.user?.email}</span>,
+      render: (_: any, record: findUserEnroll) => (
+        <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
+      ),
     },
     {
       title: 'Khóa học đã mua',
       dataIndex: 'courseName',
       key: 'courseName',
-      render: (_: any, record: findUserEnroll) => <span>{record?.course?.name}</span>,
+      render: (_: any, record: findUserEnroll) => (
+        <TextWithTooltip rows={1} children={record?.course?.name as string}></TextWithTooltip>
+      ),
     },
     {
       title: 'Lớp học',
@@ -138,6 +145,7 @@ export default function MyStudent() {
     <div>
       <div className='div-table'>
         <Table
+          scroll={{ x: 500, y: 300 }} // Đặt chiều cao cuộn ở đây (300px)
           rowKey={'key'}
           dataSource={data?.data?.docs as any}
           pagination={{

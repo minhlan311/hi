@@ -171,7 +171,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
         <Form.Item>
           <Row>
             <Col span={22}></Col>
-            <Col span={2}>
+            <Col xs={24} xl={2}>
               <Button htmlType='submit' type='primary'>
                 Tiếp theo
               </Button>
@@ -179,9 +179,9 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
           </Row>
         </Form.Item>
         <Row gutter={10}>
-          <Col span={16}>
+          <Col xs={24} xl={16}>
             <Row gutter={30}>
-              <Col span={6}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   rules={[{ required: true, message: 'Vui lòng chọn loại khóa học' }]}
                   label='Loại'
@@ -197,7 +197,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   />
                 </Form.Item>
               </Col>
-              <Col span={3}>
+              <Col xs={24} xl={3}>
                 <Form.Item
                   label='Số tiền'
                   name='cost'
@@ -206,7 +206,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   <InputNumber min={1} disabled={typePlan === PlanEnum.FREE} />
                 </Form.Item>
               </Col>
-              <Col span={9}>
+              <Col xs={24} xl={9}>
                 <Form.Item
                   label='Tiêu đề khóa học'
                   name='name'
@@ -217,7 +217,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
               </Col>
             </Row>
             <Row gutter={30}>
-              <Col span={9}>
+              <Col xs={24} xl={9}>
                 <Form.Item
                   label='Danh mục khóa học'
                   name='categoryId'
@@ -242,10 +242,10 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={9}></Col>
+              <Col xs={24} xl={9}></Col>
             </Row>
           </Col>
-          <Col span={4}>
+          <Col xs={24} xl={4}>
             <Form.Item
               label='Ảnh khoá học'
               name='coverMedia'

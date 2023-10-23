@@ -2,7 +2,7 @@
 import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
-import { Pagination, Row } from 'antd'
+import { Divider, Pagination, Row } from 'antd'
 import { useContext, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import './index.scss'
@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import PATH from '@/constants/path'
 import LoadingCustom from '@/components/LoadingCustom'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
@@ -23,6 +24,8 @@ const MentorCourses = () => {
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page)
   }
+
+  const { sm } = useResponsives()
 
   return (
     <div>
@@ -36,10 +39,14 @@ const MentorCourses = () => {
         callBackData={setData}
         page={current}
         addOnButton={
-          <ButtonCustom type='primary' onClick={() => navigate(PATH.MENTOR_COURSES_CREATE)}>
+          <ButtonCustom
+            type='primary'
+            onClick={() => navigate(PATH.MENTOR_COURSES_CREATE)}
+            tooltip={sm ? 'Thêm khóa học mới' : undefined}
+          >
             <Row align='middle'>
               <BiPlus size={22} />
-              Thêm khóa học mới
+              {!sm && 'Thêm khóa học mới'}
             </Row>
           </ButtonCustom>
         }
@@ -53,7 +60,8 @@ const MentorCourses = () => {
           }}
         />
       )}
-      {data && data?.length > 0 && (
+      <Divider />
+      {data && data?.totalDocs > 0 && (
         <div className='pagination'>
           <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />
         </div>
