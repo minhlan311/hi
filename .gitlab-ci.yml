@@ -11,7 +11,6 @@ test:
   only:
     - develop
     - release
-
 deploy:
   stage: deploy-develop
   script:
@@ -22,6 +21,6 @@ deploy:
 release:
   stage: deploy-release
   script:
-    - ssh -o StrictHostKeyChecking=no -i /path/to/private/key root@$HOST "cd /home/ucam-edu/ui && git pull origin release && npm install && npm run build"
+    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@$HOST "cd /home/ucam-edu/ui && git pull origin release && npm install && npm run build"
   only:
     - release
