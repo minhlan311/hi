@@ -9,10 +9,14 @@ import Mission from './Mission'
 import Intro from './Intro'
 import CourseCalender from './CourseCalender/CourseCalender'
 import News from './News/News'
+import CountDownTimer from '@/components/CountDownTimer'
 
 export default function HomePage() {
   return (
     <div className='mtz-homepage'>
+      <CountDownTimer
+      // timeTillDate='2023-10-23T09:51:35.527Z'
+      />
       <Banner />
       <Intro />
       <Mentor />
