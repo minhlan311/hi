@@ -15,6 +15,8 @@ import courseApi from '@/apis/course.api'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '@/contexts/app.context'
 import enrollsApi from '@/apis/enrolls.api'
+import useResponsives from '@/hooks/useResponsives'
+import { Col, Row } from 'antd'
 
 export default function Courses() {
   const { id } = useParams()
@@ -39,6 +41,7 @@ export default function Courses() {
       })
     },
   })
+  const { lg } = useResponsives()
 
   console.log(checkEnrolls, 'checkEnrollscheckEnrolls')
 
@@ -51,13 +54,21 @@ export default function Courses() {
         {/* container bg black  */}
         <div className={style.container}>
           {/* grid 2/1 black */}
-          <div className={style.content}>
+          <Row className={style.content}>
             {/* cột bên trái */}
-            <Detail data={dataCourse?.data} />
+            <Col xs={24} xl={18}>
+              <Detail data={dataCourse?.data} />
+            </Col>
             {/* cột bên phải  */}
-            <VideoContent data={dataCourse?.data} checkEnrolls={checkEnrolls} />
+            {!lg ? (
+              <Col xl={6}>
+                <VideoContent data={dataCourse?.data} checkEnrolls={checkEnrolls} />{' '}
+              </Col>
+            ) : (
+              ''
+            )}
             {/* end cột bên phải  */}
-          </div>
+          </Row>
           {/* end grid 2/1 */}
         </div>
         {/* end container bg black  */}
@@ -73,7 +84,7 @@ export default function Courses() {
             </WrapMore> */}
             <div
               style={{
-                margin: '40px 0',
+                margin: '40px 10px',
               }}
             >
               <div className={style.titleText}>Khóa học liên quan</div>

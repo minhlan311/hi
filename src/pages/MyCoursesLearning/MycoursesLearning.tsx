@@ -21,6 +21,7 @@ import {
   LeftCircleOutlined,
   RightCircleOutlined,
   WarningOutlined,
+  SearchOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
@@ -33,6 +34,7 @@ import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
 import ExamCourse from './components/ExamCourse'
 import { Topic } from '@/types/course.type'
+import useResponsives from '@/hooks/useResponsives'
 
 interface FileItem {
   name: string
@@ -54,7 +56,7 @@ export default function MycoursesLearning() {
   const { scaleScreen } = useContext(AppContext)
   const examDivRef = useRef<HTMLDivElement | null>(null)
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
-
+  const { Panel } = Collapse
   const toggleFullScreenForExamDiv = () => {
     if (screenfull.isEnabled && examDivRef.current) {
       screenfull.toggle(examDivRef.current)
@@ -62,6 +64,8 @@ export default function MycoursesLearning() {
       console.error('Screenfull không hỗ trợ trình duyệt này !')
     }
   }
+
+  const { lg } = useResponsives()
 
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],
@@ -113,6 +117,139 @@ export default function MycoursesLearning() {
   const myTabs = [
     {
       id: '1',
+      name: lg ? 'Nội dung' : '',
+      children: (
+        <>
+          {lg ? (
+            <Col xs={24} xl={!scaleScreen ? 6 : 0} className={style.col2}>
+              <div className={style.onBoxCol2}>
+                <div>
+                  <h4 className={style.h4Col2}>Nội dung khóa học</h4>
+                </div>
+                {isLoading ? (
+                  <LoadingCustom
+                    style={{
+                      marginTop: '30px',
+                    }}
+                  />
+                ) : (
+                  <div className={style.scroll}>
+                    {
+                      <Collapse destroyInactivePanel>
+                        {Array.isArray(dataTopics) && dataTopics?.length > 0
+                          ? dataTopics?.map((course, courseIndex) => (
+                              <>
+                                <Panel
+                                  key={courseIndex}
+                                  header={<h4>{course?.name}</h4>}
+                                  extra={
+                                    <div
+                                      style={{
+                                        display: 'flex',
+                                        gap: '10px',
+                                      }}
+                                    ></div>
+                                  }
+                                >
+                                  {course?.lessons?.map((lesson: any, lessonIndex: number) => (
+                                    <>
+                                      <div
+                                        key={lesson._id}
+                                        onClick={() => handleLessonClick(courseIndex, lessonIndex, lesson)}
+                                        style={{
+                                          marginTop: '20px',
+                                        }}
+                                        className={active === lesson?._id ? 'div-flex-active' : 'div-flex'}
+                                      >
+                                        <div>{lesson?.name}</div>
+                                        <div
+                                          style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                          }}
+                                        ></div>
+                                      </div>
+                                      <div className={style.flexBest}>
+                                        {lesson?.type === TypeLessonEnum.VIDEO_LESSON ? (
+                                          <div>
+                                            <p>
+                                              Thời lượng : {lesson?.length} phút {''}
+                                            </p>
+                                            Thể loại : <PlayCircleOutlined /> video
+                                          </div>
+                                        ) : lesson?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                          <p>
+                                            Thể loại : <FileOutlined /> Văn bản
+                                          </p>
+                                        ) : lesson?.type === TypeLessonEnum.LIVE_LESSON ? (
+                                          <p>
+                                            Thể loại : <VideoCameraOutlined /> live
+                                          </p>
+                                        ) : (
+                                          <p>
+                                            Thể loại : <FileTextOutlined /> Bài kiểm tra
+                                          </p>
+                                        )}
+
+                                        <div>
+                                          <Popover
+                                            placement='bottomLeft'
+                                            style={{
+                                              maxWidth: '100px',
+                                            }}
+                                            title={
+                                              <>
+                                                {lesson?.documents?.map((item: any, index: number) => (
+                                                  <>
+                                                    <Button
+                                                      style={{
+                                                        width: '150px',
+                                                        margin: '0 5px',
+                                                      }}
+                                                      onClick={() => handleDownload(item?.files)}
+                                                    >
+                                                      <DownloadOutlined />
+                                                      Tài liệu {index + 1}
+                                                    </Button>
+                                                  </>
+                                                ))}
+                                              </>
+                                            }
+                                            trigger={'click'}
+                                          >
+                                            <>
+                                              {lesson?.documents?.length > 0 && (
+                                                <Button>
+                                                  <FolderOutlined />
+                                                  Tài liệu
+                                                </Button>
+                                              )}
+                                            </>
+                                          </Popover>
+                                        </div>
+                                      </div>
+                                    </>
+                                  ))}
+                                </Panel>
+                              </>
+                            ))
+                          : ''}
+                      </Collapse>
+                    }
+                  </div>
+                )}
+              </div>
+            </Col>
+          ) : (
+            ''
+          )}
+        </>
+      ),
+    },
+    {
+      id: '2',
       name: 'Tổng quan',
       children: (
         <>
@@ -121,7 +258,7 @@ export default function MycoursesLearning() {
       ),
     },
     {
-      id: '2',
+      id: '3',
       name: 'Tài liệu',
       children: (
         <>
@@ -140,8 +277,6 @@ export default function MycoursesLearning() {
       ),
     },
   ]
-
-  const { Panel } = Collapse
 
   const handleVideo = (id: string, name: string, video: string, document: any) => {
     setActive(id)
@@ -295,7 +430,7 @@ export default function MycoursesLearning() {
   return (
     <div className={style.containerDivQuest}>
       <Row gutter={16}>
-        <Col span={scaleScreen ? 24 : 18} className={style.col1}>
+        <Col xs={24} xl={scaleScreen ? 24 : 18} className={style.col1}>
           {type === TypeLessonEnum.VIDEO_LESSON ? (
             <>
               <div className={style.boxVideoContent}>
@@ -415,127 +550,131 @@ export default function MycoursesLearning() {
             <TabsCustom data={myTabs} />
           </div>
         </Col>
-        <Col span={!scaleScreen ? 6 : 0} className={style.col2}>
-          <div className={style.onBoxCol2}>
-            <div>
-              <h4 className={style.h4Col2}>Nội dung khóa học</h4>
-            </div>
-            {isLoading ? (
-              <LoadingCustom
-                style={{
-                  marginTop: '30px',
-                }}
-              />
-            ) : (
-              <div className={style.scroll}>
-                {
-                  <Collapse destroyInactivePanel>
-                    {Array.isArray(dataTopics) && dataTopics?.length > 0
-                      ? dataTopics?.map((course, courseIndex) => (
-                          <>
-                            <Panel
-                              key={courseIndex}
-                              header={<h4>{course?.name}</h4>}
-                              extra={
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    gap: '10px',
-                                  }}
-                                ></div>
-                              }
-                            >
-                              {course?.lessons?.map((lesson: any, lessonIndex: number) => (
-                                <>
-                                  <div
-                                    key={lesson._id}
-                                    onClick={() => handleLessonClick(courseIndex, lessonIndex, lesson)}
-                                    style={{
-                                      marginTop: '20px',
-                                    }}
-                                    className={active === lesson?._id ? 'div-flex-active' : 'div-flex'}
-                                  >
-                                    <div>{lesson?.name}</div>
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                      }}
-                                    ></div>
-                                  </div>
-                                  <div className={style.flexBest}>
-                                    {lesson?.type === TypeLessonEnum.VIDEO_LESSON ? (
-                                      <div>
-                                        <p>
-                                          Thời lượng : {lesson?.length} phút {''}
-                                        </p>
-                                        Thể loại : <PlayCircleOutlined /> video
-                                      </div>
-                                    ) : lesson?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
-                                      <p>
-                                        Thể loại : <FileOutlined /> Văn bản
-                                      </p>
-                                    ) : lesson?.type === TypeLessonEnum.LIVE_LESSON ? (
-                                      <p>
-                                        Thể loại : <VideoCameraOutlined /> live
-                                      </p>
-                                    ) : (
-                                      <p>
-                                        Thể loại : <FileTextOutlined /> Bài kiểm tra
-                                      </p>
-                                    )}
-
-                                    <div>
-                                      <Popover
-                                        placement='bottomLeft'
-                                        style={{
-                                          maxWidth: '100px',
-                                        }}
-                                        title={
-                                          <>
-                                            {lesson?.documents?.map((item: any, index: number) => (
-                                              <>
-                                                <Button
-                                                  style={{
-                                                    width: '150px',
-                                                    margin: '0 5px',
-                                                  }}
-                                                  onClick={() => handleDownload(item?.files)}
-                                                >
-                                                  <DownloadOutlined />
-                                                  Tài liệu {index + 1}
-                                                </Button>
-                                              </>
-                                            ))}
-                                          </>
-                                        }
-                                        trigger={'click'}
-                                      >
-                                        <>
-                                          {lesson?.documents?.length > 0 && (
-                                            <Button>
-                                              <FolderOutlined />
-                                              Tài liệu
-                                            </Button>
-                                          )}
-                                        </>
-                                      </Popover>
-                                    </div>
-                                  </div>
-                                </>
-                              ))}
-                            </Panel>
-                          </>
-                        ))
-                      : ''}
-                  </Collapse>
-                }
+        {!lg ? (
+          <Col xs={24} xl={!scaleScreen ? 6 : 0} className={style.col2}>
+            <div className={style.onBoxCol2}>
+              <div>
+                <h4 className={style.h4Col2}>Nội dung khóa học</h4>
               </div>
-            )}
-          </div>
-        </Col>
+              {isLoading ? (
+                <LoadingCustom
+                  style={{
+                    marginTop: '30px',
+                  }}
+                />
+              ) : (
+                <div className={style.scroll}>
+                  {
+                    <Collapse destroyInactivePanel>
+                      {Array.isArray(dataTopics) && dataTopics?.length > 0
+                        ? dataTopics?.map((course, courseIndex) => (
+                            <>
+                              <Panel
+                                key={courseIndex}
+                                header={<h4>{course?.name}</h4>}
+                                extra={
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      gap: '10px',
+                                    }}
+                                  ></div>
+                                }
+                              >
+                                {course?.lessons?.map((lesson: any, lessonIndex: number) => (
+                                  <>
+                                    <div
+                                      key={lesson._id}
+                                      onClick={() => handleLessonClick(courseIndex, lessonIndex, lesson)}
+                                      style={{
+                                        marginTop: '20px',
+                                      }}
+                                      className={active === lesson?._id ? 'div-flex-active' : 'div-flex'}
+                                    >
+                                      <div>{lesson?.name}</div>
+                                      <div
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'space-between',
+                                          alignItems: 'center',
+                                          gap: '10px',
+                                        }}
+                                      ></div>
+                                    </div>
+                                    <div className={style.flexBest}>
+                                      {lesson?.type === TypeLessonEnum.VIDEO_LESSON ? (
+                                        <div>
+                                          <p>
+                                            Thời lượng : {lesson?.length} phút {''}
+                                          </p>
+                                          Thể loại : <PlayCircleOutlined /> video
+                                        </div>
+                                      ) : lesson?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
+                                        <p>
+                                          Thể loại : <FileOutlined /> Văn bản
+                                        </p>
+                                      ) : lesson?.type === TypeLessonEnum.LIVE_LESSON ? (
+                                        <p>
+                                          Thể loại : <VideoCameraOutlined /> live
+                                        </p>
+                                      ) : (
+                                        <p>
+                                          Thể loại : <FileTextOutlined /> Bài kiểm tra
+                                        </p>
+                                      )}
+
+                                      <div>
+                                        <Popover
+                                          placement='bottomLeft'
+                                          style={{
+                                            maxWidth: '100px',
+                                          }}
+                                          title={
+                                            <>
+                                              {lesson?.documents?.map((item: any, index: number) => (
+                                                <>
+                                                  <Button
+                                                    style={{
+                                                      width: '150px',
+                                                      margin: '0 5px',
+                                                    }}
+                                                    onClick={() => handleDownload(item?.files)}
+                                                  >
+                                                    <DownloadOutlined />
+                                                    Tài liệu {index + 1}
+                                                  </Button>
+                                                </>
+                                              ))}
+                                            </>
+                                          }
+                                          trigger={'click'}
+                                        >
+                                          <>
+                                            {lesson?.documents?.length > 0 && (
+                                              <Button>
+                                                <FolderOutlined />
+                                                Tài liệu
+                                              </Button>
+                                            )}
+                                          </>
+                                        </Popover>
+                                      </div>
+                                    </div>
+                                  </>
+                                ))}
+                              </Panel>
+                            </>
+                          ))
+                        : ''}
+                    </Collapse>
+                  }
+                </div>
+              )}
+            </div>
+          </Col>
+        ) : (
+          ''
+        )}
       </Row>
     </div>
   )
