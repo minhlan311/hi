@@ -32,6 +32,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: CATEGORY PATH :::::::::::::::::::::
   CATEGORIES_PATH: '/category/',
+  CATEGORIES_PATH_SLUG: '/category/detail/',
   FIND_CATEGORIES_PATH: '/category/find',
 
   // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::

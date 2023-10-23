@@ -21,6 +21,9 @@ const categoryApi = {
   getCategorieDetail(id: string) {
     return http.get<CategoryState>(ENDPOINT.CATEGORIES_PATH + id)
   },
+  getCategorieDetailSlug(slug: string) {
+    return http.get<CategoryState>(ENDPOINT.CATEGORIES_PATH_SLUG + slug)
+  },
 }
 
 export default categoryApi

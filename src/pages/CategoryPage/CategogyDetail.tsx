@@ -59,7 +59,7 @@ export default function CategogyDetail() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['cateDetail', categoryDetailSlug],
-    queryFn: () => categoryApi.getCategorieDetail(categoryDetailSlug!),
+    queryFn: () => categoryApi.getCategorieDetailSlug(categoryDetailSlug!),
   })
 
   const { data: listCourse, isLoading: Loading } = useQuery({
