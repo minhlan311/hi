@@ -9,19 +9,20 @@ import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import { TypeLessonEnum } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
+import { Topic } from '@/types/course.type'
 import {
   DownloadOutlined,
   ExpandOutlined,
   FileOutlined,
   FileTextOutlined,
   FolderOutlined,
+  LeftCircleOutlined,
   PlayCircleOutlined,
+  RightCircleOutlined,
   SettingOutlined,
   VideoCameraOutlined,
-  LeftCircleOutlined,
-  RightCircleOutlined,
   WarningOutlined,
-  SearchOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
@@ -33,8 +34,6 @@ import screenfull from 'screenfull'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
 import ExamCourse from './components/ExamCourse'
-import { Topic } from '@/types/course.type'
-import useResponsives from '@/hooks/useResponsives'
 
 interface FileItem {
   name: string
