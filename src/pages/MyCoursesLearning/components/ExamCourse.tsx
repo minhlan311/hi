@@ -106,7 +106,6 @@ export default function ExamCourse({ data, name }: Props) {
       return 'black'
     }
   }
-  console.log(data, 'datadatadata')
 
   useEffect(() => {
     if (data && data[0] && data[0].questions) {

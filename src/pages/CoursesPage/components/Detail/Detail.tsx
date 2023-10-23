@@ -5,6 +5,8 @@ import { Breadcrumb } from 'antd'
 import { Link } from 'react-router-dom'
 import { CreditCardOutlined, GlobalOutlined, WarningFilled } from '@ant-design/icons'
 import { TCourse } from '@/types/course.type'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   data?: TCourse
@@ -25,9 +27,20 @@ export default function Detail({ data }: Props) {
       href: '#',
     },
   ]
+  const { lg } = useResponsives()
 
   return (
     <div className={style.col1}>
+      <div>
+        {lg && (
+          <ImageCustom
+            width='100%'
+            height='320px'
+            preview={false}
+            src={`${import.meta.env.VITE_FILE_ENDPOINT}/${data?.coverMedia}`}
+          />
+        )}
+      </div>
       <div>
         <Breadcrumb separator={<span className={style.breadCrumbs}>{'>'}</span>} items={items} />
       </div>

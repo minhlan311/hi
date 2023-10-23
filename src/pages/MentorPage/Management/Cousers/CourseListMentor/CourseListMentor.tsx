@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Image, Row } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import './CourseListMentor.scss'
 
 export default function CourseListMentor({ data }: any) {
   const queryClient = useQueryClient()
@@ -43,58 +44,60 @@ export default function CourseListMentor({ data }: any) {
 
   return (
     <>
-      <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
-        {data
-          ? data?.docs?.map((item: any) => (
-              <>
-                <Col>
-                  <Card
-                    style={{ width: 300 }}
-                    cover={
-                      <Image
-                        onClick={() => {
-                          navigate(`/courses/${item._id}`)
-                        }}
-                        height={'150px'}
-                        alt='example'
-                        src={import.meta.env.VITE_FILE_ENDPOINT + `/` + item?.coverMedia}
-                        fallback={imageFallback}
-                      />
-                    }
-                    actions={[
-                      <>
-                        <EditOutlined
-                          key='edit'
+      <div className='scroll-x-div'>
+        <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
+          {data
+            ? data?.docs?.map((item: any) => (
+                <>
+                  <Col>
+                    <Card
+                      style={{ width: 300 }}
+                      cover={
+                        <Image
                           onClick={() => {
-                            navigate(`/mentor/courses/update/${item._id}`)
+                            navigate(`/courses/${item._id}`)
                           }}
+                          height={'150px'}
+                          alt='example'
+                          src={import.meta.env.VITE_FILE_ENDPOINT + `/` + item?.coverMedia}
+                          fallback={imageFallback}
                         />
-                      </>,
-                      <PopConfirmAntd
-                        desc='Bạn có muốn xóa khóa học này ?'
-                        onConfirm={() => {
-                          onConfirm(item._id)
-                        }}
-                      >
-                        <DeleteOutlined key='ellipsis' />
-                      </PopConfirmAntd>,
-                    ]}
-                  >
-                    <Meta
-                      title={item?.name}
-                      description={
-                        <>
-                          <p>Mentor : {item?.mentor?.fullName}</p>
-                          {/* <p>{item?.descriptions || 'Không có mô tả'}</p> */}
-                        </>
                       }
-                    />
-                  </Card>
-                </Col>
-              </>
-            ))
-          : 'Không có dữ liệu'}
-      </Row>
+                      actions={[
+                        <>
+                          <EditOutlined
+                            key='edit'
+                            onClick={() => {
+                              navigate(`/mentor/courses/update/${item._id}`)
+                            }}
+                          />
+                        </>,
+                        <PopConfirmAntd
+                          desc='Bạn có muốn xóa khóa học này ?'
+                          onConfirm={() => {
+                            onConfirm(item._id)
+                          }}
+                        >
+                          <DeleteOutlined key='ellipsis' />
+                        </PopConfirmAntd>,
+                      ]}
+                    >
+                      <Meta
+                        title={item?.name}
+                        description={
+                          <>
+                            <p>Mentor : {item?.mentor?.fullName}</p>
+                            {/* <p>{item?.descriptions || 'Không có mô tả'}</p> */}
+                          </>
+                        }
+                      />
+                    </Card>
+                  </Col>
+                </>
+              ))
+            : 'Không có dữ liệu'}
+        </Row>
+      </div>
     </>
   )
 }

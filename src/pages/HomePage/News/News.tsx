@@ -70,7 +70,7 @@ export default function News() {
             ))
           )}
         </Row>
-        <Button className='buttonMore' onClick={() => navigate('/tin-tuc')}>
+        <Button className='buttonMore' onClick={() => navigate('/tin-tuc-4pa1v')}>
           Xem tất cả
         </Button>
       </div>

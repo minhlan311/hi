@@ -4,13 +4,13 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
-import VideoComponent from '@/components/VideoComponent/VideoComponent'
+// import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import { AppContext } from '@/contexts/app.context'
 import { formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Modal } from 'antd'
+import { Button } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import style from './VideoContent.module.scss'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -27,7 +27,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [isModalOpen, setIsModalOpen] = useState(false)
   const [check, setCheck] = useState(false)
   const { profile } = useContext(AppContext)
   const { id } = useParams()
@@ -38,8 +38,6 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   useEffect(() => {
     setCheck(cartData?.data?.docs?.some((item: any) => item?.id === id))
   }, [id, cartData])
-
-  console.log(profile, 'profile')
 
   const mutate = useMutation({
     mutationFn: (body: any) => {
@@ -80,18 +78,6 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   useEffect(() => {
     setDatas(data)
   }, [data])
-
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
-
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
-
-  const handleCancel = () => {
-    setIsModalOpen(false)
-  }
 
   const mutationPay = useMutation({
     mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
@@ -168,7 +154,7 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
 
   return (
     <div className={style.col2}>
-      <Modal
+      {/* <Modal
         destroyOnClose
         zIndex={9999989999}
         maskClosable={false}
@@ -178,30 +164,30 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
         onCancel={handleCancel}
       >
         <VideoComponent video={'https://vimeo.com/90509568'} />
-      </Modal>
+      </Modal> */}
 
       <div className={style.boxVideo} ref={contentRef}>
-        {/* // ảnh video  */}
-
         {datas ? (
-          <div onClick={showModal} className={style.video} hidden={visible}>
+          <div className={style.video} hidden={visible}>
             <ImageCustom
               width='100%'
               height='198px'
               preview={false}
               src={`${import.meta.env.VITE_FILE_ENDPOINT}/${datas?.coverMedia}`}
             />
-            <div className={style.videoPosition}>
-              <div className={style.videoPositionText}>
-                <p>Video giới thiệu khóa học</p>
+            <a href='https://www.youtube.com/watch?v=Ih3za2gY-bI' target='_blank'>
+              <div className={style.videoPosition}>
+                <div className={style.videoPositionText}>
+                  <p>Video giới thiệu khóa học</p>
+                </div>
               </div>
-            </div>
-            <div>
-              <PlayCircleFilled
-                style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
-                className=''
-              />
-            </div>
+              <div>
+                <PlayCircleFilled
+                  style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
+                  className=''
+                />
+              </div>
+            </a>
           </div>
         ) : (
           <LoadingCustom

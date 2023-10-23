@@ -1,0 +1,10 @@
+@media screen and (max-width: 800px) {
+  .scroll-x-div {
+    scroll-snap-type: mandatory;
+    overflow-y: auto;
+    max-height: 380px;
+    padding: 20px 0;
+    margin-left: 30px;
+    overflow-x: hidden;
+  }
+}
