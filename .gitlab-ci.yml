@@ -20,13 +20,13 @@ deploy:
 
 release:
   stage: deploy-release
-    script:
+  script:
     - |
       sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "
       cd /home/ucam-edu/ui &&
       git pull origin release &&
-      echo $USER_NAME 
-      echo $PASSWORD
+      echo $USER_NAME &&
+      echo $PASSWORD &&
       npm install &&
       npm run build"
   only:
