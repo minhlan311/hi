@@ -92,7 +92,7 @@ const CalendarWeek = ({ callBackWeekSelect, callBackDateOfWeek, showCurrent, but
   return (
     <Space direction='vertical' className={'sp100'}>
       {showCurrent && (
-        <Row justify='space-around'>
+        <Row justify='space-between'>
           <Space className={css.currentButt}>
             <ButtonCustom onClick={nowWeek}>Now</ButtonCustom>
             <ButtonCustom onClick={prevWeek}>prev</ButtonCustom>
