@@ -24,7 +24,7 @@ release:
     - |
       sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "
       cd /home/ucam-edu/ui &&
-      git pull origin release &&
+      git pull &&
       echo $USER_NAME &&
       echo $PASSWORD &&
       npm install &&
