@@ -13,10 +13,12 @@ import Meta from 'antd/es/card/Meta'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import calenderSVG from '@/assets/icons/calendar.svg'
 import WrapMore from '@/components/WrapMore/WrapMore'
+import useResponsives from '@/hooks/useResponsives'
+import SliderCustom from '@/components/SliderCustom'
 
 export default function CategogyDetail() {
   const { categoryDetailSlug } = useParams()
-
+  const { lg } = useResponsives()
   const [page, setPage] = useState(1)
 
   const navigate = useNavigate()
@@ -86,7 +88,6 @@ export default function CategogyDetail() {
   }
 
   const listDataCourse = listCourse?.data?.docs
-  // const listDataCourse = listCourse?.data?.docs?.filter((obj) => obj?.class && obj?.class?.length > 0)
 
   return (
     <>
@@ -111,73 +112,151 @@ export default function CategogyDetail() {
           <div className='h2'>
             <div className='div-cate'>
               <h2>{data?.data?.name}</h2>
-              <WrapMore
-                title=''
-                maxWidth='100%'
-                children={
-                  <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content as any }}></div>
-                }
-                wrapper={'nonBorder'}
-              ></WrapMore>
+              {data?.data?.content ? (
+                <WrapMore
+                  title=''
+                  maxWidth='100%'
+                  children={
+                    <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content as any }}></div>
+                  }
+                  wrapper={'nonBorder'}
+                ></WrapMore>
+              ) : (
+                ''
+              )}
 
-              <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ xs: 0, sm: 0, md: 24, lg: 32 }}>
-                {Loading ? (
-                  <LoadingCustom />
-                ) : (
-                  listDataCourse?.map((item) => (
-                    <Col className='col'>
-                      <Card
-                        onClick={() => handleClickCourse(item?._id as string)}
-                        hoverable
-                        style={{ width: 340, height: 410 }}
-                        cover={
-                          <ImageCustom
-                            preview={false}
-                            height='160px'
-                            width='100%'
-                            src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                          />
-                        }
-                      >
-                        <Meta
-                          description={
-                            <>
-                              <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                              {item?.class?.map((item) => (
-                                <>
-                                  <div className='flex'>
-                                    <img src={calenderSVG} className='icons' alt='' />
-                                    <TextWithTooltip
-                                      rows={1}
-                                      children={
-                                        <>
-                                          {item?.startDate ? (
-                                            <>
-                                              Khai giảng {''}
-                                              {formatDate(item?.startDate)}
-                                            </>
-                                          ) : (
-                                            'Đang cập nhật'
-                                          )}
-                                        </>
-                                      }
-                                      className='text-date'
-                                    />
-                                  </div>
-                                </>
-                              ))}
-                              <div className='flexPrice'>
-                                <span className='name'>Chi phí: </span>
-                                <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                              </div>
-                            </>
+              {!lg ? (
+                <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ md: 24, lg: 32 }}>
+                  {Loading ? (
+                    <LoadingCustom />
+                  ) : (
+                    listDataCourse?.map((item) => (
+                      <Col className='col'>
+                        <Card
+                          onClick={() => handleClickCourse(item?._id as string)}
+                          hoverable
+                          style={{ width: 340, height: 410 }}
+                          cover={
+                            <ImageCustom
+                              preview={false}
+                              height='160px'
+                              width='100%'
+                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                            />
                           }
-                        />
-                      </Card>
-                    </Col>
-                  ))
-                )}
-              </Row>
+                        >
+                          <Meta
+                            description={
+                              <>
+                                <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                {item?.class?.map((item) => (
+                                  <>
+                                    <div className='flex'>
+                                      <img src={calenderSVG} className='icons' alt='' />
+                                      <TextWithTooltip
+                                        rows={1}
+                                        children={
+                                          <>
+                                            {item?.startDate ? (
+                                              <>
+                                                Khai giảng {''}
+                                                {formatDate(item?.startDate)}
+                                              </>
+                                            ) : (
+                                              'Đang cập nhật'
+                                            )}
+                                          </>
+                                        }
+                                        className='text-date'
+                                      />
+                                    </div>
+                                  </>
+                                ))}
+                                <div className='flexPrice'>
+                                  <span className='name'>Chi phí: </span>
+                                  <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                                </div>
+                              </>
+                            }
+                          />
+                        </Card>
+                      </Col>
+                    ))
+                  )}
+                </Row>
+              ) : (
+                <div
+                  style={{
+                    marginTop: '80px',
+                  }}
+                >
+                  <SliderCustom autoplay infinite dataLength={listDataCourse?.length as number}>
+                    {listDataCourse?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Card
+                          onClick={() => handleClickCourse(item?._id as string)}
+                          style={{ height: 410, margin: '0 20px' }}
+                          cover={
+                            <ImageCustom
+                              preview={false}
+                              height='160px'
+                              width='100%'
+                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                            />
+                          }
+                        >
+                          <Meta
+                            description={
+                              <>
+                                <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                {item?.class?.map((item) => (
+                                  <>
+                                    <div
+                                      className='flex'
+                                      style={{
+                                        padding: '0 20px',
+                                      }}
+                                    >
+                                      <img src={calenderSVG} className='icons' alt='' />
+                                      <TextWithTooltip
+                                        rows={1}
+                                        children={
+                                          <>
+                                            {item?.startDate ? (
+                                              <>
+                                                Khai giảng {''}
+                                                {formatDate(item?.startDate)}
+                                              </>
+                                            ) : (
+                                              'Đang cập nhật'
+                                            )}
+                                          </>
+                                        }
+                                        className='text-date'
+                                      />
+                                    </div>
+                                  </>
+                                ))}
+                                <div className='flexPrice'>
+                                  <span className='name'>Chi phí: </span>
+                                  <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                                </div>
+                              </>
+                            }
+                          />
+                        </Card>
+                      </div>
+                    ))}
+                  </SliderCustom>
+                </div>
+              )}
+
               {listDataCourse && listDataCourse?.length > 0 && (
                 <div className='pagi'>
                   <Pagination pageSize={9} onChange={onChange} current={page} total={listCourse?.data?.totalDocs} />

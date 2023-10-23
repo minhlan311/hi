@@ -11,6 +11,7 @@ import style from './MenuCourses.module.scss'
 import LoadingCustom from '@/components/LoadingCustom'
 import { TCourse } from '@/types/course.type'
 import { useNavigate, useParams } from 'react-router-dom'
+import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   dataCourses?: TCourse
@@ -36,6 +37,7 @@ export default function MenuCourses({ dataCourses }: Props) {
   })
 
   const coursesData = data?.data?.docs?.filter((item) => item._id !== id)
+  const { xs } = useResponsives()
 
   return (
     <>
@@ -72,15 +74,18 @@ export default function MenuCourses({ dataCourses }: Props) {
                       </div>
                       {/* //  div tren */}
                       <div className={style.divBottom}>
-                        <div>
-                          <TagCustom
-                            intArrType={['BESS SELLER', 'REVISION', 'NEW']}
-                            intColor={['#eceb98', 'var(--teal)', 'var(--red)']}
-                            intAlternativeType={['BEST SELLER', '改訂', '話題・新着']}
-                            content={'BESS SELLER'}
-                            colorText='var(--black)'
-                          />
-                        </div>
+                        {!xs && (
+                          <div>
+                            <TagCustom
+                              intArrType={['BESS SELLER', 'REVISION', 'NEW']}
+                              intColor={['#eceb98', 'var(--teal)', 'var(--red)']}
+                              intAlternativeType={['BEST SELLER', '改訂', '話題・新着']}
+                              content={'BESS SELLER'}
+                              colorText='var(--black)'
+                            />
+                          </div>
+                        )}
+
                         <div className={style.flex}>
                           <div className={style.marginRight}>
                             <span>Tổng cộng : 7.5 giờ</span> <span className={style.dot}></span>
