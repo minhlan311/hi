@@ -19,9 +19,9 @@ deploy:
   only:
     - develop
 
-update-release:
+release:
   stage: deploy-release
   script:
-    - sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "cd /home/ucam-edu/ui && git pull origin release && npm install && npm run build"
+    - ssh -o StrictHostKeyChecking=no -i /path/to/private/key root@$HOST "cd /home/ucam-edu/ui && git pull origin release && npm install && npm run build"
   only:
     - release
