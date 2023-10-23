@@ -1,7 +1,7 @@
 stages:
   - auto-test
   - deploy-develop
-  - deploy-release
+  # - deploy-release
 
 test:
   stage: auto-test
@@ -17,17 +17,16 @@ deploy:
     - sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "cd /home/ucam-ui && git pull origin develop && npm install && npm run build"
   only:
     - develop
-
-release:
-  stage: deploy-release
-  script:
-    - |
-      sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "
-      cd /home/ucam-edu/ui &&
-      git pull &&
-      echo $USER_NAME &&
-      echo $PASSWORD &&
-      npm install &&
-      npm run build"
-  only:
-    - release
+# release:
+#   stage: deploy-release
+#   script:
+#     - |
+#       sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "
+#       cd /home/ucam-edu/ui &&
+#       git pull &&
+#       echo $USER_NAME &&
+#       echo $PASSWORD &&
+#       npm install &&
+#       npm run build"
+#   only:
+#     - release
