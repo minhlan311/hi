@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import newsApi from '@/apis/news.api'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import './NewsPageDetail.scss'
 import SliderCustom from '@/components/SliderCustom'
@@ -8,13 +8,13 @@ import { Card } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import Paragraph from 'antd/es/typography/Paragraph'
-import { News } from '@/types/news.type'
+// import { News } from '@/types/news.type'
 import LoadingCustom from '@/components/LoadingCustom'
 
 export default function NewsPageDetail() {
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
   const { id } = useParams()
-  const dataAllNews = queryClient.getQueryData<News>(['news'])
+  // const dataAllNews = queryClient.getQueryData<News>(['news'])
 
   const { data, isLoading } = useQuery({
     queryKey: ['oneNew', id],
