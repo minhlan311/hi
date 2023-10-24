@@ -161,15 +161,11 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm Bài học mới '}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
-          <Input placeholder='Nhập tên bài thi' allowClear />
+          <Input placeholder='Nhập tên bài học' allowClear />
         </Form.Item>
-        <Form.Item
-          // initialValue={TypeLessonEnum.VIDEO_LESSON}
-          label={'Loại bài học'}
-          name='type'
-          rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}
-        >
+        <Form.Item label={'Loại bài học'} name='type' rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}>
           <Select
+            placeholder='Chọn loại bài học'
             onChange={onChange}
             options={[
               { value: TypeLessonEnum.VIDEO_LESSON, label: 'VIDEO' },
