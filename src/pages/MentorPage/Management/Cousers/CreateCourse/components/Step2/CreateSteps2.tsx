@@ -43,19 +43,21 @@ const CreateSteps2 = ({ dataId }: any) => {
     const callApi = async () => {
       setLoading(true)
 
-      try {
-        const data = await topicApi.getAllTopic({
-          filterQuery: { parentId: id ? id : dataId },
-          options: { limit: 15, createAt: 1 },
-        })
+      if (id || dataId) {
+        try {
+          const data = await topicApi.getAllTopic({
+            filterQuery: { parentId: id ? id : dataId },
+            options: { createAt: 1 },
+          })
 
-        localStorage.setItem('apiData', JSON.stringify(data?.data?.docs))
+          localStorage.setItem('apiData', JSON.stringify(data?.data?.docs))
 
-        setLoading(false)
-        setDataColl(data?.data?.docs as any)
-      } catch (error) {
-        console.error('Lỗi khi gọi API: ', error)
-        setLoading(false)
+          setLoading(false)
+          setDataColl(data?.data?.docs as any)
+        } catch (error) {
+          console.error('Lỗi khi gọi API: ', error)
+          setLoading(false)
+        }
       }
     }
 

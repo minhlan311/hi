@@ -66,7 +66,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
     <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm chuyên đề mới'}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tên chuyên đề'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
-          <Input placeholder='Nhập tên bài thi' allowClear />
+          <Input placeholder='Nhập tên chuyên đề' allowClear />
         </Form.Item>
         <Form.Item label={'Mô tả'} name='descriptions' rules={[{ required: true, message: 'Hãy nhập mô tả' }]}>
           <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
