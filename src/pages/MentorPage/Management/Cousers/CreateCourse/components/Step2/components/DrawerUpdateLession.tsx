@@ -195,11 +195,12 @@ export default function DrawerUpdateLession({
     <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Sửa bài học '}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tiêu đề bài học'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
-          <Input placeholder='Nhập tên bài thi' allowClear />
+          <Input placeholder='Nhập tên bbài học' allowClear />
         </Form.Item>
         <Form.Item label={'Loại bài học'} name='type' rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}>
           <Select
             onChange={onChange}
+            placeholder='Chọn loại bài học'
             options={[
               { value: TypeLessonEnum.VIDEO_LESSON, label: 'VIDEO' },
               { value: TypeLessonEnum.DOCUMENT_LESSON, label: 'VĂN BẢN' },
