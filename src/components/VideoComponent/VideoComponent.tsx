@@ -5,7 +5,7 @@ import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
 import screenfull from 'screenfull'
 import { ForwardOutlined, BackwardOutlined, StarOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Button, Popover } from 'antd'
+import { Button, Popover, Tooltip } from 'antd'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -305,9 +305,12 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             marginTop: '5px',
           }}
         >
-          <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
-            <PlusCircleOutlined /> Thêm ghi chú
-          </Button>
+          <Tooltip title='Thêm ghi chú'>
+            <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
+              <PlusCircleOutlined />
+            </Button>
+          </Tooltip>
+
           <Popover
             trigger={'click'}
             title={
@@ -326,19 +329,20 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               </>
             }
           >
-            <Button
-              style={{
-                cursor: 'pointer',
-              }}
-              type='primary'
-            >
-              <StarOutlined
+            <Tooltip title='Danh sách ghi chú'>
+              <Button
                 style={{
-                  scale: '1.5',
+                  cursor: 'pointer',
                 }}
-              />
-              Danh sách ghi chú{' '}
-            </Button>
+                type='primary'
+              >
+                <StarOutlined
+                  style={{
+                    scale: '1.5',
+                  }}
+                />
+              </Button>
+            </Tooltip>
           </Popover>
         </div>
       </div>

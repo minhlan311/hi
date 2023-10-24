@@ -80,6 +80,13 @@ export default function MycoursesLearning() {
     enabled: profile._id && id ? true : false,
   })
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Thêm dòng này để cuộn mượt mà
+    })
+  }
+
   useEffect(() => {
     if (isSuccess && !checkEnrolls?.data?.docs?.length) {
       openNotification({
@@ -413,7 +420,7 @@ export default function MycoursesLearning() {
 
   const handleLessonClick = (courseIndex: number, lessonIndex: number, lesson: any) => {
     let flatIndex = 0
-
+    scrollToTop()
     for (let i = 0; i < courseIndex; i++) {
       if (dataTopics && Array.isArray(dataTopics)) {
         flatIndex += dataTopics[i]?.lessons?.length || 0
