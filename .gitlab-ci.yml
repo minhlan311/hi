@@ -24,7 +24,7 @@ release:
       sshpass -p $PASS_HOST ssh -o StrictHostKeyChecking=no root@$HOST "
       cd /home/ucam-edu/ui &&
       git fetch &&
-      git merge origin/release
+      git merge origin/release &&
       npm install &&
       npm run build"
   only:
