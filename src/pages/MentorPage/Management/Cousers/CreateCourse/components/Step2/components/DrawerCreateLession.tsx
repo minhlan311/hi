@@ -32,6 +32,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [questionShow, setQuestionShow] = useState<boolean>(true)
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [id, setId] = useState<string>()
+  const [showAll, setShowAll] = useState<boolean>(false)
   useEffect(() => {
     dataCollapLession(dataDrawer)
   }, [dataDrawer])
@@ -100,6 +101,14 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   })
 
   useEffect(() => {
+    if (form.getFieldValue('type')) {
+      setShowAll(true)
+    } else {
+      setShowAll(false)
+    }
+  }, [form.getFieldValue('type')])
+
+  useEffect(() => {
     form.setFieldValue('descriptions', content)
   }, [content])
 
@@ -155,7 +164,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
           <Input placeholder='Nhập tên bài thi' allowClear />
         </Form.Item>
         <Form.Item
-          initialValue={TypeLessonEnum.VIDEO_LESSON}
+          // initialValue={TypeLessonEnum.VIDEO_LESSON}
           label={'Loại bài học'}
           name='type'
           rules={[{ required: true, message: 'Hãy chọn loại bài học' }]}
@@ -170,42 +179,50 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
             ]}
           />
         </Form.Item>
-        {!hidden && (
+        {showAll && (
           <>
-            <Form.Item label={'Link video'} name='media'>
-              <Input placeholder='Nhập Link video' allowClear />
+            {!hidden && (
+              <>
+                <Form.Item label={'Link video'} name='media'>
+                  <Input placeholder='Nhập Link video' allowClear />
+                </Form.Item>
+                <Form.Item label={'Thời lượng'} name='length'>
+                  <InputNumber
+                    style={{
+                      width: '100%',
+                    }}
+                    placeholder='Nhập thời lượng video nếu có'
+                  />
+                </Form.Item>
+              </>
+            )}
+            <Form.Item
+              label={'Nội dung giới thiệu'}
+              name='descriptions'
+              rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
+            >
+              <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
             </Form.Item>
-            <Form.Item label={'Thời lượng'} name='length'>
-              <InputNumber
-                style={{
-                  width: '100%',
-                }}
-                placeholder='Nhập thời lượng video nếu có'
-              />
+            {!questionShow && (
+              <Form.Item
+                label={'Thêm bộ câu hỏi'}
+                name='testId'
+                rules={[{ required: true, message: 'Hãy chọn câu hỏi' }]}
+              >
+                <Select options={optionsLession} placeholder='Thêm bộ câu hỏi cho bài học này' />
+              </Form.Item>
+            )}
+            <Form.Item label={'Tài liệu'} name='document'>
+              <Dragger {...props}>
+                <p className='ant-upload-drag-icon'>
+                  <InboxOutlined />
+                </p>
+                <p className='ant-upload-text'>Click hoặc kéo file vào đây để tải lên</p>
+              </Dragger>
             </Form.Item>
           </>
         )}
 
-        <Form.Item
-          label={'Nội dung giới thiệu'}
-          name='descriptions'
-          rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
-        >
-          <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
-        </Form.Item>
-        {!questionShow && (
-          <Form.Item label={'Thêm bộ câu hỏi'} name='testId' rules={[{ required: true, message: 'Hãy chọn câu hỏi' }]}>
-            <Select options={optionsLession} placeholder='Thêm bộ câu hỏi cho bài học này' />
-          </Form.Item>
-        )}
-        <Form.Item label={'Tài liệu'} name='document'>
-          <Dragger {...props}>
-            <p className='ant-upload-drag-icon'>
-              <InboxOutlined />
-            </p>
-            <p className='ant-upload-text'>Click hoặc kéo file vào đây để tải lên</p>
-          </Dragger>
-        </Form.Item>
         <Form.Item hidden name='parentId' />
         <Form.Item hidden name='lessonid' />
         <Form.Item>
