@@ -21,6 +21,7 @@ import EventDetailModal from './EventDetailModal'
 import RenderDateOfWeek from './RenderDateOfWeek'
 import { HiOutlineUserGroup } from 'react-icons/hi2'
 import { PiExam } from 'react-icons/pi'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -80,7 +81,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
           ? {
               start: timeSelect?.startDate,
               end: timeSelect?.endDate,
-              createdById: profile._id,
+              mentorId: profile._id,
               type: type,
             }
           : {
@@ -113,6 +114,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
           backgroundColor: (between && '#757575b5') || (item.testId && '#d72831a8') || '#019d44b5',
           color: 'var(--white)',
           isReadOnly: profile._id !== item.classData.createdById,
+          type: item.type,
         }
       })
 
@@ -187,7 +189,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   ]
 
   return (
-    <Space direction='vertical' className='sp100'>
+    <Space direction='vertical' className={'sp100'}>
       {sm && md && <Input.Search placeholder='Tìm kiếm' />}
       <Row justify='space-between' gutter={[12, 12]}>
         {!sm && (
@@ -334,24 +336,41 @@ const CalendarCustom = ({ calendarType }: Props) => {
           }
         />
       ) : (
-        <Calendar
-          ref={calRef}
-          height={(xl && '67vh') || (xxl && '75vh') || '20vh'}
-          events={events as unknown as any[]}
-          view={view}
-          week={{
-            showTimezoneCollapseButton: true,
-            timezonesCollapsed: true,
-            taskView: false,
-            workweek: false,
-            eventView: ['time'],
-          }}
-          usageStatistics={false}
-          disableDblClick={false}
-          onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
-          onSelectDateTime={handleCreateSelect}
-          isReadOnly={!profile.isMentor}
-        />
+        <Space direction='vertical' className={'sp100'}>
+          <Calendar
+            ref={calRef}
+            height={(xl && '66vh') || (xxl && '74vh') || '20vh'}
+            events={events as unknown as any[]}
+            view={view}
+            week={{
+              showTimezoneCollapseButton: true,
+              timezonesCollapsed: true,
+              taskView: false,
+              workweek: false,
+              eventView: ['time'],
+            }}
+            usageStatistics={false}
+            disableDblClick={false}
+            onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
+            onSelectDateTime={handleCreateSelect}
+            isReadOnly={!profile.isMentor}
+          />
+          <Space className={css.hint}>
+            <i>* Chú thích:</i>
+            <Space>
+              <div className={`${css.boxHint} ${css.classEvent}`}></div>
+              Lịch học
+            </Space>
+            <Space>
+              <div className={`${css.boxHint} ${css.testEvent}`}></div>
+              Lịch thi
+            </Space>
+            <Space>
+              <div className={`${css.boxHint} ${css.endEvnet}`}></div>
+              Đã kết thúc
+            </Space>
+          </Space>
+        </Space>
       )}
       <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
       <EventActionModal

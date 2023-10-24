@@ -2,9 +2,11 @@
 import { Row, Space } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import css from './styles.module.scss'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import { AppContext } from '@/contexts/app.context'
 type Props = {
   callBackWeekSelect?: React.Dispatch<React.SetStateAction<string | object>>
   callBackDateOfWeek?: React.Dispatch<React.SetStateAction<Dayjs[]>>
@@ -21,6 +23,7 @@ interface Date {
 const CalendarWeek = ({ callBackWeekSelect, callBackDateOfWeek, showCurrent, buttonAdd }: Props) => {
   const [currentWeek, setCurrentWeek] = useState(dayjs())
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const { profile } = useContext(AppContext)
 
   const nowWeek = () => {
     setCurrentWeek(dayjs())
@@ -94,11 +97,11 @@ const CalendarWeek = ({ callBackWeekSelect, callBackDateOfWeek, showCurrent, but
       {showCurrent && (
         <Row justify='space-between'>
           <Space className={css.currentButt}>
-            <ButtonCustom onClick={nowWeek}>Now</ButtonCustom>
-            <ButtonCustom onClick={prevWeek}>prev</ButtonCustom>
-            <ButtonCustom onClick={nextWeek}>next</ButtonCustom>
+            <ButtonCustom onClick={nowWeek}>Bây giờ</ButtonCustom>
+            <ButtonCustom onClick={prevWeek} icon={<AiOutlineLeft />}></ButtonCustom>
+            <ButtonCustom onClick={nextWeek} icon={<AiOutlineRight />}></ButtonCustom>
           </Space>
-          {buttonAdd}
+          {profile.isMentor && buttonAdd}
         </Row>
       )}
       <Space className={css.week}>
