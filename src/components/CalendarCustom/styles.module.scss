@@ -1,0 +1,15 @@
+.hint {
+  margin-left: 25px;
+  .boxHint {
+    padding: 6px;
+  }
+  .classEvent {
+    background-color: var(--green-2);
+  }
+  .testEvent {
+    background-color: var(--red-2);
+  }
+  .endEvnet {
+    background-color: var(--light-gray-2);
+  }
+}

@@ -47,4 +47,6 @@ export interface EventState {
   updatedAt: string
   classData: ClassState
   id: string
+  type: string
+  mentorId: string
 }

@@ -126,7 +126,8 @@ const EventActionModal = (props: Props) => {
         start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
         end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
         students: studentIds,
-        mentorId: eventDetail?._id,
+        mentorId: profile?._id,
+        type: 'CLASS',
       }
       mutate(payload as unknown as any)
     } else {
@@ -150,7 +151,7 @@ const EventActionModal = (props: Props) => {
         start: new Date(start),
         end: new Date(end),
         students: studentIds,
-        mentorId: eventDetail?._id,
+        mentorId: profile?._id,
       }
       mutate(payload as unknown as any)
     }
@@ -225,7 +226,7 @@ const EventActionModal = (props: Props) => {
             </Form.Item>
           </Col>
           {eventDetail && (
-            <Col span={6}>
+            <Col span={24} md={6}>
               <Form.Item label='Trạng thái' name='status'>
                 <SelectCustom
                   placeholder='Chọn trạng thái'
