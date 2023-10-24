@@ -2,6 +2,7 @@
 import { ENDPOINT } from '@/constants/endpoint'
 import { ClassState } from '@/interface/class'
 import { Class } from '@/types/class.type'
+import { TCourse } from '@/types/course.type'
 import { findUserEnroll } from '@/types/eroll.type'
 
 import { SuccessResponse } from '@/types/utils.type'
@@ -24,6 +25,9 @@ const classApi = {
   },
   arrangeClass(body: { courseId: string; userId: string }) {
     return http.post<SuccessResponse<findUserEnroll>>(ENDPOINT.ARRANGE_PATH, body)
+  },
+  openingClass(body: any) {
+    return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.OPENING_PATH, body)
   },
 }
 

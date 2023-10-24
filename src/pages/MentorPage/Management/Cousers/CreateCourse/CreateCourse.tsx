@@ -59,7 +59,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     queryKey: ['categoryAll'],
     queryFn: () =>
       categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
+        // parentId: '64ffde9c746fe5413cf8d1af',
       }),
   })
 
