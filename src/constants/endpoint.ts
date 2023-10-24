@@ -75,6 +75,7 @@ export const ENDPOINT = {
   FIND_CLASS_PATH: '/class/find',
   CLASS_PATH: '/class/',
   ARRANGE_PATH: '/class/arrange',
+  OPENING_PATH: '/class/find-opening',
 
   // :::::::::::::::::::: EVENT PATH :::::::::::::::::::::
   FIND_EVENT_PATH: '/event/find',
