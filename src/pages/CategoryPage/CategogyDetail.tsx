@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
 import { formatDate, formatPriceVND } from '@/helpers/common'
@@ -7,7 +8,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import LoadingCustom from '@/components/LoadingCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import courseApi from '@/apis/course.api'
 import { Card, Col, Pagination, Row } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
@@ -15,12 +15,17 @@ import calenderSVG from '@/assets/icons/calendar.svg'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import useResponsives from '@/hooks/useResponsives'
 import SliderCustom from '@/components/SliderCustom'
+import classApi from '@/apis/class.api'
+import courseApi from '@/apis/course.api'
 
 export default function CategogyDetail() {
-  const { categoryDetailSlug } = useParams()
+  const { categoryDetailSlug, menuSlug } = useParams()
   const { lg } = useResponsives()
   const [page, setPage] = useState(1)
 
+  // menuSlug
+  // :
+  // "lich-khai-giang-blbah"
   const navigate = useNavigate()
 
   const [filter, setFilter] = useState({
@@ -33,15 +38,6 @@ export default function CategogyDetail() {
       pagination: true,
     },
   })
-
-  useEffect(() => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      filterQuery: {
-        slug: 'trung-hoc-co-so',
-      },
-    }))
-  }, [])
 
   useEffect(() => {
     setFilter((prevFilter) => ({
@@ -67,6 +63,23 @@ export default function CategogyDetail() {
   const { data: listCourse, isLoading: Loading } = useQuery({
     queryKey: ['courseCate', filter, data],
     queryFn: () => {
+      return classApi.openingClass({
+        filterQuery: {
+          categoryId: data?.data?._id,
+        },
+        options: {
+          limit: 9,
+          page: page,
+          sort: { createdAt: -1 },
+        },
+      })
+    },
+    enabled: data?.data?._id && menuSlug === 'lich-khai-giang-blbah' ? true : false,
+  })
+
+  useQuery({
+    queryKey: ['courseCate', filter, data],
+    queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
           categoryId: data?.data?._id,
@@ -78,7 +91,7 @@ export default function CategogyDetail() {
         },
       })
     },
-    enabled: data?.data?.parentId ? true : false,
+    enabled: data?.data?._id && menuSlug === 'luyen-thi-743j7' ? true : false,
   })
 
   const handleClickCourse = (id: string) => {
@@ -127,62 +140,60 @@ export default function CategogyDetail() {
 
               {!lg ? (
                 <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ md: 24, lg: 32 }}>
-                  {Loading ? (
-                    <LoadingCustom />
-                  ) : (
-                    listDataCourse?.map((item) => (
-                      <Col className='col'>
-                        <Card
-                          onClick={() => handleClickCourse(item?._id as string)}
-                          hoverable
-                          style={{ width: 340, height: 410 }}
-                          cover={
-                            <ImageCustom
-                              preview={false}
-                              height='160px'
-                              width='100%'
-                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                            />
-                          }
-                        >
-                          <Meta
-                            description={
-                              <>
-                                <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                                {item?.class?.map((item) => (
-                                  <>
-                                    <div className='flex'>
-                                      <img src={calenderSVG} className='icons' alt='' />
-                                      <TextWithTooltip
-                                        rows={1}
-                                        children={
-                                          <>
-                                            {item?.startDate ? (
-                                              <>
-                                                Khai giảng {''}
-                                                {formatDate(item?.startDate)}
-                                              </>
-                                            ) : (
-                                              'Đang cập nhật'
-                                            )}
-                                          </>
-                                        }
-                                        className='text-date'
-                                      />
-                                    </div>
-                                  </>
-                                ))}
-                                <div className='flexPrice'>
-                                  <span className='name'>Chi phí: </span>
-                                  <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                                </div>
-                              </>
+                  {Loading
+                    ? menuSlug === 'lich-khai-giang-blbah' && <LoadingCustom />
+                    : listDataCourse?.map((item) => (
+                        <Col className='col'>
+                          <Card
+                            onClick={() => handleClickCourse(item?._id as string)}
+                            hoverable
+                            style={{ width: 340, height: 410 }}
+                            cover={
+                              <ImageCustom
+                                preview={false}
+                                height='160px'
+                                width='100%'
+                                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                              />
                             }
-                          />
-                        </Card>
-                      </Col>
-                    ))
-                  )}
+                          >
+                            <Meta
+                              description={
+                                <>
+                                  <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                  {item?.class?.map((item) => (
+                                    <>
+                                      <div className='flex'>
+                                        <img src={calenderSVG} className='icons' alt='' />
+                                        <TextWithTooltip
+                                          rows={1}
+                                          children={
+                                            <>
+                                              {item?.startDate ? (
+                                                <>
+                                                  Khai giảng {''}
+                                                  {formatDate(item?.startDate)}
+                                                </>
+                                              ) : (
+                                                'Đang cập nhật'
+                                              )}
+                                            </>
+                                          }
+                                          className='text-date'
+                                        />
+                                      </div>
+                                    </>
+                                  ))}
+                                  <div className='flexPrice'>
+                                    <span className='name'>Chi phí: </span>
+                                    <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                                  </div>
+                                </>
+                              }
+                            />
+                          </Card>
+                        </Col>
+                      ))}
                 </Row>
               ) : (
                 <div
