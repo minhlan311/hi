@@ -1,170 +1,108 @@
-//   .card {
-//     position: relative;
-//     overflow: hidden;
-//     width: 1.4em;
-//     height: 1.1em;
-//     border-radius: 0.15em;
-//     text-align: center;
-//     transition: transform 0.6s;
-//     transform-style: preserve-3d;
-//     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.timer {
+  display: flex;
 
-//     .cardTop {
-//       width: 100%;
-//       height: 100%;
-//       background-color: var(--light-gray-2);
-//       pointer-events: none;
-//     }
-//     .cardBottom {
-//       width: 100%;
-//       height: 100%;
-//       display: block;
-//       background-color: red;
-//       transform: rotateY(180deg);
-//     }
-//     .cardTop,
-//     .cardBottom {
-//       position: absolute;
-//       width: 100%;
-//       height: 100%;
-//       -webkit-backface-visibility: hidden;
-//       backface-visibility: hidden;
-//     }
+  .timeSegment {
+    display: block;
+    font-weight: bold;
+    width: 0.8em;
+    height: 1.4em;
+    margin: 0.3em 0 0.3em 0.15em;
+    .segmentDisplay {
+      position: relative;
+      height: 100%;
 
-//     .cardBack::before,
-//     .cardBottom::after {
-//       content: attr(data-value);
-//     }
+      .segmentDisplay__top,
+      .segmentDisplay__bottom {
+        overflow: hidden;
+        text-align: center;
+        width: 100%;
+        height: 50%;
+        position: relative;
+      }
 
-//     // .cardBack {
-//     //   position: absolute;
-//     //   height: 100%;
-//     //   left: 0;
-//     //   pointer-events: none;
-//     //   &::before {
-//     //     position: relative;
-//     //     z-index: -1;
-//     //     overflow: hidden;
-//     //   }
-//     // }
+      .segmentDisplay__top {
+        line-height: 1.3;
+        color: var(--white);
+        background-color: var(--light-gray-3);
+        border-radius: 0.12em 0.12em 0 0;
+      }
 
-//     // .flip {
-//     //   .cardBack::before {
-//     //     animation: flipTop 0.3s cubic-bezier(0.37, 0.01, 0.94, 0.35);
-//     //     animation-fill-mode: both;
-//     //     transform-origin: center bottom;
-//     //   }
-//     //   .cardBack {
-//     //     .cardTop {
-//     //       transform-origin: center top;
-//     //       animation-fill-mode: both;
-//     //       animation: flipBottom 0.6s cubic-bezier(0.15, 0.45, 0.28, 1); // 0.3s;
-//     //     }
-//     //   }
-//     // }
-//   }
-//   .flipClockSlot {
-//     font-size: 2vw;
-//   }
-// }
+      .segmentDisplay__bottom {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        line-height: 1.5;
+        color: var(--white);
+        background-color: var(--blackBg);
+        border-radius: 0 0 0.12em 0.12em;
+        border-top: 1px solid var(--light-gray-3);
+      }
+      .segmentOverlay {
+        position: absolute;
+        top: 0;
+        perspective: 400px;
+        height: 100%;
+        width: 0.8em;
 
-.flipCard {
-  background-color: transparent;
-  text-align: center;
-  margin: 20px;
-  perspective: 1000px;
+        .segmentOverlay__top,
+        .segmentOverlay__bottom {
+          position: absolute;
+          overflow: hidden;
+          text-align: center;
+          width: 100%;
+          height: 50%;
+        }
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-  .flipCardFront,
-  .flipCardBack {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    color: var(--white);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-  }
+        .segmentOverlay__top {
+          top: 0;
+          line-height: 1.3;
+          color: var(--white);
+          background-color: var(--light-gray-3);
+          transform-origin: bottom;
+          border-radius: 0.12em 0.12em 0 0;
+        }
 
-  .flipCardFront {
-    background-color: var(--light-gray-2);
-    z-index: 1;
-    border-radius: 0.2em 0.2em 0 0;
-  }
-
-  .flipCardBack {
-    background-color: var(--light-gray-3);
-    border-radius: 0 0 0.2em 0.2em;
-  }
-
-  .flipCardInner,
-  .show {
-    width: 1.4em;
-    height: 1.1em;
-    text-align: center;
-    border-radius: 0.2em 0.2em;
-    overflow: hidden;
-  }
-  .show {
-    position: absolute;
-    z-index: -1;
-  }
-  .flipCardInner {
-    position: relative;
-    transition: transform 1s;
-    transform-style: preserve-3d;
-    .flipCardFront {
-      animation: flipTop 0.3s;
-      animation-fill-mode: both;
-    }
-
-    .flipCardBack {
-      animation-fill-mode: both;
-      animation: flipBottom 0.6s; // 0.3s;?
-    }
-  }
-
-  &:hover {
-    .flipCardInner {
-      transform: rotateX(-90deg);
+        .segmentOverlay__bottom {
+          bottom: 0;
+          line-height: 1.5;
+          display: inline-flex;
+          align-items: flex-end;
+          justify-content: space-evenly;
+          color: var(--white);
+          background-color: var(--blackBg);
+          border-top: 1px solid var(--light-gray-3);
+          transform-origin: top;
+          border-radius: 0 0 0.12em 0.12em;
+        }
+      }
+      .flip {
+        .segmentOverlay__top {
+          animation: flip-top 0.8s linear;
+        }
+        .segmentOverlay__bottom {
+          animation: flip-bottom 0.8s linear;
+        }
+      }
     }
   }
 }
 
-@keyframes flipTop {
+@keyframes flip-top {
   0% {
     transform: rotateX(0deg);
-    z-index: 2;
   }
-  0%,
-  99% {
-    opacity: 0.99;
-  }
+  50%,
   100% {
     transform: rotateX(-90deg);
-    opacity: 0;
   }
 }
 
-@keyframes flipBottom {
+@keyframes flip-bottom {
   0%,
   50% {
-    z-index: -1;
     transform: rotateX(90deg);
-    opacity: 0;
-  }
-  51% {
-    opacity: 0.99;
   }
   100% {
-    opacity: 0.99;
     transform: rotateX(0deg);
-    z-index: 5;
   }
 }
