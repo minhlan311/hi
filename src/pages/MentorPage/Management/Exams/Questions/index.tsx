@@ -74,7 +74,23 @@ const MentorQuestions = () => {
   const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
   const [current, setCurrent] = useState<number>(1)
   const [currentSelected, setSelectedCurrent] = useState<number>(1)
-  const examMutation = useMutation({ mutationFn: (data: ExamState) => examApi.putExam(data) })
+  const examMutation = useMutation({
+    mutationFn: (data: ExamState) => examApi.putExam(data),
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: remove ? 'Xóa câu hỏi khỏi bộ đề thành công' : 'Cập nhật bộ đề thành công',
+      })
+      setRemove(false)
+    },
+    onError: () =>
+      openNotification({
+        status: 'error',
+        message: 'Thông báo',
+        description: ' Có lỗi xảy ra',
+      }),
+  })
 
   // bank questons
   const [questionsCallback, setQuestionsCallback] = useState<SuccessResponse<QuestionState[]>>()
@@ -115,25 +131,6 @@ const MentorQuestions = () => {
       examMutation.mutate(payload as unknown as any)
     }
   }
-
-  useEffect(() => {
-    if (examMutation.status === 'success' && !examMutation.isLoading) {
-      openNotification({
-        status: examMutation.status,
-        message: 'Thông báo',
-        description: remove ? 'Xóa câu hỏi khỏi bộ đề thành công' : 'Cập nhật bộ đề thành công',
-      })
-      setRemove(false)
-    }
-
-    if (examMutation.status === 'error' && examMutation.error) {
-      openNotification({
-        status: examMutation.status,
-        message: 'Thông báo',
-        description: ' Có lỗi xảy ra',
-      })
-    }
-  }, [])
 
   const scrollToTop = () => {
     window.scrollTo({

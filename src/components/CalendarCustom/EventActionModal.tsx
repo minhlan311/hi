@@ -79,6 +79,7 @@ const EventActionModal = (props: Props) => {
         )
         if (selectedOption)
           setInitVal({
+            name: eventDetail.name,
             classId: eventDetail.classId,
             testId: eventDetail.testId,
             students: eventDetail.students,
@@ -90,7 +91,7 @@ const EventActionModal = (props: Props) => {
           })
       } else
         setInitVal({
-          title: eventDetail.title,
+          name: eventDetail.name,
           classId: eventDetail.classId,
           students: eventDetail.students,
           status: eventDetail.status,
@@ -186,7 +187,7 @@ const EventActionModal = (props: Props) => {
         >
           <Input placeholder='Nhập tiêu đề' />
         </Form.Item>
-        <TextAreaCustom name='description' data={eventDetail?.description} label='Ghi chú' />
+        <TextAreaCustom name='description' data={eventDetail} label='Ghi chú' />
         <Row gutter={12}>
           <Col span={24} md={eventDetail ? 9 : 12}>
             <Form.Item label='Lớp học' name='classId' rules={[{ required: true, message: 'Vui lòng chọn lớp' }]}>
@@ -215,7 +216,7 @@ const EventActionModal = (props: Props) => {
                 searchKey='user'
                 apiFind={userApi.findUser}
                 filterQuery={{ _id: studentsId }}
-                defaultValue={eventDetail?.classData.students}
+                defaultValue={eventDetail?.students}
                 mode='multiple'
                 allowClear
                 selectAll
@@ -251,7 +252,7 @@ const EventActionModal = (props: Props) => {
                     searchKey='exams'
                     apiFind={examApi.findExam}
                     filterQuery={{ createdById: profile._id }}
-                    defaultValue={eventDetail?.classData.students}
+                    defaultValue={eventDetail?.students}
                   />
                 </Form.Item>
               </Col>
