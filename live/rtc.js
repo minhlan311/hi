@@ -18,6 +18,7 @@ window.addEventListener('load', () => {
     host_id: 1779
   }
   const user = JSON.parse(localStorage.getItem('profile'))
+  let streamActive = null
 
   if (!user) {
     window.location.href = '/login'
@@ -62,7 +63,6 @@ window.addEventListener('load', () => {
   let idActive = null
   var pc = []
   let streamHost = null
-  let streamActive = null
 
   let socket = null
 
@@ -284,38 +284,6 @@ window.addEventListener('load', () => {
     }
   }
 
-  function shareScreen() {
-    h.shareScreen()
-      .then((stream) => {
-        h.toggleShareIcons(true)
-
-        //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
-        //It will be enabled was user stopped sharing screen
-        h.toggleVideoBtnDisabled(true)
-
-        //save my screen stream
-        screen = stream
-
-        if (!isHost) {
-          document.getElementById('local').srcObject = stream
-        } else {
-          document.getElementById('video-host').srcObject = stream
-        }
-
-        //share the new stream with all partners
-        // document.getElementById()
-        broadcastNewTracks(stream, 'video', false)
-
-        //When the stop sharing button shown by the browser is clicked
-        screen.getVideoTracks()[0].addEventListener('ended', () => {
-          stopSharingScreen()
-        })
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-  }
-
   function stopSharingScreen() {
     //enable video toggle btn
     h.toggleVideoBtnDisabled(false)
@@ -481,15 +449,6 @@ window.addEventListener('load', () => {
   })
 
   //When user clicks the 'Share screen' button
-  document.getElementById('share-screen').addEventListener('click', (e) => {
-    e.preventDefault()
-
-    if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
-      stopSharingScreen()
-    } else {
-      shareScreen()
-    }
-  })
 
   //When user choose to record own video
   if (document.getElementById('record-video')) {
@@ -585,8 +544,8 @@ window.addEventListener('load', () => {
     document.getElementById('video-demo').remove()
     socket = io.connect(SOCKET_URL, { secure: true })
 
-    var audioTracks = myStream.getAudioTracks()
-    var hasAudio = audioTracks.length > 0
+    var audioTracks = myStream ? myStream.getAudioTracks() : null
+    var hasAudio = audioTracks ? audioTracks.length > 0 : 0
 
     if (!isOnCamera) {
       document.getElementById('toggle-video').click()
@@ -664,6 +623,57 @@ window.addEventListener('load', () => {
         user: user,
         isHost: user.id === room.host_id,
         isOnCamera: isOnCamera
+      })
+
+      document.getElementById('share-screen').addEventListener('click', (e) => {
+        e.preventDefault()
+
+        if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
+          stopSharingScreen()
+        } else {
+          shareScreen()
+        }
+      })
+
+      function shareScreen() {
+        h.shareScreen()
+          .then((stream) => {
+            h.toggleShareIcons(true)
+            h.toggleVideoBtnDisabled(true)
+            //save my screen stream
+            screen = stream
+            //share the new stream with all partners
+            // document.getElementById('sc').srcObject = stream
+            streamActive = stream
+            broadcastNewTracks(stream, 'video', false)
+            socket.emit('share', {
+              room: room.id,
+              user: user,
+              to: socketId
+            })
+
+            //When the stop sharing button shown by the browser is clicked
+            screen.getVideoTracks()[0].addEventListener('ended', () => {
+              stopSharingScreen()
+            })
+          })
+          .catch((e) => {
+            console.error(e)
+          })
+      }
+
+      socket.on('share', (data) => {
+        const video = document.getElementById(data.id)
+        const videoShare = document.getElementsByClassName('share')
+
+        for (let i = 0; i <= videoShare.length; i++) {
+          if (videoShare[i]) {
+            videoShare[i].remove()
+          }
+        }
+
+        video.classList.add('share')
+        // h.adjustVideoElemSize()
       })
 
       socket.on('new user', (data) => {

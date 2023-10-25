@@ -173,8 +173,10 @@ export default {
     let sender = recipientPeer.getSenders
       ? recipientPeer.getSenders().find((s) => s.track && s.track.kind === stream.kind)
       : false
-
+    if (!sender || !recipientPeer.addStream) return console.error('Could not find or add track to peer connection')
     sender ? sender.replaceTrack(stream) : ''
+
+    // thay đổi sender thành video elemment
   },
 
   toggleShareIcons(share) {
@@ -245,26 +247,32 @@ export default {
 
   adjustVideoElemSize() {
     let elem = document.getElementsByClassName('card card-sm')
-    let totalRemoteVideosDesktop = elem.length
-    let newWidth =
-      totalRemoteVideosDesktop <= 2
-        ? '50%'
-        : totalRemoteVideosDesktop == 3
-          ? '33.33%'
-          : totalRemoteVideosDesktop <= 8
-            ? '25%'
-            : totalRemoteVideosDesktop <= 15
-              ? '20%'
-              : totalRemoteVideosDesktop <= 18
-                ? '16%'
-                : totalRemoteVideosDesktop <= 23
-                  ? '15%'
-                  : totalRemoteVideosDesktop <= 32
-                    ? '12%'
-                    : '10%'
+    let videoShare = document.getElementsByClassName('share')
 
-    for (let i = 0; i < totalRemoteVideosDesktop; i++) {
-      elem[i].style.width = newWidth
+    if (!videoShare || !videoShare.length) {
+      let totalRemoteVideosDesktop = elem.length
+      let newWidth =
+        totalRemoteVideosDesktop <= 2
+          ? '50%'
+          : totalRemoteVideosDesktop == 3
+            ? '33.33%'
+            : totalRemoteVideosDesktop <= 8
+              ? '25%'
+              : totalRemoteVideosDesktop <= 15
+                ? '20%'
+                : totalRemoteVideosDesktop <= 18
+                  ? '16%'
+                  : totalRemoteVideosDesktop <= 23
+                    ? '15%'
+                    : totalRemoteVideosDesktop <= 32
+                      ? '12%'
+                      : '10%'
+
+      for (let i = 0; i < totalRemoteVideosDesktop; i++) {
+        elem[i].style.width = newWidth
+      }
+    } else {
+      videoShare.style.width = '60vw'
     }
   }
 }

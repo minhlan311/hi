@@ -425,3 +425,7 @@ video {
 #video-demo {
   background-color: #000;
 }
+.share {
+  width: 70vw;
+  height: 100%;
+}
