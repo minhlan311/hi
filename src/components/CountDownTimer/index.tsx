@@ -66,18 +66,28 @@
 
 //   const CountdownTracker = ({ value, label }) => {
 //     return (
-//       <span className={css.flipClock__piece}>
-//         <b className={css.card} style={{ fontSize: size }}>
-//           <b className={css.card__top}>{value}</b>
-//           <b className={css.card__bottom}>{value}</b>
-//           <div className={value && css.flip}>
-//             <b className={css.card__back}>
-//               <b className={css.card__bottom}>{value}</b>
-//             </b>
-//           </div>
-//         </b>
-//         <span className={css.flipClock__slot}>{label}</span>
-//       </span>
+//       // <span className={css.flipClock}>
+//       //   <b className={css.card} style={{ fontSize: size }}>
+//       //     <b className={css.cardTop}>{value}</b>
+//       //     <b className={css.cardBottom}>{value}</b>
+//       //     {/* <div className={value && css.flip}>
+//       //       <b className={css.cardBack}>
+//       //         <b className={css.cardTop}>{value}</b>
+//       //       </b>
+//       //     </div> */}
+//       //   </b>
+//       //   {/* <span className={css.flipClockSlot}>{label}</span> */}
+//       // </span>
+//       <div className={css.flipCard}>
+//         <div className={css.show} style={{ fontSize: size }}>
+//           <div className={css.flipCardFront}>{value}</div>
+//           <div className={css.flipCardBack}>{value}</div>
+//         </div>
+//         <div className={value && css.flipCardInner} style={{ fontSize: size }}>
+//           <div className={css.flipCardFront}>{value}</div>
+//           <div className={css.flipCardBack}>{value}</div>
+//         </div>
+//       </div>
 //     )
 //   }
 

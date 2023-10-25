@@ -50,28 +50,21 @@ const DrawerExam = (props: Props) => {
     }
   })
 
-  const { isLoading, status, mutate, error } = useMutation({
+  const { isLoading, mutate } = useMutation({
     mutationFn: (body) => (action === 'create' ? examApi.createExam(body) : examApi.putExam(body)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['examFilter'] })
-    },
-  })
 
-  useEffect(() => {
-    if (status === 'success') {
       openNotification({
-        status: status,
+        status: 'success',
         message: action === 'create' ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
       setOpen(false)
 
       form.resetFields()
-    }
-
-    if (status === 'error' && error) {
-      openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
-    }
-  }, [status])
+    },
+    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
+  })
 
   useEffect(() => {
     setLoading && setLoading(isLoading)
@@ -130,7 +123,7 @@ const DrawerExam = (props: Props) => {
             <Input placeholder='Nhập tên tiêu đề bộ đề' />
           </Form.Item>
 
-          <TextAreaCustom name='description' label='Chú thích' data={examData?.description} />
+          <TextAreaCustom name='description' label='Chú thích' data={examData} />
 
           <Form.Item
             name='type'
