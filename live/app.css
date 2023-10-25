@@ -198,7 +198,7 @@
         transition: 0.3s;
         top: 47px;
     }
-  
+
     .chat-opened::-webkit-scrollbar {
         display: none;
     }
@@ -211,7 +211,7 @@
         bottom: 90px;
         margin-bottom: 0px;
     }
-    
+
     .card-sm{
         max-width: 100%;
         min-width: 50%;

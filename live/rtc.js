@@ -6,6 +6,7 @@ import h from './helpers.js'
 import { changeVideoDevice } from './checkDevice.js'
 
 window.addEventListener('load', () => {
+  document.getElementById('chat-pane').style.right = '-100vw'
   let isOnCamera = true
   const urlParams = new URLSearchParams(window.location.search)
   const roomId = urlParams.get('room_id')
@@ -38,6 +39,7 @@ window.addEventListener('load', () => {
   })
 
   const SOCKET_URL = 'https://hiblue.fun/stream'
+  // const SOCKET_URL = 'http://127.0.0.1:4000/stream'
 
   // document.getElementById('guest').style.height = `calc(${window.innerHeight}px - 200px)`
   // document.getElementById('guest').style.overflowY = 'auto'
@@ -204,7 +206,7 @@ window.addEventListener('load', () => {
 
               //create a new div for card
               let cardDiv = document.createElement('div')
-              cardDiv.className = `card card-sm`
+              cardDiv.className = `card card-sm m-1`
               cardDiv.id = partnerName
               cardDiv.appendChild(newVid)
               cardDiv.appendChild(controlDiv)
@@ -216,7 +218,7 @@ window.addEventListener('load', () => {
               //   document.getElementById('video-off-camera').appendChild(cardDiv)
               // } else {
               // }
-              document.getElementById('videos').appendChild(cardDiv)
+              document.getElementById('guest').appendChild(cardDiv)
 
               h.adjustVideoElemSize()
             }
@@ -230,18 +232,23 @@ window.addEventListener('load', () => {
 
       switch (pc[partnerName].iceConnectionState) {
         case 'disconnected':
+          setTimeout(() => {
+            if (pc[partnerName].iceConnectionState === 'disconnected') {
+              h.closeVideo(partnerName)
+            }
+          }, 5000)
+          break
         case 'failed':
-          h.closeVideo(partnerName)
+          setTimeout(() => {
+            if (pc[partnerName].iceConnectionState === 'disconnected') {
+              h.closeVideo(partnerName)
+            }
+          }, 5000)
           break
-
         case 'closed':
-          h.closeVideo(partnerName)
-          break
-        default:
-          if (document.getElementById(`${partnerName}-video`)) {
-            return
-          }
+          console.log('dong')
 
+          h.closeVideo(partnerName)
           break
       }
     }
@@ -874,7 +881,6 @@ window.addEventListener('load', () => {
           document.getElementById('toggle-mute').classList.remove('fa-microphone-alt-slash')
           myStream.getAudioTracks()[0].enabled = true
           muted = false
-        } else {
         }
       })
 
@@ -938,6 +944,14 @@ window.addEventListener('load', () => {
         } else {
           // document.getElementById(`${data.id}-poster`).remove()
         }
+      })
+      socket.on('out', (data) => {
+        console.log(data.id)
+        h.closeVideo(data.id)
+      })
+
+      window.addEventListener('offline', (event) => {
+        alert('Mất kết nối mạng')
       })
     })
   }
