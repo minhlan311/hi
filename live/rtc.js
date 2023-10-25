@@ -39,8 +39,8 @@ window.addEventListener('load', () => {
     )
   })
 
-  const SOCKET_URL = 'https://hiblue.fun/stream'
-  // const SOCKET_URL = 'http://127.0.0.1:4000/stream'
+  // const SOCKET_URL = 'https://hiblue.fun/stream'
+  const SOCKET_URL = 'http://127.0.0.1:4000/stream'
 
   // document.getElementById('guest').style.height = `calc(${window.innerHeight}px - 200px)`
   // document.getElementById('guest').style.overflowY = 'auto'
@@ -643,8 +643,9 @@ window.addEventListener('load', () => {
             //save my screen stream
             screen = stream
             //share the new stream with all partners
-            // document.getElementById('sc').srcObject = stream
-            streamActive = stream
+            // document.getElementsByClassName('share').style.display = 'block'
+            document.getElementById('local').srcObject = stream
+            // streamActive = stream
             broadcastNewTracks(stream, 'video', false)
             socket.emit('share', {
               room: room.id,
@@ -662,19 +663,23 @@ window.addEventListener('load', () => {
           })
       }
 
-      socket.on('share', (data) => {
-        const video = document.getElementById(data.id)
-        const videoShare = document.getElementsByClassName('share')
+      // socket.on('share', (data) => {
+      //   const video = document.getElementById(data.id)
+      //   const videoShare = document.getElementsByClassName('share')
 
-        for (let i = 0; i <= videoShare.length; i++) {
-          if (videoShare[i]) {
-            videoShare[i].remove()
-          }
-        }
+      //   for (let i = 0; i <= videoShare.length; i++) {
+      //     if (videoShare[i]) {
+      //       videoShare[i].remove()
+      //     }
+      //   }
 
-        video.classList.add('share')
-        // h.adjustVideoElemSize()
-      })
+      //   videoShare.appendChild(video)
+
+      //   // video.classList.add('share')
+
+      //   document.getElementById('guest').classList.add('col-md-3')
+      //   // h.adjustVideoElemSize()
+      // })
 
       socket.on('new user', (data) => {
         console.log('new user', data)
