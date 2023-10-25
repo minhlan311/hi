@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
+import { REGEX_PATTERN } from '@/constants/utils'
 import { Button, Form, Input, Space } from 'antd'
 import { Link } from 'react-router-dom'
 
@@ -19,6 +20,10 @@ const ForgotPassword = () => {
           {
             required: true,
             message: 'Vui lòng nhập Email hoặc số điện thoại',
+          },
+          {
+            pattern: REGEX_PATTERN.regexCombineEmailPhoneNumber,
+            message: `Email hoặc số điện thoại không hợp lệ!`,
           },
         ]}
       >

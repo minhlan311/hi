@@ -169,7 +169,7 @@ const EventDetailModal = (props: Props) => {
                   <ButtonCustom
                     type='primary'
                     disabled={!between || endClass}
-                    href={`/live/index.html?room_id=${eventDetail._id}`}
+                    href={`/live/index.html?id=${eventDetail._id}`}
                     linkTarget='_parent'
                   >
                     Tham gia

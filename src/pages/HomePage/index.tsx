@@ -15,7 +15,9 @@ export default function HomePage() {
   return (
     <div className='mtz-homepage'>
       {/* <CountDownTimer
-      // timeTillDate='2023-10-23T09:51:35.527Z'
+        type='progress'
+        action
+        // timeTillDate='2023-10-23T09:51:35.527Z'
       /> */}
       <Banner />
       <Intro />
