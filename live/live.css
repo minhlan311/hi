@@ -426,6 +426,7 @@ video {
   background-color: #000;
 }
 .share {
+  display: none;
   width: 70vw;
   height: 100%;
 }

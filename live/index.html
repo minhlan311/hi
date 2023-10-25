@@ -15,15 +15,15 @@
       href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
       integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
       crossorigin="anonymous" />
-    <link rel="stylesheet" href="./live.css?v=2" type="text/css" />
+    <link rel="stylesheet" href="./live.css?v=1111112" type="text/css" />
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.js"
       integrity="sha512-jMNwWSmjje4fjYut9MBGKXw5FZA6D67NHAuC9szpjbbjg51KefquNfvn4DalCbGfkcv/jHsHnPo1o47+8u4biA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"></script>
-    <script type="module" src="./rtc.js?v=17091996"></script>
-    <script type="module" src="./events.js?v=17091996"></script>
+    <script type="module" src="./rtc.js?v=1709199611111111111111"></script>
+    <script type="module" src="./events.js?v=170919961"></script>
     <script src="./autolink.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js"
@@ -123,6 +123,9 @@
         <div class="row">
           <div class="col-md-12" id="main">
             <div class="row mx-0">
+              <div class="share col-md-9">
+                <video id="sc"></video>
+              </div>
               <div class="col-md-12 d-flex" id="guest">
                 <!-- <div class="row mx-0 my-2"> -->
                 <div id="videos">
@@ -132,8 +135,6 @@
                     autoplay
                     muted></video>
                 </div>
-                <!-- <div class="col-md-2" id="video-off-camera"></div> -->
-                <!-- </div> -->
               </div>
             </div>
           </div>

@@ -249,30 +249,31 @@ export default {
     let elem = document.getElementsByClassName('card card-sm')
     let videoShare = document.getElementsByClassName('share')
 
-    if (!videoShare || !videoShare.length) {
-      let totalRemoteVideosDesktop = elem.length
-      let newWidth =
-        totalRemoteVideosDesktop <= 2
-          ? '50%'
-          : totalRemoteVideosDesktop == 3
-            ? '33.33%'
-            : totalRemoteVideosDesktop <= 8
-              ? '25%'
-              : totalRemoteVideosDesktop <= 15
-                ? '20%'
-                : totalRemoteVideosDesktop <= 18
-                  ? '16%'
-                  : totalRemoteVideosDesktop <= 23
-                    ? '15%'
-                    : totalRemoteVideosDesktop <= 32
-                      ? '12%'
-                      : '10%'
+    // if (!videoShare || !videoShare.length) {
+    let totalRemoteVideosDesktop = elem.length
+    let newWidth =
+      totalRemoteVideosDesktop <= 2
+        ? '50%'
+        : totalRemoteVideosDesktop == 3
+          ? '33.33%'
+          : totalRemoteVideosDesktop <= 8
+            ? '25%'
+            : totalRemoteVideosDesktop <= 15
+              ? '20%'
+              : totalRemoteVideosDesktop <= 18
+                ? '16%'
+                : totalRemoteVideosDesktop <= 23
+                  ? '15%'
+                  : totalRemoteVideosDesktop <= 32
+                    ? '12%'
+                    : '10%'
 
-      for (let i = 0; i < totalRemoteVideosDesktop; i++) {
-        elem[i].style.width = newWidth
-      }
-    } else {
-      videoShare.style.width = '60vw'
+    for (let i = 0; i < totalRemoteVideosDesktop; i++) {
+      elem[i].style.width = newWidth
     }
+    //   } else {
+    //     videoShare.style.width = '60vw'
+    //   }
+    // }
   }
 }
