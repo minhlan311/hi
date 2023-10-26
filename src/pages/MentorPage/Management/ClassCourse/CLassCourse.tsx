@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Col, Input, Popconfirm, Row, Space, Table, Tooltip, DatePicker, Form } from 'antd'
-import { DeleteOutlined, PlusCircleOutlined, EditOutlined } from '@ant-design/icons'
-import { useState, useContext, ChangeEvent } from 'react'
-import './CLassCourse.scss'
-import { debounce, formatDate } from '@/helpers/common'
-import { MyPageTableOptions } from '@/types/page.type'
-import { Class } from '@/types/class.type'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import classApi from '@/apis/class.api'
-import { AppContext } from '@/contexts/app.context'
-import ClassCourseCreate from './ClassCourseCreate'
 import openNotification from '@/components/Notification'
+import { AppContext } from '@/contexts/app.context'
+import { debounce, formatDate } from '@/helpers/common'
+import { Class } from '@/types/class.type'
+import { MyPageTableOptions } from '@/types/page.type'
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, Col, DatePicker, Form, Input, Popconfirm, Row, Space, Table, Tooltip } from 'antd'
+import { ChangeEvent, useContext, useState } from 'react'
+import './CLassCourse.scss'
+import ClassCourseCreate from './ClassCourseCreate'
 // import { DatePickerProps } from 'antd/lib'
 // import { RangePickerProps } from 'antd/es/date-picker'
-import { FORM_TYPE } from '@/constants'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import { FORM_TYPE } from '@/constants'
 
 export default function CLassCourse() {
   const { profile } = useContext(AppContext)
@@ -208,7 +208,7 @@ export default function CLassCourse() {
       </Form>
       <div className='div-table'>
         <Table
-          scroll={{ x: 500, y: 300 }} // Đặt chiều cao cuộn ở đây (300px)
+          scroll={{ x: 500, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
           dataSource={data?.data?.docs as any}
           pagination={{
             current: data?.data?.page,
