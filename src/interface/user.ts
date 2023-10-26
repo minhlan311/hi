@@ -1,3 +1,4 @@
+import { Class } from '@/types/class.type'
 import { MentorInfo } from '@/types/mentor.type'
 
 export interface UserState {
@@ -20,6 +21,7 @@ export interface UserState {
   educationType?: string
   birthday: string
   mentorInfo: MentorInfo
+  classData: Class[]
   socials: {
     type: string
     url: string

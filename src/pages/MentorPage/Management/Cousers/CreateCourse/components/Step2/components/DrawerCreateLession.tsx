@@ -138,14 +138,6 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
       setHidden(false)
     }
 
-    if (value === TypeLessonEnum.LIVE_LESSON) {
-      setContent(
-        '<p>Đây là bài học sẽ học tại lớp học online <b><a href="/schedule">CLICK VÀO ĐÂY</a></b> để xem lịch học của bạn</p>',
-      )
-    } else {
-      setContent('')
-    }
-
     if (value === TypeLessonEnum.EXAM) {
       setQuestionShow(false)
     } else {

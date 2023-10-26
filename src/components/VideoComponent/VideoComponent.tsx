@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef, useState, useEffect } from 'react'
+import useIsMobile from '@/hooks/useCheckMobile'
+import { BackwardOutlined, ForwardOutlined, PlusCircleOutlined, StarOutlined } from '@ant-design/icons'
+import { Button, Popover, Tooltip } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
+import screenfull from 'screenfull'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
-import screenfull from 'screenfull'
-import { ForwardOutlined, BackwardOutlined, StarOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Button, Popover, Tooltip } from 'antd'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -54,10 +55,12 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     show: false,
     volume: 0,
   })
+
   const [seekNotification, setSeekNotification] = useState<{ show: boolean; type: 'forward' | 'rewind' }>({
     show: false,
     type: 'forward',
   })
+  const isMobile = useIsMobile()
 
   const handleDeleteBookmark = (index: number) => {
     const newBookmarks = [...bookmarks]
@@ -72,13 +75,19 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   let hideControlsTimeout: string | number | NodeJS.Timeout | undefined
 
   const handleMouseMove = () => {
-    controlsRef.current.style.visibility = 'visible'
+    if (controlsRef.current) {
+      controlsRef.current.style.visibility = 'visible'
+    }
+
     if (hideControlsTimeout) {
       clearTimeout(hideControlsTimeout)
     }
+
     hideControlsTimeout = setTimeout(() => {
-      controlsRef.current.style.visibility = 'hidden'
-    }, 3000) // ẩn sau 3 giây
+      if (controlsRef.current) {
+        controlsRef.current.style.visibility = 'hidden'
+      }
+    }, 3000)
   }
 
   useEffect(() => {
@@ -95,6 +104,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
         setSeekNotification((prev) => ({ ...prev, show: false }))
         setVolumeNotification((prev) => ({ ...prev, show: false }))
       }, 500)
+
       return () => clearTimeout(timeout)
     }
   }, [seekNotification, volumeNotification])
@@ -221,7 +231,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   return (
     <>
       <div className={style.boxContainer}>
-        <div ref={playerContainerRef} className={style.container} onMouseMove={handleMouseMove}>
+        <div ref={playerContainerRef} className={style.container} onMouseMove={isMobile ? undefined : handleMouseMove}>
           {volumeNotification.show ? (
             <div className={style.volumeNotification} style={{ opacity: volumeNotification.show ? 1 : 0 }}>
               {`Âm lượng: ${Math.round(volume * 100)}%`}
@@ -256,7 +266,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             muted={muted}
             ref={playerRef}
             playing={playing}
-            controls={false}
+            controls={isMobile ? true : false}
             onProgress={handleProgress}
             style={{
               width: '1200px',
@@ -271,33 +281,34 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               },
             }}
           />
-
-          <Controls
-            names={names}
-            dataLession={dataLession}
-            ref={controlsRef}
-            onSeek={handleSeekChange}
-            onDuration={handleDuration}
-            handleRewind={handleRewind}
-            handlePlayPause={handlePlayPause}
-            handleFastForward={handleFastForward}
-            handleMute={handleMute}
-            onVolumeChange={onVolumeChange}
-            toggleFullScreen={toggleFullScreen}
-            handlePlaybackRate={handlePlaybackRate}
-            onRewind={handleRewind}
-            onPlayPause={handlePlayPause}
-            onFastForward={handleFastForward}
-            playing={playing}
-            played={playeds}
-            elapsedTime={elapsedTime}
-            totalDuration={totalDuration}
-            muted={muted}
-            handleSeekMouseUp={handleSeekMouseUp}
-            onVolumeSeekDown={handleVolumeSeekDown}
-            playbackRate={playbackRate}
-            volume={volume}
-          />
+          {!isMobile && (
+            <Controls
+              names={names}
+              dataLession={dataLession}
+              ref={controlsRef}
+              onSeek={handleSeekChange}
+              onDuration={handleDuration}
+              handleRewind={handleRewind}
+              handlePlayPause={handlePlayPause}
+              handleFastForward={handleFastForward}
+              handleMute={handleMute}
+              onVolumeChange={onVolumeChange}
+              toggleFullScreen={toggleFullScreen}
+              handlePlaybackRate={handlePlaybackRate}
+              onRewind={handleRewind}
+              onPlayPause={handlePlayPause}
+              onFastForward={handleFastForward}
+              playing={playing}
+              played={playeds}
+              elapsedTime={elapsedTime}
+              totalDuration={totalDuration}
+              muted={muted}
+              handleSeekMouseUp={handleSeekMouseUp}
+              onVolumeSeekDown={handleVolumeSeekDown}
+              playbackRate={playbackRate}
+              volume={volume}
+            />
+          )}
         </div>
         <div
           className='flex'
@@ -305,7 +316,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             marginTop: '5px',
           }}
         >
-          <Tooltip title='Thêm ghi chú'>
+          <Tooltip placement='bottom' title='Thêm ghi chú'>
             <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
               <PlusCircleOutlined />
             </Button>
@@ -317,19 +328,37 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               <>
                 <div>
                   <ul>
-                    {bookmarks?.map((bookmark, index) => (
-                      <li key={index}>
-                        Time: {format(bookmark.time)} - Note: {bookmark.note}
-                        <button onClick={() => handleGoToBookmark(bookmark.time)}>Go to</button>
-                        <button onClick={() => handleDeleteBookmark(index)}>Xóa</button>
-                      </li>
-                    )) || 'Không có ghi chú nào'}
+                    {bookmarks && bookmarks?.length > 0 ? (
+                      bookmarks?.map((bookmark, index) => (
+                        <li key={index}>
+                          Time: {format(bookmark.time)} - Note: {bookmark.note}
+                          <Button
+                            type='primary'
+                            style={{
+                              margin: '5px',
+                            }}
+                            onClick={() => handleGoToBookmark(bookmark.time)}
+                          >
+                            Go to
+                          </Button>
+                          <Button type='dashed' className='dashed' onClick={() => handleDeleteBookmark(index)}>
+                            Xóa
+                          </Button>
+                        </li>
+                      ))
+                    ) : (
+                      <p>Không có ghi chú nào</p>
+                    )}
                   </ul>
                 </div>
               </>
             }
           >
-            <Tooltip title='Danh sách ghi chú'>
+            <Tooltip
+              getPopupContainer={(triggerNode) => triggerNode.parentElement || triggerNode}
+              placement='bottom'
+              title='Danh sách ghi chú'
+            >
               <Button
                 style={{
                   cursor: 'pointer',
