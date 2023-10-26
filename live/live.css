@@ -5,7 +5,7 @@ body {
 
 .chat-col {
   background: white;
-  right: 0%;
+  right: -100vw;
   bottom: 3%;
   top: 3%;
   z-index: 1000;
@@ -253,7 +253,9 @@ body {
 @media only screen and (min-width: 769px) and (max-width: 1281px) {
 }
 /*// mobile*/
-
+#guest{
+  display: flex;
+}
 @media only screen and (max-width: 768px) {
   #guest {
     display: none;
@@ -422,4 +424,9 @@ video {
 }
 #video-demo {
   background-color: #000;
+}
+.share {
+  display: none;
+  width: 70vw;
+  height: 100%;
 }

@@ -1,135 +1,83 @@
-// import { Progress, Space } from 'antd'
-// import moment from 'moment-timezone'
-// import { useEffect, useState } from 'react'
-// import ButtonCustom from '../ButtonCustom/ButtonCustom'
-// import css from './styles.module.scss'
+import { Space } from 'antd'
+import moment from 'moment-timezone'
+import { useEffect, useState } from 'react'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import FlipCountdown from './FlipCountdown'
+import TextCountdown from './TextCountdown'
 
-// interface Time {
-//   showTime: 's' | 'm' | 'h' | 'd'
-// }
+interface Time {
+  showTime: 's' | 'm' | 'h' | 'd'
+}
 
-// type Props = {
-//   timeTillDate?: string
-//   timeFormat?: string
-//   showTime?: Time | [Time, Time]
-//   type?: 'countUp' | 'countDown'
-//   timeInit?: number
-//   size?: number
-// }
+type Props = {
+  timeTillDate?: string
+  timeFormat?: string
+  showTime?: Time | [Time, Time]
+  count?: 'countUp' | 'countDown'
+  type: 'text' | 'number' | 'flip' | 'progress'
+  initTime?: number
+  size?: number
+  action?: boolean
+}
 
-// const CountDownTimer = (props: Props) => {
-//   const { timeTillDate, timeInit = 1, timeFormat = 'HH:mm:ss', size = 255 } = props
-//   const now = moment()
+const CountDownTimer = (props: Props) => {
+  const { timeTillDate, initTime = 1, timeFormat = 'HH:mm:ss', size = 150, action = false, type = 'text' } = props
+  const now = moment()
 
-//   const minutesInit = timeTillDate ? moment(timeTillDate).diff(now, 'seconds') : timeInit && timeInit * 60
-//   const [countdown, setCountdown] = useState(minutesInit || 0)
-//   const [isRunning, setIsRunning] = useState(false)
+  const minutesInit = timeTillDate ? moment(timeTillDate).diff(now, 'seconds') : initTime && initTime * 60
+  const [countdown, setCountdown] = useState(minutesInit || 0)
+  const [isRunning, setIsRunning] = useState(false)
 
-//   const handleCountdown = () => {
-//     setIsRunning(!isRunning)
-//   }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prevCountdown) => prevCountdown - 1)
+    }, 1000)
 
-//   const resetCountdown = () => {
-//     setIsRunning(false)
-//     setCountdown(minutesInit || 0)
-//   }
+    if (!isRunning || countdown === 0) {
+      clearInterval(interval)
+    }
 
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setCountdown((prevCountdown) => prevCountdown - 1)
-//     }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [isRunning, countdown])
 
-//     if (!isRunning || countdown === 0) {
-//       clearInterval(interval)
-//     }
+  const resetCountdown = () => {
+    setIsRunning(false)
+    setCountdown(minutesInit || 0)
+  }
 
-//     return () => {
-//       clearInterval(interval)
-//     }
-//   }, [isRunning, countdown])
+  const handleCountdown = () => {
+    setIsRunning(!isRunning)
+  }
 
-//   useEffect(() => {
-//     if (timeTillDate) {
-//       const targetDate = moment(timeTillDate)
+  return (
+    <Space>
+      {(type === 'flip' && (
+        <>
+          <FlipCountdown number={countdown} size={size} getTime='hours' numRender='firstNumber' />
+          <FlipCountdown number={countdown} size={size} getTime='hours' numRender='secondNumber' />
 
-//       const duration = moment.duration(targetDate.diff(now))
-//       const secondsRemaining = Math.max(duration.asSeconds(), 0)
-//       setCountdown(secondsRemaining)
+          <FlipCountdown number={countdown} size={size} getTime='minutes' numRender='firstNumber' />
+          <FlipCountdown number={countdown} size={size} getTime='minutes' numRender='secondNumber' />
 
-//       if (secondsRemaining > 0) {
-//         setIsRunning(true)
-//       }
-//     }
-//   }, [timeTillDate])
+          <FlipCountdown number={countdown} size={size} getTime='seconds' numRender='firstNumber' />
+          <FlipCountdown number={countdown} size={size} getTime='seconds' numRender='secondNumber' />
+        </>
+      )) || (
+        <TextCountdown countdown={countdown} type={type} timeFormat={timeFormat} initTime={initTime}></TextCountdown>
+      )}
 
-//   const time = moment().startOf('day').seconds(countdown)
+      {action && (
+        <>
+          <ButtonCustom onClick={handleCountdown}>{isRunning ? 'Tạm dừng' : 'Bắt đầu'}</ButtonCustom>
+          <ButtonCustom onClick={resetCountdown} disabled={isRunning}>
+            Đặt lại
+          </ButtonCustom>
+        </>
+      )}
+    </Space>
+  )
+}
 
-//   const CountdownTracker = ({ value, label }) => {
-//     return (
-//       // <span className={css.flipClock}>
-//       //   <b className={css.card} style={{ fontSize: size }}>
-//       //     <b className={css.cardTop}>{value}</b>
-//       //     <b className={css.cardBottom}>{value}</b>
-//       //     {/* <div className={value && css.flip}>
-//       //       <b className={css.cardBack}>
-//       //         <b className={css.cardTop}>{value}</b>
-//       //       </b>
-//       //     </div> */}
-//       //   </b>
-//       //   {/* <span className={css.flipClockSlot}>{label}</span> */}
-//       // </span>
-//       <div className={css.flipCard}>
-//         <div className={css.show} style={{ fontSize: size }}>
-//           <div className={css.flipCardFront}>{value}</div>
-//           <div className={css.flipCardBack}>{value}</div>
-//         </div>
-//         <div className={value && css.flipCardInner} style={{ fontSize: size }}>
-//           <div className={css.flipCardFront}>{value}</div>
-//           <div className={css.flipCardBack}>{value}</div>
-//         </div>
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <Space>
-//       <div className={css.flipClock}>
-//         <CountdownTracker value={time.format('ss')} label={'giây'} />
-//       </div>
-//       {timeInit && minutesInit ? (
-//         <>
-//           <Progress
-//             type='circle'
-//             percent={parseInt(((countdown / minutesInit) * 100).toFixed(2))}
-//             format={() => (time ? `${time.format('mm')}:${time.format('ss')}` : '00:00')}
-//           />
-//           <ButtonCustom onClick={handleCountdown}>{isRunning ? 'Tạm dừng' : 'Bắt đầu'}</ButtonCustom>
-//           <ButtonCustom onClick={resetCountdown} disabled={isRunning}>
-//             Đặt lại
-//           </ButtonCustom>
-//         </>
-//       ) : (
-//         <p>Thời gian còn lại: {time.format(timeFormat)}</p>
-//       )}
-
-//       {/* <Space direction='vertical' align='center'>
-//         {days}
-//         Ngày
-//       </Space>
-//       <Space direction='vertical' align='center'>
-//         {hours}
-//         Giờ
-//       </Space>
-//       <Space direction='vertical' align='center'>
-//         {minutes}
-//         Phút
-//       </Space>
-//       <Space direction='vertical' align='center'>
-//         {seconds}
-//         Giây
-//       </Space> */}
-//     </Space>
-//   )
-// }
-
-// export default CountDownTimer
+export default CountDownTimer

@@ -6,6 +6,7 @@ import h from './helpers.js'
 import { changeVideoDevice } from './checkDevice.js'
 
 window.addEventListener('load', () => {
+  document.getElementById('chat-pane').style.right = '-100vw'
   let isOnCamera = true
   const urlParams = new URLSearchParams(window.location.search)
   const roomId = urlParams.get('room_id')
@@ -17,6 +18,7 @@ window.addEventListener('load', () => {
     host_id: 1779
   }
   const user = JSON.parse(localStorage.getItem('profile'))
+  let streamActive = null
 
   if (!user) {
     window.location.href = '/login'
@@ -37,7 +39,8 @@ window.addEventListener('load', () => {
     )
   })
 
-  const SOCKET_URL = 'https://hiblue.fun/stream'
+  // const SOCKET_URL = 'https://hiblue.fun/stream'
+  const SOCKET_URL = 'http://127.0.0.1:4000/stream'
 
   // document.getElementById('guest').style.height = `calc(${window.innerHeight}px - 200px)`
   // document.getElementById('guest').style.overflowY = 'auto'
@@ -60,7 +63,6 @@ window.addEventListener('load', () => {
   let idActive = null
   var pc = []
   let streamHost = null
-  let streamActive = null
 
   let socket = null
 
@@ -204,7 +206,7 @@ window.addEventListener('load', () => {
 
               //create a new div for card
               let cardDiv = document.createElement('div')
-              cardDiv.className = `card card-sm`
+              cardDiv.className = `card card-sm m-1`
               cardDiv.id = partnerName
               cardDiv.appendChild(newVid)
               cardDiv.appendChild(controlDiv)
@@ -216,7 +218,7 @@ window.addEventListener('load', () => {
               //   document.getElementById('video-off-camera').appendChild(cardDiv)
               // } else {
               // }
-              document.getElementById('videos').appendChild(cardDiv)
+              document.getElementById('guest').appendChild(cardDiv)
 
               h.adjustVideoElemSize()
             }
@@ -230,18 +232,23 @@ window.addEventListener('load', () => {
 
       switch (pc[partnerName].iceConnectionState) {
         case 'disconnected':
+          setTimeout(() => {
+            if (pc[partnerName].iceConnectionState === 'disconnected') {
+              h.closeVideo(partnerName)
+            }
+          }, 5000)
+          break
         case 'failed':
-          h.closeVideo(partnerName)
+          setTimeout(() => {
+            if (pc[partnerName].iceConnectionState === 'disconnected') {
+              h.closeVideo(partnerName)
+            }
+          }, 5000)
           break
-
         case 'closed':
-          h.closeVideo(partnerName)
-          break
-        default:
-          if (document.getElementById(`${partnerName}-video`)) {
-            return
-          }
+          console.log('dong')
 
+          h.closeVideo(partnerName)
           break
       }
     }
@@ -275,38 +282,6 @@ window.addEventListener('load', () => {
         }
       }, 1000)
     }
-  }
-
-  function shareScreen() {
-    h.shareScreen()
-      .then((stream) => {
-        h.toggleShareIcons(true)
-
-        //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
-        //It will be enabled was user stopped sharing screen
-        h.toggleVideoBtnDisabled(true)
-
-        //save my screen stream
-        screen = stream
-
-        if (!isHost) {
-          document.getElementById('local').srcObject = stream
-        } else {
-          document.getElementById('video-host').srcObject = stream
-        }
-
-        //share the new stream with all partners
-        // document.getElementById()
-        broadcastNewTracks(stream, 'video', false)
-
-        //When the stop sharing button shown by the browser is clicked
-        screen.getVideoTracks()[0].addEventListener('ended', () => {
-          stopSharingScreen()
-        })
-      })
-      .catch((e) => {
-        console.error(e)
-      })
   }
 
   function stopSharingScreen() {
@@ -474,15 +449,6 @@ window.addEventListener('load', () => {
   })
 
   //When user clicks the 'Share screen' button
-  document.getElementById('share-screen').addEventListener('click', (e) => {
-    e.preventDefault()
-
-    if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
-      stopSharingScreen()
-    } else {
-      shareScreen()
-    }
-  })
 
   //When user choose to record own video
   if (document.getElementById('record-video')) {
@@ -578,8 +544,8 @@ window.addEventListener('load', () => {
     document.getElementById('video-demo').remove()
     socket = io.connect(SOCKET_URL, { secure: true })
 
-    var audioTracks = myStream.getAudioTracks()
-    var hasAudio = audioTracks.length > 0
+    var audioTracks = myStream ? myStream.getAudioTracks() : null
+    var hasAudio = audioTracks ? audioTracks.length > 0 : 0
 
     if (!isOnCamera) {
       document.getElementById('toggle-video').click()
@@ -658,6 +624,62 @@ window.addEventListener('load', () => {
         isHost: user.id === room.host_id,
         isOnCamera: isOnCamera
       })
+
+      document.getElementById('share-screen').addEventListener('click', (e) => {
+        e.preventDefault()
+
+        if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
+          stopSharingScreen()
+        } else {
+          shareScreen()
+        }
+      })
+
+      function shareScreen() {
+        h.shareScreen()
+          .then((stream) => {
+            h.toggleShareIcons(true)
+            h.toggleVideoBtnDisabled(true)
+            //save my screen stream
+            screen = stream
+            //share the new stream with all partners
+            // document.getElementsByClassName('share').style.display = 'block'
+            document.getElementById('local').srcObject = stream
+            // streamActive = stream
+            broadcastNewTracks(stream, 'video', false)
+            socket.emit('share', {
+              room: room.id,
+              user: user,
+              to: socketId
+            })
+
+            //When the stop sharing button shown by the browser is clicked
+            screen.getVideoTracks()[0].addEventListener('ended', () => {
+              stopSharingScreen()
+            })
+          })
+          .catch((e) => {
+            console.error(e)
+          })
+      }
+
+      // socket.on('share', (data) => {
+      //   const video = document.getElementById(data.id)
+      //   const videoShare = document.getElementsByClassName('share')
+
+      //   for (let i = 0; i <= videoShare.length; i++) {
+      //     if (videoShare[i]) {
+      //       videoShare[i].remove()
+      //     }
+      //   }
+
+      //   videoShare.appendChild(video)
+
+      //   // video.classList.add('share')
+
+      //   document.getElementById('guest').classList.add('col-md-3')
+      //   // h.adjustVideoElemSize()
+      // })
 
       socket.on('new user', (data) => {
         console.log('new user', data)
@@ -874,7 +896,6 @@ window.addEventListener('load', () => {
           document.getElementById('toggle-mute').classList.remove('fa-microphone-alt-slash')
           myStream.getAudioTracks()[0].enabled = true
           muted = false
-        } else {
         }
       })
 
@@ -938,6 +959,14 @@ window.addEventListener('load', () => {
         } else {
           // document.getElementById(`${data.id}-poster`).remove()
         }
+      })
+      socket.on('out', (data) => {
+        console.log(data.id)
+        h.closeVideo(data.id)
+      })
+
+      window.addEventListener('offline', (event) => {
+        alert('Mất kết nối mạng')
       })
     })
   }
