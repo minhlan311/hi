@@ -206,36 +206,6 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <InputNumber />
             </Form.Item>
           </Col>
-          {/* <Col span={6}>
-            <Form.Item
-              name='startAt'
-              label='Thời gian bắt đầu'
-              required
-              rules={[{ required: true, message: 'Vui lòng chọn thời gian bắt đầu' }]}
-            >
-              <Checkbox placeholder='Thời gian bắt đầu' format='HH:mm' />
-            </Form.Item>
-          </Col> */}
-          {/* <Col span={6}>
-            <Form.Item
-              name='endAt'
-              label='Thời gian kết thúc'
-              required
-              rules={[
-                { required: true, message: 'Vui lòng chọn thời gian kết thúc' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('startAt').isBefore(value)) {
-                      return Promise.resolve()
-                    }
-                    return Promise.reject(new Error('Thời gian kết thúc phải sau thời gian bắt đầu'))
-                  },
-                }),
-              ]}
-            >
-              <TimePicker placeholder='Thời gian kết thúc' format='HH:mm' />
-            </Form.Item>
-          </Col> */}
 
           <Form.Item name='id' hidden />
         </Row>

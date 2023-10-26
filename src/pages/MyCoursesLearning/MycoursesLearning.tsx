@@ -56,6 +56,7 @@ export default function MycoursesLearning() {
   const examDivRef = useRef<HTMLDivElement | null>(null)
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
   const { Panel } = Collapse
+
   const toggleFullScreenForExamDiv = () => {
     if (screenfull.isEnabled && examDivRef.current) {
       screenfull.toggle(examDivRef.current)
@@ -65,6 +66,10 @@ export default function MycoursesLearning() {
   }
 
   const { lg } = useResponsives()
+
+  console.log(profile, 'profileprofile')
+
+  const joinClass = profile?.classData?.find((item) => item?.courseId === id)
 
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],
@@ -498,13 +503,30 @@ export default function MycoursesLearning() {
                   paddingTop: '50px',
                 }}
               >
-                {/* <h3>Bài LIVE</h3> */}
                 <div
                   style={{
                     lineHeight: '1.4',
                   }}
-                  dangerouslySetInnerHTML={{ __html: document }}
-                ></div>
+                >
+                  {joinClass && joinClass?._id ? (
+                    <p>
+                      Đây là bài học trực tuyến
+                      <a
+                        style={{
+                          margin: '0 5px',
+                          fontWeight: '700',
+                        }}
+                        href={`/schedule?classId=${joinClass?._id}`}
+                        target='blank'
+                      >
+                        Bấm vào đây
+                      </a>
+                      để xem lịch học của bạn
+                    </p>
+                  ) : (
+                    <h3>Bạn chưa được xếp lớp nào !</h3>
+                  )}
+                </div>
               </div>
               <div className={style.divTool}>
                 <Tooltip title='Bài học trước'>
