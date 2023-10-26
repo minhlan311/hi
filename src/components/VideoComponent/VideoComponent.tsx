@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import useIsMobile from '@/hooks/useCheckMobile'
-import { BackwardOutlined, ForwardOutlined } from '@ant-design/icons'
+import { BackwardOutlined, ForwardOutlined, PlusCircleOutlined, StarOutlined } from '@ant-design/icons'
+import { Button, Popover, Tooltip } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import screenfull from 'screenfull'
@@ -49,7 +50,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   const controlsRef = useRef<any>(null)
   const playerContainerRef = useRef<any>(null)
   const [playeds, setPlayeds] = useState<number | string>(0)
-  // const [bookmarks, setBookmarks] = useState<{ time: number; note: string }[]>([])
+  const [bookmarks, setBookmarks] = useState<{ time: number; note: string }[]>([])
   const [volumeNotification, setVolumeNotification] = useState<{ show: boolean; volume: number }>({
     show: false,
     volume: 0,
@@ -61,15 +62,15 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   })
   const isMobile = useIsMobile()
 
-  // const handleDeleteBookmark = (index: number) => {
-  //   const newBookmarks = [...bookmarks]
-  //   newBookmarks.splice(index, 1)
-  //   setBookmarks(newBookmarks)
+  const handleDeleteBookmark = (index: number) => {
+    const newBookmarks = [...bookmarks]
+    newBookmarks.splice(index, 1)
+    setBookmarks(newBookmarks)
 
-  //   // Cập nhật localStorage ngay sau khi cập nhật state
-  //   const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
-  //   localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: newBookmarks }))
-  // }
+    // Cập nhật localStorage ngay sau khi cập nhật state
+    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+    localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: newBookmarks }))
+  }
 
   let hideControlsTimeout: string | number | NodeJS.Timeout | undefined
 
@@ -87,10 +88,6 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
         controlsRef.current.style.visibility = 'hidden'
       }
     }, 3000)
-  }
-
-  const handleTouchEnd = () => {
-    handleMouseMove()
   }
 
   useEffect(() => {
@@ -112,17 +109,17 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     }
   }, [seekNotification, volumeNotification])
 
-  // useEffect(() => {
-  //   // Lấy tất cả bookmarks từ localStorage
-  //   const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+  useEffect(() => {
+    // Lấy tất cả bookmarks từ localStorage
+    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
 
-  //   // Nếu có bookmarks cho video hiện tại, cập nhật state, nếu không đặt danh sách rỗng
-  //   if (Object.prototype.hasOwnProperty.call(allBookmarks, video!)) {
-  //     setBookmarks(allBookmarks[video!])
-  //   } else {
-  //     setBookmarks([]) // Đặt bookmarks về mảng trống nếu không có bookmarks cho video
-  //   }
-  // }, [video]) // Dependency là video, nghĩa là useEffect sẽ chạy mỗi khi video thay đổi
+    // Nếu có bookmarks cho video hiện tại, cập nhật state, nếu không đặt danh sách rỗng
+    if (Object.prototype.hasOwnProperty.call(allBookmarks, video!)) {
+      setBookmarks(allBookmarks[video!])
+    } else {
+      setBookmarks([]) // Đặt bookmarks về mảng trống nếu không có bookmarks cho video
+    }
+  }, [video]) // Dependency là video, nghĩa là useEffect sẽ chạy mỗi khi video thay đổi
 
   const [state, setState] = useState<Props>({
     pip: false,
@@ -211,35 +208,30 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     screenfull.toggle(playerContainerRef.current)
   }
 
-  // const handleAddBookmark = () => {
-  //   const note = prompt('Ghi chú :')
+  const handleAddBookmark = () => {
+    const note = prompt('Ghi chú :')
 
-  //   if (note) {
-  //     const newBookmark = { time: currentTime, note }
-  //     const updatedBookmarks = [...bookmarks, newBookmark]
-  //     setBookmarks(updatedBookmarks)
+    if (note) {
+      const newBookmark = { time: currentTime, note }
+      const updatedBookmarks = [...bookmarks, newBookmark]
+      setBookmarks(updatedBookmarks)
 
-  //     // Cập nhật localStorage ngay sau khi cập nhật state
-  //     const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
-  //     localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: updatedBookmarks }))
-  //   }
-  // }
+      // Cập nhật localStorage ngay sau khi cập nhật state
+      const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
+      localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: updatedBookmarks }))
+    }
+  }
 
-  // const handleGoToBookmark = (time: number) => {
-  //   if (playerRef && playerRef.current) {
-  //     playerRef.current.seekTo(time)
-  //   }
-  // }
+  const handleGoToBookmark = (time: number) => {
+    if (playerRef && playerRef.current) {
+      playerRef.current.seekTo(time)
+    }
+  }
 
   return (
     <>
-      <div className={style.boxContainer} onClick={isMobile ? handleTouchEnd : undefined}>
-        <div
-          ref={playerContainerRef}
-          className={style.container}
-          onMouseMove={isMobile ? undefined : handleMouseMove}
-          onTouchStart={isMobile ? handleTouchEnd : undefined}
-        >
+      <div className={style.boxContainer}>
+        <div ref={playerContainerRef} className={style.container} onMouseMove={isMobile ? undefined : handleMouseMove}>
           {volumeNotification.show ? (
             <div className={style.volumeNotification} style={{ opacity: volumeNotification.show ? 1 : 0 }}>
               {`Âm lượng: ${Math.round(volume * 100)}%`}
@@ -289,46 +281,42 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               },
             }}
           />
-          <Controls
-            names={names}
-            dataLession={dataLession}
-            ref={controlsRef}
-            onSeek={handleSeekChange}
-            onDuration={handleDuration}
-            handleRewind={handleRewind}
-            handlePlayPause={handlePlayPause}
-            handleFastForward={handleFastForward}
-            handleMute={handleMute}
-            onVolumeChange={onVolumeChange}
-            toggleFullScreen={toggleFullScreen}
-            handlePlaybackRate={handlePlaybackRate}
-            onRewind={handleRewind}
-            onPlayPause={handlePlayPause}
-            onFastForward={handleFastForward}
-            playing={playing}
-            played={playeds}
-            elapsedTime={elapsedTime}
-            totalDuration={totalDuration}
-            muted={muted}
-            handleSeekMouseUp={handleSeekMouseUp}
-            onVolumeSeekDown={handleVolumeSeekDown}
-            playbackRate={playbackRate}
-            volume={volume}
-          />
+          {!isMobile && (
+            <Controls
+              names={names}
+              dataLession={dataLession}
+              ref={controlsRef}
+              onSeek={handleSeekChange}
+              onDuration={handleDuration}
+              handleRewind={handleRewind}
+              handlePlayPause={handlePlayPause}
+              handleFastForward={handleFastForward}
+              handleMute={handleMute}
+              onVolumeChange={onVolumeChange}
+              toggleFullScreen={toggleFullScreen}
+              handlePlaybackRate={handlePlaybackRate}
+              onRewind={handleRewind}
+              onPlayPause={handlePlayPause}
+              onFastForward={handleFastForward}
+              playing={playing}
+              played={playeds}
+              elapsedTime={elapsedTime}
+              totalDuration={totalDuration}
+              muted={muted}
+              handleSeekMouseUp={handleSeekMouseUp}
+              onVolumeSeekDown={handleVolumeSeekDown}
+              playbackRate={playbackRate}
+              volume={volume}
+            />
+          )}
         </div>
-        {isMobile && (
-          <div>
-            <p>ahihi</p>
-          </div>
-        )}
-        <div></div>
-        {/* <div
+        <div
           className='flex'
           style={{
             marginTop: '5px',
           }}
         >
-          <Tooltip title='Thêm ghi chú'>
+          <Tooltip placement='bottom' title='Thêm ghi chú'>
             <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
               <PlusCircleOutlined />
             </Button>
@@ -340,19 +328,37 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               <>
                 <div>
                   <ul>
-                    {bookmarks?.map((bookmark, index) => (
-                      <li key={index}>
-                        Time: {format(bookmark.time)} - Note: {bookmark.note}
-                        <button onClick={() => handleGoToBookmark(bookmark.time)}>Go to</button>
-                        <button onClick={() => handleDeleteBookmark(index)}>Xóa</button>
-                      </li>
-                    )) || 'Không có ghi chú nào'}
+                    {bookmarks && bookmarks?.length > 0 ? (
+                      bookmarks?.map((bookmark, index) => (
+                        <li key={index}>
+                          Time: {format(bookmark.time)} - Note: {bookmark.note}
+                          <Button
+                            type='primary'
+                            style={{
+                              margin: '5px',
+                            }}
+                            onClick={() => handleGoToBookmark(bookmark.time)}
+                          >
+                            Go to
+                          </Button>
+                          <Button type='dashed' className='dashed' onClick={() => handleDeleteBookmark(index)}>
+                            Xóa
+                          </Button>
+                        </li>
+                      ))
+                    ) : (
+                      <p>Không có ghi chú nào</p>
+                    )}
                   </ul>
                 </div>
               </>
             }
           >
-            <Tooltip title='Danh sách ghi chú'>
+            <Tooltip
+              getPopupContainer={(triggerNode) => triggerNode.parentElement || triggerNode}
+              placement='bottom'
+              title='Danh sách ghi chú'
+            >
               <Button
                 style={{
                   cursor: 'pointer',
@@ -367,7 +373,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               </Button>
             </Tooltip>
           </Popover>
-        </div> */}
+        </div>
       </div>
     </>
   )
