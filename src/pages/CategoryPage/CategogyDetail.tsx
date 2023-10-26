@@ -161,28 +161,26 @@ export default function CategogyDetail() {
                               description={
                                 <>
                                   <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                                  {item?.class?.map((item) => (
-                                    <>
-                                      <div className='flex'>
-                                        <img src={calenderSVG} className='icons' alt='' />
-                                        <TextWithTooltip
-                                          rows={1}
-                                          children={
-                                            <>
-                                              {item?.startDate ? (
-                                                <>
-                                                  Khai giảng {''}
-                                                  {formatDate(item?.startDate)}
-                                                </>
-                                              ) : (
-                                                'Đang cập nhật'
-                                              )}
-                                            </>
-                                          }
-                                          className='text-date'
-                                        />
-                                      </div>
-                                    </>
+                                  {item?.class?.slice(0, 2).map((item, index) => (
+                                    <div key={index} className='flex'>
+                                      <img src={calenderSVG} className='icons' alt='' />
+                                      <TextWithTooltip
+                                        rows={1}
+                                        children={
+                                          <>
+                                            {item?.startDate ? (
+                                              <>
+                                                Khai giảng {''}
+                                                {formatDate(item?.startDate)}
+                                              </>
+                                            ) : (
+                                              'Đang cập nhật'
+                                            )}
+                                          </>
+                                        }
+                                        className='text-date'
+                                      />
+                                    </div>
                                   ))}
                                   <div className='flexPrice'>
                                     <span className='name'>Chi phí: </span>
