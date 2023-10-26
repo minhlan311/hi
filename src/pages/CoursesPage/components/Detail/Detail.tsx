@@ -1,18 +1,37 @@
-import ProductRating from '@/components/ProductRating'
-import style from './Detail.module.scss'
-import { colorStar } from '@/components/ProductRating/pickColor.enum'
-import { Breadcrumb } from 'antd'
-import { Link } from 'react-router-dom'
-import { CreditCardOutlined, GlobalOutlined, WarningFilled } from '@ant-design/icons'
-import { TCourse } from '@/types/course.type'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import cartApi from '@/apis/cart.api'
+import enrollsApi from '@/apis/enrolls.api'
+import vnpayApi from '@/apis/vnpay.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import openNotification from '@/components/Notification'
+import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
+import ProductRating from '@/components/ProductRating'
+import { colorStar } from '@/components/ProductRating/pickColor.enum'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
+import { TCourse } from '@/types/course.type'
+import { TargetModelEnum } from '@/types/utils.type'
+import { CreditCardOutlined, GlobalOutlined, WarningFilled } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Breadcrumb, Button } from 'antd'
+import { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import style from './Detail.module.scss'
 
 type Props = {
   data?: TCourse
+  checkEnrolls?: any
 }
 
-export default function Detail({ data }: Props) {
+export default function Detail({ data, checkEnrolls }: Props) {
+  const [datas, setDatas] = useState<TCourse>()
+  const [check, setCheck] = useState(false)
+  const { profile } = useContext(AppContext)
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const cartData = queryClient.getQueryData<any>(['dataCart'])
   const items = [
     {
       title: <p className={style.breadCrumbs}>Trang chủ</p>,
@@ -28,6 +47,75 @@ export default function Detail({ data }: Props) {
     },
   ]
   const { lg } = useResponsives()
+
+  useEffect(() => {
+    setCheck(cartData?.data?.docs?.some((item: any) => item?.id === id))
+  }, [id, cartData])
+
+  const mutate = useMutation({
+    mutationFn: (body: any) => {
+      return cartApi.addtoCart(body)
+    },
+    onSuccess: (data: any) => {
+      openNotification({
+        message: 'Thông báo',
+        status: data?.data?.message ? 'warning' : 'success',
+        description: data?.data?.message ? data?.data?.message : 'Thêm khóa học vào giỏ hàng thành công !',
+        duration: 1.5,
+      })
+      queryClient.invalidateQueries({ queryKey: ['dataCart'] })
+      setCheck(true)
+    },
+    onError: () => ({
+      message: 'Thông báo',
+      status: 'error',
+      description: 'Có lỗi xảy ra',
+    }),
+  })
+
+  const addCart = (id: string) => {
+    if (!profile) {
+      openNotification({
+        status: 'warning',
+        message: 'Thông báo',
+        description: 'Bạn cần đăng nhập để thực hiện chức năng này',
+      })
+    } else {
+      mutate.mutate({
+        userId: profile._id,
+        courseId: id,
+      })
+    }
+  }
+
+  useEffect(() => {
+    setDatas(data)
+  }, [data])
+
+  const mutationPay = useMutation({
+    mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
+    onSuccess: (data: any) => {
+      window.open(data?.data?.url)
+    },
+  })
+
+  const mutationLocked = useMutation({
+    mutationFn: (body: any) => enrollsApi.createEnroll(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['enrolls'] })
+      openNotification({
+        description: 'Tham gia khóa học thành công',
+        status: 'success',
+        message: 'Thông báo',
+      })
+      navigate('/myCourse')
+    },
+  })
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['products'] })
+  }, [mutationLocked.isSuccess])
+  const checkLession = datas?.topics && datas?.topics?.some((item: any) => item?.countLessons > 0)
 
   return (
     <div className={style.col1}>
@@ -84,6 +172,87 @@ export default function Detail({ data }: Props) {
           <p>Tiếng Việt</p>
         </div>
       </div>
+      {lg && (
+        <div className={style.moduleButtonFlex}>
+          {datas?.topics && datas?.topics?.length > 0 && checkLession ? (
+            checkEnrolls?.data?.docs?.length === 0 ? (
+              datas?.cost ? (
+                <>
+                  {check ? (
+                    <>
+                      <Button disabled className={style.buttonCart} children='Đã thêm vào giỏ hàng' />
+                      <ButtonCustom
+                        className={style.buttonDetail}
+                        children={'Mua ngay'}
+                        onClick={() =>
+                          mutationPay.mutate({
+                            value: datas?.cost,
+                            targetModel: TargetModelEnum.COURSE,
+                            targetId: datas._id!,
+                          })
+                        }
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        loading={mutate.isLoading}
+                        htmlType='submit'
+                        className={style.buttonCart}
+                        children='Thêm vào giỏ hàng'
+                        onClick={() => {
+                          addCart(datas!._id!)
+                        }}
+                      />
+                      <ButtonCustom
+                        className={style.buttonDetail}
+                        children={'Mua ngay'}
+                        onClick={() =>
+                          mutationPay.mutate({
+                            value: datas?.cost,
+                            targetModel: TargetModelEnum.COURSE,
+                            targetId: datas._id!,
+                          })
+                        }
+                      />
+                    </>
+                  )}
+                </>
+              ) : (
+                <PopConfirmAntd
+                  onConfirm={() =>
+                    mutationLocked.mutate({
+                      targetId: datas?._id,
+                      targetModel: 'COURSE',
+                      type: profile.isMentor ? 'MENTOR' : 'STUDENT',
+                      userIds: [profile._id],
+                    })
+                  }
+                  desc='Bạn có chắc chắn muốn tham gia khóa học này'
+                >
+                  <ButtonCustom className={style.buttonCart} children={'Tham gia khóa học này'} />
+                </PopConfirmAntd>
+              )
+            ) : (
+              <ButtonCustom
+                className={style.buttonCart}
+                children={'Vào khóa học'}
+                onClick={() => {
+                  navigate('/myCourseLearning/' + datas._id)
+                }}
+              />
+            )
+          ) : (
+            <div
+              style={{
+                padding: '20px 0',
+              }}
+            >
+              <h3>Khóa học đang hoàn thiện</h3>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
