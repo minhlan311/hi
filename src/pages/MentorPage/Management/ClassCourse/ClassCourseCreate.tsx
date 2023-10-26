@@ -66,7 +66,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
   const mutation = useMutation({
     mutationFn: (body: FormClass) => classApi.createClass(body),
     onSuccess: () => {
-      form.resetFields([])
+      form.resetFields()
       queryClient.invalidateQueries({ queryKey: ['course'] })
       queryClient.invalidateQueries({ queryKey: ['dataClass'] })
       openNotification({
@@ -160,7 +160,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               required
               rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu' }]}
             >
-              <DatePicker placeholder='Ngày bắt đầu' />
+              <DatePicker placeholder='Ngày bắt đầu' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -180,7 +180,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
                 }),
               ]}
             >
-              <DatePicker placeholder='Ngày kết thúc' />
+              <DatePicker placeholder='Ngày kết thúc' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
           <Col span={6}>
