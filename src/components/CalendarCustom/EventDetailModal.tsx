@@ -24,6 +24,11 @@ type Props = {
   eventDetail: EventState | null
 }
 
+interface Time {
+  label: string
+  value: number
+}
+
 const EventDetailModal = (props: Props) => {
   const { open, setOpen, eventDetail } = props
   const { profile } = useContext(AppContext)
@@ -61,9 +66,17 @@ const EventDetailModal = (props: Props) => {
     ]
 
     const examTime = dayjs(eventDetail.end).diff(dayjs(eventDetail.start)) / 60000
-    const selectedOption = testTime.find(
-      (item) => item.value <= examTime && testTime[testTime.indexOf(item) + 1]?.value > examTime,
-    )
+
+    const closestTime = testTime.reduce((closest: Time | null, time: Time) => {
+      if (
+        time.value <= examTime &&
+        (closest === null || Math.abs(time.value - examTime) < Math.abs(closest.value - examTime))
+      ) {
+        return time
+      } else {
+        return closest
+      }
+    }, null)
 
     return (
       <>
@@ -149,7 +162,7 @@ const EventDetailModal = (props: Props) => {
               )}
 
               <Space>
-                {eventDetail.testId && selectedOption ? (
+                {eventDetail.testId && closestTime ? (
                   <ButtonCustom
                     type='primary'
                     disabled={!between || endClass}
@@ -157,8 +170,9 @@ const EventDetailModal = (props: Props) => {
                       navigate('/lam-bai-thi-online', {
                         state: {
                           testId: eventDetail.testId,
-                          testTime: selectedOption.label,
-                          addTime: examTime - selectedOption?.value,
+                          eventId: eventDetail._id,
+                          testTime: closestTime.value,
+                          addTime: examTime - closestTime.value,
                         },
                       })
                     }

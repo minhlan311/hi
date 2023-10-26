@@ -1,0 +1,12 @@
+.testBody {
+  min-height: 85vh;
+  background-color: var(--lighish-white);
+  .question {
+    font-size: 18px;
+  }
+  .titleQues {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

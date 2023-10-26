@@ -16,7 +16,7 @@ const useResponsives = () => {
     md: window.innerWidth < 992,
     lg: window.innerWidth < 1200,
     xl: window.innerWidth < 1600,
-    xxl: window.innerWidth >= 1600
+    xxl: window.innerWidth >= 1600,
   })
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const useResponsives = () => {
         md: window.innerWidth < 992,
         lg: window.innerWidth < 1200,
         xl: window.innerWidth < 1600,
-        xxl: window.innerWidth >= 1600
+        xxl: window.innerWidth >= 1600,
       })
     }
 

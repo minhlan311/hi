@@ -1,16 +1,20 @@
-import { Progress, Space } from 'antd'
+import { Card, Progress, Space } from 'antd'
 import moment, { Moment } from 'moment-timezone'
+import css from './styles.module.scss'
+import { BsClockHistory } from 'react-icons/bs'
 
 type Props = {
   type: 'text' | 'number' | 'flip' | 'progress'
   countdown: number
+  size: number
   initTime: number
   timeFormat?: string
 }
 
-const TextCountdown = ({ type, countdown, initTime }: Props) => {
+const nowTime = moment()
+
+const TextCountdown = ({ type, countdown, size, initTime }: Props) => {
   const getTimeRemaining = (targetDateTime: Moment | null, minutesRemaining?: number) => {
-    const nowTime = moment()
     const targetMinutes = nowTime.clone().add(minutesRemaining, 'seconds')
     const targetData = targetDateTime ? targetDateTime : targetMinutes
     const complete = nowTime.isSameOrAfter(targetData)
@@ -41,27 +45,37 @@ const TextCountdown = ({ type, countdown, initTime }: Props) => {
   }
 
   const time = getTimeRemaining(null, countdown)
+  const duration = moment.duration(countdown, 'seconds')
+  const showTime = moment.utc(duration.asMilliseconds())
 
   return (
-    <div>
+    <div className={css.textCountdown}>
       {(type === 'text' && (
         <Space>
-          <Space direction='vertical' align='center'>
-            {time.days}
-            Ngày
-          </Space>
-          <Space direction='vertical' align='center'>
-            {time.hours}
-            Giờ
-          </Space>
-          <Space direction='vertical' align='center'>
-            {time.minutes}
-            Phút
-          </Space>
-          <Space direction='vertical' align='center'>
-            {time.seconds}
-            Giây
-          </Space>
+          <Card size='small'>
+            <div className={css.item} style={{ fontSize: size }}>
+              <b className={css.number}>{time.days}</b>
+              <p className={css.label}>Ngày</p>
+            </div>
+          </Card>
+          <Card size='small'>
+            <div className={css.item} style={{ fontSize: size }}>
+              <b className={css.number}>{time.hours}</b>
+              <p className={css.label}>Giờ</p>
+            </div>
+          </Card>
+          <Card size='small'>
+            <div className={css.item} style={{ fontSize: size }}>
+              <b className={css.number}>{time.minutes}</b>
+              <p className={css.label}>Phút</p>
+            </div>
+          </Card>
+          <Card size='small'>
+            <div className={css.item} style={{ fontSize: size }}>
+              <b className={css.number}>{time.seconds}</b>
+              <p className={css.label}>Giây</p>
+            </div>
+          </Card>
         </Space>
       )) ||
         (type === 'progress' && (
@@ -72,36 +86,41 @@ const TextCountdown = ({ type, countdown, initTime }: Props) => {
             format={() =>
               countdown === initTime * 60 ? (
                 <p>
-                  {time.seconds === 0 && time.hours > 0 && time.minutes === 0 && <span>{time.hours} giờ</span>}
-                  {time.seconds === 0 && time.hours === 0 && time.minutes > 0 && <span>{time.minutes} phút</span>}
-                  {time.seconds > 0 && time.hours === 0 && time.minutes === 0 && <span>{time.seconds} giây</span>}
-
-                  {time.hours > 0 && time.minutes > 0 && (
-                    <span>
-                      {time.hours}:{time.minutes}
-                    </span>
+                  {time.hours > 0 && time.minutes === 0 && time.seconds === 0 && (
+                    <span>{showTime.format('HH')} giờ</span>
+                  )}
+                  {time.hours === 0 && time.minutes > 0 && time.seconds === 0 && (
+                    <span>{showTime.format('mm')} phút</span>
+                  )}
+                  {time.hours === 0 && time.minutes === 0 && time.seconds > 0 && (
+                    <span>{showTime.format('ss')} giây</span>
                   )}
 
                   {time.hours > 0 && time.minutes > 0 && time.seconds > 0 && (
-                    <span>
-                      {time.hours}:{time.minutes}:{time.seconds}
-                    </span>
+                    <span>{time.hours === 0 ? showTime.format('mm:ss') : showTime.format('HH:mm:ss')}</span>
                   )}
                 </p>
               ) : (
                 <span>
-                  {time.hours > 0 && <span>{time.hours}:</span>}
-                  {time.minutes > 0 && <span>{time.minutes}:</span>}
-                  {time.seconds > 0 && time.minutes > 0 ? (
-                    <span>{time.seconds}</span>
+                  {(time.seconds > 0 && time.minutes > 0) || (time.seconds > 0 && time.hours > 0) ? (
+                    <span>{time.hours === 0 ? showTime.format('mm:ss') : showTime.format('HH:mm:ss')}</span>
                   ) : (
-                    <span>{time.seconds} giây</span>
+                    <span>{showTime.format('ss')} giây</span>
                   )}
                 </span>
               )
             }
           />
-        ))}
+        )) || (
+          <Card size='small' className={css.countdownNumber}>
+            <div style={{ fontSize: size - (size * 25) / 100 }} className={css.timeNumber}>
+              <BsClockHistory />
+              <div style={{ fontSize: size, fontWeight: 'bold' }}>
+                {time.hours === 0 ? showTime.format('mm:ss') : showTime.format('HH:mm:ss')}
+              </div>
+            </div>
+          </Card>
+        )}
     </div>
   )
 }

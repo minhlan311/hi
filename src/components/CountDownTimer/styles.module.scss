@@ -6,7 +6,7 @@
     font-weight: bold;
     width: 0.8em;
     height: 1.4em;
-    margin: 0.3em 0 0.3em 0.15em;
+    margin: 0.3em 0;
     .segmentDisplay {
       position: relative;
       height: 100%;
@@ -82,6 +82,33 @@
         .segmentOverlay__bottom {
           animation: flip-bottom 0.8s linear;
         }
+      }
+    }
+  }
+}
+.textCountdown {
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1em;
+    .number {
+      font-size: 1em;
+      line-height: 1;
+    }
+    .label {
+      font-size: 0.4em;
+    }
+  }
+  .countdownNumber {
+    background-color: var(--lighish-white);
+    .timeNumber {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & svg {
+        margin-right: 0.2em;
       }
     }
   }

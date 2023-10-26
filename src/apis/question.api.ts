@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { ExamState } from '@/interface/exam'
+import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
@@ -11,11 +11,11 @@ type Props = {
 }
 const questionApi = {
   createQuestion(data: any) {
-    return http.post<ExamState>(ENDPOINT.QUESTION_PATH, data)
+    return http.post<QuestionState>(ENDPOINT.QUESTION_PATH, data)
   },
 
   importQuestion(data: any) {
-    return http.post<ExamState>(ENDPOINT.IMPORT_QUESTION_PATH, data)
+    return http.post<QuestionState>(ENDPOINT.IMPORT_QUESTION_PATH, data)
   },
 
   findQuestion(props: Props) {
@@ -33,19 +33,19 @@ const questionApi = {
       options: options,
     }
 
-    return http.post<SuccessResponse<ExamState[]>>(ENDPOINT.FIND_QUESTION_PATH, payload ? payload : data)
+    return http.post<SuccessResponse<QuestionState[]>>(ENDPOINT.FIND_QUESTION_PATH, payload ? payload : data)
   },
 
   getQuestionDetail(id: string) {
-    return http.get<ExamState>(ENDPOINT.QUESTION_PATH + id)
+    return http.get<QuestionState>(ENDPOINT.QUESTION_PATH + id)
   },
 
   putQuestion(data: any) {
-    return http.put<ExamState>(ENDPOINT.QUESTION_PATH + data.id, data)
+    return http.put<QuestionState>(ENDPOINT.QUESTION_PATH + data.id, data)
   },
 
   deleteQuestion(id: string) {
-    return http.delete<ExamState>(ENDPOINT.QUESTION_PATH + id)
+    return http.delete<QuestionState>(ENDPOINT.QUESTION_PATH + id)
   },
 }
 
