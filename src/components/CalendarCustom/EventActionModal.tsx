@@ -24,6 +24,10 @@ type Props = {
   selectTime?: { start: Date; end: Date } | null
   setSelectTime?: React.Dispatch<React.SetStateAction<{ start: Date; end: Date } | null>>
 }
+interface Time {
+  label: string
+  value: number
+}
 
 const EventActionModal = (props: Props) => {
   const { open, setOpen, setType, type = 'event', eventDetail, selectTime, setSelectTime } = props
@@ -67,17 +71,24 @@ const EventActionModal = (props: Props) => {
     { label: '90 phút', value: 90 },
     { label: '120 phút', value: 120 },
   ]
+  console.log(initVal)
 
   useEffect(() => {
     if (eventDetail) {
       if (eventDetail.testId) {
         const examTime = dayjs(eventDetail.end).diff(dayjs(eventDetail.start)) / 60000
-        const selectedOption = testTime.find(
-          (item) =>
-            item.value <= examTime &&
-            (testTime[testTime.indexOf(item) + 1]?.value > examTime || item.value === examTime),
-        )
-        if (selectedOption)
+        const closestTime = testTime.reduce((closest: Time | null, time: Time) => {
+          if (
+            time.value <= examTime &&
+            (closest === null || Math.abs(time.value - examTime) < Math.abs(closest.value - examTime))
+          ) {
+            return time
+          } else {
+            return closest
+          }
+        }, null)
+
+        if (closestTime)
           setInitVal({
             name: eventDetail.name,
             classId: eventDetail.classId,
@@ -86,8 +97,8 @@ const EventActionModal = (props: Props) => {
             status: eventDetail.status,
             date: dayjs(eventDetail.start),
             time: dayjs(eventDetail.start),
-            timeTest: selectedOption.value,
-            timeAdd: examTime - selectedOption.value,
+            timeTest: closestTime.value,
+            timeAdd: examTime - closestTime.value,
           })
       } else
         setInitVal({
