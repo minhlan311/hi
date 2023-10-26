@@ -182,10 +182,7 @@ export default function CLassCourse() {
           <Col xs={24} xl={12} xxl={10}>
             <Form.Item label='Tìm kiếm theo khoảng thời gian' name={'time'}>
               <RangePicker
-                format='YYYY/MM/DD'
-                style={{
-                  marginTop: '10px',
-                }}
+                format='DD/MM/YYYY'
                 // onChange={onOk}
               />
             </Form.Item>

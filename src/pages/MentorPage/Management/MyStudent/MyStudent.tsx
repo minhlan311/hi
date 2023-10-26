@@ -66,14 +66,14 @@ export default function MyStudent() {
         <TextWithTooltip rows={1} children={record?.user?.fullName as string}></TextWithTooltip>
       ),
     },
-    {
-      title: 'Email',
-      dataIndex: 'limitStudent',
-      key: 'limitStudent',
-      render: (_: any, record: findUserEnroll) => (
-        <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
-      ),
-    },
+    // {
+    //   title: 'Email',
+    //   dataIndex: 'limitStudent',
+    //   key: 'limitStudent',
+    //   render: (_: any, record: findUserEnroll) => (
+    //     <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
+    //   ),
+    // },
     {
       title: 'Khóa học đã mua',
       dataIndex: 'courseName',
@@ -102,7 +102,7 @@ export default function MyStudent() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'x',
-      width: '10%',
+      width: '20%',
       align: 'center' as const,
       render: (_: string, record: findUserEnroll) => {
         const filterClassName = record?.user?.classData?.filter((item) => item?.courseId === record?.course?._id)
