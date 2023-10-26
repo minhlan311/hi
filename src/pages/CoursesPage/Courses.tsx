@@ -57,7 +57,7 @@ export default function Courses() {
           <Row className={style.content}>
             {/* cột bên trái */}
             <Col xs={24} xl={18}>
-              <Detail data={dataCourse?.data} />
+              <Detail data={dataCourse?.data} checkEnrolls={checkEnrolls}/>
             </Col>
             {/* cột bên phải  */}
             {!lg ? (

@@ -5,19 +5,19 @@ import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 // import VideoComponent from '@/components/VideoComponent/VideoComponent'
+import enrollsApi from '@/apis/enrolls.api'
+import vnpayApi from '@/apis/vnpay.api'
+import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
 import { AppContext } from '@/contexts/app.context'
 import { formatPriceVND } from '@/helpers/common'
 import { TCourse } from '@/types/course.type'
+import { TargetModelEnum } from '@/types/utils.type'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
-import style from './VideoContent.module.scss'
 import { useNavigate, useParams } from 'react-router-dom'
-import vnpayApi from '@/apis/vnpay.api'
-import { TargetModelEnum } from '@/types/utils.type'
-import enrollsApi from '@/apis/enrolls.api'
-import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
+import style from './VideoContent.module.scss'
 type Props = {
   data?: TCourse
   checkEnrolls?: any
@@ -27,7 +27,6 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   const contentRef = useRef<HTMLHeadingElement | null>(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
-  // const [isModalOpen, setIsModalOpen] = useState(false)
   const [check, setCheck] = useState(false)
   const { profile } = useContext(AppContext)
   const { id } = useParams()
