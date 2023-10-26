@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
+import openNotification from '@/components/Notification'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import { AppContext } from '@/contexts/app.context'
+import { findUserEnroll } from '@/types/eroll.type'
 import { MyPageTableOptions } from '@/types/page.type'
+import { EditOutlined, ReconciliationOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Space, Table, Tooltip } from 'antd'
-import { ReconciliationOutlined, EditOutlined } from '@ant-design/icons'
 import { useContext, useState } from 'react'
-import classApi from '@/apis/class.api'
-import openNotification from '@/components/Notification'
-import { findUserEnroll } from '@/types/eroll.type'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 
 export default function MyStudent() {
   const [current, setCurrent] = useState<number>(1)
@@ -66,14 +66,14 @@ export default function MyStudent() {
         <TextWithTooltip rows={1} children={record?.user?.fullName as string}></TextWithTooltip>
       ),
     },
-    {
-      title: 'Email',
-      dataIndex: 'limitStudent',
-      key: 'limitStudent',
-      render: (_: any, record: findUserEnroll) => (
-        <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
-      ),
-    },
+    // {
+    //   title: 'Email',
+    //   dataIndex: 'limitStudent',
+    //   key: 'limitStudent',
+    //   render: (_: any, record: findUserEnroll) => (
+    //     <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
+    //   ),
+    // },
     {
       title: 'Khóa học đã mua',
       dataIndex: 'courseName',
@@ -102,7 +102,7 @@ export default function MyStudent() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'x',
-      width: '10%',
+      width: '20%',
       align: 'center' as const,
       render: (_: string, record: findUserEnroll) => {
         const filterClassName = record?.user?.classData?.filter((item) => item?.courseId === record?.course?._id)
@@ -145,7 +145,7 @@ export default function MyStudent() {
     <div>
       <div className='div-table'>
         <Table
-          scroll={{ x: 500, y: 300 }} // Đặt chiều cao cuộn ở đây (300px)
+          scroll={{ x: 500, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
           rowKey={'key'}
           dataSource={data?.data?.docs as any}
           pagination={{

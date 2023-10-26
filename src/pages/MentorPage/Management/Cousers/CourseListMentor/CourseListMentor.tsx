@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import openNotification from '@/components/Notification'
 import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
-import { imageFallback } from '@/constants/utils'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Image, Row } from 'antd'
+import { Card, Col, Row } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './CourseListMentor.scss'
 
 export default function CourseListMentor({ data }: any) {
+  console.log(data, 'lolpwodpwld')
+
   const queryClient = useQueryClient()
 
   const [checkReset, setCheckReset] = useState<boolean>(false)
@@ -53,14 +55,13 @@ export default function CourseListMentor({ data }: any) {
                     <Card
                       style={{ width: 300 }}
                       cover={
-                        <Image
+                        <ImageCustom
                           onClick={() => {
                             navigate(`/courses/${item._id}`)
                           }}
+                          width='100%'
                           height={'150px'}
-                          alt='example'
                           src={import.meta.env.VITE_FILE_ENDPOINT + `/` + item?.coverMedia}
-                          fallback={imageFallback}
                         />
                       }
                       actions={[

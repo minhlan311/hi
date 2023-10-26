@@ -13,6 +13,7 @@ import PATH from '@/constants/path'
 import LoadingCustom from '@/components/LoadingCustom'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
@@ -52,7 +53,15 @@ const MentorCourses = () => {
         }
       />
       {!loading ? (
-        <CourseListMentor data={data} />
+        data && data.docs?.length === 0 ? (
+          <EmptyCustom
+            style={{
+              marginTop: '50px',
+            }}
+          />
+        ) : (
+          <CourseListMentor data={data} />
+        )
       ) : (
         <LoadingCustom
           style={{

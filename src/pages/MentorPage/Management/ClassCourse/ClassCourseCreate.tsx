@@ -66,7 +66,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
   const mutation = useMutation({
     mutationFn: (body: FormClass) => classApi.createClass(body),
     onSuccess: () => {
-      form.resetFields([])
+      form.resetFields()
       queryClient.invalidateQueries({ queryKey: ['course'] })
       queryClient.invalidateQueries({ queryKey: ['dataClass'] })
       openNotification({
@@ -160,7 +160,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               required
               rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu' }]}
             >
-              <DatePicker placeholder='Ngày bắt đầu' />
+              <DatePicker placeholder='Ngày bắt đầu' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -180,7 +180,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
                 }),
               ]}
             >
-              <DatePicker placeholder='Ngày kết thúc' />
+              <DatePicker placeholder='Ngày kết thúc' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -206,36 +206,6 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <InputNumber />
             </Form.Item>
           </Col>
-          {/* <Col span={6}>
-            <Form.Item
-              name='startAt'
-              label='Thời gian bắt đầu'
-              required
-              rules={[{ required: true, message: 'Vui lòng chọn thời gian bắt đầu' }]}
-            >
-              <Checkbox placeholder='Thời gian bắt đầu' format='HH:mm' />
-            </Form.Item>
-          </Col> */}
-          {/* <Col span={6}>
-            <Form.Item
-              name='endAt'
-              label='Thời gian kết thúc'
-              required
-              rules={[
-                { required: true, message: 'Vui lòng chọn thời gian kết thúc' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('startAt').isBefore(value)) {
-                      return Promise.resolve()
-                    }
-                    return Promise.reject(new Error('Thời gian kết thúc phải sau thời gian bắt đầu'))
-                  },
-                }),
-              ]}
-            >
-              <TimePicker placeholder='Thời gian kết thúc' format='HH:mm' />
-            </Form.Item>
-          </Col> */}
 
           <Form.Item name='id' hidden />
         </Row>
