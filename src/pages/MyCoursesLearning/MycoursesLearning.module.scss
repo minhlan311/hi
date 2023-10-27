@@ -111,6 +111,15 @@
   width: 100%;
   overflow: scroll;
 }
+@media screen and (max-width: 900px) {
+  .document {
+    border-bottom: 1px solid #d1d7dc;
+    padding: 0px 10px;
+    height: 65vh;
+    width: 100%;
+    overflow: scroll;
+  }
+}
 .boxExam {
   border-bottom: 1px solid #d1d7dc;
   padding: 30px 70px;

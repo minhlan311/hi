@@ -20,6 +20,37 @@
   font-size: 16px;
 }
 
+@media screen and (max-width: 1000px) {
+  .div-answer {
+    cursor: pointer;
+    border: 1px solid #2d2f31;
+    width: 500px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-left: 20px;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 650px) {
+  .div-answer {
+    cursor: pointer;
+    border: 1px solid #2d2f31;
+    width: 300px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-left: 20px;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
+
 .div-answerR {
   border: 1px solid #2d2f31;
   width: 700px;
