@@ -9,12 +9,15 @@ import PageResult from '@/components/PageResult'
 import questionApi from '@/apis/question.api'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import testBg from '@/assets/images/examimg/online-test.png'
+import successBg from '@/assets/images/examimg/hander-pana.png'
 import useResponsives from '@/hooks/useResponsives'
 import { Card, Col, Descriptions, Row, Space, Steps } from 'antd'
 import { QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import Score from './Score'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface QuestionRender {
@@ -28,11 +31,12 @@ const TestPage = () => {
   const location = useLocation()
 
   const [startTest, setStartTest] = useState<boolean>(false)
+  const [finishTest, setFinishTest] = useState<boolean>(false)
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [skill, setSkill] = useState('READING')
 
-  const { xl, sm, md, lg } = useResponsives()
+  const { sm, md, lg } = useResponsives()
   const { data: testData, isLoading } = useQuery({
     queryKey: ['examData', location],
     queryFn: () => {
@@ -69,9 +73,14 @@ const TestPage = () => {
 
   useEffect(() => {
     if (testData?.data) {
-      if (xl)
+      if (!md)
         window.scrollTo({
           top: 120,
+          behavior: 'smooth',
+        })
+      else
+        window.scrollTo({
+          top: 65,
           behavior: 'smooth',
         })
     }
@@ -170,9 +179,21 @@ const TestPage = () => {
 
   const check = question && currentQuestion + 1 < question?.length
 
+  const handleFinish = () => {
+    setCurrent(0)
+    setCurrentQuestion(0)
+    setSkill('')
+    setStartTest(false)
+    setFinishTest(true)
+  }
+
   const handleNext = () => {
     if (check) {
       setCurrentQuestion((prev) => prev + 1)
+    } else if (current === testSkill.length - 1) {
+      handleFinish()
+
+      return
     } else {
       setCurrent((prev) => {
         setSkill(testSkill[prev + 1].id)
@@ -190,82 +211,150 @@ const TestPage = () => {
   if (data && event)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
-        <Header padding={'70px 0'}>
-          <Row justify='space-between' gutter={24} align='middle'>
-            {startTest ? (
+        <Header padding={sm ? '20px 0' : '70px 0'}>
+          <Row justify='space-between' gutter={24} align='middle' className={css.testMain}>
+            {(startTest && (
               <>
                 <Col span={24} md={18}>
+                  {md && (
+                    <Row justify='space-between' align='bottom' className={css.testNav}>
+                      <Col>
+                        {current === testSkill.length - 1 ? (
+                          <ButtonCustom
+                            onClick={handlePrev}
+                            disabled={currentQuestion === 0}
+                            icon={<AiOutlineLeft />}
+                            tooltip='Câu trước'
+                          ></ButtonCustom>
+                        ) : (
+                          <ButtonCustom
+                            onClick={handlePrev}
+                            disabled={currentQuestion === 0}
+                            icon={<AiOutlineLeft />}
+                            tooltip='Câu trước'
+                          ></ButtonCustom>
+                        )}
+                      </Col>
+                      <Col>
+                        <CountDownTimer
+                          type={sm ? 'number' : 'progress'}
+                          initTime={testTime}
+                          initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
+                          start={startTest}
+                          size={sm ? 20 : 30}
+                          localId={event._id}
+                        ></CountDownTimer>
+                      </Col>
+                      <Col>
+                        <ButtonCustom
+                          type='primary'
+                          onClick={handleNext}
+                          icon={current === testSkill.length - 1 ? <></> : <AiOutlineRight />}
+                          tooltip={
+                            current === testSkill.length - 1
+                              ? undefined
+                              : question?.length && currentQuestion === question?.length - 1
+                              ? 'Kỹ năng tiếp theo'
+                              : 'Câu tiếp theo'
+                          }
+                        >
+                          {current === testSkill.length - 1 && 'Nộp bài'}
+                        </ButtonCustom>
+                      </Col>
+                    </Row>
+                  )}
                   <Card className={css.testBody}>{testSkill[current].content}</Card>
                 </Col>
                 <Col span={24} md={6}>
-                  <Space className={'sp100'} direction='vertical' size='large' align='center'>
-                    <CountDownTimer
-                      type='progress'
-                      initTime={testTime}
-                      initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
-                      start={startTest}
-                      size={30}
-                      localId={event._id}
-                    ></CountDownTimer>
-                    <Space direction='vertical'>
-                      <b>Kỹ năng:</b>
-                      <Steps current={current} onChange={onChange} direction='vertical' items={testSkill} />
-                    </Space>
+                  {!md && (
+                    <Space className={` sp100`} direction='vertical' size='large' align='center'>
+                      <CountDownTimer
+                        type={sm ? 'number' : 'progress'}
+                        initTime={testTime}
+                        initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
+                        start={startTest}
+                        size={sm ? 20 : 30}
+                        localId={event._id}
+                      ></CountDownTimer>
+                      <Space direction='vertical'>
+                        <b>Kỹ năng:</b>
+                        <Steps current={current} onChange={onChange} direction='vertical' items={testSkill} />
+                      </Space>
 
-                    <Space>
-                      <ButtonCustom onClick={handlePrev} disabled={currentQuestion === 0}>
-                        Câu trước
-                      </ButtonCustom>
-                      <ButtonCustom type='primary' onClick={handleNext}>
-                        {question && currentQuestion === question.length ? 'Kỹ năng tiếp theo' : 'Câu tiếp theo'}
+                      <Space>
+                        <ButtonCustom onClick={handlePrev} disabled={currentQuestion === 0}>
+                          Câu trước
+                        </ButtonCustom>
+                        <ButtonCustom type='primary' onClick={handleNext}>
+                          {question && currentQuestion === question.length ? 'Kỹ năng tiếp theo' : 'Câu tiếp theo'}
+                        </ButtonCustom>
+                      </Space>
+                    </Space>
+                  )}
+                </Col>
+              </>
+            )) ||
+              (!startTest && !finishTest && (
+                <>
+                  <Col span={24} md={12}>
+                    <img src={testBg} alt='testBg' width={'100%'} />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
+                      <h1>{event?.name}</h1>
+                      {oldTime && oldTime !== '0' && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
+                      <div>
+                        <Descriptions size='small'>
+                          <Descriptions.Item label='Số câu hỏi'>
+                            <b>{data.countQuestions}</b>
+                          </Descriptions.Item>
+                        </Descriptions>
+                        <Descriptions column={sm || md || lg ? 1 : 2}>
+                          <Descriptions.Item label='Thời gian làm bài'>
+                            <b>{location.state.testTime} phút</b>
+                          </Descriptions.Item>
+                          <Descriptions.Item label='Thời gian cộng thêm'>
+                            <b>{location.state.addTime} phút</b>
+                          </Descriptions.Item>
+                        </Descriptions>
+                        <Descriptions size='small'>
+                          <Descriptions.Item label='Chú thích'>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  event?.description && event?.description !== '<p></p>'
+                                    ? event?.description
+                                    : 'Không có chú thích.',
+                              }}
+                            ></div>
+                          </Descriptions.Item>
+                        </Descriptions>
+                      </div>
+                      <ButtonCustom size='large' type='primary' onClick={() => setStartTest(true)}>
+                        Bắt đầu thi
                       </ButtonCustom>
                     </Space>
-                  </Space>
-                </Col>
-              </>
-            ) : (
-              <>
-                <Col span={24} md={12}>
-                  <img src={testBg} alt='testBg' width={'100%'} />
-                </Col>
-                <Col span={24} md={8}>
-                  <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
-                    <h1>{event?.name}</h1>
-                    {oldTime && oldTime !== '0' && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
-                    <div>
-                      <Descriptions size='small'>
-                        <Descriptions.Item label='Số câu hỏi'>
-                          <b>{data.countQuestions}</b>
-                        </Descriptions.Item>
-                      </Descriptions>
-                      <Descriptions column={sm || md || lg ? 1 : 2}>
-                        <Descriptions.Item label='Thời gian làm bài'>
-                          <b>{location.state.testTime} phút</b>
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Thời gian cộng thêm'>
-                          <b>{location.state.addTime} phút</b>
-                        </Descriptions.Item>
-                      </Descriptions>
-                      <Descriptions size='small'>
-                        <Descriptions.Item label='Chú thích'>
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                event?.description && event?.description !== '<p></p>'
-                                  ? event?.description
-                                  : 'Không có chú thích.',
-                            }}
-                          ></div>
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </div>
-                    <ButtonCustom size='large' type='primary' onClick={() => setStartTest(true)}>
-                      Bắt đầu thi
-                    </ButtonCustom>
-                  </Space>
-                </Col>
-              </>
-            )}
+                  </Col>
+                </>
+              )) || (
+                <>
+                  <Col span={24} md={12}>
+                    <img src={successBg} alt='successBg' width={'100%'} />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
+                      <h1>{event?.name}</h1>
+                      <Score />
+                      <Space>
+                        <ButtonCustom onClick={() => setStartTest(true)}>Làm lại</ButtonCustom>
+                        <ButtonCustom type='primary' href='/'>
+                          Trở về trang chủ
+                        </ButtonCustom>
+                      </Space>
+                    </Space>
+                  </Col>
+                </>
+              )}
           </Row>
         </Header>
       </LoadingCustom>

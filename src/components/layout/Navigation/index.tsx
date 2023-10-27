@@ -27,7 +27,7 @@ type Props = {
 
 export default function Navigation({ user }: Props) {
   const navigate = useNavigate()
-  const { sm, md, xl, xxl } = useResponsives()
+  const { sm, md, lg, xl, xxl } = useResponsives()
   useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
   const { profile } = useContext(AppContext)
 
@@ -65,7 +65,7 @@ export default function Navigation({ user }: Props) {
                 )
               ) : (
                 <>
-                  {(xl || xxl) && (
+                  {(xl || xxl) && !lg && (
                     <Col>
                       <Space size='large'>
                         <Button type='primary' size='small'>
