@@ -1,4 +1,4 @@
 export interface AuthState {
-  email: string
+  account: string
   password: string
 }

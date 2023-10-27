@@ -1,3 +1,5 @@
+import { QuestionType } from './question'
+
 export interface Choice {
   _id?: string
   key?: string
@@ -12,16 +14,6 @@ export interface TestState {
   choices: Choice[]
   hint: string
   status: string
-  type:
-    | 'SINGLE CHOICE'
-    | 'MULTIPLE CHOICE'
-    | 'TRUE FALSE'
-    | 'SORT'
-    | 'DRAG DROP'
-    | 'LIKERT SCALE'
-    | 'FILL BLANK'
-    | 'MATCHING'
-    | 'NUMERICAL'
-    | 'WRITING'
+  type: QuestionType
   point: number
 }

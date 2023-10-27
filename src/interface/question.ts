@@ -5,6 +5,19 @@ export interface Choice {
   isChosen: boolean
   _id: string
 }
+export interface QuestionType {
+  type:
+    | 'SINGLE CHOICE'
+    | 'MULTIPLE CHOICE'
+    | 'TRUE FALSE'
+    | 'SORT'
+    | 'DRAG DROP'
+    | 'LIKERT SCALE'
+    | 'FILL BLANK'
+    | 'MATCHING'
+    | 'NUMERICAL'
+    | 'WRITING'
+}
 
 export interface QuestionState {
   _id: string
@@ -15,7 +28,7 @@ export interface QuestionState {
   question: string
   choices: Choice[]
   status: string
-  type: string
+  type: QuestionType
   point: number
   difficulty: string
   answer?: string

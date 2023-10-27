@@ -1,4 +1,5 @@
 import { ENDPOINT } from '@/constants/endpoint'
+import { AuthState } from '@/interface/auth'
 import { UserState } from '@/interface/user'
 import { AuthResponse, ChangePassword } from '@/types/auth.type'
 import { Register } from '@/types/mentor.type'
@@ -14,7 +15,7 @@ const authApi = {
     return http.post<AuthResponse>(ENDPOINT.MENTOR, body)
   },
   login(body: { email: string; password: string }) {
-    return http.post<AuthResponse>(ENDPOINT.LOGIN, body)
+    return http.post<AuthState>(ENDPOINT.LOGIN, body)
   },
   logout() {
     return http.post(ENDPOINT.LOGOUT)

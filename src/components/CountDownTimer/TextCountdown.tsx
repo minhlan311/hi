@@ -1,7 +1,7 @@
-import { Card, Progress, Space } from 'antd'
-import moment, { Moment } from 'moment-timezone'
 import css from './styles.module.scss'
+import moment, { Moment } from 'moment-timezone'
 import { BsClockHistory } from 'react-icons/bs'
+import { Card, Progress, Space } from 'antd'
 
 type Props = {
   type: 'text' | 'number' | 'flip' | 'progress'
