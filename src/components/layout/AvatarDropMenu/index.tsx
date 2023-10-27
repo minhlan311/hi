@@ -53,7 +53,7 @@ const AvatarDropMenu = (props: Props) => {
     items.map(
       (item) =>
         !item.type && (
-          <ButtonCustom type='text' key={item._id} size='small' onClick={item.actionFunction}>
+          <ButtonCustom type='text' key={item._id} size='small' onClick={() => item.clickEvent && item.clickEvent()}>
             {item.label}
           </ButtonCustom>
         ),

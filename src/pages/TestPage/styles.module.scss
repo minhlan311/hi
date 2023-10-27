@@ -1,12 +1,25 @@
-.testBody {
-  min-height: 85vh;
-  background-color: var(--lighish-white);
-  .question {
-    font-size: 18px;
+@import '../../components/GlobalStyles/responsive.scss';
+
+.testMain {
+  .testBody {
+    min-height: 85vh;
+    @include respond-to(xs) {
+      min-height: 77vh;
+    }
+    // @include respond-to(sm) {
+    //   min-height: 7vh;
+    // }
+    background-color: var(--lighish-white);
+    .question {
+      font-size: 18px;
+    }
+    .titleQues {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
-  .titleQues {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .testNav {
+    margin-bottom: 20px;
   }
 }
