@@ -17,6 +17,11 @@ type Props = {
 const AvatarDropMenu = (props: Props) => {
   const { userData, collapsed = false, renderMenu = false } = props
 
+  const handleLogout = () => {
+    clearLS()
+    window.location.href = '/'
+  }
+
   const items: any[] = [
     {
       key: 'profiles',
@@ -24,7 +29,7 @@ const AvatarDropMenu = (props: Props) => {
     },
     !userData.isMentor && {
       key: 'schedule',
-      label: <Link to='/schedule'>Lịnh học của tôi</Link>,
+      label: <Link to='/schedule'>Lịch học của tôi</Link>,
     },
     {
       key: 'myCourse',
@@ -39,16 +44,8 @@ const AvatarDropMenu = (props: Props) => {
     },
     {
       key: 'logout',
-      label: (
-        <div
-          onClick={() => {
-            clearLS()
-            window.location.href = '/'
-          }}
-        >
-          Đăng xuất
-        </div>
-      ),
+      label: <div>Đăng xuất</div>,
+      clickEvent: handleLogout,
     },
   ]
 
@@ -56,7 +53,7 @@ const AvatarDropMenu = (props: Props) => {
     items.map(
       (item) =>
         !item.type && (
-          <ButtonCustom type='text' key={item._id} size='small'>
+          <ButtonCustom type='text' key={item._id} size='small' onClick={item.actionFunction}>
             {item.label}
           </ButtonCustom>
         ),

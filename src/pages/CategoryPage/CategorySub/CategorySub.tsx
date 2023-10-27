@@ -45,7 +45,7 @@ export default function CategorySub() {
               objectFit: 'cover',
             }}
             width='100%'
-            height='500px'
+            height='100%'
             src={import.meta.env.VITE_FILE_ENDPOINT + '/' + detailData?.data?.coverUrl}
           />
           <div className='h2'>

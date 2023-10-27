@@ -1,9 +1,11 @@
-import { Dropdown as Drop, Space, theme } from 'antd'
-import React from 'react'
-import type { MenuProps } from 'antd'
-import css from './DropdownCustom.module.scss'
-import { Link } from 'react-router-dom'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import css from './DropdownCustom.module.scss'
+import React from 'react'
+import { Dropdown as Drop, Space, theme } from 'antd'
+import { Link } from 'react-router-dom'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import type { MenuProps } from 'antd'
 
 type Props = {
   children: React.ReactNode
@@ -60,9 +62,15 @@ const DropdownCustom = (props: Props) => {
     boxShadow: token.boxShadowSecondary,
   }
 
+  const handleClick = ({ item }: { item: any }) => {
+    if (item.props.clickEvent) {
+      item.props.clickEvent()
+    }
+  }
+
   return (
     <Drop
-      menu={{ items }}
+      menu={{ items, onClick: handleClick }}
       placement={placement}
       trigger={[trigger]}
       arrow={arrow}
