@@ -7,6 +7,7 @@ import ReactPlayer from 'react-player'
 import screenfull from 'screenfull'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
+import useResponsives from '@/hooks/useResponsives'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -61,6 +62,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     type: 'forward',
   })
   const isMobile = useIsMobile()
+  const { sm } = useResponsives()
 
   const handleDeleteBookmark = (index: number) => {
     const newBookmarks = [...bookmarks]
@@ -266,7 +268,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             muted={muted}
             ref={playerRef}
             playing={playing}
-            controls={isMobile ? true : false}
+            controls={isMobile || sm}
             onProgress={handleProgress}
             style={{
               width: '1200px',
@@ -281,7 +283,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               },
             }}
           />
-          {!isMobile && (
+          {!sm && (
             <Controls
               names={names}
               dataLession={dataLession}
