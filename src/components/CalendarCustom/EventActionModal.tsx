@@ -71,7 +71,6 @@ const EventActionModal = (props: Props) => {
     { label: '90 phút', value: 90 },
     { label: '120 phút', value: 120 },
   ]
-  console.log(initVal)
 
   useEffect(() => {
     if (eventDetail) {

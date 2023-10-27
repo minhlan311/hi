@@ -1,23 +1,25 @@
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
 import css from './styles.module.scss'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import eventApi from '@/apis/event.api'
 import examApi from '@/apis/exam.api'
 import Header from '@/components/layout/Header/Header'
 import LoadingCustom from '@/components/LoadingCustom'
 import PageResult from '@/components/PageResult'
 import questionApi from '@/apis/question.api'
+import RenderAnswer from './RenderAnswer'
+import Score from './Score'
+import successBg from '@/assets/images/examimg/hander-pana.png'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import testBg from '@/assets/images/examimg/online-test.png'
-import successBg from '@/assets/images/examimg/hander-pana.png'
 import useResponsives from '@/hooks/useResponsives'
+import { AiOutlineLeft, AiOutlineQuestionCircle, AiOutlineRight } from 'react-icons/ai'
 import { Card, Col, Descriptions, Row, Space, Steps } from 'antd'
-import { QuestionState } from '@/interface/question'
+import { Choice, QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
-import Score from './Score'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface QuestionRender {
@@ -61,10 +63,6 @@ const TestPage = () => {
           _id: data?.questions,
           skill: skill,
         },
-        // options: {
-        //   limit: 1,
-        //   page: currentQuestion,
-        // },
       })
     },
   })
@@ -95,7 +93,7 @@ const TestPage = () => {
     if (questions.isLoading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
     if (questionData)
       return (
-        <div>
+        <Space direction='vertical' className={'sp100'}>
           <div className={css.titleQues}>
             <h2>
               Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
@@ -109,7 +107,33 @@ const TestPage = () => {
             className={css.question}
             dangerouslySetInnerHTML={{ __html: questionData.question as unknown as string }}
           ></p>
-        </div>
+          {questionData.hint && questionData.hint !== '<p></p>' && (
+            <Space>
+              <AiOutlineQuestionCircle />
+              <div dangerouslySetInnerHTML={{ __html: questionData.hint }}></div>
+            </Space>
+          )}
+          <RenderAnswer
+            type={
+              questionData.type as unknown as
+                | 'SINGLE CHOICE'
+                | 'MULTIPLE CHOICE'
+                | 'TRUE FALSE'
+                | 'SORT'
+                | 'DRAG DROP'
+                | 'LIKERT SCALE'
+                | 'FILL BLANK'
+                | 'MATCHING'
+                | 'NUMERICAL'
+                | 'WRITING'
+            }
+            choices={questionData.choices as unknown as Choice[]}
+          />
+        </Space>
+      )
+    else
+      return (
+        <EmptyCustom description='Không có câu hỏi nào. Vui lòng làm phần tiếp theo!' style={{ marginTop: '25vh' }} />
       )
   }
 
@@ -171,11 +195,11 @@ const TestPage = () => {
     },
   ]
 
-  const onChange = (value: number) => {
-    setSkill(testSkill[value].id)
-    setCurrentQuestion(0)
-    setCurrent(value)
-  }
+  // const onChange = (value: number) => {
+  //   setSkill(testSkill[value].id)
+  //   setCurrentQuestion(0)
+  //   setCurrent(value)
+  // }
 
   const check = question && currentQuestion + 1 < question?.length
 
@@ -185,6 +209,12 @@ const TestPage = () => {
     setSkill('')
     setStartTest(false)
     setFinishTest(true)
+    if (event) localStorage.removeItem(event._id as string)
+  }
+
+  const handleReset = () => {
+    setStartTest(true)
+    setSkill(testSkill[0].id)
   }
 
   const handleNext = () => {
@@ -276,17 +306,24 @@ const TestPage = () => {
                         size={sm ? 20 : 30}
                         localId={event._id}
                       ></CountDownTimer>
-                      <Space direction='vertical'>
-                        <b>Kỹ năng:</b>
-                        <Steps current={current} onChange={onChange} direction='vertical' items={testSkill} />
-                      </Space>
+
+                      <Steps
+                        current={current}
+                        //  onChange={onChange}
+                        direction='vertical'
+                        items={testSkill}
+                      />
 
                       <Space>
                         <ButtonCustom onClick={handlePrev} disabled={currentQuestion === 0}>
                           Câu trước
                         </ButtonCustom>
                         <ButtonCustom type='primary' onClick={handleNext}>
-                          {question && currentQuestion === question.length ? 'Kỹ năng tiếp theo' : 'Câu tiếp theo'}
+                          {current === testSkill.length - 1
+                            ? 'Nộp bài'
+                            : question && (question.length === 0 || currentQuestion === question.length - 1)
+                            ? 'Kỹ năng tiếp theo'
+                            : 'Câu tiếp theo'}
                         </ButtonCustom>
                       </Space>
                     </Space>
@@ -346,7 +383,7 @@ const TestPage = () => {
                       <h1>{event?.name}</h1>
                       <Score />
                       <Space>
-                        <ButtonCustom onClick={() => setStartTest(true)}>Làm lại</ButtonCustom>
+                        <ButtonCustom onClick={handleReset}>Làm lại</ButtonCustom>
                         <ButtonCustom type='primary' href='/'>
                           Trở về trang chủ
                         </ButtonCustom>

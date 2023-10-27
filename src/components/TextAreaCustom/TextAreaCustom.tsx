@@ -12,7 +12,7 @@ type Props = {
   onBlur?: () => void
   onReady?: (e: any) => void
   name: string
-  data: any | null
+  data?: any | null
   label?: string
   required?: boolean
 }

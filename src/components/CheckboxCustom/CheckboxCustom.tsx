@@ -32,7 +32,7 @@ const CheckboxCustom = (props: Props) => {
     onClick,
     checkAll = false,
     defaultChecked = false,
-    className
+    className,
   } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
 
@@ -68,16 +68,18 @@ const CheckboxCustom = (props: Props) => {
       </Space>
     )
   }
+
   if (type === 'card') {
     return (
-      <Card className={`${css.checkboxCard} ${className}`} onClick={() => setIsCheck(!isCheck)}>
-        <Space direction='vertical'>
-          <Checkbox onChange={onChange} value={value} className={css.checkbox} checked={isCheck} onClick={onClick}>
+      <Checkbox onChange={onChange} value={value} className={css.checkbox} checked={isCheck} onClick={onClick}>
+        <Card className={`${css.checkboxCard} ${className}`} onClick={() => setIsCheck(!isCheck)} size='small'>
+          <Space direction='vertical'>
             {children}
-          </Checkbox>
-          {desc && <p className={css.desc}>{desc}</p>}
-        </Space>
-      </Card>
+
+            {desc && <p className={css.desc}>{desc}</p>}
+          </Space>
+        </Card>{' '}
+      </Checkbox>
     )
   } else
     return (
