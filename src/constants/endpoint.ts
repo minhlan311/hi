@@ -35,6 +35,11 @@ export const ENDPOINT = {
   CATEGORIES_PATH_SLUG: '/category/detail/',
   FIND_CATEGORIES_PATH: '/category/find',
 
+  // :::::::::::::::::::: BOOKMARK PATH :::::::::::::::::::::
+  ADD_BOOKMARK_PATH: '/bookmark/add-bookmark',
+  FIND_BOOKMARK_PATH: '/bookmark/find',
+  DELETE_BOOKMARK_PATH: '/bookmark/delete-bookmark/',
+
   // :::::::::::::::::::: EXAM PATH :::::::::::::::::::::
   EXAM_PATH: '/exam/tests/',
   FIND_EXAM_PATH: '/exam/tests/find',

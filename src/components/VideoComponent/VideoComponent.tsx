@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import bookmarkApi from '@/apis/bookmark'
+import { AppContext } from '@/contexts/app.context'
 import useIsMobile from '@/hooks/useCheckMobile'
+import useResponsives from '@/hooks/useResponsives'
 import { BackwardOutlined, ForwardOutlined, PlusCircleOutlined, StarOutlined } from '@ant-design/icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Popover, Tooltip } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import screenfull from 'screenfull'
 import style from './VideoComponent.module.scss'
 import Controls from './component/Controls'
-import useResponsives from '@/hooks/useResponsives'
 
 const format = (seconds: number) => {
   if (isNaN(seconds)) {
@@ -51,10 +54,35 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   const controlsRef = useRef<any>(null)
   const playerContainerRef = useRef<any>(null)
   const [playeds, setPlayeds] = useState<number | string>(0)
-  const [bookmarks, setBookmarks] = useState<{ time: number; note: string }[]>([])
   const [volumeNotification, setVolumeNotification] = useState<{ show: boolean; volume: number }>({
     show: false,
     volume: 0,
+  })
+  const { profile } = useContext(AppContext)
+  const queryClient = useQueryClient()
+  const mutate = useMutation({
+    mutationFn: (body: any) => bookmarkApi.addBookmark(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookmarkVideo'] })
+    },
+  })
+
+  const mutateDelete = useMutation({
+    mutationFn: (id: string) => bookmarkApi.deleteBookmark(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookmarkVideo'] })
+    },
+  })
+
+  const { data: dataBookmark } = useQuery({
+    queryKey: ['bookmarkVideo', video],
+    queryFn: () =>
+      bookmarkApi.getBookmark({
+        filterQuery: {
+          userId: profile._id,
+          lessonVideo: video!,
+        },
+      }),
   })
 
   const [seekNotification, setSeekNotification] = useState<{ show: boolean; type: 'forward' | 'rewind' }>({
@@ -64,14 +92,8 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   const isMobile = useIsMobile()
   const { sm } = useResponsives()
 
-  const handleDeleteBookmark = (index: number) => {
-    const newBookmarks = [...bookmarks]
-    newBookmarks.splice(index, 1)
-    setBookmarks(newBookmarks)
-
-    // Cập nhật localStorage ngay sau khi cập nhật state
-    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
-    localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: newBookmarks }))
+  const handleDeleteBookmark = (id: string) => {
+    mutateDelete.mutate(id)
   }
 
   let hideControlsTimeout: string | number | NodeJS.Timeout | undefined
@@ -110,18 +132,6 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
       return () => clearTimeout(timeout)
     }
   }, [seekNotification, volumeNotification])
-
-  useEffect(() => {
-    // Lấy tất cả bookmarks từ localStorage
-    const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
-
-    // Nếu có bookmarks cho video hiện tại, cập nhật state, nếu không đặt danh sách rỗng
-    if (Object.prototype.hasOwnProperty.call(allBookmarks, video!)) {
-      setBookmarks(allBookmarks[video!])
-    } else {
-      setBookmarks([]) // Đặt bookmarks về mảng trống nếu không có bookmarks cho video
-    }
-  }, [video]) // Dependency là video, nghĩa là useEffect sẽ chạy mỗi khi video thay đổi
 
   const [state, setState] = useState<Props>({
     pip: false,
@@ -214,13 +224,8 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
     const note = prompt('Ghi chú :')
 
     if (note) {
-      const newBookmark = { time: currentTime, note }
-      const updatedBookmarks = [...bookmarks, newBookmark]
-      setBookmarks(updatedBookmarks)
-
-      // Cập nhật localStorage ngay sau khi cập nhật state
-      const allBookmarks = JSON.parse(localStorage.getItem('bookmarks-video') || '{}')
-      localStorage.setItem('bookmarks-video', JSON.stringify({ ...allBookmarks, [video!]: updatedBookmarks }))
+      const newBookmark = { time: currentTime, note, lessonVideo: video }
+      mutate.mutate(newBookmark)
     }
   }
 
@@ -328,13 +333,19 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
             trigger={'click'}
             title={
               <>
-                <div>
+                <div
+                  style={{
+                    minHeight: '100px',
+                    minWidth: '200px',
+                  }}
+                >
                   <ul>
-                    {bookmarks && bookmarks?.length > 0 ? (
-                      bookmarks?.map((bookmark, index) => (
-                        <li key={index}>
+                    {dataBookmark && dataBookmark?.data?.docs?.length > 0 ? (
+                      dataBookmark?.data?.docs?.map((bookmark: any) => (
+                        <li key={bookmark._id}>
                           Time: {format(bookmark.time)} - Note: {bookmark.note}
                           <Button
+                            disabled={mutateDelete.isLoading}
                             type='primary'
                             style={{
                               margin: '5px',
@@ -343,7 +354,12 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
                           >
                             Go to
                           </Button>
-                          <Button type='dashed' className='dashed' onClick={() => handleDeleteBookmark(index)}>
+                          <Button
+                            disabled={mutateDelete.isLoading}
+                            type='dashed'
+                            className='dashed'
+                            onClick={() => handleDeleteBookmark(bookmark._id)}
+                          >
                             Xóa
                           </Button>
                         </li>
