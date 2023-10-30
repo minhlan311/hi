@@ -24,7 +24,7 @@ import {
   VideoCameraOutlined,
   WarningOutlined,
 } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
 import FileSaver from 'file-saver'
 import JSZip from 'jszip'
@@ -42,6 +42,7 @@ interface FileItem {
 }
 
 export default function MycoursesLearning() {
+  const queryClient = useQueryClient()
   const { id } = useParams()
   const [video, setVideo] = useState('')
   const [nameVideo, setNameVideo] = useState('')
@@ -57,6 +58,8 @@ export default function MycoursesLearning() {
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
   const { Panel } = Collapse
 
+  const dataProfile = queryClient.getQueryData<any>(['userDetail'])
+
   const toggleFullScreenForExamDiv = () => {
     if (screenfull.isEnabled && examDivRef.current) {
       screenfull.toggle(examDivRef.current)
@@ -67,9 +70,7 @@ export default function MycoursesLearning() {
 
   const { lg } = useResponsives()
 
-  console.log(profile, 'profileprofile')
-
-  const joinClass = profile?.classData?.find((item) => item?.courseId === id)
+  const joinClass = dataProfile?.data?.classData?.find((item: any) => item?.courseId === id)
 
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],

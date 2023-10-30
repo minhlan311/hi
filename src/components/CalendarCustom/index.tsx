@@ -235,6 +235,22 @@ const CalendarCustom = ({ calendarType }: Props) => {
     }
   }
 
+  const sortedData = events.sort((a, b) => {
+    const isPastEnd = (item: any) => dayjs().isAfter(item.end)
+
+    if (isPastEnd(a) && !isPastEnd(b)) {
+      return 1
+    } else if (!isPastEnd(a) && isPastEnd(b)) {
+      return -1
+    } else if (a.type === 'TEST' && b.type !== 'TEST') {
+      return -1
+    } else if (a.type !== 'TEST' && b.type === 'TEST') {
+      return 1
+    } else {
+      return dayjs(a.start).diff(dayjs(b.start))
+    }
+  })
+
   return (
     <Space direction='vertical' className={'sp100'}>
       {sm && md && <Input.Search placeholder='Tìm kiếm' />}
@@ -267,7 +283,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
                     (ev) => dayjs(ev.start).format('YYYY/MM/DD') === dayjs(callBackWeekSelect).format('YYYY/MM/DD'),
                   ).length > 0 ? (
                     <Space direction='vertical' className={'sp100'}>
-                      {events.map((event) => (
+                      {sortedData.map((event) => (
                         <MapData event={event} key={event.id} />
                       ))}
                     </Space>
@@ -284,7 +300,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
                       </b>
 
                       {events.some((ev) => dayjs(ev.start).format('YYYY/MM/DD') === dayjs(d).format('YYYY/MM/DD')) ? (
-                        events.map((event) =>
+                        sortedData.map((event) =>
                           dayjs(event.start).format('YYYY/MM/DD') === dayjs(d).format('YYYY/MM/DD') ? (
                             <MapData event={event} key={event.id} />
                           ) : null,
