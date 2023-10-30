@@ -199,7 +199,7 @@ const ProfilePage = ({ profile }: Props) => {
           setting={{
             size: 'large',
           }}
-          align='center'
+          align={sm ? 'start' : 'center'}
         />
       </Header>
     </div>
