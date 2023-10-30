@@ -1,6 +1,6 @@
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import { Choice } from '@/interface/test'
+import { Choice } from '@/interface/tests'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
