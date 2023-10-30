@@ -6,6 +6,7 @@ declare module '@toast-ui/react-calendar' {
   type EventNameMapping = {
     useFormPopup: 'useFormPopup'
     onBeforeCreateEvent: 'beforeCreateEvent'
+    onAfterCreateEvent: 'afterCreateEvent'
     onBeforeUpdateEvent: 'beforeUpdateEvent'
     onBeforeDeleteEvent: 'beforeDeleteEvent'
     onAfterRenderEvent: 'afterRenderEvent'
