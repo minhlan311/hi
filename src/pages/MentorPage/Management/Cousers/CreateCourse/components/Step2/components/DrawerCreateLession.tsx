@@ -112,7 +112,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
   const onFinish = (values: any) => {
     delete values.document

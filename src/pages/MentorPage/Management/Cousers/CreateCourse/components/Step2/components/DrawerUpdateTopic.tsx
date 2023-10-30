@@ -52,7 +52,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
   const onFinish = (values: any) => {
     mutation.mutate(values)
