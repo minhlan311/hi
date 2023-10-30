@@ -28,11 +28,11 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [form] = Form.useForm()
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [hidden, setHidden] = useState<boolean>(false)
-  const [questionShow, setQuestionShow] = useState<boolean>(true)
+  const [type, setType] = useState<string>('')
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [id, setId] = useState<string>()
   const [showAll, setShowAll] = useState<boolean>(false)
+
   useEffect(() => {
     dataCollapLession(dataDrawer)
   }, [dataDrawer])
@@ -101,14 +101,6 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   })
 
   useEffect(() => {
-    if (form.getFieldValue('type')) {
-      setShowAll(true)
-    } else {
-      setShowAll(false)
-    }
-  }, [form.getFieldValue('type')])
-
-  useEffect(() => {
     form.setFieldValue('descriptions', content)
   }, [content])
 
@@ -125,24 +117,22 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const onFinish = (values: any) => {
     delete values.document
     mutation.mutate(values)
-
+    setShowAll(false)
     form.resetFields()
     setContent('')
     onClose(false)
   }
 
-  const onChange = (value: string) => {
-    if (value !== TypeLessonEnum.VIDEO_LESSON) {
-      setHidden(true)
+  useEffect(() => {
+    if (type) {
+      setShowAll(true)
     } else {
-      setHidden(false)
+      setShowAll(false)
     }
+  }, [type])
 
-    if (value === TypeLessonEnum.EXAM) {
-      setQuestionShow(false)
-    } else {
-      setQuestionShow(true)
-    }
+  const onChange = (value: string) => {
+    setType(value)
   }
 
   const onFinishFailed = (values: any) => {
@@ -169,7 +159,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         </Form.Item>
         {showAll && (
           <>
-            {!hidden && (
+            {type === TypeLessonEnum.VIDEO_LESSON && (
               <>
                 <Form.Item label={'Link video'} name='media'>
                   <Input placeholder='Nhập Link video' allowClear />
@@ -184,14 +174,18 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
                 </Form.Item>
               </>
             )}
-            <Form.Item
-              label={'Nội dung giới thiệu'}
-              name='descriptions'
-              rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
-            >
-              <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
-            </Form.Item>
-            {!questionShow && (
+
+            {type !== TypeLessonEnum.LIVE_LESSON && (
+              <Form.Item
+                label={'Nội dung giới thiệu'}
+                name='descriptions'
+                rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
+              >
+                <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+              </Form.Item>
+            )}
+
+            {type === TypeLessonEnum.EXAM && (
               <Form.Item
                 label={'Thêm bộ câu hỏi'}
                 name='testId'

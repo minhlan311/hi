@@ -1,31 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
-import { formatDate, formatPriceVND } from '@/helpers/common'
-import { useQuery } from '@tanstack/react-query'
-import './CategoryDetail.scss'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import LoadingCustom from '@/components/LoadingCustom'
-import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import { Card, Col, Pagination, Row } from 'antd'
-import Meta from 'antd/es/card/Meta'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
-import calenderSVG from '@/assets/icons/calendar.svg'
-import WrapMore from '@/components/WrapMore/WrapMore'
-import useResponsives from '@/hooks/useResponsives'
-import SliderCustom from '@/components/SliderCustom'
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
+import calenderSVG from '@/assets/icons/calendar.svg'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import LoadingCustom from '@/components/LoadingCustom'
+import SliderCustom from '@/components/SliderCustom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import WrapMore from '@/components/WrapMore/WrapMore'
+import { formatDate, formatPriceVND } from '@/helpers/common'
+import useResponsives from '@/hooks/useResponsives'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Pagination, Row, Tooltip } from 'antd'
+import Meta from 'antd/es/card/Meta'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import './CategoryDetail.scss'
 
 export default function CategogyDetail() {
   const { categoryDetailSlug, menuSlug } = useParams()
   const { lg } = useResponsives()
   const [page, setPage] = useState(1)
-
-  // menuSlug
-  // :
-  // "lich-khai-giang-blbah"
   const navigate = useNavigate()
 
   const [filter, setFilter] = useState({
@@ -79,7 +75,7 @@ export default function CategogyDetail() {
         },
       })
     },
-    enabled: data?.data?._id && menuSlug === 'lich-khai-giang-blbah' ? true : false,
+    enabled: data?.data?._id && menuSlug?.includes('lich-khai-giang') ? true : false,
   })
 
   useQuery({
@@ -96,7 +92,7 @@ export default function CategogyDetail() {
         },
       })
     },
-    enabled: data?.data?._id && menuSlug === 'luyen-thi-743j7' ? true : false,
+    enabled: data?.data?._id && menuSlug?.includes('luyen-thi') ? true : false,
   })
 
   const handleClickCourse = (id: string) => {
@@ -119,6 +115,7 @@ export default function CategogyDetail() {
       ) : (
         <>
           <ImageCustom
+            preview={false}
             styles={{
               objectFit: 'cover',
             }}
@@ -149,52 +146,90 @@ export default function CategogyDetail() {
                     ? menuSlug === 'lich-khai-giang-blbah' && <LoadingCustom />
                     : listDataCourse?.map((item) => (
                         <Col className='col'>
-                          <Card
-                            onClick={() => handleClickCourse(item?._id as string)}
-                            hoverable
-                            style={{ width: 340, height: 410 }}
-                            cover={
-                              <ImageCustom
-                                preview={false}
-                                height='160px'
-                                width='100%'
-                                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                              />
+                          <Tooltip
+                            color='white'
+                            placement='right'
+                            title={
+                              <>
+                                <h3
+                                  style={{
+                                    color: 'black',
+                                  }}
+                                >
+                                  Tất cả lịch khai giảng
+                                </h3>
+                                {item?.class?.map((item, index) => (
+                                  <div key={index} className='flex'>
+                                    <img src={calenderSVG} className='icons' alt='' />
+                                    <TextWithTooltip
+                                      rows={1}
+                                      children={
+                                        <>
+                                          {item?.startDate ? (
+                                            <>
+                                              Khai giảng {''}
+                                              {formatDate(item?.startDate)}
+                                            </>
+                                          ) : (
+                                            'Đang cập nhật'
+                                          )}
+                                        </>
+                                      }
+                                      className='text-date'
+                                    />
+                                  </div>
+                                ))}{' '}
+                              </>
                             }
                           >
-                            <Meta
-                              description={
-                                <>
-                                  <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                                  {item?.class?.slice(0, 2).map((item, index) => (
-                                    <div key={index} className='flex'>
-                                      <img src={calenderSVG} className='icons' alt='' />
-                                      <TextWithTooltip
-                                        rows={1}
-                                        children={
-                                          <>
-                                            {item?.startDate ? (
-                                              <>
-                                                Khai giảng {''}
-                                                {formatDate(item?.startDate)}
-                                              </>
-                                            ) : (
-                                              'Đang cập nhật'
-                                            )}
-                                          </>
-                                        }
-                                        className='text-date'
-                                      />
-                                    </div>
-                                  ))}
-                                  <div className='flexPrice'>
-                                    <span className='name'>Chi phí: </span>
-                                    <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                                  </div>
-                                </>
+                            {' '}
+                            <Card
+                              onClick={() => handleClickCourse(item?._id as string)}
+                              hoverable
+                              style={{ width: 340, height: 410 }}
+                              cover={
+                                <ImageCustom
+                                  preview={false}
+                                  height='160px'
+                                  width='100%'
+                                  src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                                />
                               }
-                            />
-                          </Card>
+                            >
+                              <Meta
+                                description={
+                                  <>
+                                    <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                    {item?.class?.slice(0, 2).map((item, index) => (
+                                      <div key={index} className='flex'>
+                                        <img src={calenderSVG} className='icons' alt='' />
+                                        <TextWithTooltip
+                                          rows={1}
+                                          children={
+                                            <>
+                                              {item?.startDate ? (
+                                                <>
+                                                  Khai giảng {''}
+                                                  {formatDate(item?.startDate)}
+                                                </>
+                                              ) : (
+                                                'Đang cập nhật'
+                                              )}
+                                            </>
+                                          }
+                                          className='text-date'
+                                        />
+                                      </div>
+                                    ))}
+                                    <div className='flexPrice'>
+                                      <span className='name'>Chi phí: </span>
+                                      <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                                    </div>
+                                  </>
+                                }
+                              />
+                            </Card>
+                          </Tooltip>
                         </Col>
                       ))}
                 </Row>

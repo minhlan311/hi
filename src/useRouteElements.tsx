@@ -16,7 +16,6 @@ import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
 import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
 import Courses from './pages/CoursesPage/Courses.tsx'
 import HomePage from './pages/HomePage/index.tsx'
-import Introduce from './pages/IntroducePage/Introduce.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
@@ -34,6 +33,7 @@ import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
+import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -314,18 +314,18 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: PATH.INTRODUCE,
-          element: (
-            <Layout user={profile} title=''>
-              <Introduce />
-            </Layout>
-          ),
-        },
-        {
           path: PATH.SUBMENU_2,
           element: (
             <Layout user={profile} title=''>
               <CategorySub />
+            </Layout>
+          ),
+        },
+        {
+          path: PATH.SUBMENU_1,
+          element: (
+            <Layout user={profile} title=''>
+              <MemuSlug />
             </Layout>
           ),
         },
