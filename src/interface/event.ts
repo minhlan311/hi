@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs'
 import { ClassState } from './class'
 import { UserState } from './user'
-import { TestState } from './test'
+import { TestState } from './tests'
 
 export interface EventSchedule {
   id?: string
