@@ -22,7 +22,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -59,7 +58,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     queryKey: ['categoryAll'],
     queryFn: () =>
       categoryApi.getCategories({
-        // parentId: '64ffde9c746fe5413cf8d1af',
+        parentId: '650004a3dffb95727e9cb9fc',
       }),
   })
 
