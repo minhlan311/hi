@@ -19,7 +19,7 @@ import Certificate from './Certificate'
 import Feedback from './Feedback'
 import MentorInfor from './MentorInfor'
 import MentorVideo from './MentorVideo'
-import MyCourses from './MyCourses'
+// import MyCourses from './MyCourses'
 import css from './styles.module.scss'
 import facebook from '../../assets/icons/facebook-logo.svg'
 import tiktok from '../../assets/icons/tiktok-icon.svg'
@@ -72,30 +72,25 @@ const ProfilePage = ({ profile }: Props) => {
 
   const tabData = [
     {
-      id: '1',
+      id: 'intro',
       name: 'Video',
       children: <MentorVideo />,
     },
     {
-      id: '2',
+      id: 'infor',
       name: 'Thông tin',
       children: <>{user ? <MentorInfor user={user} profileId={profile._id} /> : ''}</>,
     },
     {
-      id: '3',
+      id: 'category',
       name: 'Bằng cấp',
       children: <>{user?.isMentor ? <Certificate user={user} /> : ''}</>,
-    },
-    {
-      id: '4',
-      name: 'Khóa học',
-      children: <>{user ? <MyCourses user={user} /> : ''}</>,
     },
   ]
 
   if (user?.isMentor) {
     tabData.push({
-      id: '5',
+      id: 'feedback',
       name: 'Đánh giá',
       children: <Feedback />,
     })
@@ -195,6 +190,7 @@ const ProfilePage = ({ profile }: Props) => {
       </div>
       <Header background='var(--whiteBg)' padding='0 0 50px 0'>
         <TabsCustom
+          defaultActiveKey={location.state}
           data={tabData}
           setting={{
             size: 'large',
