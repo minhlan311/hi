@@ -162,7 +162,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     },
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
   return (
     <div>

@@ -128,7 +128,7 @@ export default function DrawerUpdateLession({
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 100)
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
   useEffect(() => {
     if (mutation.isSuccess && newArray.length > 0) {
