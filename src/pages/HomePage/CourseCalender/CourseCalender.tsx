@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Card, Col, Row } from 'antd'
+import { Button, Card, Col, Row, Tooltip } from 'antd'
 import { useState } from 'react'
 import chinaSVG from '../../../assets/icons/china_flag.svg'
 import engSVG from '../../../assets/icons/eng_flag.svg'
@@ -88,52 +88,83 @@ export default function CourseCalender() {
           ) : (
             listData?.data?.docs?.map((item) => (
               <Col className='col'>
-                <Card
-                  onClick={() => handleClickCourse(item._id!)}
-                  hoverable
-                  style={{ width: 340, height: 410 }}
-                  cover={
-                    <ImageCustom
-                      preview={false}
-                      height='160px'
-                      width='100%'
-                      src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                    />
+                <Tooltip
+                  title={
+                    <>
+                      {item?.class && item?.class?.length > 0 && <h3>Tất cả lịch khải giảng</h3>}
+                      {item?.class && item?.class?.length > 0
+                        ? item?.class?.map((item, index) => (
+                            <div key={index} className='flex'>
+                              <img src={calenderSVG} className='icons' alt='' />
+                              <TextWithTooltip
+                                rows={1}
+                                children={
+                                  <>
+                                    {item?.startDate ? (
+                                      <>
+                                        Khai giảng {''}
+                                        {formatDate(item?.startDate)}
+                                      </>
+                                    ) : (
+                                      'Đang cập nhật'
+                                    )}
+                                  </>
+                                }
+                                className='text-date'
+                              />
+                            </div>
+                          ))
+                        : 'Khóa học này chưa có lịch khai giảng'}
+                    </>
                   }
                 >
-                  <Meta
-                    description={
-                      <>
-                        <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                        {item?.class?.slice(0, 2).map((item, index) => (
-                          <div key={index} className='flex'>
-                            <img src={calenderSVG} className='icons' alt='' />
-                            <TextWithTooltip
-                              rows={1}
-                              children={
-                                <>
-                                  {item?.startDate ? (
-                                    <>
-                                      Khai giảng {''}
-                                      {formatDate(item?.startDate)}
-                                    </>
-                                  ) : (
-                                    'Đang cập nhật'
-                                  )}
-                                </>
-                              }
-                              className='text-date'
-                            />
-                          </div>
-                        ))}
-                        <div className='flexPrice'>
-                          <span className='name'>Chi phí: </span>
-                          <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                        </div>
-                      </>
+                  <Card
+                    onClick={() => handleClickCourse(item._id!)}
+                    hoverable
+                    style={{ width: 340, height: 410 }}
+                    cover={
+                      <ImageCustom
+                        preview={false}
+                        height='160px'
+                        width='100%'
+                        src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                      />
                     }
-                  />
-                </Card>
+                  >
+                    <Meta
+                      description={
+                        <>
+                          <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                          {item?.class?.slice(0, 2).map((item, index) => (
+                            <div key={index} className='flex'>
+                              <img src={calenderSVG} className='icons' alt='' />
+                              <TextWithTooltip
+                                rows={1}
+                                children={
+                                  <>
+                                    {item?.startDate ? (
+                                      <>
+                                        Khai giảng {''}
+                                        {formatDate(item?.startDate)}
+                                      </>
+                                    ) : (
+                                      'Đang cập nhật'
+                                    )}
+                                  </>
+                                }
+                                className='text-date'
+                              />
+                            </div>
+                          ))}
+                          <div className='flexPrice'>
+                            <span className='name'>Chi phí: </span>
+                            <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                          </div>
+                        </>
+                      }
+                    />
+                  </Card>
+                </Tooltip>
               </Col>
             ))
           )}
