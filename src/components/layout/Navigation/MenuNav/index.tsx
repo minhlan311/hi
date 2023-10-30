@@ -200,24 +200,24 @@ export default function MenuNav({ user }: Props) {
           size={sm ? 'large' : 'default'}
         >
           <Space direction='vertical'>
-            <Link to='/profile'>
+            <Link to={'/profiles/' + `${userData?.data?._id}`}>
               <Space direction='vertical'>
                 <Avatar avtUrl={user?.avatarUrl} userData={user} size={65}></Avatar>
                 <h3>{user?.fullName}</h3>
               </Space>
             </Link>
-            <Link to='/profile#gioi-thieu'>
+            <Link to={'/profiles/' + `${userData?.data?._id}`} state='infor'>
               <ButtonCustom type='text'>Thông tin giới thiệu</ButtonCustom>
             </Link>
-            <Link to='/profile?#phan-hoi'>
+            <Link to={'/profiles/' + `${userData?.data?._id}`} state='category'>
               <ButtonCustom type='text'>Bằng cấp</ButtonCustom>
             </Link>
-            <Link to='/profile?#phan-hoi'>
-              <ButtonCustom type='text'>Khóa học của tôi</ButtonCustom>
-            </Link>
-            <Link to='/profile?#phan-hoi'>
-              <ButtonCustom type='text'>Đánh giá</ButtonCustom>
-            </Link>
+
+            {user?.isMentor && (
+              <Link to={'/profiles/' + `${userData?.data?._id}`} state='feedback'>
+                <ButtonCustom type='text'>Đánh giá</ButtonCustom>
+              </Link>
+            )}
             <Divider style={{ margin: '10px 0' }} />
             <LanguageChange />
             {!user ? (
