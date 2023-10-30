@@ -1,28 +1,31 @@
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import Calendar from '@toast-ui/react-calendar'
-import css from './styles.module.scss'
-import DropdownCustom from '../DropdownCustom/DropdownCustom'
-import EventActionModal from './EventActionModal'
 import eventApi from '@/apis/event.api'
-import EventDetailModal from './EventDetailModal'
-import moment, { Moment } from 'moment-timezone'
-import RenderDateOfWeek from './RenderDateOfWeek'
-import SelectCustom from '../SelectCustom/SelectCustom'
-import useResponsives from '@/hooks/useResponsives'
-import { AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { Col, Input, Row, Space } from 'antd'
+import useResponsives from '@/hooks/useResponsives'
 import { EventObject } from '@/interface/class'
 import { EventSchedule } from '@/interface/event'
-import { HiOutlineUserGroup } from 'react-icons/hi2'
-import { PiExam } from 'react-icons/pi'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
+import Calendar from '@toast-ui/react-calendar'
+import { Card, Col, Input, Row, Space } from 'antd'
+import dayjs, { Dayjs } from 'dayjs'
+import moment, { Moment } from 'moment-timezone'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { AiOutlineClockCircle, AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
+import { HiOutlineUserGroup } from 'react-icons/hi2'
+import { PiExam } from 'react-icons/pi'
+import { useLocation } from 'react-router-dom'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import CalendarWeek from '../CalendarWeek'
+import DropdownCustom from '../DropdownCustom/DropdownCustom'
+import EmptyCustom from '../EmptyCustom/EmptyCustom'
+import SelectCustom from '../SelectCustom/SelectCustom'
+import EventActionModal from './EventActionModal'
+import EventDetailModal from './EventDetailModal'
+import css from './styles.module.scss'
+import LoadingCustom from '../LoadingCustom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -39,6 +42,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const [events, setEvents] = useState<EventSchedule[]>([])
   const [eventId, setEventId] = useState<string | null>(null)
   const [callBackWeekSelect, setCallBackWeekSelect] = useState<any>()
+  const [callBackDateOfWeek, setCallBackDateOfWeek] = useState<Dayjs[]>([])
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
@@ -78,7 +82,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
     }
   }, [callBackWeekSelect])
 
-  const { data: eventsData } = useQuery({
+  const { data: eventsData, isLoading } = useQuery({
     queryKey: ['eventsData', callBackWeekSelect, timeSelect, type, classId],
     queryFn: () => {
       const filter =
@@ -194,6 +198,38 @@ const CalendarCustom = ({ calendarType }: Props) => {
       icon: <PiExam size={20} />,
     },
   ]
+
+  const MapData = ({ event }: { event: EventSchedule }) => {
+    if (event) {
+      const between = dayjs().isAfter(event.end)
+
+      return (
+        <div>
+          <Card
+            size='small'
+            hoverable
+            onClick={() => setEventId(event.id as unknown as string)}
+            style={{
+              backgroundColor: between ? '#7575751a' : (event.type === 'TEST' && '#d7283133') || '#019d4429',
+              color: 'var(--light-gray-3)',
+              textDecorationLine: between ? 'line-through' : undefined,
+            }}
+          >
+            <h4>{event.title}</h4>
+            <Space
+              style={{
+                color: 'var(--light-gray-2)',
+                textDecorationLine: between ? 'line-through' : undefined,
+              }}
+            >
+              <AiOutlineClockCircle size='18' style={{ marginTop: 5 }} />
+              <div>{dayjs(event.start).format('HH:mmA') + ' - ' + dayjs(event.end).format('HH:mmA')}</div>
+            </Space>
+          </Card>
+        </div>
+      )
+    }
+  }
 
   return (
     <Space direction='vertical' className={'sp100'}>
@@ -329,19 +365,66 @@ const CalendarCustom = ({ calendarType }: Props) => {
         </Col>
       </Row>
       {sm ? (
-        <RenderDateOfWeek
-          events={events}
-          selectDate={callBackWeekSelect}
-          setCallBackWeekSelect={setCallBackWeekSelect}
-          setEventId={setEventId}
-          buttonAdd={
-            <DropdownCustom items={items} trigger='click'>
-              <ButtonCustom type='primary'>
-                Thêm <AiOutlinePlus />
-              </ButtonCustom>
-            </DropdownCustom>
-          }
-        />
+        <Row gutter={[0, 24]}>
+          <Col span={24}>
+            <CalendarWeek
+              callBackWeekSelect={setCallBackWeekSelect}
+              callBackDateOfWeek={setCallBackDateOfWeek}
+              showCurrent
+              buttonAdd={
+                <DropdownCustom items={items} trigger='click'>
+                  <ButtonCustom type='primary'>
+                    Thêm <AiOutlinePlus />
+                  </ButtonCustom>
+                </DropdownCustom>
+              }
+            />
+          </Col>
+          <Col span={24}>
+            <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
+              {!events.length ? (
+                <EmptyCustom description='Không có sự kiện nào!' />
+              ) : callBackWeekSelect && typeof callBackWeekSelect === 'string' ? (
+                <Space direction='vertical' className={'sp100'}>
+                  <b style={{ textTransform: 'capitalize' }}>
+                    {dayjs(callBackWeekSelect).locale('vi').format('dddd - DD/MM/YYYY')}
+                  </b>
+                  {events.filter(
+                    (ev) => dayjs(ev.start).format('YYYY/MM/DD') === dayjs(callBackWeekSelect).format('YYYY/MM/DD'),
+                  ).length > 0 ? (
+                    <Space direction='vertical' className={'sp100'}>
+                      {events.map((event) => (
+                        <MapData event={event} key={event.id} />
+                      ))}
+                    </Space>
+                  ) : (
+                    <EmptyCustom description='Không có sự kiện nào!' />
+                  )}
+                </Space>
+              ) : (
+                <Space direction='vertical' className={'sp100'} size='large'>
+                  {callBackDateOfWeek.map((d) => (
+                    <Space direction='vertical' className={'sp100'}>
+                      <b style={{ textTransform: 'capitalize' }} className={`${css.title} sticky`}>
+                        {dayjs(d).locale('vi').format('dddd - DD/MM/YYYY')}
+                      </b>
+
+                      {events.some((ev) => dayjs(ev.start).format('YYYY/MM/DD') === dayjs(d).format('YYYY/MM/DD')) ? (
+                        events.map((event) =>
+                          dayjs(event.start).format('YYYY/MM/DD') === dayjs(d).format('YYYY/MM/DD') ? (
+                            <MapData event={event} key={event.id} />
+                          ) : null,
+                        )
+                      ) : (
+                        <EmptyCustom description='Không có sự kiện nào!' />
+                      )}
+                    </Space>
+                  ))}
+                </Space>
+              )}
+            </LoadingCustom>
+          </Col>
+        </Row>
       ) : (
         <Space direction='vertical' className={'sp100'}>
           <Calendar
