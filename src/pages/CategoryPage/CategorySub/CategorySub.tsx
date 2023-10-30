@@ -12,14 +12,17 @@ import WrapMore from '@/components/WrapMore/WrapMore'
 
 export default function CategorySub() {
   const { categorySlug } = useParams()
-
+  const navigate = useNavigate()
   const { data: detailData, isLoading } = useQuery({
     queryKey: ['cateDetail', categorySlug],
     queryFn: () => categoryApi.getCategorieDetailSlug(categorySlug!),
     enabled: categorySlug ? true : false,
+    onError: (error: any) => {
+      if (error?.response && error?.response?.status === 404) {
+        navigate('/404')
+      }
+    },
   })
-
-  const navigate = useNavigate()
 
   const { data } = useQuery({
     queryKey: ['cateSub', categorySlug],

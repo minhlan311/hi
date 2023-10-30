@@ -58,6 +58,11 @@ export default function CategogyDetail() {
   const { data, isLoading } = useQuery({
     queryKey: ['cateDetail', categoryDetailSlug],
     queryFn: () => categoryApi.getCategorieDetailSlug(categoryDetailSlug!),
+    onError: (error: any) => {
+      if (error?.response && error?.response?.status === 404) {
+        navigate('/404')
+      }
+    },
   })
 
   const { data: listCourse, isLoading: Loading } = useQuery({
