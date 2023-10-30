@@ -39,13 +39,15 @@ export default function DrawerUpdateLession({
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [refetch, setRefetch] = useState('')
-  const [hidden, setHidden] = useState<boolean>(false)
-  const [questionShow, setQuestionShow] = useState<boolean>(true)
+  const [type, setType] = useState<string>('')
 
   const { data: dataExamLession } = useQuery({
     queryKey: ['queryExam'],
     queryFn: () => examApi.findExam({}),
   })
+  useEffect(() => {
+    setType(dataUpdateLession?.type)
+  }, [dataUpdateLession])
 
   useEffect(() => {
     form.setFieldValue('name', dataUpdateLession?.name)
@@ -61,20 +63,6 @@ export default function DrawerUpdateLession({
   useEffect(() => {
     reFetchData(refetch)
   }, [refetch])
-
-  useEffect(() => {
-    if (dataUpdateLession?.type !== 'VIDEO') {
-      setHidden(true)
-    } else {
-      setHidden(false)
-    }
-
-    if (dataUpdateLession?.type === 'LIVE') {
-      setContent(
-        '<p>Đây là bài học sẽ học tại lớp học online <b><a href="/schedule">CLICK VÀO ĐÂY</a></b> để xem lịch học của bạn</p>',
-      )
-    }
-  }, [dataUpdateLession?.type])
 
   useEffect(() => {
     form.setFieldValue('descriptions', content)
@@ -168,17 +156,7 @@ export default function DrawerUpdateLession({
   }
 
   const onChange = (value: string) => {
-    if (value !== TypeLessonEnum.VIDEO_LESSON) {
-      setHidden(true)
-    } else {
-      setHidden(false)
-    }
-
-    if (value === TypeLessonEnum.EXAM) {
-      setQuestionShow(false)
-    } else {
-      setQuestionShow(true)
-    }
+    setType(value)
   }
 
   const onFinishFailed = (_values: any) => {}
@@ -201,7 +179,7 @@ export default function DrawerUpdateLession({
             ]}
           />
         </Form.Item>
-        {!hidden && (
+        {type === TypeLessonEnum.VIDEO_LESSON && (
           <>
             <Form.Item label={'Link video'} name='media'>
               <Input placeholder='Nhập Link video' allowClear />
@@ -217,18 +195,21 @@ export default function DrawerUpdateLession({
           </>
         )}
 
-        {!questionShow && (
+        {type === TypeLessonEnum.EXAM && (
           <Form.Item label={'Thêm bộ câu hỏi'} name='testId' rules={[{ required: true, message: 'Hãy chọn câu hỏi' }]}>
             <Select options={optionsLession} placeholder='Thêm bộ câu hỏi cho bài học này' />
           </Form.Item>
         )}
-        <Form.Item
-          label={'Nội dung giới thiệu'}
-          name='descriptions'
-          rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
-        >
-          <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
-        </Form.Item>
+        {type !== TypeLessonEnum.LIVE_LESSON && (
+          <Form.Item
+            label={'Nội dung giới thiệu'}
+            name='descriptions'
+            rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
+          >
+            <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+          </Form.Item>
+        )}
+
         <Form.Item label={'Tài liệu'} name='document'>
           <Dragger {...props}>
             <p className='ant-upload-drag-icon'>
