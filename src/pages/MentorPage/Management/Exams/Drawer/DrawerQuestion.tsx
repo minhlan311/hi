@@ -147,7 +147,7 @@ const DrawerQuestion = (props: Props) => {
   useEffect(() => {
     if (data) {
       form.setFieldsValue(data)
-      setTypeQues(data.type)
+      setTypeQues(data.type as unknown as string)
     }
   }, [data])
 

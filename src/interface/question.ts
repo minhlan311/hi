@@ -5,7 +5,16 @@ export interface Choice {
   isChosen: boolean
   _id: string
 }
-export interface QuestionType {
+
+export interface QuestionState {
+  _id: string
+  createdById: string
+  updatedById: string
+  _destroy: boolean
+  categoryId: string
+  question: string
+  choices: Choice[]
+  status: string
   type:
     | 'SINGLE CHOICE'
     | 'MULTIPLE CHOICE'
@@ -17,18 +26,6 @@ export interface QuestionType {
     | 'MATCHING'
     | 'NUMERICAL'
     | 'WRITING'
-}
-
-export interface QuestionState {
-  _id: string
-  createdById: string
-  updatedById: string
-  _destroy: boolean
-  categoryId: string
-  question: string
-  choices: Choice[]
-  status: string
-  type: QuestionType
   point: number
   difficulty: string
   answer?: string

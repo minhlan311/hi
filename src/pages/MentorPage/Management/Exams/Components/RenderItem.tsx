@@ -89,7 +89,7 @@ const RenderItem = (props: Props) => {
               <Col span={18} md={19}>
                 <Space>
                   {/* <h3>Câu {id + 1}: </h3> */}
-                  <TagCustom content={data.type} />
+                  <TagCustom content={data.type as unknown as string} />
                   <TagCustom color='gold' content={`${data.point} Điểm`} />
                   <TagCustom
                     intArrType={['EASY', 'MEDIUM', 'DIFFICULT']}
