@@ -1,31 +1,31 @@
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import Calendar from '@toast-ui/react-calendar'
+import CalendarWeek from '../CalendarWeek'
+import css from './styles.module.scss'
+import dayjs, { Dayjs } from 'dayjs'
+import DropdownCustom from '../DropdownCustom/DropdownCustom'
+import EmptyCustom from '../EmptyCustom/EmptyCustom'
+import EventActionModal from './EventActionModal'
 import eventApi from '@/apis/event.api'
-import { AppContext } from '@/contexts/app.context'
+import EventDetailModal from './EventDetailModal'
+import LoadingCustom from '../LoadingCustom'
+import moment, { Moment } from 'moment-timezone'
+import SelectCustom from '../SelectCustom/SelectCustom'
 import useResponsives from '@/hooks/useResponsives'
+import { AiOutlineClockCircle, AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
+import { AppContext } from '@/contexts/app.context'
+import { Card, Col, Input, Row, Space } from 'antd'
 import { EventObject } from '@/interface/class'
 import { EventSchedule } from '@/interface/event'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import '@toast-ui/calendar/dist/toastui-calendar.min.css'
-import Calendar from '@toast-ui/react-calendar'
-import { Card, Col, Input, Row, Space } from 'antd'
-import dayjs, { Dayjs } from 'dayjs'
-import moment, { Moment } from 'moment-timezone'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { AiOutlineClockCircle, AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
 import { HiOutlineUserGroup } from 'react-icons/hi2'
 import { PiExam } from 'react-icons/pi'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import CalendarWeek from '../CalendarWeek'
-import DropdownCustom from '../DropdownCustom/DropdownCustom'
-import EmptyCustom from '../EmptyCustom/EmptyCustom'
-import SelectCustom from '../SelectCustom/SelectCustom'
-import EventActionModal from './EventActionModal'
-import EventDetailModal from './EventDetailModal'
-import css from './styles.module.scss'
-import LoadingCustom from '../LoadingCustom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -35,6 +35,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
   const { sm, md, xl, xxl } = useResponsives()
+
   const [modalType, setModalType] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
   const [view, setView] = useState<'day' | 'week' | 'month'>('week')
@@ -161,6 +162,9 @@ const CalendarCustom = ({ calendarType }: Props) => {
     setSelectTime({ start: e.start, end: e.end })
     setModalType('event')
     setOpenModal(true)
+    setTimeout(() => {
+      calAction.clearGridSelections()
+    }, 300)
   }
 
   const items = [
@@ -234,136 +238,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
   return (
     <Space direction='vertical' className={'sp100'}>
       {sm && md && <Input.Search placeholder='Tìm kiếm' />}
-      <Row justify='space-between' gutter={[12, 12]}>
-        {!sm && (
-          <Col span={10}>
-            <Space>
-              <ButtonCustom
-                onClick={() => {
-                  calAction.today()
-                  getDate()
-                }}
-              >
-                Hôm nay
-              </ButtonCustom>
-              <ButtonCustom
-                icon={<AiOutlineLeft />}
-                onClick={() => {
-                  calAction.prev()
-                  getDate()
-                }}
-              ></ButtonCustom>
-              <ButtonCustom
-                icon={<AiOutlineRight />}
-                onClick={() => {
-                  calAction.next()
-                  getDate()
-                }}
-              ></ButtonCustom>
-              <SelectCustom
-                onChange={(e) => {
-                  setView(e)
-                  getDate()
-                }}
-                defaultValue='week'
-                options={[
-                  {
-                    value: 'day',
-                    label: 'Ngày',
-                  },
-                  {
-                    value: 'week',
-                    label: 'Tuần',
-                  },
-                  {
-                    value: 'month',
-                    label: 'Tháng',
-                  },
-                ]}
-              />
-              {!md && (
-                <SelectCustom
-                  onChange={(e) => {
-                    setType(e)
-                    getDate()
-                  }}
-                  placeholder='Loại sự kiện'
-                  options={[
-                    {
-                      value: 'CLASS',
-                      label: 'Cuộc họp',
-                    },
-                    {
-                      value: 'TEST',
-                      label: 'Lịch thi',
-                    },
-                  ]}
-                  allowClear
-                  style={{ width: 115 }}
-                />
-              )}
-            </Space>
-          </Col>
-        )}
-        <Col>
-          <Space>
-            {!sm && !md && <Input.Search placeholder='Tìm kiếm' />}
-            {!profile.isMentor ? null : !md ? (
-              <Space.Compact>
-                <ButtonCustom
-                  onClick={() => {
-                    setOpenModal(true)
-                    setModalType('test')
-                  }}
-                  type='primary'
-                >
-                  Tạo lịch thi
-                </ButtonCustom>
-                <ButtonCustom
-                  type='primary'
-                  onClick={() => {
-                    setOpenModal(true)
-                    setModalType('event')
-                  }}
-                >
-                  Tạo cuộc họp
-                </ButtonCustom>
-              </Space.Compact>
-            ) : (
-              <>
-                {!sm && (
-                  <SelectCustom
-                    onChange={(e) => {
-                      setType(e)
-                      getDate()
-                    }}
-                    placeholder='Loại sự kiện'
-                    options={[
-                      {
-                        value: 'CLASS',
-                        label: 'Cuộc họp',
-                      },
-                      {
-                        value: 'TEST',
-                        label: 'Lịch thi',
-                      },
-                    ]}
-                    allowClear
-                    style={{ width: 115 }}
-                  />
-                )}
-                {!sm && (
-                  <DropdownCustom items={items} trigger='click'>
-                    <ButtonCustom type='primary'>
-                      Thêm <AiOutlinePlus />
-                    </ButtonCustom>
-                  </DropdownCustom>
-                )}
-              </>
-            )}
-          </Space>
-        </Col>
-      </Row>
       {sm ? (
         <Row gutter={[0, 24]}>
           <Col span={24}>
@@ -426,41 +300,173 @@ const CalendarCustom = ({ calendarType }: Props) => {
           </Col>
         </Row>
       ) : (
-        <Space direction='vertical' className={'sp100'}>
-          <Calendar
-            ref={calRef}
-            height={(xl && '66vh') || (xxl && '74vh') || '20vh'}
-            events={events as unknown as any[]}
-            view={view}
-            week={{
-              showTimezoneCollapseButton: true,
-              timezonesCollapsed: true,
-              taskView: false,
-              workweek: false,
-              eventView: ['time'],
-            }}
-            usageStatistics={false}
-            disableDblClick={false}
-            onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
-            onSelectDateTime={handleCreateSelect}
-            isReadOnly={!profile.isMentor}
-          />
-          <Space className={css.hint}>
-            <i>* Chú thích:</i>
-            <Space>
-              <div className={`${css.boxHint} ${css.classEvent}`}></div>
-              Lịch học
-            </Space>
-            <Space>
-              <div className={`${css.boxHint} ${css.testEvent}`}></div>
-              Lịch thi
-            </Space>
-            <Space>
-              <div className={`${css.boxHint} ${css.endEvnet}`}></div>
-              Đã kết thúc
+        <>
+          <Row justify='space-between' gutter={[12, 12]}>
+            {!sm && (
+              <Col span={10}>
+                <Space>
+                  <ButtonCustom
+                    onClick={() => {
+                      calAction.today()
+                      getDate()
+                    }}
+                  >
+                    Hôm nay
+                  </ButtonCustom>
+                  <ButtonCustom
+                    icon={<AiOutlineLeft />}
+                    onClick={() => {
+                      calAction.prev()
+                      getDate()
+                    }}
+                  ></ButtonCustom>
+                  <ButtonCustom
+                    icon={<AiOutlineRight />}
+                    onClick={() => {
+                      calAction.next()
+                      getDate()
+                    }}
+                  ></ButtonCustom>
+                  <SelectCustom
+                    onChange={(e) => {
+                      setView(e)
+                      getDate()
+                    }}
+                    defaultValue='week'
+                    options={[
+                      {
+                        value: 'day',
+                        label: 'Ngày',
+                      },
+                      {
+                        value: 'week',
+                        label: 'Tuần',
+                      },
+                      {
+                        value: 'month',
+                        label: 'Tháng',
+                      },
+                    ]}
+                  />
+                  {!md && (
+                    <SelectCustom
+                      onChange={(e) => {
+                        setType(e)
+                        getDate()
+                      }}
+                      placeholder='Loại sự kiện'
+                      options={[
+                        {
+                          value: 'CLASS',
+                          label: 'Cuộc họp',
+                        },
+                        {
+                          value: 'TEST',
+                          label: 'Lịch thi',
+                        },
+                      ]}
+                      allowClear
+                      style={{ width: 115 }}
+                    />
+                  )}
+                </Space>
+              </Col>
+            )}
+            <Col>
+              <Space>
+                {!sm && !md && <Input.Search placeholder='Tìm kiếm' />}
+                {!profile.isMentor ? null : !md ? (
+                  <Space.Compact>
+                    <ButtonCustom
+                      onClick={() => {
+                        setOpenModal(true)
+                        setModalType('test')
+                      }}
+                      type='primary'
+                    >
+                      Tạo lịch thi
+                    </ButtonCustom>
+                    <ButtonCustom
+                      type='primary'
+                      onClick={() => {
+                        setOpenModal(true)
+                        setModalType('event')
+                      }}
+                    >
+                      Tạo cuộc họp
+                    </ButtonCustom>
+                  </Space.Compact>
+                ) : (
+                  <>
+                    {!sm && (
+                      <SelectCustom
+                        onChange={(e) => {
+                          setType(e)
+                          getDate()
+                        }}
+                        placeholder='Loại sự kiện'
+                        options={[
+                          {
+                            value: 'CLASS',
+                            label: 'Cuộc họp',
+                          },
+                          {
+                            value: 'TEST',
+                            label: 'Lịch thi',
+                          },
+                        ]}
+                        allowClear
+                        style={{ width: 115 }}
+                      />
+                    )}
+                    {!sm && (
+                      <DropdownCustom items={items} trigger='click'>
+                        <ButtonCustom type='primary'>
+                          Thêm <AiOutlinePlus />
+                        </ButtonCustom>
+                      </DropdownCustom>
+                    )}
+                  </>
+                )}
+              </Space>
+            </Col>
+          </Row>
+          <Space direction='vertical' className={'sp100'}>
+            <Calendar
+              ref={calRef}
+              height={(xl && '66vh') || (xxl && '74vh') || '20vh'}
+              events={events as unknown as any[]}
+              view={view}
+              week={{
+                showTimezoneCollapseButton: true,
+                timezonesCollapsed: true,
+                taskView: false,
+                workweek: false,
+                eventView: ['time'],
+              }}
+              usageStatistics={false}
+              disableDblClick={false}
+              onClickEvent={(e: { event: EventObject }) => setEventId(e.event.id ? e.event.id : null)}
+              onSelectDateTime={handleCreateSelect}
+              isReadOnly={!profile.isMentor}
+            />
+            <Space className={css.hint}>
+              <i>* Chú thích:</i>
+              <Space>
+                <div className={`${css.boxHint} ${css.classEvent}`}></div>
+                Lịch học
+              </Space>
+              <Space>
+                <div className={`${css.boxHint} ${css.testEvent}`}></div>
+                Lịch thi
+              </Space>
+              <Space>
+                <div className={`${css.boxHint} ${css.endEvnet}`}></div>
+                Đã kết thúc
+              </Space>
             </Space>
           </Space>
-        </Space>
+        </>
       )}
       <EventDetailModal open={Boolean(eventId)} setOpen={setEventId} eventDetail={eventData ? eventData : null} />
       <EventActionModal
