@@ -16,8 +16,8 @@ const PageResult = (props: Props) => {
     title,
     desc = 'Xin lỗi, trang không tồn tại hoặc đã bị xóa!',
     extra = (
-      <Button type='primary' onClick={() => navigate(-1)}>
-        Quay lại trang trước đó
+      <Button type='primary' onClick={() => navigate('/')}>
+        Quay lại trang chủ
       </Button>
     ),
   } = props
