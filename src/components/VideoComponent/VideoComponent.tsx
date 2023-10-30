@@ -3,7 +3,14 @@ import bookmarkApi from '@/apis/bookmark'
 import { AppContext } from '@/contexts/app.context'
 import useIsMobile from '@/hooks/useCheckMobile'
 import useResponsives from '@/hooks/useResponsives'
-import { BackwardOutlined, ForwardOutlined, PlusCircleOutlined, StarOutlined } from '@ant-design/icons'
+import {
+  BackwardOutlined,
+  ForwardOutlined,
+  PlusCircleOutlined,
+  StarOutlined,
+  CaretRightOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Popover, Tooltip } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -221,7 +228,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
   }
 
   const handleAddBookmark = () => {
-    const note = prompt('Ghi chú :')
+    const note = prompt('Thêm ghi chú :')
 
     if (note) {
       const newBookmark = { time: currentTime, note, lessonVideo: video }
@@ -352,7 +359,11 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
                             }}
                             onClick={() => handleGoToBookmark(bookmark.time)}
                           >
-                            Go to
+                            <CaretRightOutlined
+                              style={{
+                                scale: '1.5',
+                              }}
+                            />
                           </Button>
                           <Button
                             disabled={mutateDelete.isLoading}
@@ -360,7 +371,11 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
                             className='dashed'
                             onClick={() => handleDeleteBookmark(bookmark._id)}
                           >
-                            Xóa
+                            <DeleteOutlined
+                              style={{
+                                scale: '1.5',
+                              }}
+                            />
                           </Button>
                         </li>
                       ))
@@ -385,7 +400,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
               >
                 <StarOutlined
                   style={{
-                    scale: '1.5',
+                    scale: '1.3',
                   }}
                 />
               </Button>
