@@ -22,6 +22,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -162,7 +163,12 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     },
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
+  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
+    handleEditorChange(_event, editor)
+    setTimeout(() => {
+      setIsSubmitting(false)
+    }, 1500)
+  }, 1500)
 
   return (
     <div>
@@ -171,7 +177,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
           <Row>
             <Col span={22}></Col>
             <Col xs={24} xl={2}>
-              <Button htmlType='submit' type='primary'>
+              <Button htmlType='submit' loading={isSubmitting} type='primary'>
                 Tiếp theo
               </Button>
             </Col>
@@ -270,7 +276,14 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
         <Row>
           <Col span={24}>
             <Form.Item label={'Mô tả khóa học'} name='descriptions'>
-              <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+              <CKEditor
+                editor={ClassicEditor}
+                data={content}
+                onChange={(_event: any, editor: any) => {
+                  setIsSubmitting(true)
+                  debouncedHandleEditorChange(_event, editor)
+                }}
+              />
             </Form.Item>
           </Col>
         </Row>

@@ -24,6 +24,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
   const [content, setContent] = useState('')
   const [refetch, setRefetch] = useState('')
   const [dataDrawer, setDataDrawer] = useState<TopicList | []>([])
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryClient = new QueryClient()
   useEffect(() => {
@@ -61,7 +62,12 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
+  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
+    handleEditorChange(_event, editor)
+    setTimeout(() => {
+      setIsSubmitting(false)
+    }, 1500)
+  }, 1500)
 
   const onFinish = (values: any) => {
     mutation.mutate(values)
@@ -75,18 +81,25 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
   }
 
   return (
-    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Sửa chuyên đề'}>
+    <Drawer destroyOnClose size='large' open={onOpen} onClose={() => onClose(false)} title={'Thêm chuyên đề'}>
       <Form onFinishFailed={onFinishFailed} onFinish={onFinish} layout='vertical' form={form}>
         <Form.Item label={'Tên chuyên đề'} name='name' rules={[{ required: true, message: 'Hãy nhập chuyên đề' }]}>
           <Input placeholder='Nhập tên chuyên đề' allowClear />
         </Form.Item>
         <Form.Item label={'Mô tả'} name='descriptions' rules={[{ required: true, message: 'Hãy nhập mô tả' }]}>
-          <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+          <CKEditor
+            editor={ClassicEditor}
+            data={content}
+            onChange={(_event: any, editor: any) => {
+              setIsSubmitting(true)
+              debouncedHandleEditorChange(_event, editor)
+            }}
+          />
         </Form.Item>
         <Form.Item hidden name='parentId' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button type='primary' htmlType='submit' className='btn-sn'>
+          <Button loading={isSubmitting} type='primary' htmlType='submit' className='btn-sn'>
             Thêm chuyên đề
           </Button>
         </Form.Item>

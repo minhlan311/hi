@@ -40,6 +40,7 @@ export default function DrawerUpdateLession({
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [refetch, setRefetch] = useState('')
   const [type, setType] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { data: dataExamLession } = useQuery({
     queryKey: ['queryExam'],
@@ -128,7 +129,12 @@ export default function DrawerUpdateLession({
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
+  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
+    handleEditorChange(_event, editor)
+    setTimeout(() => {
+      setIsSubmitting(false)
+    }, 1500)
+  }, 1500)
 
   useEffect(() => {
     if (mutation.isSuccess && newArray.length > 0) {
@@ -206,7 +212,14 @@ export default function DrawerUpdateLession({
             name='descriptions'
             rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
           >
-            <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+            <CKEditor
+              editor={ClassicEditor}
+              data={content}
+              onChange={(_event: any, editor: any) => {
+                setIsSubmitting(true)
+                debouncedHandleEditorChange(_event, editor)
+              }}
+            />
           </Form.Item>
         )}
 
@@ -222,7 +235,7 @@ export default function DrawerUpdateLession({
         <Form.Item hidden name='id' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button type='primary' htmlType='submit' className='btn-sn'>
+          <Button type='primary' htmlType='submit' className='btn-sn' loading={isSubmitting}>
             Cập nhật Bài học
           </Button>
         </Form.Item>
