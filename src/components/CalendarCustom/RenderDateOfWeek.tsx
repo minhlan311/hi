@@ -20,9 +20,11 @@ const RenderDateOfWeek = (props: Props) => {
   const [dateOfWeek, setDateOfWeek] = useState<Dayjs[]>([])
 
   const MapData = ({ event, date }: { event: EventSchedule; date: any }) => {
+    const startEvent = dayjs(event.start).format('YYYY/MM/DD')
+    console.log(typeof date === 'string' ? date === startEvent : date.start === startEvent)
+
     if (event) {
       const between = dayjs().isAfter(event.end)
-      console.log(date)
 
       return (
         <div>
