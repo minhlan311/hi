@@ -17,6 +17,7 @@ import TagCustom from '../TagCustom/TagCustom'
 import EventActionModal from './EventActionModal'
 import dayjs from 'dayjs'
 import useResponsives from '@/hooks/useResponsives'
+import slugify from 'slugify'
 
 type Props = {
   open: boolean
@@ -182,8 +183,8 @@ const EventDetailModal = (props: Props) => {
                 ) : (
                   <ButtonCustom
                     type='primary'
-                    disabled={!between || endClass}
-                    href={`/live?id=${eventDetail._id}`}
+                    // disabled={!between || endClass}
+                    href={`/live/#/${slugify(eventDetail.name, '_')}-${eventDetail._id}`}
                     linkTarget='_parent'
                   >
                     Tham gia

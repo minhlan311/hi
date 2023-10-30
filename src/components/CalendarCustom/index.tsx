@@ -1,27 +1,28 @@
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import Calendar from '@toast-ui/react-calendar'
+import css from './styles.module.scss'
+import DropdownCustom from '../DropdownCustom/DropdownCustom'
+import EventActionModal from './EventActionModal'
 import eventApi from '@/apis/event.api'
-import { AppContext } from '@/contexts/app.context'
+import EventDetailModal from './EventDetailModal'
+import moment, { Moment } from 'moment-timezone'
+import RenderDateOfWeek from './RenderDateOfWeek'
+import SelectCustom from '../SelectCustom/SelectCustom'
 import useResponsives from '@/hooks/useResponsives'
+import { AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
+import { AppContext } from '@/contexts/app.context'
+import { Col, Input, Row, Space } from 'antd'
 import { EventObject } from '@/interface/class'
 import { EventSchedule } from '@/interface/event'
+import { HiOutlineUserGroup } from 'react-icons/hi2'
+import { PiExam } from 'react-icons/pi'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
-import Calendar from '@toast-ui/react-calendar'
-import { Col, Input, Row, Space } from 'antd'
-import moment, { Moment } from 'moment-timezone'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import DropdownCustom from '../DropdownCustom/DropdownCustom'
-import SelectCustom from '../SelectCustom/SelectCustom'
-import EventActionModal from './EventActionModal'
-import EventDetailModal from './EventDetailModal'
-import RenderDateOfWeek from './RenderDateOfWeek'
-import { HiOutlineUserGroup } from 'react-icons/hi2'
-import { PiExam } from 'react-icons/pi'
-import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -41,6 +42,10 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
+
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const classId = searchParams.get('classId')
 
   useEffect(() => {
     if (eventId) mutate(eventId)
@@ -74,7 +79,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   }, [callBackWeekSelect])
 
   const { data: eventsData } = useQuery({
-    queryKey: ['eventsData', callBackWeekSelect, timeSelect],
+    queryKey: ['eventsData', callBackWeekSelect, timeSelect, type, classId],
     queryFn: () => {
       const filter =
         calendarType === 'mentor'
@@ -83,12 +88,14 @@ const CalendarCustom = ({ calendarType }: Props) => {
               end: timeSelect?.endDate,
               mentorId: profile._id,
               type: type,
+              classId: classId ? classId : undefined,
             }
           : {
               start: timeSelect?.startDate,
               end: timeSelect?.endDate,
               students: [profile._id],
               type: type,
+              classId: classId ? classId : undefined,
             }
 
       return eventApi.getEvent({

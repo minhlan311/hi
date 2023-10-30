@@ -147,7 +147,7 @@ const EventActionModal = (props: Props) => {
       const start = date + ' ' + time
 
       const newTime = moment(values.time.$d)
-        .add(values.timeTest + parseInt(values.timeAdd), 'minutes')
+        .add(values.timeTest + parseInt(values.timeAdd ? values.timeAdd : 0), 'minutes')
         .format('HH:mm')
 
       const end = date + ' ' + newTime
