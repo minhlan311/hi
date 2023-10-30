@@ -117,8 +117,8 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     handleEditorChange(_event, editor)
     setTimeout(() => {
       setIsSubmitting(false)
-    }, 1500)
-  }, 1500)
+    }, 2000)
+  }, 500)
 
   const onFinish = (values: any) => {
     delete values.document

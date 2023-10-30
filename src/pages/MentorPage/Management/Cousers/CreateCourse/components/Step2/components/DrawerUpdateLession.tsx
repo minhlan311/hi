@@ -133,8 +133,8 @@ export default function DrawerUpdateLession({
     handleEditorChange(_event, editor)
     setTimeout(() => {
       setIsSubmitting(false)
-    }, 1500)
-  }, 1500)
+    }, 2000)
+  }, 500)
 
   useEffect(() => {
     if (mutation.isSuccess && newArray.length > 0) {
