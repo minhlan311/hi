@@ -17,7 +17,6 @@ import Meta from 'antd/es/card/Meta'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './CategoryDetail.scss'
-import { HiBars3BottomLeft } from 'react-icons/hi2'
 
 export default function CategogyDetail() {
   const { categoryDetailSlug, menuSlug } = useParams()
