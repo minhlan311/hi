@@ -117,7 +117,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const onFinish = (values: any) => {
     delete values.document
     mutation.mutate(values)
-
+    setShowAll(false)
     form.resetFields()
     setContent('')
     onClose(false)
