@@ -45,6 +45,7 @@ export default function CategorySub() {
       ) : (
         <>
           <ImageCustom
+            preview={false}
             styles={{
               objectFit: 'cover',
             }}
@@ -73,7 +74,7 @@ export default function CategorySub() {
                     <Col>
                       <Card
                         hoverable
-                        onClick={() => navigate(`${item?.slug + '-i-' + item?._id}`)}
+                        onClick={() => navigate(`${item?.slug}`)}
                         style={{ width: 340, height: 410 }}
                         cover={
                           <ImageCustom

@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
-import { formatDate, formatPriceVND } from '@/helpers/common'
-import { useQuery } from '@tanstack/react-query'
-import './CategoryDetail.scss'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import LoadingCustom from '@/components/LoadingCustom'
-import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import { Card, Col, Pagination, Row } from 'antd'
-import Meta from 'antd/es/card/Meta'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
-import calenderSVG from '@/assets/icons/calendar.svg'
-import WrapMore from '@/components/WrapMore/WrapMore'
-import useResponsives from '@/hooks/useResponsives'
-import SliderCustom from '@/components/SliderCustom'
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
+import calenderSVG from '@/assets/icons/calendar.svg'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import LoadingCustom from '@/components/LoadingCustom'
+import SliderCustom from '@/components/SliderCustom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import WrapMore from '@/components/WrapMore/WrapMore'
+import { formatDate, formatPriceVND } from '@/helpers/common'
+import useResponsives from '@/hooks/useResponsives'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Pagination, Row } from 'antd'
+import Meta from 'antd/es/card/Meta'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import './CategoryDetail.scss'
 
 export default function CategogyDetail() {
   const { categoryDetailSlug, menuSlug } = useParams()
@@ -119,6 +119,7 @@ export default function CategogyDetail() {
       ) : (
         <>
           <ImageCustom
+            preview={false}
             styles={{
               objectFit: 'cover',
             }}
