@@ -22,10 +22,6 @@ export default function CategogyDetail() {
   const { categoryDetailSlug, menuSlug } = useParams()
   const { lg } = useResponsives()
   const [page, setPage] = useState(1)
-
-  // menuSlug
-  // :
-  // "lich-khai-giang-blbah"
   const navigate = useNavigate()
 
   const [filter, setFilter] = useState({
@@ -79,7 +75,7 @@ export default function CategogyDetail() {
         },
       })
     },
-    enabled: data?.data?._id && menuSlug === 'lich-khai-giang-blbah' ? true : false,
+    enabled: data?.data?._id && menuSlug?.includes('lich-khai-giang') ? true : false,
   })
 
   useQuery({
@@ -96,7 +92,7 @@ export default function CategogyDetail() {
         },
       })
     },
-    enabled: data?.data?._id && menuSlug === 'luyen-thi-743j7' ? true : false,
+    enabled: data?.data?._id && menuSlug?.includes('luyen-thi') ? true : false,
   })
 
   const handleClickCourse = (id: string) => {
