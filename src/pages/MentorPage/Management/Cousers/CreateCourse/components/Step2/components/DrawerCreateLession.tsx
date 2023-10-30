@@ -26,6 +26,7 @@ type Props = {
 
 export default function DrawerCreateLession({ onOpen, onClose, userId, dataCollapLession, idLessCheck }: Props) {
   const [form] = Form.useForm()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [type, setType] = useState<string>('')
@@ -112,7 +113,12 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     setContent(data)
   }
 
-  const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
+  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
+    handleEditorChange(_event, editor)
+    setTimeout(() => {
+      setIsSubmitting(false)
+    }, 1500)
+  }, 1500)
 
   const onFinish = (values: any) => {
     delete values.document
@@ -181,7 +187,14 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
                 name='descriptions'
                 rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
               >
-                <CKEditor editor={ClassicEditor} data={content} onChange={debouncedHandleEditorChange} />
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={content}
+                  onChange={(_event: any, editor: any) => {
+                    setIsSubmitting(true)
+                    debouncedHandleEditorChange(_event, editor)
+                  }}
+                />
               </Form.Item>
             )}
 
@@ -209,7 +222,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         <Form.Item hidden name='lessonid' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button type='primary' htmlType='submit' className='btn-sn'>
+          <Button type='primary' loading={isSubmitting} htmlType='submit' className='btn-sn'>
             Thêm Bài học
           </Button>
         </Form.Item>
