@@ -15,9 +15,10 @@ export default function CategorySub() {
 
   const { data: detailData, isLoading } = useQuery({
     queryKey: ['cateDetail', categorySlug],
-    queryFn: () => categoryApi.getCategorieDetail(categorySlug!),
+    queryFn: () => categoryApi.getCategorieDetailSlug(categorySlug!),
     enabled: categorySlug ? true : false,
   })
+
   const navigate = useNavigate()
 
   const { data } = useQuery({
