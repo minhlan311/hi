@@ -141,54 +141,124 @@ export default function CategogyDetail() {
               )}
 
               {!lg ? (
-                <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ md: 24, lg: 32 }}>
+                <Row style={{ marginTop: '100px' }} justify={'center'} gutter={{ xs: 0, md: 24, lg: 32 }}>
                   {Loading
                     ? menuSlug === 'lich-khai-giang-blbah' && <LoadingCustom />
                     : listDataCourse?.map((item) => (
                         <Col className='col'>
-                          <Tooltip
-                            color='white'
-                            placement='right'
-                            title={
-                              <>
-                                <h3
-                                  style={{
-                                    color: 'black',
-                                  }}
-                                >
-                                  Tất cả lịch khai giảng
-                                </h3>
-                                {item?.class?.map((item, index) => (
-                                  <div key={index} className='flex'>
-                                    <img src={calenderSVG} className='icons' alt='' />
-                                    <TextWithTooltip
-                                      rows={1}
-                                      children={
-                                        <>
-                                          {item?.startDate ? (
-                                            <>
-                                              Khai giảng {''}
-                                              {formatDate(item?.startDate)}
-                                            </>
-                                          ) : (
-                                            'Đang cập nhật'
-                                          )}
-                                        </>
-                                      }
-                                      className='text-date'
-                                    />
-                                  </div>
-                                ))}{' '}
-                              </>
+                          <Card
+                            onClick={() => handleClickCourse(item?._id as string)}
+                            hoverable
+                            style={{ width: 340, height: 410 }}
+                            cover={
+                              <ImageCustom
+                                preview={false}
+                                height='160px'
+                                width='100%'
+                                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
+                              />
                             }
                           >
-                            {' '}
+                            <Meta
+                              description={
+                                <>
+                                  <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                  {item?.class?.slice(0, 2).map((item, index) => (
+                                    <div key={index} className='flex'>
+                                      <img src={calenderSVG} className='icons' alt='' />
+                                      <TextWithTooltip
+                                        rows={1}
+                                        children={
+                                          <>
+                                            {item?.startDate ? (
+                                              <>
+                                                Khai giảng {''}
+                                                {formatDate(item?.startDate)}
+                                              </>
+                                            ) : (
+                                              'Đang cập nhật'
+                                            )}
+                                          </>
+                                        }
+                                        className='text-date'
+                                      />
+                                    </div>
+                                  ))}
+                                  <Tooltip
+                                    color='white'
+                                    placement='right'
+                                    title={
+                                      <>
+                                        <h3
+                                          style={{
+                                            color: 'black',
+                                          }}
+                                        >
+                                          Tất cả lịch khai giảng
+                                        </h3>
+                                        {item?.class?.map((item, index) => (
+                                          <div key={index} className='flex'>
+                                            <img src={calenderSVG} className='icons' alt='' />
+                                            <TextWithTooltip
+                                              rows={1}
+                                              children={
+                                                <>
+                                                  {item?.startDate ? (
+                                                    <>
+                                                      Khai giảng {''}
+                                                      {formatDate(item?.startDate)}
+                                                    </>
+                                                  ) : (
+                                                    'Đang cập nhật'
+                                                  )}
+                                                </>
+                                              }
+                                              className='text-date'
+                                            />
+                                          </div>
+                                        ))}{' '}
+                                      </>
+                                    }
+                                  >
+                                    {item?.class && item?.class?.length > 2 && (
+                                      <p
+                                        style={{
+                                          color: '#f2184f',
+                                          textAlign: 'start',
+                                        }}
+                                      >
+                                        Xem tất cả lịch khai giảng
+                                      </p>
+                                    )}
+                                  </Tooltip>
+
+                                  <div className='flexPrice'>
+                                    <span className='name'>Chi phí: </span>
+                                    <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
+                                  </div>
+                                </>
+                              }
+                            />
+                          </Card>
+                        </Col>
+                      ))}
+                </Row>
+              ) : (
+                <div
+                  style={{
+                    marginTop: '80px',
+                  }}
+                >
+                  <SliderCustom slidesToShow={1} infinite={true} dataLength={listDataCourse?.length as number}>
+                    {Loading
+                      ? menuSlug === 'lich-khai-giang-blbah' && <LoadingCustom />
+                      : listDataCourse?.map((item) => (
+                          <Col className='col'>
                             <Card
-                              onClick={() => handleClickCourse(item?._id as string)}
-                              hoverable
-                              style={{ width: 340, height: 410 }}
+                              style={{ height: 420 }}
                               cover={
                                 <ImageCustom
+                                  onClick={() => handleClickCourse(item?._id as string)}
                                   preview={false}
                                   height='160px'
                                   width='100%'
@@ -199,7 +269,12 @@ export default function CategogyDetail() {
                               <Meta
                                 description={
                                   <>
-                                    <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
+                                    <TextWithTooltip
+                                      onClick={() => handleClickCourse(item?._id as string)}
+                                      rows={1}
+                                      children={item?.name}
+                                      className='link-h4-config'
+                                    />
                                     {item?.class?.slice(0, 2).map((item, index) => (
                                       <div key={index} className='flex'>
                                         <img src={calenderSVG} className='icons' alt='' />
@@ -221,6 +296,54 @@ export default function CategogyDetail() {
                                         />
                                       </div>
                                     ))}
+                                    <Tooltip
+                                      color='white'
+                                      title={
+                                        <>
+                                          <h3
+                                            style={{
+                                              color: 'black',
+                                              marginBottom: '10px',
+                                            }}
+                                          >
+                                            Tất cả lịch khai giảng
+                                          </h3>
+                                          {item?.class?.map((item, index) => (
+                                            <div key={index} className='flex'>
+                                              <img src={calenderSVG} className='icons' alt='' />
+                                              <TextWithTooltip
+                                                rows={1}
+                                                children={
+                                                  <>
+                                                    {item?.startDate ? (
+                                                      <>
+                                                        Khai giảng {''}
+                                                        {formatDate(item?.startDate)}
+                                                      </>
+                                                    ) : (
+                                                      'Đang cập nhật'
+                                                    )}
+                                                  </>
+                                                }
+                                                className='text-date'
+                                              />
+                                            </div>
+                                          ))}{' '}
+                                        </>
+                                      }
+                                    >
+                                      {item?.class && item?.class?.length > 2 && (
+                                        <p
+                                          style={{
+                                            color: '#f2184f',
+                                            textAlign: 'start',
+                                          }}
+                                        >
+                                          Xem tất cả lịch khai giảng
+                                        </p>
+                                      )}
+                                    </Tooltip>
+
                                     <div className='flexPrice'>
                                       <span className='name'>Chi phí: </span>
                                       <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
@@ -229,79 +352,8 @@ export default function CategogyDetail() {
                                 }
                               />
                             </Card>
-                          </Tooltip>
-                        </Col>
-                      ))}
-                </Row>
-              ) : (
-                <div
-                  style={{
-                    marginTop: '80px',
-                  }}
-                >
-                  <SliderCustom autoplay infinite dataLength={listDataCourse?.length as number}>
-                    {listDataCourse?.map((item) => (
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Card
-                          onClick={() => handleClickCourse(item?._id as string)}
-                          style={{ height: 410, margin: '0 20px' }}
-                          cover={
-                            <ImageCustom
-                              preview={false}
-                              height='160px'
-                              width='100%'
-                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                            />
-                          }
-                        >
-                          <Meta
-                            description={
-                              <>
-                                <TextWithTooltip rows={1} children={item?.name} className='link-h4-config' />
-                                {item?.class?.map((item) => (
-                                  <>
-                                    <div
-                                      className='flex'
-                                      style={{
-                                        padding: '0 20px',
-                                      }}
-                                    >
-                                      <img src={calenderSVG} className='icons' alt='' />
-                                      <TextWithTooltip
-                                        rows={1}
-                                        children={
-                                          <>
-                                            {item?.startDate ? (
-                                              <>
-                                                Khai giảng {''}
-                                                {formatDate(item?.startDate)}
-                                              </>
-                                            ) : (
-                                              'Đang cập nhật'
-                                            )}
-                                          </>
-                                        }
-                                        className='text-date'
-                                      />
-                                    </div>
-                                  </>
-                                ))}
-                                <div className='flexPrice'>
-                                  <span className='name'>Chi phí: </span>
-                                  <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                                </div>
-                              </>
-                            }
-                          />
-                        </Card>
-                      </div>
-                    ))}
+                          </Col>
+                        ))}
                   </SliderCustom>
                 </div>
               )}
