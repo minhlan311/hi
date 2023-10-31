@@ -108,13 +108,13 @@ export default function ExamCourse({ data, name }: Props) {
   }
 
   useEffect(() => {
-    if (data && data[0] && data[0].questions) {
+    if (data && data[0] && data[0]?.questions) {
       const extractedData =
         data[0]?.questions ??
-        data[0].questions.map((item: any) => ({
-          _id: item._id,
-          name: item.question,
-          choices: item.choices,
+        data[0]?.questions.map((item: any) => ({
+          _id: item?._id,
+          name: item?.question,
+          choices: item?.choices,
         }))
       setQuestion(extractedData)
       setHasSubmitted(false)
@@ -125,7 +125,7 @@ export default function ExamCourse({ data, name }: Props) {
 
   useEffect(() => {
     setDataUpload({
-      _id: data && data[0]._id,
+      _id: data && data[0]?._id,
       questions: questions,
     })
   }, [questions])
