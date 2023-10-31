@@ -102,7 +102,7 @@ const TextCountdown = ({ type, countdown, size, initTime }: Props) => {
                 </p>
               ) : (
                 <span>
-                  {(time.seconds > 0 && time.minutes > 0) || (time.seconds > 0 && time.hours > 0) ? (
+                  {time.minutes > 0 || time.hours > 0 ? (
                     <span>{time.hours === 0 ? showTime.format('mm:ss') : showTime.format('HH:mm:ss')}</span>
                   ) : (
                     <span>{showTime.format('ss')} giây</span>

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
-import { debounce } from '@/helpers/common'
 import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Form, Input, Row, Select, Space } from 'antd'
@@ -9,6 +8,7 @@ import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import Drawer from '../Drawer/Drawer'
+import { debounce } from '@/helpers/common'
 
 type Props = {
   apiFind: any
@@ -41,6 +41,8 @@ const FilterAction = (props: Props) => {
 
   const [form] = Form.useForm()
   const [open, setOpen] = useState<boolean>(false)
+  const [forcus, setForcus] = useState<boolean>(false)
+
   const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>({
     filterQuery: filterQuery || {},
     options: {
@@ -66,7 +68,7 @@ const FilterAction = (props: Props) => {
   }))
 
   const onChangeFilter = () => {
-    const { categoryId, plan, viewCountDownCount, keyword, type, skill, difficulty, score, status, createdAt } =
+    const { categoryId, plan, viewCountDownCount, type, keyword, skill, difficulty, score, status, createdAt } =
       form.getFieldsValue()
 
     const body = {
@@ -92,6 +94,7 @@ const FilterAction = (props: Props) => {
         },
       },
     })
+    setForcus(true)
   }
 
   const handleReset = () => {
@@ -389,10 +392,9 @@ const FilterAction = (props: Props) => {
                 <Input
                   placeholder='Tìm kiếm...'
                   prefix={<BiSearch size={20} />}
+                  onChange={debounce(() => onChangeFilter(), 800)}
+                  autoFocus={forcus}
                   allowClear
-                  onChange={() => {
-                    debounce(onChangeFilter(), 500)
-                  }}
                 />
               </Form.Item>
             </div>
@@ -407,14 +409,15 @@ const FilterAction = (props: Props) => {
     return (
       <Row justify='space-between' style={{ marginBottom: 20 }}>
         <Col span={9} lg={8} md={8}>
-          <Input
-            placeholder='Tìm kiếm...'
-            prefix={<BiSearch size={20} />}
-            allowClear
-            onChange={() => {
-              debounce(onChangeFilter(), 500)
-            }}
-          />
+          <Form.Item name='keyword'>
+            <Input
+              placeholder='Tìm kiếm...'
+              prefix={<BiSearch size={20} />}
+              allowClear
+              onChange={debounce(() => onChangeFilter(), 800)}
+              autoFocus={forcus}
+            />
+          </Form.Item>
         </Col>
 
         <Col>
