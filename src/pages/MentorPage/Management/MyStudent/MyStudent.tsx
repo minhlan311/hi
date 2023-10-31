@@ -145,7 +145,7 @@ export default function MyStudent() {
     <div>
       <div className='div-table'>
         <Table
-          scroll={{ x: 500, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
+          scroll={{ x: 700, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
           rowKey={'key'}
           dataSource={data?.data?.docs as any}
           pagination={{
