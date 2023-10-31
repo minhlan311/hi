@@ -162,6 +162,10 @@
   a:hover {
     text-decoration: underline;
   }
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 }
 .divInnerHtml {
   line-height: 1.4;
@@ -169,4 +173,8 @@
   overflow-y: auto;
   padding: 50px;
   height: 100%;
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 }
