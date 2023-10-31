@@ -167,8 +167,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     handleEditorChange(_event, editor)
     setTimeout(() => {
       setIsSubmitting(false)
-    }, 1500)
-  }, 1500)
+    }, 2000)
+  }, 500)
 
   return (
     <div>

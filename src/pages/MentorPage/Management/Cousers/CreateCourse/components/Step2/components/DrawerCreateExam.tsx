@@ -66,8 +66,8 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     handleEditorChange(_event, editor)
     setTimeout(() => {
       setIsSubmitting(false)
-    }, 1500)
-  }, 1500)
+    }, 2000)
+  }, 500)
 
   const onFinish = (values: any) => {
     mutation.mutate(values)

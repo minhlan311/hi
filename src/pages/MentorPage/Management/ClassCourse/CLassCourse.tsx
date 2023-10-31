@@ -23,7 +23,7 @@ export default function CLassCourse() {
   const [reset, setReset] = useState(false)
   const [search, setSearch] = useState('')
   const [typeForm, setTypeForm] = useState<string | undefined>(undefined)
-
+  const [page, setPage] = useState<number>(1)
   const [form] = Form.useForm()
 
   const mutationDelete = useMutation({
@@ -48,7 +48,7 @@ export default function CLassCourse() {
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['dataClass', search],
+    queryKey: ['dataClass', search, page],
     queryFn: () =>
       classApi.getClass({
         filterQuery: {
@@ -57,7 +57,7 @@ export default function CLassCourse() {
         },
         options: {
           limit: 10,
-          page: 1,
+          page: page,
         },
       }),
     enabled: profile?._id ? true : false,
@@ -159,16 +159,9 @@ export default function CLassCourse() {
   //   })
   // }
 
-  // const onPageChange = (page: number, limit?: number) => {
-  //   setFilter((prevFilter) => ({
-  //     ...prevFilter,
-  //     options: {
-  //       ...prevFilter.options,
-  //       page: page!,
-  //       limit: limit!,
-  //     },
-  //   }))
-  // }
+  const onPageChange = (page: number) => {
+    setPage(page)
+  }
 
   return (
     <div>
@@ -214,7 +207,7 @@ export default function CLassCourse() {
             current: data?.data?.page,
             pageSize: data?.data?.limit,
             total: data?.data?.totalDocs,
-            // onChange: onPageChange,
+            onChange: onPageChange,
           }}
           loading={isLoading}
           columns={tableColumns}
