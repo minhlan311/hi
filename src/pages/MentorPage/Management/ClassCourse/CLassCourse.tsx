@@ -8,11 +8,9 @@ import { MyPageTableOptions } from '@/types/page.type'
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Col, DatePicker, Form, Input, Popconfirm, Row, Space, Table, Tooltip } from 'antd'
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import './CLassCourse.scss'
 import ClassCourseCreate from './ClassCourseCreate'
-// import { DatePickerProps } from 'antd/lib'
-// import { RangePickerProps } from 'antd/es/date-picker'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import { FORM_TYPE } from '@/constants'
 
@@ -22,6 +20,7 @@ export default function CLassCourse() {
   const [idClass, setIdClass] = useState('')
   const [reset, setReset] = useState(false)
   const [search, setSearch] = useState('')
+  const [date, setDate] = useState<string[] | null>([])
   const [typeForm, setTypeForm] = useState<string | undefined>(undefined)
   const [page, setPage] = useState<number>(1)
   const [form] = Form.useForm()
@@ -47,13 +46,23 @@ export default function CLassCourse() {
 
   const queryClient = useQueryClient()
 
+  useEffect(() => {
+    if (reset) {
+      setSearch(''), setPage(1)
+      setDate(null)
+      form.resetFields()
+    }
+  }, [reset])
+
   const { data, isLoading } = useQuery({
-    queryKey: ['dataClass', search, page],
+    queryKey: ['dataClass', search, page, date],
     queryFn: () =>
       classApi.getClass({
         filterQuery: {
           createdById: profile?._id,
-          search: search,
+          search: search || undefined,
+          startDate: date ? date[0] : undefined,
+          endDate: date ? date[1] : undefined,
         },
         options: {
           limit: 10,
@@ -148,19 +157,24 @@ export default function CLassCourse() {
 
   const handleEditorChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event?.target?.value)
+    setReset(false)
   }
 
   const debouncedHandleEditorChange = debounce(handleEditorChange, 500)
 
-  // const onOk = (value: DatePickerProps['value'] | RangePickerProps['value'] | any) => {
-  //   setTime({
-  //     startDate: value && value[0] ? value[0] : undefined,
-  //     endDate: value && value[1] ? value[1] : undefined,
-  //   })
-  // }
+  const onOk = (dates: any) => {
+    setReset(false)
+
+    if (dates) {
+      setDate(dates)
+    } else {
+      setDate(null)
+    }
+  }
 
   const onPageChange = (page: number) => {
     setPage(page)
+    setReset(false)
   }
 
   return (
@@ -174,10 +188,7 @@ export default function CLassCourse() {
           </Col>
           <Col xs={24} xl={12} xxl={10}>
             <Form.Item label='Tìm kiếm theo khoảng thời gian' name={'time'}>
-              <RangePicker
-                format='DD/MM/YYYY'
-                // onChange={onOk}
-              />
+              <RangePicker format='DD/MM/YYYY' onChange={onOk} />
             </Form.Item>
           </Col>
           <Col xs={24} xl={24} xxl={4}>
