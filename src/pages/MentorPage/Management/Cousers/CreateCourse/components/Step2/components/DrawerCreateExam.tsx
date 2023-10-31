@@ -45,6 +45,7 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
         message: 'Thông báo',
         description: 'Thêm chuyên đề mới thành công',
       })
+      setRefetch(refetch + 1)
       form.resetFields()
       setContent('')
       queryClient.invalidateQueries({ queryKey: ['topicsAll'] })
@@ -73,7 +74,6 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
     mutation.mutate(values)
     setDataDrawer(values)
     onClose(false)
-    setRefetch(refetch + 1)
   }
 
   const onFinishFailed = (values: any) => {
