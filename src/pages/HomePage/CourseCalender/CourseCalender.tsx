@@ -99,7 +99,13 @@ export default function CourseCalender() {
                               <TextWithTooltip
                                 rows={1}
                                 children={
-                                  <>
+                                  <div
+                                    style={{
+                                      color: 'white',
+                                      fontWeight: '400',
+                                      fontSize: '14px',
+                                    }}
+                                  >
                                     {item?.startDate ? (
                                       <>
                                         Khai giảng {''}
@@ -108,7 +114,7 @@ export default function CourseCalender() {
                                     ) : (
                                       'Đang cập nhật'
                                     )}
-                                  </>
+                                  </div>
                                 }
                                 className='text-date'
                               />
