@@ -7,9 +7,10 @@ type Props = {
   classNameTooltip?: string
   className?: string
   rows: number
+  onClick?: () => void
 }
 
-export default function TextWithTooltip({ children, classNameTooltip, color, className, rows }: Props) {
+export default function TextWithTooltip({ children, classNameTooltip, color, className, rows, onClick }: Props) {
   return (
     <Tooltip
       arrow
@@ -21,7 +22,7 @@ export default function TextWithTooltip({ children, classNameTooltip, color, cla
         </>
       }
     >
-      <Paragraph ellipsis={{ rows: rows }} className={className}>
+      <Paragraph onClick={onClick} ellipsis={{ rows: rows }} className={className}>
         {children}
       </Paragraph>
     </Tooltip>
