@@ -1,0 +1,19 @@
+.checkbox {
+  .checkboxCard {
+    &:hover {
+      background-color: var(--lighish-white);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+  }
+}
+
+.checked {
+  background-color: var(--greenBg);
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+.desc {
+  margin-left: 25px;
+}

@@ -1,7 +1,7 @@
+import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice } from '@/interface/question'
-import { Card, Checkbox, Col, Input, Radio, Row } from 'antd'
-import css from './styles.module.scss'
+import { Input } from 'antd'
 
 type Props = {
   type:
@@ -20,38 +20,16 @@ type Props = {
 
 const RenderAnswer = (props: Props) => {
   const { type, choices } = props
+  const optionsList = choices.map((ots) => {
+    return { value: ots._id, label: ots.answer }
+  })
+
   if (type === 'WRITING') return <TextAreaCustom name='answer' />
   if (type === 'NUMERICAL') return <Input type='number' placeholder='Nhập giá trị' />
   if (type === 'SINGLE CHOICE')
-    return (
-      <Radio.Group className={css.answerMain}>
-        <Row gutter={[24, 24]}>
-          {choices.map((choi) => (
-            <Col span={24} md={12} key={choi._id}>
-              <Radio value={choi._id}>
-                <Card size='small'>
-                  <div dangerouslySetInnerHTML={{ __html: choi.answer }}></div>
-                </Card>
-              </Radio>
-            </Col>
-          ))}
-        </Row>
-      </Radio.Group>
-    )
+    return <FormControls control='radio' type='card' options={optionsList} gutter={[24, 24]} />
   if (type === 'MULTIPLE CHOICE')
-    return (
-      <Checkbox.Group className={css.answerMain}>
-        <Row gutter={[24, 24]}>
-          {choices.map((choi) => (
-            <Col span={24} md={12} key={choi._id}>
-              <Checkbox>
-                <div dangerouslySetInnerHTML={{ __html: choi.answer }}></div>
-              </Checkbox>
-            </Col>
-          ))}
-        </Row>
-      </Checkbox.Group>
-    )
+    return <FormControls control='checkBox' type='card' options={optionsList} gutter={[24, 24]} />
 }
 
 export default RenderAnswer
