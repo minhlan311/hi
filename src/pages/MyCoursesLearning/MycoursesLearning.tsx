@@ -25,7 +25,7 @@ import {
   WarningOutlined,
 } from '@ant-design/icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, Collapse, Popover, Row, Tooltip } from 'antd'
+import { Button, Col, Collapse, Popover, Row, Switch, Tooltip } from 'antd'
 import FileSaver from 'file-saver'
 import JSZip from 'jszip'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -34,7 +34,6 @@ import screenfull from 'screenfull'
 import './MycoursesLearning.module.scss'
 import style from './MycoursesLearning.module.scss'
 import ExamCourse from './components/ExamCourse'
-
 interface FileItem {
   name: string
   url?: string
@@ -49,6 +48,7 @@ export default function MycoursesLearning() {
   const [type, setType] = useState('DOCUMENT')
   const [nameExam, setNameExam] = useState('')
   const [document, setDocuemnt] = useState<any>()
+  const [dark, setDark] = useState<boolean>()
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
   const [exam, setExam] = useState([])
@@ -57,6 +57,10 @@ export default function MycoursesLearning() {
   const examDivRef = useRef<HTMLDivElement | null>(null)
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
   const { Panel } = Collapse
+
+  const onChange = (checked: boolean) => {
+    setDark(checked)
+  }
 
   const dataProfile = queryClient.getQueryData<any>(['userDetail'])
 
@@ -456,9 +460,9 @@ export default function MycoursesLearning() {
                   <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
                 </Tooltip>
 
-                <Tooltip title='Cài đặt'>
+                {/* <Tooltip title='Cài đặt'>
                   <SettingOutlined className={style.iconScale} />
-                </Tooltip>
+                </Tooltip> */}
                 <Tooltip title='Báo cáo video không phù hợp'>
                   <WarningOutlined className={style.iconScale} />
                 </Tooltip>
@@ -466,17 +470,16 @@ export default function MycoursesLearning() {
             </>
           ) : type === TypeLessonEnum.DOCUMENT_LESSON ? (
             <>
-              <div className={style.document}>
+              <div
+                className={style.document}
+                style={{
+                  background: dark ? '#262626' : 'white',
+                }}
+              >
                 {/* <h3>Bài TEXT</h3> */}
                 <div
                   ref={examDivRef}
-                  style={{
-                    lineHeight: '1.4',
-                    overflowY: 'auto',
-                    height: '100%',
-                    background: 'white',
-                    padding: '50px',
-                  }}
+                  className={dark ? style.divInnerHtmlDark : style.divInnerHtml}
                   dangerouslySetInnerHTML={{ __html: document }}
                 ></div>
               </div>
@@ -487,8 +490,22 @@ export default function MycoursesLearning() {
                 <Tooltip title='Bài học tiếp '>
                   <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
                 </Tooltip>
-
-                <Tooltip title='Cài đặt'>
+                <Tooltip
+                  trigger={'click'}
+                  title={
+                    <div
+                      style={{
+                        padding: '10px',
+                      }}
+                      className='flex'
+                    >
+                      <div>Chế độ tối</div>
+                      <div>
+                        <Switch onChange={onChange} />
+                      </div>
+                    </div>
+                  }
+                >
                   <SettingOutlined className={style.iconScale} />
                 </Tooltip>
                 <Tooltip title='Toàn màn hình'>
@@ -536,13 +553,6 @@ export default function MycoursesLearning() {
                 <Tooltip title='Bài học tiếp '>
                   <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
                 </Tooltip>
-
-                <Tooltip title='Cài đặt'>
-                  <SettingOutlined className={style.iconScale} />
-                </Tooltip>
-                <Tooltip title='Toàn màn hình'>
-                  <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
-                </Tooltip>
               </div>
             </>
           ) : (
@@ -565,9 +575,9 @@ export default function MycoursesLearning() {
                   <RightCircleOutlined className={style.iconScale} onClick={getNextLesson} />
                 </Tooltip>
 
-                <Tooltip title='Cài đặt'>
-                  <SettingOutlined className={style.iconScale} />
-                </Tooltip>
+                {/* <Tooltip title='Gợi ý'>
+                  <QuestionCircleOutlined className={style.iconScale} />
+                </Tooltip> */}
                 <Tooltip title='Toàn màn hình'>
                   <ExpandOutlined className={style.iconScale} onClick={toggleFullScreenForExamDiv} />
                 </Tooltip>
