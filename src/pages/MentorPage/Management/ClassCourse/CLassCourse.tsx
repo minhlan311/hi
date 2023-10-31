@@ -125,7 +125,7 @@ export default function CLassCourse() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'x',
-      width: '10%',
+      width: '20%',
       align: 'center' as const,
       render: (_: string, record: Class) => (
         <div>
@@ -212,7 +212,7 @@ export default function CLassCourse() {
       </Form>
       <div className='div-table'>
         <Table
-          scroll={{ x: 500, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
+          scroll={{ x: 700, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
           dataSource={data?.data?.docs as any}
           pagination={{
             current: data?.data?.page,
