@@ -47,7 +47,7 @@ const TestPage = () => {
   })
 
   const { data: eventData } = useQuery({
-    queryKey: ['eventData', testData],
+    queryKey: ['eventData'],
     queryFn: () => {
       return eventApi.getOneEvent(location.state.eventId)
     },
@@ -55,8 +55,9 @@ const TestPage = () => {
 
   const event = eventData?.data
   const data = testData?.data
+
   const questions = useQuery({
-    queryKey: ['questionData', skill, currentQuestion],
+    queryKey: ['questionData', skill, currentQuestion, data],
     queryFn: () => {
       return questionApi.findQuestion({
         filterQuery: {
@@ -66,6 +67,10 @@ const TestPage = () => {
       })
     },
   })
+
+  // const testMutation = useMutation({
+  //   mutationFn: (body) => examApi.examSubmit(body),
+  // })
 
   const question = questions?.data?.data?.docs
 
@@ -113,6 +118,7 @@ const TestPage = () => {
               <div dangerouslySetInnerHTML={{ __html: questionData.hint }}></div>
             </Space>
           )}
+
           <RenderAnswer
             type={
               questionData.type as unknown as
@@ -141,7 +147,7 @@ const TestPage = () => {
     {
       id: 'READING',
       title: 'Đọc',
-      description: 'Chưa hoàn thành',
+      description: `${current > 0 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
         <QuestionItem
           type='READING'
@@ -154,7 +160,7 @@ const TestPage = () => {
     {
       id: 'LISTENING',
       title: 'Nghe',
-      description: 'Chưa hoàn thành',
+      description: `${current > 1 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
         <QuestionItem
           type='LISTENING'
@@ -168,7 +174,7 @@ const TestPage = () => {
     {
       id: 'WRITING',
       title: 'Viết',
-      description: 'Chưa hoàn thành',
+      description: `${current > 2 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
         <QuestionItem
           type='WRITING'
@@ -182,7 +188,7 @@ const TestPage = () => {
     {
       id: 'SPEAKING',
       title: 'Nói',
-      description: 'Chưa hoàn thành',
+      description: `${current === 3 && question && currentQuestion === question?.length ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
         <QuestionItem
           type='SPEAKING'

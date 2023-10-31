@@ -15,6 +15,7 @@
   --red-2: #ff636f;
   --green: #019d44;
   --green-2: #0ec25c;
+  --greenBg: #21c12130;
   --transparent: transparent;
   --borderColor: #e7e7e7;
 }
@@ -177,7 +178,12 @@ table {
 .ant-typography.ant-typography-ellipsis.ant-typography-ellipsis-multiple-line._title_k5ogj_19.css-dev-only-do-not-override-k7rw7n {
   margin: 0 !important;
 }
-
+.checkCustom {
+  .ant-checkbox,
+  .ant-radio {
+    display: none !important;
+  }
+}
 .sticky {
   position: sticky;
   top: 10px;
