@@ -1,18 +1,17 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import examApi from '@/apis/exam.api'
-import openNotification from '@/components/Notification'
 import { Question } from '@/types/question.type'
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
   CloseCircleOutlined,
   LeftCircleOutlined,
   RightCircleOutlined,
   SendOutlined,
   UndoOutlined,
-  ClockCircleOutlined,
 } from '@ant-design/icons'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Radio } from 'antd'
 import { useEffect, useState } from 'react'
 import { Cell, Pie, PieChart, Tooltip } from 'recharts'
@@ -95,10 +94,6 @@ export default function ExamCourse({ data, name }: Props) {
     )
   }
 
-  const isCurrentQuestionAnswered = () => {
-    return currentQuestion?.choices?.some((choice) => choice.isChosen)
-  }
-
   const getAnswerColor = (choice: any) => {
     if (hasSubmitted) {
       if (choice.isChosen) {
@@ -168,20 +163,20 @@ export default function ExamCourse({ data, name }: Props) {
     },
   })
 
-  const allQuestionsAnswered = () => {
-    return questions.every((question) => question?.choices?.some((choice) => choice.isChosen))
-  }
+  // const allQuestionsAnswered = () => {
+  //   return questions.every((question) => question?.choices?.some((choice) => choice.isChosen))
+  // }
 
   const handleSubmit = () => {
-    if (!allQuestionsAnswered()) {
-      openNotification({
-        message: 'Thông báo',
-        status: 'warning',
-        description: 'Vui lòng chọn đáp án cho tất cả các câu hỏi trước khi hoàn thành bài kiểm tra!',
-      })
+    // if (!allQuestionsAnswered()) {
+    //   openNotification({
+    //     message: 'Thông báo',
+    //     status: 'warning',
+    //     description: 'Vui lòng chọn đáp án cho tất cả các câu hỏi trước khi hoàn thành bài kiểm tra!',
+    //   })
 
-      return
-    }
+    //   return
+    // }
 
     const correctCount = countCorrectAnswers()
     setCorrectAnswersCount(correctCount)
@@ -294,19 +289,14 @@ export default function ExamCourse({ data, name }: Props) {
                   </div>
                   <div>
                     {currentPage >= questions.length - 1 ? (
-                      <Button
-                        disabled={!isCurrentQuestionAnswered()}
-                        onClick={handleSubmit}
-                        style={{ width: '120px' }}
-                        type='primary'
-                      >
+                      <Button onClick={handleSubmit} style={{ width: '120px' }} type='primary'>
                         Hoàn thành <SendOutlined />
                       </Button>
                     ) : (
                       <Button
                         type='dashed'
                         className='dashed'
-                        disabled={currentPage >= questions.length - 1 || !isCurrentQuestionAnswered()}
+                        disabled={currentPage >= questions.length - 1}
                         onClick={() => {
                           setCurrentPage(currentPage + 1)
                         }}
