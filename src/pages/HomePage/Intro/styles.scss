@@ -25,7 +25,7 @@
     .intro-card {
       min-width: 75%;
       @include respond-to(xs) {
-        min-width: 75%;
+        min-width: 80%;
         &:first-child {
           margin-left: 10px;
         }
@@ -34,7 +34,7 @@
         }
       }
       @include respond-to(sm) {
-        min-width: 75%;
+        min-width: 80%;
         &:first-child {
           margin-left: 10px;
         }
