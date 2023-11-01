@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { Question } from '@/types/question.type'
 import { UserState } from './user'
 
 export interface Diploma {
@@ -47,4 +48,5 @@ export interface ExamState {
   id: string
   createdAt: string
   updatedAt: string
+  questionsDetail?: Question[]
 }
