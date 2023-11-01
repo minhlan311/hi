@@ -76,6 +76,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.setFieldValue('name', courseDetail?.data?.name)
       form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
       form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
+      form.setFieldValue('coverVideo', courseDetail?.data?.coverVideo)
       setContent(courseDetail?.data?.descriptions as string)
       setFileList([
         {
@@ -247,7 +248,11 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col xs={24} xl={9}></Col>
+              <Col xs={24} xl={9}>
+                <Form.Item label='Video dưới thiệu' name='coverVideo'>
+                  <Input placeholder='Nhập link video của bạn' allowClear />
+                </Form.Item>
+              </Col>
             </Row>
           </Col>
           <Col xs={24} xl={4}>
