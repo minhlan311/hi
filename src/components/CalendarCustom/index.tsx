@@ -1,31 +1,31 @@
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import Calendar from '@toast-ui/react-calendar'
-import CalendarWeek from '../CalendarWeek'
-import css from './styles.module.scss'
-import dayjs, { Dayjs } from 'dayjs'
-import DropdownCustom from '../DropdownCustom/DropdownCustom'
-import EmptyCustom from '../EmptyCustom/EmptyCustom'
-import EventActionModal from './EventActionModal'
 import eventApi from '@/apis/event.api'
-import EventDetailModal from './EventDetailModal'
-import LoadingCustom from '../LoadingCustom'
-import moment, { Moment } from 'moment-timezone'
-import SelectCustom from '../SelectCustom/SelectCustom'
-import useResponsives from '@/hooks/useResponsives'
-import { AiOutlineClockCircle, AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { Card, Col, Input, Row, Space } from 'antd'
+import useResponsives from '@/hooks/useResponsives'
 import { EventObject } from '@/interface/class'
 import { EventSchedule } from '@/interface/event'
-import { HiOutlineUserGroup } from 'react-icons/hi2'
-import { PiExam } from 'react-icons/pi'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
+import Calendar from '@toast-ui/react-calendar'
+import { Card, Col, Input, Row, Space } from 'antd'
+import dayjs, { Dayjs } from 'dayjs'
+import moment, { Moment } from 'moment-timezone'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { AiOutlineClockCircle, AiOutlineLeft, AiOutlinePlus, AiOutlineRight } from 'react-icons/ai'
+import { HiOutlineUserGroup } from 'react-icons/hi2'
+import { PiExam } from 'react-icons/pi'
+import { useLocation } from 'react-router-dom'
 import 'tui-calendar/dist/tui-calendar.css'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import 'tui-time-picker/dist/tui-time-picker.css'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import CalendarWeek from '../CalendarWeek'
+import DropdownCustom from '../DropdownCustom/DropdownCustom'
+import EmptyCustom from '../EmptyCustom/EmptyCustom'
+import LoadingCustom from '../LoadingCustom'
+import SelectCustom from '../SelectCustom/SelectCustom'
+import EventActionModal from './EventActionModal'
+import EventDetailModal from './EventDetailModal'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   calendarType: 'student' | 'mentor'
@@ -47,6 +47,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
+  console.log(events)
 
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -74,17 +75,8 @@ const CalendarCustom = ({ calendarType }: Props) => {
     }
   }
 
-  useEffect(() => {
-    if (callBackWeekSelect) {
-      setTimeSelect({
-        startDate: callBackWeekSelect.start ? callBackWeekSelect.start : moment(callBackWeekSelect).startOf('day'),
-        endDate: callBackWeekSelect.end ? callBackWeekSelect.end : moment(callBackWeekSelect).endOf('day'),
-      })
-    }
-  }, [callBackWeekSelect])
-
   const { data: eventsData, isLoading } = useQuery({
-    queryKey: ['eventsData', callBackWeekSelect, timeSelect, type, classId],
+    queryKey: ['eventsData', callBackWeekSelect, type, timeSelect, classId],
     queryFn: () => {
       const filter =
         calendarType === 'mentor'
@@ -110,6 +102,15 @@ const CalendarCustom = ({ calendarType }: Props) => {
       })
     },
   })
+
+  useEffect(() => {
+    if (callBackWeekSelect) {
+      setTimeSelect({
+        startDate: callBackWeekSelect.start ? callBackWeekSelect.start : moment(callBackWeekSelect).startOf('day'),
+        endDate: callBackWeekSelect.end ? callBackWeekSelect.end : moment(callBackWeekSelect).endOf('day'),
+      })
+    }
+  }, [callBackWeekSelect])
 
   useEffect(() => {
     getDate()
@@ -250,9 +251,48 @@ const CalendarCustom = ({ calendarType }: Props) => {
       return dayjs(a.start).diff(dayjs(b.start))
     }
   })
+  // const [datas, setDatas] = useState([
+  //   {
+  //     id: 'root',
+  //     name: 'root',
+  //     children: [
+  //       { id: '1', name: '1' },
+  //       { id: '2', name: '2' },
+  //       { id: '3', name: '3' },
+  //     ],
+  //   },
+  //   {
+  //     id: 'col1',
+  //     name: 'col1',
+  //     children: [
+  //       { id: '4', name: '4' },
+  //       { id: '5', name: '5' },
+  //     ],
+  //   },
+  //   {
+  //     id: 'col2',
+  //     name: 'col2',
+  //     children: [
+  //       { id: '6', name: '6' },
+  //       { id: '7', name: '7' },
+  //       { id: '8', name: '8' },
+  //     ],
+  //   },
+  //   { id: 'col3', name: 'col3', children: [] },
+  // ])
 
   return (
     <Space direction='vertical' className={'sp100'}>
+      {/* <DragAndDrop
+        data={datas}
+        setData={setDatas}
+        renderType='card'
+        dndType='dnd'
+        labelKey='name'
+        columnLabelKey='name'
+        direction='vertical'
+      /> */}
+
       {sm && md && <Input.Search placeholder='Tìm kiếm' />}
       {sm ? (
         <Row gutter={[0, 24]}>

@@ -71,6 +71,38 @@ const EventActionModal = (props: Props) => {
     { label: '90 phút', value: 90 },
     { label: '120 phút', value: 120 },
   ]
+  const daysOfWeek = [
+    { label: 'T2', value: 1 },
+    { label: 'T3', value: 2 },
+    { label: 'T4', value: 3 },
+    { label: 'T5', value: 4 },
+    { label: 'T6', value: 5 },
+    { label: 'T7', value: 6 },
+    { label: 'CN', value: 0 },
+  ]
+
+  const [repeat, setRepeat] = useState(false)
+
+  const [schedules, setSchedules] = useState<number[]>([])
+
+  const handleChangeRepeat = (e: string) => {
+    setRepeat(true)
+
+    setSchedules(
+      (e === 'allWeek' && [0, 1, 2, 3, 4, 5, 6]) ||
+        (e === 'T2-T6' && [1, 2, 3, 4, 5]) ||
+        (e === 'weekEnd' && [0, 6]) ||
+        [],
+    )
+  }
+
+  const onChangeDate = (list: any[]) => {
+    setSchedules(list)
+  }
+
+  useEffect(() => {
+    form.setFieldsValue({ schedules: schedules })
+  }, [schedules])
 
   useEffect(() => {
     if (eventDetail) {
@@ -139,6 +171,8 @@ const EventActionModal = (props: Props) => {
         students: studentIds,
         mentorId: profile?._id,
         type: 'CLASS',
+        isRepeat: repeat,
+        schedules: !repeat ? [] : schedules,
       }
       mutate(payload as unknown as any)
     } else {
@@ -171,7 +205,7 @@ const EventActionModal = (props: Props) => {
     form.resetFields()
   }
 
-  const { sm } = useResponsives()
+  const { xs, sm, md, lg } = useResponsives()
 
   return (
     <Modal
@@ -186,7 +220,7 @@ const EventActionModal = (props: Props) => {
         setSelectTime && setSelectTime(null)
       }}
       onOk={handleSubmit}
-      width={sm ? undefined : '40vw'}
+      width={(md && '80vw') || ((sm || xs) && undefined) || (lg && '60vw') || '45vw'}
       okText={eventDetail ? 'Lưu thay đổi' : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'}`}
     >
       <Form onFinish={handleFinish} form={form} layout='vertical' initialValues={initVal}>
@@ -287,7 +321,7 @@ const EventActionModal = (props: Props) => {
               </Form.Item>
             </Col>
             <Col span={24} md={8}>
-              <Form.Item name='allDay' label=' '>
+              <Form.Item name='allDay' label={sm ? '' : ' '}>
                 <Checkbox onChange={(e) => setAllDay(e.target.checked)} checked={allDay}>
                   Cả ngày
                 </Checkbox>
@@ -321,6 +355,28 @@ const EventActionModal = (props: Props) => {
             </Col>
           </Row>
         )}
+        <Row gutter={24}>
+          <Col span={24} md={6}>
+            <Form.Item name='repeat'>
+              <SelectCustom
+                options={[
+                  { label: 'Hàng ngày', value: 'allWeek' },
+                  { label: 'T2-T6', value: 'T2-T6' },
+                  { label: 'Cuối tuần', value: 'weekEnd' },
+                  { label: 'Chọn ngày', value: 'any' },
+                ]}
+                placeholder='Lặp lại'
+                onChange={handleChangeRepeat}
+              ></SelectCustom>
+            </Form.Item>
+          </Col>
+
+          <Col span={24} md={18}>
+            <Form.Item name='schedules' rules={[{ required: repeat, message: 'Vui lòng chọn thứ' }]}>
+              <Checkbox.Group value={schedules} options={daysOfWeek} onChange={onChangeDate}></Checkbox.Group>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
     </Modal>
   )
