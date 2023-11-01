@@ -27,9 +27,9 @@ const RenderAnswer = (props: Props) => {
   if (type === 'WRITING') return <TextAreaCustom name='answer' />
   if (type === 'NUMERICAL') return <Input type='number' placeholder='Nhập giá trị' />
   if (type === 'SINGLE CHOICE')
-    return <FormControls control='radio' type='card' options={optionsList} gutter={[24, 24]} />
+    return <FormControls control='radio' type='card' options={optionsList} gutter={[12, 12]} />
   if (type === 'MULTIPLE CHOICE')
-    return <FormControls control='checkBox' type='card' options={optionsList} gutter={[24, 24]} />
+    return <FormControls control='checkBox' type='card' options={optionsList} gutter={[12, 12]} />
 }
 
 export default RenderAnswer

@@ -247,11 +247,11 @@ const TestPage = () => {
   if (data && event)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
-        <Header padding={sm ? '20px 0' : '70px 0'}>
+        <Header padding={md ? '20px 0' : '70px 0'}>
           <Row justify='space-between' gutter={24} align='middle' className={css.testMain}>
             {(startTest && (
               <>
-                <Col span={24} md={18}>
+                <Col span={24} lg={18}>
                   {md && (
                     <Row justify='space-between' align='bottom' className={css.testNav}>
                       <Col>
@@ -273,11 +273,11 @@ const TestPage = () => {
                       </Col>
                       <Col>
                         <CountDownTimer
-                          type={sm ? 'number' : 'progress'}
+                          type={md ? 'number' : 'progress'}
                           initTime={testTime}
                           initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
                           start={startTest}
-                          size={sm ? 20 : 30}
+                          size={md ? 20 : 30}
                           localId={event._id}
                         ></CountDownTimer>
                       </Col>
@@ -301,7 +301,7 @@ const TestPage = () => {
                   )}
                   <Card className={css.testBody}>{testSkill[current].content}</Card>
                 </Col>
-                <Col span={24} md={6}>
+                <Col span={24} lg={6}>
                   {!md && (
                     <Space className={` sp100`} direction='vertical' size='large' align='center'>
                       <CountDownTimer
@@ -384,8 +384,13 @@ const TestPage = () => {
                   <Col span={24} md={12}>
                     <img src={successBg} alt='successBg' width={'100%'} />
                   </Col>
-                  <Col span={24} md={8}>
-                    <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
+                  <Col span={24} md={12}>
+                    <Space
+                      direction='vertical'
+                      size='large'
+                      align={sm || md || lg ? 'center' : 'start'}
+                      className={'sp100'}
+                    >
                       <h1>{event?.name}</h1>
                       <Score />
                       <Space>
