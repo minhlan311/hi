@@ -7,8 +7,9 @@ import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
-import Drawer from '../Drawer/Drawer'
+
 import { debounce } from '@/helpers/common'
+import DrawerCustom from '../DrawerCustom/DrawerCustom'
 
 type Props = {
   apiFind: any
@@ -426,9 +427,9 @@ const FilterAction = (props: Props) => {
             <ButtonCustom onClick={() => setOpen(true)}>Lọc</ButtonCustom>
           </Space>
         </Col>
-        <Drawer open={open} onClose={() => setOpen(false || !lg)} placement='right' title='Lọc'>
+        <DrawerCustom open={open} onClose={() => setOpen(false || !lg)} placement='right' title='Lọc'>
           <FormFilter />
-        </Drawer>
+        </DrawerCustom>
       </Row>
     )
 }
