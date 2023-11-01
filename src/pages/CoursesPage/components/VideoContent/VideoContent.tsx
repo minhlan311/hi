@@ -14,16 +14,18 @@ import { TCourse } from '@/types/course.type'
 import { TargetModelEnum } from '@/types/utils.type'
 import { ClockCircleOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from 'antd'
+import { Button, Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import style from './VideoContent.module.scss'
+import ReactPlayer from 'react-player'
 type Props = {
   data?: TCourse
   checkEnrolls?: any
 }
 
 export default function VideoContent({ data, checkEnrolls }: Props) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const contentRef = useRef<HTMLHeadingElement | null>(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [datas, setDatas] = useState<TCourse>()
@@ -37,6 +39,14 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
   useEffect(() => {
     setCheck(cartData?.data?.docs?.some((item: any) => item?.id === id))
   }, [id, cartData])
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   const mutate = useMutation({
     mutationFn: (body: any) => {
@@ -153,40 +163,43 @@ export default function VideoContent({ data, checkEnrolls }: Props) {
 
   return (
     <div className={style.col2}>
-      {/* <Modal
+      <Modal
+        footer={null}
         destroyOnClose
-        zIndex={9999989999}
-        maskClosable={false}
-        title='Giới thiệu khóa học'
+        maskClosable={true}
+        title={null}
         open={isModalOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
+        closable={false}
+        width={750}
       >
-        <VideoComponent video={'https://vimeo.com/90509568'} />
-      </Modal> */}
+        {datas?.coverVideo ? (
+          <ReactPlayer width={'100%'} controls url={datas?.coverVideo} />
+        ) : (
+          'Không có video giới thiệu nào'
+        )}
+      </Modal>
 
       <div className={style.boxVideo} ref={contentRef}>
         {datas ? (
-          <div className={style.video} hidden={visible}>
+          <div className={style.video} hidden={visible} onClick={showModal}>
             <ImageCustom
               width='100%'
               height='198px'
               preview={false}
               src={`${import.meta.env.VITE_FILE_ENDPOINT}/${datas?.coverMedia}`}
             />
-            <a href='https://www.youtube.com/watch?v=Ih3za2gY-bI' target='_blank'>
-              <div className={style.videoPosition}>
-                <div className={style.videoPositionText}>
-                  <p>Video giới thiệu khóa học</p>
-                </div>
+            <div className={style.videoPosition}>
+              <div className={style.videoPositionText}>
+                <p>Video giới thiệu khóa học</p>
               </div>
-              <div>
-                <PlayCircleFilled
-                  style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
-                  className=''
-                />
-              </div>
-            </a>
+            </div>
+            <div>
+              <PlayCircleFilled
+                style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
+                className=''
+              />
+            </div>
           </div>
         ) : (
           <LoadingCustom
