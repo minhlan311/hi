@@ -2,6 +2,7 @@
 export type TCourse = {
   data: any
   _id?: string
+  coverVideo?: string
   createdById: string
   updatedById: string
   _destroy: boolean
