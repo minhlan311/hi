@@ -11,7 +11,7 @@ const Score = () => {
     {
       title: 'Lần thi',
       key: 'index',
-      align: 'center',
+      // align: 'center',
       render: (_: any, _a: any, index: number) => index + 1,
     },
     {
@@ -23,7 +23,7 @@ const Score = () => {
       ),
       dataIndex: 'reading',
       key: 'reading',
-      align: 'center',
+      // align: 'center',
     },
     {
       title: (
@@ -34,7 +34,7 @@ const Score = () => {
       ),
       dataIndex: 'listening',
       key: 'listening',
-      align: 'center',
+      // align: 'center',
     },
     {
       title: (
@@ -45,7 +45,7 @@ const Score = () => {
       ),
       dataIndex: 'writing',
       key: 'writing',
-      align: 'center',
+      // align: 'center',
     },
     {
       title: (
@@ -56,7 +56,7 @@ const Score = () => {
       ),
       dataIndex: 'speaking',
       key: 'speaking',
-      align: 'center',
+      // align: 'center',
     },
   ]
 
