@@ -12,7 +12,7 @@ import {
   UndoOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Radio } from 'antd'
 import { useEffect, useState } from 'react'
 import { Cell, Pie, PieChart, Tooltip } from 'recharts'
@@ -21,6 +21,7 @@ import './ExamCourse.scss'
 interface DataUpload {
   _id: string
   questions: Question[]
+  type: string
 }
 
 interface Props {
@@ -41,6 +42,17 @@ export default function ExamCourse({ data, name }: Props) {
   const [showDetails, setShowDetails] = useState(false)
   const [startQuiz, setStartQuiz] = useState(false)
   const [seconds, setSeconds] = useState<number>(0)
+  const [dataExam, setDataExam] = useState<any>()
+
+  const { data: dataQuestion } = useQuery({
+    queryKey: ['questionList', data],
+    queryFn: () => examApi.getExamDetail(data[0]?._id),
+    enabled: data ? true : false,
+  })
+
+  useEffect(() => {
+    setDataExam(dataQuestion)
+  }, [dataQuestion])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
@@ -62,10 +74,10 @@ export default function ExamCourse({ data, name }: Props) {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
 
   const renderPieChart = () => {
-    const data = [
+    const dataQuestion = [
       { name: 'Đáp án chọn đúng', value: correctAnswersCount },
       { name: 'Đáp án chọn sai', value: questions.length - (correctAnswersCount ?? 0) },
     ]
@@ -73,7 +85,7 @@ export default function ExamCourse({ data, name }: Props) {
 
     return (
       <PieChart disable width={230} height={230}>
-        <Pie data={data} cx='50%' cy='50%' labelLine={false} outerRadius={80} fill='#8884d8' dataKey='value'>
+        <Pie data={dataQuestion} cx='50%' cy='50%' labelLine={false} outerRadius={80} fill='#8884d8' dataKey='value'>
           {data.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index]} />
           ))}
@@ -107,11 +119,13 @@ export default function ExamCourse({ data, name }: Props) {
     }
   }
 
+  console.log(currentQuestion, 'currentQuestion')
+
   useEffect(() => {
-    if (data && data[0] && data[0]?.questions) {
+    if (dataExam?.data && dataExam?.data?.questionsDetail) {
       const extractedData =
-        data[0]?.questions ??
-        data[0]?.questions.map((item: any) => ({
+        dataExam?.data?.questionsDetail ??
+        dataExam?.data?.questionsDetail?.map((item: any) => ({
           _id: item?._id,
           name: item?.question,
           choices: item?.choices,
@@ -120,15 +134,23 @@ export default function ExamCourse({ data, name }: Props) {
       setHasSubmitted(false)
       setDataUpload([])
       setCurrentPage(0)
+      setShowDetails(false)
+      setStartQuiz(false)
+      setSeconds(0)
     }
-  }, [data])
+  }, [data, dataExam])
+
+  console.log(questions, '==========')
 
   useEffect(() => {
     setDataUpload({
       _id: data && data[0]?._id,
+      type: 'QUIZZ',
       questions: questions,
     })
   }, [questions])
+
+  console.log(dataUpload, 'dataUploaddataUpload')
 
   const handleRadioChange = (questionIndex: any, choiceIndex: any) => {
     const newQuestions = [...questions]
@@ -140,8 +162,9 @@ export default function ExamCourse({ data, name }: Props) {
 
   const mutate = useMutation({
     mutationFn: (body: any) => examApi.examSubmit(body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['topicLearning'] })
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries({ queryKey: ['topicLearning'] })
+      setDataExam(data?.data)
     },
   })
 
@@ -195,7 +218,7 @@ export default function ExamCourse({ data, name }: Props) {
       {!startQuiz ? (
         <div className='start-quiz-container'>
           <h2 className='quiz-start'>Quiz - {name}</h2>
-          <p className='quiz-p'>Tổng số câu hỏi: {questions.length}</p>
+          <p className='quiz-p'>Tổng số câu hỏi: {dataExam?.data?.questionsDetail?.length}</p>
           <Button
             style={{
               minWidth: '100px',
