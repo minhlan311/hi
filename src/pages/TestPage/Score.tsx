@@ -5,94 +5,121 @@ import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
 import { RiSpeakLine } from 'react-icons/ri'
 import { VscBook } from 'react-icons/vsc'
+import css from './styles.module.scss'
+import useResponsives from '@/hooks/useResponsives'
 
 const Score = () => {
   const columns = [
     {
       title: 'Lần thi',
       key: 'index',
-      // align: 'center',
-      render: (_: any, _a: any, index: number) => index + 1,
+      render: (_: any, _a: any, index: number) => <p style={{ textAlign: 'center' }}>{index + 1}</p>,
+      width: 30,
     },
     {
       title: (
-        <Space direction='vertical'>
+        <div className={css.colTable}>
           <VscBook size={30} />
           Đọc
-        </Space>
+        </div>
       ),
       dataIndex: 'reading',
       key: 'reading',
-      // align: 'center',
+      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.reading}</h3>,
     },
     {
       title: (
-        <Space direction='vertical'>
+        <div className={css.colTable}>
           <FaAssistiveListeningSystems size={25} />
           Nghe
-        </Space>
+        </div>
       ),
       dataIndex: 'listening',
       key: 'listening',
-      // align: 'center',
+      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.listening}</h3>,
     },
     {
       title: (
-        <Space direction='vertical'>
+        <div className={css.colTable}>
           <BsPencil size={23} />
           Viết
-        </Space>
+        </div>
       ),
       dataIndex: 'writing',
       key: 'writing',
-      // align: 'center',
+      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.writing}</h3>,
     },
     {
       title: (
-        <Space direction='vertical'>
+        <div className={css.colTable}>
           <RiSpeakLine size={30} />
           Nói
-        </Space>
+        </div>
       ),
       dataIndex: 'speaking',
       key: 'speaking',
-      // align: 'center',
+      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.speaking}</h3>,
     },
   ]
 
-  const data = [{ reading: 5, listening: 5, writing: 5, speaking: 5 }]
+  const data = [{ reading: 9, listening: 8, writing: 8.5, speaking: 9.5 }]
+  const { md } = useResponsives()
 
   return (
-    <Space align='center' size='large' direction='vertical' className='sp100'>
+    <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
       <h2>Điểm của bạn</h2>
-      <Space>
-        <Progress
-          type='circle'
-          percent={(45 / 50) * 100}
-          format={() => (
-            <Space direction='vertical'>
-              <BsCheckCircle />
-              <p>Đúng</p>
-              <h3>45/50</h3>
+
+      <div className={'sp100'} style={{ margin: 'auto' }}>
+        <Space>
+          {md ? (
+            <Space direction='vertical' align='center'>
+              <Space direction='vertical' className={css.done} align='center'>
+                <BsCheckCircle />
+                <p className={css.title}>Câu đúng</p>
+              </Space>
+              <h4>45/50</h4>
             </Space>
+          ) : (
+            <Progress
+              type='circle'
+              percent={(45 / 50) * 100}
+              format={() => (
+                <Space direction='vertical'>
+                  <Space direction='vertical' className={css.done}>
+                    <BsCheckCircle />
+                    <p className={css.title}>Đúng</p>
+                  </Space>
+                  <h4>45/50</h4>
+                </Space>
+              )}
+            ></Progress>
           )}
-        ></Progress>
-        <Space direction='vertical'>
-          <Progress type='circle' percent={100} format={() => <h2>8.5</h2>}></Progress>
-          <h2>DONE!</h2>
+          <Space direction='vertical' align='center'>
+            <Progress type='circle' percent={100} format={() => <h2>8.5</h2>}></Progress>
+            <h2 className={`${css.title} ${css.done}`}>DONE!</h2>
+          </Space>
+          {md ? (
+            <Space direction='vertical' align='center'>
+              <PiTimer size={28} />
+              <p className={css.title}>Thời gian</p>
+              <h4>35:38</h4>
+            </Space>
+          ) : (
+            <Progress
+              type='circle'
+              percent={(45 / 60) * 100}
+              format={() => (
+                <Space direction='vertical'>
+                  <PiTimer size={28} />
+                  <p className={css.title}>Thời gian</p>
+                  <h4>35:38</h4>
+                </Space>
+              )}
+            ></Progress>
+          )}
         </Space>
-        <Progress
-          type='circle'
-          percent={100}
-          format={() => (
-            <Space direction='vertical'>
-              <PiTimer />
-              <p>Thời gian</p>
-              <h3>35:38</h3>
-            </Space>
-          )}
-        ></Progress>
-      </Space>
+      </div>
+
       <Table columns={columns} dataSource={data} bordered pagination={false}></Table>
     </Space>
   )

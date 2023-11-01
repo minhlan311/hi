@@ -17,8 +17,8 @@ import { AppContext } from '@/contexts/app.context'
 import { Badge, Button, Col, Row, Space } from 'antd'
 import { BiSolidDashboard } from 'react-icons/bi'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { Link, useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { UserState } from '@/interface/user'
 import './styles.scss'
@@ -45,6 +45,10 @@ export default function Navigation({ user }: Props) {
   })
 
   const [open, setOpen] = useState(false)
+  const location = useLocation()
+  useEffect(() => {
+    setOpen(false)
+  }, [location])
 
   return (
     <div>

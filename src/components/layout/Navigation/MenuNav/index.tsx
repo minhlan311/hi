@@ -92,18 +92,12 @@ export default function MenuNav({ user, type }: Props) {
               {item.children && !item.children.length ? (
                 <Link to={item.href} className='title'>
                   <Space className='sp100' size='small'>
-                    {item?.href ? item.label : <div className='title'>{item.label}</div>}
+                    {item.label}
                   </Space>
                 </Link>
               ) : (
-                <>
-                  <Space className='sp100' size='small'>
-                    <RenderSubMenu item={item} />
-                  </Space>
-                </>
+                <RenderSubMenu item={item} />
               )}
-
-              {item.children ? item.children.length > 0 && <div className='arr'></div> : null}
             </div>
           </div>
         ))}
