@@ -18,7 +18,7 @@ import useResponsives from '@/hooks/useResponsives'
 const MentorExams = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [data, setData] = useState<{ docs: ExamState[] }>()
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [examData, setExamData] = useState<ExamState>()
   const queryClient = useQueryClient()
   const { status, mutate, error } = useMutation({

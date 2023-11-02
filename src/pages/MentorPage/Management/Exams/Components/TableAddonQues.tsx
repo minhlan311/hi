@@ -1,3 +1,4 @@
+import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice } from '@/interface/tests'
@@ -6,9 +7,10 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Form, FormInstance, InputRef, Popconfirm, Space, Table, message } from 'antd'
-import React, { useContext, useEffect, useId, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
 import { MdPlaylistAdd } from 'react-icons/md'
+import { v4 } from 'uuid'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -179,11 +181,11 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
 
 const TableAddonQues = (props: Props) => {
   const { selectionType, callBackData, data, isClose } = props
-  const id = useId()
-  const randomId = id + Math.floor(Math.random() * 1000000).toString()
+  const id = v4()
   const [dataSource, setDataSource] = useState<Choice[]>([
     {
-      key: randomId,
+      id,
+      key: id,
       answer: 'Nhập đáp án',
       isCorrect: false,
       isChosen: false,
@@ -193,8 +195,8 @@ const TableAddonQues = (props: Props) => {
   const convertCallBack = (array: Choice[]): Choice[] => {
     const newArray = array.map((item) => {
       const newItem: Choice = { ...item }
-      newItem.key = newItem._id
-      delete newItem._id
+      newItem.key = newItem.id
+      newItem.id
 
       return newItem
     })
@@ -208,11 +210,6 @@ const TableAddonQues = (props: Props) => {
       setDataSource(newData)
     }
   }, [data])
-
-  const handleDelete = (key: React.Key) => {
-    const newData = dataSource.filter((item) => item.key !== key)
-    setDataSource(newData)
-  }
 
   const initColumns = [
     {
@@ -249,7 +246,10 @@ const TableAddonQues = (props: Props) => {
       key: 'action',
       render: (_: any, record: Choice) =>
         dataSource.length >= 1 && (
-          <Popconfirm title='Xóa đáp án?' onConfirm={() => handleDelete(record.key as string)}>
+          <Popconfirm
+            title='Xóa đáp án?'
+            onConfirm={() => stateAction(setDataSource, record.id as string, null, 'remove', undefined, 'id')}
+          >
             <ButtonCustom icon={<AiOutlineDelete />} type='text' size='small' style={{ color: 'var(--red)' }} />
           </Popconfirm>
         ),
@@ -283,8 +283,8 @@ const TableAddonQues = (props: Props) => {
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
       setDataSource((previous) => {
-        const activeIndex = previous.findIndex((i) => i.key === active.id)
-        const overIndex = previous.findIndex((i) => i.key === over?.id)
+        const activeIndex = previous.findIndex((i) => i.id === active.id)
+        const overIndex = previous.findIndex((i) => i.id === over?.id)
 
         return arrayMove(previous, activeIndex, overIndex)
       })
@@ -293,7 +293,8 @@ const TableAddonQues = (props: Props) => {
 
   const handleAdd = () => {
     const newData: Choice = {
-      key: randomId,
+      id,
+      key: id,
       answer: 'Nhập đáp án',
       isCorrect: false,
       isChosen: false,
@@ -303,7 +304,7 @@ const TableAddonQues = (props: Props) => {
 
   const handleSave = (row: Choice) => {
     const newData = [...dataSource]
-    const index = newData.findIndex((item) => row.key === item.key)
+    const index = newData.findIndex((item) => row.id === item.id)
     const item = newData[index]
     newData.splice(index, 1, {
       ...item,
@@ -338,7 +339,7 @@ const TableAddonQues = (props: Props) => {
 
   const handleSelect = (newSelectedRowKeys: any) => {
     const newData = dataSource.map((item: Choice) => {
-      if (newSelectedRowKeys.includes(item.key)) {
+      if (newSelectedRowKeys.includes(item.id)) {
         return {
           ...item,
           isCorrect: true,
@@ -350,11 +351,11 @@ const TableAddonQues = (props: Props) => {
         isCorrect: false,
       }
     })
+    setDataSource(newData)
 
     callBackData(newData)
 
-    const key = newData.filter((item) => item.isCorrect).map((item) => item.key)
-    setSelectKey(key)
+    setSelectKey(newSelectedRowKeys)
   }
 
   const [selectKey, setSelectKey] = useState<any[]>()
@@ -363,7 +364,26 @@ const TableAddonQues = (props: Props) => {
     if (dataSource.length > 0) {
       const key = dataSource.filter((item) => item.isCorrect).map((item) => item.key)
       setSelectKey(key)
-      callBackData(dataSource)
+
+      const newData = dataSource.map((item: Choice) => {
+        if (selectionType === 'SORT' || selectionType === 'DRAG DROP' || selectionType === 'MATCHING') {
+          return {
+            ...item,
+            isCorrect: true,
+          }
+        }
+
+        return {
+          ...item,
+          isCorrect: false,
+        }
+      })
+
+      selectionType === 'SORT' || selectionType === 'DRAG DROP' || selectionType === 'MATCHING'
+        ? callBackData(newData)
+        : callBackData(dataSource)
+
+      return
     }
   }, [dataSource])
 
@@ -371,7 +391,8 @@ const TableAddonQues = (props: Props) => {
     if (isClose)
       setDataSource([
         {
-          key: randomId,
+          id,
+          key: id,
           answer: 'Nhập đáp án',
           isCorrect: false,
           isChosen: false,
@@ -399,7 +420,7 @@ const TableAddonQues = (props: Props) => {
           </SortableContext>
         </DndContext>
       )) ||
-        (selectionType === 'MATCHING' && (
+        ((selectionType === 'MATCHING' || selectionType === 'DRAG DROP') && (
           <Table
             components={components}
             rowClassName={() => 'editable-row'}

@@ -19,10 +19,11 @@ type Props = {
   defaultChecked?: boolean
   className?: string
   gutter?: Gutter | [Gutter, Gutter]
+  md?: number
 }
 
 const FormControls = (props: Props) => {
-  const { control, type, options, checkAll = false, defaultChecked = false, className, gutter } = props
+  const { control, type, options, checkAll = false, defaultChecked = false, className, gutter, md } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
   const [values, setValues] = useState<any>(control === 'radio' ? '' : [])
 
@@ -67,7 +68,7 @@ const FormControls = (props: Props) => {
             <Checkbox.Group className={css.answerMain}>
               <Row gutter={gutter}>
                 {options.map((ots) => (
-                  <Col span={24} md={12} key={ots.value as string}>
+                  <Col span={24} md={12 || md} key={ots.value as string}>
                     <Checkbox
                       onChange={(e) => stateAction(setValues, ots.value as string, e.target.value, 'add')}
                       className={css.checkbox}
@@ -91,7 +92,7 @@ const FormControls = (props: Props) => {
             <Radio.Group className={css.answerMain}>
               <Row gutter={gutter}>
                 {options.map((ots) => (
-                  <Col span={24} md={12} key={ots.value as string}>
+                  <Col span={24} md={md || 12} key={ots.value as string}>
                     <Radio
                       onChange={(e) => setValues(e.target.value)}
                       className={css.checkbox}

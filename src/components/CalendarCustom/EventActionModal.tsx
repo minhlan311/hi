@@ -86,6 +86,13 @@ const EventActionModal = (props: Props) => {
   const [schedules, setSchedules] = useState<number[]>([])
 
   const handleChangeRepeat = (e: string) => {
+    if (e === 'none') {
+      setSchedules([])
+      setRepeat(false)
+
+      return
+    }
+
     setRepeat(true)
 
     setSchedules(
@@ -355,28 +362,36 @@ const EventActionModal = (props: Props) => {
             </Col>
           </Row>
         )}
-        <Row gutter={24}>
-          <Col span={24} md={6}>
-            <Form.Item name='repeat'>
-              <SelectCustom
-                options={[
-                  { label: 'Hàng ngày', value: 'allWeek' },
-                  { label: 'T2-T6', value: 'T2-T6' },
-                  { label: 'Cuối tuần', value: 'weekEnd' },
-                  { label: 'Chọn ngày', value: 'any' },
-                ]}
-                placeholder='Lặp lại'
-                onChange={handleChangeRepeat}
-              ></SelectCustom>
-            </Form.Item>
-          </Col>
+        {type === 'event' && (
+          <Row gutter={24}>
+            <Col span={24} md={6}>
+              <Form.Item name='repeat'>
+                <SelectCustom
+                  options={[
+                    { label: 'Không lặp lại', value: 'none' },
+                    { label: 'Hàng ngày', value: 'allWeek' },
+                    { label: 'T2-T6', value: 'T2-T6' },
+                    { label: 'Cuối tuần', value: 'weekEnd' },
+                    { label: 'Chọn ngày', value: 'any' },
+                  ]}
+                  placeholder='Lặp lại'
+                  onChange={handleChangeRepeat}
+                ></SelectCustom>
+              </Form.Item>
+            </Col>
 
-          <Col span={24} md={18}>
-            <Form.Item name='schedules' rules={[{ required: repeat, message: 'Vui lòng chọn thứ' }]}>
-              <Checkbox.Group value={schedules} options={daysOfWeek} onChange={onChangeDate}></Checkbox.Group>
-            </Form.Item>
-          </Col>
-        </Row>
+            <Col span={24} md={18}>
+              <Form.Item name='schedules' rules={[{ required: repeat, message: 'Vui lòng chọn thứ' }]}>
+                <Checkbox.Group
+                  value={schedules}
+                  options={daysOfWeek}
+                  onChange={onChangeDate}
+                  disabled={!repeat}
+                ></Checkbox.Group>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
       </Form>
     </Modal>
   )
