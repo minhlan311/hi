@@ -19,6 +19,11 @@ export default function HomePage() {
       <Mission />
       <VideoContent />
       {/* <LanguageSystem /> */}
+      <div
+        style={{
+          margin: '60px 0',
+        }}
+      ></div>
       <Gift />
       <CourseCalender />
       <News />
