@@ -12,12 +12,13 @@ import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { TCourse } from '@/types/course.type'
 import { TargetModelEnum } from '@/types/utils.type'
-import { CreditCardOutlined, GlobalOutlined, WarningFilled } from '@ant-design/icons'
+import { CreditCardOutlined, GlobalOutlined, WarningFilled, PlayCircleFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Breadcrumb, Button } from 'antd'
+import { Breadcrumb, Button, Modal } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import style from './Detail.module.scss'
+import ReactPlayer from 'react-player'
 
 type Props = {
   data?: TCourse
@@ -29,6 +30,7 @@ export default function Detail({ data, checkEnrolls }: Props) {
   const [check, setCheck] = useState(false)
   const { profile } = useContext(AppContext)
   const { id } = useParams()
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const cartData = queryClient.getQueryData<any>(['dataCart'])
@@ -111,6 +113,13 @@ export default function Detail({ data, checkEnrolls }: Props) {
       navigate('/myCourse')
     },
   })
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['products'] })
@@ -119,14 +128,39 @@ export default function Detail({ data, checkEnrolls }: Props) {
 
   return (
     <div className={style.col1}>
+      <Modal
+        footer={null}
+        destroyOnClose
+        maskClosable={true}
+        title={null}
+        open={isModalOpen}
+        onCancel={handleCancel}
+        closable={false}
+        width={750}
+      >
+        {datas?.coverVideo ? (
+          <ReactPlayer width={'100%'} controls url={datas?.coverVideo} />
+        ) : (
+          'Không có video giới thiệu nào'
+        )}
+      </Modal>
       <div>
         {lg && (
-          <ImageCustom
-            width='100%'
-            height='320px'
-            preview={false}
-            src={`${import.meta.env.VITE_FILE_ENDPOINT}/${data?.coverMedia}`}
-          />
+          <div className={style.video} onClick={showModal}>
+            <ImageCustom
+              width='100%'
+              height='198px'
+              preview={false}
+              src={`${import.meta.env.VITE_FILE_ENDPOINT}/${datas?.coverMedia}`}
+            />
+
+            <div>
+              <PlayCircleFilled
+                style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
+                className=''
+              />
+            </div>
+          </div>
         )}
       </div>
       <div>
