@@ -19,7 +19,7 @@ export default function HomePage() {
       <TopCourses />
       <Mission />
       <VideoContent />
-      <LanguageSystem />
+      {/* <LanguageSystem /> */}
       <Gift />
       <CourseCalender />
       <News />
