@@ -153,7 +153,7 @@ export default function Detail({ data, checkEnrolls }: Props) {
               preview={false}
               src={`${import.meta.env.VITE_FILE_ENDPOINT}/${datas?.coverMedia}`}
             />
-
+            <div className={style.videoPosition} />
             <div>
               <PlayCircleFilled
                 style={{ color: 'white', fontSize: '65px', position: 'absolute', top: '32%', right: '40%' }}
