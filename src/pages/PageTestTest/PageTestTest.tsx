@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
-import { CSSProperties, useCallback, useState } from 'react'
+import { CSSProperties, useCallback, useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import questionApi from '@/apis/question.api'
 
 import './PageTestTest.scss'
 
@@ -54,12 +56,19 @@ function DroppableSpace({ id, content }: DroppableSpaceProps) {
 }
 
 export default function PageTestTest() {
-  const handleReset = () => {
-    setAnswers(['company', 'name'])
-    setFilledAnswers({})
-  }
-  const [answers, setAnswers] = useState<string[]>(['company', 'name'])
+  const { data } = useQuery({
+    queryKey: ['keyadkaljshda'],
+    queryFn: () => questionApi.getQuestionDetail('65434591b972956a12555aff'),
+  })
+
+  const initialAnswers = data?.data?.choices.map((choice) => choice.answer) || []
+  const [answers, setAnswers] = useState<string[]>([])
   const [filledAnswers, setFilledAnswers] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    const initialAnswers = data?.data?.choices.map((choice) => choice.answer) || []
+    setAnswers(initialAnswers)
+  }, [data])
 
   const handleDragEnd = useCallback((event: any) => {
     const { active, over } = event
@@ -73,32 +82,47 @@ export default function PageTestTest() {
     }
   }, [])
 
+  const handleReset = () => {
+    setAnswers(initialAnswers)
+    setFilledAnswers({})
+  }
+
   const getResultString = () => {
-    return `My ${filledAnswers['space1'] || '_____'} is John and I work at a ${filledAnswers['space2'] || '_____'}.`
+    const parts = data?.data?.questionText?.split('______') || []
+    let result = parts[0]
+
+    for (let i = 1; i < parts.length; i++) {
+      result += filledAnswers[`space${i}`] || '______'
+      result += parts[i]
+    }
+
+    return result
   }
 
   return (
     <div className='container-testtesst'>
-      <button
-        onClick={() => {
-          alert(getResultString())
-        }}
-      >
-        Hiển thị kết quả
-      </button>
+      <button onClick={() => alert(getResultString())}>Hiển thị kết quả</button>
       <button onClick={handleReset} style={{ marginTop: '20px' }}>
         Reset
       </button>
 
       <DndContext onDragEnd={handleDragEnd}>
         <div style={{ margin: '20px' }}>
-          <p>
-            My <DroppableSpace id='space1' content={filledAnswers['space1']} /> is John and I work at a{' '}
-            <DroppableSpace id='space2' content={filledAnswers['space2']} />.
-          </p>
+          {data?.data?.questionText?.split('______').map((part: any, index: any) => (
+            <>
+              <span key={`text-part-${index}`}>{part}</span>
+              {index < data?.data?.choices.length && (
+                <DroppableSpace
+                  key={`drop-space-${index}`}
+                  id={`space${index + 1}`}
+                  content={filledAnswers[`space${index + 1}`]}
+                />
+              )}
+            </>
+          ))}
           <div style={{ display: 'flex', marginTop: '20px' }}>
-            {answers.map((answer) => (
-              <DraggableItem key={answer} id={answer} content={answer} />
+            {answers.map((answer, index) => (
+              <DraggableItem key={index} id={answer} content={answer} />
             ))}
           </div>
         </div>

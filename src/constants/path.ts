@@ -26,6 +26,8 @@ export const PATH = {
   CHOICE_PAGE: '/trac-nghiem',
   QA_PAGE: '/hoi-dap',
   TEST_PAGE: '/lam-bai-thi-online',
+  TEST_TEST_PAGE: '/test-drag-drop',
+  TEST_TEST_CREATE: '/create-drag-drop',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
