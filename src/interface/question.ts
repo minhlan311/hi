@@ -11,6 +11,7 @@ export interface Choice {
 
 export interface QuestionState {
   _id: string
+  questionText?: string
   createdById: string
   updatedById: string
   _destroy: boolean

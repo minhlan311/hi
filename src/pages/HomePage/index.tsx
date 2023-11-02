@@ -1,9 +1,8 @@
+import Mentor from '@/pages/HomePage/Mentor'
 import Banner from './Banner'
 import CourseCalender from './CourseCalender/CourseCalender'
 import Gift from './Gift/Gift'
 import Intro from './Intro'
-import LanguageSystem from './LanguageSystem/LanguageSystem'
-import Mentor from '@/pages/HomePage/Mentor'
 import Mission from './Mission'
 import News from './News/News'
 import TopCourses from './TopCourses'
@@ -19,7 +18,12 @@ export default function HomePage() {
       <TopCourses />
       <Mission />
       <VideoContent />
-      <LanguageSystem />
+      {/* <LanguageSystem /> */}
+      <div
+        style={{
+          margin: '60px 0',
+        }}
+      ></div>
       <Gift />
       <CourseCalender />
       <News />
