@@ -37,7 +37,7 @@ export default function Navigation({ user }: Props) {
   const { configs } = useContext(AppContext)
 
   useEffect(() => {
-    if (user?._id && users) setProfileFromLS(users?.data?.data as unknown as UserState)
+    if (user?._id && users?.data?.data?._id) setProfileFromLS(users?.data?.data as unknown as UserState)
   }, [user, users])
 
   const changeFavicon = (faviconUrl: string) => {
