@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AffixCustom from '@/components/AffixCustom'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import cartApi from '@/apis/cart.api'
@@ -32,6 +33,30 @@ export default function Navigation({ user }: Props) {
   const { sm, md, lg, xl, xxl } = useResponsives()
   useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
   const { profile } = useContext(AppContext)
+
+  const { configs } = useContext(AppContext)
+
+  const changeFavicon = (faviconUrl: string) => {
+    let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement | null
+
+    if (!link) {
+      link = document.createElement('link')
+      link.type = 'image/x-icon'
+      link.rel = 'shortcut icon'
+      document.getElementsByTagName('head')[0].appendChild(link)
+    }
+
+    link.href = import.meta.env.VITE_FILE_ENDPOINT + '/' + faviconUrl
+  }
+
+  console.log(configs?.favicon, ' configs?.favicon')
+
+  useEffect(() => {
+    const faviconUrl = configs?.favicon
+    if (configs && faviconUrl) {
+      changeFavicon(faviconUrl)
+    }
+  }, [configs])
 
   const { data } = useQuery({
     queryKey: ['dataCart'],
@@ -94,18 +119,30 @@ export default function Navigation({ user }: Props) {
                     <div className='menu-bar'>
                       <Space size='large'>
                         <Space size='small'>
-                          <Link to='https://www.facebook.com/' target='_blank'>
-                            <img src={facebook} alt='facebook' width={20} />
-                          </Link>
-                          <Link to='https://www.youtube.com/' target='_blank'>
-                            <img src={youtube} alt='youtube' width={26} />
-                          </Link>
-                          <Link to='https://www.tiktok.com/' target='_blank'>
-                            <img src={tiktok} alt='tiktok' width={20} />
-                          </Link>
-                          <Link to='https://zalo.me/' target='_blank'>
-                            <img src={zalo} alt='zalo' width={20} />
-                          </Link>
+                          {configs?.socials?.map((item) => (
+                            <>
+                              {item?.type === 'ZALO' && (
+                                <Link to={item?.url} target='_blank'>
+                                  <img src={zalo} alt='zalo' width={20} />
+                                </Link>
+                              )}
+                              {item?.type === 'FACEBOOK' && (
+                                <Link to={item?.url} target='_blank'>
+                                  <img src={facebook} alt='facebook' width={20} />
+                                </Link>
+                              )}
+                              {item?.type === 'YOUTUBE' && (
+                                <Link to={item?.url} target='_blank'>
+                                  <img src={youtube} alt='youtube' width={26} />
+                                </Link>
+                              )}
+                              {item?.type === 'TIKTOK' && (
+                                <Link to={item?.url} target='_blank'>
+                                  <img src={tiktok} alt='tiktok' width={20} />
+                                </Link>
+                              )}
+                            </>
+                          ))}
                         </Space>
 
                         <Space
@@ -137,7 +174,7 @@ export default function Navigation({ user }: Props) {
                           </div>
                           <div>
                             <p className='mb-5 hotline'>Hotline</p>
-                            <b>0769.340.340</b>
+                            <b>{configs?.hotline}</b>
                           </div>
                         </Space>
                         <LanguageChange />

@@ -8,8 +8,23 @@ import News from './News/News'
 import TopCourses from './TopCourses'
 import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
+import { useQuery } from '@tanstack/react-query'
+import configApi from '@/apis/config.api'
+import { useEffect } from 'react'
+import { setConfigFromLS } from '@/utils/auth'
 
 export default function HomePage() {
+  const { data } = useQuery({
+    queryKey: ['config'],
+    queryFn: () => configApi.getConfig(),
+  })
+
+  useEffect(() => {
+    if (data) {
+      setConfigFromLS(data?.data)
+    }
+  }, [data?.data])
+
   return (
     <div className='mtz-homepage'>
       <Banner />

@@ -1,9 +1,13 @@
-import ucamFooter from '@/assets/icons/ucamFooter.png'
 import { Col, Row, Space, Typography } from 'antd'
 import './styles.scss'
+import { useContext } from 'react'
+import { AppContext } from '@/contexts/app.context'
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
 const { Text } = Typography
 
 const Footer = () => {
+  const { configs } = useContext(AppContext)
+
   return (
     <>
       <div className='footer'>
@@ -19,7 +23,7 @@ const Footer = () => {
                   }}
                 >
                   <div className='mtz-footer-logo'>
-                    <img src={ucamFooter} />
+                    <ImageCustom width='100px' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + configs?.logoFooter} />
                   </div>
 
                   <Space className='social-group'>
@@ -28,48 +32,28 @@ const Footer = () => {
                 </Space>
               </div>
             </Col>
-            <Col className=''>
-              <div className='col-footer-right max-w'>
-                <Space direction='vertical' style={{ textAlign: 'start' }}>
-                  <Text className='footer-heading text-yellow-heading'>VĂN PHÒNG TP HCM</Text>
-
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      color: '#FFFFFF',
-                    }}
-                  >
-                    <ul className='ul-fff'>
-                      <li>Địa chỉ: 699 Nguyễn Kiệm, Phường 3, Quận Gò Vấp, TP Hồ Chí Minh</li>
-                      <li>Hotline: 0769.340.340</li>
-                    </ul>
+            {configs &&
+              configs?.branch.map((item) => (
+                <Col className=''>
+                  <div className='col-footer-right max-w'>
+                    <Space direction='vertical' style={{ textAlign: 'start' }}>
+                      <Text className='footer-heading text-yellow-heading'>{item?.name}</Text>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          color: '#FFFFFF',
+                        }}
+                      >
+                        <ul className='ul-fff'>
+                          <li>Địa chỉ: {item?.address}</li>
+                          <li>Hotline: {item?.phoneNumber}</li>
+                        </ul>
+                      </div>
+                    </Space>
                   </div>
-                </Space>
-              </div>
-            </Col>
-            <Col className=''>
-              <div className='col-footer-left max-w'>
-                <Space direction='vertical' style={{ textAlign: 'start' }}>
-                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH QUẢNG NGÃI</Text>
-                  <ul className='ul-fff'>
-                    <li>Địa chỉ: 116 Hai Bà Trưng , P.Lê Hồng Phong, TP. Quảng Ngãi</li>
-                    <li>Hotline: 0769.340.340</li>
-                  </ul>
-                </Space>
-              </div>
-            </Col>
-            <Col className=''>
-              <div className='col-footer-right max-w'>
-                <Space direction='vertical' style={{ textAlign: 'start' }}>
-                  <Text className='footer-heading text-yellow-heading'>CHI NHÁNH BÌNH PHƯỚC</Text>
-                  <ul className='ul-fff'>
-                    <li>Địa chỉ: 922/10 QL14, Phường Tiến Thành,TP Đồng Xoài, Tỉnh Bình Phước</li>
-                    <li>Hotline: 0769.340.340</li>
-                  </ul>
-                </Space>
-              </div>
-            </Col>
+                </Col>
+              ))}
           </Row>
           {/* </div> */}
 

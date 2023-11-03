@@ -65,6 +65,10 @@ const CreateQuestion = () => {
       <label>
         Nhập văn bản ban đầu:
         <textarea
+          style={{
+            width: '500px',
+            height: '200px',
+          }}
           value={initialText}
           onChange={(e) => {
             setInitialText(e.target.value)
@@ -73,9 +77,15 @@ const CreateQuestion = () => {
           }}
         />
       </label>
+      <br />
+      <br />
       <label>
         Chỉnh sửa câu hỏi:
         <textarea
+          style={{
+            width: '500px',
+            height: '200px',
+          }}
           ref={textareaRef}
           value={questionText}
           onChange={(e) => setQuestionText(e.target.value)}
@@ -91,7 +101,11 @@ const CreateQuestion = () => {
           />
         </div>
       ))}
+      <br />
+      <br />
       <button onClick={handleSubmit}>Submit</button>
+      <br />
+      <br />
       <button onClick={handleReset}>Reset</button>
       {/* <button onClick={handleTest}>Thêm câu hỏi vào bài test</button> */}
     </div>
