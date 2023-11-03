@@ -7,6 +7,7 @@ export interface Choice {
   id: string
   rows: Choice[]
   cols: Choice[]
+  key?: string
 }
 
 export interface QuestionState {

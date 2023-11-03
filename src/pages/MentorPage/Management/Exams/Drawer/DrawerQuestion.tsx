@@ -1,17 +1,15 @@
-import questionApi from '@/apis/question.api'
-import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
-import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import { debounce } from '@/helpers/common'
-import useResponsives from '@/hooks/useResponsives'
-import { QuestionState } from '@/interface/question'
-import { Choice } from '@/interface/tests'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Drawer, Form, Input, Row, Select, Space, Switch } from 'antd'
-import { useEffect, useState } from 'react'
-import { IoClose } from 'react-icons/io5'
+import questionApi from '@/apis/question.api'
 import TableAddonQues from '../Components/TableAddonQues'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import useResponsives from '@/hooks/useResponsives'
+import { Choice } from '@/interface/tests'
+import { Col, Drawer, Form, Input, Row, Select, Space, Switch } from 'antd'
+import { QuestionState } from '@/interface/question'
+import { useEffect, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import RenderAddonLinkertScale from '../Components/RenderAddonLinkertScale'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -24,131 +22,12 @@ type Props = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const LinkertScale = ({
-  callBackChoices,
-  data,
-}: {
-  callBackChoices: React.Dispatch<React.SetStateAction<any>>
-  data: Choice[]
-}) => {
-  const id = crypto.randomUUID()
-  const initData = {
-    answer: '',
-    isCorrect: false,
-    isChosen: false,
-  }
-  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id }])
-  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id }])
-
-  const handleAdd = (type: 'row' | 'col') => {
-    if (type === 'row') {
-      setAddRow([...addRow, { ...initData, id }])
-    } else {
-      setAddCol([...addCol, { ...initData, id }])
-    }
-  }
-
-  const handleInputChange = (type: 'row' | 'col', id: string, value: string) => {
-    const updatedData = (type === 'row' ? addRow : addCol).map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          answer: value,
-        }
-      }
-
-      return item
-    })
-
-    if (type === 'row') {
-      setAddRow(updatedData)
-    } else {
-      setAddCol(updatedData)
-    }
-  }
-
-  useEffect(() => {
-    callBackChoices([{ rows: addRow, cols: addCol, id }])
-  }, [addRow, addCol])
-
-  useEffect(() => {
-    if (data?.length > 0) {
-      data.forEach((item) => {
-        setAddRow(item.rows as unknown as Choice[])
-        setAddCol(item.cols as unknown as Choice[])
-      })
-    }
-  }, [data])
-
-  return (
-    <div style={{ margin: '20px 0 30px' }}>
-      <Row gutter={[12, 12]}>
-        <Col span={24} md={12}>
-          <Card size='small' title='Hàng'>
-            <Space direction='vertical' className='sp100'>
-              {addRow.map((item, id) => (
-                <Space key={item.id} className='sp100'>
-                  <b>{id + 1}</b>
-
-                  <Input
-                    placeholder='Nhập nội dung hàng'
-                    autoFocus
-                    className='sp100'
-                    defaultValue={item.answer}
-                    onChange={debounce((e: any) => handleInputChange('row', String(item.id), e.target.value), 500)}
-                  ></Input>
-                  {addRow.length > 1 && (
-                    <ButtonCustom
-                      icon={<IoClose />}
-                      type='text'
-                      onClick={() => stateAction(setAddRow, String(item.id), null, 'remove', undefined, 'id')}
-                    ></ButtonCustom>
-                  )}
-                </Space>
-              ))}
-              <ButtonCustom size='small' onClick={() => handleAdd('row')}>
-                Thêm hàng
-              </ButtonCustom>
-            </Space>
-          </Card>
-        </Col>
-        <Col span={24} md={12}>
-          <Card size='small' title='Cột'>
-            <Space direction='vertical' className='sp100'>
-              {addCol.map((item, id) => (
-                <Space key={item._id} className='sp100'>
-                  <b>{id + 1}</b>
-                  <Input
-                    placeholder='Nhập nội dung cột'
-                    autoFocus
-                    className='sp100'
-                    defaultValue={item.answer}
-                    onChange={debounce((e: any) => handleInputChange('col', String(item.id), e.target.value), 500)}
-                  ></Input>
-                  {addCol.length > 1 && (
-                    <ButtonCustom
-                      icon={<IoClose />}
-                      type='text'
-                      onClick={() => stateAction(setAddCol, String(item.id), null, 'remove', undefined, 'id')}
-                    ></ButtonCustom>
-                  )}
-                </Space>
-              ))}
-              <ButtonCustom size='small' onClick={() => handleAdd('col')}>
-                Thêm cột
-              </ButtonCustom>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
-    </div>
-  )
-}
-
 const DrawerQuestion = (props: Props) => {
   const { open, questionData = null, categoryId, setOpen, setQuestionData, setLoading } = props
   const [form] = Form.useForm()
   const [choices, setChoices] = useState<Choice[]>([])
+  const [corrects, setCorrects] = useState<string[]>([])
+
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState | null>(null)
   const [typeQues, setTypeQues] = useState<string | null>(null)
@@ -173,6 +52,7 @@ const DrawerQuestion = (props: Props) => {
     setOpen(false)
     setData(null)
     setChoices([])
+    setCorrects([])
     setQuestionData(null)
     setTypeQues(null)
   }
@@ -199,6 +79,7 @@ const DrawerQuestion = (props: Props) => {
       openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
   }, [isLoading])
+  console.log(corrects)
 
   const onFinish = (values: any) => {
     const id = crypto.randomUUID()
@@ -214,7 +95,7 @@ const DrawerQuestion = (props: Props) => {
       status: isCheck ? 'ACTIVE' : 'INACTIVE',
       point: parseInt(values.point),
       choices: choicesData,
-      correctAnswers: correctAnswers,
+      correctAnswers: corrects.length > 0 ? corrects : correctAnswers,
       categoryId: categoryId,
     }
     mutate(payload)
@@ -445,7 +326,12 @@ const DrawerQuestion = (props: Props) => {
               />
             )) ||
             ((typeQues === 'LIKERT SCALE' || typeQues === 'MATCHING') && (
-              <LinkertScale callBackChoices={setChoices} data={data?.choices as unknown as Choice[]} />
+              <RenderAddonLinkertScale
+                callBackCorrects={setCorrects}
+                callBackChoices={setChoices}
+                data={data?.choices as unknown as Choice[]}
+                selectionType={typeQues}
+              />
             )) ||
             (typeQues === 'NUMERICAL' && (
               <Form.Item

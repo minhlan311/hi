@@ -65,21 +65,30 @@ export default function MenuNav({ user, type }: Props) {
     categories ? (categories?.data.docs as unknown as CategoryState[]) : [],
   )
 
+  const test = categoriesData?.find((item) => item.label === 'Luyện thi')
+  const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
+  const choice = categoriesData?.find((item) => item.label === 'Trắc nghiệm')
+
   const mobileMenu = [
     { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
     {
       label: 'Luyện thi',
       icon: <IoSchoolOutline />,
       activeIcon: <MdSchool />,
-      href: '/luyen-thi-743j7/tieng-anh-au6xd',
+      href: ` ${test?.href} + ${test?.children?.[0]?.href}`,
     },
     {
       label: 'Lịch khai giảng',
       icon: <IoCalendarOutline />,
       activeIcon: <IoCalendar />,
-      href: '/lich-khai-giang-blbah/tieng-anh-iejqi',
+      href: ` ${opening?.href} + ${opening?.children?.[0]?.href}`,
     },
-    { label: 'Trắc nghiệm', icon: <PiExam />, activeIcon: <PiExamFill />, href: '/trac-nghiem-jshrw/a' },
+    {
+      label: 'Trắc nghiệm',
+      icon: <PiExam />,
+      activeIcon: <PiExamFill />,
+      href: ` ${choice?.href} + ${choice?.children?.[0]?.href}`,
+    },
     { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
   ]
 
