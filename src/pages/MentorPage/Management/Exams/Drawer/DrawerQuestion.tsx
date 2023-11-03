@@ -12,8 +12,7 @@ import { IoClose } from 'react-icons/io5'
 import { stateAction } from '@/common'
 import { debounce } from '@/helpers/common'
 import useResponsives from '@/hooks/useResponsives'
-// import {'ckeditor } from ''ckeditor5-react'
-// import ClassicEditor from ''ckeditor5-build-classic'
+import { v4 } from 'uuid'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -25,26 +24,32 @@ type Props = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<React.SetStateAction<any>> }) => {
+const LinkertScale = ({
+  callBackChoices,
+  data,
+}: {
+  callBackChoices: React.Dispatch<React.SetStateAction<any>>
+  data: Choice[]
+}) => {
   const initData = {
     answer: '',
     isCorrect: false,
     isChosen: false,
   }
-  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
-  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id: v4() }])
+  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id: v4() }])
 
   const handleAdd = (type: 'row' | 'col') => {
     if (type === 'row') {
-      setAddRow([...addRow, { ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+      setAddRow([...addRow, { ...initData, id: v4() }])
     } else {
-      setAddCol([...addCol, { ...initData, _id: Math.floor(Math.random() * 1000000).toString() }])
+      setAddCol([...addCol, { ...initData, id: v4() }])
     }
   }
 
   const handleInputChange = (type: 'row' | 'col', id: string, value: string) => {
     const updatedData = (type === 'row' ? addRow : addCol).map((item) => {
-      if (item._id === id) {
+      if (item.id === id) {
         return {
           ...item,
           answer: value,
@@ -62,8 +67,17 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
   }
 
   useEffect(() => {
-    callBackChoices([{ rows: addRow, cols: addCol }])
+    callBackChoices([{ rows: addRow, cols: addCol, id: v4() }])
   }, [addRow, addCol])
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      data.forEach((item) => {
+        setAddRow(item.rows as unknown as Choice[])
+        setAddCol(item.cols as unknown as Choice[])
+      })
+    }
+  }, [data])
 
   return (
     <div style={{ margin: '20px 0 30px' }}>
@@ -72,19 +86,21 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
           <Card size='small' title='Hàng'>
             <Space direction='vertical' className='sp100'>
               {addRow.map((item, id) => (
-                <Space key={item._id} className='sp100'>
+                <Space key={item.id} className='sp100'>
                   <b>{id + 1}</b>
+
                   <Input
                     placeholder='Nhập nội dung hàng'
                     autoFocus
                     className='sp100'
-                    onChange={(e) => debounce(handleInputChange('row', String(item._id), e.target.value), 500)}
+                    defaultValue={item.answer}
+                    onChange={debounce((e: any) => handleInputChange('row', String(item.id), e.target.value), 500)}
                   ></Input>
                   {addRow.length > 1 && (
                     <ButtonCustom
                       icon={<IoClose />}
                       type='text'
-                      onClick={() => stateAction(setAddRow, String(item._id), null, 'remove')}
+                      onClick={() => stateAction(setAddRow, String(item.id), null, 'remove', undefined, 'id')}
                     ></ButtonCustom>
                   )}
                 </Space>
@@ -105,13 +121,14 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
                     placeholder='Nhập nội dung cột'
                     autoFocus
                     className='sp100'
-                    onChange={(e) => debounce(handleInputChange('col', String(item._id), e.target.value), 500)}
+                    defaultValue={item.answer}
+                    onChange={debounce((e: any) => handleInputChange('col', String(item.id), e.target.value), 500)}
                   ></Input>
                   {addCol.length > 1 && (
                     <ButtonCustom
                       icon={<IoClose />}
                       type='text'
-                      onClick={() => stateAction(setAddCol, String(item._id), null, 'remove')}
+                      onClick={() => stateAction(setAddCol, String(item.id), null, 'remove', undefined, 'id')}
                     ></ButtonCustom>
                   )}
                 </Space>
@@ -130,7 +147,7 @@ const LinkertScale = ({ callBackChoices }: { callBackChoices: React.Dispatch<Rea
 const DrawerQuestion = (props: Props) => {
   const { open, questionData = null, categoryId, setOpen, setQuestionData, setLoading } = props
   const [form] = Form.useForm()
-  const [choice, setChoice] = useState<Choice[]>([])
+  const [choices, setChoices] = useState<Choice[]>([])
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState | null>(null)
   const [typeQues, setTypeQues] = useState<string | null>(null)
@@ -154,7 +171,7 @@ const DrawerQuestion = (props: Props) => {
   const onCloseDrawer = () => {
     setOpen(false)
     setData(null)
-    setChoice([])
+    setChoices([])
     setQuestionData(null)
     setTypeQues(null)
   }
@@ -183,15 +200,24 @@ const DrawerQuestion = (props: Props) => {
   }, [isLoading])
 
   const onFinish = (values: any) => {
+    const choicesData = choices.map((choose) => {
+      return { id: v4().hex, ...choose }
+    })
+
+    const correctAnswers = choicesData.filter((choice) => choice.isCorrect).map((choice) => choice.id)
+
     const payload = {
       ...values,
-      id: data?._id,
+      id: data?._id ? data?._id : undefined,
       status: isCheck ? 'ACTIVE' : 'INACTIVE',
       point: parseInt(values.point),
-      choices: choice,
+      choices: choicesData,
+      correctAnswers: correctAnswers,
       categoryId: categoryId,
     }
     mutate(payload)
+    // console.log(payload)
+
     setTimeout(() => {
       onCloseDrawer()
     }, 300)
@@ -242,7 +268,12 @@ const DrawerQuestion = (props: Props) => {
         >
           <h3>Câu hỏi</h3>
 
-          <TextAreaCustom name='question' label='Nội dung câu hỏi' required data={!data ? undefined : data} />
+          <TextAreaCustom
+            name='question'
+            label='Nội dung câu hỏi'
+            required
+            data={!open ? undefined : data ? data : undefined}
+          />
 
           <Row justify='space-between' gutter={12}>
             <Col span={24} md={6}>
@@ -402,12 +433,19 @@ const DrawerQuestion = (props: Props) => {
             typeQues === 'FILL BLANK' ||
             typeQues === 'DRAG DROP' ||
             typeQues === 'MATCHING') && (
-            <TableAddonQues selectionType={typeQues} callBackData={setChoice} data={data?.choices} isClose={!open} />
+            <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!open} />
           )) ||
             (typeQues === 'WRITING' && (
-              <TextAreaCustom name='answer' label='Đáp án' required data={!data ? undefined : data} />
+              <TextAreaCustom
+                name='answer'
+                label='Đáp án'
+                required
+                data={!open ? undefined : data ? data : undefined}
+              />
             )) ||
-            (typeQues === 'LIKERT SCALE' && <LinkertScale callBackChoices={setChoice} />) ||
+            (typeQues === 'LIKERT SCALE' && (
+              <LinkertScale callBackChoices={setChoices} data={data?.choices as unknown as Choice[]} />
+            )) ||
             (typeQues === 'NUMERICAL' && (
               <Form.Item
                 name='answer'
@@ -423,9 +461,9 @@ const DrawerQuestion = (props: Props) => {
               </Form.Item>
             )) || <></>}
 
-          <TextAreaCustom name='explanation' label='Giải thích' data={!data ? undefined : data} />
+          <TextAreaCustom name='explanation' label='Giải thích' data={!open ? undefined : data ? data : undefined} />
 
-          <TextAreaCustom name='hint' label='Gợi ý' data={!data ? undefined : data}></TextAreaCustom>
+          <TextAreaCustom name='hint' label='Gợi ý' data={!open ? undefined : data ? data : undefined}></TextAreaCustom>
         </Form>
       </Drawer>
     </div>

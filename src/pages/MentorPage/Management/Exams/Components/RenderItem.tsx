@@ -133,34 +133,36 @@ const RenderItem = (props: Props) => {
             </Row>
 
             <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
-            <Card size='small' className={css.anws}>
-              <Row gutter={[12, 12]}>
-                {data.choices.map((anw) => {
-                  if (anw.isCorrect)
-                    return (
-                      <Col span={24} md={12} xl={6}>
-                        <div
-                          className={css.isAnswer}
-                          key={anw._id}
-                          dangerouslySetInnerHTML={{ __html: anw.answer }}
-                        ></div>
-                      </Col>
-                    )
-                })}
+            {data.type !== 'LIKERT SCALE' && (
+              <Card size='small' className={css.anws}>
+                <Row gutter={[12, 12]}>
+                  {data.choices.map((anw) => {
+                    if (data.correctAnswers?.includes(anw.id))
+                      return (
+                        <Col span={24} md={12} xl={6}>
+                          <div
+                            className={css.isAnswer}
+                            key={anw._id}
+                            dangerouslySetInnerHTML={{ __html: anw.answer }}
+                          ></div>
+                        </Col>
+                      )
+                  })}
 
-                {data.choices.map((anw) => {
-                  if (!anw.isCorrect)
-                    return (
-                      <Col span={24} md={12} xl={6}>
-                        <Card size='small'>
-                          <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
-                        </Card>
-                      </Col>
-                    )
-                })}
-              </Row>
-              {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
-            </Card>
+                  {data.choices.map((anw) => {
+                    if (!anw.isCorrect)
+                      return (
+                        <Col span={24} md={12} xl={6}>
+                          <Card size='small'>
+                            <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
+                          </Card>
+                        </Col>
+                      )
+                  })}
+                </Row>
+                {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
+              </Card>
+            )}
             {data.explanation !== '<p></p>' ||
               (undefined && (
                 <Space className={`${css.hint} sp100 `}>

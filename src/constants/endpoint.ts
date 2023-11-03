@@ -15,6 +15,9 @@ export const ENDPOINT = {
   // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::
   DOCUMENT_PATH: '/edu/documents',
 
+  // :::::::::::::::::::: CONFIG PATH :::::::::::::::::::::
+  CONFIG_PATH: '/configs',
+
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
   NEWS: '/news/find',
   GET_ONE_NEWS: '/news/',

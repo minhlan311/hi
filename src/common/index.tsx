@@ -41,17 +41,7 @@ export const stateAction = (
         return updatedData
 
       case 'remove':
-        if (Array.isArray(dataUpdate)) {
-          dataUpdate.forEach((i) => {
-            if (newData.includes(i)) {
-              newData = newData.filter((data) => data !== i)
-            }
-          })
-        } else {
-          if (newData.includes(dataUpdate)) {
-            newData = newData.filter((data) => data !== dataUpdate)
-          }
-        }
+        newData = newData.filter((data) => (key ? data?.[key] !== id : data._id !== id))
 
         setLocalFunction && setLocalFunction(newData)
 

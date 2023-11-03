@@ -42,7 +42,13 @@ import CreateQuestion from './pages/PageTestTest/component/CreateDragDrop.tsx'
 function RejectedMentorRoute() {
   const { profile, isAuthenticated } = useContext(AppContext)
 
-  return !isAuthenticated ? <Navigate to='/login' /> : profile?.isMentor ? <Outlet /> : <Navigate to='/403' />
+  return !isAuthenticated ? (
+    <Navigate to='/login' />
+  ) : profile?.isMentor && profile?.mentorStatus === 'APPROVED' ? (
+    <Outlet />
+  ) : (
+    <Navigate to='/403' />
+  )
 }
 
 function ProtectedRoute() {

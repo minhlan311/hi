@@ -1,4 +1,9 @@
 .checkbox {
+  width: 100%;
+  & > span {
+    width: 100%;
+    text-align: center;
+  }
   .checkboxCard {
     &:hover {
       background-color: var(--lighish-white);
