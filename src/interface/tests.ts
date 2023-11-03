@@ -1,9 +1,12 @@
 export interface Choice {
+  id?: string
   _id?: string
   key?: string
   answer: string
   isCorrect: boolean
   isChosen: boolean
+  rows?: Choice[]
+  cols?: Choice[]
 }
 
 export interface TestState {

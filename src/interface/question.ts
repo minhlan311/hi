@@ -4,6 +4,9 @@ export interface Choice {
   isCorrect: boolean
   isChosen: boolean
   _id: string
+  id: string
+  rows: Choice[]
+  cols: Choice[]
 }
 
 export interface QuestionState {
@@ -31,6 +34,7 @@ export interface QuestionState {
   difficulty: string
   answer?: string
   hint?: string
+  correctAnswers?: string[]
   explanation?: any
   createdAt: string
   updatedAt: string

@@ -64,8 +64,7 @@ export default function Navigation({ user }: Props) {
 
               {md ? (
                 <Space>
-                  {user?.isMentor && (
-                    // user?.mentorStatus === 'APPROVED'
+                  {user?.isMentor && user?.mentorStatus === 'APPROVED' && (
                     <Link to='/mentor'>
                       <ButtonCustom icon={<BiSolidDashboard />} tooltip='Chuyển qua màn Mentor'>
                         Mentor
