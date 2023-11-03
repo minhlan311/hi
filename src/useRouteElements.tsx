@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, lazy } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import PageResult from './components/PageResult/index.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
@@ -14,16 +14,18 @@ import CartPage from './pages/CartPage/CartPage.tsx'
 import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
 import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
 import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
-import Courses from './pages/CoursesPage/Courses.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
-import MentorExamDetail from './pages/MentorPage/Management/Exams/ExamDetail/index.tsx'
-import MentorExamQuestions from './pages/MentorPage/Management/Exams/Questions/index.tsx'
-import MentorExams from './pages/MentorPage/Management/Exams/index.tsx'
-import MycoursesLearning from './pages/MyCoursesLearning/MycoursesLearning.tsx'
+
+const MentorExamDetail = lazy(() => import('./pages/MentorPage/Management/Exams/ExamDetail/index.tsx'))
+const Courses = lazy(() => import('./pages/CoursesPage/Courses.tsx'))
+const MentorExamQuestions = lazy(() => import('./pages/MentorPage/Management/Exams/Questions/index.tsx'))
+const MentorExams = lazy(() => import('./pages/MentorPage/Management/Exams/index.tsx'))
+const MycoursesLearning = lazy(() => import('./pages/MyCoursesLearning/MycoursesLearning.tsx'))
+
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
@@ -36,6 +38,7 @@ import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 import PageTestTest from './pages/PageTestTest/PageTestTest.tsx'
 import CreateQuestion from './pages/PageTestTest/component/CreateDragDrop.tsx'
+import SuspenseWrapper from './components/SuspenseWrapper/SuspenseWrapper.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -167,7 +170,9 @@ export default function useRouteElements() {
           path: PATH.MENTOR_EXAMS,
           element: (
             <MentorLayout user={profile} title='Quản lý đề thi thử'>
-              <MentorExams />
+              <SuspenseWrapper>
+                <MentorExams />
+              </SuspenseWrapper>
             </MentorLayout>
           ),
         },
@@ -175,7 +180,9 @@ export default function useRouteElements() {
           path: PATH.MENTOR_EXAMS_DETAIL,
           element: (
             <MentorLayout user={profile} title='Bộ đề'>
-              <MentorExamDetail />
+              <SuspenseWrapper>
+                <MentorExamDetail />
+              </SuspenseWrapper>
             </MentorLayout>
           ),
         },
@@ -183,7 +190,9 @@ export default function useRouteElements() {
           path: PATH.MENTOR_EXAMS_QUESTION,
           element: (
             <MentorLayout user={profile} title='Danh sách câu hỏi'>
-              <MentorExamQuestions />
+              <SuspenseWrapper>
+                <MentorExamQuestions />
+              </SuspenseWrapper>
             </MentorLayout>
           ),
         },
@@ -218,28 +227,25 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.MY_COURSE_LEARNING,
-          element: (
-            <Layout user={profile} title='Khóa học của bạn'>
-              <MycoursesLearning />
-            </Layout>
-          ),
-        },
+
         {
           path: PATH.MY_COURSE,
           element: (
             <Layout user={profile} title='Giỏ hàng của bạn'>
-              <MyCourse />
+              <SuspenseWrapper>
+                <MyCourse />
+              </SuspenseWrapper>
             </Layout>
           ),
         },
         {
           path: PATH.MY_COURSE_LEARNING,
           element: (
-            <Layout user={profile} title='Khóa học đã mua'>
-              <MycoursesLearning />
-            </Layout>
+            <SuspenseWrapper>
+              <Layout user={profile} title='Khóa học đã mua'>
+                <MycoursesLearning />
+              </Layout>
+            </SuspenseWrapper>
           ),
         },
         {
@@ -298,7 +304,9 @@ export default function useRouteElements() {
           path: PATH.COURSE_DETAIL,
           element: (
             <Layout user={profile} title='Trang chủ'>
-              <Courses />
+              <SuspenseWrapper>
+                <Courses />
+              </SuspenseWrapper>
             </Layout>
           ),
         },
