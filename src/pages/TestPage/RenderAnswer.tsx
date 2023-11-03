@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { stateAction } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
@@ -22,6 +23,7 @@ type Props = {
 }
 
 const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: string }) => {
+  const [correctAnswers, setCorrectAnswers] = useState<string[]>([])
   const optionsList = cols.map((c) => {
     return { value: c.id, label: c.answer }
   })
@@ -31,17 +33,32 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
   })
 
   const colCount = 24 % cols.length > 0 ? 24 % cols.length : cols.length
+  console.log(correctAnswers)
 
   return type === 'MATCHING' ? (
     <Row gutter={24}>
       <Col span={12}>
         {rowsList.map((row) => (
-          <FormControls control='checkBox' type='card' value={row.value} label={row.label} disabled />
+          <FormControls
+            control='checkBox'
+            type='card'
+            value={row.value}
+            label={row.label}
+            callBackId={(e) => stateAction(setCorrectAnswers, row.value, e, 'add')}
+            disabled={correctAnswers.includes(row.value)}
+          />
         ))}
       </Col>
       <Col span={12}>
         {optionsList.map((col) => (
-          <FormControls control='checkBox' type='card' value={col.value} label={col.label} disabled />
+          <FormControls
+            control='checkBox'
+            type='card'
+            value={col.value}
+            label={col.label}
+            callBackId={(e) => stateAction(setCorrectAnswers, col.value, e, 'add')}
+            disabled={correctAnswers.includes(col.value)}
+          />
         ))}
       </Col>
     </Row>
