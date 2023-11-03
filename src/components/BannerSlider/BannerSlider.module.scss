@@ -2,21 +2,21 @@
 .outerDiv {
   width: 100%;
   height: 100%;
-
   text-decoration: none;
   color: var(--gray);
   position: relative;
   display: flex;
   .img {
+    min-height: 110px;
     height: 100%;
     width: 100%;
     object-fit: cover;
-    max-height: 600px;
   }
 }
 
 .box {
   width: 35%;
+
   position: absolute;
   top: 15%;
   left: 5%;
