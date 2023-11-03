@@ -3,7 +3,7 @@ import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice } from '@/interface/question'
-import { Card, Divider, Input, Space } from 'antd'
+import { Card, Col, Divider, Input, Row, Space } from 'antd'
 import { useState } from 'react'
 
 type Props = {
@@ -21,13 +21,31 @@ type Props = {
   choices: Choice[]
 }
 
-const LikertScale = ({ rows, cols }: { rows: any[]; cols: any[] }) => {
+const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: string }) => {
   const optionsList = cols.map((c) => {
     return { value: c.id, label: c.answer }
   })
+
+  const rowsList = rows.map((c) => {
+    return { value: c.id, label: c.answer }
+  })
+
   const colCount = 24 % cols.length > 0 ? 24 % cols.length : cols.length
 
-  return (
+  return type === 'MATCHING' ? (
+    <Row gutter={24}>
+      <Col span={12}>
+        {rowsList.map((row) => (
+          <FormControls control='checkBox' type='card' value={row.value} label={row.label} disabled />
+        ))}
+      </Col>
+      <Col span={12}>
+        {optionsList.map((col) => (
+          <FormControls control='checkBox' type='card' value={col.value} label={col.label} disabled />
+        ))}
+      </Col>
+    </Row>
+  ) : (
     <Card>
       <Space direction='vertical' className='sp100'>
         {rows.map((r: any, id: number) => (
@@ -66,7 +84,9 @@ const RenderAnswer = (props: Props) => {
         direction='vertical'
       />
     )
-  if (type === 'LIKERT SCALE') return <LikertScale rows={choices[0]?.rows} cols={choices[0]?.cols} />
+
+  if (type === 'LIKERT SCALE' || type === 'MATCHING')
+    return <LikertScale rows={choices[0]?.rows} cols={choices[0]?.cols} type={type} />
 }
 
 export default RenderAnswer

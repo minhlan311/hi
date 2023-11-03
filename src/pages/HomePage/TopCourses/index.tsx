@@ -1,24 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import useResponsives from '@/hooks/useResponsives'
+import { CategoryState } from '@/interface/category'
+import { useQueryClient } from '@tanstack/react-query'
 import { Button, Card, Col, Row, Space, Tooltip } from 'antd'
 import { BsArrowRightCircle } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
 import ball from '../../../assets/icons/ball.svg'
 import bird from '../../../assets/icons/bird.svg'
+import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-import categoryApi from '@/apis/categories.api'
-import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-import courseBn from '../../../assets/images/backgrounds/course-banner.svg'
-import useResponsives from '@/hooks/useResponsives'
 
 export default function TopCourses() {
-  const { data: categoriesData } = useQuery({
-    queryKey: ['topCategories'],
-    queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
-      })
-    },
-  })
+  const queryClient = useQueryClient()
+  const categories: any = queryClient.getQueryData(['categoriesList'])
+
+  const courses = categories?.data?.docs?.find((item: CategoryState) => item.name === 'Khóa học')
+
   const { xl } = useResponsives()
 
   return (
@@ -31,9 +29,9 @@ export default function TopCourses() {
           <h2 className='title'>Các khóa học tiêu biểu</h2>
         </div>
         <Row gutter={[24, 24]} justify='space-between'>
-          {categoriesData?.data?.docs?.map((item, id) => (
+          {courses?.children?.map((item: CategoryState, id: number) => (
             <Col span={24} md={12} xl={8} key={id}>
-              <Link to={`/${item?.slug}`}>
+              <Link to={`${courses.slug}/${item?.slug}`}>
                 <Card
                   size='small'
                   cover={

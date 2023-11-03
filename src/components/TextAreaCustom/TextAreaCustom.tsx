@@ -11,6 +11,7 @@ type Props = {
   config?: any
   onBlur?: () => void
   onReady?: (e: any) => void
+  onChange?: (e: any) => void
   name: string
   data?: any | null
   label?: string
@@ -18,13 +19,14 @@ type Props = {
 }
 
 const TextAreaCustom = (props: Props) => {
-  const { ref, onBlur, onReady, config, name, data, label, required = false } = props
+  const { ref, onBlur, onReady, onChange, config, name, data, label, required = false } = props
 
   const [editorContent, setEditorContent] = useState<string>('<p></p>')
 
   const handleEditorChange = (_: any, editor: any) => {
     const newContent = editor.getData()
     setEditorContent(newContent)
+    onChange && onChange(newContent)
   }
 
   useEffect(() => {
