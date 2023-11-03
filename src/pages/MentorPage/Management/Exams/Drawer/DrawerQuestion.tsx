@@ -1,18 +1,18 @@
 import questionApi from '@/apis/question.api'
+import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import { debounce } from '@/helpers/common'
+import useResponsives from '@/hooks/useResponsives'
 import { QuestionState } from '@/interface/question'
 import { Choice } from '@/interface/tests'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Drawer, Form, Input, Row, Select, Space, Switch } from 'antd'
 import { useEffect, useState } from 'react'
-import TableAddonQues from '../Components/TableAddonQues'
 import { IoClose } from 'react-icons/io5'
-import { stateAction } from '@/common'
-import { debounce } from '@/helpers/common'
-import useResponsives from '@/hooks/useResponsives'
-import { v4 } from 'uuid'
+import TableAddonQues from '../Components/TableAddonQues'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -31,19 +31,20 @@ const LinkertScale = ({
   callBackChoices: React.Dispatch<React.SetStateAction<any>>
   data: Choice[]
 }) => {
+  const id = crypto.randomUUID()
   const initData = {
     answer: '',
     isCorrect: false,
     isChosen: false,
   }
-  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id: v4() }])
-  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id: v4() }])
+  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id }])
+  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id }])
 
   const handleAdd = (type: 'row' | 'col') => {
     if (type === 'row') {
-      setAddRow([...addRow, { ...initData, id: v4() }])
+      setAddRow([...addRow, { ...initData, id }])
     } else {
-      setAddCol([...addCol, { ...initData, id: v4() }])
+      setAddCol([...addCol, { ...initData, id }])
     }
   }
 
@@ -67,7 +68,7 @@ const LinkertScale = ({
   }
 
   useEffect(() => {
-    callBackChoices([{ rows: addRow, cols: addCol, id: v4() }])
+    callBackChoices([{ rows: addRow, cols: addCol, id }])
   }, [addRow, addCol])
 
   useEffect(() => {
@@ -200,8 +201,9 @@ const DrawerQuestion = (props: Props) => {
   }, [isLoading])
 
   const onFinish = (values: any) => {
+    const id = crypto.randomUUID()
     const choicesData = choices.map((choose) => {
-      return { id: v4().hex, ...choose }
+      return { id, ...choose }
     })
 
     const correctAnswers = choicesData.filter((choice) => choice.isCorrect).map((choice) => choice.id)
@@ -431,8 +433,7 @@ const DrawerQuestion = (props: Props) => {
             typeQues === 'TRUE FALSE' ||
             typeQues === 'SORT' ||
             typeQues === 'FILL BLANK' ||
-            typeQues === 'DRAG DROP' ||
-            typeQues === 'MATCHING') && (
+            typeQues === 'DRAG DROP') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!open} />
           )) ||
             (typeQues === 'WRITING' && (
@@ -443,7 +444,7 @@ const DrawerQuestion = (props: Props) => {
                 data={!open ? undefined : data ? data : undefined}
               />
             )) ||
-            (typeQues === 'LIKERT SCALE' && (
+            ((typeQues === 'LIKERT SCALE' || typeQues === 'MATCHING') && (
               <LinkertScale callBackChoices={setChoices} data={data?.choices as unknown as Choice[]} />
             )) ||
             (typeQues === 'NUMERICAL' && (

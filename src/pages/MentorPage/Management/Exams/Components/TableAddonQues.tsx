@@ -10,7 +10,6 @@ import { Form, FormInstance, InputRef, Popconfirm, Space, Table, message } from 
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
 import { MdPlaylistAdd } from 'react-icons/md'
-import { v4 } from 'uuid'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -181,7 +180,8 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
 
 const TableAddonQues = (props: Props) => {
   const { selectionType, callBackData, data, isClose } = props
-  const id = v4()
+  const id = crypto.randomUUID()
+
   const [dataSource, setDataSource] = useState<Choice[]>([
     {
       id,
