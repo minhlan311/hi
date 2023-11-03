@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import css from './style.module.scss'
 import { Space, Spin } from 'antd'
 import Logo from '../Logo/Logo'
