@@ -142,18 +142,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   if (editable) {
     childNode = editing ? (
-      // <Form.Item
-      //   style={{ margin: 0 }}
-      //   name={dataIndex}
-      //   rules={[
-      //     {
-      //       required: true,
-      //       message: 'Vui lòng nhập đáp án',
-      //     },
-      //   ]}
-      // >
-      //   <Input.TextArea ref={inputRef} onPressEnter={save} onBlur={save} placeholder='Nhập đáp án' />
-      // </Form.Item>
       <TextAreaCustom
         ref={inputRef}
         onReady={(editor: any) => {

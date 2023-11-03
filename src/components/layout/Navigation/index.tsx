@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import AffixCustom from '@/components/AffixCustom'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import cartApi from '@/apis/cart.api'
@@ -19,10 +18,12 @@ import { Badge, Button, Col, Row, Space } from 'antd'
 import { BiSolidDashboard } from 'react-icons/bi'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { setProfileFromLS } from '@/utils/auth'
 import { useContext, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { UserState } from '@/interface/user'
 import './styles.scss'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
   user?: UserState
@@ -31,10 +32,13 @@ type Props = {
 export default function Navigation({ user }: Props) {
   const navigate = useNavigate()
   const { sm, md, lg, xl, xxl } = useResponsives()
-  useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
-  const { profile } = useContext(AppContext)
+  const users = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
 
   const { configs } = useContext(AppContext)
+
+  useEffect(() => {
+    if (user?._id && users) setProfileFromLS(users?.data?.data as unknown as UserState)
+  }, [user, users])
 
   const changeFavicon = (faviconUrl: string) => {
     let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement | null
@@ -63,10 +67,10 @@ export default function Navigation({ user }: Props) {
     queryFn: () =>
       cartApi.getCartList({
         filterQuery: {
-          userId: profile?._id,
+          userId: user?._id,
         },
       }),
-    enabled: profile?._id ? true : false,
+    enabled: user?._id ? true : false,
   })
 
   const [open, setOpen] = useState(false)

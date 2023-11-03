@@ -20,10 +20,24 @@ type Props = {
   className?: string
   gutter?: Gutter | [Gutter, Gutter]
   md?: number
+  label?: string
+  value?: string
 }
 
 const FormControls = (props: Props) => {
-  const { control, type, options, checkAll = false, defaultChecked = false, className, gutter, md } = props
+  const {
+    control,
+    type,
+    options,
+    checkAll = false,
+    defaultChecked = false,
+    className,
+    gutter,
+    md,
+    label,
+    value,
+    disabled,
+  } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
   const [values, setValues] = useState<any>(control === 'radio' ? '' : [])
 
@@ -60,7 +74,7 @@ const FormControls = (props: Props) => {
     )
   }
 
-  if (options && options?.length > 0)
+  if (options && options?.length > 0) {
     if (type === 'card') {
       return (
         <div className={'checkCustom'}>
@@ -68,7 +82,7 @@ const FormControls = (props: Props) => {
             <Checkbox.Group className={css.answerMain}>
               <Row gutter={gutter}>
                 {options.map((ots) => (
-                  <Col span={24} md={12 || md} key={ots.value as string}>
+                  <Col span={24} md={md || 12} key={ots.value as string}>
                     <Checkbox
                       onChange={(e) => stateAction(setValues, ots.value as string, e.target.value, 'add')}
                       className={css.checkbox}
@@ -113,36 +127,46 @@ const FormControls = (props: Props) => {
           )}
         </div>
       )
-    } else
-      return control === 'checkBox' ? (
-        <Checkbox.Group className={css.answerMain}>
-          <Row gutter={gutter}>
-            {options.map((ots) => (
-              <Col span={24} md={12} key={ots.value as string}>
-                <Checkbox
-                  onChange={(e) => setValues(e.target.value)}
-                  className={css.checkbox}
-                  value={ots.value as string}
+    }
+  } else {
+    if (type === 'card') {
+      return (
+        <div className={'checkCustom'}>
+          {control === 'checkBox' ? (
+            <div className={css.answerMain}>
+              <Checkbox className={css.checkbox} value={value} disabled={disabled}>
+                <Card
+                  className={`${css.checkboxCard} ${
+                    values.find((val: string) => val === value) ? css.checked : undefined
+                  } ${className}`}
+                  onClick={() => setIsCheck(!isCheck)}
+                  size='small'
                 >
-                  <div dangerouslySetInnerHTML={{ __html: ots.label as string }}></div>
-                </Checkbox>
-              </Col>
-            ))}
-          </Row>
-        </Checkbox.Group>
-      ) : (
-        <Radio.Group className={css.answerMain}>
-          <Row gutter={gutter}>
-            {options.map((ots) => (
-              <Col span={24} md={12} key={ots.value as string}>
-                <Radio onChange={(e) => setValues(e.target.value)} className={css.checkbox} value={ots.value as string}>
-                  <div dangerouslySetInnerHTML={{ __html: ots.label as string }}></div>
+                  <div dangerouslySetInnerHTML={{ __html: label as string }}></div>
+                </Card>
+              </Checkbox>
+            </div>
+          ) : (
+            <div className={css.answerMain}>
+              <div className={css.answerMain}>
+                <Radio className={css.checkbox} value={value as string} disabled={disabled}>
+                  <Card
+                    className={`${css.checkboxCard} ${
+                      values.find((val: string) => val === value) ? css.checked : undefined
+                    } ${className}`}
+                    onClick={() => setIsCheck(!isCheck)}
+                    size='small'
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: label as string }}></div>
+                  </Card>
                 </Radio>
-              </Col>
-            ))}
-          </Row>
-        </Radio.Group>
+              </div>
+            </div>
+          )}
+        </div>
       )
+    }
+  }
 }
 
 export default FormControls
