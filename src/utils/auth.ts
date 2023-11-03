@@ -1,3 +1,5 @@
+import { Configs } from '@/types/configs.type'
+
 export const LocalStorageEventTarget = new EventTarget()
 
 export const setAccessTokenToLS = (access_token: string) => {
@@ -23,6 +25,15 @@ export const getRefreshTokenFromLS = () => localStorage.getItem('refresh_token')
 export const getProfileFromLS = () => {
   const result = localStorage.getItem('profile')
   return result ? JSON.parse(result) : null
+}
+
+export const getConfigFromLS = () => {
+  const result = localStorage.getItem('configs')
+  return result ? JSON.parse(result) : null
+}
+
+export const setConfigFromLS = (configs: Configs) => {
+  localStorage.setItem('configs', JSON.stringify(configs))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
