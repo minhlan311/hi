@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import './styles.scss'
 import uploadPlugin from './upload.plugin'
 type Props = {
-  ref?: React.RefObject<HTMLDivElement> | React.RefObject<InputRef>
+  ref?: React.RefObject<HTMLDivElement> | React.RefObject<InputRef> | any
   config?: any
   onBlur?: () => void
   onReady?: (e: any) => void
@@ -65,7 +65,7 @@ const TextAreaCustom = (props: Props) => {
       <CKEditor
         ref={ref}
         onBlur={onBlur}
-        name={name}
+        // name={name}
         editor={ClassicEditor}
         data={editorContent}
         config={{
