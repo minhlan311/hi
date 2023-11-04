@@ -2,18 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import topicApi from '@/apis/topic.api'
 import openNotification from '@/components/Notification'
-import { debounce } from '@/helpers/common'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUpdateTopic }: any) {
   const [form] = Form.useForm()
-  const [content, setContent] = useState('')
   const [refetch, setRefetch] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [content, setContent] = useState('')
 
   const mutation = useMutation({
     mutationFn: (body: any) => topicApi.updateTopic(body),
@@ -23,6 +21,7 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
         message: 'Thông báo',
         description: 'Sửa chuyên đề thành công',
       })
+      form.resetFields()
       setRefetch(refetch + 1)
       onClose(false)
     },
@@ -37,32 +36,23 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
       form.setFieldValue('name', dataUpdateTopic?.name)
       form.setFieldValue('parentId', dataUpdateTopic?.parentId)
       form.setFieldValue('id', dataUpdateTopic?.id)
+      form.setFieldValue('descriptions', dataUpdateTopic?.id)
       setContent(dataUpdateTopic?.descriptions)
+      editorRef.current = dataUpdateTopic?.descriptions
     }
     return
   }, [dataUpdateTopic])
 
-  useEffect(() => {
-    if (content) form.setFieldValue('descriptions', content)
-    return
-  }, [content])
+  const editorRef = useRef()
 
-  function handleEditorChange(_event: any, editor: any) {
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData()
-    setContent(data)
+    // Cập nhật ref thay vì state để tránh re-render
+    editorRef.current = data
   }
 
-  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
-    handleEditorChange(_event, editor)
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
-  }, 500)
-
   const onFinish = (values: any) => {
-    mutation.mutate(values)
-    form.resetFields()
-    setContent('')
+    mutation.mutate({ ...values, descriptions: editorRef.current })
   }
 
   const onFinishFailed = (_values: any) => {}
@@ -74,20 +64,13 @@ export default function DrawerUpdateTopic({ onOpen, onClose, reFetchData, dataUp
           <Input placeholder='Nhập tên chuyên đề' allowClear />
         </Form.Item>
         <Form.Item label={'Mô tả'} name='descriptions' rules={[{ required: true, message: 'Hãy nhập mô tả' }]}>
-          <CKEditor
-            editor={ClassicEditor}
-            data={content}
-            onChange={(_event: any, editor: any) => {
-              setIsSubmitting(true)
-              debouncedHandleEditorChange(_event, editor)
-            }}
-          />
+          <CKEditor editor={ClassicEditor} data={content || editorRef.current} onChange={handleEditorChange} />
         </Form.Item>
         <Form.Item hidden name='parentId' />
         <Form.Item hidden name='id' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button type='primary' htmlType='submit' className='btn-sn' loading={isSubmitting}>
+          <Button type='primary' htmlType='submit' className='btn-sn'>
             Sửa chuyên đề
           </Button>
         </Form.Item>

@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import openNotification from '@/components/Notification'
-import { debounce } from '@/helpers/common'
 import { TopicList } from '@/interface/topic'
 import { Topic } from '@/types/course.type'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { QueryClient, useMutation } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input } from 'antd'
-import { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction, useRef } from 'react'
 
 type Props = {
   onOpen?: boolean
@@ -21,10 +20,8 @@ type Props = {
 
 export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, reFetchData }: Props) {
   const [form] = Form.useForm()
-  const [content, setContent] = useState('')
   const [refetch, setRefetch] = useState('')
   const [dataDrawer, setDataDrawer] = useState<TopicList | []>([])
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryClient = new QueryClient()
   useEffect(() => {
@@ -47,31 +44,23 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
       })
       setRefetch(refetch + 1)
       form.resetFields()
-      setContent('')
+      editorRef.current = undefined
       queryClient.invalidateQueries({ queryKey: ['topicsAll'] })
     },
   })
 
-  useEffect(() => {
-    form.setFieldValue('descriptions', content)
-  }, [content])
-
   form.setFieldValue('parentId', userId)
 
-  function handleEditorChange(_event: any, editor: any) {
+  const editorRef = useRef()
+
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData()
-    setContent(data)
+    // Cập nhật ref thay vì state để tránh re-render
+    editorRef.current = data
   }
 
-  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
-    handleEditorChange(_event, editor)
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
-  }, 500)
-
   const onFinish = (values: any) => {
-    mutation.mutate(values)
+    mutation.mutate({ ...values, descriptions: editorRef.current })
     setDataDrawer(values)
     onClose(false)
   }
@@ -87,19 +76,12 @@ export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, 
           <Input placeholder='Nhập tên chuyên đề' allowClear />
         </Form.Item>
         <Form.Item label={'Mô tả'} name='descriptions' rules={[{ required: true, message: 'Hãy nhập mô tả' }]}>
-          <CKEditor
-            editor={ClassicEditor}
-            data={content}
-            onChange={(_event: any, editor: any) => {
-              setIsSubmitting(true)
-              debouncedHandleEditorChange(_event, editor)
-            }}
-          />
+          <CKEditor editor={ClassicEditor} data={editorRef.current} onChange={handleEditorChange} />
         </Form.Item>
         <Form.Item hidden name='parentId' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button loading={isSubmitting} type='primary' htmlType='submit' className='btn-sn'>
+          <Button type='primary' htmlType='submit' className='btn-sn'>
             Thêm chuyên đề
           </Button>
         </Form.Item>
