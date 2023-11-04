@@ -47,13 +47,12 @@ export default function CourseListMentor({ data }: any) {
   return (
     <>
       <div className='scroll-x-div'>
-        <Row style={{ marginTop: '50px' }} gutter={[20, 20]}>
+        <Row style={{ marginTop: '50px', width: '100%' }} gutter={[20, 20]}>
           {data
             ? data?.docs?.map((item: any) => (
                 <>
-                  <Col>
+                  <Col xs={24} md={12} lg={6}>
                     <Card
-                      style={{ width: 300 }}
                       cover={
                         <ImageCustom
                           onClick={() => {

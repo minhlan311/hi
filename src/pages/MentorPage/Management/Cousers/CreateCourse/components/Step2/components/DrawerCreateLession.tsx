@@ -5,7 +5,6 @@ import examApi from '@/apis/exam.api'
 import lessionApi from '@/apis/lession.api'
 import { TypeLessonEnum } from '@/constants'
 import { ENDPOINT } from '@/constants/endpoint'
-import { debounce } from '@/helpers/common'
 import { LessionForm } from '@/types/lession.type'
 import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -14,7 +13,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
   onOpen: boolean
@@ -26,8 +25,6 @@ type Props = {
 
 export default function DrawerCreateLession({ onOpen, onClose, userId, dataCollapLession, idLessCheck }: Props) {
   const [form] = Form.useForm()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [type, setType] = useState<string>('')
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
@@ -83,7 +80,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
       mutationDocument.mutate({
         isDownloadable: true,
         name: ` Tài liệu `,
-        description: content,
+        description: editorRef.current,
         type: 'CURRICULUM',
         files: newArray,
         courseId: userId,
@@ -101,31 +98,22 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
     },
   })
 
-  useEffect(() => {
-    form.setFieldValue('descriptions', content)
-  }, [content])
-
   form.setFieldValue('parentId', idLessCheck)
   form.setFieldValue('id', idLessCheck)
 
-  function handleEditorChange(_event: any, editor: any) {
-    const data = editor.getData()
-    setContent(data)
-  }
+  const editorRef = useRef()
 
-  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
-    handleEditorChange(_event, editor)
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
-  }, 500)
+  const handleEditorChange = (_event: any, editor: any) => {
+    const data = editor.getData()
+    // Cập nhật ref thay vì state để tránh re-render
+    editorRef.current = data
+  }
 
   const onFinish = (values: any) => {
     delete values.document
-    mutation.mutate(values)
+    mutation.mutate({ ...values, descriptions: editorRef.current })
     setShowAll(false)
     form.resetFields()
-    setContent('')
     onClose(false)
   }
 
@@ -187,14 +175,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
                 name='descriptions'
                 rules={[{ required: true, message: 'Hãy nhập mô tả' }]}
               >
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={content}
-                  onChange={(_event: any, editor: any) => {
-                    setIsSubmitting(true)
-                    debouncedHandleEditorChange(_event, editor)
-                  }}
-                />
+                <CKEditor editor={ClassicEditor} data={editorRef.current} onChange={handleEditorChange} />
               </Form.Item>
             )}
 
@@ -222,7 +203,7 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
         <Form.Item hidden name='lessonid' />
         <Form.Item>
           <Button onClick={() => onClose(false)}>Hủy bỏ</Button>
-          <Button type='primary' loading={isSubmitting} htmlType='submit' className='btn-sn'>
+          <Button type='primary' htmlType='submit' className='btn-sn'>
             Thêm Bài học
           </Button>
         </Form.Item>

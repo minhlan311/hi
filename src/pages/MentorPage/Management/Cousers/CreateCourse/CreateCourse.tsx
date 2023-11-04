@@ -2,7 +2,6 @@
 import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
 import { AppContext } from '@/contexts/app.context'
-import { debounce } from '@/helpers/common'
 import { CourseForm } from '@/types/course.type'
 import { PlusOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -12,7 +11,7 @@ import { Button, Col, Form, Input, InputNumber, Row, Select, TreeSelect, Upload,
 import ImgCrop from 'antd-img-crop'
 import { RcFile } from 'antd/es/upload'
 import { UploadFile } from 'antd/lib'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
 import { useParams } from 'react-router-dom'
@@ -20,36 +19,36 @@ import { useParams } from 'react-router-dom'
 export default function CreateCourse({ next, dataIdCouser }: any) {
   const { id } = useParams()
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
-  const [content, setContent] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
   const myDataUser = queryClient.getQueryData<any>(['userDetail'])
   const dataMedia = fileList?.map((item) => item?.response?.url)
 
+  console.log('loggggggggggg')
+
   useEffect(() => {
     form.setFieldValue('coverMedia', dataMedia[0])
 
-    form.setFieldValue('descriptions', content)
-
     form.setFieldValue('mentorId', myDataUser?.data?._id)
-  }, [fileList, dataMedia, content, myDataUser])
+  }, [fileList, dataMedia, myDataUser])
 
-  function handleEditorChange(_event: any, editor: any) {
+  const editorRef = useRef('')
+
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData()
-
-    setContent(data)
+    // Cập nhật ref thay vì state để tránh re-render
+    editorRef.current = data
   }
 
   const onFinish = (values: any) => {
     next(1)
 
     if (id) {
-      mutationUpdate.mutate({ ...values, mentorId: profile._id, id: id })
+      mutationUpdate.mutate({ ...values, mentorId: profile._id, id: id, descriptions: editorRef.current })
     } else {
-      mutation.mutate({ ...values, mentorId: profile._id })
+      mutation.mutate({ ...values, mentorId: profile._id, descriptions: editorRef.current })
     }
   }
 
@@ -77,7 +76,9 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
       form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
       form.setFieldValue('coverVideo', courseDetail?.data?.coverVideo)
-      setContent(courseDetail?.data?.descriptions as string)
+
+      editorRef.current = courseDetail?.data?.descriptions
+
       setFileList([
         {
           uid: 'áldkjalkdjalskj',
@@ -87,7 +88,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       ])
     } else {
       form.resetFields()
-      setContent('')
+      // setContent('')
     }
   }, [courseDetail, id])
 
@@ -164,13 +165,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     },
   }
 
-  const debouncedHandleEditorChange = debounce((_event: any, editor: any) => {
-    handleEditorChange(_event, editor)
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
-  }, 500)
-
   return (
     <div>
       <Form form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
@@ -178,7 +172,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
           <Row>
             <Col span={22}></Col>
             <Col xs={24} xl={2}>
-              <Button htmlType='submit' loading={isSubmitting} type='primary'>
+              <Button htmlType='submit' type='primary'>
                 Tiếp theo
               </Button>
             </Col>
@@ -281,14 +275,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
         <Row>
           <Col span={24}>
             <Form.Item label={'Mô tả khóa học'} name='descriptions'>
-              <CKEditor
-                editor={ClassicEditor}
-                data={content}
-                onChange={(_event: any, editor: any) => {
-                  setIsSubmitting(true)
-                  debouncedHandleEditorChange(_event, editor)
-                }}
-              />
+              <CKEditor editor={ClassicEditor} data={editorRef.current} onChange={handleEditorChange} />
             </Form.Item>
           </Col>
         </Row>
