@@ -15,11 +15,12 @@ import TagCustom from '@/components/TagCustom/TagCustom'
 import testBg from '@/assets/images/examimg/online-test.png'
 import useResponsives from '@/hooks/useResponsives'
 import { AiOutlineLeft, AiOutlineQuestionCircle, AiOutlineRight } from 'react-icons/ai'
-import { Card, Col, Descriptions, Row, Space, Steps } from 'antd'
+import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
 import { Choice, QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { TbArrowBack } from 'react-icons/tb'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface QuestionRender {
@@ -73,7 +74,7 @@ const TestPage = () => {
   // })
 
   const question = questions?.data?.data?.docs
-
+  const [current, setCurrent] = useState(0)
   useEffect(() => {
     if (testData?.data) {
       if (!md)
@@ -83,31 +84,60 @@ const TestPage = () => {
         })
       else
         window.scrollTo({
-          top: 65,
+          top: 80,
           behavior: 'smooth',
         })
     }
-  }, [testData, event])
+  }, [testData, event, currentQuestion, current])
 
   const testTime = location.state.testTime + location.state.addTime
 
   const oldTime = event && localStorage.getItem(event._id as string)
-  const [current, setCurrent] = useState(0)
+
+  const [reset, setReset] = useState<boolean>(false)
+  const [form] = Form.useForm()
+  // useEffect(() => {
+  //   setDataUpload({
+  //     _id: data && data[0]?._id,
+  //     type: 'QUIZZ',
+  //     questions: questions,
+  //   })
+  // }, [questions])
+
+  // const mutate = useMutation({
+  //   mutationFn: (body: any) => examApi.examSubmit(body),
+  //   onSuccess: (data) => {
+  //     // queryClient.invalidateQueries({ queryKey: ['topicLearning'] })
+  //     setDataExam(data?.data)
+  //   },
+  // })
+
+  const onFinish = (val: any) => {
+    console.log(val)
+  }
 
   const QuestionItem = ({ type, questionData, questionLength, questionKey }: QuestionRender) => {
     if (questions.isLoading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
     if (questionData)
       return (
         <Space direction='vertical' className={'sp100'}>
-          <div className={css.titleQues}>
-            <h2>
-              Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
-            </h2>
-            <Space>
-              <TagCustom content={type}></TagCustom>
-              <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
-            </Space>
-          </div>
+          <Row justify='space-between'>
+            <Col span={24} sm={5} md={5}>
+              <h2>
+                Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
+              </h2>
+            </Col>
+            <Col span={24} sm={8} md={6}>
+              <Space>
+                <TagCustom content={type}></TagCustom>
+                <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
+                <ButtonCustom size='small' onClick={() => setReset(true)} icon={<TbArrowBack />}>
+                  Làm lại
+                </ButtonCustom>
+              </Space>
+            </Col>
+          </Row>
+
           <p
             className={css.question}
             dangerouslySetInnerHTML={{ __html: questionData.question as unknown as string }}
@@ -119,22 +149,26 @@ const TestPage = () => {
             </Space>
           )}
 
-          <RenderAnswer
-            type={
-              questionData.type as unknown as
-                | 'SINGLE CHOICE'
-                | 'MULTIPLE CHOICE'
-                | 'TRUE FALSE'
-                | 'SORT'
-                | 'DRAG DROP'
-                | 'LIKERT SCALE'
-                | 'FILL BLANK'
-                | 'MATCHING'
-                | 'NUMERICAL'
-                | 'WRITING'
-            }
-            choices={questionData.choices as unknown as Choice[]}
-          />
+          <Form form={form} onFinish={onFinish}>
+            <RenderAnswer
+              type={
+                questionData.type as unknown as
+                  | 'SINGLE CHOICE'
+                  | 'MULTIPLE CHOICE'
+                  | 'TRUE FALSE'
+                  | 'SORT'
+                  | 'DRAG DROP'
+                  | 'LIKERT SCALE'
+                  | 'FILL BLANK'
+                  | 'MATCHING'
+                  | 'NUMERICAL'
+                  | 'WRITING'
+              }
+              choices={questionData.choices as unknown as Choice[]}
+              reset={reset}
+              setReset={setReset}
+            />
+          </Form>
         </Space>
       )
     else
@@ -226,6 +260,7 @@ const TestPage = () => {
   const handleNext = () => {
     if (check) {
       setCurrentQuestion((prev) => prev + 1)
+      form.submit()
     } else if (current === testSkill.length - 1) {
       handleFinish()
 
