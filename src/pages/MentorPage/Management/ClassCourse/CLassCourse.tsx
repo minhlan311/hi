@@ -67,6 +67,7 @@ export default function CLassCourse() {
         options: {
           limit: 10,
           page: page,
+          sort: { createdAt: -1 },
         },
       }),
     enabled: profile?._id ? true : false,
