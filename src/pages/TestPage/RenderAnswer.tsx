@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { stateAction } from '@/common'
+import { shuffleArray, stateAction } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
@@ -33,7 +33,6 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
   })
 
   const colCount = 24 % cols.length > 0 ? 24 % cols.length : cols.length
-  console.log(correctAnswers)
 
   return type === 'MATCHING' ? (
     <Row gutter={24}>
@@ -93,7 +92,7 @@ const RenderAnswer = (props: Props) => {
   if (type === 'SORT')
     return (
       <DragAndDrop
-        data={choiceList}
+        data={shuffleArray(choiceList)}
         setData={setChoiceList}
         renderType='card'
         dndType='sort'
@@ -103,7 +102,7 @@ const RenderAnswer = (props: Props) => {
     )
 
   if (type === 'LIKERT SCALE' || type === 'MATCHING')
-    return <LikertScale rows={choices[0]?.rows} cols={choices[0]?.cols} type={type} />
+    return <LikertScale rows={shuffleArray(choices[0]?.rows)} cols={shuffleArray(choices[0]?.cols)} type={type} />
 }
 
 export default RenderAnswer
