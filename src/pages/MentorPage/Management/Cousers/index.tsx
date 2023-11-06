@@ -32,7 +32,7 @@ const MentorCourses = () => {
     <div>
       <FilterAction
         keyFilter='course'
-        limit={10}
+        limit={12}
         filterQuery={{ mentorId: profile?._id }}
         type='course'
         setLoading={setLoading}
