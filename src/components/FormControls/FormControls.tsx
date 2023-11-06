@@ -22,6 +22,7 @@ type Props = {
   md?: number
   label?: string
   value?: string
+  callBackId?: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const FormControls = (props: Props) => {
@@ -37,6 +38,7 @@ const FormControls = (props: Props) => {
     label,
     value,
     disabled,
+    callBackId,
   } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
   const [values, setValues] = useState<any>(control === 'radio' ? '' : [])
@@ -134,11 +136,14 @@ const FormControls = (props: Props) => {
         <div className={'checkCustom'}>
           {control === 'checkBox' ? (
             <div className={css.answerMain}>
-              <Checkbox className={css.checkbox} value={value} disabled={disabled}>
+              <Checkbox
+                className={css.checkbox}
+                value={value}
+                disabled={disabled}
+                onChange={(e) => callBackId && callBackId(e.target.value)}
+              >
                 <Card
-                  className={`${css.checkboxCard} ${
-                    values.find((val: string) => val === value) ? css.checked : undefined
-                  } ${className}`}
+                  className={`${css.checkboxCard} ${disabled ? css.disabled : undefined} ${className}`}
                   onClick={() => setIsCheck(!isCheck)}
                   size='small'
                 >
@@ -149,11 +154,14 @@ const FormControls = (props: Props) => {
           ) : (
             <div className={css.answerMain}>
               <div className={css.answerMain}>
-                <Radio className={css.checkbox} value={value as string} disabled={disabled}>
+                <Radio
+                  className={css.checkbox}
+                  value={value as string}
+                  disabled={disabled}
+                  onChange={(e) => callBackId && callBackId(e.target.value)}
+                >
                   <Card
-                    className={`${css.checkboxCard} ${
-                      values.find((val: string) => val === value) ? css.checked : undefined
-                    } ${className}`}
+                    className={`${css.checkboxCard} ${disabled ? css.disabled : undefined} ${className}`}
                     onClick={() => setIsCheck(!isCheck)}
                     size='small'
                   >
