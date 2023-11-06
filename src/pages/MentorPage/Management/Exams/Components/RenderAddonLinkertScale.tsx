@@ -35,14 +35,14 @@ const RenderAddonLinkertScale = (props: Props) => {
     isCorrect: false,
     isChosen: false,
   }
-  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id }])
-  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id }])
+  const [addRow, setAddRow] = useState<Choice[]>([{ ...initData, id: crypto.randomUUID() }])
+  const [addCol, setAddCol] = useState<Choice[]>([{ ...initData, id: crypto.randomUUID() }])
 
   const handleAdd = (type: 'row' | 'col') => {
     if (type === 'row') {
-      setAddRow([...addRow, { ...initData, id }])
+      setAddRow([...addRow, { ...initData, id: crypto.randomUUID() }])
     } else {
-      setAddCol([...addCol, { ...initData, id }])
+      setAddCol([...addCol, { ...initData, id: crypto.randomUUID() }])
     }
   }
 
@@ -145,6 +145,7 @@ const RenderAddonLinkertScale = (props: Props) => {
         size='small'
         onClick={() => {
           handleAdd('row')
+
           handleAdd('col')
         }}
         className='sp100'
