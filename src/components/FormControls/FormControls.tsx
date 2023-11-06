@@ -22,7 +22,7 @@ type Props = {
   md?: number
   label?: string
   value?: string
-  callBackId?: React.Dispatch<React.SetStateAction<string[]>>
+  callbackValue?: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const FormControls = (props: Props) => {
@@ -38,7 +38,7 @@ const FormControls = (props: Props) => {
     label,
     value,
     disabled,
-    callBackId,
+    callbackValue,
   } = props
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
   const [values, setValues] = useState<any>(control === 'radio' ? '' : [])
@@ -140,7 +140,7 @@ const FormControls = (props: Props) => {
                 className={css.checkbox}
                 value={value}
                 disabled={disabled}
-                onChange={(e) => callBackId && callBackId(e.target.value)}
+                onChange={(e) => callbackValue && callbackValue(e.target.value)}
               >
                 <Card
                   className={`${css.checkboxCard} ${disabled ? css.disabled : undefined} ${className}`}
@@ -158,7 +158,7 @@ const FormControls = (props: Props) => {
                   className={css.checkbox}
                   value={value as string}
                   disabled={disabled}
-                  onChange={(e) => callBackId && callBackId(e.target.value)}
+                  onChange={(e) => callbackValue && callbackValue(e.target.value)}
                 >
                   <Card
                     className={`${css.checkboxCard} ${disabled ? css.disabled : undefined} ${className}`}
