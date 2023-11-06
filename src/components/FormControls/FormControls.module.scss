@@ -18,7 +18,11 @@
   border: 1px solid var(--green);
   color: var(--green);
 }
-
+.disabled {
+  background-color: var(--light-gray);
+  border: 1px solid var(--light-gray-3);
+  color: var(--light-gray-3);
+}
 .answerMain {
   width: 100%;
 }
