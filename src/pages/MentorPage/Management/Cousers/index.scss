@@ -1,13 +1,13 @@
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   margin-top: 50px;
 }
 
 @media screen and (max-width: 800px) {
   .pagination {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     margin-top: 20px;
   }
 }

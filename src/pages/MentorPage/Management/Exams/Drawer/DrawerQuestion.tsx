@@ -10,6 +10,7 @@ import { QuestionState } from '@/interface/question'
 import { useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import RenderAddonLinkertScale from '../Components/RenderAddonLinkertScale'
+import CreateQuestion from '@/pages/MentorPage/Management/Exams/Components/CreateDragDrop'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -27,6 +28,7 @@ const DrawerQuestion = (props: Props) => {
   const [form] = Form.useForm()
   const [choices, setChoices] = useState<Choice[]>([])
   const [corrects, setCorrects] = useState<string[]>([])
+  const [questionText, setQuestionText] = useState<string>('')
 
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState | null>(null)
@@ -56,6 +58,8 @@ const DrawerQuestion = (props: Props) => {
     setQuestionData(null)
     setTypeQues(null)
   }
+
+  console.log(choices, 'choiceschoices')
 
   const { isLoading, status, mutate, error, isSuccess } = useMutation({
     mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
@@ -97,9 +101,10 @@ const DrawerQuestion = (props: Props) => {
       choices: choicesData,
       correctAnswers: corrects.length > 0 ? corrects : correctAnswers,
       categoryId: categoryId,
+      questionText: questionText ? questionText : undefined,
     }
     mutate(payload)
-    // console.log(payload)
+    console.log(values, 'values')
 
     setTimeout(() => {
       onCloseDrawer()
@@ -149,14 +154,17 @@ const DrawerQuestion = (props: Props) => {
           form={form}
           initialValues={{ difficulty: 'EASY', skill: 'READING' }}
         >
-          <h3>Câu hỏi</h3>
-
-          <TextAreaCustom
-            name='question'
-            label='Nội dung câu hỏi'
-            required
-            data={!open ? undefined : data ? data : undefined}
-          />
+          {typeQues !== 'DRAG DROP' && (
+            <>
+              <h3>Câu hỏi</h3>
+              <TextAreaCustom
+                name='question'
+                label='Nội dung câu hỏi'
+                required
+                data={!open ? undefined : data ? data : undefined}
+              />
+            </>
+          )}
 
           <Row justify='space-between' gutter={12}>
             <Col span={24} md={6}>
@@ -309,12 +317,13 @@ const DrawerQuestion = (props: Props) => {
             )}
           </Row>
           <h3>Câu trả lời</h3>
+
+          {typeQues === 'DRAG DROP' && <CreateQuestion questionTextForm={setQuestionText} choose={setChoices} />}
           {((typeQues === 'SINGLE CHOICE' ||
             typeQues === 'MULTIPLE CHOICE' ||
             typeQues === 'TRUE FALSE' ||
             typeQues === 'SORT' ||
-            typeQues === 'FILL BLANK' ||
-            typeQues === 'DRAG DROP') && (
+            typeQues === 'FILL BLANK') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!open} />
           )) ||
             (typeQues === 'WRITING' && (

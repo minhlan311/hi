@@ -51,7 +51,7 @@ export default function CourseListMentor({ data }: any) {
           {data
             ? data?.docs?.map((item: any) => (
                 <>
-                  <Col xs={24} md={12} lg={6}>
+                  <Col xs={24} md={12} lg={6} xxl={4}>
                     <Card
                       cover={
                         <ImageCustom

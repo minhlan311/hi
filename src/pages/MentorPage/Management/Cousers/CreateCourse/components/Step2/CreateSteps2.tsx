@@ -47,7 +47,9 @@ const CreateSteps2 = ({ dataId }: any) => {
         try {
           const data = await topicApi.getAllTopic({
             filterQuery: { parentId: id ? id : dataId },
-            options: { createAt: 1 },
+            options: {
+              sort: { createdAt: -1 },
+            },
           })
 
           localStorage.setItem('apiData', JSON.stringify(data?.data?.docs))

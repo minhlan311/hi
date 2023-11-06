@@ -28,17 +28,17 @@ const MycoursesLearning = lazy(() => import('./pages/MyCoursesLearning/Mycourses
 
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
-import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 import PageTestTest from './pages/PageTestTest/PageTestTest.tsx'
-import CreateQuestion from './pages/PageTestTest/component/CreateDragDrop.tsx'
+import CreateQuestion from './pages/MentorPage/Management/Exams/Components/CreateDragDrop.tsx'
 import SuspenseWrapper from './components/SuspenseWrapper/SuspenseWrapper.tsx'
+import MyCourse from './pages/MyCourse/MyCourse.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -231,7 +231,7 @@ export default function useRouteElements() {
         {
           path: PATH.MY_COURSE,
           element: (
-            <Layout user={profile} title='Giỏ hàng của bạn'>
+            <Layout user={profile} title='khóa học của tôi'>
               <SuspenseWrapper>
                 <MyCourse />
               </SuspenseWrapper>
@@ -241,11 +241,11 @@ export default function useRouteElements() {
         {
           path: PATH.MY_COURSE_LEARNING,
           element: (
-            <SuspenseWrapper>
-              <Layout user={profile} title='Khóa học đã mua'>
+            <Layout user={profile} title='Khóa học đã mua'>
+              <SuspenseWrapper>
                 <MycoursesLearning />
-              </Layout>
-            </SuspenseWrapper>
+              </SuspenseWrapper>
+            </Layout>
           ),
         },
         {

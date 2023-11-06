@@ -13,7 +13,7 @@ const BannerSlider = (props: Props) => {
 
   return (
     <Carousel autoplay dots={dots} effect={effect} draggable speed={1500} autoplaySpeed={5000}>
-      {bannerData.map((item) => (
+      {bannerData?.map((item) => (
         <Link className={css.banner} to={item?.href || '/'} key={item._id}>
           <img src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.imageUrl} alt='banner' />
         </Link>
