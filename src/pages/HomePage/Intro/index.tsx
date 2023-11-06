@@ -5,6 +5,7 @@ import point from '../../../assets/icons/place.svg'
 import place from '../../../assets/icons/point.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
+import useResponsives from '@/hooks/useResponsives'
 
 export default function Intro() {
   const introData = [
@@ -58,12 +59,14 @@ export default function Intro() {
     },
   ]
 
+  const { md } = useResponsives()
+
   return (
     <Header
       size='sm'
       title='UCAM là trung tâm ngoại ngữ uy tín, tận tình'
       desc='VÌ SAO NÊN CHỌN CHÚNG TÔI?'
-      padding='60px 0'
+      padding={md ? '25px 0' : '60px 0'}
       background='var(--lighish-white)'
     >
       <img src={place} alt='place' className='place' />
