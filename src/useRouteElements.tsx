@@ -35,7 +35,6 @@ import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 import PageTestTest from './pages/PageTestTest/PageTestTest.tsx'
-import CreateQuestion from './pages/MentorPage/Management/Exams/Components/CreateDragDrop.tsx'
 import SuspenseWrapper from './components/SuspenseWrapper/SuspenseWrapper.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
@@ -283,14 +282,6 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Làm bài thi Online'>
               <PageTestTest />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.TEST_TEST_CREATE,
-          element: (
-            <Layout user={profile} title='Làm bài thi Online'>
-              <CreateQuestion />
             </Layout>
           ),
         },
