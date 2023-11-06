@@ -24,7 +24,6 @@ type DraggableListProps = {
   renderType?: 'text' | 'card'
   columnLabelKey?: string
   direction?: 'vertical'
-  setData: React.Dispatch<React.SetStateAction<any[]>>
 }
 
 const DragAndDrop = ({
@@ -46,6 +45,8 @@ const DragAndDrop = ({
   const [activeData, setActiveData] = useState<any | null>(null)
   const [columns, setColumns] = useState<any[]>([])
   const [tasks, setTasks] = useState<any[]>([])
+
+  // const correctAnswers = tasks.filter((choice) => choice.isCorrect).map((choice) => choice.id)
 
   useEffect(() => {
     if (dndType === 'sort') {

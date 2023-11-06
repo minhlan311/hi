@@ -55,3 +55,25 @@ export interface EventState {
   testData: TestState
   id: string
 }
+
+export interface Property {
+  name: string
+  hasAudio: boolean
+  hasVideo: boolean
+  outputMode: string
+  recordingLayout: string
+  resolution: string
+  frameRate: number
+  shmSize: number
+}
+
+export interface RecordState {
+  size: number
+  duration: number
+  id: string
+  sessionId: string
+  createdAt: number
+  url: string
+  status: string
+  properties: Property
+}

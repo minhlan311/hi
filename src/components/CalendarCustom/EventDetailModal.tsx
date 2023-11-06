@@ -2,10 +2,10 @@
 import eventApi from '@/apis/event.api'
 import { AppContext } from '@/contexts/app.context'
 import { EventState } from '@/interface/event'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Descriptions, Modal, Space } from 'antd'
 import moment from 'moment-timezone'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AiOutlineClockCircle, AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { BiTimer } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,7 @@ import EventActionModal from './EventActionModal'
 import dayjs from 'dayjs'
 import useResponsives from '@/hooks/useResponsives'
 import slugify from 'slugify'
+import { MdOutlineEmergencyRecording } from 'react-icons/md'
 
 type Props = {
   open: boolean
@@ -35,6 +36,11 @@ const EventDetailModal = (props: Props) => {
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
   const [openUpload, setOpenUpload] = useState<boolean>(false)
+  const [openRecord, setOpenRecord] = useState<boolean>(false)
+  const [recordUrlData, setRecordData] = useState<any>()
+  useEffect(() => {
+    setRecordData(null)
+  }, [open])
   const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationFn: (id) => eventApi.deleteEvent(id),
@@ -49,6 +55,18 @@ const EventDetailModal = (props: Props) => {
     },
   })
   const { sm } = useResponsives()
+
+  const { data: record } = useQuery({
+    queryKey: ['eventsData', eventDetail],
+    queryFn: () => {
+      return eventApi.getRecord(`${slugify(`${eventDetail?.name}`, '_')}-${eventDetail?._id}`)
+    },
+    enabled: dayjs().diff(eventDetail?.end, 'minutes') > 60,
+  })
+
+  useEffect(() => {
+    if (record?.data) setRecordData(record?.data?.[0])
+  }, [record])
 
   if (eventDetail) {
     const currentTime = moment()
@@ -113,7 +131,7 @@ const EventDetailModal = (props: Props) => {
             </div>
 
             {eventDetail.classData?.createdById === profile._id && (
-              <Space size='large'>
+              <Space>
                 <ButtonCustom
                   onClick={() => {
                     setOpenUpload(true)
@@ -136,6 +154,11 @@ const EventDetailModal = (props: Props) => {
                   </ButtonCustom>
                 </PopConfirmAntd>
               </Space>
+            )}
+            {recordUrlData?.url && (
+              <ButtonCustom size='small' icon={<MdOutlineEmergencyRecording />} onClick={() => setOpenRecord(true)}>
+                Xem bản ghi
+              </ButtonCustom>
             )}
             <Space direction='vertical' className='sp100'>
               <Descriptions column={sm ? 1 : 2}>
@@ -194,6 +217,23 @@ const EventDetailModal = (props: Props) => {
             </Space>
           </Space>
         </Modal>
+        {recordUrlData && (
+          <Modal
+            title={`Bản ghi ${recordUrlData?.id}`}
+            open={openRecord}
+            onCancel={() => setOpenRecord(false)}
+            footer={null}
+            width='80vw'
+          >
+            <video
+              width='100%'
+              height='650px'
+              src={recordUrlData?.url}
+              title={`Bản ghi ${recordUrlData?.id}`}
+              controls
+            />
+          </Modal>
+        )}
         <EventActionModal
           open={openUpload}
           type={eventDetail.testId ? 'test' : 'event'}

@@ -32,7 +32,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 const MentorQuestions = () => {
   const location = useLocation()
   const examSlug = location.pathname.split('/')[3]
-  const { data: exam } = useQuery({
+  const { data: exam, isLoading } = useQuery({
     queryKey: ['examDetail'],
     queryFn: () => {
       return examApi.getExamDetail(examSlug)
@@ -44,7 +44,6 @@ const MentorQuestions = () => {
 
   // question select
   const { setQuestionList, profile } = useContext(AppContext)
-  const [load, setLoad] = useState<boolean>(false)
 
   const [questionsSelectCallback, setQuestionsSelectCallback] = useState<SuccessResponse<QuestionState[]>>()
   const [questionsSelect, setQuestionsSelect] = useState<string[]>([])
@@ -59,10 +58,6 @@ const MentorQuestions = () => {
       setQuestionsListFromLS(examDetail.questions)
       setQuestionsSelect(examDetail.questions)
       setQuestionList(examDetail.questions)
-      setLoad(true)
-      setTimeout(() => {
-        setLoad(false)
-      }, 500)
     }
   }, [examDetail])
 
@@ -115,7 +110,7 @@ const MentorQuestions = () => {
       : stateAction(setQuestionsSelect, null, quesId, 'remove', setQuestionsListFromLS)
   }
 
-  const [tabChange, setTabChange] = useState<string>()
+  const [tabChange, setTabChange] = useState<string>('questions')
 
   const handleChangeTab = (e: string) => {
     setTabChange(e)
@@ -161,7 +156,7 @@ const MentorQuestions = () => {
               page={currentSelected}
               keyFilter='questionsSelect'
               setLoading={setLoading}
-              checkQuery={tabChange === 'questions' || load === true}
+              checkQuery={questionsSelect && questionsSelect.length > 0 && tabChange === 'questions'}
               addOnButton={
                 <Space className={css.mb}>
                   <Popconfirm
@@ -241,7 +236,7 @@ const MentorQuestions = () => {
               </ButtonCustom>
             </Space>
           </Space>
-          {load ? (
+          {isLoading ? (
             <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
           ) : (
             <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 15 }}>
@@ -277,7 +272,7 @@ const MentorQuestions = () => {
               limit={10}
               page={current}
               keyFilter='questionsBank'
-              checkQuery={myQues}
+              checkQuery={tabChange === 'questionsBank' || myQues}
               addOnButton={
                 <Space className={css.mb}>
                   <ButtonCustom

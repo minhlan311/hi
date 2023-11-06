@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { EventState } from '@/interface/event'
+import { EventState, RecordState } from '@/interface/event'
 
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
@@ -19,6 +19,9 @@ const eventApi = {
   },
   updateEvent(body: any) {
     return http.put<EventState>(ENDPOINT.EVENT_PATH + body.id, body)
+  },
+  getRecord(id: string) {
+    return http.get<RecordState[]>(`https://api.hiblue.fun/recordings/${id}`)
   },
 }
 
