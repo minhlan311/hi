@@ -7,7 +7,7 @@ import { AppContext } from '@/contexts/app.context'
 const Banner = () => {
   const { configs } = useContext(AppContext)
 
-  const banner = configs.banners.map((bn) => {
+  const banner = configs?.banners?.map((bn) => {
     return {
       imageUrl: bn,
       _id: bn,
