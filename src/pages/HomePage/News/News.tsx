@@ -27,14 +27,14 @@ export default function News() {
       <div className='container-1200px'>
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Tin tức và Góc học tập</h3>
-        <Row justify={'center'} gutter={[64, 32]}>
+        <Row gutter={[32, 32]}>
           {isLoading ? (
             <LoadingCustom />
           ) : (
             data?.data?.docs &&
             data?.data?.docs?.map((item) => (
               <>
-                <Col md={12} span={24} className='col'>
+                <Col xs={24} lg={12} className='col'>
                   <div className='imgBox'>
                     <Image
                       width='280px'
@@ -62,7 +62,6 @@ export default function News() {
                         </Link>
                       </Paragraph>
                     </Tooltip>
-
                     <TextWithTooltip rows={3} className='text' children={item?.description} />
                   </div>
                 </Col>
