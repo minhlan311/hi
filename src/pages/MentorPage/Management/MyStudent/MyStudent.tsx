@@ -7,13 +7,20 @@ import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import { AppContext } from '@/contexts/app.context'
 import { findUserEnroll } from '@/types/eroll.type'
 import { MyPageTableOptions } from '@/types/page.type'
+import { TypeForm } from '@/types/utils.type'
 import { EditOutlined, ReconciliationOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Space, Table, Tooltip } from 'antd'
+import { Button, Modal, Select, Space, Table, Tooltip } from 'antd'
 import { useContext, useState } from 'react'
 
 export default function MyStudent() {
   const [current, setCurrent] = useState<number>(1)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [courseId, setCourseId] = useState<string>()
+  const [studentId, setStudentId] = useState<string>()
+  const [classId, setClassId] = useState<string>()
+  const [type, setType] = useState<TypeForm>()
+
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -32,12 +39,41 @@ export default function MyStudent() {
     keepPreviousData: true,
   })
 
+  const { data: loadingClass } = useQuery({
+    queryKey: ['dataClass', courseId, studentId],
+    queryFn: () =>
+      classApi.getClass({
+        filterQuery: {
+          mentorId: profile?._id,
+          courseId: courseId,
+        },
+        options: {
+          sort: { createdAt: -1 },
+        },
+      }),
+    enabled: profile?._id && courseId ? true : false,
+  })
+
   const onChange = (page: any) => {
     setCurrent(page.current)
   }
 
+  const subjectOptions = loadingClass?.data?.docs?.map((item: any) => ({
+    label: item?.title,
+    value: item?._id,
+  }))
+
+  const handleClass = (course: string, id: string, type: TypeForm) => {
+    setCourseId(course)
+    setStudentId(id)
+    setIsModalOpen(true)
+    setType(type)
+    console.log(course, 'course')
+    console.log(id, 'id')
+  }
+
   const mutate = useMutation({
-    mutationFn: (body: { courseId: string; userId: string }) => {
+    mutationFn: (body: { classId: string; userId: string }) => {
       return classApi.arrangeClass(body)
     },
     onSuccess: () => {
@@ -57,6 +93,47 @@ export default function MyStudent() {
     },
   })
 
+  const mutateUpdate = useMutation({
+    mutationFn: (body: { courseId: string; classId: string; userId: string }) => {
+      return classApi.arrangeUpdateClass(body)
+    },
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        description: 'Xếp lớp thành công!',
+        message: 'thông báo',
+      })
+      queryClient.invalidateQueries({ queryKey: ['dataUserEnroll'] })
+    },
+    onError: (data: any) => {
+      openNotification({
+        status: 'error',
+        description: data?.response?.data?.message,
+        message: 'thông báo',
+      })
+    },
+  })
+
+  const handleOk = () => {
+    {
+      type === TypeForm.CREATE
+        ? mutate.mutate({
+            classId: classId as string,
+            userId: studentId as string,
+          })
+        : mutateUpdate.mutate({
+            courseId: courseId as string,
+            classId: classId as string,
+            userId: studentId as string,
+          })
+    }
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
   const tableColumns: MyPageTableOptions<any> = [
     {
       title: 'Học viên',
@@ -66,14 +143,7 @@ export default function MyStudent() {
         <TextWithTooltip rows={1} children={record?.user?.fullName as string}></TextWithTooltip>
       ),
     },
-    // {
-    //   title: 'Email',
-    //   dataIndex: 'limitStudent',
-    //   key: 'limitStudent',
-    //   render: (_: any, record: findUserEnroll) => (
-    //     <TextWithTooltip rows={1} children={record?.user?.email as string}></TextWithTooltip>
-    //   ),
-    // },
+
     {
       title: 'Khóa học đã mua',
       dataIndex: 'courseName',
@@ -111,23 +181,22 @@ export default function MyStudent() {
           <>
             {filterClassName && filterClassName.length ? (
               <Tooltip placement='top' title='Đổi lịch học'>
-                <Button type='dashed' className='dashed'>
+                <Button
+                  type='dashed'
+                  className='dashed'
+                  onClick={() => handleClass(record?.course?._id as string, record?.user?._id, TypeForm.UPDATE)}
+                >
                   <EditOutlined />
                 </Button>
               </Tooltip>
             ) : (
               <div>
                 <Space size='middle'>
-                  <Tooltip placement='top' title='Xếp lớp tự động'>
+                  <Tooltip placement='top' title='Xếp lớp '>
                     <Button
                       type='dashed'
                       className={'dashed'}
-                      onClick={() =>
-                        mutate.mutate({
-                          courseId: record?.course?._id,
-                          userId: record?.user?._id,
-                        } as any)
-                      }
+                      onClick={() => handleClass(record?.course?._id as string, record?.user?._id, TypeForm.CREATE)}
                     >
                       <ReconciliationOutlined className='icon-button' />
                     </Button>
@@ -144,6 +213,16 @@ export default function MyStudent() {
   return (
     <div>
       <div className='div-table'>
+        <Modal
+          title={type === TypeForm.CREATE ? 'Xếp lớp học' : 'Đổi lớp học'}
+          open={isModalOpen}
+          onOk={handleOk}
+          okText='Xếp lớp'
+          cancelText='Hủy bỏ'
+          onCancel={handleCancel}
+        >
+          <Select onChange={setClassId} options={subjectOptions} placeholder='Danh sách lớp học...' />
+        </Modal>
         <Table
           scroll={{ x: 700, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
           rowKey={'key'}

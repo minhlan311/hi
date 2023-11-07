@@ -104,6 +104,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
   })
 
   const onFinish = async (values: any) => {
+    console.log(values, 'values')
     onClose(false)
 
     {
@@ -207,7 +208,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
             </Form.Item>
           </Col>
 
-          <Form.Item name='id' hidden />
+          <Form.Item name='mentorId' hidden initialValue={profile?._id} />
         </Row>
       </Form>
     </Drawer>

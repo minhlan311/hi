@@ -59,7 +59,7 @@ export default function CLassCourse() {
     queryFn: () =>
       classApi.getClass({
         filterQuery: {
-          createdById: profile?._id,
+          mentorId: profile?._id,
           search: search || undefined,
           startDate: date ? date[0] : undefined,
           endDate: date ? date[1] : undefined,
