@@ -5,11 +5,16 @@ import { Divider } from 'antd'
 import { VscDebugBreakpointLog } from 'react-icons/vsc'
 import css from './styles.module.scss'
 import UpdateCertificate from './UpdateCertificate'
+import { useContext } from 'react'
+import { AppContext } from '@/contexts/app.context'
+import { useParams } from 'react-router-dom'
 type Props = { user: UserState }
 
 const Certificate = ({ user }: Props) => {
   const dataDiploma = user?.mentorInfo?.diploma
+  const { profile } = useContext(AppContext)
   const dataCertificates = user?.mentorInfo?.certificates
+  const { id } = useParams()
 
   const dilopma = dataDiploma?.filter((item) => item?.schoolName !== 'other' && item?.schoolName !== null)
 
@@ -28,7 +33,7 @@ const Certificate = ({ user }: Props) => {
         <h3 className={css.h3}>Bằng cấp của tôi</h3>
       </div>
 
-      {user?.mentorInfo === null ? (
+      {user?.mentorInfo === null && profile?._id === id ? (
         <UpdateCertificate />
       ) : (
         <>
