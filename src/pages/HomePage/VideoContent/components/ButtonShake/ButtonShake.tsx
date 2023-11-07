@@ -2,8 +2,10 @@ import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { DoubleRightOutlined, DoubleLeftOutlined } from '@ant-design/icons'
 import './ButtonShake.scss'
+import { useNavigate } from 'react-router-dom'
 
 export default function ButtonShake() {
+  const navigate = useNavigate()
   const [shake, setShake] = useState(false)
 
   useEffect(() => {
@@ -16,7 +18,7 @@ export default function ButtonShake() {
     }
   }, [])
   return (
-    <Button className={`button-in ${shake ? 'shake' : ''}`}>
+    <Button onClick={() => navigate('/register')} className={`button-in ${shake ? 'shake' : ''}`}>
       <DoubleRightOutlined /> ĐĂNG KÝ NGAY
       <DoubleLeftOutlined />
     </Button>
