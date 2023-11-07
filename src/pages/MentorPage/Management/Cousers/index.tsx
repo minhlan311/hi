@@ -2,7 +2,7 @@
 import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
-import { Divider, Pagination, Row } from 'antd'
+import { Col, Divider, Pagination, Row, Skeleton } from 'antd'
 import { useContext, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import './index.scss'
@@ -10,7 +10,6 @@ import CourseListMentor from './CourseListMentor/CourseListMentor'
 import { PaginationProps } from 'antd/lib'
 import { useNavigate } from 'react-router-dom'
 import PATH from '@/constants/path'
-import LoadingCustom from '@/components/LoadingCustom'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
@@ -25,6 +24,14 @@ const MentorCourses = () => {
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page)
   }
+
+  const numberOfDivs = 12
+
+  const divs = Array.from({ length: numberOfDivs }, (_, index) => (
+    <Col xs={24} lg={6} xxl={4} key={index}>
+      <Skeleton paragraph={{ rows: 6 }} />
+    </Col>
+  ))
 
   const { sm } = useResponsives()
 
@@ -52,6 +59,7 @@ const MentorCourses = () => {
           </ButtonCustom>
         }
       />
+
       {!loading ? (
         data && data.docs?.length === 0 ? (
           <EmptyCustom
@@ -63,11 +71,9 @@ const MentorCourses = () => {
           <CourseListMentor data={data} />
         )
       ) : (
-        <LoadingCustom
-          style={{
-            marginTop: '50px',
-          }}
-        />
+        <Row className='div-row-container' gutter={[16, 32]}>
+          {divs}
+        </Row>
       )}
       <Divider />
       {data && data?.totalDocs > 0 && (
