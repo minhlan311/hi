@@ -32,7 +32,7 @@ export default function CourseCalender() {
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: {
-          categoryId: id ? id : categoriesData?.data?.docs[0]?._id,
+          categoryId: id ? id : courses?.children[0]?._id,
         },
         options: {
           limit: 6,
