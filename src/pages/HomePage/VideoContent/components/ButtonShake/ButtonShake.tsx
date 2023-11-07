@@ -17,6 +17,7 @@ export default function ButtonShake() {
       clearInterval(interval)
     }
   }, [])
+
   return (
     <Button onClick={() => navigate('/register')} className={`button-in ${shake ? 'shake' : ''}`}>
       <DoubleRightOutlined /> ĐĂNG KÝ NGAY
