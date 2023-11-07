@@ -59,8 +59,6 @@ const DrawerQuestion = (props: Props) => {
     setTypeQues(null)
   }
 
-  console.log(choices, 'choiceschoices')
-
   const { isLoading, status, mutate, error, isSuccess } = useMutation({
     mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
     onSuccess: () => {
@@ -83,6 +81,7 @@ const DrawerQuestion = (props: Props) => {
       openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
     }
   }, [isLoading])
+
   console.log(corrects)
 
   const onFinish = (values: any) => {

@@ -199,6 +199,13 @@ const TableAddonQues = (props: Props) => {
     }
   }, [data])
 
+  // useEffect(() => {
+  //   if (selectionType === 'TRUE FALSE') {
+  //   }
+  // }, [selectionType])
+
+  console.log(dataSource, '=============')
+
   const initColumns = [
     {
       title: 'Đáp án',
@@ -278,6 +285,8 @@ const TableAddonQues = (props: Props) => {
       })
     }
   }
+
+  console.log(dataSource, 'dataSourcedataSource')
 
   const handleAdd = () => {
     const newData: Choice = {
@@ -437,7 +446,14 @@ const TableAddonQues = (props: Props) => {
             }
           />
         )}
-      <ButtonCustom onClick={handleAdd} type='dashed' icon={<MdPlaylistAdd />} className='sp100'>
+
+      <ButtonCustom
+        disabled={selectionType === 'TRUE FALSE' && dataSource?.length === 2 ? true : false}
+        onClick={handleAdd}
+        type='dashed'
+        icon={<MdPlaylistAdd />}
+        className='sp100'
+      >
         Thêm đáp án
       </ButtonCustom>
     </Space>
