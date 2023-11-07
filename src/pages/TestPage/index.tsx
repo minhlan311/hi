@@ -1,26 +1,27 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import CountDownTimer from '@/components/CountDownTimer'
-import css from './styles.module.scss'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import eventApi from '@/apis/event.api'
 import examApi from '@/apis/exam.api'
-import Header from '@/components/layout/Header/Header'
+import questionApi from '@/apis/question.api'
+import successBg from '@/assets/images/examimg/hander-pana.png'
+import testBg from '@/assets/images/examimg/online-test.png'
+import { shuffleArray, stateAction } from '@/common'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import CountDownTimer from '@/components/CountDownTimer'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import PageResult from '@/components/PageResult'
-import questionApi from '@/apis/question.api'
+import TagCustom from '@/components/TagCustom/TagCustom'
+import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
+import { Choice, QuestionState } from '@/interface/question'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
+import { useEffect, useState } from 'react'
+import { AiOutlineLeft, AiOutlineQuestionCircle, AiOutlineRight } from 'react-icons/ai'
+import { TbArrowBack } from 'react-icons/tb'
+import { useLocation } from 'react-router-dom'
 import RenderAnswer from './RenderAnswer'
 import Score from './Score'
-import successBg from '@/assets/images/examimg/hander-pana.png'
-import TagCustom from '@/components/TagCustom/TagCustom'
-import testBg from '@/assets/images/examimg/online-test.png'
-import useResponsives from '@/hooks/useResponsives'
-import { AiOutlineLeft, AiOutlineQuestionCircle, AiOutlineRight } from 'react-icons/ai'
-import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
-import { Choice, QuestionState } from '@/interface/question'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { TbArrowBack } from 'react-icons/tb'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface QuestionRender {
@@ -94,7 +95,6 @@ const TestPage = () => {
 
   const oldTime = event && localStorage.getItem(event._id as string)
 
-  const [reset, setReset] = useState<boolean>(false)
   const [form] = Form.useForm()
   // useEffect(() => {
   //   setDataUpload({
@@ -112,11 +112,22 @@ const TestPage = () => {
   //   },
   // })
 
-  const onFinish = (val: any) => {
-    console.log(val)
-  }
+  const [sub, setsub] = useState<any[]>([])
+  console.log(sub)
 
   const QuestionItem = ({ type, questionData, questionLength, questionKey }: QuestionRender) => {
+    const [reset, setReset] = useState<boolean>(false)
+
+    const onFinish = (val: any) => {
+      const payload = {
+        ...questionData,
+        correctAnswers:
+          typeof val.correctAnswers === 'string' ? { correctAnswers: [val.correctAnswers] } : val.correctAnswers,
+      }
+
+      stateAction(setsub, questionData._id, payload, 'add')
+    }
+
     if (questions.isLoading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
     if (questionData)
       return (
@@ -164,9 +175,10 @@ const TestPage = () => {
                   | 'NUMERICAL'
                   | 'WRITING'
               }
-              choices={questionData.choices as unknown as Choice[]}
+              choices={shuffleArray(questionData.choices as unknown as Choice[])}
               reset={reset}
               setReset={setReset}
+              data={sub?.[currentQuestion]}
             />
           </Form>
         </Space>

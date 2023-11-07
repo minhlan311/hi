@@ -1,16 +1,17 @@
-import { Button, Card, Rate, Space, Tooltip } from 'antd'
+import userApi from '@/apis/user.api'
+import Avatar from '@/components/Avatar/Avatar'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import LoadingCustom from '@/components/LoadingCustom'
+import SliderCustom from '@/components/SliderCustom'
+import useResponsives from '@/hooks/useResponsives'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Rate, Space, Tooltip } from 'antd'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 import book from '../../../assets/icons/book.svg'
 import point2 from '../../../assets/icons/point2.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-import SliderCustom from '@/components/SliderCustom'
-import useResponsives from '@/hooks/useResponsives'
-import { useQuery } from '@tanstack/react-query'
-import userApi from '@/apis/user.api'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
-import LoadingCustom from '@/components/LoadingCustom'
-import Avatar from '@/components/Avatar/Avatar'
 
 const Mentor = () => {
   const { sm, md } = useResponsives()
@@ -81,12 +82,17 @@ const Mentor = () => {
                       </div>
 
                       <Space className='it-butt'>
-                        <Button size='small' type='primary'>
+                        <ButtonCustom size='small' type='primary'>
                           {360} giờ
-                        </Button>
-                        <Button size='small'>{370} học viên</Button>
+                        </ButtonCustom>
+                        <ButtonCustom size='small'>{370} học viên</ButtonCustom>
                       </Space>
-                      <Button className='sm-butt' size='large' style={{ width: '100%' }}>
+                      <ButtonCustom
+                        className='sm-butt'
+                        size='large'
+                        style={{ width: '100%' }}
+                        href={`/profiles/${item._id}`}
+                      >
                         <Space>
                           <div>Chọn giáo viên</div>
                           <BsArrowRight
@@ -95,7 +101,7 @@ const Mentor = () => {
                             }}
                           />
                         </Space>
-                      </Button>
+                      </ButtonCustom>
                     </Space>
                   </Card>
                 ))}
