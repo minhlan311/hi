@@ -17,12 +17,15 @@ import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import { formatDate, formatPriceVND } from '@/helpers/common'
 import LoadingCustom from '@/components/LoadingCustom'
+import { CategoryState } from '@/interface/category'
 
 export default function CourseCalender() {
   const queryClient = useQueryClient()
-  const categoriesData = queryClient.getQueryData<any>(['topCategories'])
+  const categoriesData = queryClient.getQueryData<any>(['categoriesList'])
   const [active, setActive] = useState('Tiếng Anh')
   const [id, setId] = useState<string>()
+
+  const courses = categoriesData?.data?.docs?.find((item: CategoryState) => item.name === 'Khóa học')
 
   const { data: listData, isLoading } = useQuery({
     queryKey: ['course', id, categoriesData],
@@ -56,8 +59,8 @@ export default function CourseCalender() {
         <p className='text-xs'>ĐÀO TẠO NHIỀU NGÔN NGỮ</p>
         <h3>Lịch khai giảng khóa học online</h3>
         <div className='groupButton'>
-          {categoriesData?.data?.docs &&
-            categoriesData?.data?.docs?.map((item: any) => (
+          {courses?.children &&
+            courses?.children?.map((item: any) => (
               <Button
                 disabled={isLoading}
                 className={active === item.name ? 'buttonActive' : 'button'}
