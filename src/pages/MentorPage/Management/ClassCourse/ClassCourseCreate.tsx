@@ -154,7 +154,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <Input />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Form.Item
               name='startDate'
               label='Ngày bắt đầu'
@@ -164,7 +164,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <DatePicker placeholder='Ngày bắt đầu' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Form.Item
               name='endDate'
               label='Ngày kết thúc '
@@ -184,7 +184,7 @@ export default function ClassCourseCreate({ onOpen, onClose, idClass, typeForm }
               <DatePicker placeholder='Ngày kết thúc' format='DD/MM/YYYY' />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col lg={6}>
             <Form.Item
               required
               rules={[
