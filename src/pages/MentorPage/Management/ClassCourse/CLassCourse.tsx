@@ -107,19 +107,25 @@ export default function CLassCourse() {
       title: 'Ngày bắt đầu',
       dataIndex: 'startDate',
       key: 'startDate',
-      render: (_: any, record: Class) => <span>{formatDate(record?.startDate as string)}</span>,
+      render: (_: any, record: Class) => (
+        <TextWithTooltip rows={1} children={formatDate(record?.startDate as string)}></TextWithTooltip>
+      ),
     },
     {
       title: 'Ngày kết thúc',
       dataIndex: 'endDate',
       key: 'startDate',
-      render: (_: any, record: Class) => <span>{formatDate(record?.endDate as string)}</span>,
+      render: (_: any, record: Class) => (
+        <TextWithTooltip rows={1} children={formatDate(record?.endDate as string)}></TextWithTooltip>
+      ),
     },
     {
       title: 'Số lượng học viên đối đa',
       dataIndex: 'limitStudent',
       key: 'limitStudent',
-      render: (_: any, record: Class) => <span>{record?.limitStudent}</span>,
+      render: (_: any, record: Class) => (
+        <TextWithTooltip rows={1} children={record?.limitStudent as string}></TextWithTooltip>
+      ),
     },
 
     {
