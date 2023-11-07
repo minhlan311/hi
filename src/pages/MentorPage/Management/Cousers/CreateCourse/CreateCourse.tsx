@@ -60,7 +60,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       }),
   })
 
-  const { data: courseDetail } = useQuery({
+  const { data: courseDetail, isLoading } = useQuery({
     queryKey: ['courseMentor'],
     queryFn: () => courseApi.getOneCourse(id!),
     enabled: id ? true : false,
@@ -165,7 +165,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   return (
     <div>
-      <Form form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+      <Form disabled={isLoading} form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <Form.Item>
           <Row>
             <Col span={22}></Col>
