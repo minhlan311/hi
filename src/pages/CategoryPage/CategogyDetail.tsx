@@ -114,15 +114,9 @@ export default function CategogyDetail() {
         />
       ) : (
         <>
-          <ImageCustom
-            preview={false}
-            styles={{
-              objectFit: 'cover',
-            }}
-            width='100%'
-            height='100%'
-            src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}
-          />
+          <div className='banner'>
+            <img src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.data?.coverUrl}`} />
+          </div>
 
           <div className='h2'>
             <div className='div-cate'>

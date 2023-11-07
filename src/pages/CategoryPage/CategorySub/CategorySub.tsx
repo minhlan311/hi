@@ -44,15 +44,9 @@ export default function CategorySub() {
         />
       ) : (
         <>
-          <ImageCustom
-            preview={false}
-            styles={{
-              objectFit: 'cover',
-            }}
-            width='100%'
-            height='100%'
-            src={import.meta.env.VITE_FILE_ENDPOINT + '/' + detailData?.data?.coverUrl}
-          />
+          <div className='banner'>
+            <img src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + detailData?.data?.coverUrl}`} />
+          </div>
           <div className='h2'>
             <div className='div-cate'>
               <h2>{detailData?.data?.name}</h2>
