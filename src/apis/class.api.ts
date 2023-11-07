@@ -23,8 +23,11 @@ const classApi = {
   updateClass(body: any) {
     return http.put<Class>(ENDPOINT.CLASS_PATH + body.id, body)
   },
-  arrangeClass(body: { courseId: string; userId: string }) {
+  arrangeClass(body: { classId: string; userId: string }) {
     return http.post<SuccessResponse<findUserEnroll>>(ENDPOINT.ARRANGE_PATH, body)
+  },
+  arrangeUpdateClass(body: { classId: string; userId: string }) {
+    return http.post<SuccessResponse<findUserEnroll>>(ENDPOINT.ARRANGE_UPDATE_PATH, body)
   },
   openingClass(body: any) {
     return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.OPENING_PATH, body)

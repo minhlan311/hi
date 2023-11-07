@@ -4,8 +4,14 @@ import birdSVG from '../../../assets/icons/bird.svg'
 import pencilSVG from '../../../assets/icons/pencil.svg'
 import './Gift.scss'
 import PromotionCountdown from './PromotionCountdown/PromotionCountdown'
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '@/contexts/app.context'
 
 export default function Gift() {
+  const navigate = useNavigate()
+  const { profile } = useContext(AppContext)
+
   return (
     <div className='container-gift'>
       <div className='max-w-1200'>
@@ -45,9 +51,19 @@ export default function Gift() {
                 <li>Hỗ trợ MIỄN PHÍ học phí cho HSSV và người mới học từ đầu</li>
               </ul>
             </div>
-            <div className='button'>
-              <Button className='button-in'>GỬI NGAY</Button>
-            </div>
+            {!profile ? (
+              <div className='button'>
+                <Button className='button-in' onClick={() => navigate('/register')}>
+                  ĐĂNG KÝ NGAY
+                </Button>
+              </div>
+            ) : (
+              <div className='button'>
+                <Button className='button-in' onClick={() => navigate('/cart-page')}>
+                  KHÁM PHÁ NGAY
+                </Button>
+              </div>
+            )}
           </Col>
         </Row>
       </div>

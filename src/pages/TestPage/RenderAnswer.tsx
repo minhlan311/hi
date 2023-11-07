@@ -3,7 +3,7 @@ import { shuffleArray } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import { Choice } from '@/interface/question'
+import { Choice, QuestionState } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -22,6 +22,7 @@ type Props = {
   choices: Choice[]
   reset: boolean
   setReset: React.Dispatch<React.SetStateAction<boolean>>
+  data: QuestionState
 }
 
 const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: string }) => {
@@ -62,6 +63,7 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
       <Col span={12}>
         {rowsList.map((row) => (
           <FormControls
+            key={row.value}
             control='checkBox'
             type='card'
             value={row.value}
@@ -74,6 +76,7 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
       <Col span={12}>
         {optionsList.map((col) => (
           <FormControls
+            key={col.value}
             control='checkBox'
             type='card'
             value={col.value}
@@ -88,7 +91,7 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
     <Card>
       <Space direction='vertical' className='sp100'>
         {rows.map((r: any, id: number) => (
-          <Space direction='vertical' className='sp100'>
+          <Space direction='vertical' className='sp100' key={r.id}>
             <div key={r.id} dangerouslySetInnerHTML={{ __html: r.answer }}></div>
             <FormControls control='radio' type='card' options={optionsList} gutter={[12, 12]} md={colCount} />
             {rows.length - 1 > id && <Divider />}
@@ -100,48 +103,49 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
 }
 
 const RenderAnswer = (props: Props) => {
-  const { type, choices, reset, setReset } = props
+  const { type, choices, reset, setReset, data } = props
 
   useEffect(() => {
     if (reset) {
       setReset(false)
     }
   }, [reset])
-  const [choiceList, setChoiceList] = useState(choices)
+
   const optionsList = choices.map((ots) => {
     return { value: ots._id, label: ots.answer }
   })
 
-  if (type === 'WRITING') return <TextAreaCustom name='answer' />
+  if (type === 'WRITING') return <TextAreaCustom name='correctAnswers' data={data?.correctAnswers?.[0]} />
   if (type === 'NUMERICAL')
     return (
-      <Form.Item name='answer'>
+      <Form.Item name='correctAnswers'>
         <Input type='number' placeholder='Nhập giá trị' />
       </Form.Item>
     )
   if (type === 'SINGLE CHOICE')
     return (
-      <Form.Item name='correctAnswers'>
-        <FormControls control='radio' type='card' options={shuffleArray(optionsList)} gutter={[12, 12]} />
-      </Form.Item>
+      <FormControls
+        name='correctAnswers'
+        control='radio'
+        type='card'
+        options={optionsList}
+        gutter={[12, 12]}
+        defaultValue={data?.correctAnswers}
+      />
     )
   if (type === 'MULTIPLE CHOICE')
     return (
-      <Form.Item name='correctAnswers'>
-        <FormControls control='checkBox' type='card' options={shuffleArray(optionsList)} gutter={[12, 12]} />
-      </Form.Item>
-    )
-  if (type === 'SORT')
-    return (
-      <DragAndDrop
-        data={shuffleArray(choiceList)}
-        setData={setChoiceList}
-        renderType='card'
-        dndType='sort'
-        labelKey='answer'
-        direction='vertical'
+      <FormControls
+        name='correctAnswers'
+        control='checkBox'
+        type='card'
+        options={optionsList}
+        gutter={[12, 12]}
+        defaultValue={data?.correctAnswers}
       />
     )
+  if (type === 'SORT')
+    return <DragAndDrop data={choices} renderType='card' dndType='sort' labelKey='answer' direction='vertical' />
 
   if (type === 'LIKERT SCALE' || type === 'MATCHING')
     return <LikertScale rows={shuffleArray(choices[0]?.rows)} cols={shuffleArray(choices[0]?.cols)} type={type} />

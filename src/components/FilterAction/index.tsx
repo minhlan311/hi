@@ -129,6 +129,7 @@ const FilterAction = (props: Props) => {
     queryFn: () => {
       return apiFind(filterData)
     },
+    enabled: checkQuery ? checkQuery : true,
   })
 
   useEffect(() => {

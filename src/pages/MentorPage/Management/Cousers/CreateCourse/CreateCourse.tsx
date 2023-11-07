@@ -26,8 +26,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const myDataUser = queryClient.getQueryData<any>(['userDetail'])
   const dataMedia = fileList?.map((item) => item?.response?.url)
 
-  console.log('loggggggggggg')
-
   useEffect(() => {
     form.setFieldValue('coverMedia', dataMedia[0])
 
