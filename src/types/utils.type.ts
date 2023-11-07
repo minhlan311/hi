@@ -32,3 +32,8 @@ export enum TargetModelEnum {
   QUESTION = 'QUESTION',
   ANSWER = 'ANSWER',
 }
+
+export enum TypeForm {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
