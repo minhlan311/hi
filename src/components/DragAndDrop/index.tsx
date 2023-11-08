@@ -24,6 +24,7 @@ type DraggableListProps = {
   renderType?: 'text' | 'card'
   columnLabelKey?: string
   direction?: 'vertical'
+  callbackData: React.Dispatch<React.SetStateAction<any[]>>
 }
 
 const DragAndDrop = ({
@@ -33,6 +34,7 @@ const DragAndDrop = ({
   renderType = 'text',
   dndType,
   direction,
+  callbackData,
 }: DraggableListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -45,8 +47,6 @@ const DragAndDrop = ({
   const [activeData, setActiveData] = useState<any | null>(null)
   const [columns, setColumns] = useState<any[]>([])
   const [tasks, setTasks] = useState<any[]>([])
-
-  // const correctAnswers = tasks.filter((choice) => choice.isCorrect).map((choice) => choice.id)
 
   useEffect(() => {
     if (dndType === 'sort') {
@@ -110,7 +110,11 @@ const DragAndDrop = ({
         return arrayMove(tasks, activeIndex, overIndex - 1)
       }
 
-      return arrayMove(t, activeIndex, overIndex)
+      const arrCallback = arrayMove(t, activeIndex, overIndex)
+
+      callbackData && callbackData(arrCallback)
+
+      return arrCallback
     })
   }
 

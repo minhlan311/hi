@@ -3,39 +3,30 @@ import examApi from '@/apis/exam.api'
 import questionApi from '@/apis/question.api'
 import successBg from '@/assets/images/examimg/hander-pana.png'
 import testBg from '@/assets/images/examimg/online-test.png'
-import { shuffleArray, stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import PageResult from '@/components/PageResult'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
-import { Choice, QuestionState } from '@/interface/question'
+import { QuestionState } from '@/interface/question'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
 import { useEffect, useState } from 'react'
-import { AiOutlineLeft, AiOutlineQuestionCircle, AiOutlineRight } from 'react-icons/ai'
-import { TbArrowBack } from 'react-icons/tb'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { useLocation } from 'react-router-dom'
-import RenderAnswer from './RenderAnswer'
-import Score from './Score'
+import Score from './components/Score'
 import css from './styles.module.scss'
+import QuestionItem from './components/QuestionItem'
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-interface QuestionRender {
-  type: string
-  questionData: QuestionState
-  questionLength: number
-  questionKey: number
-}
 
 const TestPage = () => {
   const location = useLocation()
-
+  const [form] = Form.useForm()
   const [startTest, setStartTest] = useState<boolean>(false)
   const [finishTest, setFinishTest] = useState<boolean>(false)
+  const [selectId, setSelectId] = useState<string>('')
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [skill, setSkill] = useState('READING')
@@ -70,12 +61,10 @@ const TestPage = () => {
     },
   })
 
-  // const testMutation = useMutation({
-  //   mutationFn: (body) => examApi.examSubmit(body),
-  // })
-
   const question = questions?.data?.data?.docs
+
   const [current, setCurrent] = useState(0)
+
   useEffect(() => {
     if (testData?.data) {
       if (!md)
@@ -89,106 +78,19 @@ const TestPage = () => {
           behavior: 'smooth',
         })
     }
-  }, [testData, event, currentQuestion, current])
+
+    if (question && currentQuestion >= 0) setSelectId(question[currentQuestion]?._id)
+  }, [testData, event, currentQuestion, current, question])
 
   const testTime = location.state.testTime + location.state.addTime
 
   const oldTime = event && localStorage.getItem(event._id as string)
 
-  const [form] = Form.useForm()
-  // useEffect(() => {
-  //   setDataUpload({
-  //     _id: data && data[0]?._id,
-  //     type: 'QUIZZ',
-  //     questions: questions,
-  //   })
-  // }, [questions])
+  // data upload api
+  const [dataUpload, setDataUpload] = useState<any[]>([])
+  console.log(dataUpload)
 
-  // const mutate = useMutation({
-  //   mutationFn: (body: any) => examApi.examSubmit(body),
-  //   onSuccess: (data) => {
-  //     // queryClient.invalidateQueries({ queryKey: ['topicLearning'] })
-  //     setDataExam(data?.data)
-  //   },
-  // })
-
-  const [sub, setsub] = useState<any[]>([])
-  console.log(sub)
-
-  const QuestionItem = ({ type, questionData, questionLength, questionKey }: QuestionRender) => {
-    const [reset, setReset] = useState<boolean>(false)
-
-    const onFinish = (val: any) => {
-      const payload = {
-        _id: questionData._id,
-        correctAnswers:
-          typeof val.correctAnswers === 'string' ? { correctAnswers: [val.correctAnswers] } : val.correctAnswers,
-      }
-
-      stateAction(setsub, questionData._id, payload, 'update')
-    }
-
-    if (questions.isLoading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
-    if (questionData)
-      return (
-        <Space direction='vertical' className={'sp100'}>
-          <Row justify='space-between'>
-            <Col span={24} sm={5}>
-              <h2>
-                Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
-              </h2>
-            </Col>
-            <Col span={24} xxl={6} xl={6} lg={8} md={8} sm={8}>
-              <Space>
-                <TagCustom content={type}></TagCustom>
-                <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
-                <ButtonCustom size='small' onClick={() => setReset(true)} icon={<TbArrowBack />}>
-                  Làm lại
-                </ButtonCustom>
-              </Space>
-            </Col>
-          </Row>
-
-          <p
-            className={css.question}
-            dangerouslySetInnerHTML={{ __html: questionData.question as unknown as string }}
-          ></p>
-          {questionData.hint && questionData.hint !== '<p></p>' && (
-            <Space>
-              <AiOutlineQuestionCircle />
-              <div dangerouslySetInnerHTML={{ __html: questionData.hint }}></div>
-            </Space>
-          )}
-
-          <Form form={form} onFinish={onFinish}>
-            <RenderAnswer
-              type={
-                questionData.type as unknown as
-                  | 'SINGLE CHOICE'
-                  | 'MULTIPLE CHOICE'
-                  | 'TRUE FALSE'
-                  | 'SORT'
-                  | 'DRAG DROP'
-                  | 'LIKERT SCALE'
-                  | 'FILL BLANK'
-                  | 'MATCHING'
-                  | 'NUMERICAL'
-                  | 'WRITING'
-              }
-              choices={shuffleArray(questionData.choices as unknown as Choice[])}
-              reset={reset}
-              setReset={setReset}
-              data={sub?.[currentQuestion]}
-            />
-          </Form>
-        </Space>
-      )
-    else
-      return (
-        <EmptyCustom description='Không có câu hỏi nào. Vui lòng làm phần tiếp theo!' style={{ marginTop: '25vh' }} />
-      )
-  }
-  console.log(currentQuestion)
+  const [isLoad, setIsLoad] = useState(false)
 
   const testSkill = [
     {
@@ -196,12 +98,19 @@ const TestPage = () => {
       title: 'Đọc',
       description: `${current > 0 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
-        <QuestionItem
-          type='READING'
-          questionData={question?.[currentQuestion] as unknown as QuestionState}
-          questionLength={question?.length as unknown as number}
-          questionKey={currentQuestion}
-        />
+        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
+          <QuestionItem
+            type='READING'
+            questionData={question?.[currentQuestion] as unknown as QuestionState}
+            questionLength={question?.length as unknown as number}
+            questionKey={currentQuestion}
+            dataValue={dataUpload}
+            setDataUpload={setDataUpload}
+            loading={questions.isLoading}
+            selectId={selectId}
+            form={form}
+          />
+        </LoadingCustom>
       ),
     },
     {
@@ -209,12 +118,19 @@ const TestPage = () => {
       title: 'Nghe',
       description: `${current > 1 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
-        <QuestionItem
-          type='LISTENING'
-          questionData={question?.[currentQuestion] as unknown as QuestionState}
-          questionLength={question?.length as unknown as number}
-          questionKey={currentQuestion}
-        />
+        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
+          <QuestionItem
+            type='LISTENING'
+            questionData={question?.[currentQuestion] as unknown as QuestionState}
+            questionLength={question?.length as unknown as number}
+            questionKey={currentQuestion}
+            dataValue={dataUpload}
+            setDataUpload={setDataUpload}
+            loading={questions.isLoading}
+            selectId={selectId}
+            form={form}
+          />
+        </LoadingCustom>
       ),
       disabled: false,
     },
@@ -223,12 +139,19 @@ const TestPage = () => {
       title: 'Viết',
       description: `${current > 2 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
-        <QuestionItem
-          type='WRITING'
-          questionData={question?.[currentQuestion] as unknown as QuestionState}
-          questionLength={question?.length as unknown as number}
-          questionKey={currentQuestion}
-        />
+        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
+          <QuestionItem
+            type='WRITING'
+            questionData={question?.[currentQuestion] as unknown as QuestionState}
+            questionLength={question?.length as unknown as number}
+            questionKey={currentQuestion}
+            dataValue={dataUpload}
+            setDataUpload={setDataUpload}
+            loading={questions.isLoading}
+            selectId={selectId}
+            form={form}
+          />
+        </LoadingCustom>
       ),
       disabled: false,
     },
@@ -237,22 +160,23 @@ const TestPage = () => {
       title: 'Nói',
       description: `${current === 3 && question && currentQuestion === question?.length ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
-        <QuestionItem
-          type='SPEAKING'
-          questionData={question?.[currentQuestion] as unknown as QuestionState}
-          questionLength={question?.length as unknown as number}
-          questionKey={currentQuestion}
-        />
+        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
+          <QuestionItem
+            type='SPEAKING'
+            questionData={question?.[currentQuestion] as unknown as QuestionState}
+            questionLength={question?.length as unknown as number}
+            questionKey={currentQuestion}
+            dataValue={dataUpload}
+            setDataUpload={setDataUpload}
+            loading={questions.isLoading}
+            selectId={selectId}
+            form={form}
+          />
+        </LoadingCustom>
       ),
       disabled: false,
     },
   ]
-
-  // const onChange = (value: number) => {
-  //   setSkill(testSkill[value].id)
-  //   setCurrentQuestion(0)
-  //   setCurrent(value)
-  // }
 
   const check = question && currentQuestion + 1 < question?.length
 
@@ -272,8 +196,12 @@ const TestPage = () => {
 
   const handleNext = () => {
     if (check) {
-      setCurrentQuestion((prev) => prev + 1)
       form.submit()
+      setIsLoad(true)
+      setTimeout(() => {
+        setCurrentQuestion((prev) => prev + 1)
+        setIsLoad(false)
+      }, 250)
     } else if (current === testSkill.length - 1) {
       handleFinish()
 
@@ -289,7 +217,13 @@ const TestPage = () => {
   }
 
   const handlePrev = () => {
-    if (currentQuestion > 0) setCurrentQuestion((prev) => prev - 1)
+    form.resetFields()
+    setIsLoad(true)
+    if (currentQuestion > 0)
+      setTimeout(() => {
+        setCurrentQuestion((prev) => prev - 1)
+        setIsLoad(false)
+      }, 250)
   }
 
   if (data && event)
