@@ -91,6 +91,8 @@ const TestPage = () => {
     }
   }, [testData, event, currentQuestion, current])
 
+  console.log(question, 'questionquestion')
+
   const testTime = location.state.testTime + location.state.addTime
 
   const oldTime = event && localStorage.getItem(event._id as string)
@@ -113,10 +115,11 @@ const TestPage = () => {
   // })
 
   const [sub, setsub] = useState<any[]>([])
-  console.log(sub)
 
   const QuestionItem = ({ type, questionData, questionLength, questionKey }: QuestionRender) => {
     const [reset, setReset] = useState<boolean>(false)
+
+    console.log(questionData, 'questionDataquestionData==')
 
     const onFinish = (val: any) => {
       const payload = {
@@ -178,6 +181,7 @@ const TestPage = () => {
               choices={shuffleArray(questionData.choices as unknown as Choice[])}
               reset={reset}
               setReset={setReset}
+              questionText={questionData?.questionText}
               data={sub?.[currentQuestion]}
             />
           </Form>
@@ -253,6 +257,8 @@ const TestPage = () => {
   //   setCurrentQuestion(0)
   //   setCurrent(value)
   // }
+
+  console.log(currentQuestion, 'currentQuestion')
 
   const check = question && currentQuestion + 1 < question?.length
 
