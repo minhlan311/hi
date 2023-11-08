@@ -106,7 +106,7 @@ const MentorQuestions = () => {
 
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
     e.target.checked
-      ? stateAction(setQuestionsSelect, null, quesId, 'add', setQuestionsListFromLS)
+      ? stateAction(setQuestionsSelect, null, quesId, 'switch', setQuestionsListFromLS)
       : stateAction(setQuestionsSelect, null, quesId, 'remove', setQuestionsListFromLS)
   }
 
