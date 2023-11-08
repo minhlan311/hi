@@ -27,24 +27,31 @@
     margin-bottom: 20px;
   }
 }
-
-.score {
-  .colTable {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    svg {
-      height: 28px;
+.scoreMain {
+  & > * {
+    width: 100%;
+  }
+  .score {
+    & > * {
+      width: 100%;
     }
-  }
-  .title {
-    font-size: 14px;
-  }
-  .done {
-    color: #52c41a;
-    font-size: 25px;
-  }
-  .time {
-    margin-top: 25px;
+    .colTable {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      svg {
+        height: 28px;
+      }
+    }
+    .title {
+      font-size: 14px;
+    }
+    .done {
+      color: #52c41a;
+      font-size: 25px;
+    }
+    .time {
+      margin-top: 25px;
+    }
   }
 }

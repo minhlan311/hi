@@ -38,7 +38,7 @@ export const stateAction = (
   setData: React.Dispatch<React.SetStateAction<any[]>>,
   id: string | null,
   dataUpdate: any | null,
-  actionType: 'update' | 'remove' | 'edit' | 'add',
+  actionType: 'update' | 'remove' | 'edit' | 'add' | 'switch',
   setLocalFunction?: React.Dispatch<React.SetStateAction<any>>,
   key?: string,
 ) => {
@@ -47,9 +47,56 @@ export const stateAction = (
 
     switch (actionType) {
       case 'update':
-        const updatedData = newData.map((item) => (item._id === id ? { ...item, ...dataUpdate } : item))
+        // const updatedData = newData.map((item) => (item._id === id ? { ...item, ...dataUpdate } : item))
 
-        return updatedData
+        // return updatedData
+
+        if (newData) {
+          if (typeof dataUpdate === 'string') {
+            if (newData.includes(id)) {
+              const updatedData = newData.map((item) => (item._id === id ? { ...item, dataUpdate } : item))
+
+              return updatedData
+            } else {
+              newData.push(dataUpdate)
+            }
+          }
+
+          if (typeof dataUpdate === 'object') {
+            if (newData.find((item) => (key ? item?.[key] === id : item._id === id))) {
+              const updatedData = newData.map((item) => (item._id === id ? { ...item, dataUpdate } : item))
+
+              return updatedData
+            } else {
+              newData.push(dataUpdate)
+            }
+          } else {
+            const itemIndex = newData.findIndex((item) => (key ? item?.[key] === id : item._id === id))
+            dataUpdate.forEach((item: any) => {
+              if (itemIndex) {
+                const updatedData = newData.map((item) => (item._id === id ? { ...item, ...dataUpdate } : item))
+
+                return updatedData
+              } else {
+                newData.push(item)
+              }
+            })
+          }
+
+          setLocalFunction && setLocalFunction(newData)
+
+          return newData
+        } else {
+          if (Array.isArray(dataUpdate)) {
+            setLocalFunction && setLocalFunction(dataUpdate)
+
+            return dataUpdate
+          }
+
+          setLocalFunction && setLocalFunction([dataUpdate])
+
+          return [dataUpdate]
+        }
 
       case 'remove':
         newData = newData.filter((data) => (key ? data?.[key] !== id : data._id !== id))
@@ -73,6 +120,50 @@ export const stateAction = (
         return editedData
 
       case 'add':
+        if (newData) {
+          if (typeof dataUpdate === 'string') {
+            if (newData.includes(dataUpdate)) {
+              return newData
+            } else {
+              newData.push(dataUpdate)
+            }
+          }
+
+          if (typeof dataUpdate === 'object') {
+            if (newData.find((item) => (key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate._id))) {
+              return newData
+            } else {
+              newData.push(dataUpdate)
+            }
+          } else {
+            const itemIndex = newData.findIndex((item) =>
+              key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate._id,
+            )
+            dataUpdate.forEach((item: any) => {
+              if (itemIndex === -1) {
+                return newData
+              } else {
+                newData.push(item)
+              }
+            })
+          }
+
+          setLocalFunction && setLocalFunction(newData)
+
+          return newData
+        } else {
+          if (Array.isArray(dataUpdate)) {
+            setLocalFunction && setLocalFunction(dataUpdate)
+
+            return dataUpdate
+          }
+
+          setLocalFunction && setLocalFunction([dataUpdate])
+
+          return [dataUpdate]
+        }
+
+      case 'switch':
         if (newData) {
           if (Array.isArray(dataUpdate)) {
             dataUpdate.forEach((i) => {

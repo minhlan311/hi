@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import useResponsives from '@/hooks/useResponsives'
 import { CategoryState } from '@/interface/category'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Button, Card, Col, Row, Space, Tooltip } from 'antd'
 import { BsArrowRightCircle } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
@@ -12,8 +13,12 @@ import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
 
 export default function TopCourses() {
-  const queryClient = useQueryClient()
-  const categories: any = queryClient.getQueryData(['categoriesList'])
+  const { data: categories } = useQuery({
+    queryKey: ['coursesList'],
+    queryFn: () => {
+      return categoryApi.getCategories({ parentId: null })
+    },
+  })
 
   const courses = categories?.data?.docs?.find((item: CategoryState) => item.name === 'Khóa học')
 

@@ -90,7 +90,7 @@ const FormControls = (props: Props) => {
                 <Col span={24} md={md || 12} key={ots.value as string}>
                   <Checkbox
                     onChange={(e) => {
-                      stateAction(setValues, ots.value as string, e.target.value, 'add')
+                      stateAction(setValues, ots.value as string, e.target.value, 'switch')
                     }}
                     className={css.checkbox}
                     value={ots.value as string}

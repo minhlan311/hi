@@ -120,12 +120,12 @@ const TestPage = () => {
 
     const onFinish = (val: any) => {
       const payload = {
-        ...questionData,
+        _id: questionData._id,
         correctAnswers:
           typeof val.correctAnswers === 'string' ? { correctAnswers: [val.correctAnswers] } : val.correctAnswers,
       }
 
-      stateAction(setsub, questionData._id, payload, 'add')
+      stateAction(setsub, questionData._id, payload, 'update')
     }
 
     if (questions.isLoading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
@@ -133,12 +133,12 @@ const TestPage = () => {
       return (
         <Space direction='vertical' className={'sp100'}>
           <Row justify='space-between'>
-            <Col span={24} sm={5} md={5}>
+            <Col span={24} sm={5}>
               <h2>
                 Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
               </h2>
             </Col>
-            <Col span={24} sm={8} md={6}>
+            <Col span={24} xxl={6} xl={6} lg={8} md={8} sm={8}>
               <Space>
                 <TagCustom content={type}></TagCustom>
                 <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
@@ -188,6 +188,7 @@ const TestPage = () => {
         <EmptyCustom description='Không có câu hỏi nào. Vui lòng làm phần tiếp theo!' style={{ marginTop: '25vh' }} />
       )
   }
+  console.log(currentQuestion)
 
   const testSkill = [
     {
@@ -431,12 +432,12 @@ const TestPage = () => {
                   <Col span={24} md={12}>
                     <img src={successBg} alt='successBg' width={'100%'} />
                   </Col>
-                  <Col span={24} md={12}>
+                  <Col span={24} xxl={9} xl={9} lg={11} md={11}>
                     <Space
                       direction='vertical'
                       size='large'
                       align={sm || md || lg ? 'center' : 'start'}
-                      className={'sp100'}
+                      className={`sp100 ${css.scoreMain}`}
                     >
                       <h1>{event?.name}</h1>
                       <Score />
