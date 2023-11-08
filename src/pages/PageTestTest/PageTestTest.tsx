@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSSProperties, useCallback, useState, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import questionApi from '@/apis/question.api'
 
 import './PageTestTest.scss'
+import { Button } from 'antd'
+import { Choice } from '@/interface/tests'
 
 interface DraggableItemProps {
   id: string
@@ -12,23 +12,18 @@ interface DraggableItemProps {
 }
 
 function DraggableItem({ id, content }: DraggableItemProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
   })
 
-  const style: CSSProperties = {
-    padding: '8px',
-    border: '1px solid black',
-    borderRadius: '4px',
-    marginRight: '8px',
-    cursor: 'grab',
-    position: isDragging ? 'fixed' : 'relative',
-    zIndex: isDragging ? 1000 : 'auto',
-    transform: isDragging ? `translate3d(${transform!.x}px, ${transform!.y}px, 0)` : undefined,
-  }
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes} className='drag-item'>
       {content}
     </div>
   )
@@ -46,6 +41,8 @@ function DroppableSpace({ id, content }: DroppableSpaceProps) {
 
   const style: CSSProperties = {
     borderBottom: '2px dotted black',
+    fontWeight: 700,
+    fontSize: '16px',
   }
 
   return (
@@ -55,20 +52,21 @@ function DroppableSpace({ id, content }: DroppableSpaceProps) {
   )
 }
 
-export default function PageTestTest() {
-  const { data } = useQuery({
-    queryKey: ['keyadkaljshda'],
-    queryFn: () => questionApi.getQuestionDetail('65434591b972956a12555aff'),
-  })
+interface Props {
+  questionText?: string
+  choices?: Choice[]
+}
 
-  const initialAnswers = data?.data?.choices.map((choice) => choice.answer) || []
-  const [answers, setAnswers] = useState<string[]>([])
+export default function PageTestTest({ questionText, choices }: Props) {
+  const initialAnswers = choices?.map((choice: any) => choice.answer) || []
+  const [answers, setAnswers] = useState<string[]>(initialAnswers)
   const [filledAnswers, setFilledAnswers] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    const initialAnswers = data?.data?.choices.map((choice) => choice.answer) || []
+    const initialAnswers = choices?.map((choice: any) => choice.answer) || []
+
     setAnswers(initialAnswers)
-  }, [data])
+  }, [choices])
 
   const handleDragEnd = useCallback((event: any) => {
     const { active, over } = event
@@ -87,31 +85,31 @@ export default function PageTestTest() {
     setFilledAnswers({})
   }
 
-  const getResultString = () => {
-    const parts = data?.data?.questionText?.split('______') || []
-    let result = parts[0]
+  // const getResultString = () => {
+  //   const parts = questionText?.split('______') || []
+  //   let result = parts[0]
 
-    for (let i = 1; i < parts.length; i++) {
-      result += filledAnswers[`space${i}`] || '______'
-      result += parts[i]
-    }
+  //   for (let i = 1; i < parts.length; i++) {
+  //     result += filledAnswers[`space${i}`] || '______'
+  //     result += parts[i]
+  //   }
 
-    return result
-  }
+  //   return result
+  // }
 
   return (
     <div className='container-testtesst'>
-      <button onClick={() => alert(getResultString())}>Hiển thị kết quả</button>
-      <button onClick={handleReset} style={{ marginTop: '20px' }}>
+      <Button type='primary' onClick={handleReset}>
         Reset
-      </button>
-
+      </Button>
       <DndContext onDragEnd={handleDragEnd}>
         <div style={{ margin: '20px' }}>
-          {data?.data?.questionText?.split('______').map((part: any, index: any) => (
+          {questionText?.split('______').map((part: any, index: any) => (
             <>
-              <span key={`text-part-${index}`}>{part}</span>
-              {index < data?.data?.choices.length && (
+              <span className='span-drag' key={`text-part-${index}`}>
+                {part}
+              </span>
+              {choices && index < choices.length && (
                 <DroppableSpace
                   key={`drop-space-${index}`}
                   id={`space${index + 1}`}
@@ -120,13 +118,13 @@ export default function PageTestTest() {
               )}
             </>
           ))}
-          <div style={{ display: 'flex', marginTop: '20px' }}>
-            {answers.map((answer, index) => (
-              <DraggableItem key={index} id={answer} content={answer} />
-            ))}
+
+          <div style={{ display: 'flex', padding: '10px', marginTop: '20px' }}>
+            {answers?.map((answer, index) => <DraggableItem key={index} id={answer} content={answer} />)}
           </div>
         </div>
       </DndContext>
+      {/* <button onClick={() => alert(getResultString())}>Hiển thị kết quả</button> */}
     </div>
   )
 }

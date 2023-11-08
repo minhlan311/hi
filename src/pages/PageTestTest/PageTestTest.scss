@@ -1,4 +1,15 @@
 .container-testtesst {
   max-width: 1200px;
   margin: auto;
+  min-height: 500px;
+}
+.drag-item {
+  border: 1px solid;
+  margin: 0 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.span-drag {
+  font-size: 16px;
 }
