@@ -6,6 +6,7 @@ import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice, QuestionState } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
+import PageTestTest from '../PageTestTest/PageTestTest'
 
 type Props = {
   type:
@@ -20,6 +21,7 @@ type Props = {
     | 'NUMERICAL'
     | 'WRITING'
   choices: Choice[]
+  questionText?: string
   reset: boolean
   setReset: React.Dispatch<React.SetStateAction<boolean>>
   data: QuestionState
@@ -103,7 +105,7 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
 }
 
 const RenderAnswer = (props: Props) => {
-  const { type, choices, reset, setReset, data } = props
+  const { type, choices, reset, setReset, data, questionText } = props
 
   useEffect(() => {
     if (reset) {
@@ -111,11 +113,15 @@ const RenderAnswer = (props: Props) => {
     }
   }, [reset])
 
+  console.log(props, 'data=-=-=-=')
+
   const optionsList = choices.map((ots) => {
     return { value: ots._id, label: ots.answer }
   })
 
   if (type === 'WRITING') return <TextAreaCustom name='correctAnswers' data={data?.correctAnswers?.[0]} />
+
+  if (type === 'DRAG DROP') return <PageTestTest questionText={questionText} choices={choices} />
   if (type === 'NUMERICAL')
     return (
       <Form.Item name='correctAnswers'>

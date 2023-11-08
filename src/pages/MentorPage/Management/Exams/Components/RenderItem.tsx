@@ -1,18 +1,18 @@
 import questionApi from '@/apis/question.api'
+import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import { AppContext } from '@/contexts/app.context'
 import { QuestionState } from '@/interface/question'
+import { setQuestionsListFromLS } from '@/utils/questons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Popconfirm, Row, Space } from 'antd'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
 import { MdOutlineDisabledVisible } from 'react-icons/md'
 import { RiCloseCircleFill } from 'react-icons/ri'
 import css from './RenderIten.module.scss'
-import { stateAction } from '@/common'
-import { setQuestionsListFromLS } from '@/utils/questons'
 
 type Props = {
   type: 'questionsSelected' | 'questionsBank'
@@ -30,26 +30,20 @@ const RenderItem = (props: Props) => {
   const [isHover, setIsHover] = useState(false)
   const queryClient = useQueryClient()
 
-  const { status, mutate, error } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (id: string) => questionApi.deleteQuestion(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [type] })
+      openNotification({ status: 'success', message: 'Xóa câu hỏi thành công' })
     },
-  })
-
-  useEffect(() => {
-    if (status === 'success') {
-      openNotification({ status: status, message: 'Xóa câu hỏi thành công' })
-    }
-
-    if (status === 'error' && error) {
+    onError: () => {
       openNotification({
-        status: status,
+        status: 'error',
         message: 'Thông báo',
         description: ' Có lỗi xảy ra',
       })
-    }
-  }, [status, error])
+    },
+  })
 
   if (data) {
     const check = questionsSelect.includes(data._id)
@@ -60,7 +54,7 @@ const RenderItem = (props: Props) => {
           className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
           onClick={() => {
             setQuestionList(data._id as unknown as string[])
-            setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'add', setQuestionsListFromLS)
+            setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'switch', setQuestionsListFromLS)
             // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
           }}
           onMouseEnter={() => setIsHover(true)}

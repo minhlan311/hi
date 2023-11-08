@@ -56,7 +56,7 @@ const ProfilePage = ({ profile }: Props) => {
   useEffect(() => {
     if (payload) {
       mutate(
-        { ...payload, _id: profile._id },
+        { ...payload, _id: profile?._id },
         {
           onSuccess: () => {
             const newData = { ...profile, ...payload }
@@ -79,7 +79,7 @@ const ProfilePage = ({ profile }: Props) => {
     {
       id: 'infor',
       name: 'Thông tin',
-      children: <>{user ? <MentorInfor user={user} profileId={profile._id} /> : ''}</>,
+      children: <>{user ? <MentorInfor user={user} profileId={profile?._id} /> : ''}</>,
     },
     {
       id: 'category',
@@ -100,7 +100,7 @@ const ProfilePage = ({ profile }: Props) => {
     <LoadingCustom tip='Vui lòng chờ...' className={css.loading} />
   ) : user ? (
     <div className={css.prfMain}>
-      {profile._id === user._id ? (
+      {profile?._id === user._id ? (
         <UploadCustom
           cropBeforeUpload
           cropAspect={32 / 9}
@@ -150,7 +150,7 @@ const ProfilePage = ({ profile }: Props) => {
               avtUrl={data?.data.avatarUrl ? data?.data.avatarUrl : user.avatarUrl}
               userData={user}
               size={(sm && 80) || (md && 120) || 180}
-              uploadImg={profile._id === user._id ? true : false}
+              uploadImg={profile?._id === user._id ? true : false}
               callbackPayload={(data) => setPayload(data as unknown as UserState)}
             />
             <Space direction='vertical' className={css.inf}>
