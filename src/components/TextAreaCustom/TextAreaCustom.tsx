@@ -16,7 +16,7 @@ type Props = {
   data?: any | null
   label?: string
   required?: boolean
-  dataArr: boolean
+  dataArr?: boolean
 }
 
 const TextAreaCustom = (props: Props) => {

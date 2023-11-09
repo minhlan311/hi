@@ -82,6 +82,8 @@ const TestPage = () => {
     if (question && currentQuestion >= 0) setSelectId(question[currentQuestion]?._id)
   }, [testData, event, currentQuestion, current, question])
 
+  console.log(question, 'questionquestion')
+
   const testTime = location.state.testTime + location.state.addTime
 
   const oldTime = event && localStorage.getItem(event._id as string)

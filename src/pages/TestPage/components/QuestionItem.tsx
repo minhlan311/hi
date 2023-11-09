@@ -101,6 +101,7 @@ const QuestionItem = (props: Props) => {
             data={index >= 0 ? dataValue?.[index] : null}
             questId={questionData._id}
             form={form}
+            questionText={questionData?.questionText}
           />
         </Form>
       </Space>

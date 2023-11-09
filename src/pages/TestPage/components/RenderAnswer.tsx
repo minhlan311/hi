@@ -4,6 +4,7 @@ import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice, QuestionState } from '@/interface/question'
+import PageTestTest from '@/pages/PageTestTest/PageTestTest'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
 import { useEffect, useState } from 'react'
@@ -21,6 +22,7 @@ type Props = {
     | 'NUMERICAL'
     | 'WRITING'
   choices: Choice[]
+  questionText?: string
   reset: boolean
   setReset: React.Dispatch<React.SetStateAction<boolean>>
   data: QuestionState | null
@@ -122,10 +124,8 @@ const LikertScale = ({
 }
 
 const RenderAnswer = (props: Props) => {
-  const { type, choices, reset, setReset, data, form, questId } = props
+  const { type, choices, reset, setReset, data, form, questId, questionText } = props
   const [dataCallback, setDataCallback] = useState<any[]>([])
-
-  const correctAnswers = dataCallback?.filter((choice) => choice.isCorrect).map((choice) => choice.id)
 
   useEffect(() => {
     if (reset) {
@@ -134,11 +134,8 @@ const RenderAnswer = (props: Props) => {
   }, [reset])
 
   useEffect(() => {
-    if (correctAnswers?.length > 0) {
-      const payload = { _id: '654895a3b8714d5aa64c7de6', correctAnswers: correctAnswers }
-      console.log(payload, questId)
-    }
-  }, [correctAnswers])
+    console.log(dataCallback, questId)
+  }, [dataCallback])
 
   const optionsList = choices.map((ots) => {
     return { value: ots._id, label: ots.answer }
@@ -146,6 +143,8 @@ const RenderAnswer = (props: Props) => {
 
   if (type === 'WRITING')
     return <TextAreaCustom name='correctAnswers' data={data ? data?.correctAnswers?.[0] : '<p></p>'} dataArr />
+
+  if (type === 'DRAG DROP') return <PageTestTest questionText={questionText} choices={choices} />
   if (type === 'NUMERICAL')
     return (
       <Form.Item name='correctAnswers'>
