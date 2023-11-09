@@ -6,7 +6,7 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import type { CheckboxValueType } from 'antd/es/checkbox/Group'
 import { CheckboxOptionType } from 'antd/lib'
 import { Gutter } from 'antd/lib/grid/row'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import css from './FormControls.module.scss'
 
 type Props = {
@@ -22,9 +22,8 @@ type Props = {
   gutter?: Gutter | [Gutter, Gutter]
   md?: number
   label?: string
-  value?: string
+  value?: any
   callbackValue?: React.Dispatch<React.SetStateAction<string[]>>
-  defaultValue?: any
 }
 
 const FormControls = (props: Props) => {
@@ -42,10 +41,19 @@ const FormControls = (props: Props) => {
     value,
     disabled,
     callbackValue,
-    defaultValue,
   } = props
+
   const [isCheck, setIsCheck] = useState(false || defaultChecked)
-  const [values, setValues] = useState<any>(control === 'radio' ? '' : defaultValue ? defaultValue : [])
+  const [optionsList, setOptionsList] = useState<CheckboxOptionType[]>([])
+
+  useEffect(() => {
+    if (options) setOptionsList(options)
+  }, [])
+  const [values, setValues] = useState<any>([])
+
+  useEffect(() => {
+    if (value?.length > 0) setValues(value)
+  }, [value])
 
   if (checkAll) {
     const plainOptions = ['Apple', 'Pear', 'Orange']
@@ -82,22 +90,22 @@ const FormControls = (props: Props) => {
 
   return (
     <Form.Item name={name} className={'checkCustom'}>
-      {options && options?.length > 0 ? (
+      {optionsList && optionsList?.length > 0 ? (
         type === 'card' && control === 'checkBox' ? (
-          <Checkbox.Group className={`${css.answerMain} `}>
+          <Checkbox.Group className={`${css.answerMain}`} value={values}>
             <Row gutter={gutter}>
-              {options.map((ots) => (
+              {optionsList.map((ots) => (
                 <Col span={24} md={md || 12} key={ots.value as string}>
                   <Checkbox
                     onChange={(e) => {
-                      stateAction(setValues, ots.value as string, e.target.value, 'switch')
+                      stateAction(setValues, ots.value as string, e.target.value, 'add')
                     }}
                     className={css.checkbox}
                     value={ots.value as string}
                   >
                     <Card
                       className={`${css.checkboxCard} ${
-                        values.find((val: string) => val === ots.value) ? css.checked : undefined
+                        values.findIndex((val: string) => val === ots.value) !== -1 ? css.checked : undefined
                       } ${className}`}
                       onClick={() => setIsCheck(!isCheck)}
                       size='small'
@@ -110,17 +118,19 @@ const FormControls = (props: Props) => {
             </Row>
           </Checkbox.Group>
         ) : (
-          <Radio.Group className={`${css.answerMain}`}>
+          <Radio.Group className={`${css.answerMain}`} value={values}>
             <Row gutter={gutter}>
-              {options.map((ots) => (
+              {optionsList.map((ots) => (
                 <Col span={24} md={md || 12} key={ots.value as string}>
                   <Radio
-                    onChange={(e) => setValues(e.target.value)}
+                    onChange={(e) => setValues([e.target.value])}
                     className={css.checkbox}
                     value={ots.value as string}
                   >
                     <Card
-                      className={`${css.checkboxCard} ${values === ots.value ? css.checked : undefined} ${className}`}
+                      className={`${css.checkboxCard} ${
+                        values?.[0] === ots.value ? css.checked : undefined
+                      } ${className}`}
                       onClick={() => setIsCheck(!isCheck)}
                       size='small'
                     >

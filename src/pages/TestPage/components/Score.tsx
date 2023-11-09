@@ -5,7 +5,7 @@ import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
 import { RiSpeakLine } from 'react-icons/ri'
 import { VscBook } from 'react-icons/vsc'
-import css from './styles.module.scss'
+import css from '../styles.module.scss'
 import useResponsives from '@/hooks/useResponsives'
 
 const Score = () => {

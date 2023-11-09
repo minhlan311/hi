@@ -16,10 +16,11 @@ type Props = {
   data?: any | null
   label?: string
   required?: boolean
+  dataArr?: boolean
 }
 
 const TextAreaCustom = (props: Props) => {
-  const { ref, onBlur, onReady, onChange, config, name, data, label, required = false } = props
+  const { ref, onBlur, onReady, onChange, config, name, data, label, required = false, dataArr = false } = props
 
   const [editorContent, setEditorContent] = useState<string>('<p></p>')
 
@@ -32,7 +33,8 @@ const TextAreaCustom = (props: Props) => {
   useEffect(() => {
     if (!data) setEditorContent('<p></p>')
     if (data?.[name]) setEditorContent(data?.[name])
-  }, [data])
+    if (data && dataArr) setEditorContent(data)
+  }, [data, dataArr])
 
   return (
     <Form.Item
