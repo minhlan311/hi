@@ -123,6 +123,39 @@ const DrawerExam = (props: Props) => {
             <Input placeholder='Nhập tên tiêu đề bộ đề' />
           </Form.Item>
 
+          <Form.Item
+            name='skill'
+            label='Loại kỹ năng'
+            rules={[
+              {
+                required: true,
+                message: 'Chọn loại kỹ năng',
+              },
+            ]}
+          >
+            <Select
+              placeholder='Chọn loại kỹ năng'
+              options={[
+                {
+                  value: 'READING',
+                  label: 'Đọc',
+                },
+                {
+                  value: 'LISTENING',
+                  label: 'Nghe',
+                },
+                {
+                  value: 'WRITING',
+                  label: 'Viết',
+                },
+                {
+                  value: 'SPEAKING',
+                  label: 'Nói',
+                },
+              ]}
+            />
+          </Form.Item>
+
           <TextAreaCustom name='description' label='Chú thích' data={examData} />
 
           <Form.Item
