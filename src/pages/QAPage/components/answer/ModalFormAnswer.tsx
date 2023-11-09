@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Form, Modal, Upload, Button, message } from 'antd'
-import { useForm } from 'antd/es/form/Form'
+import FaqApi from '@/apis/faq.api'
+import { AppContext } from '@/contexts/app.context'
+import { AnswerState, FaqSate } from '@/interface/faq'
+import { UploadOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button, Form, Modal, Upload, message } from 'antd'
+import { useForm } from 'antd/es/form/Form'
 import { UploadFile } from 'antd/lib'
-import { useContext, useState, useEffect } from 'react'
-import { UploadOutlined } from '@ant-design/icons'
-import FaqApi from '@/apis/faq.api'
-import { AnswerState, FaqSate } from '@/interface/faq'
-import { AppContext } from '@/contexts/app.context'
+import { useContext, useEffect, useState } from 'react'
 
 interface IModalFormProps {
   isModalOpen: boolean
@@ -147,7 +147,7 @@ export default function ModalFormAnswer(props: IModalFormProps) {
             <CKEditor
               editor={ClassicEditor}
               data={answer?.content}
-              onChange={(event: any, editor: any) => {
+              onChange={(_event: any, editor: any) => {
                 const data = editor.getData()
                 form.setFieldsValue({ content: data })
               }}
