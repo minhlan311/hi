@@ -239,7 +239,7 @@ export default function CategogyDetail() {
                       </Col>
                     ))
                   ) : (
-                    <EmptyCustom description='Hiện tại chưa có lịch khai giảng nào' />
+                    <EmptyCustom />
                   )}
                 </Row>
               ) : (
