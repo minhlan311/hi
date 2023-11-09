@@ -4,10 +4,11 @@ import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice, QuestionState } from '@/interface/question'
-import PageTestTest from '@/pages/PageTestTest/PageTestTest'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
 import { useEffect, useState } from 'react'
+import PageTestDrag from './DragTest/PageTestDrag'
+import PageFillTest from './FillTest/PageFillTest'
 
 type Props = {
   type:
@@ -143,8 +144,8 @@ const RenderAnswer = (props: Props) => {
 
   if (type === 'WRITING')
     return <TextAreaCustom name='correctAnswers' data={data ? data?.correctAnswers?.[0] : '<p></p>'} dataArr />
-
-  if (type === 'DRAG DROP') return <PageTestTest questionText={questionText} choices={choices} />
+  if (type === 'DRAG DROP') return <PageTestDrag questionText={questionText} choices={choices} />
+  if (type === 'FILL BLANK') return <PageFillTest template={questionText} />
   if (type === 'NUMERICAL')
     return (
       <Form.Item name='correctAnswers'>
