@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const localAction = (
@@ -37,8 +36,8 @@ export const shuffleArray = (array: any[]) => {
 export const stateAction = (
   setData: React.Dispatch<React.SetStateAction<any[]>>,
   id: string | null,
-  dataUpdate: any | null,
-  actionType: 'update' | 'remove' | 'edit' | 'add' | 'switch',
+  dataUpdate: any | any[] | null,
+  actionType: 'update' | 'remove' | 'add' | 'switch',
   setLocalFunction?: React.Dispatch<React.SetStateAction<any>>,
   key?: string,
 ) => {
@@ -47,10 +46,6 @@ export const stateAction = (
 
     switch (actionType) {
       case 'update':
-        // const updatedData = newData.map((item) => (item._id === id ? { ...item, ...dataUpdate } : item))
-
-        // return updatedData
-
         if (newData) {
           if (typeof dataUpdate === 'string') {
             if (newData.includes(id)) {
@@ -62,25 +57,37 @@ export const stateAction = (
             }
           }
 
-          if (typeof dataUpdate === 'object') {
-            if (newData.find((item) => (key ? item?.[key] === id : item._id === id))) {
-              const updatedData = newData.map((item) => (item._id === id ? { ...item, dataUpdate } : item))
-
-              return updatedData
-            } else {
-              newData.push(dataUpdate)
-            }
-          } else {
+          if (Array.isArray(dataUpdate as unknown as any[])) {
             const itemIndex = newData.findIndex((item) => (key ? item?.[key] === id : item._id === id))
-            dataUpdate.forEach((item: any) => {
+            dataUpdate?.forEach((item: any) => {
               if (itemIndex) {
-                const updatedData = newData.map((item) => (item._id === id ? { ...item, ...dataUpdate } : item))
+                const updatedData = newData.map((item) =>
+                  key
+                    ? item?.[key] === dataUpdate?.[key as unknown as any]
+                    : item._id === dataUpdate?._id
+                    ? { ...item, ...dataUpdate }
+                    : item,
+                )
 
                 return updatedData
               } else {
                 newData.push(item)
               }
             })
+          } else {
+            if (newData.find((item) => (key ? item?.[key] === id : item._id === id))) {
+              const updatedData = newData.map((item) =>
+                key
+                  ? item?.[key] === dataUpdate?.[key]
+                  : item._id === dataUpdate._id
+                  ? { ...item, ...dataUpdate }
+                  : item,
+              )
+
+              return updatedData
+            } else {
+              newData.push(dataUpdate)
+            }
           }
 
           setLocalFunction && setLocalFunction(newData)
@@ -105,20 +112,6 @@ export const stateAction = (
 
         return newData
 
-      case 'edit':
-        const editedData = newData.map((item) => {
-          if (item._id === id) {
-            const updatedItem = { ...item }
-            updatedItem[key as string] = dataUpdate
-
-            return updatedItem
-          }
-
-          return item
-        })
-
-        return editedData
-
       case 'add':
         if (newData) {
           if (typeof dataUpdate === 'string') {
@@ -129,23 +122,23 @@ export const stateAction = (
             }
           }
 
-          if (typeof dataUpdate === 'object') {
-            if (newData.find((item) => (key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate._id))) {
-              return newData
-            } else {
-              newData.push(dataUpdate)
-            }
-          } else {
+          if (Array.isArray(dataUpdate as unknown as any[])) {
             const itemIndex = newData.findIndex((item) =>
-              key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate._id,
+              key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate?._id,
             )
-            dataUpdate.forEach((item: any) => {
+            dataUpdate?.forEach((item: any) => {
               if (itemIndex === -1) {
                 return newData
               } else {
                 newData.push(item)
               }
             })
+          } else {
+            if (newData.find((item) => (key ? item?.[key] === dataUpdate?.[key] : item._id === dataUpdate._id))) {
+              return newData
+            } else {
+              newData.push(dataUpdate)
+            }
           }
 
           setLocalFunction && setLocalFunction(newData)

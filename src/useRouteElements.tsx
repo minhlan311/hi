@@ -32,13 +32,14 @@ import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
-import PageTestTest from './pages/PageTestTest/PageTestTest.tsx'
-import ProfilePage from './pages/ProfilePage/index.tsx'
+
 import QAPage from './pages/QAPage/QAPage.tsx'
 import QADetail from './pages/QAPage/QAPageDetail.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
+import PageTestTest from './pages/TestPage/components/DragTest/PageTestDrag.tsx'
+import ProfilePage from './pages/ProfilePage/index.tsx'
 
 /* eslint-disable react-refresh/only-export-components */
 

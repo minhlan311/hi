@@ -153,7 +153,7 @@ const DrawerQuestion = (props: Props) => {
           form={form}
           initialValues={{ difficulty: 'EASY', skill: 'READING' }}
         >
-          {typeQues !== 'DRAG DROP' && (
+          {typeQues !== 'DRAG DROP' && typeQues !== 'FILL BLANK' && (
             <>
               <h3>Câu hỏi</h3>
               <TextAreaCustom
@@ -317,12 +317,15 @@ const DrawerQuestion = (props: Props) => {
           </Row>
           <h3>Câu trả lời</h3>
 
-          {typeQues === 'DRAG DROP' && <CreateQuestion questionTextForm={setQuestionText} choose={setChoices} />}
+          {typeQues === 'DRAG DROP' || typeQues === 'FILL BLANK' ? (
+            <CreateQuestion questionTextForm={setQuestionText} choose={setChoices} />
+          ) : (
+            ''
+          )}
           {((typeQues === 'SINGLE CHOICE' ||
             typeQues === 'MULTIPLE CHOICE' ||
             typeQues === 'TRUE FALSE' ||
-            typeQues === 'SORT' ||
-            typeQues === 'FILL BLANK') && (
+            typeQues === 'SORT') && (
             <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!open} />
           )) ||
             (typeQues === 'WRITING' && (

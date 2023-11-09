@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSSProperties, useCallback, useState, useEffect } from 'react'
-
-import './PageTestTest.scss'
+import './PageTestDrag.scss'
 import { Button } from 'antd'
 import { Choice } from '@/interface/tests'
 
@@ -57,7 +56,7 @@ interface Props {
   choices?: Choice[]
 }
 
-export default function PageTestTest({ questionText, choices }: Props) {
+export default function PageTestDrag({ questionText, choices }: Props) {
   const initialAnswers = choices?.map((choice: any) => choice.answer) || []
   const [answers, setAnswers] = useState<string[]>(initialAnswers)
   const [filledAnswers, setFilledAnswers] = useState<Record<string, string>>({})
