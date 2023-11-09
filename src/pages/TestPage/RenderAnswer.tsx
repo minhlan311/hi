@@ -120,7 +120,7 @@ const RenderAnswer = (props: Props) => {
 
   if (type === 'WRITING') return <TextAreaCustom name='correctAnswers' data={data?.correctAnswers?.[0]} />
   if (type === 'DRAG DROP') return <PageTestDrag questionText={questionText} choices={choices} />
-  if (type === 'FILL BLANK') return <PageFillTest template={questionText} />
+  if (type === 'FILL BLANK') return <PageFillTest template={questionText || ''} />
   if (type === 'NUMERICAL')
     return (
       <Form.Item name='correctAnswers'>
