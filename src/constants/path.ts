@@ -25,6 +25,7 @@ export const PATH = {
   COURSE_SUB: '/khoa-hoc',
   CHOICE_PAGE: '/trac-nghiem',
   QA_PAGE: '/hoi-dap',
+  QA_PAGE_DETAIL: '/hoi-dap/:id',
   TEST_PAGE: '/lam-bai-thi-online',
   TEST_TEST_PAGE: '/test-drag-drop',
   TEST_TEST_CREATE: '/create-drag-drop',
@@ -50,7 +51,7 @@ export const PATH = {
   PAYMENT_CALLBACK: '/payment-callback',
   ROOM_LIVE: '/room/:roomId',
   PEDAGOGYS: '/pedagogys/:id',
-  CART: '/cart-page',
+  CART: '/cart-page'
 } as const
 
 export default PATH
