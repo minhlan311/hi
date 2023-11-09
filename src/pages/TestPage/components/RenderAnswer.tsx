@@ -5,9 +5,10 @@ import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice, QuestionState } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
+import { FormInstance } from 'antd/lib'
 import { useEffect, useState } from 'react'
-import PageTestDrag from './components/DragTest/PageTestDrag'
-import PageFillTest from './components/FillTest/PageFillTest'
+import PageTestDrag from './DragTest/PageTestDrag'
+import PageFillTest from './FillTest/PageFillTest'
 
 type Props = {
   type:
@@ -25,10 +26,24 @@ type Props = {
   questionText?: string
   reset: boolean
   setReset: React.Dispatch<React.SetStateAction<boolean>>
-  data: QuestionState
+  data: QuestionState | null
+  form: FormInstance
+  questId: string
 }
 
-const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: string }) => {
+const LikertScale = ({
+  rows,
+  cols,
+  type,
+  form,
+  dataId,
+}: {
+  rows: any[]
+  cols: any[]
+  type: string
+  form: FormInstance
+  dataId: string
+}) => {
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
   const [correctAnswers, setCorrectAnswers] = useState<any[]>([])
 
@@ -50,6 +65,10 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
       )
     }
   }, [selectedAnswers])
+
+  useEffect(() => {
+    if (correctAnswers.length > 0) form.setFieldsValue({ _id: dataId, correctAnswers: correctAnswers })
+  }, [form, correctAnswers])
 
   const optionsList = cols.map((c) => {
     return { value: c.id, label: c.answer }
@@ -106,7 +125,8 @@ const LikertScale = ({ rows, cols, type }: { rows: any[]; cols: any[]; type: str
 }
 
 const RenderAnswer = (props: Props) => {
-  const { type, choices, reset, setReset, data, questionText } = props
+  const { type, choices, reset, setReset, data, form, questId, questionText } = props
+  const [dataCallback, setDataCallback] = useState<any[]>([])
 
   useEffect(() => {
     if (reset) {
@@ -114,11 +134,16 @@ const RenderAnswer = (props: Props) => {
     }
   }, [reset])
 
+  useEffect(() => {
+    console.log(dataCallback, questId)
+  }, [dataCallback])
+
   const optionsList = choices.map((ots) => {
     return { value: ots._id, label: ots.answer }
   })
 
-  if (type === 'WRITING') return <TextAreaCustom name='correctAnswers' data={data?.correctAnswers?.[0]} />
+  if (type === 'WRITING')
+    return <TextAreaCustom name='correctAnswers' data={data ? data?.correctAnswers?.[0] : '<p></p>'} dataArr />
   if (type === 'DRAG DROP') return <PageTestDrag questionText={questionText} choices={choices} />
   if (type === 'FILL BLANK') return <PageFillTest template={questionText || ''} />
   if (type === 'NUMERICAL')
@@ -135,7 +160,7 @@ const RenderAnswer = (props: Props) => {
         type='card'
         options={optionsList}
         gutter={[12, 12]}
-        defaultValue={data?.correctAnswers}
+        value={data?.correctAnswers}
       />
     )
   if (type === 'MULTIPLE CHOICE')
@@ -146,14 +171,31 @@ const RenderAnswer = (props: Props) => {
         type='card'
         options={optionsList}
         gutter={[12, 12]}
-        defaultValue={data?.correctAnswers}
+        value={data?.correctAnswers}
       />
     )
   if (type === 'SORT')
-    return <DragAndDrop data={choices} renderType='card' dndType='sort' labelKey='answer' direction='vertical' />
+    return (
+      <DragAndDrop
+        data={choices}
+        renderType='card'
+        dndType='sort'
+        labelKey='answer'
+        direction='vertical'
+        callbackData={setDataCallback}
+      />
+    )
 
   if (type === 'LIKERT SCALE' || type === 'MATCHING')
-    return <LikertScale rows={shuffleArray(choices[0]?.rows)} cols={shuffleArray(choices[0]?.cols)} type={type} />
+    return (
+      <LikertScale
+        rows={shuffleArray(choices[0]?.rows)}
+        cols={shuffleArray(choices[0]?.cols)}
+        type={type}
+        form={form}
+        dataId={data?._id as unknown as string}
+      />
+    )
 }
 
 export default RenderAnswer
