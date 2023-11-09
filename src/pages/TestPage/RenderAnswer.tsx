@@ -6,7 +6,8 @@ import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Choice, QuestionState } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
-import PageTestTest from '../PageTestTest/PageTestTest'
+import PageTestDrag from './components/DragTest/PageTestDrag'
+import PageFillTest from './components/FillTest/PageFillTest'
 
 type Props = {
   type:
@@ -113,15 +114,13 @@ const RenderAnswer = (props: Props) => {
     }
   }, [reset])
 
-  console.log(props, 'data=-=-=-=')
-
   const optionsList = choices.map((ots) => {
     return { value: ots._id, label: ots.answer }
   })
 
   if (type === 'WRITING') return <TextAreaCustom name='correctAnswers' data={data?.correctAnswers?.[0]} />
-
-  if (type === 'DRAG DROP') return <PageTestTest questionText={questionText} choices={choices} />
+  if (type === 'DRAG DROP') return <PageTestDrag questionText={questionText} choices={choices} />
+  if (type === 'FILL BLANK') return <PageFillTest template={questionText} />
   if (type === 'NUMERICAL')
     return (
       <Form.Item name='correctAnswers'>
