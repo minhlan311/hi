@@ -3,7 +3,7 @@ import { AnswerState } from '@/interface/faq'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Avatar, Button, Card, Image, Row, Skeleton, Space, Tooltip, Col, Popconfirm, message } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
+// import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
 import { useNavigate, useParams } from 'react-router-dom'
 import { UserOutlined, CommentOutlined } from '@ant-design/icons'
 import './QAPage.scss'
@@ -79,6 +79,10 @@ export default function QADetail() {
     return []
   }
 
+  // const likeFaq = () => {
+  //   // FaqApi.likeFaq(faq?._id as string)
+  // }
+
   return (
     <div id='qa-page_container'>
       <Row gutter={16}>
@@ -95,7 +99,16 @@ export default function QADetail() {
             <Skeleton avatar paragraph={{ rows: 4 }} />
           ) : (
             <>
-              <Card actions={actions()} title={'Môn học: ' + faq?.category?.name} style={{ marginBottom: '10px' }}>
+              <Card
+                actions={actions()}
+                title={faq?.title}
+                style={{ marginBottom: '10px' }}
+                extra={
+                  <>
+                    <p>{'Môn học: ' + faq?.category?.name}</p>
+                  </>
+                }
+              >
                 <Meta
                   avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + faq?.user?.avatarUrl} />}
                   title={faq?.user?.fullName}
@@ -113,8 +126,15 @@ export default function QADetail() {
                   ></p>
                 )}
                 <Space align='center' style={{ margin: '10px 0' }}>
-                  <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
-                  <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0
+                  {/* <AiOutlineLike
+                    size={25}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      likeFaq()
+                    }}
+                  />{' '}
+                  0
+                  <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0 */}
                   <Avatar.Group maxCount={2}>
                     {faq?.answers?.map((item: AnswerState) => (
                       <Tooltip title={item?.user?.fullName} placement='top'>
