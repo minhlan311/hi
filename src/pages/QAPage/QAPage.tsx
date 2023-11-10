@@ -31,8 +31,8 @@ export default function QAPage() {
 
   return (
     <Content id='qa-page_container'>
-      <Row gutter={16}>
-        <Col span={7} lg={6}>
+      <Row gutter={16} justify={'center'}>
+        <Col span={7} lg={6} className='position-fixed-div'>
           <CateGoriesList
             setCategoryId={(id: string) => {
               console.log('categoryId', id)

@@ -31,13 +31,13 @@ export default function AnswerList(props: IAnswerListProps) {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    }
+    },
   })
 
   const deleteAnswer = (answer: AnswerState) => {
     mutate.mutate({
       id: faq?._id as string,
-      answerId: answer?._id as string
+      answerId: answer?._id as string,
     })
   }
 
@@ -66,7 +66,7 @@ export default function AnswerList(props: IAnswerListProps) {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>
+        </Tooltip>,
       ]
     }
 
