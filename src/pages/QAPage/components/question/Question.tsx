@@ -57,7 +57,10 @@ export default function FaqList(props: IFaqListProp) {
             <Avatar.Group maxCount={2}>
               {faq?.answers?.map((item: AnswerState) => (
                 <Tooltip title={item?.user?.fullName} placement='top'>
-                  <Avatar src={item?.user?.avatarUrl} icon={<UserOutlined />} />
+                  <Avatar
+                    src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.user?.avatarUrl}
+                    icon={<UserOutlined />}
+                  />
                 </Tooltip>
               ))}
             </Avatar.Group>
@@ -73,13 +76,15 @@ export default function FaqList(props: IFaqListProp) {
         </Card>
       ))}
 
-      <Pagination
-        defaultCurrent={page}
-        total={data?.data.totalDocs}
-        onChange={(page) => {
-          setPage(page)
-        }}
-      />
+      {faqs?.length && (
+        <Pagination
+          defaultCurrent={page}
+          total={data?.data.totalDocs}
+          onChange={(page) => {
+            setPage(page)
+          }}
+        />
+      )}
     </>
   )
 }

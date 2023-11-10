@@ -31,13 +31,13 @@ export default function AnswerList(props: IAnswerListProps) {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    }
+    },
   })
 
   const deleteAnswer = (answer: AnswerState) => {
     mutate.mutate({
       id: faq?._id as string,
-      answerId: answer?._id as string
+      answerId: answer?._id as string,
     })
   }
 
@@ -66,7 +66,7 @@ export default function AnswerList(props: IAnswerListProps) {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>
+        </Tooltip>,
       ]
     }
 
@@ -79,29 +79,31 @@ export default function AnswerList(props: IAnswerListProps) {
         <h1 style={{ margin: '10px' }}>Câu trả lời</h1>
         <div id='answer_container'>
           {sortedAnswers?.map((answer: AnswerState) => (
-            <Card style={{ marginBottom: '10px' }} actions={actions(answer)}>
-              <Meta
-                avatar={<Avatar src={answer?.user.avatarUrl} />}
-                title={answer?.user?.fullName}
-                description={answer?.createdAt}
-              />
-              <div style={{ margin: '10px 0' }}>
-                {answer?.files?.map((item: string) => (
-                  <Image width={200} src={`${import.meta.env.VITE_FILE_ENDPOINT}/${item}`}></Image>
-                ))}
-              </div>
-              {answer?.content && (
-                <p
-                  style={{ margin: '10px 0', fontSize: '16px' }}
-                  dangerouslySetInnerHTML={{ __html: answer?.content }}
-                ></p>
-              )}
+            <>
+              <Card style={{ marginBottom: '10px' }} actions={actions(answer)}>
+                <Meta
+                  avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + answer?.user?.avatarUrl} />}
+                  title={answer?.user?.fullName}
+                  description={answer?.createdAt}
+                />
+                <div style={{ margin: '10px 0' }}>
+                  {answer?.files?.map((item: string) => (
+                    <Image width={200} src={`${import.meta.env.VITE_FILE_ENDPOINT}/${item}`}></Image>
+                  ))}
+                </div>
+                {answer?.content && (
+                  <p
+                    style={{ margin: '10px 0', fontSize: '16px' }}
+                    dangerouslySetInnerHTML={{ __html: answer?.content }}
+                  ></p>
+                )}
 
-              <Space align='center' style={{ marginTop: '10px' }}>
-                <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
-                <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0
-              </Space>
-            </Card>
+                <Space align='center' style={{ marginTop: '10px' }}>
+                  <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
+                  <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0
+                </Space>
+              </Card>
+            </>
           ))}
         </div>
       </>

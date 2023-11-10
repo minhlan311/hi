@@ -24,14 +24,14 @@ export default function CateGoriesList(props: ICateGoriesListProps) {
     queryFn: () =>
       categoryApi.getCategories(
         {
-          parentId: '64ffde9c746fe5413cf8d1af'
+          parentId: '64ffde9c746fe5413cf8d1af',
         },
         {
           limit: 12,
-          page
-        }
+          page,
+        },
       ),
-    queryKey: ['getCategoryCourse', page]
+    queryKey: ['getCategoryCourse', page],
   })
 
   const categoryList = data?.data?.docs
@@ -66,7 +66,7 @@ export default function CateGoriesList(props: ICateGoriesListProps) {
                 style={categoryIdActive === item._id ? { backgroundColor: '#EEEEEE' } : {}}
               >
                 <List.Item.Meta
-                  avatar={<Avatar src={`${item.icon}`} />}
+                  avatar={<Avatar src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + item.icon}`} />}
                   title={<p>{item.name}</p>}
                   description={
                     <>
@@ -77,7 +77,7 @@ export default function CateGoriesList(props: ICateGoriesListProps) {
                 {isLoading && (
                   <Skeleton loading={isLoading} active avatar>
                     <List.Item.Meta
-                      avatar={<Avatar src={item.icon} />}
+                      avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item.icon} />}
                       title={item.name}
                       description={item.description}
                     />
