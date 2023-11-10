@@ -206,7 +206,7 @@ const EventDetailModal = (props: Props) => {
                 ) : (
                   <ButtonCustom
                     type='primary'
-                    // disabled={!between || endClass}
+                    disabled={!between || endClass}
                     href={`/live/#/${slugify(eventDetail.name, '_')}-${eventDetail._id}`}
                     linkTarget='_parent'
                   >
