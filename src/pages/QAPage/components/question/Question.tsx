@@ -4,7 +4,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, Button, Card, Pagination, Space, Tooltip } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
+// import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
@@ -36,7 +36,15 @@ export default function FaqList(props: IFaqListProp) {
   return (
     <>
       {faqs?.map((faq) => (
-        <Card title={'Môn học: ' + faq?.category?.name} style={{ marginBottom: '10px' }}>
+        <Card
+          title={faq?.title}
+          style={{ marginBottom: '10px' }}
+          extra={
+            <>
+              <p>{'Môn học: ' + faq?.category?.name}</p>
+            </>
+          }
+        >
           <Meta avatar={<Avatar src={faq?.user.avatarUrl} />} title={faq?.user?.fullName} description={faq.createdAt} />
 
           <Link to={'/hoi-dap/' + faq._id}>
@@ -44,8 +52,8 @@ export default function FaqList(props: IFaqListProp) {
           </Link>
 
           <Space align='center'>
-            <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
-            <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0
+            {/* <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
+            <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0 */}
             <Avatar.Group maxCount={2}>
               {faq?.answers?.map((item: AnswerState) => (
                 <Tooltip title={item?.user?.fullName} placement='top'>
