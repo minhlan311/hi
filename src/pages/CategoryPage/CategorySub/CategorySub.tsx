@@ -2,13 +2,13 @@
 import categoryApi from '@/apis/categories.api'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
-import { useQuery } from '@tanstack/react-query'
-import './CategorySub.scss'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Card, Col, Row } from 'antd'
-import Meta from 'antd/es/card/Meta'
 import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import WrapMore from '@/components/WrapMore/WrapMore'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Row } from 'antd'
+import Meta from 'antd/es/card/Meta'
+import { useNavigate, useParams } from 'react-router-dom'
+import './CategorySub.scss'
 
 export default function CategorySub() {
   const { categorySlug } = useParams()
@@ -23,7 +23,6 @@ export default function CategorySub() {
       }
     },
   })
-
   const { data } = useQuery({
     queryKey: ['cateSub', categorySlug],
     queryFn: () =>
@@ -50,7 +49,6 @@ export default function CategorySub() {
           <div className='h2'>
             <div className='div-cate'>
               <h2>{detailData?.data?.name}</h2>
-
               <WrapMore
                 title=''
                 maxWidth='100%'
