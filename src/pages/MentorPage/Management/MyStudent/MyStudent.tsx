@@ -11,7 +11,7 @@ import { TypeForm } from '@/types/utils.type'
 import { EditOutlined, ReconciliationOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Modal, Select, Space, Table, Tooltip } from 'antd'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export default function MyStudent() {
   const [current, setCurrent] = useState<number>(1)
@@ -58,6 +58,10 @@ export default function MyStudent() {
     setCurrent(page.current)
   }
 
+  useEffect(() => {
+    setClassId('')
+  }, [courseId, studentId])
+
   const subjectOptions = loadingClass?.data?.docs?.map((item: any) => ({
     label: item?.title,
     value: item?._id,
@@ -83,8 +87,10 @@ export default function MyStudent() {
         message: 'thông báo',
       })
       queryClient.invalidateQueries({ queryKey: ['dataUserEnroll'] })
+      setClassId('')
     },
     onError: (data: any) => {
+      setClassId('')
       openNotification({
         status: 'error',
         description: data?.response?.data?.message,
@@ -221,7 +227,13 @@ export default function MyStudent() {
           cancelText='Hủy bỏ'
           onCancel={handleCancel}
         >
-          <Select onChange={setClassId} options={subjectOptions} placeholder='Danh sách lớp học...' />
+          <Select
+            style={{ minWidth: '150px' }}
+            value={classId}
+            onChange={setClassId}
+            options={subjectOptions}
+            placeholder='Danh sách lớp học...'
+          />
         </Modal>
         <Table
           scroll={{ x: 700, y: 500 }} // Đặt chiều cao cuộn ở đây (300px)
