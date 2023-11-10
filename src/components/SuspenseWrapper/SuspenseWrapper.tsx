@@ -12,7 +12,7 @@ const SuspenseWrapper = ({ children }: any) => {
           <Space className={css.logo}>
             <Logo
               style={{
-                marginRight: '10px',
+                marginRight: '10px'
               }}
             />
             {<Spin delay={200} />}
