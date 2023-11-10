@@ -25,7 +25,7 @@ export default function QADetail() {
   const { data, isLoading } = useQuery({
     queryFn: () => FaqApi.getQaDetail(params.id as string),
     queryKey: ['getFaqDetail', reload],
-    enabled: params.id ? true : false
+    enabled: params.id ? true : false,
   })
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ export default function QADetail() {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    }
+    },
   })
 
   const deleteFaq = () => {
@@ -72,7 +72,7 @@ export default function QADetail() {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>
+        </Tooltip>,
       ]
     }
 
@@ -90,14 +90,14 @@ export default function QADetail() {
             }}
           ></CateGoriesList>
         </Col>
-        <Col span={10} lg={18 }>
+        <Col span={10} lg={18}>
           {isLoading ? (
             <Skeleton avatar paragraph={{ rows: 4 }} />
           ) : (
             <>
               <Card actions={actions()} title={'Môn học: ' + faq?.category?.name} style={{ marginBottom: '10px' }}>
                 <Meta
-                  avatar={<Avatar src={faq?.user?.avatarUrl} />}
+                  avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + faq?.user?.avatarUrl} />}
                   title={faq?.user?.fullName}
                   description={faq?.createdAt}
                 />
@@ -118,7 +118,10 @@ export default function QADetail() {
                   <Avatar.Group maxCount={2}>
                     {faq?.answers?.map((item: AnswerState) => (
                       <Tooltip title={item?.user?.fullName} placement='top'>
-                        <Avatar src={item?.user?.avatarUrl} icon={<UserOutlined />} />
+                        <Avatar
+                          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.user?.avatarUrl}
+                          icon={<UserOutlined />}
+                        />
                       </Tooltip>
                     ))}
                   </Avatar.Group>

@@ -37,7 +37,11 @@ export default function FaqList(props: IFaqListProp) {
     <>
       {faqs?.map((faq) => (
         <Card title={'Môn học: ' + faq?.category?.name} style={{ marginBottom: '10px' }}>
-          <Meta avatar={<Avatar src={faq?.user.avatarUrl} />} title={faq?.user?.fullName} description={faq.createdAt} />
+          <Meta
+            avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + faq?.user.avatarUrl} />}
+            title={faq?.user?.fullName}
+            description={faq.createdAt}
+          />
 
           <Link to={'/hoi-dap/' + faq._id}>
             <p style={{ margin: '10px 0', fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: faq.content }}></p>
@@ -49,7 +53,10 @@ export default function FaqList(props: IFaqListProp) {
             <Avatar.Group maxCount={2}>
               {faq?.answers?.map((item: AnswerState) => (
                 <Tooltip title={item?.user?.fullName} placement='top'>
-                  <Avatar src={item?.user?.avatarUrl} icon={<UserOutlined />} />
+                  <Avatar
+                    src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.user?.avatarUrl}
+                    icon={<UserOutlined />}
+                  />
                 </Tooltip>
               ))}
             </Avatar.Group>
