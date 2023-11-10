@@ -22,9 +22,9 @@ export default function FaqList(props: IFaqListProp) {
     queryFn: () =>
       FaqApi.getFaqs(category ? { categoryId: category } : {}, {
         limit: 10,
-        page: page
+        page: page,
       }),
-    queryKey: ['getFaqList', category, page]
+    queryKey: ['getFaqList', category, page],
   })
   const navigate = useNavigate()
   const faqs = data?.data?.docs
@@ -65,13 +65,15 @@ export default function FaqList(props: IFaqListProp) {
         </Card>
       ))}
 
-      <Pagination
-        defaultCurrent={page}
-        total={data?.data.totalDocs}
-        onChange={(page) => {
-          setPage(page)
-        }}
-      />
+      {faqs?.length && (
+        <Pagination
+          defaultCurrent={page}
+          total={data?.data.totalDocs}
+          onChange={(page) => {
+            setPage(page)
+          }}
+        />
+      )}
     </>
   )
 }

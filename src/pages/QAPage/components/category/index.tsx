@@ -24,14 +24,14 @@ export default function CateGoriesList(props: ICateGoriesListProps) {
     queryFn: () =>
       categoryApi.getCategories(
         {
-          parentId: '64ffde9c746fe5413cf8d1af'
+          parentId: '64ffde9c746fe5413cf8d1af',
         },
         {
           limit: 12,
-          page
-        }
+          page,
+        },
       ),
-    queryKey: ['getCategoryCourse', page]
+    queryKey: ['getCategoryCourse', page],
   })
 
   const categoryList = data?.data?.docs
