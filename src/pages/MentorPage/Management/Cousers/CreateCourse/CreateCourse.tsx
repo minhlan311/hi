@@ -7,16 +7,32 @@ import { PlusOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, Form, Input, InputNumber, Row, Select, TreeSelect, Upload, UploadProps, message } from 'antd'
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  TreeSelect,
+  Upload,
+  UploadProps,
+  message,
+} from 'antd'
 import ImgCrop from 'antd-img-crop'
 import { RcFile } from 'antd/es/upload'
 import { UploadFile } from 'antd/lib'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { PlanEnum, planOptions } from '../constants/ultil'
 import './CreateCourse.scss'
-import { useParams } from 'react-router-dom'
 
 export default function CreateCourse({ next, dataIdCouser }: any) {
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+  const [previewTitle, setPreviewTitle] = useState('')
   const { id } = useParams()
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -25,6 +41,18 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const queryClient = useQueryClient()
   const myDataUser = queryClient.getQueryData<any>(['userDetail'])
   const dataMedia = fileList?.map((item) => item?.response?.url)
+
+  const handleCancel = () => setPreviewOpen(false)
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile)
+    }
+
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
+    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
+  }
 
   useEffect(() => {
     form.setFieldValue('coverMedia', dataMedia[0])
@@ -165,7 +193,16 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   return (
     <div>
-      <Form disabled={isLoading} form={form} layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+        <img alt='example' style={{ width: '100%' }} src={previewImage} />
+      </Modal>{' '}
+      <Form
+        disabled={!!isLoading && !!id}
+        form={form}
+        layout='vertical'
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
         <Form.Item>
           <Row>
             <Col span={22}></Col>
@@ -263,7 +300,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                 modalOk='Cắt'
                 modalTitle='Chỉnh sửa hình ảnh'
               >
-                <Upload {...propsImageDocuments} fileList={fileList}>
+                <Upload {...propsImageDocuments} fileList={fileList} onPreview={handlePreview}>
                   {fileList.length >= 1 ? null : <PlusOutlined />}
                 </Upload>
               </ImgCrop>
