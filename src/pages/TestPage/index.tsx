@@ -11,7 +11,7 @@ import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
 import { QuestionState } from '@/interface/question'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
 import { useEffect, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
@@ -19,6 +19,9 @@ import { useLocation } from 'react-router-dom'
 import Score from './components/Score'
 import css from './styles.module.scss'
 import QuestionItem from './components/QuestionItem'
+import openNotification from '@/components/Notification'
+import { ExamResultsState } from '@/interface/exam'
+import moment from 'moment-timezone'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {
@@ -50,7 +53,7 @@ const TestPage = () => {
   const data = testData?.data
 
   const questions = useQuery({
-    queryKey: ['questionData', skill, currentQuestion, data],
+    queryKey: ['questionData', skill, data],
     queryFn: () => {
       return questionApi.findQuestion({
         filterQuery: {
@@ -59,6 +62,7 @@ const TestPage = () => {
         },
       })
     },
+    enabled: Boolean(data?._id),
   })
 
   const question = questions?.data?.data?.docs
@@ -82,7 +86,24 @@ const TestPage = () => {
     if (question && currentQuestion >= 0) setSelectId(question[currentQuestion]?._id)
   }, [testData, event, currentQuestion, current, question])
 
-  console.log(question, 'questionquestion')
+  const testMutation = useMutation({
+    mutationFn: (body) => examApi.examSubmit(body),
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: 'Đã gửi câu trả lời!',
+      })
+    },
+  })
+
+  const results = useQuery({
+    queryKey: ['userDetail', testMutation, testData],
+    queryFn: () => examApi.findResults({ filterQuery: { testId: testData?.data._id } }),
+    enabled: testMutation.isSuccess,
+  })
+
+  const resultsData = results?.data?.data.docs
 
   const testTime = location.state.testTime + location.state.addTime
 
@@ -90,7 +111,6 @@ const TestPage = () => {
 
   // data upload api
   const [dataUpload, setDataUpload] = useState<any[]>([])
-  console.log(dataUpload)
 
   const [isLoad, setIsLoad] = useState(false)
 
@@ -188,6 +208,12 @@ const TestPage = () => {
     setSkill('')
     setStartTest(false)
     setFinishTest(true)
+    const payload = {
+      _id: testData?.data._id,
+      questions: dataUpload,
+      time: 300,
+    }
+    testMutation.mutate(payload as unknown as any)
     if (event) localStorage.removeItem(event._id as string)
   }
 
@@ -228,6 +254,11 @@ const TestPage = () => {
       }, 250)
   }
 
+  const startTime = moment(eventData?.data.start)
+
+  const endTime = moment(eventData?.data.end)
+  const duration = moment.duration(endTime.diff(startTime))
+  const totalMinutes = duration.asMinutes()
   if (data && event)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
@@ -376,7 +407,12 @@ const TestPage = () => {
                       className={`sp100 ${css.scoreMain}`}
                     >
                       <h1>{event?.name}</h1>
-                      <Score />
+
+                      <Score
+                        data={resultsData as unknown as ExamResultsState[]}
+                        testQuestion={testData.data.countQuestions}
+                        time={totalMinutes}
+                      />
                       <Space>
                         <ButtonCustom onClick={handleReset}>Làm lại</ButtonCustom>
                         <ButtonCustom type='primary' href='/'>

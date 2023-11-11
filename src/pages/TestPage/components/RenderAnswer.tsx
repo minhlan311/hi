@@ -139,7 +139,7 @@ const RenderAnswer = (props: Props) => {
   }, [dataCallback])
 
   const optionsList = choices.map((ots) => {
-    return { value: ots._id, label: ots.answer }
+    return { value: ots.id, label: ots.answer }
   })
 
   if (type === 'WRITING')

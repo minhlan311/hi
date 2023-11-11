@@ -76,7 +76,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   }
 
   const { data: eventsData, isLoading } = useQuery({
-    queryKey: ['eventsData', callBackWeekSelect, type, timeSelect, classId],
+    queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
       const filter =
         calendarType === 'mentor'
@@ -101,7 +101,9 @@ const CalendarCustom = ({ calendarType }: Props) => {
         options: { pagination: false },
       })
     },
+    // enabled: Boolean(timeSelect) || Boolean(classId) || Boolean(callBackWeekSelect),
   })
+  console.log(Boolean(timeSelect), Boolean(classId), Boolean(callBackWeekSelect))
 
   useEffect(() => {
     if (callBackWeekSelect) {

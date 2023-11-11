@@ -53,10 +53,9 @@ export default function Navigation({ user }: Props) {
     link.href = import.meta.env.VITE_FILE_ENDPOINT + '/' + faviconUrl
   }
 
-  console.log(configs?.favicon, ' configs?.favicon')
-
   useEffect(() => {
     const faviconUrl = configs?.favicon
+
     if (configs && faviconUrl) {
       changeFavicon(faviconUrl)
     }
@@ -201,7 +200,7 @@ export default function Navigation({ user }: Props) {
           <MenuNav user={user} />
         </AffixCustom>
       )}
-      <DrawerCustom open={open} onClose={() => setOpen(false)} placement='left' width='80vw'>
+      <DrawerCustom open={open} onClose={() => setOpen(false)} placement='left' width={sm ? '80vw' : '30vw'}>
         <MenuNav user={user} type='subMenu' />
       </DrawerCustom>
     </div>
