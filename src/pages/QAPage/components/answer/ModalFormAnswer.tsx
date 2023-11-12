@@ -17,10 +17,11 @@ interface IModalFormProps {
   faqId?: string
   onSuccess: () => void
   answer: AnswerState | null
+  parentId?: string
 }
 
 export default function ModalFormAnswer(props: IModalFormProps) {
-  const { isModalOpen, onClose, onSuccess, faqId, answer } = props
+  const { isModalOpen, onClose, onSuccess, faqId, answer, parentId } = props
   const [form] = useForm()
   const [images, setImages] = useState<UploadFile[]>([])
   const { profile } = useContext(AppContext)
@@ -57,14 +58,13 @@ export default function ModalFormAnswer(props: IModalFormProps) {
         files: values?.files?.fileList.map((item: UploadFile) => {
           return item.response.url
         }),
-        userId: profile?._id
+        userId: profile?._id,
+        parentId: parentId
       }
       delete query.files
       delete query.content
     } else {
       query.files = query?.files?.fileList?.map((item: UploadFile) => {
-        console.log(item)
-
         return item?.response?.url || item?.uid
       })
       query.answerId = answer?._id
