@@ -41,3 +41,8 @@ export interface QuestionState {
   updatedAt: string
   id: string
 }
+
+export interface Answer {
+  _id: string
+  correctAnswers: string[]
+}

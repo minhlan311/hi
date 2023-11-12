@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Progress, Row, Space, Table } from 'antd'
+import useResponsives from '@/hooks/useResponsives'
+import { ExamResultsState } from '@/interface/exam'
+import { Progress, Row, Space } from 'antd'
+import moment from 'moment-timezone'
 import { BsCheckCircle, BsPencil } from 'react-icons/bs'
 import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
 import { RiSpeakLine } from 'react-icons/ri'
 import { VscBook } from 'react-icons/vsc'
 import css from '../styles.module.scss'
-import useResponsives from '@/hooks/useResponsives'
-import { ExamResultsState } from '@/interface/exam'
-import moment from 'moment-timezone'
 
 type Props = {
   data: ExamResultsState[]
@@ -66,6 +66,13 @@ const Score = ({ data, testQuestion, time }: Props) => {
 
   const { md } = useResponsives()
 
+  const durations = moment.duration(data?.[0]?.time, 'minutes')
+  const minutes = Math.floor(durations.asMinutes())
+  const seconds = Math.floor(durations.asSeconds() % 60)
+
+  // Hiển thị dưới dạng mm:ss
+  const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
       <h2>Điểm của bạn</h2>
@@ -107,7 +114,7 @@ const Score = ({ data, testQuestion, time }: Props) => {
           <Space direction='vertical' align='center'>
             <PiTimer size={28} />
             <p className={css.title}>Thời gian</p>
-            <h4>{moment.utc(data?.[0]?.time * 60 * 1000).format('mm:ss')}</h4>
+            <h4>{formattedTime}</h4>
           </Space>
         ) : (
           <Progress
@@ -117,7 +124,7 @@ const Score = ({ data, testQuestion, time }: Props) => {
               <Space direction='vertical'>
                 <PiTimer size={28} />
                 <p className={css.title}>Thời gian</p>
-                <h4>{moment.utc(data?.[0]?.time * 60 * 1000).format('mm:ss')}</h4>
+                <h4>{formattedTime}</h4>
               </Space>
             )}
           ></Progress>

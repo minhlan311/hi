@@ -49,10 +49,12 @@ const FormControls = (props: Props) => {
   useEffect(() => {
     if (options) setOptionsList(options)
   }, [])
-  const [values, setValues] = useState<any>([])
+  const [values, setValues] = useState<any[] | any>()
 
   useEffect(() => {
-    if (value?.length > 0) setValues(value)
+    if (control === 'checkBox') {
+      if (value?.length > 0) setValues(value)
+    }
   }, [value])
 
   if (checkAll) {
@@ -98,14 +100,14 @@ const FormControls = (props: Props) => {
                 <Col span={24} md={md || 12} key={ots.value as string}>
                   <Checkbox
                     onChange={(e) => {
-                      stateAction(setValues, ots.value as string, e.target.value, 'add')
+                      stateAction(setValues, ots.value as string, e.target.value, 'switch')
                     }}
                     className={css.checkbox}
                     value={ots.value as string}
                   >
                     <Card
                       className={`${css.checkboxCard} ${
-                        values.findIndex((val: string) => val === ots.value) !== -1 ? css.checked : undefined
+                        values && values.findIndex((val: string) => val === ots.value) !== -1 ? css.checked : undefined
                       } ${className}`}
                       onClick={() => setIsCheck(!isCheck)}
                       size='small'
@@ -118,19 +120,20 @@ const FormControls = (props: Props) => {
             </Row>
           </Checkbox.Group>
         ) : (
-          <Radio.Group className={`${css.answerMain}`} value={values}>
+          <Radio.Group
+            className={`${css.answerMain}`}
+            onChange={(e) => {
+              callbackValue && callbackValue(e.target.value)
+              setValues(e.target.value)
+            }}
+            value={values}
+          >
             <Row gutter={gutter}>
               {optionsList.map((ots) => (
                 <Col span={24} md={md || 12} key={ots.value as string}>
-                  <Radio
-                    onChange={(e) => setValues([e.target.value])}
-                    className={css.checkbox}
-                    value={ots.value as string}
-                  >
+                  <Radio className={css.checkbox} value={ots.value as string}>
                     <Card
-                      className={`${css.checkboxCard} ${
-                        values?.[0] === ots.value ? css.checked : undefined
-                      } ${className}`}
+                      className={`${css.checkboxCard} ${values === ots.value ? css.checked : undefined} ${className}`}
                       onClick={() => setIsCheck(!isCheck)}
                       size='small'
                     >

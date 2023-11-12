@@ -1,25 +1,70 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const localAction = (
-  setData: React.Dispatch<React.SetStateAction<any[]>>,
-  id: string,
-  type: 'update' | 'remove',
-  localKey?: string,
-) => {
-  setData((prevData: any) => {
-    if (type === 'update') {
-      const updatedData = prevData.map((item: any) => (item.id === id ? { ...item } : item))
-      if (localKey) localStorage.setItem(localKey, JSON.stringify(updatedData))
+  localKey: string = 'default',
+  updateData?: any | any[] | null,
+  type?: 'update' | 'remove' | 'delete',
+  updateKey?: any,
+): any => {
+  if (!type) {
+    const data = localStorage.getItem(localKey)
 
-      return updatedData
-    } else if (type === 'remove') {
-      const filteredData = prevData.filter((item: any) => item._id !== id)
+    return data ? JSON.parse(data) : null
+  }
 
-      if (localKey) localStorage.setItem(localKey, JSON.stringify(filteredData))
+  let localData: any = localStorage.getItem(localKey)
 
-      return filteredData
+  if (!localData) {
+    localData = []
+  } else {
+    localData = JSON.parse(localData)
+  }
+
+  if (type === 'update') {
+    if (updateData && typeof updateData === 'string') {
+      const existingIndex = localData.findIndex((item: any) => item === updateData)
+
+      if (existingIndex !== -1) {
+        localData[existingIndex] = updateData
+      } else {
+        localData.push(updateData)
+      }
+    } else if (updateData && typeof updateData === 'object' && updateKey) {
+      const existingIndex = localData.findIndex((item: any) =>
+        updateKey ? item?.[updateKey] === updateData?.[updateKey] : item._id === updateData._id,
+      )
+
+      if (existingIndex !== -1) {
+        const filteredData = localData.filter((item: any) =>
+          updateKey ? item?.[updateKey] !== updateData?.[updateKey] : item._id !== updateData._id,
+        )
+
+        localData = [...filteredData, updateData]
+      } else {
+        localData.push(updateData)
+      }
     }
-  })
+  } else if (type === 'remove') {
+    if (updateData && typeof updateData === 'string') {
+      const dataIndex = localData.findIndex((item: any) => item === updateData)
+
+      if (dataIndex !== -1) {
+        localData.splice(dataIndex, 1)
+      }
+    } else if (updateData && typeof updateData === 'object' && updateKey) {
+      const dataIndex = localData.findIndex((item: any) => item[updateKey] === updateData[updateKey])
+
+      if (dataIndex !== -1) {
+        localData.splice(dataIndex, 1)
+      }
+    }
+  } else if (type === 'delete') {
+    localStorage.removeItem(localKey)
+  }
+
+  localStorage.setItem(localKey, JSON.stringify(localData))
+
+  return localData
 }
 
 export const shuffleArray = (array: any[]) => {

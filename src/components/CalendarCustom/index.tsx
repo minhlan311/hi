@@ -47,7 +47,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
-  console.log(events)
 
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -103,7 +102,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
     },
     // enabled: Boolean(timeSelect) || Boolean(classId) || Boolean(callBackWeekSelect),
   })
-  console.log(Boolean(timeSelect), Boolean(classId), Boolean(callBackWeekSelect))
 
   useEffect(() => {
     if (callBackWeekSelect) {

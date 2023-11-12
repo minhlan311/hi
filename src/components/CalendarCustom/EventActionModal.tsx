@@ -302,7 +302,7 @@ const EventActionModal = (props: Props) => {
                     type='search'
                     searchKey='exams'
                     apiFind={examApi.findExam}
-                    filterQuery={{ mentorId: profile._id }}
+                    filterQuery={{ createdById: profile._id }}
                     defaultValue={eventDetail?.students}
                   />
                 </Form.Item>
