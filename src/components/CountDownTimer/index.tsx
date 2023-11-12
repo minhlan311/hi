@@ -3,7 +3,7 @@ import FlipCountdown from './FlipCountdown'
 import moment from 'moment-timezone'
 import TextCountdown from './TextCountdown'
 import { Space } from 'antd'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   timeTillDate?: string
@@ -16,6 +16,7 @@ type Props = {
   action?: boolean
   start?: boolean
   localId?: string
+  callbackTimeEnd?: React.Dispatch<React.SetStateAction<number>>
 }
 
 const CountDownTimer = (props: Props) => {
@@ -28,8 +29,9 @@ const CountDownTimer = (props: Props) => {
     size = 50,
     action = false,
     type = 'text',
-    start = false,
+    start = true,
     localId,
+    callbackTimeEnd,
   } = props
   const now = moment()
 
@@ -55,6 +57,7 @@ const CountDownTimer = (props: Props) => {
 
   useEffect(() => {
     setIsRunning(start)
+    if (!start && callbackTimeEnd) callbackTimeEnd(stopedTime / 60)
   }, [start])
 
   useEffect(() => {

@@ -50,3 +50,23 @@ export interface ExamState {
   updatedAt: string
   questionsDetail?: Question[]
 }
+
+export interface InCorrectAnswer {
+  _id: string
+  incorrectAnswers: string[]
+  point: number
+}
+
+export interface ExamResultsState {
+  _id: string
+  testId: string
+  userId: string
+  point: number
+  submitDate: string
+  totalCorrectAnswer: number
+  inCorrectAnswer: InCorrectAnswer[]
+  time: number
+  status: string
+  createdAt: string
+  updatedAt: string
+}

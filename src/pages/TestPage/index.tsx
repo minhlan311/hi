@@ -3,22 +3,26 @@ import examApi from '@/apis/exam.api'
 import questionApi from '@/apis/question.api'
 import successBg from '@/assets/images/examimg/hander-pana.png'
 import testBg from '@/assets/images/examimg/online-test.png'
+import { localAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
 import LoadingCustom from '@/components/LoadingCustom'
+import openNotification from '@/components/Notification'
 import PageResult from '@/components/PageResult'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
+import { ExamResultsState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
+import moment from 'moment-timezone'
 import { useEffect, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { useLocation } from 'react-router-dom'
+import QuestionItem from './components/QuestionItem'
 import Score from './components/Score'
 import css from './styles.module.scss'
-import QuestionItem from './components/QuestionItem'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {
@@ -50,7 +54,7 @@ const TestPage = () => {
   const data = testData?.data
 
   const questions = useQuery({
-    queryKey: ['questionData', skill, currentQuestion, data],
+    queryKey: ['questionData', skill, data],
     queryFn: () => {
       return questionApi.findQuestion({
         filterQuery: {
@@ -59,6 +63,7 @@ const TestPage = () => {
         },
       })
     },
+    enabled: Boolean(data?._id),
   })
 
   const question = questions?.data?.data?.docs
@@ -82,16 +87,41 @@ const TestPage = () => {
     if (question && currentQuestion >= 0) setSelectId(question[currentQuestion]?._id)
   }, [testData, event, currentQuestion, current, question])
 
-  console.log(question, 'questionquestion')
+  const testMutation = useMutation({
+    mutationFn: (body) => examApi.examSubmit(body),
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: 'Đã gửi câu trả lời!',
+      })
+      localAction(testData?.data._id, null, 'delete')
+    },
+  })
+
+  const results = useQuery({
+    queryKey: ['resultDetail', testMutation, testData],
+    queryFn: () => examApi.findResults({ filterQuery: { testId: testData?.data._id } }),
+    enabled: testMutation.isSuccess,
+  })
+
+  const resultsData = results?.data?.data.docs
 
   const testTime = location.state.testTime + location.state.addTime
 
-  const oldTime = event && localStorage.getItem(event._id as string)
+  const oldTime = event && (localAction(event._id) as unknown as number)
 
   // data upload api
-  const [dataUpload, setDataUpload] = useState<any[]>([])
-  console.log(dataUpload)
+  const [answers, setAnswers] = useState<any>([])
+  useEffect(() => {
+    if (testData) {
+      const savedAnswers = localAction(testData?.data._id)
 
+      if (savedAnswers !== null) {
+        setAnswers(savedAnswers)
+      }
+    }
+  }, [testData, finishTest])
   const [isLoad, setIsLoad] = useState(false)
 
   const testSkill = [
@@ -106,8 +136,8 @@ const TestPage = () => {
             questionData={question?.[currentQuestion] as unknown as QuestionState}
             questionLength={question?.length as unknown as number}
             questionKey={currentQuestion}
-            dataValue={dataUpload}
-            setDataUpload={setDataUpload}
+            dataValue={answers}
+            testId={testData ? testData.data._id : ''}
             loading={questions.isLoading}
             selectId={selectId}
             form={form}
@@ -126,8 +156,8 @@ const TestPage = () => {
             questionData={question?.[currentQuestion] as unknown as QuestionState}
             questionLength={question?.length as unknown as number}
             questionKey={currentQuestion}
-            dataValue={dataUpload}
-            setDataUpload={setDataUpload}
+            dataValue={answers}
+            testId={testData ? testData.data._id : ''}
             loading={questions.isLoading}
             selectId={selectId}
             form={form}
@@ -147,8 +177,8 @@ const TestPage = () => {
             questionData={question?.[currentQuestion] as unknown as QuestionState}
             questionLength={question?.length as unknown as number}
             questionKey={currentQuestion}
-            dataValue={dataUpload}
-            setDataUpload={setDataUpload}
+            dataValue={answers}
+            testId={testData ? testData.data._id : ''}
             loading={questions.isLoading}
             selectId={selectId}
             form={form}
@@ -168,8 +198,8 @@ const TestPage = () => {
             questionData={question?.[currentQuestion] as unknown as QuestionState}
             questionLength={question?.length as unknown as number}
             questionKey={currentQuestion}
-            dataValue={dataUpload}
-            setDataUpload={setDataUpload}
+            dataValue={answers}
+            testId={testData ? testData.data._id : ''}
             loading={questions.isLoading}
             selectId={selectId}
             form={form}
@@ -179,6 +209,7 @@ const TestPage = () => {
       disabled: false,
     },
   ]
+  const [time, setTime] = useState<number>(0)
 
   const check = question && currentQuestion + 1 < question?.length
 
@@ -186,13 +217,29 @@ const TestPage = () => {
     setCurrent(0)
     setCurrentQuestion(0)
     setSkill('')
-    setStartTest(false)
     setFinishTest(true)
+
     if (event) localStorage.removeItem(event._id as string)
   }
 
+  useEffect(() => {
+    if (finishTest && time > 0) {
+      const payload = {
+        _id: testData?.data._id,
+        questions: answers,
+        time: testTime - time,
+      }
+
+      testMutation.mutate(payload as unknown as any)
+
+      setAnswers([])
+    }
+  }, [finishTest, time])
+
   const handleReset = () => {
-    setStartTest(true)
+    setStartTest(false)
+    setFinishTest(false)
+    setTime(0)
     setSkill(testSkill[0].id)
   }
 
@@ -211,6 +258,7 @@ const TestPage = () => {
     } else {
       setCurrent((prev) => {
         setSkill(testSkill[prev + 1].id)
+        form.submit()
 
         return prev + 1
       })
@@ -228,12 +276,60 @@ const TestPage = () => {
       }, 250)
   }
 
+  const startTime = moment(eventData?.data.start)
+
+  const endTime = moment(eventData?.data.end)
+  const duration = moment.duration(endTime.diff(startTime))
+  const totalMinutes = duration.asMinutes()
   if (data && event)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
         <Header padding={md ? '20px 0' : '70px 0'}>
           <Row justify='space-between' gutter={24} align='middle' className={css.testMain}>
-            {(startTest && (
+            {!startTest && !finishTest && (
+              <>
+                <Col span={24} md={12}>
+                  <img src={testBg} alt='testBg' width={'100%'} />
+                </Col>
+                <Col span={24} md={8}>
+                  <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
+                    <h1>{event?.name}</h1>
+                    {oldTime && oldTime !== 0 && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
+                    <div>
+                      <Descriptions size='small'>
+                        <Descriptions.Item label='Số câu hỏi'>
+                          <b>{data.countQuestions}</b>
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Descriptions column={sm || md || lg ? 1 : 2}>
+                        <Descriptions.Item label='Thời gian làm bài'>
+                          <b>{location.state.testTime} phút</b>
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Thời gian cộng thêm'>
+                          <b>{location.state.addTime} phút</b>
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Descriptions size='small'>
+                        <Descriptions.Item label='Chú thích'>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                event?.description && event?.description !== '<p></p>'
+                                  ? event?.description
+                                  : 'Không có chú thích.',
+                            }}
+                          ></div>
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                    <ButtonCustom size='large' type='primary' onClick={() => setStartTest(true)}>
+                      Bắt đầu thi
+                    </ButtonCustom>
+                  </Space>
+                </Col>
+              </>
+            )}
+            {startTest && time === 0 && (
               <>
                 <Col span={24} lg={18}>
                   {md && (
@@ -259,10 +355,11 @@ const TestPage = () => {
                         <CountDownTimer
                           type={md ? 'number' : 'progress'}
                           initTime={testTime}
-                          initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
-                          start={startTest}
+                          initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
+                          start={!finishTest}
                           size={md ? 20 : 30}
                           localId={event._id}
+                          callbackTimeEnd={setTime}
                         ></CountDownTimer>
                       </Col>
                       <Col>
@@ -291,10 +388,11 @@ const TestPage = () => {
                       <CountDownTimer
                         type={sm ? 'number' : 'progress'}
                         initTime={testTime}
-                        initCountdown={oldTime !== '0' ? (oldTime as unknown as number) : 0}
-                        start={startTest}
+                        initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
+                        start={!finishTest}
                         size={sm ? 20 : 30}
                         localId={event._id}
+                        callbackTimeEnd={setTime}
                       ></CountDownTimer>
 
                       <Steps
@@ -320,73 +418,37 @@ const TestPage = () => {
                   )}
                 </Col>
               </>
-            )) ||
-              (!startTest && !finishTest && (
-                <>
-                  <Col span={24} md={12}>
-                    <img src={testBg} alt='testBg' width={'100%'} />
-                  </Col>
-                  <Col span={24} md={8}>
-                    <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
-                      <h1>{event?.name}</h1>
-                      {oldTime && oldTime !== '0' && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
-                      <div>
-                        <Descriptions size='small'>
-                          <Descriptions.Item label='Số câu hỏi'>
-                            <b>{data.countQuestions}</b>
-                          </Descriptions.Item>
-                        </Descriptions>
-                        <Descriptions column={sm || md || lg ? 1 : 2}>
-                          <Descriptions.Item label='Thời gian làm bài'>
-                            <b>{location.state.testTime} phút</b>
-                          </Descriptions.Item>
-                          <Descriptions.Item label='Thời gian cộng thêm'>
-                            <b>{location.state.addTime} phút</b>
-                          </Descriptions.Item>
-                        </Descriptions>
-                        <Descriptions size='small'>
-                          <Descriptions.Item label='Chú thích'>
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  event?.description && event?.description !== '<p></p>'
-                                    ? event?.description
-                                    : 'Không có chú thích.',
-                              }}
-                            ></div>
-                          </Descriptions.Item>
-                        </Descriptions>
-                      </div>
-                      <ButtonCustom size='large' type='primary' onClick={() => setStartTest(true)}>
-                        Bắt đầu thi
+            )}
+
+            {finishTest && (
+              <>
+                <Col span={24} md={12}>
+                  <img src={successBg} alt='successBg' width={'100%'} />
+                </Col>
+                <Col span={24} xxl={9} xl={9} lg={11} md={11}>
+                  <Space
+                    direction='vertical'
+                    size='large'
+                    align={sm || md || lg ? 'center' : 'start'}
+                    className={`sp100 ${css.scoreMain}`}
+                  >
+                    <h1>{event?.name}</h1>
+
+                    <Score
+                      data={resultsData as unknown as ExamResultsState[]}
+                      testQuestion={testData.data.countQuestions}
+                      time={totalMinutes}
+                    />
+                    <Space>
+                      <ButtonCustom onClick={handleReset}>Làm lại</ButtonCustom>
+                      <ButtonCustom type='primary' href='/'>
+                        Trở về trang chủ
                       </ButtonCustom>
                     </Space>
-                  </Col>
-                </>
-              )) || (
-                <>
-                  <Col span={24} md={12}>
-                    <img src={successBg} alt='successBg' width={'100%'} />
-                  </Col>
-                  <Col span={24} xxl={9} xl={9} lg={11} md={11}>
-                    <Space
-                      direction='vertical'
-                      size='large'
-                      align={sm || md || lg ? 'center' : 'start'}
-                      className={`sp100 ${css.scoreMain}`}
-                    >
-                      <h1>{event?.name}</h1>
-                      <Score />
-                      <Space>
-                        <ButtonCustom onClick={handleReset}>Làm lại</ButtonCustom>
-                        <ButtonCustom type='primary' href='/'>
-                          Trở về trang chủ
-                        </ButtonCustom>
-                      </Space>
-                    </Space>
-                  </Col>
-                </>
-              )}
+                  </Space>
+                </Col>
+              </>
+            )}
           </Row>
         </Header>
       </LoadingCustom>
