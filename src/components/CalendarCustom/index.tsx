@@ -126,7 +126,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
           end: new Date(item.end),
           backgroundColor: (between && '#757575b5') || (item.testId && '#d72831a8') || '#019d44b5',
           color: 'var(--white)',
-          isReadOnly: profile._id !== item.createdById,
+          isReadOnly: profile._id !== item.mentorId,
           type: item.type,
         }
       })

@@ -248,7 +248,7 @@ const EventActionModal = (props: Props) => {
                 searchKey='classId'
                 labelKey='title'
                 apiFind={classApi.getClass}
-                filterQuery={{ createdById: profile._id }}
+                filterQuery={{ mentorId: profile._id }}
                 callBackDataSearch={setClassData}
                 onChange={setClassSelect}
                 allowClear
@@ -302,7 +302,7 @@ const EventActionModal = (props: Props) => {
                     type='search'
                     searchKey='exams'
                     apiFind={examApi.findExam}
-                    filterQuery={{ createdById: profile._id }}
+                    filterQuery={{ mentorId: profile._id }}
                     defaultValue={eventDetail?.students}
                   />
                 </Form.Item>
