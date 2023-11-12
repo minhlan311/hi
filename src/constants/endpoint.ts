@@ -146,5 +146,8 @@ export const ENDPOINT = {
   // :::::::::::::::::::: FAQ PATH :::::::::::::::::::::
   FAQ_PATH: '/qas/',
   FAQ_PATH_ANSWER: '/qas/answer/',
-  FAQ_FIND_PATH: '/qas/find'
+  FAQ_FIND_PATH: '/qas/find',
+
+  // :::::::::::::::::::: FAQ PATH :::::::::::::::::::::
+  LIKE_PATH: '/likes/'
 }

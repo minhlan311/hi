@@ -1,13 +1,19 @@
 import { AnswerState, FaqSate } from '@/interface/faq'
 import { Avatar, Button, Card, Image, Space, Tooltip, message, Popconfirm } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
+import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
 import { useContext, useMemo, useState } from 'react'
 import { AppContext } from '@/contexts/app.context'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import ModalFormAnswer from './ModalFormAnswer'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import FaqApi from '@/apis/faq.api'
+import { LikeState, TypeEnum } from '@/interface/like'
+import { TargetModelEnum } from '@/types/utils.type'
+import { AxiosError } from 'axios'
+import LikeApi from '@/apis/like.api'
+import { CommentOutlined } from '@ant-design/icons'
+import { formatDate } from '@/helpers/common'
 interface IAnswerListProps {
   faq?: FaqSate
 }
@@ -22,6 +28,7 @@ export default function AnswerList(props: IAnswerListProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [answer, setAnswer] = useState<AnswerState | null>(null)
   const queryClient = useQueryClient()
+  const [parentId, setParentId] = useState<string>('')
 
   const mutate = useMutation({
     mutationFn: (body: { answerId: string; id: string }) => FaqApi.deleteAnswer(body),
@@ -31,13 +38,13 @@ export default function AnswerList(props: IAnswerListProps) {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    },
+    }
   })
 
   const deleteAnswer = (answer: AnswerState) => {
     mutate.mutate({
       id: faq?._id as string,
-      answerId: answer?._id as string,
+      answerId: answer?._id as string
     })
   }
 
@@ -66,11 +73,64 @@ export default function AnswerList(props: IAnswerListProps) {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>,
+        </Tooltip>
       ]
     }
 
     return []
+  }
+
+  const mutateLike = useMutation({
+    mutationFn: (body: LikeState) => (!body.id ? LikeApi.createLike(body) : LikeApi.updateLike(body)),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['getFaqDetail'] })
+    },
+    onError(error: AxiosError): void {
+      if (error?.response?.status) {
+        message.warning('Vui lòng đăng nhập để yêu thích câu hỏi')
+      } else {
+        message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
+      }
+    }
+  })
+  const mutateDeleteLike = useMutation({
+    mutationFn: (id: string) => LikeApi.deleteLike(id),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['getFaqDetail'] })
+    },
+    onError(error: AxiosError): void {
+      if (error?.response?.status) {
+        message.warning('Vui lòng đăng nhập để yêu thích câu hỏi')
+      } else {
+        message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
+      }
+    }
+  })
+
+  const likeAnswer = (answer: AnswerState, type: TypeEnum, method: string) => {
+    const id =
+      answer?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id ??
+      answer?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id
+
+    if (method == 'create') {
+      mutateLike.mutate({
+        targetId: answer?._id as string,
+        targetType: TargetModelEnum.ANSWER,
+        type: type,
+        userId: profile?._id as string,
+        id: id
+      })
+    } else {
+      if (type === TypeEnum.LIKE) {
+        console.log('id', answer?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id)
+
+        mutateDeleteLike.mutate(answer?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
+      } else {
+        mutateDeleteLike.mutate(
+          answer?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string
+        )
+      }
+    }
   }
 
   const answerList = useMemo(() => {
@@ -84,7 +144,7 @@ export default function AnswerList(props: IAnswerListProps) {
                 <Meta
                   avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + answer?.user?.avatarUrl} />}
                   title={answer?.user?.fullName}
-                  description={answer?.createdAt}
+                  description={formatDate(answer?.createdAt as string)}
                 />
                 <div style={{ margin: '10px 0' }}>
                   {answer?.files?.map((item: string) => (
@@ -99,9 +159,56 @@ export default function AnswerList(props: IAnswerListProps) {
                 )}
 
                 <Space align='center' style={{ marginTop: '10px' }}>
-                  <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
-                  <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0
+                  {answer?.likes &&
+                  answer?.likes?.findIndex((item: LikeState) => item?.userId === profile?._id) !== -1 ? (
+                    <AiFillLike
+                      size={25}
+                      style={{ cursor: 'pointer', color: 'red' }}
+                      onClick={() => {
+                        likeAnswer(answer, TypeEnum.LIKE, 'delete')
+                      }}
+                    />
+                  ) : (
+                    <AiOutlineLike
+                      size={25}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        likeAnswer(answer, TypeEnum.LIKE, 'create')
+                      }}
+                    />
+                  )}
+                  {answer?.countLike}
+                  {answer?.dislikes &&
+                  answer?.dislikes?.findIndex((item: LikeState) => item?.userId === profile?._id) !== -1 ? (
+                    <AiTwotoneDislike
+                      size={25}
+                      style={{ cursor: 'pointer', color: 'red' }}
+                      onClick={() => {
+                        likeAnswer(answer, TypeEnum.DISLIKE, 'delete')
+                      }}
+                    />
+                  ) : (
+                    <AiOutlineDislike
+                      size={25}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        likeAnswer(answer, TypeEnum.DISLIKE, 'create')
+                      }}
+                    />
+                  )}
+                  {answer?.countDislike}
+                  <Button
+                    onClick={() => {
+                      setIsModalOpen(true)
+                      setParentId(answer?._id as string)
+                    }}
+                    icon={<CommentOutlined />}
+                  >
+                    Trả lời
+                  </Button>
                 </Space>
+                {/* <h3>Trả lời</h3>
+                <Card></Card> */}
               </Card>
             </>
           ))}
@@ -120,12 +227,15 @@ export default function AnswerList(props: IAnswerListProps) {
         isModalOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false)
+          setParentId('')
           setAnswer(null)
         }}
         onSuccess={() => {
           setIsModalOpen(false)
+          setParentId('')
           setAnswer(null)
         }}
+        parentId={parentId}
       />
     </>
   )

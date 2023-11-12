@@ -1,12 +1,19 @@
 import FaqApi from '@/apis/faq.api'
-import { AnswerState } from '@/interface/faq'
-import { UserOutlined } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
-import { Avatar, Button, Card, Pagination, Space, Tooltip } from 'antd'
+import { AnswerState, FaqSate } from '@/interface/faq'
+import { UserOutlined, CommentOutlined } from '@ant-design/icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Avatar, Button, Card, Pagination, Space, Tooltip, message } from 'antd'
 import Meta from 'antd/es/card/Meta'
-// import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { LikeState, TargetModelEnum, TypeEnum } from '@/interface/like'
+
+import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
+import { AppContext } from '@/contexts/app.context'
+
+import LikeApi from '@/apis/like.api'
+import { AxiosError } from 'axios'
+import { formatDate } from '@/helpers/common'
 
 interface IFaqListProp {
   categoryId?: string
@@ -28,10 +35,63 @@ export default function FaqList(props: IFaqListProp) {
   })
   const navigate = useNavigate()
   const faqs = data?.data?.docs
+  const { profile } = useContext(AppContext)
 
   useEffect(() => {
     setCategory(categoryId)
   }, [categoryId])
+
+  const queryClient = useQueryClient()
+  const mutateLike = useMutation({
+    mutationFn: (body: LikeState) => (!body.id ? LikeApi.createLike(body) : LikeApi.updateLike(body)),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['getFaqList'] })
+    },
+    onError(error: AxiosError): void {
+      if (error?.response?.status) {
+        message.warning('Vui lòng đăng nhập để yêu thích câu hỏi')
+      } else {
+        message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
+      }
+    }
+  })
+  const mutateDeleteLike = useMutation({
+    mutationFn: (id: string) => LikeApi.deleteLike(id),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['getFaqDetail'] })
+    },
+    onError(error: AxiosError): void {
+      if (error?.response?.status) {
+        message.warning('Vui lòng đăng nhập để yêu thích câu hỏi')
+      } else {
+        message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
+      }
+    }
+  })
+
+  const likeFaq = (faq: FaqSate, type: TypeEnum, method: string) => {
+    const id =
+      faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id ??
+      faq?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id
+
+    if (method == 'create') {
+      mutateLike.mutate({
+        targetId: faq?._id as string,
+        targetType: TargetModelEnum.FAQ,
+        type: type,
+        userId: profile?._id as string,
+        id: id
+      })
+    } else {
+      if (type === TypeEnum.LIKE) {
+        console.log('id', faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id)
+
+        mutateDeleteLike.mutate(faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
+      } else {
+        mutateDeleteLike.mutate(faq?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
+      }
+    }
+  }
 
   return (
     <>
@@ -45,15 +105,53 @@ export default function FaqList(props: IFaqListProp) {
             </>
           }
         >
-          <Meta avatar={<Avatar src={faq?.user.avatarUrl} />} title={faq?.user?.fullName} description={faq.createdAt} />
+          <Meta
+            avatar={<Avatar src={import.meta.env.VITE_FILE_ENDPOINT + '/' + faq?.user?.avatarUrl} />}
+            title={faq?.user?.fullName}
+            description={formatDate(faq?.createdAt as string)}
+          />
 
           <Link to={'/hoi-dap/' + faq._id}>
             <p style={{ margin: '10px 0', fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: faq.content }}></p>
           </Link>
 
           <Space align='center'>
-            {/* <AiOutlineLike size={25} style={{ cursor: 'pointer' }} /> 0
-            <AiOutlineDislike size={25} style={{ cursor: 'pointer' }} /> 0 */}
+            {faq?.likes && faq?.likes?.findIndex((item: LikeState) => item?.userId === profile?._id) !== -1 ? (
+              <AiFillLike
+                size={25}
+                style={{ cursor: 'pointer', color: 'red' }}
+                onClick={() => {
+                  likeFaq(faq, TypeEnum.LIKE, 'delete')
+                }}
+              />
+            ) : (
+              <AiOutlineLike
+                size={25}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  likeFaq(faq, TypeEnum.LIKE, 'create')
+                }}
+              />
+            )}
+            {faq?.countLike}
+            {faq?.dislikes && faq?.dislikes?.findIndex((item: LikeState) => item?.userId === profile?._id) !== -1 ? (
+              <AiTwotoneDislike
+                size={25}
+                style={{ cursor: 'pointer', color: 'red' }}
+                onClick={() => {
+                  likeFaq(faq, TypeEnum.DISLIKE, 'delete')
+                }}
+              />
+            ) : (
+              <AiOutlineDislike
+                size={25}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  likeFaq(faq, TypeEnum.DISLIKE, 'create')
+                }}
+              />
+            )}
+            {faq?.countDislike}
             <Avatar.Group maxCount={2}>
               {faq?.answers?.map((item: AnswerState) => (
                 <Tooltip title={item?.user?.fullName} placement='top'>
@@ -69,6 +167,7 @@ export default function FaqList(props: IFaqListProp) {
               onClick={() => {
                 navigate('/hoi-dap/' + faq?._id)
               }}
+              icon={<CommentOutlined />}
             >
               Trả lời
             </Button>
