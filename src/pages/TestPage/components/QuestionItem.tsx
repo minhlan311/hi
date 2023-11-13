@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { shuffleArray, stateAction } from '@/common'
+import { localAction, shuffleArray } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
+import { Answer, Choice, QuestionState } from '@/interface/question'
 import { Col, Form, Row, Space } from 'antd'
+import { FormInstance } from 'antd/lib'
 import { useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbArrowBack } from 'react-icons/tb'
-import RenderAnswer from './RenderAnswer'
-import { Choice, QuestionState } from '@/interface/question'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
-import { FormInstance } from 'antd/lib'
 import css from '../styles.module.scss'
+import RenderAnswer from './RenderAnswer'
 
 type Props = {
   type: string
   questionData: QuestionState
   questionLength: number
   questionKey: number
-  dataValue: QuestionState[]
-  setDataUpload: React.Dispatch<React.SetStateAction<any>>
+  testId: string
   loading: boolean
   selectId: string
   form: FormInstance
+  dataValue: Answer[]
 }
 
 const QuestionItem = (props: Props) => {
-  const { type, questionData, questionLength, questionKey, dataValue, setDataUpload, loading, selectId, form } = props
+  const { type, questionData, questionLength, questionKey, testId, loading, selectId, form, dataValue } = props
   const [reset, setReset] = useState<boolean>(false)
 
   const onFinish = (val: any) => {
@@ -35,7 +35,8 @@ const QuestionItem = (props: Props) => {
         _id: questionData._id,
         correctAnswers: typeof val.correctAnswers === 'string' ? [val.correctAnswers] : val.correctAnswers,
       }
-      stateAction(setDataUpload, selectId, payload, 'update')
+
+      localAction(testId, payload, 'update', '_id')
     }
   }
 
@@ -59,7 +60,7 @@ const QuestionItem = (props: Props) => {
                 size='small'
                 onClick={() => {
                   setReset(true)
-                  stateAction(setDataUpload, selectId, null, 'remove')
+                  localAction(testId, null, 'remove', '_id')
                 }}
                 icon={<TbArrowBack />}
               >
@@ -102,6 +103,7 @@ const QuestionItem = (props: Props) => {
             questId={questionData._id}
             form={form}
             questionText={questionData?.questionText}
+            testId={testId}
           />
         </Form>
       </Space>

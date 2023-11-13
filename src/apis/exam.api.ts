@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { ExamState } from '@/interface/exam'
+import { ExamResultsState, ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
@@ -31,6 +31,23 @@ const examApi = {
     return http.post<SuccessResponse<ExamState[]>>(ENDPOINT.FIND_EXAM_PATH, payload ? payload : data)
   },
 
+  findResults(props: Props) {
+    const {
+      filterQuery = {},
+      options = {
+        pagination: false,
+        sort: { createdAt: -1 },
+      },
+      payload,
+    } = props
+
+    const data = {
+      filterQuery: filterQuery,
+      options: options,
+    }
+
+    return http.post<SuccessResponse<ExamResultsState>>(ENDPOINT.FIND_EXAM_RESULTS, payload ? payload : data)
+  },
   getExamDetail(id: string) {
     return http.get<ExamState>(ENDPOINT.EXAM_PATH + id)
   },
