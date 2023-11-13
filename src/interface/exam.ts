@@ -66,6 +66,7 @@ export interface ExamResultsState {
   totalCorrectAnswer: number
   inCorrectAnswer: InCorrectAnswer[]
   time: number
+  score: any[]
   status: string
   createdAt: string
   updatedAt: string

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import useResponsives from '@/hooks/useResponsives'
 import { ExamResultsState } from '@/interface/exam'
-import { Progress, Row, Space } from 'antd'
+import { Progress, Row, Space, Table } from 'antd'
 import moment from 'moment-timezone'
 import { BsCheckCircle, BsPencil } from 'react-icons/bs'
 import { FaAssistiveListeningSystems } from 'react-icons/fa'
@@ -25,9 +25,10 @@ const Score = ({ data, testQuestion, time }: Props) => {
           Đọc
         </div>
       ),
-      dataIndex: 'reading',
+      dataIndex: 'READING',
       key: 'reading',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.reading}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'READING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -36,9 +37,10 @@ const Score = ({ data, testQuestion, time }: Props) => {
           Nghe
         </div>
       ),
-      dataIndex: 'listening',
+      dataIndex: 'LISTENING',
       key: 'listening',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.listening}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'LISTENING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -47,9 +49,10 @@ const Score = ({ data, testQuestion, time }: Props) => {
           Viết
         </div>
       ),
-      dataIndex: 'writing',
+      dataIndex: 'WRITING',
       key: 'writing',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.writing}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'WRITING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -58,9 +61,10 @@ const Score = ({ data, testQuestion, time }: Props) => {
           Nói
         </div>
       ),
-      dataIndex: 'speaking',
+      dataIndex: 'SPEAKING',
       key: 'speaking',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.speaking}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'SPEAKING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
   ]
 
@@ -72,6 +76,9 @@ const Score = ({ data, testQuestion, time }: Props) => {
 
   // Hiển thị dưới dạng mm:ss
   const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+
+  const filteredColumns = columns.filter((column) => data?.[0]?.score?.some((item) => item.skill === column.dataIndex))
+  console.log(filteredColumns)
 
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
@@ -106,7 +113,7 @@ const Score = ({ data, testQuestion, time }: Props) => {
             type='circle'
             percent={100}
             format={() => <h2>{data?.[0]?.point}</h2>}
-            status={data?.[0]?.status === 'FAIL' ? 'exception' : 'active'}
+            status={data?.[0]?.status === 'FAIL' ? 'exception' : 'success'}
           ></Progress>
           <h2 className={`${css.title} ${data?.[0]?.status === 'FAIL' ? css.fail : css.done}`}>{data?.[0]?.status}!</h2>
         </Space>
@@ -131,7 +138,7 @@ const Score = ({ data, testQuestion, time }: Props) => {
         )}
       </Row>
 
-      {/* <Table columns={columns} dataSource={[data?.[0]]} bordered pagination={false}></Table> */}
+      <Table columns={filteredColumns} dataSource={[data?.[0]?.score]} bordered pagination={false}></Table>
     </Space>
   )
 }
