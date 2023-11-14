@@ -96,7 +96,17 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     enabled: id ? true : false,
   })
 
-  console.log(courseDetail?.data?.typeCourse, 'courseDetail?.data?.typeCourse')
+  useEffect(() => {
+    if (id && typeCourse !== courseDetail?.data?.typeCourse) {
+      form.resetFields(['categoryId'])
+    }
+  }, [typeCourse])
+
+  useEffect(() => {
+    if (typePlan === PlanEnum.FREE) {
+      form.setFieldValue('cost', null)
+    }
+  }, [typePlan])
 
   useEffect(() => {
     if (courseDetail && id) {
@@ -236,13 +246,19 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} xl={3}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Số tiền'
                   name='cost'
                   rules={[{ required: typePlan === PlanEnum.PREMIUM, message: 'Hãy nhập số tiền' }]}
                 >
-                  <InputNumber min={1} disabled={typePlan === PlanEnum.FREE} />
+                  <InputNumber
+                    style={{
+                      width: '100%',
+                    }}
+                    min={1}
+                    disabled={typePlan === PlanEnum.FREE}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} xl={9}>
@@ -256,7 +272,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
               </Col>
             </Row>
             <Row gutter={30}>
-              <Col xs={24} xl={9}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Dạng khóa học'
                   name='typeCourse'
@@ -274,7 +290,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} xl={10}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Danh mục khóa học'
                   name='categoryId'
@@ -283,7 +299,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   <TreeSelect
                     disabled={typeCourse === ''}
                     showSearch
-                    style={{ width: '90%' }}
                     value={form.getFieldValue('categoryId')}
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     placeholder='Chọn danh mục'
@@ -308,13 +323,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             </Row>
           </Col>
           <Col xs={24} xl={4}>
-            <Form.Item
-              label='Ảnh khoá học'
-              name='coverMedia'
-              // rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học' }]}
-              // type='upload-image-crop'
-              //   cropOptions={propsImageCrop}
-            >
+            <Form.Item label='Ảnh khoá học' name='coverMedia'>
               <ImgCrop
                 aspect={2 / 1}
                 cropShape='rect'
