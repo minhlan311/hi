@@ -8,10 +8,6 @@ import Questions from './components/question'
 export default function QAPage() {
   const [categoryId, setCategoryId] = useState<string>('')
 
-  useEffect(() => {
-    console.log(categoryId)
-  }, [categoryId])
-
   const useQuery = () => {
     const { search } = useLocation()
 

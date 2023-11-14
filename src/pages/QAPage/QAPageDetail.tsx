@@ -1,23 +1,22 @@
 import FaqApi from '@/apis/faq.api'
+import LikeApi from '@/apis/like.api'
+import { AppContext } from '@/contexts/app.context'
+import { formatDate } from '@/helpers/common'
 import { AnswerState } from '@/interface/faq'
+import { LikeState, TargetModelEnum, TypeEnum } from '@/interface/like'
+import { CommentOutlined, DeleteOutlined, EditOutlined, UserOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Avatar, Button, Card, Image, Row, Skeleton, Space, Tooltip, Col, Popconfirm, message } from 'antd'
+import { Avatar, Button, Card, Col, Image, Popconfirm, Row, Skeleton, Space, Tooltip, message } from 'antd'
 import Meta from 'antd/es/card/Meta'
+import { AxiosError } from 'axios'
+import { useContext, useState } from 'react'
 import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
 import { useNavigate, useParams } from 'react-router-dom'
-import { UserOutlined, CommentOutlined } from '@ant-design/icons'
 import './QAPage.scss'
-import ModalFormAnswer from './components/answer/ModalFormAnswer'
-import { useState, useContext } from 'react'
 import AnswerList from './components/answer'
+import ModalFormAnswer from './components/answer/ModalFormAnswer'
 import CateGoriesList from './components/category'
-import { AppContext } from '@/contexts/app.context'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import ModalForm from './components/question/ModalForm'
-import LikeApi from '@/apis/like.api'
-import { LikeState, TargetModelEnum, TypeEnum } from '@/interface/like'
-import { AxiosError } from 'axios'
-import { formatDate } from '@/helpers/common'
 
 export default function QADetail() {
   const params = useParams()
@@ -29,7 +28,7 @@ export default function QADetail() {
   const { data, isLoading } = useQuery({
     queryFn: () => FaqApi.getQaDetail(params.id as string),
     queryKey: ['getFaqDetail', reload],
-    enabled: params.id ? true : false
+    enabled: params.id ? true : false,
   })
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
@@ -45,7 +44,7 @@ export default function QADetail() {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    }
+    },
   })
 
   const deleteFaq = () => {
@@ -77,7 +76,7 @@ export default function QADetail() {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>
+        </Tooltip>,
       ]
     }
 
@@ -99,7 +98,7 @@ export default function QADetail() {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
 
   const mutateDeleteLike = useMutation({
@@ -113,7 +112,7 @@ export default function QADetail() {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
 
   const likeFaq = (type: TypeEnum, method: string) => {
@@ -127,12 +126,10 @@ export default function QADetail() {
         targetType: TargetModelEnum.FAQ,
         type: type,
         userId: profile?._id as string,
-        id: id
+        id: id,
       })
     } else {
       if (type === TypeEnum.LIKE) {
-        console.log('id', faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id)
-
         mutateDeleteLike.mutate(faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
       } else {
         mutateDeleteLike.mutate(faq?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
@@ -145,8 +142,7 @@ export default function QADetail() {
       <Row gutter={16}>
         <Col span={7} lg={6}>
           <CateGoriesList
-            setCategoryId={(id: string) => {
-              console.log('categoryId', id)
+            setCategoryId={() => {
               // setCategoryId(id)
             }}
           ></CateGoriesList>
