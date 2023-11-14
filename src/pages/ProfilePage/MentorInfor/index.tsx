@@ -68,7 +68,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
                           <FaUserAlt />
                         </div>
                         <Space direction='vertical'>
-                          <b>Giảng viên</b>
+                          <b>{user.isMentor ? 'Giảng viên' : 'Sinh viên'}</b>
                           <Paragraph style={{ width: '150px' }} ellipsis={true} className={css.data}>
                             {user.fullName}
                           </Paragraph>
