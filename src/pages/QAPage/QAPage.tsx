@@ -1,10 +1,9 @@
-import { Col, Layout, Row } from 'antd'
-const { Content } = Layout
+import { Col, Row } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import './QAPage.scss'
 import CateGoriesList from './components/category'
-import { useState, useEffect, useMemo } from 'react'
 import Questions from './components/question'
-import { useLocation } from 'react-router-dom'
 
 export default function QAPage() {
   const [categoryId, setCategoryId] = useState<string>('')
@@ -30,7 +29,7 @@ export default function QAPage() {
   }, [query])
 
   return (
-    <Content id='qa-page_container'>
+    <div id='qa-page_container'>
       <Row gutter={16} justify={'center'}>
         <Col span={7} lg={6} className='position-fixed-div'>
           <CateGoriesList
@@ -44,6 +43,6 @@ export default function QAPage() {
           <Questions categoryId={categoryId} />
         </Col>
       </Row>
-    </Content>
+    </div>
   )
 }
