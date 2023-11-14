@@ -72,8 +72,6 @@ export default function MyStudent() {
     setStudentId(id)
     setIsModalOpen(true)
     setType(type)
-    console.log(course, 'course')
-    console.log(id, 'id')
   }
 
   const mutate = useMutation({

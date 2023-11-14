@@ -29,9 +29,9 @@ export default function FaqList(props: IFaqListProp) {
     queryFn: () =>
       FaqApi.getFaqs(category ? { categoryId: category } : {}, {
         limit: 10,
-        page: page
+        page: page,
       }),
-    queryKey: ['getFaqList', category, page]
+    queryKey: ['getFaqList', category, page],
   })
   const navigate = useNavigate()
   const faqs = data?.data?.docs
@@ -53,7 +53,7 @@ export default function FaqList(props: IFaqListProp) {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
   const mutateDeleteLike = useMutation({
     mutationFn: (id: string) => LikeApi.deleteLike(id),
@@ -66,7 +66,7 @@ export default function FaqList(props: IFaqListProp) {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
 
   const likeFaq = (faq: FaqSate, type: TypeEnum, method: string) => {
@@ -80,12 +80,10 @@ export default function FaqList(props: IFaqListProp) {
         targetType: TargetModelEnum.FAQ,
         type: type,
         userId: profile?._id as string,
-        id: id
+        id: id,
       })
     } else {
       if (type === TypeEnum.LIKE) {
-        console.log('id', faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id)
-
         mutateDeleteLike.mutate(faq?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
       } else {
         mutateDeleteLike.mutate(faq?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
