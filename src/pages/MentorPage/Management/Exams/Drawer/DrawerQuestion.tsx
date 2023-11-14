@@ -82,8 +82,6 @@ const DrawerQuestion = (props: Props) => {
     }
   }, [isLoading])
 
-  console.log(corrects)
-
   const onFinish = (values: any) => {
     const id = crypto.randomUUID()
     const choicesData = choices.map((choose) => {
@@ -103,7 +101,6 @@ const DrawerQuestion = (props: Props) => {
       questionText: questionText ? questionText : undefined,
     }
     mutate(payload)
-    console.log(values, 'values')
 
     setTimeout(() => {
       onCloseDrawer()
