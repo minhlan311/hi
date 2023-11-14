@@ -6,7 +6,7 @@
   min-height: 110vh;
 }
 #scrollableDiv {
-  height: 80vh;
+  height: 95vh;
   overflow: auto;
   border: 1px solid rgba(140, 140, 140, 0.35);
   box-shadow: 1px 3px 7px 0px rgba(48, 44, 44, 0.76);
@@ -22,6 +22,6 @@
 .position-fixed-div {
   position: -webkit-sticky; /* Cho Safari */
   position: sticky;
-  top: 20px;
+  top: 50px;
   height: 100vh;
 }
