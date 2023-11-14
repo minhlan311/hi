@@ -96,6 +96,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     enabled: id ? true : false,
   })
 
+  console.log(courseDetail?.data?.typeCourse, 'courseDetail?.data?.typeCourse')
+
   useEffect(() => {
     if (courseDetail && id) {
       form.setFieldValue('plan', courseDetail?.data?.plan)
@@ -104,8 +106,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
       form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
       form.setFieldValue('coverVideo', courseDetail?.data?.coverVideo)
-      form.setFieldValue('typeCourse', courseDetail?.data?.typeCourse)
       setTypeCourse(courseDetail?.data?.typeCourse)
+      form.setFieldValue('typeCourse', courseDetail?.data?.typeCourse)
       editorRef.current = courseDetail?.data?.descriptions
 
       setFileList([
@@ -117,9 +119,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       ])
     } else {
       form.resetFields()
-      // setContent('')
     }
-  }, [courseDetail, id])
+  }, [courseDetail, id, typeCourse])
 
   const subjectOptions = subjectData?.data?.docs?.map((category: any) => ({
     key: category?._id,
