@@ -1,15 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Class } from '@/types/class.type'
+import { UserState } from './user'
+import { CategoryState } from './category'
+
 export interface CoursesState {
   _id: string
+  createdById: string
+  updatedById: string
   name: string
+  descriptions: string
+  categoryId: string
+  mentorId: string
+  status: string
+  plan: string
+  createdAt: string
+  updatedAt: string
   coverMedia?: string
-  mentor: string
-  type: 'BESS SELLER' | 'REVISION' | 'NEW'
-  avgRating: number
-  countRating: number
-  countTime: number
-  countCourses: number
-  educationType: 'PRYMARY SCHOOL' | 'SECONDARY SCHOOL' | 'HIGH SCHOOL' | 'UNIVESITY'
+  coverVideo: string
+  class: Class[]
+  countStudents?: number
+  countTopics: number
+  countTests: number
+  mentor: UserState
+  assessment?: any[]
+  countAssessment: number
+  category: CategoryState
+  avgAssessment?: any
+  id?: string
   cost: number
-  discount?: number
-  video?: string
 }

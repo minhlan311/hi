@@ -19,7 +19,7 @@ import Certificate from './Certificate'
 import Feedback from './Feedback'
 import MentorInfor from './MentorInfor'
 import MentorVideo from './MentorVideo'
-// import MyCourses from './MyCourses'
+import MyCourses from './MyCourses'
 import css from './styles.module.scss'
 import facebook from '../../assets/icons/facebook-logo.svg'
 import tiktok from '../../assets/icons/tiktok-icon.svg'
@@ -82,18 +82,25 @@ const ProfilePage = ({ profile }: Props) => {
       children: <>{user ? <MentorInfor user={user} profileId={profile?._id} /> : ''}</>,
     },
     {
-      id: 'category',
-      name: 'Bằng cấp',
-      children: <>{user?.isMentor ? <Certificate user={user} /> : ''}</>,
+      id: 'courses',
+      name: `Khóa học ${user?.isMentor ? 'của tôi' : 'đang học'}`,
+      children: user && <MyCourses userId={user._id} />,
     },
   ]
 
   if (user?.isMentor) {
-    tabData.push({
-      id: 'feedback',
-      name: 'Đánh giá',
-      children: <Feedback />,
-    })
+    tabData.push(
+      {
+        id: 'feedback',
+        name: 'Đánh giá',
+        children: <Feedback />,
+      },
+      {
+        id: 'category',
+        name: 'Bằng cấp',
+        children: user && <Certificate user={user} />,
+      },
+    )
   }
 
   return isLoading ? (
