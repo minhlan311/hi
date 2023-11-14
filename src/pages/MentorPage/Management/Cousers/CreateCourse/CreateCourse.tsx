@@ -120,7 +120,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     } else {
       form.resetFields()
     }
-  }, [courseDetail, id, typeCourse])
+  }, [courseDetail, id])
 
   const subjectOptions = subjectData?.data?.docs?.map((category: any) => ({
     key: category?._id,
