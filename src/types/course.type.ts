@@ -8,6 +8,7 @@ export type TCourse = {
   _destroy: boolean
   name: string
   coverMedia: string
+  typeCourse: string
   descriptions: string
   categoryId: string
   mentorId: string
