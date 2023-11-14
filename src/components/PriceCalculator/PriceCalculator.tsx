@@ -66,7 +66,7 @@ const PriceCalculator = (props: Props) => {
         >
           <Space style={{ color: priceColor }}>
             <div className={css.title} style={{ fontSize: priceSize }}>
-              {formatPrice(total.lastPrice)}
+              {total.lastPrice === 0 ? 'Miễn phí' : formatPrice(total.lastPrice)}
             </div>
             {showDiscountTag && <TagFilled style={{ transform: 'scaleX(-1)' }} />}
           </Space>
@@ -84,7 +84,13 @@ const PriceCalculator = (props: Props) => {
         style={direction === 'right' || direction === 'column-right' ? { justifyContent: 'flex-end' } : {}}
       >
         <div className={css.title} style={{ fontSize: priceSize }}>
-          {formatPrice(total.lastPrice)}
+          {total.lastPrice === 0 ? (
+            <h2 className={css.free} style={{ fontSize: priceSize }}>
+              Miễn phí
+            </h2>
+          ) : (
+            formatPrice(total.lastPrice)
+          )}
         </div>
       </Space>
     )
