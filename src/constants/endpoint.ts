@@ -47,6 +47,7 @@ export const ENDPOINT = {
   EXAM_PATH: '/exam/tests/',
   FIND_EXAM_PATH: '/exam/tests/find',
   FIND_EXAM_SUBMIT: '/exam/tests/submit/',
+  FIND_EXAM_RESULTS: '/exam/results/find',
 
   // :::::::::::::::::::: QUESTION PATH :::::::::::::::::::::
   QUESTION_PATH: '/exam/questions/',
@@ -145,5 +146,8 @@ export const ENDPOINT = {
   // :::::::::::::::::::: FAQ PATH :::::::::::::::::::::
   FAQ_PATH: '/qas/',
   FAQ_PATH_ANSWER: '/qas/answer/',
-  FAQ_FIND_PATH: '/qas/find'
+  FAQ_FIND_PATH: '/qas/find',
+
+  // :::::::::::::::::::: FAQ PATH :::::::::::::::::::::
+  LIKE_PATH: '/likes/'
 }

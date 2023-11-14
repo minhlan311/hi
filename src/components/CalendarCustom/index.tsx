@@ -47,7 +47,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const { mutate, data } = useMutation({
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
-  console.log(events)
 
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -76,7 +75,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   }
 
   const { data: eventsData, isLoading } = useQuery({
-    queryKey: ['eventsData', callBackWeekSelect, type, timeSelect, classId],
+    queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
       const filter =
         calendarType === 'mentor'
@@ -101,6 +100,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
         options: { pagination: false },
       })
     },
+    // enabled: Boolean(timeSelect) || Boolean(classId) || Boolean(callBackWeekSelect),
   })
 
   useEffect(() => {

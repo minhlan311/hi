@@ -170,3 +170,12 @@
 .btn-ms {
   margin-left: 20px;
 }
+
+.nav-icon {
+  & > * {
+    display: flex;
+    & > svg {
+      margin-left: 5px;
+    }
+  }
+}

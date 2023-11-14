@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { debounce } from '@/helpers/common'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Form, InputRef } from 'antd'
@@ -79,7 +78,7 @@ const TextAreaCustom = (props: Props) => {
             shouldNotGroupWhenFull: true,
           },
         }}
-        onChange={debounce(handleEditorChange, 500)}
+        onChange={handleEditorChange}
         onReady={onReady}
       ></CKEditor>
     </Form.Item>

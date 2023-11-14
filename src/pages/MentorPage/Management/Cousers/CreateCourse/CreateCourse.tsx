@@ -33,6 +33,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
+  const [typeCourse, setTypeCourse] = useState('')
   const { id } = useParams()
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -81,11 +82,12 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
-    queryKey: ['categoryAll'],
+    queryKey: ['categoryAll', typeCourse],
     queryFn: () =>
       categoryApi.getCategories({
-        parentId: '650004a3dffb95727e9cb9fc',
+        parentId: typeCourse === 'NORMAL' ? '650004a3dffb95727e9cb9fc' : '6500048ddffb95727e9cb9f1',
       }),
+    enabled: !!typeCourse,
   })
 
   const { data: courseDetail, isLoading } = useQuery({
@@ -102,7 +104,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
       form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
       form.setFieldValue('coverVideo', courseDetail?.data?.coverVideo)
-
+      form.setFieldValue('typeCourse', courseDetail?.data?.typeCourse)
+      setTypeCourse(courseDetail?.data?.typeCourse)
       editorRef.current = courseDetail?.data?.descriptions
 
       setFileList([
@@ -254,11 +257,30 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             <Row gutter={30}>
               <Col xs={24} xl={9}>
                 <Form.Item
+                  label='Dạng khóa học'
+                  name='typeCourse'
+                  rules={[{ required: true, message: 'Vui lòng chọn dạng khóa học' }]}
+                >
+                  <Select
+                    placeholder='Chọn dạng khóa học'
+                    onChange={(value: 'NORMAL' | 'TEST' | '') => {
+                      setTypeCourse(value)
+                    }}
+                    options={[
+                      { label: 'Khóa học thường', value: 'NORMAL' },
+                      { label: 'Khóa học luyện thi', value: 'TEST' },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} xl={10}>
+                <Form.Item
                   label='Danh mục khóa học'
                   name='categoryId'
                   rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
                   <TreeSelect
+                    disabled={typeCourse === ''}
                     showSearch
                     style={{ width: '90%' }}
                     value={form.getFieldValue('categoryId')}

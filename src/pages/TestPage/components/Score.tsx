@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import useResponsives from '@/hooks/useResponsives'
+import { ExamResultsState } from '@/interface/exam'
 import { Progress, Row, Space, Table } from 'antd'
+import moment from 'moment-timezone'
 import { BsCheckCircle, BsPencil } from 'react-icons/bs'
 import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
 import { RiSpeakLine } from 'react-icons/ri'
 import { VscBook } from 'react-icons/vsc'
 import css from '../styles.module.scss'
-import useResponsives from '@/hooks/useResponsives'
 
-const Score = () => {
+type Props = {
+  data: ExamResultsState[]
+  testQuestion: number
+  time: number
+}
+
+const Score = ({ data, testQuestion, time }: Props) => {
   const columns = [
-    {
-      title: 'Lần thi',
-      key: 'index',
-      render: (_: any, _a: any, index: number) => <p style={{ textAlign: 'center' }}>{index + 1}</p>,
-      width: '12%',
-    },
     {
       title: (
         <div className={css.colTable}>
@@ -23,9 +25,10 @@ const Score = () => {
           Đọc
         </div>
       ),
-      dataIndex: 'reading',
+      dataIndex: 'READING',
       key: 'reading',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.reading}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'READING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -34,9 +37,10 @@ const Score = () => {
           Nghe
         </div>
       ),
-      dataIndex: 'listening',
+      dataIndex: 'LISTENING',
       key: 'listening',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.listening}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'LISTENING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -45,9 +49,10 @@ const Score = () => {
           Viết
         </div>
       ),
-      dataIndex: 'writing',
+      dataIndex: 'WRITING',
       key: 'writing',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.writing}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'WRITING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
     {
       title: (
@@ -56,14 +61,24 @@ const Score = () => {
           Nói
         </div>
       ),
-      dataIndex: 'speaking',
+      dataIndex: 'SPEAKING',
       key: 'speaking',
-      render: (_: any, data: any) => <h3 style={{ textAlign: 'center' }}>{data.speaking}</h3>,
+      render: (_: any, data: any) =>
+        data.map((item: any) => item.skill === 'SPEAKING' && <h3 style={{ textAlign: 'center' }}>{item.score}</h3>),
     },
   ]
 
-  const data = [{ reading: 9, listening: 8, writing: 8.5, speaking: 9.5 }]
   const { md } = useResponsives()
+
+  const durations = moment.duration(data?.[0]?.time, 'minutes')
+  const minutes = Math.floor(durations.asMinutes())
+  const seconds = Math.floor(durations.asSeconds() % 60)
+
+  // Hiển thị dưới dạng mm:ss
+  const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+
+  const filteredColumns = columns.filter((column) => data?.[0]?.score?.some((item) => item.skill === column.dataIndex))
+  console.log(filteredColumns)
 
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
@@ -76,49 +91,54 @@ const Score = () => {
               <BsCheckCircle />
               <p className={css.title}>Câu đúng</p>
             </Space>
-            <h4>45/50</h4>
+            <h4>{`${data?.[0]?.totalCorrectAnswer}/${testQuestion}`}</h4>
           </Space>
         ) : (
           <Progress
             type='circle'
-            percent={(45 / 50) * 100}
+            percent={(data?.[0]?.totalCorrectAnswer / testQuestion) * 100}
             format={() => (
               <Space direction='vertical'>
                 <Space direction='vertical' className={css.done}>
                   <BsCheckCircle />
                   <p className={css.title}>Đúng</p>
                 </Space>
-                <h4>45/50</h4>
+                <h4>{`${data?.[0]?.totalCorrectAnswer}/${testQuestion}`}</h4>
               </Space>
             )}
           ></Progress>
         )}
         <Space direction='vertical' align='center'>
-          <Progress type='circle' percent={100} format={() => <h2>8.5</h2>}></Progress>
-          <h2 className={`${css.title} ${css.done}`}>DONE!</h2>
+          <Progress
+            type='circle'
+            percent={100}
+            format={() => <h2>{data?.[0]?.point}</h2>}
+            status={data?.[0]?.status === 'FAIL' ? 'exception' : 'success'}
+          ></Progress>
+          <h2 className={`${css.title} ${data?.[0]?.status === 'FAIL' ? css.fail : css.done}`}>{data?.[0]?.status}!</h2>
         </Space>
         {md ? (
           <Space direction='vertical' align='center'>
             <PiTimer size={28} />
             <p className={css.title}>Thời gian</p>
-            <h4>35:38</h4>
+            <h4>{formattedTime}</h4>
           </Space>
         ) : (
           <Progress
             type='circle'
-            percent={(45 / 60) * 100}
+            percent={(data?.[0]?.time / time) * 100}
             format={() => (
               <Space direction='vertical'>
                 <PiTimer size={28} />
                 <p className={css.title}>Thời gian</p>
-                <h4>35:38</h4>
+                <h4>{formattedTime}</h4>
               </Space>
             )}
           ></Progress>
         )}
       </Row>
 
-      <Table columns={columns} dataSource={data} bordered pagination={false}></Table>
+      <Table columns={filteredColumns} dataSource={[data?.[0]?.score]} bordered pagination={false}></Table>
     </Space>
   )
 }
