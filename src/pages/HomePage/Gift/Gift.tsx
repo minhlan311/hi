@@ -46,7 +46,7 @@ export default function Gift() {
             <div className='list'>
               <ul>
                 <li>Giảm - 40% HỌC PHÍ</li>
-                <li>FREE Giác trình & tài liệu + VIDEO bài giảng bổ trợ kiến thức gửi SHIP tận nhà</li>
+                <li>FREE Giáo trình & tài liệu + VIDEO bài giảng bổ trợ kiến thức gửi SHIP tận nhà</li>
                 <li>Tặng học bổng tiền mặt 800.000đ - 1.000.000đ trừ vào học phí</li>
                 <li>Hỗ trợ MIỄN PHÍ học phí cho HSSV và người mới học từ đầu</li>
               </ul>

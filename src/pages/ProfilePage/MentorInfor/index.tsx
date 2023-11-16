@@ -1,18 +1,13 @@
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import SliderCustom from '@/components/SliderCustom'
 import Header from '@/components/layout/Header/Header'
-import { formatDate } from '@/helpers/common'
 import { UserState } from '@/interface/user'
 import { Card, Col, Divider, Image, Row, Space, Tooltip } from 'antd'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { useState } from 'react'
-import { BsFillTelephoneFill } from 'react-icons/bs'
-import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
-import { FaEarthAsia } from 'react-icons/fa6'
+import { FaUserAlt } from 'react-icons/fa'
 import { FiEdit } from 'react-icons/fi'
-import { MdEmail } from 'react-icons/md'
 import { VscDebugBreakpointLog } from 'react-icons/vsc'
-import { Link } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
 import malePic from '../../../assets/images/examimg/male-teacher.png'
 import UpdateMentor from './UpdateMentor'
@@ -97,7 +92,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
                     </Col>
                   </Row>
                   <Divider />
-                  <Row justify='space-between'>
+                  {/* <Row justify='space-between'>
                     <Col span={24} lg={8}>
                       <Space className={'sp100'}>
                         <div className={css.icon}>
@@ -127,9 +122,9 @@ const MentorInfor = ({ user, profileId }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Divider />
-                  <Row justify='space-between' gutter={[0, 12]}>
+                  {/* <Row justify='space-between' gutter={[0, 12]}>
                     <Col span={24} lg={8}>
                       <Space className={'sp100'}>
                         <div className={css.icon}>
@@ -156,7 +151,7 @@ const MentorInfor = ({ user, profileId }: Props) => {
                         </Space>
                       </Space>
                     </Col>
-                  </Row>
+                  </Row> */}
                 </Space>
               </div>
             ) : (
