@@ -18,13 +18,14 @@ type Props = {
   open: boolean
   questionData?: QuestionState | null
   categoryId: string
+  typeQuestion: 'TEST' | 'QUIZ'
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setQuestionData: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DrawerQuestion = (props: Props) => {
-  const { open, questionData = null, categoryId, setOpen, setQuestionData, setLoading } = props
+  const { open, questionData = null, categoryId, typeQuestion, setOpen, setQuestionData, setLoading } = props
   const [form] = Form.useForm()
   const [choices, setChoices] = useState<Choice[]>([])
   const [corrects, setCorrects] = useState<string[]>([])
@@ -101,6 +102,7 @@ const DrawerQuestion = (props: Props) => {
       correctAnswers: corrects.length > 0 ? corrects : correctAnswers,
       categoryId: categoryId,
       questionText: questionText ? questionText : undefined,
+      typeQuestion: typeQuestion,
     }
     mutate(payload)
     console.log(values, 'values')

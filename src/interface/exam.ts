@@ -24,7 +24,11 @@ export interface MentorInfo {
   updatedAt: string
   id: string
 }
-
+export interface Skill {
+  skillName: 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING'
+  description: string
+  url?: string[]
+}
 export interface ExamState {
   _id: string
   createdById: string
@@ -32,9 +36,7 @@ export interface ExamState {
   categoryId: string
   name: string
   description: string
-  plan: string | number
   status: string
-  type: string
   cost?: any
   slug: string
   owner: UserState
@@ -43,12 +45,15 @@ export interface ExamState {
   countSelectedResponseQuestions: number[]
   countConstructedResponseQuestions: number[]
   countUsersTested: number
-  countUsersDoned: number
-  countUsersIncompleted: number
+  usersDoned: any[]
+  usersIncompleted: any[]
   id: string
   createdAt: string
   updatedAt: string
   questionsDetail?: Question[]
+  type: 'QUIZ' | 'TEST'
+  plan: 'FREE' | 'PREMIUM'
+  skill: Skill[]
 }
 
 export interface InCorrectAnswer {

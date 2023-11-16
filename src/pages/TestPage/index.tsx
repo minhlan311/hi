@@ -23,6 +23,7 @@ import { useLocation } from 'react-router-dom'
 import QuestionItem from './components/QuestionItem'
 import Score from './components/Score'
 import css from './styles.module.scss'
+import loadingBg from '../../assets/images/examimg/loading.png'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {
@@ -31,6 +32,7 @@ const TestPage = () => {
   const [startTest, setStartTest] = useState<boolean>(false)
   const [finishTest, setFinishTest] = useState<boolean>(false)
   const [selectId, setSelectId] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(true)
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [skill, setSkill] = useState('READING')
@@ -95,16 +97,19 @@ const TestPage = () => {
         message: 'Thông báo',
         description: 'Đã gửi câu trả lời!',
       })
-      localAction(testData?.data._id, null, 'delete')
+      localStorage.removeItem(`${testData?.data._id}`)
     },
   })
 
   const results = useQuery({
     queryKey: ['resultDetail', testMutation, testData],
     queryFn: () => examApi.findResults({ filterQuery: { testId: testData?.data._id } }),
+
     enabled: testMutation.isSuccess,
   })
-
+  useEffect(() => {
+    if (results.isSuccess) setLoading(false)
+  }, [results])
   const resultsData = results?.data?.data.docs
 
   const testTime = location.state.testTime + location.state.addTime
@@ -406,6 +411,7 @@ const TestPage = () => {
                         <ButtonCustom onClick={handlePrev} disabled={currentQuestion === 0}>
                           Câu trước
                         </ButtonCustom>
+
                         <ButtonCustom type='primary' onClick={handleNext}>
                           {current === testSkill.length - 1
                             ? 'Nộp bài'
@@ -420,7 +426,7 @@ const TestPage = () => {
               </>
             )}
 
-            {finishTest && (
+            {finishTest && !loading ? (
               <>
                 <Col span={24} md={12}>
                   <img src={successBg} alt='successBg' width={'100%'} />
@@ -448,6 +454,19 @@ const TestPage = () => {
                   </Space>
                 </Col>
               </>
+            ) : (
+              <Col span={24}>
+                <Row justify='center'>
+                  <Col span={24} md={12}>
+                    <img src={loadingBg} alt='loading' width={'85%'} style={{ display: 'block', margin: '0 auto' }} />
+                  </Col>
+                  <Col span={24}>
+                    <LoadingCustom loading={loading} tip='Đang tính toán điểm của bạn! Vui lòng chờ...'>
+                      <p style={{ height: 70 }}></p>
+                    </LoadingCustom>
+                  </Col>
+                </Row>
+              </Col>
             )}
           </Row>
         </Header>

@@ -51,7 +51,7 @@ export const PATH = {
   PAYMENT_CALLBACK: '/payment-callback',
   ROOM_LIVE: '/room/:roomId',
   PEDAGOGYS: '/pedagogys/:id',
-  CART: '/cart-page'
+  CART: '/cart-page',
 } as const
 
 export default PATH

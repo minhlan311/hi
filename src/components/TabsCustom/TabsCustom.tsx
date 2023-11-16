@@ -2,7 +2,6 @@ import css from './TabsCustom.module.scss'
 import { Tabs } from 'antd'
 import type { TabsProps as TabType } from 'antd'
 import TabProps from '@/interface/tabs'
-
 type TabsItemProps = {
   data: TabProps[]
   defaultActiveKey?: string
@@ -10,10 +9,21 @@ type TabsItemProps = {
   labelWeight?: 'bold'
   setting?: TabType
   align?: 'start' | 'end' | 'center'
+  onChange?: (e: string) => void
+  hideAdd?: boolean
 }
 
 const TabsCustom = (props: TabsItemProps) => {
-  const { data, defaultActiveKey, borderBottom = true, labelWeight, setting, align = 'start' } = props
+  const {
+    data,
+    defaultActiveKey,
+    borderBottom = true,
+    labelWeight,
+    setting,
+    align = 'start',
+    onChange,
+    hideAdd = true,
+  } = props
 
   const getItem = (dataArr: TabProps[]) => {
     return dataArr.map((item) => {
@@ -29,6 +39,8 @@ const TabsCustom = (props: TabsItemProps) => {
 
   return (
     <Tabs
+      hideAdd={hideAdd}
+      onChange={onChange}
       className={`${!borderBottom && css.unBorderBottom} ${css.borderBottom} ${labelWeight && css.labelWeight} ${
         (align === 'start' && '') || (align === 'end' && css.end) || (align === 'center' && css.center)
       }`}

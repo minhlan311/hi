@@ -7,7 +7,7 @@ import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Drawer, Form, Input, Select, Space } from 'antd'
+import { Col, Drawer, Form, Input, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 
 type Props = {
@@ -24,11 +24,14 @@ const DrawerExam = (props: Props) => {
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [typePlan, setTypePlan] = useState('FREE')
+  const [type, setType] = useState<'QUIZ' | 'TEST'>()
 
   useEffect(() => {
     if (examData) {
       setAction('update')
       form.setFieldsValue(examData)
+      setType(examData?.type)
+      setTypePlan(examData?.plan)
     } else {
       setAction('create')
       form.resetFields()
@@ -76,6 +79,7 @@ const DrawerExam = (props: Props) => {
       cost: parseInt(values?.cost),
       id: examData?._id,
     }
+
     mutate(payload)
   }
 
@@ -110,130 +114,113 @@ const DrawerExam = (props: Props) => {
             plan: 'FREE',
           }}
         >
-          <Form.Item
-            name='name'
-            label='Tiêu đề bộ đề'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tiêu đề bộ đề',
-              },
-            ]}
-          >
-            <Input placeholder='Nhập tên tiêu đề bộ đề' />
-          </Form.Item>
+          <Row gutter={24}>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='type'
+                label='Loại bộ đề'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn loại bộ đề',
+                  },
+                ]}
+              >
+                <Select
+                  placeholder='Chọn loại bộ đề'
+                  onChange={(e) => setType(e)}
+                  options={[
+                    {
+                      value: 'QUIZ',
+                      label: 'Bài Quiz',
+                    },
+                    {
+                      value: 'TEST',
+                      label: 'Bài thi thử',
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='plan'
+                label='Loại phí'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng loại phí',
+                  },
+                ]}
+              >
+                <Select
+                  placeholder='Chọn loại phí'
+                  options={[
+                    {
+                      value: 'FREE',
+                      label: 'Miễn phí',
+                    },
+                    {
+                      value: 'PREMIUM',
+                      label: 'Có phí',
+                    },
+                  ]}
+                  onChange={(e) => setTypePlan(e)}
+                />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name='skill'
-            label='Loại kỹ năng'
-            rules={[
-              {
-                required: true,
-                message: 'Chọn loại kỹ năng',
-              },
-            ]}
-          >
-            <Select
-              placeholder='Chọn loại kỹ năng'
-              options={[
-                {
-                  value: 'READING',
-                  label: 'Đọc',
-                },
-                {
-                  value: 'LISTENING',
-                  label: 'Nghe',
-                },
-                {
-                  value: 'WRITING',
-                  label: 'Viết',
-                },
-                {
-                  value: 'SPEAKING',
-                  label: 'Nói',
-                },
-              ]}
-            />
-          </Form.Item>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='cost'
+                label='Số tiền'
+                rules={[
+                  {
+                    required: typePlan === 'PREMIUM',
+                    message: `Vui lòng nhập số tiền`,
+                  },
+                ]}
+              >
+                <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
+              </Form.Item>
+            </Col>
 
-          <TextAreaCustom name='description' label='Chú thích' data={examData} />
-
-          <Form.Item
-            name='type'
-            label='Loại bộ đề'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn loại bộ đề',
-              },
-            ]}
-          >
-            <Select
-              placeholder='Chọn loại bộ đề'
-              options={[
-                {
-                  value: 'QUIZ',
-                  label: 'Bài Quiz',
-                },
-                {
-                  value: 'TEST',
-                  label: 'Bài thi thử',
-                },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name='plan'
-            label='Loại phí'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng loại phí',
-              },
-            ]}
-          >
-            <Select
-              placeholder='Chọn loại phí'
-              options={[
-                {
-                  value: 'FREE',
-                  label: 'Miễn phí',
-                },
-                {
-                  value: 'PREMIUM',
-                  label: 'Có phí',
-                },
-              ]}
-              onChange={(e) => setTypePlan(e)}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name='cost'
-            label='Số tiền'
-            rules={[
-              {
-                required: typePlan === 'PREMIUM',
-                message: `Vui lòng nhập số tiền`,
-              },
-            ]}
-          >
-            <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
-          </Form.Item>
-
-          <Form.Item
-            name='categoryId'
-            label='Chọn khóa học'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn khóa học',
-              },
-            ]}
-          >
-            <Select placeholder='Chọn khóa học' options={subjectList} />
-          </Form.Item>
+            <div style={{ padding: '0 10px' }} className='sp100'>
+              {type === 'TEST' ? (
+                <ButtonCustom type='primary' size='large' href='/mentor/exams/createTest'>
+                  Chuyển qua mà tạo bài thi
+                </ButtonCustom>
+              ) : (
+                <>
+                  <Form.Item
+                    name='categoryId'
+                    label='Chọn khóa học'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng chọn khóa học',
+                      },
+                    ]}
+                  >
+                    <Select placeholder='Chọn khóa học' options={subjectList} />
+                  </Form.Item>
+                  <Form.Item
+                    name='name'
+                    label='Tiêu đề bộ đề'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập tiêu đề bộ đề',
+                      },
+                    ]}
+                  >
+                    <Input placeholder='Nhập tên tiêu đề bộ đề' />
+                  </Form.Item>
+                  <TextAreaCustom name='description' label='Chú thích' data={examData} />
+                </>
+              )}
+            </div>
+          </Row>
         </Form>
       </Drawer>
     </div>

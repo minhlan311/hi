@@ -133,7 +133,7 @@ const RenderItem = (props: Props) => {
                   {data.choices.map((anw) => {
                     if (data.correctAnswers?.includes(anw.id))
                       return (
-                        <Col span={24} md={12} xl={6}>
+                        <Col span={24} md={12} xl={6} key={anw._id}>
                           <div
                             className={css.isAnswer}
                             key={anw._id}
@@ -146,7 +146,7 @@ const RenderItem = (props: Props) => {
                   {data.choices.map((anw) => {
                     if (!anw.isCorrect)
                       return (
-                        <Col span={24} md={12} xl={6}>
+                        <Col span={24} md={12} xl={6} key={anw._id}>
                           <Card size='small'>
                             <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
                           </Card>

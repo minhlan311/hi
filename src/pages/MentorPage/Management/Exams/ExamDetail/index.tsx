@@ -1,52 +1,89 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
 import examApi from '@/apis/exam.api'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import userApi from '@/apis/user.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import LoadingCustom from '@/components/LoadingCustom'
+import PageResult from '@/components/PageResult'
+import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
+import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import TagCustom from '@/components/TagCustom/TagCustom'
+import { useQuery } from '@tanstack/react-query'
 import { Card, Col, Row, Space, Table } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
 import moment from 'moment-timezone'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BiUser } from 'react-icons/bi'
 import { BsQuestionLg } from 'react-icons/bs'
 import { CgCheckO, CgCloseO } from 'react-icons/cg'
 import { RiCheckboxMultipleLine } from 'react-icons/ri'
 import { TfiWrite } from 'react-icons/tfi'
 import { Link, useLocation } from 'react-router-dom'
+import MentorCreateTest from '../MentorCreateTest'
 import css from './styles.module.scss'
-import TagCustom from '@/components/TagCustom/TagCustom'
-import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import type { ColumnsType } from 'antd/es/table'
-import TabsCustom from '@/components/TabsCustom/TabsCustom'
-import PageResult from '@/components/PageResult'
-import LoadingCustom from '@/components/LoadingCustom'
 interface DataType {
   _id: string
-  name: string
-  score: number
+  userId: string
+  totalCorrectAnswer: number
+  point: number
   time: number
-  done: number
-  finishedTime: string
+  inCorrectAnswer: any[]
+  submitDate: string
 }
 
 const MentorExamDetail = () => {
   const location = useLocation()
   const id = location.pathname.split('/')[3]
-  const { data: exam, isLoading } = useQuery({
-    queryKey: ['examDetail'],
+  const {
+    data: exam,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: ['examDetail', id],
     queryFn: () => {
       return examApi.getExamDetail(id)
     },
+    enabled: id.length > 20,
   })
 
   const examDetail = exam?.data
-  const { data, mutate } = useMutation({ mutationFn: (id: string) => categoryApi.getCategorieDetail(id) })
 
-  useEffect(() => {
-    if (examDetail) {
-      mutate(examDetail.categoryId)
-    }
-  }, [examDetail])
+  const { data: data } = useQuery({
+    queryKey: ['categoryDetail', examDetail],
+    queryFn: () => {
+      return categoryApi.getCategorieDetail(examDetail?.categoryId as unknown as string)
+    },
+    enabled: isSuccess,
+  })
 
   const subjectDetail = data?.data
+
+  const [tabs, setTabs] = useState<'absent' | 'attended' | string>('attended')
+  const [userList, setUserList] = useState<string[]>([])
+
+  useEffect(() => {
+    if (tabs === 'attended' && examDetail && examDetail.usersDoned.length === 0) setUserList([])
+    if (tabs === 'absent' && examDetail && examDetail.usersIncompleted.length === 0) setUserList([])
+
+    if (tabs === 'attended' && examDetail && examDetail.usersDoned.length > 0) {
+      setUserList(examDetail?.usersDoned.map((item) => item.userId))
+    }
+
+    if (tabs === 'absent' && examDetail && examDetail.usersIncompleted.length > 0) {
+      setUserList(examDetail?.usersDoned.map((item) => item.userId))
+    }
+  }, [tabs, examDetail])
+
+  const { data: userListData } = useQuery({
+    queryKey: ['userListData', userList],
+    queryFn: () => {
+      return userApi.findUser({ filterQuery: { _id: userList } })
+    },
+    enabled: userList.length > 0,
+  })
+
+  // Đổi sang màn tạo
+  if (id === 'createTest' || id === 'updateTest') return <MentorCreateTest />
 
   const labelData = [
     { icon: <BsQuestionLg />, iconColor: '#367b97', title: 'Số câu hỏi', data: examDetail?.countQuestions },
@@ -67,53 +104,70 @@ const MentorExamDetail = () => {
         : examDetail?.countConstructedResponseQuestions,
     },
     { icon: <BiUser />, iconColor: '#1ac6ef', title: 'Số người làm', data: examDetail?.countUsersTested },
-    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.countUsersDoned },
+    { icon: <CgCheckO />, iconColor: '#21c121', title: 'Số hoàn thành', data: examDetail?.usersDoned.length },
     {
       icon: <CgCloseO />,
       iconColor: '#e73434',
       title: 'Số chưa hoàn thành',
-      data: examDetail?.countUsersIncompleted,
+      data: examDetail?.usersIncompleted.length,
     },
   ]
 
   const attendedColumn: ColumnsType<DataType> = [
     {
       title: 'Tên người làm',
-      dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (_a: any, record) =>
+        userListData && userListData?.data?.docs?.find((us) => us._id === record.userId)?.fullName,
     },
     {
       title: 'Qua / Không qua',
+      dataIndex: 'status',
       key: 'status',
-      render: (_, { score }) => {
-        return (
-          (score <= 5 && <TagCustom color='error' content='Không qua' />) ||
-          (score > 5 && <TagCustom color='success' content='Qua' />)
+      align: 'center',
+      render: (text) => {
+        return text === 'PASS' ? (
+          <TagCustom color='success' content='Qua' />
+        ) : (
+          <TagCustom color='error' content='Không qua' />
         )
       },
     },
     {
       title: 'Điểm số',
-      dataIndex: 'score',
       key: 'score',
-      render: (_, record) => {
-        return (
-          <p>
-            {record.done}/50 - {record.score} Điểm ({(record.done / 50) * 100}%)
-          </p>
-        )
+      align: 'center',
+
+      render: (_a: any, record) => {
+        if (examDetail)
+          return (
+            <p>
+              {record.totalCorrectAnswer}/{examDetail?.countQuestions} -{' '}
+              <b>{((record.totalCorrectAnswer / examDetail?.countQuestions) * 10).toFixed(1)}</b> Điểm (
+              {((record.totalCorrectAnswer / examDetail?.countQuestions) * 100).toFixed(1)}
+              %)
+            </p>
+          )
       },
+      sorter: (a, b) => {
+        const as = examDetail ? (a.totalCorrectAnswer / examDetail.countQuestions) * 10 : 0
+        const bs = examDetail ? (b.totalCorrectAnswer / examDetail.countQuestions) * 10 : 1
+
+        return as - bs
+      },
+      ellipsis: true,
     },
     {
       title: 'Xếp loại',
+      dataIndex: 'point',
       key: 'scoreRating',
-      render: (_, { score }) => {
+      align: 'center',
+      render: (point) => {
         return (
-          (score <= 3 && <TagCustom color='error' content='Yếu' />) ||
-          (score <= 5 && <TagCustom color='processing' content='Trung bình' />) ||
-          (score <= 8 && <TagCustom color='success' content='Tốt' />) ||
-          (score > 8 && <TagCustom color='gold' content='Xuất sắc' />)
+          (point <= 3 && <TagCustom color='error' content='Yếu' />) ||
+          (point <= 5 && <TagCustom color='processing' content='Trung bình' />) ||
+          (point <= 8 && <TagCustom color='success' content='Tốt' />) ||
+          (point > 8 && <TagCustom color='gold' content='Xuất sắc' />)
         )
       },
     },
@@ -121,15 +175,34 @@ const MentorExamDetail = () => {
       title: 'Thời gian làm',
       dataIndex: 'time',
       key: 'time',
+      align: 'center',
+      render: (time) => {
+        const durations = moment.duration(time, 'minutes')
+        const minutes = Math.floor(durations.asMinutes())
+        const seconds = Math.floor(durations.asSeconds() % 60)
+        const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+
+        return formattedTime
+      },
+
+      sorter: (a, b) => {
+        return a.time - b.time
+      },
+      ellipsis: true,
     },
     {
       title: 'Thời gian nộp',
-      key: 'finishedTime ',
-      dataIndex: 'finishedTime',
+      key: 'submitDate ',
+      dataIndex: 'submitDate',
+      align: 'center',
+
+      render: (submitDate) => moment(submitDate).format('HH:mm DD/MM/YYYY'),
     },
     {
       title: 'Chi tiết',
       key: 'detail',
+      align: 'center',
+
       render: () => (
         <Link to={'/'} className={'link'}>
           Xem chi tiết
@@ -141,82 +214,98 @@ const MentorExamDetail = () => {
   const absentColumn: ColumnsType<DataType> = [
     {
       title: 'Tên người làm',
-      dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (_a: any, record) =>
+        userListData && userListData?.data?.docs?.find((us) => us._id === record.userId)?.fullName,
     },
     {
       title: 'Số câu đã làm',
-      dataIndex: 'done',
       key: 'done',
+      align: 'center',
+
+      render: (_a: any, record) => {
+        return record.totalCorrectAnswer + record.inCorrectAnswer.length
+      },
+      sorter: (a, b) => {
+        const as = a.totalCorrectAnswer + a.inCorrectAnswer.length
+        const bs = b.totalCorrectAnswer + b.inCorrectAnswer.length
+
+        return as - bs
+      },
+      ellipsis: true,
     },
     {
       title: 'Số câu chưa làm',
-      dataIndex: 'doNot',
       key: 'doNot',
+      align: 'center',
+
+      render: (_a: any, record) => {
+        if (examDetail) return examDetail?.countQuestions - (record.totalCorrectAnswer + record.inCorrectAnswer.length)
+      },
+      sorter: (a, b) => {
+        const as = examDetail ? examDetail?.countQuestions - (a.totalCorrectAnswer + a.inCorrectAnswer.length) : 0
+        const bs = examDetail ? examDetail?.countQuestions - (b.totalCorrectAnswer + b.inCorrectAnswer.length) : 1
+
+        return as - bs
+      },
+      ellipsis: true,
     },
     {
       title: 'Điểm số',
-      dataIndex: 'score',
       key: 'score',
+      align: 'center',
+
+      render: (_a: any, record) => {
+        if (examDetail)
+          return (
+            <p>
+              {record.totalCorrectAnswer}/{examDetail?.countQuestions} - {record.point} Điểm (
+              {(record.point / examDetail?.countQuestions) * 100}
+              %)
+            </p>
+          )
+      },
+      sorter: (a, b) => {
+        const as = examDetail ? (a.totalCorrectAnswer / examDetail.countQuestions) * 10 : 0
+        const bs = examDetail ? (b.totalCorrectAnswer / examDetail.countQuestions) * 10 : 1
+
+        return as - bs
+      },
+      ellipsis: true,
     },
     {
       title: 'Xếp loại',
       key: 'scoreRating',
-      render: (_, { score }) => {
+      align: 'center',
+
+      render: (point) => {
         return (
-          (score <= 3 && <TagCustom color='error' content='Yếu' />) ||
-          (score <= 5 && <TagCustom color='processing' content='Trung bình' />) ||
-          (score <= 8 && <TagCustom color='success' content='Tốt' />) ||
-          (score > 8 && <TagCustom color='gold' content='Xuất sắc' />)
+          (point <= 3 && <TagCustom color='error' content='Yếu' />) ||
+          (point <= 5 && <TagCustom color='processing' content='Trung bình' />) ||
+          (point <= 8 && <TagCustom color='success' content='Tốt' />) ||
+          (point > 8 && <TagCustom color='gold' content='Xuất sắc' />)
         )
       },
     },
-    {
-      title: 'Thời gian làm',
-      dataIndex: 'time',
-      key: 'time',
-    },
+
     {
       title: 'Thời gian nộp',
-      key: 'finishedTime ',
-      dataIndex: 'finishedTime',
+      key: 'submitDate ',
+      align: 'center',
+
+      dataIndex: 'submitDate',
+      render: (submitDate) => moment(submitDate).format('HH:mm DD/MM/YYYY'),
     },
     {
       title: 'Chi tiết',
       key: 'detail',
+      align: 'center',
+
       render: () => (
         <Link to={'/'} className={'link'}>
           Xem chi tiết
         </Link>
       ),
-    },
-  ]
-
-  const students: DataType[] = [
-    {
-      _id: '1',
-      name: 'John Brown',
-      score: 2,
-      time: 35,
-      done: 10,
-      finishedTime: '2023-09-22 09:45 AM',
-    },
-    {
-      _id: '2',
-      name: 'Jim Green',
-      score: 8,
-      time: 29,
-      done: 49,
-      finishedTime: '2023-09-22 09:38 AM',
-    },
-    {
-      _id: '3',
-      name: 'Joe Black',
-      score: 6,
-      time: 35,
-      done: 35,
-      finishedTime: '2023-09-22 09:45 AM',
     },
   ]
 
@@ -227,10 +316,11 @@ const MentorExamDetail = () => {
       children: (
         <Table
           columns={attendedColumn}
-          dataSource={students}
+          dataSource={examDetail && examDetail.usersDoned}
           scroll={{
             x: 1024,
           }}
+          pagination={{ pageSize: 5 }}
         />
       ),
     },
@@ -240,7 +330,7 @@ const MentorExamDetail = () => {
       children: (
         <Table
           columns={absentColumn}
-          dataSource={students}
+          dataSource={examDetail && examDetail.usersIncompleted}
           scroll={{
             x: 1024,
           }}
@@ -315,7 +405,7 @@ const MentorExamDetail = () => {
             </Col>
           ))}
         </Row>
-        <TabsCustom data={testData} />
+        <TabsCustom data={testData} onChange={(e) => setTabs(e)} />
       </Space>
     )
 }

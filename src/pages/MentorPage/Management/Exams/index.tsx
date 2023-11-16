@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react'
 import { BiEdit, BiPlus } from 'react-icons/bi'
 import { BsListUl } from 'react-icons/bs'
 import { MdDeleteOutline } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DrawerExam from './Drawer/DrawerExam'
 import useResponsives from '@/hooks/useResponsives'
 
@@ -20,6 +20,8 @@ const MentorExams = () => {
   const [data, setData] = useState<{ docs: ExamState[] }>()
   const [loading, setLoading] = useState<boolean>(true)
   const [examData, setExamData] = useState<ExamState>()
+  const navitage = useNavigate()
+
   const queryClient = useQueryClient()
   const { status, mutate, error } = useMutation({
     mutationFn: (id: string) => examApi.deleteExam(id),
@@ -174,8 +176,12 @@ const MentorExams = () => {
             <BiEdit
               className='edit-icon'
               onClick={() => {
-                setExamData(record)
-                setOpen(true)
+                if (record.type === 'TEST') {
+                  navitage('/mentor/exams/updateTest', { state: record._id })
+                } else {
+                  setExamData(record)
+                  setOpen(true)
+                }
               }}
             />
           </Tooltip>

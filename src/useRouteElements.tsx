@@ -87,7 +87,7 @@ export default function useRouteElements() {
             >
               <Login />
             </AuthLayout>
-          )
+          ),
         },
         {
           path: PATH.REGISTER,
@@ -100,7 +100,7 @@ export default function useRouteElements() {
             >
               <Register />
             </AuthLayout>
-          )
+          ),
         },
         {
           path: PATH.FORGOT_PASS,
@@ -113,9 +113,9 @@ export default function useRouteElements() {
             >
               <ForgotPassword />
             </AuthLayout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // mentor
@@ -124,7 +124,7 @@ export default function useRouteElements() {
       children: [
         {
           path: PATH.MENTOR_PAGE,
-          element: <Navigate to={PATH.MENTOR_CALENDAR} />
+          element: <Navigate to={PATH.MENTOR_CALENDAR} />,
         },
 
         {
@@ -133,7 +133,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý khóa học'>
               <MentorCourses />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_COURSES_CREATE,
@@ -141,7 +141,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Tạo khóa học'>
               <StepCreate />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_CLASS,
@@ -149,7 +149,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý lớp học'>
               <CLassCourse />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_COURSES_UPDATE,
@@ -157,7 +157,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Sửa khóa học'>
               <StepCreate />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_CALENDAR,
@@ -165,7 +165,7 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Lịch giảng dạy'>
               <MentorCalendar />
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_EXAMS,
@@ -175,7 +175,7 @@ export default function useRouteElements() {
                 <MentorExams />
               </SuspenseWrapper>
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_EXAMS_DETAIL,
@@ -185,7 +185,7 @@ export default function useRouteElements() {
                 <MentorExamDetail />
               </SuspenseWrapper>
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_EXAMS_QUESTION,
@@ -195,7 +195,7 @@ export default function useRouteElements() {
                 <MentorExamQuestions />
               </SuspenseWrapper>
             </MentorLayout>
-          )
+          ),
         },
         {
           path: PATH.MENTOR_MY_STUDENT,
@@ -203,9 +203,9 @@ export default function useRouteElements() {
             <MentorLayout user={profile} title='Quản lý học viên'>
               <MyStudent />
             </MentorLayout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // private
@@ -218,7 +218,7 @@ export default function useRouteElements() {
             // <Layout user={profile} title='Đang kiểm tra thanh toán'>
             <VnpayPage />
             // </Layout>
-          )
+          ),
         },
         {
           path: PATH.CART,
@@ -226,7 +226,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Giỏ hàng của bạn'>
               <CartPage />
             </Layout>
-          )
+          ),
         },
 
         {
@@ -237,7 +237,7 @@ export default function useRouteElements() {
                 <MyCourse />
               </SuspenseWrapper>
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.MY_COURSE_LEARNING,
@@ -247,7 +247,7 @@ export default function useRouteElements() {
                 <MycoursesLearning />
               </SuspenseWrapper>
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.CHANGE_PASSWORD,
@@ -260,7 +260,7 @@ export default function useRouteElements() {
             >
               <ChangePassword />
             </AuthLayout>
-          )
+          ),
         },
 
         {
@@ -269,7 +269,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Lịch học của tôi'>
               <SchedulePage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.TEST_PAGE,
@@ -277,7 +277,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Làm bài thi Online'>
               <TestPage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.TEST_TEST_PAGE,
@@ -285,9 +285,9 @@ export default function useRouteElements() {
             <Layout user={profile} title='Làm bài thi Online'>
               <PageTestTest />
             </Layout>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
       // public
@@ -301,7 +301,7 @@ export default function useRouteElements() {
                 <Courses />
               </SuspenseWrapper>
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.HOME,
@@ -310,7 +310,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Trang chủ'>
               <HomePage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.NEWS,
@@ -319,7 +319,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Bài viết'>
               <NewsPageDetail />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.NEWS_PAGE,
@@ -328,7 +328,7 @@ export default function useRouteElements() {
             <Layout user={profile} title='Bài viết'>
               <NewsPage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.PROFILES_DETAIL,
@@ -336,7 +336,7 @@ export default function useRouteElements() {
             <Layout user={profile} title=''>
               <ProfilePage profile={profile} />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.SUBMENU_2,
@@ -344,7 +344,7 @@ export default function useRouteElements() {
             <Layout user={profile} title=''>
               <CategorySub />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.SUBMENU_1,
@@ -352,7 +352,7 @@ export default function useRouteElements() {
             <Layout user={profile} title=''>
               <MemuSlug />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.CHOICE_PAGE,
@@ -360,7 +360,7 @@ export default function useRouteElements() {
             <Layout user={profile} title=''>
               <ChoiceQuestionPage />
             </Layout>
-          )
+          ),
         },
 
         {
@@ -369,7 +369,7 @@ export default function useRouteElements() {
             <Layout user={profile}>
               <CategogyDetail />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.QA_PAGE,
@@ -377,7 +377,7 @@ export default function useRouteElements() {
             <Layout user={profile}>
               <QAPage />
             </Layout>
-          )
+          ),
         },
         {
           path: PATH.QA_PAGE_DETAIL,
@@ -385,13 +385,13 @@ export default function useRouteElements() {
             <Layout user={profile}>
               <QADetail />
             </Layout>
-          )
+          ),
         },
         { path: '/404', element: <PageResult code={404} /> },
         { path: '/403', element: <PageResult code={403} desc='Bạn không thể truy cập vào trang này!' /> },
-        { path: '*', element: <PageResult code={404} /> }
-      ]
-    }
+        { path: '*', element: <PageResult code={404} /> },
+      ],
+    },
   ])
 
   return routeElements
