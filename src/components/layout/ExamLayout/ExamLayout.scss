@@ -1,0 +1,36 @@
+.bg-white-layout {
+  background-color: white;
+}
+.layout-antd-exam {
+  height: 100vh;
+}
+.exam-header-leyout {
+  height: 10vh;
+}
+.exam-content-leyout {
+  height: 84vh;
+}
+.exam-footer-layout {
+  padding: 10px 20px !important;
+  height: 6vh;
+  background-color: bisque;
+}
+.container-prelisten {
+  padding: 30px;
+  line-height: 1.8;
+  text-align: start;
+}
+.p-sound-ul {
+  list-style: circle;
+  margin-left: 50px;
+}
+.listen-div-fixed {
+  height: 100px;
+  background-color: bisque;
+  .div-in-part {
+    padding: 10px 20px;
+    background-color: bisque;
+    width: 100%;
+    height: 100%;
+  }
+}

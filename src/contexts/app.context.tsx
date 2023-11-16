@@ -7,6 +7,8 @@ import { createContext, useState } from 'react'
 
 interface AppContextInterface {
   isAuthenticated: boolean
+  volume: number
+  setVolume: React.Dispatch<React.SetStateAction<number>>
   scaleScreen: boolean
   setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
@@ -20,10 +22,12 @@ interface AppContextInterface {
 
 const initialAppContext: AppContextInterface = {
   isAuthenticated: Boolean(getAccessTokenFromLS()),
+  volume: 50,
   configs: getConfigFromLS(),
   scaleScreen: false,
   setScaleScreen: () => {},
   setIsAuthenticated: () => {},
+  setVolume: () => {},
   profile: getProfileFromLS(),
   setProfile: () => {},
   setConfigs: () => {},
@@ -43,11 +47,14 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [questionList, setQuestionList] = useState<string[]>(initialAppContext.questionList)
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
   const [configs, setConfigs] = useState<Configs>(initialAppContext.configs)
+  const [volume, setVolume] = useState<number>(initialAppContext.volume)
 
   return (
     <AppContext.Provider
       value={{
         setConfigs,
+        volume,
+        setVolume,
         configs,
         scaleScreen,
         setScaleScreen,
