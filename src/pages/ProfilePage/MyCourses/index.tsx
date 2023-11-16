@@ -85,8 +85,7 @@ const MyCourses = ({ userId }: Props) => {
             </Descriptions.Item>
             <Descriptions.Item label='Mức phí'>
               <div style={{ marginTop: -5 }}>
-                {' '}
-                <PriceCalculator price={item.plan === 'FREE' ? 0 : item.cost} discount={0} showTotal />
+                <PriceCalculator price={item.plan === 'FREE' ? 0 : item.cost} discount={0} showTotal priceSize={20} />
               </div>
             </Descriptions.Item>
           </Descriptions>

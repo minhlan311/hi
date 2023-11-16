@@ -268,7 +268,11 @@ const MentorQuestions = () => {
               type='question'
               apiFind={questionApi.findQuestion}
               callBackData={setQuestionsCallback}
-              filterQuery={{ categoryId: examDetail.categoryId, createdById: myQues ? profile._id : undefined }}
+              filterQuery={{
+                categoryId: examDetail.categoryId,
+                createdById: myQues ? profile._id : undefined,
+                typeQuestion: examDetail.type,
+              }}
               limit={10}
               page={current}
               keyFilter='questionsBank'
@@ -389,6 +393,7 @@ const MentorQuestions = () => {
         open={open}
         questionData={questionUpdate ? questionUpdate : null}
         categoryId={examDetail ? examDetail.categoryId : ''}
+        typeQuestion={examDetail?.type as 'TEST' | 'QUIZ'}
         setOpen={setOpen}
         setQuestionData={setQuestionUpdate}
         setLoading={setLoading}

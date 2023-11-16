@@ -7,7 +7,7 @@ type Props = {
   choose: React.Dispatch<React.SetStateAction<any[]>>
 }
 
-const CreateQuestion: React.FC<Props> = ({ questionTextForm, choose }) => {
+const CreateDnDQuestion: React.FC<Props> = ({ questionTextForm, choose }) => {
   const [form] = Form.useForm()
   const [questionText, setQuestionText] = useState<string>('')
   const [answers, setAnswers] = useState<Array<{ answer: string }>>([])
@@ -78,4 +78,4 @@ const CreateQuestion: React.FC<Props> = ({ questionTextForm, choose }) => {
   )
 }
 
-export default CreateQuestion
+export default CreateDnDQuestion

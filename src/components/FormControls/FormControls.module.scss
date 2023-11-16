@@ -5,6 +5,7 @@
     text-align: center;
   }
   .checkboxCard {
+    width: 100%;
     &:hover {
       background-color: var(--lighish-white);
       border: 1px solid var(--green);

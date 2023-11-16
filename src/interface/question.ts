@@ -31,6 +31,7 @@ export interface QuestionState {
     | 'MATCHING'
     | 'NUMERICAL'
     | 'WRITING'
+  typeQuestion: 'TEST' | 'QUIZ'
   point: number
   difficulty: string
   answer?: string

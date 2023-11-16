@@ -283,9 +283,9 @@ export default function useRouteElements() {
         {
           path: PATH.TEST_EXAM_PAGE,
           element: (
-            <ExamLayout>
-              <ExamPage />
-            </ExamLayout>
+            <Layout user={profile} title='Làm bài thi Online'>
+              <PageTestTest />
+            </Layout>
           ),
         },
       ],
@@ -374,14 +374,6 @@ export default function useRouteElements() {
         },
         {
           path: PATH.QA_PAGE,
-          element: (
-            <Layout user={profile}>
-              <QAPage />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.TEST_EXAM_PAGE,
           element: (
             <Layout user={profile}>
               <QAPage />

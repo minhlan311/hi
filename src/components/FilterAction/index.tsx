@@ -54,19 +54,21 @@ const FilterAction = (props: Props) => {
       },
     },
   })
+
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
-      })
+      return categoryApi.getCategories({ parentId: null })
     },
   })
+  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
 
-  const subjectList = categoriesData?.data?.docs?.map((sj) => ({
-    value: sj._id,
-    label: sj.name,
-  }))
+  const subjectList = coursesList?.children?.map((sj) => {
+    return {
+      value: sj._id,
+      label: sj.name,
+    }
+  })
 
   const onChangeFilter = () => {
     const { categoryId, plan, viewCountDownCount, type, keyword, skill, difficulty, score, status, createdAt } =
