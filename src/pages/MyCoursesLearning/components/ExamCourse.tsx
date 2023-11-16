@@ -114,8 +114,6 @@ export default function ExamCourse({ data, name }: Props) {
     }
   }
 
-  console.log(currentQuestion, 'currentQuestion')
-
   useEffect(() => {
     if (dataExam?.data && dataExam?.data?.questionsDetail) {
       const extractedData =
@@ -135,8 +133,6 @@ export default function ExamCourse({ data, name }: Props) {
     }
   }, [data, dataExam])
 
-  console.log(questions, '==========')
-
   useEffect(() => {
     setDataUpload({
       _id: data && data[0]?._id,
@@ -144,8 +140,6 @@ export default function ExamCourse({ data, name }: Props) {
       questions: questions,
     })
   }, [questions])
-
-  console.log(dataUpload, 'dataUploaddataUpload')
 
   const handleRadioChange = (questionIndex: any, choiceIndex: any) => {
     const newQuestions = [...questions]
