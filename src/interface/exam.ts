@@ -24,10 +24,15 @@ export interface MentorInfo {
   updatedAt: string
   id: string
 }
+
+export type SkillType = 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING' | string
 export interface Skill {
-  skillName: 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING'
+  categoryId: string
+  skill: SkillType
+  title: string
   description: string
   url?: string[]
+  questions?: string[]
 }
 export interface ExamState {
   _id: string

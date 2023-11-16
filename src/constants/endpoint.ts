@@ -49,6 +49,10 @@ export const ENDPOINT = {
   FIND_EXAM_SUBMIT: '/exam/tests/submit/',
   FIND_EXAM_RESULTS: '/exam/results/find',
 
+  // :::::::::::::::::::: SKILL PATH :::::::::::::::::::::
+  SKILL_PATH: '/exam/skills/',
+  FIND_SKILL_PATH: '/exam/skills/find',
+
   // :::::::::::::::::::: QUESTION PATH :::::::::::::::::::::
   QUESTION_PATH: '/exam/questions/',
   FIND_QUESTION_PATH: '/exam/questions/find',

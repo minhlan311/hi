@@ -7,41 +7,67 @@ import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { ENDPOINT } from '@/constants/endpoint'
-import { Skill } from '@/interface/exam'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { Skill, SkillType } from '@/interface/exam'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Col, Form, Input, Modal, Row, Select, Space, Tabs } from 'antd'
 import { useEffect, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { RiVoiceprintLine } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router-dom'
+import CreateQuestion from './Components/CreateQuestion'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import useResponsives from '@/hooks/useResponsives'
+import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import skillApi from '@/apis/skill.api'
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string
-
-type SkillType = 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING' | string
 
 const RenderSkillItem = ({
   skillName,
   data,
+  categoryId,
   name,
   restField,
 }: {
   skillName: SkillType
   data: Skill
+  categoryId: string
   name: any
   restField: any
 }) => {
-  const [skill, setSkill] = useState<SkillType>(data?.skillName || 'READING')
-
+  const [skill, setSkill] = useState<SkillType>(data?.skill || 'READING')
+  const [openForm, setOpenForm] = useState<boolean>(false)
+  const [form] = Form.useForm()
   useEffect(() => {
     if (skillName) setSkill(skillName)
   }, [skillName])
+  const queryClient = useQueryClient()
 
   const [callbackUrl, setCallbackUrl] = useState<any>(null || data?.url)
   console.log(callbackUrl)
-  console.log(skill)
+  console.log(queryClient.invalidateQueries({ queryKey: ['questionsBank'] }))
+  const { sm } = useResponsives()
+
+  const { data: skillPatch } = useQuery({
+    queryKey: ['skillPatch'],
+    queryFn: () => {
+      return skillApi.findSkill({ filterQuery: {} })
+    },
+  })
+
+  console.log(skillPatch)
+
+  const items = [
+    { id: 'create', name: 'Gói câu tự tạo', children: <p></p> },
+    { id: 'store', name: 'Gói câu từ ngân hàng', children: <p></p> },
+  ]
 
   return (
-    <Row gutter={24}>
+    <Row gutter={[24, 24]}>
+      <Col span={24}>
+        <TabsCustom data={items}></TabsCustom>
+      </Col>
+
       <Col>
         <h3>
           1. Thêm nội dung kỹ năng{' '}
@@ -78,32 +104,59 @@ const RenderSkillItem = ({
         </>
       )}
       {skill && (
-        <Col span={24}>
-          <TextAreaCustom
-            {...restField}
-            name={[name, 'description']}
-            label={skill === 'READING' ? 'Nội dung bài đọc' : 'Chú thích'}
-            rules={[
-              {
-                required: skill === 'READING',
-                message: 'Vui lòng nhập nội dung bài đọc',
-              },
-            ]}
-            data={data}
-          ></TextAreaCustom>
-        </Col>
+        <>
+          <Col span={24}>
+            <Form.Item
+              name={[name, 'title']}
+              label={skill === 'READING' ? 'Tiêu đề bài đọc' : 'Chú thích'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tiêu đề bài đọc',
+                },
+              ]}
+            >
+              <Input placeholder='Tiêu đề bài đọc'></Input>
+            </Form.Item>
+          </Col>
+
+          <Col span={24}>
+            <TextAreaCustom
+              {...restField}
+              name={[name, 'description']}
+              label={skill === 'READING' ? 'Nội dung bài đọc' : 'Chú thích'}
+              rules={[
+                {
+                  required: skill === 'READING',
+                  message: 'Vui lòng nhập nội dung bài đọc',
+                },
+              ]}
+              data={data}
+            ></TextAreaCustom>
+          </Col>
+        </>
       )}
 
-      <Col>
-        <h3>
-          2. Thêm câu hỏi kỹ năng{' '}
-          {(skill === 'READING' && 'đọc') ||
-            (skill === 'LISTENING' && 'nghe') ||
-            (skill === 'WRITING' && 'viết') ||
-            (skill === 'SPEAKING' && 'nói')}
-        </h3>
+      <Col span={24}>
+        <Row justify='space-between'>
+          <h3>
+            2. Thêm câu hỏi kỹ năng{' '}
+            {(skill === 'READING' && 'đọc') ||
+              (skill === 'LISTENING' && 'nghe') ||
+              (skill === 'WRITING' && 'viết') ||
+              (skill === 'SPEAKING' && 'nói')}
+          </h3>
+          <ButtonCustom onClick={() => setOpenForm(true)} type='dashed' className='butt-link'>
+            Thêm câu hỏi
+          </ButtonCustom>
+        </Row>
       </Col>
-      <Col span={24}>Thêm câu hỏi ở đây</Col>
+      <Col span={24}>
+        <EmptyCustom description='Không có câu hỏi nào' />
+      </Col>
+      <Modal open={openForm} okText='Thêm câu hỏi' width={sm ? undefined : '60vw'} onCancel={() => setOpenForm(false)}>
+        <CreateQuestion form={form} categoryId={categoryId} typeQuestion={'TEST'} skill={skill} />
+      </Modal>
     </Row>
   )
 }
@@ -111,6 +164,8 @@ const RenderSkillItem = ({
 const MentorCreateTest = () => {
   const [form] = Form.useForm()
   const [typePlan, setTypePlan] = useState('FREE')
+  const [categoryId, setCategoryId] = useState<string>()
+
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const navitage = useNavigate()
@@ -143,8 +198,7 @@ const MentorCreateTest = () => {
   })
 
   const { mutate } = useMutation({
-    mutationFn: (body) =>
-      typeAction === 'createTest' ? examApi.createExam(body) : examApi.putExam({ id: examData?._id, data: body }),
+    mutationFn: (body) => (typeAction === 'createTest' ? examApi.createExam(body) : examApi.putExam(body)),
     onSuccess: () => {
       openNotification({
         status: 'success',
@@ -184,6 +238,7 @@ const MentorCreateTest = () => {
       ...values,
       type: 'TEST',
       cost: parseInt(values?.cost),
+      id: examData?._id,
     }
 
     mutate(payload)
@@ -203,7 +258,7 @@ const MentorCreateTest = () => {
   useEffect(() => {
     if (examData && examData?.skill.length > 0) {
       const newItems = initSkill
-        .filter((skill) => examData?.skill.find((s) => s.skillName === skill.value))
+        .filter((skill) => examData?.skill.find((s) => s.skill === skill.value))
         .map((skill) => {
           return {
             label: `Kỹ năng ${
@@ -216,6 +271,8 @@ const MentorCreateTest = () => {
             key: skill.value,
           }
         })
+
+      setSkillOption((prev) => prev.filter((skill) => !examData?.skill.some((item) => item.skill === skill.value)))
       setItems(newItems)
     }
   }, [examData])
@@ -287,7 +344,7 @@ const MentorCreateTest = () => {
                 },
               ]}
             >
-              <Select placeholder='Chọn khóa học' options={subjectList} />
+              <Select placeholder='Chọn khóa học' options={subjectList} onChange={(e) => setCategoryId(e)} />
             </Form.Item>
           </Col>
           <Col span={24} md={8}>
@@ -384,6 +441,7 @@ const MentorCreateTest = () => {
                         data={examData?.skill?.[id] as unknown as Skill}
                         name={fields[id]?.name}
                         restField={fields[id]}
+                        categoryId={categoryId as string}
                       />
                     </Tabs.TabPane>
                   ))}
@@ -392,7 +450,7 @@ const MentorCreateTest = () => {
             }}
           </Form.List>
           <ButtonCustom size='large' type='primary' htmlType='submit'>
-            {typeAction === 'createTest' ? 'Thêm mới' : 'Cập nhật'}
+            {typeAction === 'createTest' ? 'Tạo bộ đề' : 'Cập nhật bộ đề'}
           </ButtonCustom>
         </Space>
       </Form>

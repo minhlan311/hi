@@ -7,8 +7,9 @@ import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, Drawer, Form, Input, Row, Select, Space } from 'antd'
+import { Col, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   open: boolean
@@ -20,17 +21,15 @@ type Props = {
 
 const DrawerExam = (props: Props) => {
   const { open, setOpen, setLoading, examData, size } = props
-
+  const navitage = useNavigate()
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [typePlan, setTypePlan] = useState('FREE')
-  const [type, setType] = useState<'QUIZ' | 'TEST'>()
 
   useEffect(() => {
     if (examData) {
       setAction('update')
       form.setFieldsValue(examData)
-      setType(examData?.type)
       setTypePlan(examData?.plan)
     } else {
       setAction('create')
@@ -45,8 +44,9 @@ const DrawerExam = (props: Props) => {
   const queryClient = useQueryClient()
 
   const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
+  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
 
-  const subjectList = categoriesData?.data?.docs?.map((sj) => {
+  const subjectList = coursesList?.children?.map((sj) => {
     return {
       value: sj._id,
       label: sj.name,
@@ -112,34 +112,44 @@ const DrawerExam = (props: Props) => {
           form={form}
           initialValues={{
             plan: 'FREE',
+            type: 'QUIZ',
           }}
         >
+          <Form.Item
+            name='type'
+            label='Loại bộ đề'
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng chọn loại bộ đề',
+              },
+            ]}
+          >
+            <Radio.Group value={size}>
+              <Radio.Button value='QUIZ'>Bài Quiz</Radio.Button>
+              <Radio.Button
+                value='TEST'
+                onClick={() => {
+                  navitage('/mentor/exams/createTest')
+                }}
+              >
+                Bài Thi
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
           <Row gutter={24}>
             <Col span={24} md={8}>
               <Form.Item
-                name='type'
-                label='Loại bộ đề'
+                name='categoryId'
+                label='Chọn khóa học'
                 rules={[
                   {
                     required: true,
-                    message: 'Vui lòng chọn loại bộ đề',
+                    message: 'Vui lòng chọn khóa học',
                   },
                 ]}
               >
-                <Select
-                  placeholder='Chọn loại bộ đề'
-                  onChange={(e) => setType(e)}
-                  options={[
-                    {
-                      value: 'QUIZ',
-                      label: 'Bài Quiz',
-                    },
-                    {
-                      value: 'TEST',
-                      label: 'Bài thi thử',
-                    },
-                  ]}
-                />
+                <Select placeholder='Chọn khóa học' options={subjectList} />
               </Form.Item>
             </Col>
             <Col span={24} md={8}>
@@ -185,41 +195,23 @@ const DrawerExam = (props: Props) => {
               </Form.Item>
             </Col>
 
-            <div style={{ padding: '0 10px' }} className='sp100'>
-              {type === 'TEST' ? (
-                <ButtonCustom type='primary' size='large' href='/mentor/exams/createTest'>
-                  Chuyển qua mà tạo bài thi
-                </ButtonCustom>
-              ) : (
-                <>
-                  <Form.Item
-                    name='categoryId'
-                    label='Chọn khóa học'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng chọn khóa học',
-                      },
-                    ]}
-                  >
-                    <Select placeholder='Chọn khóa học' options={subjectList} />
-                  </Form.Item>
-                  <Form.Item
-                    name='name'
-                    label='Tiêu đề bộ đề'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhập tiêu đề bộ đề',
-                      },
-                    ]}
-                  >
-                    <Input placeholder='Nhập tên tiêu đề bộ đề' />
-                  </Form.Item>
-                  <TextAreaCustom name='description' label='Chú thích' data={examData} />
-                </>
-              )}
-            </div>
+            <Col span={24}>
+              <Form.Item
+                name='name'
+                label='Tiêu đề bộ đề'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập tiêu đề bộ đề',
+                  },
+                ]}
+              >
+                <Input placeholder='Nhập tên tiêu đề bộ đề' />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <TextAreaCustom name='description' label='Chú thích' data={examData} />
+            </Col>
           </Row>
         </Form>
       </Drawer>
