@@ -16,7 +16,7 @@ const PromotionCountdown = ({ endDateProps }: any) => {
       // const startDate = moment(startDateProps || '2023-09-07 07:00:00')
 
       // Mốc thời gian bắt đầu khuyến mãi
-      const endDate = moment(endDateProps || '2023-11-30 07:00:00') // Mốc thời gian kết thúc khuyến mãi
+      const endDate = moment(endDateProps || '2023-12-30 07:00:00') // Mốc thời gian kết thúc khuyến mãi
 
       // Kiểm tra nếu thời gian hiện tại đã vượt quá thời gian kết thúc khuyến mãi
       if (now.isAfter(endDate)) {
