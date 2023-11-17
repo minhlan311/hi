@@ -58,7 +58,7 @@ export default function Writing({ nextSteps }: Props) {
           </Flex>
         </Flex>
         <Button type='dashed' className='dashed' onClick={showModal}>
-          Go to Writing
+          Go to Speaking
         </Button>
       </Flex>
       <div className='container-div-reading'>
