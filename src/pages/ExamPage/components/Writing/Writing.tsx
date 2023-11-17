@@ -1,16 +1,17 @@
 import { Button, Col, Flex, Modal, Row } from 'antd'
 import { useState } from 'react'
-import './Reading.scss'
+import './Writing.scss'
 import { useQuery } from '@tanstack/react-query'
 import examApi from '@/apis/exam.api'
 import Logo from '@/components/Logo/Logo'
 import useResponsives from '@/hooks/useResponsives'
+import TextArea from 'antd/es/input/TextArea'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Reading({ nextSteps }: Props) {
+export default function Writing({ nextSteps }: Props) {
   const { sm } = useResponsives()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { data: dataQuestion } = useQuery({
@@ -27,7 +28,7 @@ export default function Reading({ nextSteps }: Props) {
   }
 
   const handleOk = () => {
-    nextSteps(4)
+    nextSteps(5)
     setIsModalOpen(false)
   }
 
@@ -52,8 +53,8 @@ export default function Reading({ nextSteps }: Props) {
         <Flex gap={'large'}>
           <Logo size={sm ? 115 : undefined} />
           <Flex vertical gap={'small'}>
-            <h3>Reading</h3>
-            <p>Reading to the audio and answer questions below.</p>
+            <h3>Writing</h3>
+            <p>Writing to the audio and answer questions below.</p>
           </Flex>
         </Flex>
         <Button type='dashed' className='dashed' onClick={showModal}>
@@ -139,27 +140,12 @@ export default function Reading({ nextSteps }: Props) {
             </div>
           </Col>
           <Col span={12}>
-            <div className='border-2-div'>
-              {dataListQuestion &&
-                dataListQuestion?.length &&
-                dataListQuestion?.map((item, index) => (
-                  <>
-                    <p
-                      style={{
-                        marginTop: '20px',
-                        fontWeight: '700',
-                      }}
-                    >
-                      Câu số {index + 1}
-                    </p>
-                    <div className='html-ques-choice' dangerouslySetInnerHTML={{ __html: item?.question }}></div>
-                    {item?.choices?.map((choice) => (
-                      <>
-                        <Button>{choice?.answer}</Button>
-                      </>
-                    ))}
-                  </>
-                ))}
+            <div className='border-2-div-w'>
+              <TextArea
+                style={{
+                  minHeight: '100%',
+                }}
+              />
             </div>
           </Col>
         </Row>

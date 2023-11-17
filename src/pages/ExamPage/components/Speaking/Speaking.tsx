@@ -5,13 +5,13 @@ import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Flex, Modal } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
-import './Listening.scss'
+import './Speaking.scss'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Listening({ nextSteps }: Props) {
+export default function Speaking({ nextSteps }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data: dataQuestion } = useQuery({
@@ -28,7 +28,7 @@ export default function Listening({ nextSteps }: Props) {
   }
 
   const handleOk = () => {
-    nextSteps(3)
+    nextSteps(6)
     setIsModalOpen(false)
   }
 
@@ -74,18 +74,18 @@ export default function Listening({ nextSteps }: Props) {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Do you want to finish this skill?</p>
+        <p>Do you want to submit this test?</p>
       </Modal>
       <Flex className='div-in-part' justify='space-between' align='center'>
         <Flex gap={'large'}>
           <Logo size={sm ? 115 : undefined} />
           <Flex vertical gap={'small'}>
-            <h3>Listening</h3>
-            <p>Listen to the audio and answer questions below.</p>
+            <h3>Speaking </h3>
+            <p>Speaking to the audio and answer questions below.</p>
           </Flex>
         </Flex>
         <Button type='dashed' className='dashed' onClick={showModal}>
-          Go to Reading
+          Submit
         </Button>
       </Flex>
 
