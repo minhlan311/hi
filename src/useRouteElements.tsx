@@ -33,6 +33,8 @@ import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 
+import ExamLayout from './components/layout/ExamLayout/ExamLayout.tsx'
+import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
 import QADetail from './pages/QAPage/QAPageDetail.tsx'
@@ -276,6 +278,14 @@ export default function useRouteElements() {
             <Layout user={profile} title='Làm bài thi Online'>
               <TestPage />
             </Layout>
+          ),
+        },
+        {
+          path: PATH.TEST_EXAM_PAGE,
+          element: (
+            <ExamLayout>
+              <ExamPage />
+            </ExamLayout>
           ),
         },
       ],
