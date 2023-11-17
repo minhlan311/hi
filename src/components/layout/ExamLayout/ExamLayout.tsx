@@ -1,7 +1,7 @@
 import { AppContext } from '@/contexts/app.context'
 import { QuestionCircleOutlined, SoundOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Layout, Modal, Row, Slider } from 'antd'
-import { Content, Footer, Header } from 'antd/es/layout/layout'
+import { Content, Header } from 'antd/es/layout/layout'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ExamLayout.scss'
