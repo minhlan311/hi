@@ -195,7 +195,7 @@ export default function ExamLayout({ children }: Props) {
         </Row>
       </Header>
       <Content className='exam-content-layout'>{children}</Content>
-      <Footer className='exam-footer-layout'>
+      {/* <Footer className='exam-footer-layout'>
         <Flex justify='space-between' align={'center'}>
           <div>
             <Button className='dashed' type='dashed'>
@@ -221,7 +221,7 @@ export default function ExamLayout({ children }: Props) {
             <Button type='primary'>Next</Button>
           </div>
         </Flex>
-      </Footer>
+      </Footer> */}
     </Layout>
   )
 }

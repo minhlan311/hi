@@ -1,9 +1,11 @@
-import { Button, message } from 'antd'
 import { useState } from 'react'
 import TestSound from './TestSound'
 import Listening from './components/Listening/Listening'
 import PreListening from './components/Listening/PreListening'
 import Reading from './components/Reading/Reading'
+import Writing from './components/Writing/Writing'
+import Speaking from './components/Speaking/Speaking'
+import Result from './components/Result/Result'
 
 export default function ExamPage() {
   const [current, setCurrent] = useState(0)
@@ -22,17 +24,21 @@ export default function ExamPage() {
     },
     {
       title: 'Last',
-      content: <Reading />,
+      content: <Reading nextSteps={setCurrent} />,
+    },
+    {
+      title: 'Last',
+      content: <Writing nextSteps={setCurrent} />,
+    },
+    {
+      title: 'Last',
+      content: <Speaking nextSteps={setCurrent} />,
+    },
+    {
+      title: 'Last',
+      content: <Result nextSteps={setCurrent} />,
     },
   ]
-
-  const next = () => {
-    setCurrent(current + 1)
-  }
-
-  const prev = () => {
-    setCurrent(current - 1)
-  }
 
   // const contentStyle: React.CSSProperties = {
   //   textAlign: 'center',
@@ -45,7 +51,7 @@ export default function ExamPage() {
   return (
     <>
       <div>{steps[current].content}</div>
-      <div style={{ marginTop: 24 }}>
+      {/* <div style={{ marginTop: 24 }}>
         {current < steps.length - 1 && (
           <Button type='primary' onClick={() => next()}>
             Next
@@ -61,7 +67,7 @@ export default function ExamPage() {
             Previous
           </Button>
         )}
-      </div>
+      </div> */}
     </>
   )
 }
