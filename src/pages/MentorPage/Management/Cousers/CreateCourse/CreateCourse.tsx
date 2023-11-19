@@ -33,6 +33,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
+  const [typeCourse, setTypeCourse] = useState('')
   const { id } = useParams()
   const [typePlan, setTypePlan] = useState<PlanEnum>(PlanEnum.FREE)
   const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -81,11 +82,12 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   const onFinishFailed = () => {}
 
   const { data: subjectData } = useQuery({
-    queryKey: ['categoryAll'],
+    queryKey: ['categoryAll', typeCourse],
     queryFn: () =>
       categoryApi.getCategories({
-        parentId: '650004a3dffb95727e9cb9fc',
+        parentId: typeCourse === 'NORMAL' ? '650004a3dffb95727e9cb9fc' : '6500048ddffb95727e9cb9f1',
       }),
+    enabled: !!typeCourse,
   })
 
   const { data: courseDetail, isLoading } = useQuery({
@@ -95,6 +97,18 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
   })
 
   useEffect(() => {
+    if (id && typeCourse !== courseDetail?.data?.typeCourse) {
+      form.resetFields(['categoryId'])
+    }
+  }, [typeCourse])
+
+  useEffect(() => {
+    if (typePlan === PlanEnum.FREE) {
+      form.setFieldValue('cost', null)
+    }
+  }, [typePlan])
+
+  useEffect(() => {
     if (courseDetail && id) {
       form.setFieldValue('plan', courseDetail?.data?.plan)
       form.setFieldValue('cost', courseDetail?.data?.cost)
@@ -102,7 +116,8 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       form.setFieldValue('categoryId', courseDetail?.data?.categoryId)
       form.setFieldValue('coverMedia', courseDetail?.data?.coverMedia)
       form.setFieldValue('coverVideo', courseDetail?.data?.coverVideo)
-
+      setTypeCourse(courseDetail?.data?.typeCourse)
+      form.setFieldValue('typeCourse', courseDetail?.data?.typeCourse)
       editorRef.current = courseDetail?.data?.descriptions
 
       setFileList([
@@ -114,7 +129,6 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
       ])
     } else {
       form.resetFields()
-      // setContent('')
     }
   }, [courseDetail, id])
 
@@ -232,13 +246,19 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} xl={3}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Số tiền'
                   name='cost'
                   rules={[{ required: typePlan === PlanEnum.PREMIUM, message: 'Hãy nhập số tiền' }]}
                 >
-                  <InputNumber min={1} disabled={typePlan === PlanEnum.FREE} />
+                  <InputNumber
+                    style={{
+                      width: '100%',
+                    }}
+                    min={1}
+                    disabled={typePlan === PlanEnum.FREE}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} xl={9}>
@@ -252,15 +272,33 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
               </Col>
             </Row>
             <Row gutter={30}>
-              <Col xs={24} xl={9}>
+              <Col xs={24} xl={6}>
+                <Form.Item
+                  label='Dạng khóa học'
+                  name='typeCourse'
+                  rules={[{ required: true, message: 'Vui lòng chọn dạng khóa học' }]}
+                >
+                  <Select
+                    placeholder='Chọn dạng khóa học'
+                    onChange={(value: 'NORMAL' | 'TEST' | '') => {
+                      setTypeCourse(value)
+                    }}
+                    options={[
+                      { label: 'Khóa học thường', value: 'NORMAL' },
+                      { label: 'Khóa học luyện thi', value: 'TEST' },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Danh mục khóa học'
                   name='categoryId'
                   rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                 >
                   <TreeSelect
+                    disabled={typeCourse === ''}
                     showSearch
-                    style={{ width: '90%' }}
                     value={form.getFieldValue('categoryId')}
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     placeholder='Chọn danh mục'
@@ -285,13 +323,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
             </Row>
           </Col>
           <Col xs={24} xl={4}>
-            <Form.Item
-              label='Ảnh khoá học'
-              name='coverMedia'
-              // rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học' }]}
-              // type='upload-image-crop'
-              //   cropOptions={propsImageCrop}
-            >
+            <Form.Item label='Ảnh khoá học' name='coverMedia'>
               <ImgCrop
                 aspect={2 / 1}
                 cropShape='rect'

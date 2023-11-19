@@ -46,8 +46,8 @@ const Footer = () => {
                         }}
                       >
                         <ul className='ul-fff'>
-                          <li>Địa chỉ: {item?.address}</li>
                           <li>Hotline: {item?.phoneNumber}</li>
+                          <li>Địa chỉ: {item?.address}</li>
                         </ul>
                       </div>
                     </Space>
@@ -57,7 +57,7 @@ const Footer = () => {
           </Row>
           {/* </div> */}
 
-          <Row className='' justify={'center'} gutter={[10, 10]}>
+          <Row className='row-footer-bottom' justify={'center'} gutter={[10, 10]}>
             <Col className='' style={{ textAlign: 'start' }}>
               <div className='col-footer-left max-w'>
                 <Space direction='vertical' style={{ textAlign: 'start' }}>

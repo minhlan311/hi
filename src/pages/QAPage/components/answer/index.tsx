@@ -38,13 +38,13 @@ export default function AnswerList(props: IAnswerListProps) {
     },
     onError() {
       message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
-    }
+    },
   })
 
   const deleteAnswer = (answer: AnswerState) => {
     mutate.mutate({
       id: faq?._id as string,
-      answerId: answer?._id as string
+      answerId: answer?._id as string,
     })
   }
 
@@ -73,7 +73,7 @@ export default function AnswerList(props: IAnswerListProps) {
           >
             <Button danger icon={<DeleteOutlined />}></Button>
           </Popconfirm>
-        </Tooltip>
+        </Tooltip>,
       ]
     }
 
@@ -91,7 +91,7 @@ export default function AnswerList(props: IAnswerListProps) {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
   const mutateDeleteLike = useMutation({
     mutationFn: (id: string) => LikeApi.deleteLike(id),
@@ -104,7 +104,7 @@ export default function AnswerList(props: IAnswerListProps) {
       } else {
         message.error('Có lỗi xảy ra! Vui lòng thử lại sau')
       }
-    }
+    },
   })
 
   const likeAnswer = (answer: AnswerState, type: TypeEnum, method: string) => {
@@ -118,16 +118,14 @@ export default function AnswerList(props: IAnswerListProps) {
         targetType: TargetModelEnum.ANSWER,
         type: type,
         userId: profile?._id as string,
-        id: id
+        id: id,
       })
     } else {
       if (type === TypeEnum.LIKE) {
-        console.log('id', answer?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id)
-
         mutateDeleteLike.mutate(answer?.likes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string)
       } else {
         mutateDeleteLike.mutate(
-          answer?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string
+          answer?.dislikes?.find((item: LikeState) => item?.userId === profile?._id)?._id as string,
         )
       }
     }
