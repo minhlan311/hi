@@ -15,16 +15,18 @@ import { RiCloseCircleFill } from 'react-icons/ri'
 import css from './RenderIten.module.scss'
 
 type Props = {
-  type: 'questionsSelected' | 'questionsBank'
+  type: 'questionsSelected' | 'questionsBank' | string
   data: QuestionState
-  setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
+  questionsSelect?: string[]
+  typeQuestion?: 'TEST' | 'QUIZ'
+  setQuestionUpdate?: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setQuestionsSelect?: React.Dispatch<React.SetStateAction<string[]>>
-  questionsSelect: string[]
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RenderItem = (props: Props) => {
-  const { type, data, setQuestionUpdate, setQuestionsSelect, questionsSelect, setOpen } = props
+  const { type, data, questionsSelect, typeQuestion, setQuestionUpdate, setQuestionsSelect, setOpen } = props
   const { setQuestionList, profile } = useContext(AppContext)
 
   const [isHover, setIsHover] = useState(false)
@@ -46,36 +48,40 @@ const RenderItem = (props: Props) => {
   })
 
   if (data) {
-    const check = questionsSelect.includes(data._id)
+    const check = questionsSelect && questionsSelect.includes(data._id)
 
     return (
       <div className={css.qItem}>
-        <div
-          className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
-          onClick={() => {
-            setQuestionList(data._id as unknown as string[])
-            setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'switch', setQuestionsListFromLS)
-            // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
-          }}
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <Space direction='vertical' align='center' className={'p-center sp100'}>
-            {data.status === 'INACTIVE' && <MdOutlineDisabledVisible className={css.iconDisable} />}
-            <h3>{data.status === 'INACTIVE' ? 'Câu hỏi đang được ẩn' : check ? 'Xóa khỏi bộ đề' : 'Thêm vào bộ đề'}</h3>
-          </Space>
-          <div className={css.iconCheck}>
-            {isHover && check ? (
-              <RiCloseCircleFill className={css.unCheck} />
-            ) : (
-              check && (
-                <b className={css.check}>
-                  {questionsSelect && questionsSelect.findIndex((val) => val === data._id) + 1}
-                </b>
-              )
-            )}
+        {typeQuestion !== 'TEST' && (
+          <div
+            className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
+            onClick={() => {
+              setQuestionList(data._id as unknown as string[])
+              setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'switch', setQuestionsListFromLS)
+              // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
+            }}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+          >
+            <Space direction='vertical' align='center' className={'p-center sp100'}>
+              {data.status === 'INACTIVE' && <MdOutlineDisabledVisible className={css.iconDisable} />}
+              <h3>
+                {data.status === 'INACTIVE' ? 'Câu hỏi đang được ẩn' : check ? 'Xóa khỏi bộ đề' : 'Thêm vào bộ đề'}
+              </h3>
+            </Space>
+            <div className={css.iconCheck}>
+              {isHover && check ? (
+                <RiCloseCircleFill className={css.unCheck} />
+              ) : (
+                check && (
+                  <b className={css.check}>
+                    {questionsSelect && questionsSelect.findIndex((val) => val === data._id) + 1}
+                  </b>
+                )
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <Card size='small' hoverable>
           <Space direction='vertical' className={'sp100'}>
@@ -96,16 +102,18 @@ const RenderItem = (props: Props) => {
               {profile._id === data.createdById && (
                 <Col className={css.buttAction}>
                   <Space size='small'>
-                    <ButtonCustom
-                      shape='circle'
-                      type='text'
-                      icon={<AiOutlineEdit />}
-                      size='small'
-                      onClick={() => {
-                        setQuestionUpdate(data)
-                        setOpen(true)
-                      }}
-                    ></ButtonCustom>
+                    {typeQuestion !== 'TEST' && (
+                      <ButtonCustom
+                        shape='circle'
+                        type='text'
+                        icon={<AiOutlineEdit />}
+                        size='small'
+                        onClick={() => {
+                          setQuestionUpdate && setQuestionUpdate(data)
+                          setOpen && setOpen(true)
+                        }}
+                      ></ButtonCustom>
+                    )}
                     <Popconfirm
                       placement='right'
                       title='Bạn có muốn xóa câu hỏi này?'

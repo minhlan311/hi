@@ -1,37 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import questionApi from '@/apis/question.api'
-import openNotification from '@/components/Notification'
-import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import { QuestionState } from '@/interface/question'
-import { Choice } from '@/interface/tests'
-
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, Form, Input, Row, Select, Switch } from 'antd'
-import { FormInstance } from 'antd/lib'
-import React, { useEffect, useState } from 'react'
-import TableAddonQues from './TableAddonQues'
-import RenderAddonLinkertScale from './RenderAddonLinkertScale'
 import CreateDnDQuestion from './CreateDragDrop'
+import openNotification from '@/components/Notification'
+import questionApi from '@/apis/question.api'
+import React, { SetStateAction, useEffect, useState } from 'react'
+import RenderAddonLinkertScale from './RenderAddonLinkertScale'
+import TableAddonQues from './TableAddonQues'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import { Choice } from '@/interface/tests'
+import { Col, Form, Input, Row, Select, Switch } from 'antd'
+import { QuestionState } from '@/interface/question'
 import { SkillType } from '@/interface/exam'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
-  form: FormInstance
   isOpen?: boolean
   questionData?: QuestionState | null
   categoryId: string
   typeQuestion: 'TEST' | 'QUIZ'
   skill?: SkillType
+  okButton?: React.ReactNode
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   setQuestionData?: React.Dispatch<React.SetStateAction<QuestionState | null>>
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  callbackIdCreate?: React.Dispatch<SetStateAction<string>>
 }
 
 const CreateQuestion = (props: Props) => {
-  const { form, isOpen, questionData, categoryId, typeQuestion, skill, setOpen, setQuestionData, setLoading } = props
+  const {
+    isOpen,
+    questionData,
+    categoryId,
+    typeQuestion,
+    skill,
+    okButton,
+    setOpen,
+    setQuestionData,
+    setLoading,
+    callbackIdCreate,
+  } = props
+  const [form] = Form.useForm()
   const [choices, setChoices] = useState<Choice[]>([])
   const [corrects, setCorrects] = useState<string[]>([])
   const [questionText, setQuestionText] = useState<string>('')
-
   const [isCheck, setCheck] = useState<boolean>(true)
   const [data, setData] = useState<QuestionState | null>(null)
   const [typeQues, setTypeQues] = useState<string | null>(null)
@@ -59,30 +69,25 @@ const CreateQuestion = (props: Props) => {
     setCorrects([])
     setQuestionData && setQuestionData(null)
     setTypeQues(null)
+    setQuestionText('')
+    setSkillQues('')
   }
 
-  const { isLoading, status, mutate, error, isSuccess } = useMutation({
+  const { isLoading, mutate } = useMutation({
     mutationFn: (body) => (data ? questionApi.putQuestion(body) : questionApi.createQuestion(body)),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['questionsBank'] })
-    },
-  })
-
-  useEffect(() => {
-    if (status === 'success' && (isSuccess || !data)) {
       openNotification({
-        status: status,
+        status: 'success',
         message: 'Thông báo',
         description: data ? 'Cập nhật bài thi thành công' : 'Tạo bài thi thành công',
       })
-
+      callbackIdCreate && callbackIdCreate(data.data._id)
       form.resetFields()
-    }
-
-    if (status === 'error' && error) {
-      openNotification({ status: status, message: 'Thông báo', description: 'Có lỗi xảy ra' })
-    }
-  }, [isLoading])
+      onCloseDrawer()
+    },
+    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
+  })
 
   const onFinish = (values: any) => {
     const id = crypto.randomUUID()
@@ -118,13 +123,6 @@ const CreateQuestion = (props: Props) => {
     }
   }, [isLoading])
 
-  useEffect(() => {
-    if (!isOpen) {
-      setData(null)
-      setTypeQues(null)
-    }
-  }, [isOpen])
-
   return (
     <Form onFinish={onFinish} layout='vertical' form={form} initialValues={{ difficulty: 'EASY', skill: 'READING' }}>
       {typeQues !== 'DRAG DROP' && typeQues !== 'FILL BLANK' && (
@@ -134,11 +132,10 @@ const CreateQuestion = (props: Props) => {
             name='question'
             label='Nội dung câu hỏi'
             required
-            data={!open ? undefined : data ? data : undefined}
+            data={!isOpen ? undefined : data ? data : undefined}
           />
         </>
       )}
-
       <Row justify='space-between' gutter={12}>
         <Col span={24} md={skill ? 8 : 6}>
           <Form.Item
@@ -292,7 +289,6 @@ const CreateQuestion = (props: Props) => {
         )}
       </Row>
       <h3>Câu trả lời</h3>
-
       {typeQues === 'DRAG DROP' || typeQues === 'FILL BLANK' ? (
         <CreateDnDQuestion questionTextForm={setQuestionText} choose={setChoices} />
       ) : (
@@ -302,10 +298,10 @@ const CreateQuestion = (props: Props) => {
         typeQues === 'MULTIPLE CHOICE' ||
         typeQues === 'TRUE FALSE' ||
         typeQues === 'SORT') && (
-        <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!open} />
+        <TableAddonQues selectionType={typeQues} callBackData={setChoices} data={data?.choices} isClose={!isOpen} />
       )) ||
         (typeQues === 'WRITING' && (
-          <TextAreaCustom name='answer' label='Đáp án' required data={!open ? undefined : data ? data : undefined} />
+          <TextAreaCustom name='answer' label='Đáp án' required data={!isOpen ? undefined : data ? data : undefined} />
         )) ||
         ((typeQues === 'LIKERT SCALE' || typeQues === 'MATCHING') && (
           <RenderAddonLinkertScale
@@ -329,10 +325,9 @@ const CreateQuestion = (props: Props) => {
             <Input type='number' placeholder='Nhập đáp án' />
           </Form.Item>
         )) || <></>}
-
-      <TextAreaCustom name='explanation' label='Giải thích' data={!open ? undefined : data ? data : undefined} />
-
-      <TextAreaCustom name='hint' label='Gợi ý' data={!open ? undefined : data ? data : undefined}></TextAreaCustom>
+      <TextAreaCustom name='explanation' label='Giải thích' data={!isOpen ? undefined : data ? data : undefined} />
+      <TextAreaCustom name='hint' label='Gợi ý' data={!isOpen ? undefined : data ? data : undefined}></TextAreaCustom>
+      {okButton && okButton}
     </Form>
   )
 }

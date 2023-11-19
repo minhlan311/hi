@@ -64,7 +64,6 @@ const ButtonCustom = (props: Props) => {
             background: background,
             fontWeight: fontWeight,
             ...style,
-            minHeight: 40,
             height: 'auto',
           }}
           form={form}
@@ -90,7 +89,7 @@ const ButtonCustom = (props: Props) => {
               background: background,
               fontWeight: fontWeight,
               ...style,
-              minHeight: 40,
+
               height: 'auto',
             }}
             form={form}
@@ -114,7 +113,7 @@ const ButtonCustom = (props: Props) => {
         disabled={disabled}
         onClick={onClick}
         className={`${className} `}
-        style={{ fontWeight: fontWeight, ...style, minHeight: 40, height: 'auto' }}
+        style={{ fontWeight: fontWeight, ...style, height: 'auto' }}
         form={form}
         htmlType={htmlType}
         danger={danger}
