@@ -81,7 +81,7 @@ const CreateSkill = (props: Props) => {
   const [choosePack, setChoosePack] = useState<string[]>(packsSelected.length > 0 ? packsSelected : [])
 
   useEffect(() => {
-    if (examData.skillData.length > 0) {
+    if (examData.skillData?.length > 0) {
       const skillData = initSkill.filter((skill) => examData.skillData.some((sk) => sk.skill === skill.value))
 
       if (skillData) {
