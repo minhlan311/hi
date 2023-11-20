@@ -27,12 +27,16 @@ export interface MentorInfo {
 
 export type SkillType = 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING' | string
 export interface Skill {
+  _id: string
+  id: string
   categoryId: string
+  testId?: string
   skill: SkillType
   title: string
   description: string
   url?: string[]
   questions?: string[]
+  countQuestions: number
 }
 export interface ExamState {
   _id: string
@@ -58,7 +62,8 @@ export interface ExamState {
   questionsDetail?: Question[]
   type: 'QUIZ' | 'TEST'
   plan: 'FREE' | 'PREMIUM'
-  skill: Skill[]
+  skill: string[]
+  skillData: Skill[]
 }
 
 export interface InCorrectAnswer {
