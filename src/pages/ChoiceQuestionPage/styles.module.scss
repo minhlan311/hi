@@ -1,0 +1,30 @@
+@import '../../components/GlobalStyles/responsive.scss';
+
+.imgQuiz {
+  width: 100%;
+  img {
+    @include respond-to(xs) {
+      height: auto;
+    }
+    @include respond-to(sm) {
+      height: auto;
+    }
+    width: 100%;
+    object-fit: contain;
+    padding: 1px;
+  }
+}
+
+.allskill {
+  background-color: #b05052;
+  img {
+    height: 300px;
+  }
+}
+
+.skill {
+  img {
+    margin-top: 25px;
+    height: 160px;
+  }
+}

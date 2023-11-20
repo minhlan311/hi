@@ -13,7 +13,7 @@ import Register from './pages/Auth/Register/index.tsx'
 import CartPage from './pages/CartPage/CartPage.tsx'
 import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
 import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
-import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
+import ChoiceQuestionPage from './pages/ChoiceQuestionPage/index.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
@@ -358,7 +358,7 @@ export default function useRouteElements() {
         {
           path: PATH.CHOICE_PAGE,
           element: (
-            <Layout user={profile} title=''>
+            <Layout user={profile} title='Trắc nghiệm'>
               <ChoiceQuestionPage />
             </Layout>
           ),
