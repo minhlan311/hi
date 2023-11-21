@@ -46,6 +46,8 @@ const DrawerQuestion = (props: Props) => {
         }
       >
         <CreateQuestion
+          questionData={questionData}
+          isForm={form}
           isOpen={open}
           setOpen={setOpen}
           categoryId={categoryId}

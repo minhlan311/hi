@@ -23,6 +23,8 @@ type Props = {
   className?: string
   filterQuery?: object
   checkQuery?: boolean | any
+  sort?: object
+  initFilter?: any
 }
 
 const FilterAction = (props: Props) => {
@@ -38,6 +40,10 @@ const FilterAction = (props: Props) => {
     className,
     filterQuery,
     checkQuery,
+    sort = {
+      createdAt: '-1',
+    },
+    initFilter = null,
   } = props
 
   const [form] = Form.useForm()
@@ -49,9 +55,7 @@ const FilterAction = (props: Props) => {
     options: {
       limit,
       page: page || 1,
-      sort: {
-        createdAt: '-1',
-      },
+      sort,
     },
   })
 
@@ -71,12 +75,13 @@ const FilterAction = (props: Props) => {
   })
 
   const onChangeFilter = () => {
-    const { categoryId, plan, viewCountDownCount, type, keyword, skill, difficulty, score, status, createdAt } =
+    const { categoryId, plan, viewCountDownCount, type, keyword, skillName, difficulty, score, status, createdAt } =
       form.getFieldsValue()
 
     const body = {
+      ...initFilter,
       type,
-      skill,
+      skillName,
       difficulty,
       score,
       categoryId,
@@ -91,6 +96,7 @@ const FilterAction = (props: Props) => {
         limit,
         page,
         sort: {
+          ...sort,
           createdAt,
           countAsseslgent: viewCountDownCount === 'highestRating' ? -1 : undefined,
           countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
@@ -108,6 +114,7 @@ const FilterAction = (props: Props) => {
         options: {
           page,
           ...prev?.options,
+          sort,
         },
       }
     })
@@ -115,23 +122,25 @@ const FilterAction = (props: Props) => {
 
   useEffect(() => {
     setFilterData({
-      filterQuery: filterQuery || {},
+      filterQuery: { ...filterQuery, ...initFilter } || {},
       options: {
         limit,
         page,
-        sort: {
-          createdAt: '-1',
-        },
+        sort,
       },
     })
   }, [page, checkQuery])
+
+  useEffect(() => {
+    form.setFieldsValue({ skillName: initFilter?.skillName })
+  }, [])
 
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
     queryFn: () => {
       return apiFind(filterData)
     },
-    enabled: checkQuery ? checkQuery : true,
+    enabled: initFilter ? Boolean(initFilter) : Boolean(checkQuery) || true,
   })
 
   useEffect(() => {
@@ -173,23 +182,51 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
-                  <Select
-                    placeholder='Đánh giá'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'highestRating',
-                        label: 'Đánh giá tốt nhất',
-                      },
-                      {
-                        value: 'highestParticipant',
-                        label: 'Đánh giá nhiều nhất',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+                {type === 'test' ? (
+                  <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
+                    <Select
+                      placeholder='Loại kỹ năng'
+                      allowClear
+                      onChange={onChangeFilter}
+                      options={[
+                        {
+                          value: 'READING',
+                          label: 'Đọc',
+                        },
+                        {
+                          value: 'LISTENING',
+                          label: 'Nghe',
+                        },
+                        {
+                          value: 'WRITING',
+                          label: 'Viết',
+                        },
+                        {
+                          value: 'SPEAKING',
+                          label: 'Nói',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                ) : (
+                  <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
+                    <Select
+                      placeholder='Đánh giá'
+                      allowClear
+                      onChange={onChangeFilter}
+                      options={[
+                        {
+                          value: 'highestRating',
+                          label: 'Đánh giá tốt nhất',
+                        },
+                        {
+                          value: 'highestParticipant',
+                          label: 'Đánh giá nhiều nhất',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                )}
                 <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
                   <Select
                     placeholder='Trạng thái'

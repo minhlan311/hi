@@ -63,7 +63,9 @@ export interface ExamState {
   type: 'QUIZ' | 'TEST'
   plan: 'FREE' | 'PREMIUM'
   skill: string[]
+  skillName: any[]
   skillData: Skill[]
+  coverUrl?: string
 }
 
 export interface InCorrectAnswer {

@@ -3,6 +3,7 @@ import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
@@ -22,6 +23,7 @@ type Props = {
 const DrawerExam = (props: Props) => {
   const { open, setOpen, setLoading, examData, size } = props
   const navitage = useNavigate()
+  const [imgUrl, setImgUrl] = useState<any>()
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [typePlan, setTypePlan] = useState('FREE')
@@ -76,6 +78,7 @@ const DrawerExam = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
+      coverUrl: imgUrl[0]?.url,
       cost: parseInt(values?.cost),
       id: examData?._id,
     }
@@ -211,6 +214,20 @@ const DrawerExam = (props: Props) => {
             </Col>
             <Col span={24}>
               <TextAreaCustom name='description' label='Chú thích' data={examData} />
+            </Col>
+            <Col span={24}>
+              <Form.Item name='coverUrl' label='Ảnh bộ đề'>
+                <UploadCustom
+                  uploadKey='image'
+                  uploadQuality='medium'
+                  cropBeforeUpload
+                  dropArea
+                  accessType='image/*'
+                  showUploadList
+                  callBackFileList={setImgUrl}
+                  maxCount={1}
+                ></UploadCustom>
+              </Form.Item>
             </Col>
           </Row>
         </Form>

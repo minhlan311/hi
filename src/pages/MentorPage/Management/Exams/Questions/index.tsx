@@ -116,11 +116,14 @@ const MentorQuestions = () => {
     setTabChange(e)
   }
 
+  const uniqueSkills = [...new Set(questionsSelectCallback?.docs?.map((item) => item.skill))]
+
   const handleSave = () => {
     if (examDetail) {
       const payload = {
         id: examDetail._id,
         questions: questionsSelect,
+        skillName: uniqueSkills,
       }
 
       examMutation.mutate(payload as unknown as any)
