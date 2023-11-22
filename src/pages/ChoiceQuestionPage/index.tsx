@@ -130,92 +130,100 @@ const ChoiceQuestionPage = () => {
             page={pageSize}
             limit={((xxl || xl) && 8) || 6}
             sort={{ createdAt: -1 }}
-            initFilter={{ skillName: skillChange }}
+            initFilter={{ skillName: skillChange !== 'ALL' ? skillChange : undefined }}
           ></FilterAction>
-          <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
-            {examData?.totalDocs === 0 ? (
-              <EmptyCustom description='Không có bài trắc nghiệm nào'></EmptyCustom>
-            ) : (
-              <Row gutter={[24, 24]}>
-                {examData?.docs.map((item) => (
-                  <Col span={24} md={8} xl={6} key={item._id}>
-                    <Card
-                      hoverable
-                      cover={
-                        <div className={`${css.quizBanner}`}>
-                          <img
-                            src={
-                              item?.coverUrl ? `${import.meta.env.VITE_FILE_ENDPOINT}/${item?.coverUrl}` : quizBanner
-                            }
-                            alt={item.name}
-                            height={250}
-                          ></img>
-                        </div>
-                      }
-                      size='small'
-                    >
-                      <Space direction='vertical' className={'sp100'}>
-                        <Meta title={item.name}></Meta>
-                        <Space size='large'>
-                          <Space align='center'>
+
+          {isLoad ? (
+            <LoadingCustom tip='Vui lòng chờ...'>
+              <div style={{ height: '40vh' }}></div>
+            </LoadingCustom>
+          ) : (
+            <div>
+              {examData?.totalDocs === 0 ? (
+                <EmptyCustom description='Không có bài trắc nghiệm nào'></EmptyCustom>
+              ) : (
+                <Row gutter={[24, 24]}>
+                  {examData?.docs.map((item) => (
+                    <Col span={24} md={8} xl={6} key={item._id}>
+                      <Card
+                        hoverable
+                        cover={
+                          <div className={`${css.quizBanner}`}>
                             <img
-                              src={`${import.meta.env.VITE_FILE_ENDPOINT}/${courses?.children?.find(
-                                (sj: any) => sj._id === item.categoryId,
-                              )?.icon}`}
-                              width='30'
+                              src={
+                                item?.coverUrl ? `${import.meta.env.VITE_FILE_ENDPOINT}/${item?.coverUrl}` : quizBanner
+                              }
+                              alt={item.name}
+                              height={250}
                             ></img>
-                            {courses?.children?.find((sj: any) => sj._id === item.categoryId)?.name}
+                          </div>
+                        }
+                        size='small'
+                      >
+                        <Space direction='vertical' className={'sp100'}>
+                          <Meta title={item.name}></Meta>
+                          <Space size='large'>
+                            <Space align='center'>
+                              <img
+                                src={`${import.meta.env.VITE_FILE_ENDPOINT}/${courses?.children?.find(
+                                  (sj: any) => sj._id === item.categoryId,
+                                )?.icon}`}
+                                width='30'
+                              ></img>
+                              {courses?.children?.find((sj: any) => sj._id === item.categoryId)?.name}
+                            </Space>
+
+                            <Tooltip title='Số câu hỏi'>
+                              <Space>
+                                <TbPencilQuestion />
+                                <b>{item.countQuestions}</b>
+                              </Space>
+                            </Tooltip>
+                            <Tooltip title='Số người đã làm'>
+                              <Space>
+                                <TbUserEdit />
+                                <b>{item.countUsersTested}</b>
+                              </Space>
+                            </Tooltip>
                           </Space>
 
-                          <Tooltip title='Số câu hỏi'>
-                            <Space>
-                              <TbPencilQuestion />
-                              <b>{item.countQuestions}</b>
-                            </Space>
-                          </Tooltip>
-                          <Tooltip title='Số người đã làm'>
-                            <Space>
-                              <TbUserEdit />
-                              <b>{item.countUsersTested}</b>
-                            </Space>
-                          </Tooltip>
-                        </Space>
+                          <Space>
+                            <TagCustom
+                              intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+                              intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+                              intColor={['green', 'blue', 'gray', 'orange']}
+                              content={item.skillName}
+                            ></TagCustom>
+                          </Space>
+                          <Flex justify='space-between' align='center'>
+                            <PriceCalculator price={item.cost}></PriceCalculator>
+                            <ButtonCustom
+                              type='primary'
+                              onClick={() => {
+                                if (item.cost > 0) console.log('Mua')
+                                else
+                                  navigate('/lam-bai-thi-online', {
+                                    state: {
+                                      testId: item._id,
 
-                        <Space>
-                          <TagCustom
-                            intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
-                            intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
-                            intColor={['green', 'blue', 'gray', 'orange']}
-                            content={item.skillName}
-                          ></TagCustom>
+                                      testTime: 300,
+                                      addTime: 0,
+                                    },
+                                  })
+                              }}
+                            >
+                              {item.cost > 0 ? 'Mua ngay' : ' Làm thử ngay'}
+                            </ButtonCustom>
+                          </Flex>
                         </Space>
-                        <Flex justify='space-between' align='center'>
-                          <PriceCalculator price={item.cost}></PriceCalculator>
-                          <ButtonCustom
-                            type='primary'
-                            onClick={() => {
-                              if (item.cost > 0) console.log('Mua')
-                              else
-                                navigate('/lam-bai-thi-online', {
-                                  state: {
-                                    testId: item._id,
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </div>
+          )}
 
-                                    testTime: 300,
-                                    addTime: 0,
-                                  },
-                                })
-                            }}
-                          >
-                            {item.cost > 0 ? 'Mua ngay' : ' Làm thử ngay'}
-                          </ButtonCustom>
-                        </Flex>
-                      </Space>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            )}
-          </LoadingCustom>
           <PaginationCustom callbackCurrent={setCurrent} totalData={examData?.totalDocs} limit={examData?.limit} />
         </Space>
       )}

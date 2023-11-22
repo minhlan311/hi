@@ -130,6 +130,7 @@ const TestPage = () => {
     }
   }, [testData, finishTest])
   const [isLoad, setIsLoad] = useState(false)
+  console.log(results.isLoading)
 
   const testSkill = [
     {
@@ -428,7 +429,7 @@ const TestPage = () => {
               </>
             )}
 
-            {finishTest && !loading ? (
+            {finishTest && !loading && (
               <>
                 <Col span={24} md={12}>
                   <img src={successBg} alt='successBg' width={'100%'} />
@@ -456,7 +457,8 @@ const TestPage = () => {
                   </Space>
                 </Col>
               </>
-            ) : (
+            )}
+            {testMutation.isSuccess && results.isLoading && (
               <Col span={24}>
                 <Row justify='center'>
                   <Col span={24} md={12}>
