@@ -144,7 +144,7 @@ const ChoiceQuestionPage = () => {
               ) : (
                 <Row gutter={[24, 24]}>
                   {examData?.docs.map((item) => (
-                    <Col span={24} md={8} xl={6} key={item._id}>
+                    <Col span={24} md={12} lg={8} xl={6} key={item._id}>
                       <Card
                         hoverable
                         cover={
@@ -188,12 +188,14 @@ const ChoiceQuestionPage = () => {
                           </Space>
 
                           <Space>
-                            <TagCustom
-                              intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
-                              intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
-                              intColor={['green', 'blue', 'gray', 'orange']}
-                              content={item.skillName}
-                            ></TagCustom>
+                            {item.skillName?.length > 0 && (
+                              <TagCustom
+                                intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+                                intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+                                intColor={['green', 'blue', 'gray', 'orange']}
+                                content={item.skillName}
+                              ></TagCustom>
+                            )}
                           </Space>
                           <Flex justify='space-between' align='center'>
                             <PriceCalculator price={item.cost}></PriceCalculator>

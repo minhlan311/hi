@@ -185,8 +185,10 @@ table {
   }
 }
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
   top: 10px;
+  height: 100%;
 }
 
 .link {

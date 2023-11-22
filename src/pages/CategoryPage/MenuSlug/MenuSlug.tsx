@@ -25,7 +25,9 @@ export default function MemuSlug() {
   return (
     <div className='div-ucam-intro'>
       {isLoading ? (
-        <LoadingCustom tip='Vui lòng chờ' />
+        <LoadingCustom tip='Vui lòng chờ'>
+          <div style={{ height: '45vh' }}></div>
+        </LoadingCustom>
       ) : !detailData?.data.content ? (
         detailData?.data.name === 'Trắc nghiệm' && <ChoiceQuestionPage />
       ) : (
