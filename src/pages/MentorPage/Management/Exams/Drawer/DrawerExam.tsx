@@ -223,9 +223,9 @@ const DrawerExam = (props: Props) => {
                   cropBeforeUpload
                   dropArea
                   accessType='image/*'
-                  showUploadList
                   callBackFileList={setImgUrl}
                   maxCount={1}
+                  defaultFileList={[{ name: examData?.name as string, url: examData?.coverUrl as string }]}
                 ></UploadCustom>
               </Form.Item>
             </Col>
