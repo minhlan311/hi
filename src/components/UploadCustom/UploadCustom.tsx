@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { Space, Upload, message } from 'antd'
+import { Flex, Image, Space, Upload, message } from 'antd'
 import ImgCrop from 'antd-img-crop'
-import type { RcFile, UploadFile } from 'antd/es/upload/interface'
+import type { RcFile } from 'antd/es/upload/interface'
+import { UploadProps } from 'antd/lib'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import css from './UploadCustom.module.scss'
-import { UploadProps } from 'antd/lib'
 import { TbDragDrop } from 'react-icons/tb'
+import css from './UploadCustom.module.scss'
+interface FileList {
+  name: string
+  url: string
+  uid?: string
+  status?: string
+}
+
 type Props = {
   children?: React.ReactNode
   action?: string
@@ -24,9 +31,11 @@ type Props = {
   dropArea?: boolean
   cropShape?: 'rect' | 'round'
   name?: string
+  defaultFileList?: FileList[]
+  showPreview?: boolean
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   setPreviewUrl?: React.Dispatch<React.SetStateAction<string>>
-  callBackFileList?: React.Dispatch<React.SetStateAction<UploadFile[]>>
+  callBackFileList?: React.Dispatch<React.SetStateAction<FileList[]>>
 }
 
 const UploadCustom = (props: Props) => {
@@ -46,13 +55,19 @@ const UploadCustom = (props: Props) => {
     dropArea = false,
     cropShape,
     name,
+    defaultFileList,
+    showPreview = false,
     setLoading,
     setPreviewUrl,
     callBackFileList,
   } = props
   const { Dragger } = Upload
-  const [fileList, setFileList] = useState<any[]>([])
+  const [fileList, setFileList] = useState<FileList[]>([])
   //   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 100, height: 50, x: 0, y: 25 })
+
+  useEffect(() => {
+    if (defaultFileList && defaultFileList?.length > 0) setFileList(defaultFileList)
+  }, [defaultFileList])
 
   const convertFilelist = (arr: any) => {
     if (!arr) {
@@ -95,6 +110,7 @@ const UploadCustom = (props: Props) => {
           `File của bạn có kích thước quá lớn, vui lòng upload file có dung lượng từ ${maxFileSize}MB trở xuống!`,
         )
         setLoading && setLoading(false)
+
         return false
       }
     }
@@ -120,8 +136,8 @@ const UploadCustom = (props: Props) => {
       )
       const newData = convertFilelist(response.data)
 
-      if (multiple) setFileList([...fileList, ...(newData as unknown as any)])
-      else setFileList(newData as unknown as any)
+      if (multiple) setFileList([...fileList, ...(newData as unknown as FileList[])])
+      else setFileList(newData as unknown as FileList[])
 
       message.success('Đăng tải thành công')
     } catch (error) {
@@ -142,8 +158,8 @@ const UploadCustom = (props: Props) => {
     multiple: multiple || (!multiple && maxCount > 1) ? true : undefined,
     maxCount: maxCount,
     listType: listType,
-    defaultFileList: fileList,
-    fileList: fileList,
+    defaultFileList: fileList as unknown as any,
+    fileList: fileList as unknown as any,
     showUploadList: showUploadList,
     beforeUpload: handleBeforeUpload,
     accept: accessType,
@@ -151,31 +167,47 @@ const UploadCustom = (props: Props) => {
 
   if (cropBeforeUpload) {
     return (
-      <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
-        {dropArea ? (
-          <Dragger {...uploadProps}>
-            <p className={'ant-upload-drag-icon'}>
-              <TbDragDrop style={{ fontSize: 40 }} />
-            </p>
-            <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-            <p className={'ant-upload-hint'}></p>
-          </Dragger>
-        ) : (
-          <Upload {...uploadProps}>{children}</Upload>
-        )}
-      </ImgCrop>
+      <Flex justify='stretch' vertical>
+        <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
+          {dropArea ? (
+            <Dragger {...uploadProps}>
+              {!fileList.length && !showPreview ? (
+                <div className={css.dropArea}>
+                  <p className={'ant-upload-drag-icon'}>
+                    <TbDragDrop style={{ fontSize: 40 }} />
+                  </p>
+                  <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+                  <p className={'ant-upload-hint'}></p>
+                </div>
+              ) : (
+                <Image
+                  width={'96%'}
+                  preview={false}
+                  src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+                ></Image>
+              )}
+            </Dragger>
+          ) : (
+            <Upload {...uploadProps}>{children}</Upload>
+          )}
+        </ImgCrop>
+      </Flex>
     )
   }
 
   return dropArea ? (
     <Dragger {...uploadProps}>
-      <div className={css.dropArea}>
-        <p className={'ant-upload-drag-icon'}>
-          <TbDragDrop style={{ fontSize: 40 }} />
-        </p>
-        <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-        <p className={'ant-upload-hint'}></p>
-      </div>
+      {!fileList.length && !showPreview ? (
+        <div className={css.dropArea}>
+          <p className={'ant-upload-drag-icon'}>
+            <TbDragDrop style={{ fontSize: 40 }} />
+          </p>
+          <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+          <p className={'ant-upload-hint'}></p>
+        </div>
+      ) : (
+        <Image width={'96%'} preview={false} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}></Image>
+      )}
     </Dragger>
   ) : (
     <Upload {...uploadProps}>

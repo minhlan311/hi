@@ -43,6 +43,7 @@ const TestPage = () => {
     queryFn: () => {
       return examApi.getExamDetail(location.state.testId)
     },
+    enabled: Boolean(location.state.testId),
   })
 
   const { data: eventData } = useQuery({
@@ -50,6 +51,7 @@ const TestPage = () => {
     queryFn: () => {
       return eventApi.getOneEvent(location.state.eventId)
     },
+    enabled: Boolean(location.state.eventId),
   })
 
   const event = eventData?.data
@@ -128,6 +130,7 @@ const TestPage = () => {
     }
   }, [testData, finishTest])
   const [isLoad, setIsLoad] = useState(false)
+  console.log(results.isLoading)
 
   const testSkill = [
     {
@@ -286,7 +289,7 @@ const TestPage = () => {
   const endTime = moment(eventData?.data.end)
   const duration = moment.duration(endTime.diff(startTime))
   const totalMinutes = duration.asMinutes()
-  if (data && event)
+  if (data)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
         <Header padding={md ? '20px 0' : '70px 0'}>
@@ -298,7 +301,7 @@ const TestPage = () => {
                 </Col>
                 <Col span={24} md={8}>
                   <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
-                    <h1>{event?.name}</h1>
+                    <h1>{event ? event?.name : data.name}</h1>
                     {oldTime && oldTime !== 0 && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
                     <div>
                       <Descriptions size='small'>
@@ -363,7 +366,7 @@ const TestPage = () => {
                           initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
                           start={!finishTest}
                           size={md ? 20 : 30}
-                          localId={event._id}
+                          localId={event ? event?._id : data._id}
                           callbackTimeEnd={setTime}
                         ></CountDownTimer>
                       </Col>
@@ -396,7 +399,7 @@ const TestPage = () => {
                         initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
                         start={!finishTest}
                         size={sm ? 20 : 30}
-                        localId={event._id}
+                        localId={event ? event?._id : data._id}
                         callbackTimeEnd={setTime}
                       ></CountDownTimer>
 
@@ -426,7 +429,7 @@ const TestPage = () => {
               </>
             )}
 
-            {finishTest && !loading ? (
+            {finishTest && !loading && (
               <>
                 <Col span={24} md={12}>
                   <img src={successBg} alt='successBg' width={'100%'} />
@@ -454,7 +457,8 @@ const TestPage = () => {
                   </Space>
                 </Col>
               </>
-            ) : (
+            )}
+            {testMutation.isSuccess && results.isLoading && (
               <Col span={24}>
                 <Row justify='center'>
                   <Col span={24} md={12}>

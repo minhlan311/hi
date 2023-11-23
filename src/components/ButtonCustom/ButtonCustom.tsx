@@ -64,7 +64,6 @@ const ButtonCustom = (props: Props) => {
             background: background,
             fontWeight: fontWeight,
             ...style,
-            height: 'auto',
           }}
           form={form}
           htmlType={htmlType}
@@ -89,8 +88,6 @@ const ButtonCustom = (props: Props) => {
               background: background,
               fontWeight: fontWeight,
               ...style,
-
-              height: 'auto',
             }}
             form={form}
             htmlType={htmlType}

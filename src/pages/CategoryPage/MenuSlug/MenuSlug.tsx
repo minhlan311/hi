@@ -4,6 +4,7 @@ import LoadingCustom from '@/components/LoadingCustom'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import './MenuSlug.scss'
+import ChoiceQuestionPage from '@/pages/ChoiceQuestionPage'
 
 export default function MemuSlug() {
   const navigate = useNavigate()
@@ -19,11 +20,16 @@ export default function MemuSlug() {
       }
     },
   })
+  document.title = detailData?.data.name + ' | Ucam'
 
   return (
     <div className='div-ucam-intro'>
       {isLoading ? (
-        <LoadingCustom tip='Vui lòng chờ' />
+        <LoadingCustom tip='Vui lòng chờ'>
+          <div style={{ height: '45vh' }}></div>
+        </LoadingCustom>
+      ) : !detailData?.data.content ? (
+        detailData?.data.name === 'Trắc nghiệm' && <ChoiceQuestionPage />
       ) : (
         <div dangerouslySetInnerHTML={{ __html: detailData?.data?.content }}></div>
       )}

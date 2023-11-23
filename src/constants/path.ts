@@ -23,7 +23,6 @@ export const PATH = {
   SUBMENU_1: ':menuSlug/',
   INTRODUCE: '/gioi-thieu-1cimn',
   COURSE_SUB: '/khoa-hoc',
-  CHOICE_PAGE: '/trac-nghiem-jshrw',
   QA_PAGE: '/hoi-dap',
   QA_PAGE_DETAIL: '/hoi-dap/:id',
   TEST_PAGE: '/lam-bai-thi-online',

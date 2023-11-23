@@ -135,7 +135,7 @@ const RenderItem = (props: Props) => {
             </Row>
 
             <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
-            {data.type !== 'LIKERT SCALE' && (
+            {data.type !== 'LIKERT SCALE' && data.type !== 'MATCHING' && (
               <Card size='small' className={css.anws}>
                 <Row gutter={[12, 12]}>
                   {data.choices.map((anw) => {
@@ -162,16 +162,23 @@ const RenderItem = (props: Props) => {
                       )
                   })}
                 </Row>
-                {data?.answer && <div dangerouslySetInnerHTML={{ __html: data?.answer }}></div>}
+                {data && (data.type === 'WRITING' || data.type === 'NUMERICAL') && (
+                  <p>
+                    {data?.answer || data?.answer !== '<p></p>' ? (
+                      <div dangerouslySetInnerHTML={{ __html: data?.answer as string }}></div>
+                    ) : (
+                      'Không có câu trả lời'
+                    )}
+                  </p>
+                )}
               </Card>
             )}
-            {data.explanation !== '<p></p>' ||
-              (undefined && (
-                <Space className={`${css.hint} sp100 `}>
-                  <AiOutlineQuestionCircle />
-                  <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
-                </Space>
-              ))}
+            {(data.explanation !== '<p></p>' || undefined) && (
+              <Space className={`${css.hint} sp100 `}>
+                <AiOutlineQuestionCircle />
+                <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
+              </Space>
+            )}
           </Space>
         </Card>
       </div>

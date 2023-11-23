@@ -40,6 +40,7 @@ const DrawerCustom = (props: Props) => {
           icon={<CloseOutlined />}
           className={`${css.buttonClose} ${!open && css.buttonHidden}`}
           onClick={onClose}
+          style={{ padding: 12 }}
         ></ButtonCustom>
       }
       {children}
