@@ -86,7 +86,7 @@ export default function MenuNav({ user, type }: Props) {
       label: 'Trắc nghiệm',
       icon: <PiExam />,
       activeIcon: <PiExamFill />,
-      href: `${choice?.href}${choice?.children?.[0]?.href}`,
+      href: `${choice?.href}`,
     },
     { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
   ]
