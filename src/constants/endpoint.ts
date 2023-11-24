@@ -7,6 +7,7 @@ export const ENDPOINT = {
   LOGOUT: '/auth/logout',
   MENTOR: '/mentorInfo/',
   CHANGE_PASSWORD: '/users/change-password/',
+  FORGOT_PASSWORD: '/users/reset-password/',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
