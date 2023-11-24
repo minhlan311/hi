@@ -69,6 +69,17 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
     editorRef.current = data
   }
 
+  function numberFormatter(value: any) {
+    // Sử dụng Intl.NumberFormat để định dạng số
+    // Bạn có thể thay đổi 'en-US' thành định dạng ngôn ngữ/địa phương mong muốn
+    return new Intl.NumberFormat('en-US').format(value)
+  }
+
+  // function numberParser(value) {
+  //   // Loại bỏ các ký tự không phải số và dấu phẩy
+  //   return value.replace(/\D/g, '')
+  // }
+
   const onFinish = (values: any) => {
     next(1)
 
@@ -253,6 +264,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
                   rules={[{ required: typePlan === PlanEnum.PREMIUM, message: 'Hãy nhập số tiền' }]}
                 >
                   <InputNumber
+                    formatter={numberFormatter}
                     style={{
                       width: '100%',
                     }}
