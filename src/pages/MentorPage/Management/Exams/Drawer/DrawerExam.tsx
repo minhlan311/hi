@@ -225,7 +225,9 @@ const DrawerExam = (props: Props) => {
                   accessType='image/*'
                   callBackFileList={setImgUrl}
                   maxCount={1}
-                  defaultFileList={[{ name: examData?.name as string, url: examData?.coverUrl as string }]}
+                  defaultFileList={
+                    examData?.coverUrl ? [{ name: examData.name as string, url: examData.coverUrl as string }] : []
+                  }
                 ></UploadCustom>
               </Form.Item>
             </Col>

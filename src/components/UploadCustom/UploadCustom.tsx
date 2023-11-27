@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { Flex, Image, Space, Upload, message } from 'antd'
+import { Image, Space, Upload, message } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import type { RcFile } from 'antd/es/upload/interface'
 import { UploadProps } from 'antd/lib'
@@ -167,31 +167,29 @@ const UploadCustom = (props: Props) => {
 
   if (cropBeforeUpload) {
     return (
-      <Flex justify='stretch' vertical>
-        <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
-          {dropArea ? (
-            <Dragger {...uploadProps}>
-              {!fileList.length && !showPreview ? (
-                <div className={css.dropArea}>
-                  <p className={'ant-upload-drag-icon'}>
-                    <TbDragDrop style={{ fontSize: 40 }} />
-                  </p>
-                  <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-                  <p className={'ant-upload-hint'}></p>
-                </div>
-              ) : (
-                <Image
-                  width={'96%'}
-                  preview={false}
-                  src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
-                ></Image>
-              )}
-            </Dragger>
-          ) : (
-            <Upload {...uploadProps}>{children}</Upload>
-          )}
-        </ImgCrop>
-      </Flex>
+      <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
+        {dropArea ? (
+          <Dragger {...uploadProps}>
+            {!fileList.length && !showPreview ? (
+              <div className={css.dropArea}>
+                <p className={'ant-upload-drag-icon'}>
+                  <TbDragDrop style={{ fontSize: 40 }} />
+                </p>
+                <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+                <p className={'ant-upload-hint'}></p>
+              </div>
+            ) : (
+              <Image
+                width={'96%'}
+                preview={false}
+                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+              ></Image>
+            )}
+          </Dragger>
+        ) : (
+          <Upload {...uploadProps}>{children}</Upload>
+        )}
+      </ImgCrop>
     )
   }
 
