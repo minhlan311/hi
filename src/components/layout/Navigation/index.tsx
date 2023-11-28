@@ -1,27 +1,27 @@
+import cartApi from '@/apis/cart.api'
+import userApi from '@/apis/user.api'
 import AffixCustom from '@/components/AffixCustom'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import cartApi from '@/apis/cart.api'
 import DrawerCustom from '@/components/DrawerCustom/DrawerCustom'
-import facebook from '../../../assets/icons/facebook-logo.svg'
-import Header from '../Header/Header'
 import LanguageChange from '@/components/LanguageChange'
 import Logo from '@/components/Logo/Logo'
-import MenuNav from './MenuNav'
-import tiktok from '../../../assets/icons/tiktok-icon.svg'
-import userApi from '@/apis/user.api'
-import useResponsives from '@/hooks/useResponsives'
-import youtube from '../../../assets/icons/youtube-logo.svg'
-import zalo from '../../../assets/icons/zalo.png'
-import { AiOutlineMenu } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { Badge, Button, Col, Row, Space } from 'antd'
+import useResponsives from '@/hooks/useResponsives'
+import { UserState } from '@/interface/user'
+import { setProfileFromLS } from '@/utils/auth'
+import { useQuery } from '@tanstack/react-query'
+import { Badge, Col, Row, Space } from 'antd'
+import { useContext, useEffect, useState } from 'react'
+import { AiOutlineMenu } from 'react-icons/ai'
 import { BiSolidDashboard } from 'react-icons/bi'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { setProfileFromLS } from '@/utils/auth'
-import { useContext, useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { UserState } from '@/interface/user'
+import facebook from '../../../assets/icons/facebook-logo.svg'
+import tiktok from '../../../assets/icons/tiktok-icon.svg'
+import youtube from '../../../assets/icons/youtube-logo.svg'
+import zalo from '../../../assets/icons/zalo.png'
+import Header from '../Header/Header'
+import MenuNav from './MenuNav'
 import './styles.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -106,15 +106,11 @@ export default function Navigation({ user }: Props) {
                   {(xl || xxl) && !lg && (
                     <Col>
                       <Space size='large'>
-                        <Button type='primary' size='small'>
-                          Tiếng Anh Offline
-                        </Button>
-                        <Button type='primary' size='small'>
-                          Tiếng Anh trực tuyến 1 kèm 1
-                        </Button>
-                        <Button type='primary' size='small'>
-                          Tiếng Anh trực tuyến
-                        </Button>
+                        {configs?.buttonADSLink?.slice(0, 3)?.map((butt) => (
+                          <ButtonCustom href={butt.href} type='primary' size='small'>
+                            {butt.content}
+                          </ButtonCustom>
+                        ))}
                       </Space>
                     </Col>
                   )}
