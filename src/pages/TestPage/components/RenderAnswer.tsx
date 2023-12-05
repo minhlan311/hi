@@ -97,7 +97,7 @@ const LikertScale = ({
         correctAnswers: correctAnswers,
       }
       setTimeout(() => {
-        localAction(testId, payload, 'update', '_id')
+        localAction(testId + 'data', payload, 'update', '_id')
       }, 1000)
     }
   }, [correctAnswers])
@@ -191,7 +191,7 @@ const RenderAnswer = (props: Props) => {
         correctAnswers: answers,
       }
       setTimeout(() => {
-        localAction(testId, payload, 'update', '_id')
+        localAction(testId + 'data', payload, 'update', '_id')
       }, 1000)
     }
   }, [dataCallback])

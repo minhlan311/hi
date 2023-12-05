@@ -19,6 +19,7 @@ import { RiVoiceprintLine } from 'react-icons/ri'
 import CreateQuestion from './CreateQuestion'
 import RenderItem from './RenderItem'
 import ShowSkillDetail from './ShowSkillDetail'
+import { BsQuestionCircle } from 'react-icons/bs'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const RenderSkillItem = ({
@@ -93,8 +94,6 @@ const RenderSkillItem = ({
     }
   }, [questions])
 
-  console.log(callbackUrl)
-
   const { data: questionsData } = useQuery({
     queryKey: ['questionsData', questions],
     queryFn: () => {
@@ -161,7 +160,6 @@ const RenderSkillItem = ({
                             </ButtonCustom>
                           </Space>
                         </Col>
-                        <ShowSkillDetail data={openData} setOpen={setOpenDetail} open={openDetail}></ShowSkillDetail>
                       </Row>
                     </Card>
                   ),
@@ -229,7 +227,11 @@ const RenderSkillItem = ({
       children: (
         <Form form={form} layout='vertical' onFinish={onFinish}>
           <Row>
-            <Col>
+            <i>
+              <BsQuestionCircle size={12} /> Để tạo kỹ năng, cần <b>điền đầy đủ thông tin</b> và <b>thêm các câu hỏi</b>
+              . Nếu thiếu câu hỏi, kỹ năng sẽ <b>không</b> có trong bộ đề.
+            </i>
+            <Col span={24}>
               <h3>
                 1. Thêm nội dung kỹ năng{' '}
                 {(skillName === 'READING' && 'đọc') ||
@@ -355,6 +357,7 @@ const RenderSkillItem = ({
           callbackIdCreate={setIdCreate}
         />
       </Modal>
+      <ShowSkillDetail data={openData} setOpen={setOpenDetail} open={openDetail}></ShowSkillDetail>
     </Row>
   )
 }

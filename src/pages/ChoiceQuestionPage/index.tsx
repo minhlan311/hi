@@ -4,12 +4,16 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
-import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
+import PaginationCustom from '@/components/PaginationCustom'
+import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
 import { ExamState, SkillType } from '@/interface/exam'
+import { useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Flex, Row, Space, Tooltip } from 'antd'
 import { useState } from 'react'
 import { TbPencilQuestion, TbUserEdit } from 'react-icons/tb'
+import { useNavigate } from 'react-router-dom'
 import listeningBaner from '../../assets/images/banner/listening_banner.png'
 import multySkillBanner from '../../assets/images/banner/multi_skill_banner.jpg'
 import quizBanner from '../../assets/images/banner/quiz_banner.jpg'
@@ -17,11 +21,6 @@ import readingBanner from '../../assets/images/banner/reading_banner.png'
 import speakingBanner from '../../assets/images/banner/speaking_banner.png'
 import writingBanner from '../../assets/images/banner/writing_banner.png'
 import css from './styles.module.scss'
-import TagCustom from '@/components/TagCustom/TagCustom'
-import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import useResponsives from '@/hooks/useResponsives'
-import PaginationCustom from '@/components/PaginationCustom'
 
 const { Meta } = Card
 
@@ -198,23 +197,21 @@ const ChoiceQuestionPage = () => {
                             )}
                           </Space>
                           <Flex justify='space-between' align='center'>
-                            <PriceCalculator price={item.cost}></PriceCalculator>
+                            <p></p>
                             <ButtonCustom
                               type='primary'
                               onClick={() => {
-                                if (item.cost > 0) console.log('Mua')
-                                else
-                                  navigate('/lam-bai-thi-online', {
-                                    state: {
-                                      testId: item._id,
+                                navigate('/lam-bai-thi-online', {
+                                  state: {
+                                    testId: item._id,
 
-                                      testTime: 300,
-                                      addTime: 0,
-                                    },
-                                  })
+                                    testTime: 300,
+                                    addTime: 0,
+                                  },
+                                })
                               }}
                             >
-                              {item.cost > 0 ? 'Mua ngay' : ' Làm thử ngay'}
+                              Làm thử ngay
                             </ButtonCustom>
                           </Flex>
                         </Space>

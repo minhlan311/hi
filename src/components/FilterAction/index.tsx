@@ -75,15 +75,26 @@ const FilterAction = (props: Props) => {
   })
 
   const onChangeFilter = () => {
-    const { categoryId, plan, viewCountDownCount, type, keyword, skillName, difficulty, score, status, createdAt } =
-      form.getFieldsValue()
+    const {
+      categoryId,
+      plan,
+      viewCountDownCount,
+      type,
+      keyword,
+      skill,
+      skillName,
+      difficulty,
+      point,
+      status,
+      createdAt,
+    } = form.getFieldsValue()
 
     const body = {
       ...initFilter,
       type,
+      skill,
       skillName,
       difficulty,
-      score,
       categoryId,
       plan,
       status,
@@ -91,12 +102,13 @@ const FilterAction = (props: Props) => {
     }
 
     setFilterData({
-      filterQuery: { ...filterQuery, ...body },
+      filterQuery: { ...body, ...filterQuery },
       options: {
         limit,
         page,
         sort: {
           ...sort,
+          point,
           createdAt,
           countAsseslgent: viewCountDownCount === 'highestRating' ? -1 : undefined,
           countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
@@ -360,18 +372,18 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='score' style={{ width: lg ? '100%' : 140 }}>
+                <Form.Item name='point' style={{ width: lg ? '100%' : 140 }}>
                   <Select
                     placeholder='Điểm số'
                     allowClear
                     onChange={onChangeFilter}
                     options={[
                       {
-                        value: '-1',
+                        value: '1',
                         label: 'Từ thấp đến cao',
                       },
                       {
-                        value: '1',
+                        value: '-1',
                         label: 'Từ cao đến thấp',
                       },
                     ]}

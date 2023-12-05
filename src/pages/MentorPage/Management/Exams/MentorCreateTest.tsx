@@ -10,6 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import LastCheck from './Components/LastCheck'
 import { localAction } from '@/common'
+import skillApi from '@/apis/skill.api'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorCreateTest = () => {
@@ -21,9 +22,24 @@ const MentorCreateTest = () => {
 
   const createdId = localAction('createTest')
 
+  const { data: exam, isLoading } = useQuery({
+    queryKey: ['examDetail', typeAction, createdId],
+    queryFn: () => {
+      return examApi.getExamDetail(location.state || createdId)
+    },
+    enabled: typeAction === 'updateTest' || Boolean(createdId),
+  })
+
+  const examData = exam?.data
+  const [examDetail, setExamDetail] = useState<ExamState>()
+
+  useEffect(() => {
+    if (examData?._id) setExamDetail(examData)
+  }, [examData])
+
   const testMutation = useMutation({
     mutationFn: (body) =>
-      typeAction === 'createTest' && !createdId ? examApi.createExam(body) : examApi.putExam(body),
+      typeAction === 'createTest' && !examDetail?._id ? examApi.createExam(body) : examApi.putExam(body),
     onSuccess: (data) => {
       openNotification({
         status: 'success',
@@ -37,22 +53,26 @@ const MentorCreateTest = () => {
     },
     onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
   })
-
-  const { data: exam, isLoading } = useQuery({
-    queryKey: ['examDetail', typeAction, createdId],
-    queryFn: () => {
-      return examApi.getExamDetail(location.state || createdId)
-    },
-    enabled: typeAction === 'updateTest' || Boolean(createdId),
-  })
-
-  const examData = exam?.data
   const [skillSelected, setSkillSelected] = useState<string[]>([])
+
   useEffect(() => {
     if (exam?.data.skill && exam?.data?.skill?.length > 0) {
       setSkillSelected(exam?.data?.skill as unknown as string[])
     }
   }, [exam])
+
+  const { data: skillData } = useQuery({
+    queryKey: ['skillSelected', skillSelected],
+    queryFn: () => {
+      return skillApi.findSkill({
+        filterQuery: {
+          _id: skillSelected,
+        },
+      })
+    },
+
+    enabled: skillSelected?.length > 0,
+  })
 
   const next = () => {
     if (current === 0) form.submit()
@@ -64,10 +84,12 @@ const MentorCreateTest = () => {
   }
 
   const finished = () => {
-    if (examData) {
+    if (examDetail) {
+      const skillArr = skillData?.data?.docs?.map((item) => item.skill)
       const payload = {
         skill: skillSelected,
-        id: examData._id,
+        skillName: skillArr,
+        id: examDetail._id,
       }
 
       testMutation.mutate(payload as any)
@@ -87,7 +109,7 @@ const MentorCreateTest = () => {
         <CreateTest
           form={form}
           testMutation={testMutation}
-          examData={examData as unknown as ExamState}
+          examData={examDetail as unknown as ExamState}
           isLoading={isLoading}
         />
       ),
@@ -98,7 +120,7 @@ const MentorCreateTest = () => {
       content: (
         <CreateSkill
           form={form}
-          examData={examData as unknown as ExamState}
+          examData={examDetail as unknown as ExamState}
           packsSelected={skillSelected}
           setSkillSelected={setSkillSelected}
         />
@@ -108,7 +130,12 @@ const MentorCreateTest = () => {
     {
       key: 'finish',
       title: typeAction === 'createTest' ? 'Thêm mới' : 'Cập nhật',
-      content: <LastCheck examData={examData as unknown as ExamState} skillSelected={skillSelected} />,
+      content: (
+        <LastCheck
+          examData={examDetail as unknown as ExamState}
+          skillData={skillData?.data?.docs ? skillData?.data?.docs : []}
+        />
+      ),
       disabled: skillSelected.length === 0,
     },
   ]
