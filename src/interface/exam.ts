@@ -46,11 +46,11 @@ export interface ExamState {
   name: string
   description: string
   status: string
-  cost?: any
   slug: string
   owner: UserState
   questions: string[]
   countQuestions: number
+  countQuestionsBySkill: number
   countSelectedResponseQuestions: number[]
   countConstructedResponseQuestions: number[]
   countUsersTested: number
@@ -61,7 +61,7 @@ export interface ExamState {
   updatedAt: string
   questionsDetail?: Question[]
   type: 'QUIZ' | 'TEST'
-  plan: 'FREE' | 'PREMIUM'
+  categoryIdDetail: string
   skill: string[]
   skillName: any[]
   skillData: Skill[]

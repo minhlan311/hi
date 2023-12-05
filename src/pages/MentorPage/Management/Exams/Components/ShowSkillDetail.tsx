@@ -12,6 +12,7 @@ const ShowSkillDetail = ({ data, open, setOpen }: Props) => {
   const handleClose = () => {
     setOpen(!open)
   }
+  console.log(data)
 
   if (data)
     return (

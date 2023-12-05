@@ -26,13 +26,17 @@ const DrawerExam = (props: Props) => {
   const [imgUrl, setImgUrl] = useState<any>()
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
-  const [typePlan, setTypePlan] = useState('FREE')
+  const [testOptions, setTestOptions] = useState<
+    {
+      value: string
+      label: string
+    }[]
+  >()
 
   useEffect(() => {
     if (examData) {
       setAction('update')
       form.setFieldsValue(examData)
-      setTypePlan(examData?.plan)
     } else {
       setAction('create')
       form.resetFields()
@@ -46,14 +50,33 @@ const DrawerExam = (props: Props) => {
   const queryClient = useQueryClient()
 
   const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
-  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+  const subjectList = categoriesData?.data?.docs
+    ?.find((item) => item.name === 'Khóa học')
+    ?.children?.map((sj) => {
+      return {
+        value: sj._id,
+        label: sj.name,
+      }
+    })
 
-  const subjectList = coursesList?.children?.map((sj) => {
-    return {
-      value: sj._id,
-      label: sj.name,
+  const testList = categoriesData?.data?.docs?.find((item) => item.name === 'Luyện thi')
+
+  const handleChange = (e: string) => {
+    const subjectName = subjectList?.find((item) => item.value === e)?.label
+
+    if (subjectName && testList) {
+      const testData = testList?.children
+        ?.find((item) => item.name === subjectName)
+        ?.children?.map((sj) => {
+          return {
+            value: sj._id,
+            label: sj.name,
+          }
+        })
+
+      setTestOptions(testData)
     }
-  })
+  }
 
   const { isLoading, mutate } = useMutation({
     mutationFn: (body) => (action === 'create' ? examApi.createExam(body) : examApi.putExam(body)),
@@ -68,6 +91,7 @@ const DrawerExam = (props: Props) => {
 
       form.resetFields()
     },
+
     onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
   })
 
@@ -78,8 +102,7 @@ const DrawerExam = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
-      coverUrl: imgUrl[0]?.url,
-      cost: parseInt(values?.cost),
+      coverUrl: imgUrl ? imgUrl?.[0]?.url : undefined,
       id: examData?._id,
     }
 
@@ -152,49 +175,57 @@ const DrawerExam = (props: Props) => {
                   },
                 ]}
               >
-                <Select placeholder='Chọn khóa học' options={subjectList} />
+                <Select placeholder='Chọn khóa học' options={subjectList} onChange={handleChange} />
               </Form.Item>
             </Col>
             <Col span={24} md={8}>
               <Form.Item
-                name='plan'
-                label='Loại phí'
+                name='categoryIdDetail'
+                label='Loại khóa học'
                 rules={[
                   {
                     required: true,
-                    message: 'Vui lòng loại phí',
+                    message: 'Vui lòng loại khóa học',
                   },
                 ]}
               >
-                <Select
-                  placeholder='Chọn loại phí'
-                  options={[
-                    {
-                      value: 'FREE',
-                      label: 'Miễn phí',
-                    },
-                    {
-                      value: 'PREMIUM',
-                      label: 'Có phí',
-                    },
-                  ]}
-                  onChange={(e) => setTypePlan(e)}
-                />
+                <Select placeholder='Chọn loại khóa học' options={testOptions} disabled={!testOptions?.length} />
               </Form.Item>
             </Col>
 
             <Col span={24} md={8}>
               <Form.Item
-                name='cost'
-                label='Số tiền'
+                name='skillName'
+                label='Loại kỹ năng'
                 rules={[
                   {
-                    required: typePlan === 'PREMIUM',
-                    message: `Vui lòng nhập số tiền`,
+                    required: true,
+                    message: 'Vui lòng chọn loại kỹ năng',
                   },
                 ]}
               >
-                <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
+                <Select
+                  placeholder='Chọn loại kỹ năng'
+                  mode='multiple'
+                  options={[
+                    {
+                      value: 'READING',
+                      label: 'Đọc',
+                    },
+                    {
+                      value: 'LISTENING',
+                      label: 'Nghe',
+                    },
+                    {
+                      value: 'WRITING',
+                      label: 'Viết',
+                    },
+                    {
+                      value: 'SPEAKING',
+                      label: 'Nói',
+                    },
+                  ]}
+                />
               </Form.Item>
             </Col>
 
@@ -226,7 +257,9 @@ const DrawerExam = (props: Props) => {
                   callBackFileList={setImgUrl}
                   maxCount={1}
                   defaultFileList={
-                    examData?.coverUrl ? [{ name: examData.name as string, url: examData.coverUrl as string }] : []
+                    examData && examData.coverUrl
+                      ? [{ name: examData.name as string, url: examData.coverUrl as string }]
+                      : []
                   }
                 ></UploadCustom>
               </Form.Item>

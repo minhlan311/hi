@@ -1,26 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import categoryApi from '@/apis/categories.api'
-import examApi from '@/apis/exam.api'
-import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import categoryApi from '@/apis/categories.api'
+import css from './styles.module.scss'
+import examApi from '@/apis/exam.api'
 import LoadingCustom from '@/components/LoadingCustom'
+import MentorCreateTest from '../MentorCreateTest'
+import moment from 'moment-timezone'
 import PageResult from '@/components/PageResult'
-import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
-import { useQuery } from '@tanstack/react-query'
-import { Card, Col, Row, Space, Table } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
-import moment from 'moment-timezone'
-import { useEffect, useState } from 'react'
+import userApi from '@/apis/user.api'
 import { BiUser } from 'react-icons/bi'
 import { BsQuestionLg } from 'react-icons/bs'
+import { Card, Col, Row, Space, Table } from 'antd'
 import { CgCheckO, CgCloseO } from 'react-icons/cg'
+import { Link, useLocation } from 'react-router-dom'
 import { RiCheckboxMultipleLine } from 'react-icons/ri'
 import { TfiWrite } from 'react-icons/tfi'
-import { Link, useLocation } from 'react-router-dom'
-import MentorCreateTest from '../MentorCreateTest'
-import css from './styles.module.scss'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ColumnsType } from 'antd/es/table'
 interface DataType {
   _id: string
   userId: string
@@ -86,7 +85,12 @@ const MentorExamDetail = () => {
   if (id === 'createTest' || id === 'updateTest') return <MentorCreateTest />
 
   const labelData = [
-    { icon: <BsQuestionLg />, iconColor: '#367b97', title: 'Số câu hỏi', data: examDetail?.countQuestions },
+    {
+      icon: <BsQuestionLg />,
+      iconColor: '#367b97',
+      title: 'Số câu hỏi',
+      data: examDetail?.type === 'TEST' ? examDetail?.countQuestionsBySkill : examDetail?.countQuestions,
+    },
     {
       icon: <RiCheckboxMultipleLine />,
       iconColor: '#ced144',
@@ -356,6 +360,11 @@ const MentorExamDetail = () => {
     )
   }
 
+  const labelDataArr =
+    examDetail?.type === 'TEST'
+      ? labelData.filter((i) => i.title !== 'Số câu trắc nghiệm' && i.title !== 'Số câu tự luận')
+      : labelData
+
   if (!isLoading && examDetail && subjectDetail)
     return (
       <Space direction='vertical' size='large' className={css.exMain}>
@@ -365,31 +374,32 @@ const MentorExamDetail = () => {
               <p className={css.exTitle}>
                 Bộ đề: <b>{examDetail.name}</b>
               </p>
-              <p>
+              <p className={css.subject}>
                 Môn học: <b>{subjectDetail.name}</b>
               </p>
-              <Space>
-                Giá:
-                {examDetail.cost ? (
-                  <Space>
-                    <PriceCalculator price={examDetail.cost} />
-                  </Space>
-                ) : (
-                  <TagCustom content='Miễn phí' color='success' />
-                )}
-              </Space>
+              <p className={css.subject}>
+                Kỹ năng:{' '}
+                <TagCustom
+                  intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
+                  intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+                  intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+                  content={examDetail.skillName}
+                ></TagCustom>
+              </p>
             </Space>
           </Col>
 
           <Space direction='vertical' className={css.infor}>
             <p className={css.timeCreated}>{moment(examDetail.createdAt).format('DD-MM-YYYY / HH:mm A')}</p>
-            <Link to='questions'>
-              <ButtonCustom type='primary'>Danh sách câu hỏi</ButtonCustom>
-            </Link>
+            {examDetail.type === 'QUIZ' && (
+              <Link to='questions'>
+                <ButtonCustom type='primary'>Danh sách câu hỏi</ButtonCustom>
+              </Link>
+            )}
           </Space>
         </Row>
         <Row justify='space-between' gutter={[24, 24]}>
-          {labelData.map((item, id) => (
+          {labelDataArr.map((item, id) => (
             <Col span={24} md={12} lg={8} key={id}>
               <Card className={css.cardItem} size='small'>
                 <Space className={'sp100'} size='large'>

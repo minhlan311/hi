@@ -275,11 +275,11 @@ const MentorQuestions = () => {
                 categoryId: examDetail.categoryId,
                 createdById: myQues ? profile._id : undefined,
                 typeQuestion: examDetail.type,
+                skill: examDetail.skillName,
               }}
               limit={10}
               page={current}
               keyFilter='questionsBank'
-              checkQuery={tabChange === 'questionsBank' || myQues}
               addOnButton={
                 <Space className={css.mb}>
                   <ButtonCustom

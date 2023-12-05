@@ -2,17 +2,18 @@ import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import openNotification from '@/components/Notification'
+import TagCustom from '@/components/TagCustom/TagCustom'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { ExamState } from '@/interface/exam'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Popconfirm, Row, Space, Table, Tag, Tooltip } from 'antd'
+import { Popconfirm, Row, Space, Table, Tooltip } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { BiEdit, BiPlus } from 'react-icons/bi'
 import { BsListUl } from 'react-icons/bs'
 import { MdDeleteOutline } from 'react-icons/md'
 import { Link, useNavigate } from 'react-router-dom'
 import DrawerExam from './Drawer/DrawerExam'
-import useResponsives from '@/hooks/useResponsives'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
@@ -68,32 +69,7 @@ const MentorExams = () => {
       width: '30%',
       render: (_: any, record: any) => <Link to={record._id}>{record.name}</Link>,
     },
-    {
-      title: 'Phí',
-      dataIndex: 'plan',
-      key: '_id',
-      align: 'center',
-      width: '10%',
-      render: (plan: string) => {
-        if (plan === 'PREMIUM') {
-          const color = '#faad14'
 
-          return (
-            <Tag color={color} key={plan}>
-              {'Mất phí'.toUpperCase()}
-            </Tag>
-          )
-        } else {
-          const color = 'green'
-
-          return (
-            <Tag color={color} key={plan}>
-              {'Miễn phí'.toUpperCase()}
-            </Tag>
-          )
-        }
-      },
-    },
     {
       title: 'Loại',
       dataIndex: 'type',
@@ -101,33 +77,44 @@ const MentorExams = () => {
       align: 'center',
       width: '10%',
       render: (type: string) => {
-        if (type === 'TEST') {
-          const color = 'geekblue'
-
-          return (
-            <Tag color={color} key={type}>
-              {'Bài Test'.toUpperCase()}
-            </Tag>
-          )
-        } else {
-          const color = '#faad14'
-
-          return (
-            <Tag color={color} key={type}>
-              {'Bài Quiz'.toUpperCase()}
-            </Tag>
-          )
-        }
+        return (
+          <TagCustom
+            intColor={['geekblue', '#faad14']}
+            intArrType={['TEST', 'QUIZ']}
+            intAlternativeType={['BÀI TEST', 'BÀI QUIZ']}
+            content={type}
+          ></TagCustom>
+        )
+      },
+    },
+    {
+      title: 'Kĩ năng',
+      dataIndex: 'skillName',
+      key: 'skillName',
+      align: 'center',
+      width: '17%',
+      render: (skillName: string) => {
+        return (
+          <TagCustom
+            intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
+            intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+            intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+            content={skillName}
+          ></TagCustom>
+        )
       },
     },
     {
       title: 'Số câu hỏi',
       align: 'center',
-      dataIndex: 'countQuestions',
       key: 'countQuestions',
       width: '10%',
       render: (_: any, record: any) => {
-        return <Link to={`/mentor/exams/${record._id}/questions`}>{record.countQuestions}</Link>
+        return (
+          <Link to={`/mentor/exams/${record._id}/questions`}>
+            {record.type === 'TEST' ? record.countQuestionsBySkill : record.countQuestions}
+          </Link>
+        )
       },
     },
     {
@@ -141,24 +128,14 @@ const MentorExams = () => {
       dataIndex: 'status',
       align: 'center',
       key: 'status',
-      render: (_: any, { status }: { status: string }) => {
-        if (status === 'ACTIVE') {
-          const color = 'green'
-
-          return (
-            <Tag color={color} key={status}>
-              {status.toUpperCase()}
-            </Tag>
-          )
-        } else {
-          const color = 'volcano'
-
-          return (
-            <Tag color={color} key={status}>
-              {status.toUpperCase()}
-            </Tag>
-          )
-        }
+      render: (status: string) => {
+        return (
+          <TagCustom
+            intColor={['green', 'volcano']}
+            intArrType={['ACTIVE', 'INACTIVE']}
+            content={status.toUpperCase()}
+          ></TagCustom>
+        )
       },
     },
     {
@@ -167,11 +144,13 @@ const MentorExams = () => {
       align: 'center',
       render: (_: any, record: any) => (
         <Space size='middle'>
-          <Tooltip title='Danh sách câu hỏi'>
-            <Link to={`/mentor/exams/${record._id}/questions`}>
-              <BsListUl className='list-question-icon' />
-            </Link>
-          </Tooltip>
+          {record.type === 'QUIZ' && (
+            <Tooltip title='Danh sách câu hỏi'>
+              <Link to={`/mentor/exams/${record._id}/questions`}>
+                <BsListUl className='list-question-icon' />
+              </Link>
+            </Tooltip>
+          )}
           <Tooltip title='Chỉnh sửa bộ đề'>
             <BiEdit
               className='edit-icon'

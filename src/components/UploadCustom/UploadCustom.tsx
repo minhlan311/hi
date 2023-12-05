@@ -62,19 +62,13 @@ const UploadCustom = (props: Props) => {
     callBackFileList,
   } = props
   const { Dragger } = Upload
-  const [fileList, setFileList] = useState<FileList[]>([])
+  const [fileList, setFileList] = useState<FileList[]>(defaultFileList || [])
   //   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 100, height: 50, x: 0, y: 25 })
-
-  useEffect(() => {
-    if (defaultFileList && defaultFileList?.length > 0) setFileList(defaultFileList)
-  }, [defaultFileList])
 
   const convertFilelist = (arr: any) => {
     if (!arr) {
       return []
     }
-
-    console.log(arr)
 
     if (Array.isArray(arr)) {
       const convertedArray = arr.map((item) => ({
