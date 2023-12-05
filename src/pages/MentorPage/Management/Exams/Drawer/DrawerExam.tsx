@@ -32,7 +32,6 @@ const DrawerExam = (props: Props) => {
       label: string
     }[]
   >()
-  console.log(123)
 
   useEffect(() => {
     if (examData) {

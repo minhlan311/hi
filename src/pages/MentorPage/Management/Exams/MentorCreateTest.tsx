@@ -1,16 +1,15 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import CreateSkill from './Components/CreateSkill'
-import CreateTest from './Components/CreateTest'
 import examApi from '@/apis/exam.api'
+import skillApi from '@/apis/skill.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import { ExamState } from '@/interface/exam'
-import { Form, Space, Steps } from 'antd'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Form, Space, Steps } from 'antd'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import CreateSkill from './Components/CreateSkill'
+import CreateTest from './Components/CreateTest'
 import LastCheck from './Components/LastCheck'
-import { localAction } from '@/common'
-import skillApi from '@/apis/skill.api'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorCreateTest = () => {
@@ -20,7 +19,7 @@ const MentorCreateTest = () => {
   const typeAction = location.pathname.split('/')[3]
   const [current, setCurrent] = useState(0)
 
-  const createdId = localAction('createTest')
+  const createdId = localStorage.getItem('createTest')
 
   const { data: exam, isLoading } = useQuery({
     queryKey: ['examDetail', typeAction, createdId],
