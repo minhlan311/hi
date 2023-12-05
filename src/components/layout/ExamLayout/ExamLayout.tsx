@@ -1,7 +1,7 @@
 import { AppContext } from '@/contexts/app.context'
 import { QuestionCircleOutlined, SoundOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Layout, Modal, Row, Slider } from 'antd'
-import { Content, Footer, Header } from 'antd/es/layout/layout'
+import { Content, Header } from 'antd/es/layout/layout'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ExamLayout.scss'
@@ -195,7 +195,7 @@ export default function ExamLayout({ children }: Props) {
         </Row>
       </Header>
       <Content className='exam-content-layout'>{children}</Content>
-      <Footer className='exam-footer-layout'>
+      {/* <Footer className='exam-footer-layout'>
         <Flex justify='space-between' align={'center'}>
           <div>
             <Button className='dashed' type='dashed'>
@@ -221,7 +221,7 @@ export default function ExamLayout({ children }: Props) {
             <Button type='primary'>Next</Button>
           </div>
         </Flex>
-      </Footer>
+      </Footer> */}
     </Layout>
   )
 }

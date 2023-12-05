@@ -33,12 +33,14 @@ type Props = {
 }
 
 const LikertScale = ({
+  reset,
   rows,
   cols,
   type,
   questId,
   testId,
 }: {
+  reset: boolean
   rows: any[]
   cols: any[]
   type: string
@@ -56,6 +58,13 @@ const LikertScale = ({
       setSelectedAnswers(updatedSelectedItems)
     }
   }
+
+  useEffect(() => {
+    if (reset) {
+      setSelectedAnswers([])
+      setCorrectAnswers([])
+    }
+  }, [reset])
 
   const handleAnswerChange = (rowId: string, colId: string) => {
     const newAnswers = [...correctAnswers]
@@ -88,7 +97,7 @@ const LikertScale = ({
         correctAnswers: correctAnswers,
       }
       setTimeout(() => {
-        localAction(testId, payload, 'update', '_id')
+        localAction(testId + 'data', payload, 'update', '_id')
       }, 1000)
     }
   }, [correctAnswers])
@@ -182,7 +191,7 @@ const RenderAnswer = (props: Props) => {
         correctAnswers: answers,
       }
       setTimeout(() => {
-        localAction(testId, payload, 'update', '_id')
+        localAction(testId + 'data', payload, 'update', '_id')
       }, 1000)
     }
   }, [dataCallback])
@@ -249,6 +258,7 @@ const RenderAnswer = (props: Props) => {
   if (type === 'LIKERT SCALE' || type === 'MATCHING')
     return (
       <LikertScale
+        reset={reset}
         rows={shuffleArray(choices[0]?.rows)}
         cols={shuffleArray(choices[0]?.cols)}
         type={type}

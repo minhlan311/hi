@@ -7,6 +7,7 @@ export const ENDPOINT = {
   LOGOUT: '/auth/logout',
   MENTOR: '/mentorInfo/',
   CHANGE_PASSWORD: '/users/change-password/',
+  FORGOT_PASSWORD: '/users/reset-password/',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
@@ -48,6 +49,10 @@ export const ENDPOINT = {
   FIND_EXAM_PATH: '/exam/tests/find',
   FIND_EXAM_SUBMIT: '/exam/tests/submit/',
   FIND_EXAM_RESULTS: '/exam/results/find',
+
+  // :::::::::::::::::::: SKILL PATH :::::::::::::::::::::
+  SKILL_PATH: '/exam/skills/',
+  FIND_SKILL_PATH: '/exam/skills/find',
 
   // :::::::::::::::::::: QUESTION PATH :::::::::::::::::::::
   QUESTION_PATH: '/exam/questions/',
@@ -149,5 +154,5 @@ export const ENDPOINT = {
   FAQ_FIND_PATH: '/qas/find',
 
   // :::::::::::::::::::: FAQ PATH :::::::::::::::::::::
-  LIKE_PATH: '/likes/'
+  LIKE_PATH: '/likes/',
 }

@@ -9,6 +9,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { Form, FormInstance, InputRef, Popconfirm, Space, Table, message } from 'antd'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineDelete, AiOutlineMenu } from 'react-icons/ai'
+import { BsQuestionCircle } from 'react-icons/bs'
 import { MdPlaylistAdd } from 'react-icons/md'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -147,7 +148,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
         onReady={(editor: any) => {
           editor.focus()
         }}
-        onBlur={save}
         name={dataIndex}
         data={record}
         required
@@ -159,7 +159,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
     )
   }
 
-  return <td {...restProps}>{childNode}</td>
+  return (
+    <td {...restProps} onDoubleClick={save}>
+      {childNode}
+    </td>
+  )
 }
 
 type EditableTableProps = Parameters<typeof Table>[0]
@@ -203,8 +207,6 @@ const TableAddonQues = (props: Props) => {
   //   if (selectionType === 'TRUE FALSE') {
   //   }
   // }, [selectionType])
-
-  console.log(dataSource, '=============')
 
   const initColumns = [
     {
@@ -285,8 +287,6 @@ const TableAddonQues = (props: Props) => {
       })
     }
   }
-
-  console.log(dataSource, 'dataSourcedataSource')
 
   const handleAdd = () => {
     const newData: Choice = {
@@ -399,6 +399,10 @@ const TableAddonQues = (props: Props) => {
 
   return (
     <Space direction='vertical' className='sp100'>
+      <i>
+        <BsQuestionCircle size={12} /> Nhấn vào nội dung để chỉnh sửa, nhấn đúp 2 lần để lưu
+      </i>
+
       {(selectionType === 'SORT' && (
         <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
           <SortableContext
@@ -446,7 +450,6 @@ const TableAddonQues = (props: Props) => {
             }
           />
         )}
-
       <ButtonCustom
         disabled={selectionType === 'TRUE FALSE' && dataSource?.length === 2 ? true : false}
         onClick={handleAdd}

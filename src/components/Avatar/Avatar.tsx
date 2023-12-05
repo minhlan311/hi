@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserState } from '@/interface/user'
 import { Avatar as Avt } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
@@ -72,7 +73,7 @@ const Avatar = (props: Props) => {
             cropBeforeUpload
             cropAspect={1}
             cropShape='round'
-            callBackFileList={setFileList}
+            callBackFileList={setFileList as unknown as any}
             maxFileSize={1}
           >
             <div className={css.iconAdd}>

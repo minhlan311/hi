@@ -1,3 +1,5 @@
+import { SkillType } from './exam'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Choice {
   answer: string
@@ -31,6 +33,8 @@ export interface QuestionState {
     | 'MATCHING'
     | 'NUMERICAL'
     | 'WRITING'
+  typeQuestion: 'TEST' | 'QUIZ'
+  skill: SkillType
   point: number
   difficulty: string
   answer?: string

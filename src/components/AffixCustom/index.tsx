@@ -26,6 +26,7 @@ const AffixCustom = (props: Props) => {
     style,
   } = props
   const [hidden, setHidden] = useState<boolean>(false)
+  const [delayedZIndex, setDelayedZIndex] = useState<number>()
 
   useEffect(() => {
     if (type === 'down-hidden' || type === 'up-hidden') {
@@ -35,6 +36,15 @@ const AffixCustom = (props: Props) => {
         const currentScrollPosition = window.scrollY
         const check = currentScrollPosition >= hiddenOffsetTop && currentScrollPosition > prevScrollPosition
         setHidden((type === 'down-hidden' && check) || (type === 'up-hidden' && !check))
+
+        if (check) {
+          setTimeout(() => {
+            setDelayedZIndex(-1)
+          }, 300)
+        } else {
+          setDelayedZIndex(zIndex)
+        }
+
         prevScrollPosition = currentScrollPosition
       }
 
@@ -47,7 +57,7 @@ const AffixCustom = (props: Props) => {
   return type === 'fixed-bottom' ? (
     <div style={{ ...style, position: 'fixed', bottom: 0, zIndex: zIndex }}>{children}</div>
   ) : (
-    <Affix offsetTop={offsetTop} offsetBottom={offsetBottom}>
+    <Affix offsetTop={offsetTop} offsetBottom={offsetBottom} style={{ ...style, zIndex: delayedZIndex }}>
       <div
         style={{
           transition: `${animationTime / 100}s`,

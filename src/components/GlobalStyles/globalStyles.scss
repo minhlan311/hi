@@ -185,8 +185,10 @@ table {
   }
 }
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
   top: 10px;
+  height: 100%;
 }
 
 .link {
@@ -195,6 +197,16 @@ table {
     text-decoration: underline;
   }
 }
+
+.butt-link {
+  color: var(--red);
+  border: 1px solid var(--red);
+  &:hover {
+    background-color: var(--red);
+    color: var(--white) !important;
+  }
+}
+
 .custom-butt-icon {
   display: flex;
   align-items: center;

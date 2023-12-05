@@ -86,7 +86,7 @@ export default function MenuNav({ user, type }: Props) {
       label: 'Trắc nghiệm',
       icon: <PiExam />,
       activeIcon: <PiExamFill />,
-      href: `${choice?.href}${choice?.children?.[0]?.href}`,
+      href: `${choice?.href}`,
     },
     { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
   ]
@@ -152,24 +152,33 @@ export default function MenuNav({ user, type }: Props) {
                 <Row justify='space-between' align='middle' className='uc-container menuItem'>
                   {categoriesData.map((item) => (
                     <div key={`${item._id}`} className='menuLabel'>
-                      <div className='labelItem'>
-                        <Link
-                          to={`${
-                            item.label === 'Giáo viên' ||
-                            item.label === 'Khóa học' ||
-                            item.label === 'Luyện thi' ||
-                            item.label === 'Lịch khai giảng'
-                              ? '#'
-                              : item.href
-                          } `}
-                          className='title'
-                        >
-                          <Space style={{ width: '100%' }} size='small'>
-                            {item?.href ? item.label : <div className='title'>{item.label}</div>}
-                            {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
-                          </Space>
-                        </Link>
-                        {item.children ? item.children.length > 0 && <div className='arr'></div> : null}
+                      <div>
+                        {item.children && item.children.length === 0 ? (
+                          <Link
+                            to={`${
+                              item.label === 'Giáo viên' ||
+                              item.label === 'Khóa học' ||
+                              item.label === 'Luyện thi' ||
+                              item.label === 'Lịch khai giảng'
+                                ? '#'
+                                : item.href
+                            } `}
+                            className='labelItem'
+                          >
+                            <Space style={{ width: '100%' }} size='small'>
+                              {item?.href ? item.label : <div className='title'>{item.label}</div>}
+                              {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
+                            </Space>
+                          </Link>
+                        ) : (
+                          <div className='labelItem'>
+                            <Space style={{ width: '100%' }} size='small'>
+                              {item?.href ? item.label : <div className='title'>{item.label}</div>}
+                              {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
+                            </Space>
+                            {item.children ? item.children.length > 0 && <div className='arr'></div> : null}
+                          </div>
+                        )}
                       </div>
                       {item.children ? (
                         item.children.length > 0 && (

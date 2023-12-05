@@ -3,12 +3,14 @@ import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Drawer, Form, Input, Select, Space } from 'antd'
+import { Col, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   open: boolean
@@ -20,10 +22,16 @@ type Props = {
 
 const DrawerExam = (props: Props) => {
   const { open, setOpen, setLoading, examData, size } = props
-
+  const navitage = useNavigate()
+  const [imgUrl, setImgUrl] = useState<any>()
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
-  const [typePlan, setTypePlan] = useState('FREE')
+  const [testOptions, setTestOptions] = useState<
+    {
+      value: string
+      label: string
+    }[]
+  >()
 
   useEffect(() => {
     if (examData) {
@@ -42,13 +50,33 @@ const DrawerExam = (props: Props) => {
   const queryClient = useQueryClient()
 
   const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
+  const subjectList = categoriesData?.data?.docs
+    ?.find((item) => item.name === 'Khóa học')
+    ?.children?.map((sj) => {
+      return {
+        value: sj._id,
+        label: sj.name,
+      }
+    })
 
-  const subjectList = categoriesData?.data?.docs?.map((sj) => {
-    return {
-      value: sj._id,
-      label: sj.name,
+  const testList = categoriesData?.data?.docs?.find((item) => item.name === 'Luyện thi')
+
+  const handleChange = (e: string) => {
+    const subjectName = subjectList?.find((item) => item.value === e)?.label
+
+    if (subjectName && testList) {
+      const testData = testList?.children
+        ?.find((item) => item.name === subjectName)
+        ?.children?.map((sj) => {
+          return {
+            value: sj._id,
+            label: sj.name,
+          }
+        })
+
+      setTestOptions(testData)
     }
-  })
+  }
 
   const { isLoading, mutate } = useMutation({
     mutationFn: (body) => (action === 'create' ? examApi.createExam(body) : examApi.putExam(body)),
@@ -63,6 +91,7 @@ const DrawerExam = (props: Props) => {
 
       form.resetFields()
     },
+
     onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
   })
 
@@ -73,9 +102,10 @@ const DrawerExam = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
-      cost: parseInt(values?.cost),
+      coverUrl: imgUrl ? imgUrl?.[0]?.url : undefined,
       id: examData?._id,
     }
+
     mutate(payload)
   }
 
@@ -108,56 +138,9 @@ const DrawerExam = (props: Props) => {
           form={form}
           initialValues={{
             plan: 'FREE',
+            type: 'QUIZ',
           }}
         >
-          <Form.Item
-            name='name'
-            label='Tiêu đề bộ đề'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tiêu đề bộ đề',
-              },
-            ]}
-          >
-            <Input placeholder='Nhập tên tiêu đề bộ đề' />
-          </Form.Item>
-
-          <Form.Item
-            name='skill'
-            label='Loại kỹ năng'
-            rules={[
-              {
-                required: true,
-                message: 'Chọn loại kỹ năng',
-              },
-            ]}
-          >
-            <Select
-              placeholder='Chọn loại kỹ năng'
-              options={[
-                {
-                  value: 'READING',
-                  label: 'Đọc',
-                },
-                {
-                  value: 'LISTENING',
-                  label: 'Nghe',
-                },
-                {
-                  value: 'WRITING',
-                  label: 'Viết',
-                },
-                {
-                  value: 'SPEAKING',
-                  label: 'Nói',
-                },
-              ]}
-            />
-          </Form.Item>
-
-          <TextAreaCustom name='description' label='Chú thích' data={examData} />
-
           <Form.Item
             name='type'
             label='Loại bộ đề'
@@ -168,72 +151,120 @@ const DrawerExam = (props: Props) => {
               },
             ]}
           >
-            <Select
-              placeholder='Chọn loại bộ đề'
-              options={[
-                {
-                  value: 'QUIZ',
-                  label: 'Bài Quiz',
-                },
-                {
-                  value: 'TEST',
-                  label: 'Bài thi thử',
-                },
-              ]}
-            />
+            <Radio.Group value={size}>
+              <Radio.Button value='QUIZ'>Bài Quiz</Radio.Button>
+              <Radio.Button
+                value='TEST'
+                onClick={() => {
+                  navitage('/mentor/exams/createTest')
+                }}
+              >
+                Bài Thi
+              </Radio.Button>
+            </Radio.Group>
           </Form.Item>
+          <Row gutter={24}>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='categoryId'
+                label='Chọn khóa học'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn khóa học',
+                  },
+                ]}
+              >
+                <Select placeholder='Chọn khóa học' options={subjectList} onChange={handleChange} />
+              </Form.Item>
+            </Col>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='categoryIdDetail'
+                label='Loại khóa học'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng loại khóa học',
+                  },
+                ]}
+              >
+                <Select placeholder='Chọn loại khóa học' options={testOptions} disabled={!testOptions?.length} />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name='plan'
-            label='Loại phí'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng loại phí',
-              },
-            ]}
-          >
-            <Select
-              placeholder='Chọn loại phí'
-              options={[
-                {
-                  value: 'FREE',
-                  label: 'Miễn phí',
-                },
-                {
-                  value: 'PREMIUM',
-                  label: 'Có phí',
-                },
-              ]}
-              onChange={(e) => setTypePlan(e)}
-            />
-          </Form.Item>
+            <Col span={24} md={8}>
+              <Form.Item
+                name='skillName'
+                label='Loại kỹ năng'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn loại kỹ năng',
+                  },
+                ]}
+              >
+                <Select
+                  placeholder='Chọn loại kỹ năng'
+                  mode='multiple'
+                  options={[
+                    {
+                      value: 'READING',
+                      label: 'Đọc',
+                    },
+                    {
+                      value: 'LISTENING',
+                      label: 'Nghe',
+                    },
+                    {
+                      value: 'WRITING',
+                      label: 'Viết',
+                    },
+                    {
+                      value: 'SPEAKING',
+                      label: 'Nói',
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name='cost'
-            label='Số tiền'
-            rules={[
-              {
-                required: typePlan === 'PREMIUM',
-                message: `Vui lòng nhập số tiền`,
-              },
-            ]}
-          >
-            <Input type='number' disabled={typePlan !== 'PREMIUM'} placeholder='Nhập số tiền'></Input>
-          </Form.Item>
-
-          <Form.Item
-            name='categoryId'
-            label='Chọn khóa học'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn khóa học',
-              },
-            ]}
-          >
-            <Select placeholder='Chọn khóa học' options={subjectList} />
-          </Form.Item>
+            <Col span={24}>
+              <Form.Item
+                name='name'
+                label='Tiêu đề bộ đề'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập tiêu đề bộ đề',
+                  },
+                ]}
+              >
+                <Input placeholder='Nhập tên tiêu đề bộ đề' />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <TextAreaCustom name='description' label='Chú thích' data={examData} />
+            </Col>
+            <Col span={24}>
+              <Form.Item name='coverUrl' label='Ảnh bộ đề'>
+                <UploadCustom
+                  uploadKey='image'
+                  uploadQuality='medium'
+                  cropBeforeUpload
+                  dropArea
+                  accessType='image/*'
+                  callBackFileList={setImgUrl}
+                  maxCount={1}
+                  defaultFileList={
+                    examData && examData.coverUrl
+                      ? [{ name: examData.name as string, url: examData.coverUrl as string }]
+                      : []
+                  }
+                ></UploadCustom>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Drawer>
     </div>

@@ -1,7 +1,9 @@
 import { lazy, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import PageResult from './components/PageResult/index.tsx'
+import SuspenseWrapper from './components/SuspenseWrapper/SuspenseWrapper.tsx'
 import AuthLayout from './components/layout/AuthLayout/index.tsx'
+import ExamLayout from './components/layout/ExamLayout/ExamLayout.tsx'
 import Layout from './components/layout/Layout.tsx'
 import MentorLayout from './components/layout/MentorLayout/index.tsx'
 import PATH from './constants/path'
@@ -13,34 +15,29 @@ import Register from './pages/Auth/Register/index.tsx'
 import CartPage from './pages/CartPage/CartPage.tsx'
 import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
 import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
-import ChoiceQuestionPage from './pages/ChoiceQuestionPage/ChoiceQuestionPage.tsx'
+import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
+import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
-
-const MentorExamDetail = lazy(() => import('./pages/MentorPage/Management/Exams/ExamDetail/index.tsx'))
-const Courses = lazy(() => import('./pages/CoursesPage/Courses.tsx'))
-const MentorExamQuestions = lazy(() => import('./pages/MentorPage/Management/Exams/Questions/index.tsx'))
-const MentorExams = lazy(() => import('./pages/MentorPage/Management/Exams/index.tsx'))
-const MycoursesLearning = lazy(() => import('./pages/MyCoursesLearning/MycoursesLearning.tsx'))
-
-import SuspenseWrapper from './components/SuspenseWrapper/SuspenseWrapper.tsx'
-import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
 import NewsPage from './pages/NewsPage/NewsPage.tsx'
 import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
-
-import ExamLayout from './components/layout/ExamLayout/ExamLayout.tsx'
-import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
 import QADetail from './pages/QAPage/QAPageDetail.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
+
+const MentorExamDetail = lazy(() => import('./pages/MentorPage/Management/Exams/ExamDetail/index.tsx'))
+const Courses = lazy(() => import('./pages/CoursesPage/Courses.tsx'))
+const MentorExamQuestions = lazy(() => import('./pages/MentorPage/Management/Exams/Questions/index.tsx'))
+const MentorExams = lazy(() => import('./pages/MentorPage/Management/Exams/index.tsx'))
+const MycoursesLearning = lazy(() => import('./pages/MyCoursesLearning/MycoursesLearning.tsx'))
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -355,14 +352,6 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.CHOICE_PAGE,
-          element: (
-            <Layout user={profile} title=''>
-              <ChoiceQuestionPage />
-            </Layout>
-          ),
-        },
 
         {
           path: PATH.SUBMENU_3,
@@ -374,14 +363,6 @@ export default function useRouteElements() {
         },
         {
           path: PATH.QA_PAGE,
-          element: (
-            <Layout user={profile}>
-              <QAPage />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.TEST_EXAM_PAGE,
           element: (
             <Layout user={profile}>
               <QAPage />

@@ -83,7 +83,6 @@ const Score = ({ data, testQuestion, time }: Props) => {
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
       <h2>Điểm của bạn</h2>
-
       <Row justify='space-between' align='middle'>
         {md ? (
           <Space direction='vertical' align='center'>
@@ -137,8 +136,9 @@ const Score = ({ data, testQuestion, time }: Props) => {
           ></Progress>
         )}
       </Row>
-
-      <Table columns={filteredColumns} dataSource={[data?.[0]?.score]} bordered pagination={false}></Table>
+      {data?.[0]?.score && (
+        <Table columns={filteredColumns} dataSource={[data?.[0]?.score]} bordered pagination={false}></Table>
+      )}
     </Space>
   )
 }

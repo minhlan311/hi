@@ -1,28 +1,29 @@
-import eventApi from '@/apis/event.api'
-import examApi from '@/apis/exam.api'
-import questionApi from '@/apis/question.api'
-import successBg from '@/assets/images/examimg/hander-pana.png'
-import testBg from '@/assets/images/examimg/online-test.png'
-import { localAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
+import css from './styles.module.scss'
+import eventApi from '@/apis/event.api'
+import examApi from '@/apis/exam.api'
+import Header from '@/components/layout/Header/Header'
+import loadingBg from '../../assets/images/examimg/loading.png'
 import LoadingCustom from '@/components/LoadingCustom'
+import moment from 'moment-timezone'
 import openNotification from '@/components/Notification'
 import PageResult from '@/components/PageResult'
-import TagCustom from '@/components/TagCustom/TagCustom'
-import Header from '@/components/layout/Header/Header'
-import useResponsives from '@/hooks/useResponsives'
-import { ExamResultsState } from '@/interface/exam'
-import { QuestionState } from '@/interface/question'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
-import moment from 'moment-timezone'
-import { useEffect, useState } from 'react'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
-import { useLocation } from 'react-router-dom'
+import questionApi from '@/apis/question.api'
 import QuestionItem from './components/QuestionItem'
 import Score from './components/Score'
-import css from './styles.module.scss'
+import successBg from '@/assets/images/examimg/hander-pana.png'
+import TagCustom from '@/components/TagCustom/TagCustom'
+import testBg from '@/assets/images/examimg/online-test.png'
+import useResponsives from '@/hooks/useResponsives'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import { Card, Col, Descriptions, Form, Row, Space, Steps } from 'antd'
+import { ExamResultsState, SkillType } from '@/interface/exam'
+import { localAction } from '@/common'
+import { QuestionState } from '@/interface/question'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useMutation, useQuery } from '@tanstack/react-query'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {
@@ -31,9 +32,10 @@ const TestPage = () => {
   const [startTest, setStartTest] = useState<boolean>(false)
   const [finishTest, setFinishTest] = useState<boolean>(false)
   const [selectId, setSelectId] = useState<string>('')
-
+  const [loading, setLoading] = useState<boolean>(true)
+  const [current, setCurrent] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [skill, setSkill] = useState('READING')
+  const [skill, setSkill] = useState<SkillType>()
 
   const { sm, md, lg } = useResponsives()
   const { data: testData, isLoading } = useQuery({
@@ -41,6 +43,7 @@ const TestPage = () => {
     queryFn: () => {
       return examApi.getExamDetail(location.state.testId)
     },
+    enabled: Boolean(location.state.testId),
   })
 
   const { data: eventData } = useQuery({
@@ -48,6 +51,7 @@ const TestPage = () => {
     queryFn: () => {
       return eventApi.getOneEvent(location.state.eventId)
     },
+    enabled: Boolean(location.state.eventId),
   })
 
   const event = eventData?.data
@@ -59,7 +63,7 @@ const TestPage = () => {
       return questionApi.findQuestion({
         filterQuery: {
           _id: data?.questions,
-          skill: skill,
+          skill: data?.skillName[current],
         },
       })
     },
@@ -67,8 +71,6 @@ const TestPage = () => {
   })
 
   const question = questions?.data?.data?.docs
-
-  const [current, setCurrent] = useState(0)
 
   useEffect(() => {
     if (testData?.data) {
@@ -95,16 +97,19 @@ const TestPage = () => {
         message: 'Thông báo',
         description: 'Đã gửi câu trả lời!',
       })
-      localAction(testData?.data._id, null, 'delete')
+      localStorage.removeItem(`${testData?.data._id}data`)
     },
   })
 
   const results = useQuery({
     queryKey: ['resultDetail', testMutation, testData],
     queryFn: () => examApi.findResults({ filterQuery: { testId: testData?.data._id } }),
+
     enabled: testMutation.isSuccess,
   })
-
+  useEffect(() => {
+    if (results.isSuccess) setLoading(false)
+  }, [results])
   const resultsData = results?.data?.data.docs
 
   const testTime = location.state.testTime + location.state.addTime
@@ -115,7 +120,7 @@ const TestPage = () => {
   const [answers, setAnswers] = useState<any>([])
   useEffect(() => {
     if (testData) {
-      const savedAnswers = localAction(testData?.data._id)
+      const savedAnswers = localAction(testData?.data._id + 'data')
 
       if (savedAnswers !== null) {
         setAnswers(savedAnswers)
@@ -124,15 +129,19 @@ const TestPage = () => {
   }, [testData, finishTest])
   const [isLoad, setIsLoad] = useState(false)
 
-  const testSkill = [
-    {
-      id: 'READING',
-      title: 'Đọc',
+  const testSkill = data?.skillName?.map((item) => {
+    return {
+      id: item,
+      title:
+        (item === 'READING' && 'Đọc') ||
+        (item === 'LISTENING' && 'Nghe') ||
+        (item === 'WRITING' && 'Viết') ||
+        (item === 'SPEAKING' && 'Nói'),
       description: `${current > 0 ? 'Đã' : 'Chưa'} hoàn thành`,
       content: (
         <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
           <QuestionItem
-            type='READING'
+            type={item}
             questionData={question?.[currentQuestion] as unknown as QuestionState}
             questionLength={question?.length as unknown as number}
             questionKey={currentQuestion}
@@ -144,79 +153,15 @@ const TestPage = () => {
           />
         </LoadingCustom>
       ),
-    },
-    {
-      id: 'LISTENING',
-      title: 'Nghe',
-      description: `${current > 1 ? 'Đã' : 'Chưa'} hoàn thành`,
-      content: (
-        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
-          <QuestionItem
-            type='LISTENING'
-            questionData={question?.[currentQuestion] as unknown as QuestionState}
-            questionLength={question?.length as unknown as number}
-            questionKey={currentQuestion}
-            dataValue={answers}
-            testId={testData ? testData.data._id : ''}
-            loading={questions.isLoading}
-            selectId={selectId}
-            form={form}
-          />
-        </LoadingCustom>
-      ),
-      disabled: false,
-    },
-    {
-      id: 'WRITING',
-      title: 'Viết',
-      description: `${current > 2 ? 'Đã' : 'Chưa'} hoàn thành`,
-      content: (
-        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
-          <QuestionItem
-            type='WRITING'
-            questionData={question?.[currentQuestion] as unknown as QuestionState}
-            questionLength={question?.length as unknown as number}
-            questionKey={currentQuestion}
-            dataValue={answers}
-            testId={testData ? testData.data._id : ''}
-            loading={questions.isLoading}
-            selectId={selectId}
-            form={form}
-          />
-        </LoadingCustom>
-      ),
-      disabled: false,
-    },
-    {
-      id: 'SPEAKING',
-      title: 'Nói',
-      description: `${current === 3 && question && currentQuestion === question?.length ? 'Đã' : 'Chưa'} hoàn thành`,
-      content: (
-        <LoadingCustom loading={isLoad} tip='Vui lòng chờ...'>
-          <QuestionItem
-            type='SPEAKING'
-            questionData={question?.[currentQuestion] as unknown as QuestionState}
-            questionLength={question?.length as unknown as number}
-            questionKey={currentQuestion}
-            dataValue={answers}
-            testId={testData ? testData.data._id : ''}
-            loading={questions.isLoading}
-            selectId={selectId}
-            form={form}
-          />
-        </LoadingCustom>
-      ),
-      disabled: false,
-    },
-  ]
-  const [time, setTime] = useState<number>(0)
+    }
+  })
 
-  const check = question && currentQuestion + 1 < question?.length
+  const [time, setTime] = useState<number>(0)
 
   const handleFinish = () => {
     setCurrent(0)
     setCurrentQuestion(0)
-    setSkill('')
+    setSkill(undefined)
     setFinishTest(true)
 
     if (event) localStorage.removeItem(event._id as string)
@@ -240,29 +185,33 @@ const TestPage = () => {
     setStartTest(false)
     setFinishTest(false)
     setTime(0)
-    setSkill(testSkill[0].id)
+    setSkill(testSkill && testSkill[0].id)
   }
 
+  const check = question && currentQuestion + 1 < question?.length
+
   const handleNext = () => {
-    if (check) {
-      form.submit()
-      setIsLoad(true)
-      setTimeout(() => {
-        setCurrentQuestion((prev) => prev + 1)
-        setIsLoad(false)
-      }, 250)
-    } else if (current === testSkill.length - 1) {
-      handleFinish()
-
-      return
-    } else {
-      setCurrent((prev) => {
-        setSkill(testSkill[prev + 1].id)
+    if (testSkill) {
+      if (check) {
         form.submit()
+        setIsLoad(true)
+        setTimeout(() => {
+          setCurrentQuestion((prev) => prev + 1)
+          setIsLoad(false)
+        }, 250)
+      } else if (current === testSkill.length - 1) {
+        handleFinish()
 
-        return prev + 1
-      })
-      setCurrentQuestion(0)
+        return
+      } else {
+        setCurrent((prev) => {
+          setSkill(testSkill[prev + 1].id)
+          form.submit()
+
+          return prev + 1
+        })
+        setCurrentQuestion(0)
+      }
     }
   }
 
@@ -277,11 +226,12 @@ const TestPage = () => {
   }
 
   const startTime = moment(eventData?.data.start)
+  console.log({ current, testSkill, currentQuestion, question })
 
   const endTime = moment(eventData?.data.end)
   const duration = moment.duration(endTime.diff(startTime))
   const totalMinutes = duration.asMinutes()
-  if (data && event)
+  if (data)
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
         <Header padding={md ? '20px 0' : '70px 0'}>
@@ -293,12 +243,20 @@ const TestPage = () => {
                 </Col>
                 <Col span={24} md={8}>
                   <Space direction='vertical' size='large' align={sm || md || lg ? 'center' : 'start'}>
-                    <h1>{event?.name}</h1>
+                    <h1>{event ? event?.name : data.name}</h1>
                     {oldTime && oldTime !== 0 && <TagCustom content='Chưa hoàn thành' color='red'></TagCustom>}
                     <div>
-                      <Descriptions size='small'>
+                      <Descriptions size='small' column={1}>
                         <Descriptions.Item label='Số câu hỏi'>
                           <b>{data.countQuestions}</b>
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Kỹ năng' className={css.sp100}>
+                          <TagCustom
+                            intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
+                            intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+                            intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+                            content={data.skillName}
+                          ></TagCustom>
                         </Descriptions.Item>
                       </Descriptions>
                       <Descriptions column={sm || md || lg ? 1 : 2}>
@@ -329,7 +287,7 @@ const TestPage = () => {
                 </Col>
               </>
             )}
-            {startTest && time === 0 && (
+            {startTest && time === 0 && testSkill && (
               <>
                 <Col span={24} lg={18}>
                   {md && (
@@ -358,7 +316,7 @@ const TestPage = () => {
                           initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
                           start={!finishTest}
                           size={md ? 20 : 30}
-                          localId={event._id}
+                          localId={event ? event?._id : data._id}
                           callbackTimeEnd={setTime}
                         ></CountDownTimer>
                       </Col>
@@ -380,18 +338,18 @@ const TestPage = () => {
                       </Col>
                     </Row>
                   )}
-                  <Card className={css.testBody}>{testSkill[current].content}</Card>
+                  <Card className={css.testBody}>{testSkill[current]?.content}</Card>
                 </Col>
                 <Col span={24} lg={6}>
                   {!md && (
-                    <Space className={` sp100`} direction='vertical' size='large' align='center'>
+                    <Space className={`sp100`} direction='vertical' size='large' align='center'>
                       <CountDownTimer
                         type={sm ? 'number' : 'progress'}
                         initTime={testTime}
                         initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
                         start={!finishTest}
                         size={sm ? 20 : 30}
-                        localId={event._id}
+                        localId={event ? event?._id : data._id}
                         callbackTimeEnd={setTime}
                       ></CountDownTimer>
 
@@ -406,12 +364,13 @@ const TestPage = () => {
                         <ButtonCustom onClick={handlePrev} disabled={currentQuestion === 0}>
                           Câu trước
                         </ButtonCustom>
+
                         <ButtonCustom type='primary' onClick={handleNext}>
-                          {current === testSkill.length - 1
-                            ? 'Nộp bài'
-                            : question && (question.length === 0 || currentQuestion === question.length - 1)
+                          {question && question?.length - 1 > currentQuestion
+                            ? 'Câu tiếp theo'
+                            : testSkill.length - 1 > current
                             ? 'Kỹ năng tiếp theo'
-                            : 'Câu tiếp theo'}
+                            : 'Nộp bài'}
                         </ButtonCustom>
                       </Space>
                     </Space>
@@ -420,7 +379,7 @@ const TestPage = () => {
               </>
             )}
 
-            {finishTest && (
+            {finishTest && !loading && (
               <>
                 <Col span={24} md={12}>
                   <img src={successBg} alt='successBg' width={'100%'} />
@@ -448,6 +407,20 @@ const TestPage = () => {
                   </Space>
                 </Col>
               </>
+            )}
+            {testMutation.isSuccess && results.isLoading && (
+              <Col span={24}>
+                <Row justify='center'>
+                  <Col span={24} md={12}>
+                    <img src={loadingBg} alt='loading' width={'85%'} style={{ display: 'block', margin: '0 auto' }} />
+                  </Col>
+                  <Col span={24}>
+                    <LoadingCustom loading={loading} tip='Đang tính toán điểm của bạn! Vui lòng chờ...'>
+                      <p style={{ height: 70 }}></p>
+                    </LoadingCustom>
+                  </Col>
+                </Row>
+              </Col>
             )}
           </Row>
         </Header>

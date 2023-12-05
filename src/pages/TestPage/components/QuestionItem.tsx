@@ -36,7 +36,7 @@ const QuestionItem = (props: Props) => {
         correctAnswers: typeof val.correctAnswers === 'string' ? [val.correctAnswers] : val.correctAnswers,
       }
 
-      localAction(testId, payload, 'update', '_id')
+      localAction(testId + 'data', payload, 'update', '_id')
     }
   }
 
@@ -60,7 +60,7 @@ const QuestionItem = (props: Props) => {
                 size='small'
                 onClick={() => {
                   setReset(true)
-                  localAction(testId, null, 'remove', '_id')
+                  localAction(testId + 'data', null, 'remove', '_id')
                 }}
                 icon={<TbArrowBack />}
               >

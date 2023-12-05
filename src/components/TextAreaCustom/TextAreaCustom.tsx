@@ -11,7 +11,7 @@ type Props = {
   onBlur?: () => void
   onReady?: (e: any) => void
   onChange?: (e: any) => void
-  name: string
+  name: string | string[]
   data?: any | null
   label?: string
   required?: boolean
@@ -31,7 +31,8 @@ const TextAreaCustom = (props: Props) => {
 
   useEffect(() => {
     if (!data) setEditorContent('<p></p>')
-    if (data?.[name]) setEditorContent(data?.[name])
+    if (data) typeof name === 'string' ? setEditorContent(data?.[name]) : setEditorContent(data?.[name[1]])
+
     if (data && dataArr) setEditorContent(data)
   }, [data, dataArr])
 

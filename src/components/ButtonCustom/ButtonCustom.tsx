@@ -59,7 +59,12 @@ const ButtonCustom = (props: Props) => {
             window.open(href, linkTarget)
           }}
           className={`${className}`}
-          style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
+          style={{
+            color: color,
+            background: background,
+            fontWeight: fontWeight,
+            ...style,
+          }}
           form={form}
           htmlType={htmlType}
           danger={danger}
@@ -78,7 +83,12 @@ const ButtonCustom = (props: Props) => {
             disabled={disabled}
             onClick={onClick}
             className={`${className} `}
-            style={{ color: color, background: background, fontWeight: fontWeight, ...style }}
+            style={{
+              color: color,
+              background: background,
+              fontWeight: fontWeight,
+              ...style,
+            }}
             form={form}
             htmlType={htmlType}
             loading={loading}
@@ -100,7 +110,7 @@ const ButtonCustom = (props: Props) => {
         disabled={disabled}
         onClick={onClick}
         className={`${className} `}
-        style={{ fontWeight: fontWeight, ...style }}
+        style={{ fontWeight: fontWeight, ...style, height: 'auto' }}
         form={form}
         htmlType={htmlType}
         danger={danger}

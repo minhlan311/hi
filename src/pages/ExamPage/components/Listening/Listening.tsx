@@ -14,6 +14,15 @@ type Props = {
 export default function Listening({ nextSteps }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const { data: dataQuestion } = useQuery({
+    queryKey: ['questionList'],
+    queryFn: () => examApi.getExamDetail('6541e1106580b32bd7dd8f14'),
+  })
+
+  const dataListQuestion = dataQuestion?.data.questionsDetail
+
+  console.log(dataListQuestion, 'dataQuestiondataQuestion')
+
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -52,11 +61,6 @@ export default function Listening({ nextSteps }: Props) {
   //   nextSteps(3)
   // }
 
-  const { data: dataQuestion } = useQuery({
-    queryKey: ['questionList'],
-    queryFn: () => examApi.getExamDetail('6541de0c89f61e825108a981'),
-  })
-
   console.log(dataQuestion, 'dataQuestiondataQuestion')
 
   return (
@@ -76,7 +80,7 @@ export default function Listening({ nextSteps }: Props) {
         <Flex gap={'large'}>
           <Logo size={sm ? 115 : undefined} />
           <Flex vertical gap={'small'}>
-            <h3>Part 1</h3>
+            <h3>Listening</h3>
             <p>Listen to the audio and answer questions below.</p>
           </Flex>
         </Flex>
@@ -96,6 +100,29 @@ export default function Listening({ nextSteps }: Props) {
       >
         Your browser does not support the audio element.
       </audio>
+
+      <div className='border-2-div'>
+        {dataListQuestion &&
+          dataListQuestion?.length &&
+          dataListQuestion?.map((item, index) => (
+            <>
+              <p
+                style={{
+                  marginTop: '20px',
+                  fontWeight: '700',
+                }}
+              >
+                Câu số {index + 1}
+              </p>
+              <div className='html-ques-choice' dangerouslySetInnerHTML={{ __html: item?.question }}></div>
+              {item?.choices?.map((choice) => (
+                <>
+                  <Button>{choice?.answer}</Button>
+                </>
+              ))}
+            </>
+          ))}
+      </div>
     </div>
   )
 }

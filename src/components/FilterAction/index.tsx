@@ -23,6 +23,8 @@ type Props = {
   className?: string
   filterQuery?: object
   checkQuery?: boolean | any
+  sort?: object
+  initFilter?: any
 }
 
 const FilterAction = (props: Props) => {
@@ -38,6 +40,10 @@ const FilterAction = (props: Props) => {
     className,
     filterQuery,
     checkQuery,
+    sort = {
+      createdAt: '-1',
+    },
+    initFilter = null,
   } = props
 
   const [form] = Form.useForm()
@@ -49,34 +55,46 @@ const FilterAction = (props: Props) => {
     options: {
       limit,
       page: page || 1,
-      sort: {
-        createdAt: '-1',
-      },
+      sort,
     },
   })
+
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af',
-      })
+      return categoryApi.getCategories({ parentId: null })
     },
   })
+  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
 
-  const subjectList = categoriesData?.data?.docs?.map((sj) => ({
-    value: sj._id,
-    label: sj.name,
-  }))
+  const subjectList = coursesList?.children?.map((sj) => {
+    return {
+      value: sj._id,
+      label: sj.name,
+    }
+  })
 
   const onChangeFilter = () => {
-    const { categoryId, plan, viewCountDownCount, type, keyword, skill, difficulty, score, status, createdAt } =
-      form.getFieldsValue()
+    const {
+      categoryId,
+      plan,
+      viewCountDownCount,
+      type,
+      keyword,
+      skill,
+      skillName,
+      difficulty,
+      point,
+      status,
+      createdAt,
+    } = form.getFieldsValue()
 
     const body = {
+      ...initFilter,
       type,
       skill,
+      skillName,
       difficulty,
-      score,
       categoryId,
       plan,
       status,
@@ -84,11 +102,13 @@ const FilterAction = (props: Props) => {
     }
 
     setFilterData({
-      filterQuery: { ...filterQuery, ...body },
+      filterQuery: { ...body, ...filterQuery },
       options: {
         limit,
         page,
         sort: {
+          ...sort,
+          point,
           createdAt,
           countAsseslgent: viewCountDownCount === 'highestRating' ? -1 : undefined,
           countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
@@ -106,6 +126,7 @@ const FilterAction = (props: Props) => {
         options: {
           page,
           ...prev?.options,
+          sort,
         },
       }
     })
@@ -113,23 +134,25 @@ const FilterAction = (props: Props) => {
 
   useEffect(() => {
     setFilterData({
-      filterQuery: filterQuery || {},
+      filterQuery: { ...filterQuery, ...initFilter } || {},
       options: {
         limit,
         page,
-        sort: {
-          createdAt: '-1',
-        },
+        sort,
       },
     })
   }, [page, checkQuery])
+
+  useEffect(() => {
+    form.setFieldsValue({ skillName: initFilter?.skillName })
+  }, [])
 
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
     queryFn: () => {
       return apiFind(filterData)
     },
-    enabled: checkQuery ? checkQuery : true,
+    enabled: initFilter ? Boolean(initFilter) : Boolean(checkQuery) || true,
   })
 
   useEffect(() => {
@@ -171,23 +194,51 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
-                  <Select
-                    placeholder='Đánh giá'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'highestRating',
-                        label: 'Đánh giá tốt nhất',
-                      },
-                      {
-                        value: 'highestParticipant',
-                        label: 'Đánh giá nhiều nhất',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+                {type === 'test' ? (
+                  <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
+                    <Select
+                      placeholder='Loại kỹ năng'
+                      allowClear
+                      onChange={onChangeFilter}
+                      options={[
+                        {
+                          value: 'READING',
+                          label: 'Đọc',
+                        },
+                        {
+                          value: 'LISTENING',
+                          label: 'Nghe',
+                        },
+                        {
+                          value: 'WRITING',
+                          label: 'Viết',
+                        },
+                        {
+                          value: 'SPEAKING',
+                          label: 'Nói',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                ) : (
+                  <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
+                    <Select
+                      placeholder='Đánh giá'
+                      allowClear
+                      onChange={onChangeFilter}
+                      options={[
+                        {
+                          value: 'highestRating',
+                          label: 'Đánh giá tốt nhất',
+                        },
+                        {
+                          value: 'highestParticipant',
+                          label: 'Đánh giá nhiều nhất',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                )}
                 <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
                   <Select
                     placeholder='Trạng thái'
@@ -321,18 +372,18 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='score' style={{ width: lg ? '100%' : 140 }}>
+                <Form.Item name='point' style={{ width: lg ? '100%' : 140 }}>
                   <Select
                     placeholder='Điểm số'
                     allowClear
                     onChange={onChangeFilter}
                     options={[
                       {
-                        value: '-1',
+                        value: '1',
                         label: 'Từ thấp đến cao',
                       },
                       {
-                        value: '1',
+                        value: '-1',
                         label: 'Từ cao đến thấp',
                       },
                     ]}

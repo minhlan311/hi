@@ -116,11 +116,14 @@ const MentorQuestions = () => {
     setTabChange(e)
   }
 
+  const uniqueSkills = [...new Set(questionsSelectCallback?.docs?.map((item) => item.skill))]
+
   const handleSave = () => {
     if (examDetail) {
       const payload = {
         id: examDetail._id,
         questions: questionsSelect,
+        skillName: uniqueSkills,
       }
 
       examMutation.mutate(payload as unknown as any)
@@ -268,11 +271,15 @@ const MentorQuestions = () => {
               type='question'
               apiFind={questionApi.findQuestion}
               callBackData={setQuestionsCallback}
-              filterQuery={{ categoryId: examDetail.categoryId, createdById: myQues ? profile._id : undefined }}
+              filterQuery={{
+                categoryId: examDetail.categoryId,
+                createdById: myQues ? profile._id : undefined,
+                typeQuestion: examDetail.type,
+                skill: examDetail.skillName,
+              }}
               limit={10}
               page={current}
               keyFilter='questionsBank'
-              checkQuery={tabChange === 'questionsBank' || myQues}
               addOnButton={
                 <Space className={css.mb}>
                   <ButtonCustom
@@ -389,6 +396,7 @@ const MentorQuestions = () => {
         open={open}
         questionData={questionUpdate ? questionUpdate : null}
         categoryId={examDetail ? examDetail.categoryId : ''}
+        typeQuestion={examDetail?.type as 'TEST' | 'QUIZ'}
         setOpen={setOpen}
         setQuestionData={setQuestionUpdate}
         setLoading={setLoading}

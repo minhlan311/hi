@@ -49,7 +49,7 @@ const FormControls = (props: Props) => {
   useEffect(() => {
     if (options) setOptionsList(options)
   }, [])
-  const [values, setValues] = useState<any[] | any>()
+  const [values, setValues] = useState<any[] | any>(control === 'checkBox' ? [0] : '')
 
   useEffect(() => {
     if (control === 'checkBox') {
