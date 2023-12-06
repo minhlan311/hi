@@ -29,6 +29,7 @@ export type SkillType = 'READING' | 'LISTENING' | 'WRITING' | 'SPEAKING' | strin
 export interface Skill {
   _id: string
   id: string
+  createdById?: string
   categoryId: string
   testId?: string
   skill: SkillType
@@ -36,7 +37,7 @@ export interface Skill {
   description: string
   url?: string[]
   questions?: string[]
-  countQuestions: number
+  countQuestions: number | any
 }
 export interface ExamState {
   _id: string

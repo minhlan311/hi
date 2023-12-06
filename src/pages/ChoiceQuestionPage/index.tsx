@@ -189,9 +189,9 @@ const ChoiceQuestionPage = () => {
                           <Space>
                             {item.skillName?.length > 0 && (
                               <TagCustom
+                                intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
                                 intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
                                 intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
-                                intColor={['green', 'blue', 'gray', 'orange']}
                                 content={item.skillName}
                               ></TagCustom>
                             )}

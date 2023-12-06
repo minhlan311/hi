@@ -279,6 +279,18 @@ table {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+  figure,
+  img {
+    display: none;
+  }
+}
+
+.dangerHTMLImg {
+  figure,
+  img {
+    width: 100% !important;
+    padding: 10px 0;
+  }
 }
 
 .userContainer {
