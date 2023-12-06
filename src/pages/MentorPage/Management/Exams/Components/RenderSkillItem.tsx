@@ -130,7 +130,7 @@ const RenderSkillItem = ({
                             description={
                               <div
                                 dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLTwoLine'
+                                className='dangerHTMLFourLine'
                               ></div>
                             }
                           ></Card.Meta>
@@ -179,7 +179,7 @@ const RenderSkillItem = ({
                             description={
                               <div
                                 dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLTwoLine'
+                                className='dangerHTMLFourLine'
                               ></div>
                             }
                           ></Card.Meta>

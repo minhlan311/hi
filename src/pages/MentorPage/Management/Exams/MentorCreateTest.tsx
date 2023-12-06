@@ -50,7 +50,7 @@ const MentorCreateTest = () => {
       if (typeAction === 'createTest') localStorage.setItem('createTest', data.data._id)
       if (current === 0) setCurrent(current + 1)
     },
-    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
+    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Tiêu đề đã tồn tại' }),
   })
   const [skillSelected, setSkillSelected] = useState<string[]>([])
 
