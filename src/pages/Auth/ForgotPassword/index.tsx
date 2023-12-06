@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
 import { REGEX_PATTERN } from '@/constants/utils'
+import { useMutation } from '@tanstack/react-query'
 import { Button, Form, Input, Space } from 'antd'
 import { Link } from 'react-router-dom'
 
@@ -8,8 +9,15 @@ const ForgotPassword = () => {
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    authApi.forgot(values)
+    mutate.mutate(values.account)
   }
+
+  const mutate = useMutation({
+    mutationFn: (username: string) => authApi.forgot(username),
+    onSuccess: (data) => {
+      console.log(data, 'data')
+    },
+  })
 
   return (
     <Form form={form} name='forgot' onFinish={onFinish} layout='vertical'>

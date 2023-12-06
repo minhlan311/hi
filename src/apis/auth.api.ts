@@ -25,8 +25,8 @@ const authApi = {
   },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  forgot(data: any) {
-    return http.post<SuccessResponse<UserState[]>>(ENDPOINT.LOGIN, data)
+  forgot(username: string) {
+    return http.put<SuccessResponse<UserState[]>>(ENDPOINT.FORGOT_PASSWORD + username)
   },
 }
 
