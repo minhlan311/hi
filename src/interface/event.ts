@@ -52,7 +52,9 @@ export interface EventState {
   updatedAt: string
   classData: ClassState
   studentList: UserState
+  schedules: number[]
   testData: TestState
+  isRepeat: boolean
   id: string
 }
 

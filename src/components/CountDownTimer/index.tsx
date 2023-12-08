@@ -1,9 +1,9 @@
+import { Space } from 'antd'
+import moment from 'moment-timezone'
+import React, { useEffect, useState } from 'react'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import FlipCountdown from './FlipCountdown'
-import moment from 'moment-timezone'
 import TextCountdown from './TextCountdown'
-import { Space } from 'antd'
-import React, { useEffect, useState } from 'react'
 
 type Props = {
   timeTillDate?: string
@@ -17,6 +17,7 @@ type Props = {
   start?: boolean
   localId?: string
   callbackTimeEnd?: React.Dispatch<React.SetStateAction<number>>
+  onListenEvent?: () => void
 }
 
 const CountDownTimer = (props: Props) => {
@@ -32,12 +33,13 @@ const CountDownTimer = (props: Props) => {
     start = true,
     localId,
     callbackTimeEnd,
+    onListenEvent,
   } = props
   const now = moment()
 
   const minutesInit = timeTillDate ? moment(timeTillDate).diff(now, 'seconds') : initTime && initTime * 60
-  const [countdown, setCountdown] = useState(minutesInit || 0)
-  const [isRunning, setIsRunning] = useState(false)
+  const [countdown, setCountdown] = useState<number>(minutesInit || 0)
+  const [isRunning, setIsRunning] = useState<boolean>(false)
 
   const [stopedTime, setStopedTime] = useState<number>(0)
   useEffect(() => {
@@ -89,6 +91,11 @@ const CountDownTimer = (props: Props) => {
 
   useEffect(() => {
     setStopedTime(countdown)
+
+    if (countdown === 0) {
+      onListenEvent && onListenEvent()
+      callbackTimeEnd && callbackTimeEnd(0)
+    }
   }, [countdown])
 
   return (

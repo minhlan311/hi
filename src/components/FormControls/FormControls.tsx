@@ -23,6 +23,7 @@ type Props = {
   md?: number
   label?: string
   value?: any
+  contentChecked?: React.ReactNode | string
   callbackValue?: React.Dispatch<React.SetStateAction<string[]>>
 }
 
@@ -40,6 +41,7 @@ const FormControls = (props: Props) => {
     label,
     value,
     disabled,
+    contentChecked,
     callbackValue,
   } = props
 
@@ -52,9 +54,7 @@ const FormControls = (props: Props) => {
   const [values, setValues] = useState<any[] | any>(control === 'checkBox' ? [0] : '')
 
   useEffect(() => {
-    if (control === 'checkBox') {
-      if (value?.length > 0) setValues(value)
-    }
+    setValues(value)
   }, [value])
 
   if (checkAll) {
@@ -126,7 +126,6 @@ const FormControls = (props: Props) => {
               callbackValue && callbackValue(e.target.value)
               setValues(e.target.value)
             }}
-            value={values}
           >
             <Row gutter={gutter}>
               {optionsList.map((ots) => (
@@ -154,10 +153,13 @@ const FormControls = (props: Props) => {
             onChange={(e) => callbackValue && callbackValue(e.target.value)}
           >
             <Card
-              className={`${css.checkboxCard} ${disabled ? css.disabled : undefined} ${className}`}
+              className={`${css.checkboxCard} ${disabled ? css.disabled : ''} ${className} ${
+                contentChecked ? css.contentCheckedBorder : ''
+              }`}
               onClick={() => setIsCheck(!isCheck)}
               size='small'
             >
+              {contentChecked && <div className={css.contentChecked}>{contentChecked}</div>}
               <div dangerouslySetInnerHTML={{ __html: label as string }}></div>
             </Card>
           </Checkbox>

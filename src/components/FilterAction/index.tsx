@@ -177,67 +177,89 @@ const FilterAction = (props: Props) => {
                 <Form.Item name='categoryId' style={{ width: lg ? '100%' : 120 }}>
                   <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
                 </Form.Item>
-                <Form.Item name='plan'>
-                  <Select
-                    placeholder='Loại phí'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'FREE',
-                        label: 'Miễn phí',
-                      },
-                      {
-                        value: 'PREMIUM',
-                        label: 'Có phí',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+
                 {type === 'test' ? (
-                  <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
-                    <Select
-                      placeholder='Loại kỹ năng'
-                      allowClear
-                      onChange={onChangeFilter}
-                      options={[
-                        {
-                          value: 'READING',
-                          label: 'Đọc',
-                        },
-                        {
-                          value: 'LISTENING',
-                          label: 'Nghe',
-                        },
-                        {
-                          value: 'WRITING',
-                          label: 'Viết',
-                        },
-                        {
-                          value: 'SPEAKING',
-                          label: 'Nói',
-                        },
-                      ]}
-                    />
-                  </Form.Item>
+                  <>
+                    <Form.Item name='type' style={{ width: lg ? '100%' : 100 }}>
+                      <Select
+                        placeholder='Loại bài'
+                        allowClear
+                        onChange={onChangeFilter}
+                        options={[
+                          {
+                            value: 'QUIZ',
+                            label: 'Bài quiz',
+                          },
+                          {
+                            value: 'TEST',
+                            label: 'Bài test',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
+                      <Select
+                        placeholder='Loại kỹ năng'
+                        allowClear
+                        onChange={onChangeFilter}
+                        options={[
+                          {
+                            value: 'READING',
+                            label: 'Đọc',
+                          },
+                          {
+                            value: 'LISTENING',
+                            label: 'Nghe',
+                          },
+                          {
+                            value: 'WRITING',
+                            label: 'Viết',
+                          },
+                          {
+                            value: 'SPEAKING',
+                            label: 'Nói',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </>
                 ) : (
-                  <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
-                    <Select
-                      placeholder='Đánh giá'
-                      allowClear
-                      onChange={onChangeFilter}
-                      options={[
-                        {
-                          value: 'highestRating',
-                          label: 'Đánh giá tốt nhất',
-                        },
-                        {
-                          value: 'highestParticipant',
-                          label: 'Đánh giá nhiều nhất',
-                        },
-                      ]}
-                    />
-                  </Form.Item>
+                  <>
+                    <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
+                      <Select
+                        placeholder='Đánh giá'
+                        allowClear
+                        onChange={onChangeFilter}
+                        options={[
+                          {
+                            value: 'highestRating',
+                            label: 'Đánh giá tốt nhất',
+                          },
+                          {
+                            value: 'highestParticipant',
+                            label: 'Đánh giá nhiều nhất',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    <Form.Item name='plan'>
+                      <Select
+                        placeholder='Loại phí'
+                        allowClear
+                        onChange={onChangeFilter}
+                        options={[
+                          {
+                            value: 'FREE',
+                            label: 'Miễn phí',
+                          },
+                          {
+                            value: 'PREMIUM',
+                            label: 'Có phí',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </>
                 )}
                 <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
                   <Select
@@ -326,31 +348,7 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='skill' style={{ width: lg ? '100%' : 120 }}>
-                  <Select
-                    placeholder='Loại kỹ năng'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'READING',
-                        label: 'Đọc',
-                      },
-                      {
-                        value: 'LISTENING',
-                        label: 'Nghe',
-                      },
-                      {
-                        value: 'WRITING',
-                        label: 'Viết',
-                      },
-                      {
-                        value: 'SPEAKING',
-                        label: 'Nói',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+
                 <Form.Item name='difficulty' style={{ width: lg ? '100%' : 87 }}>
                   <Select
                     placeholder='Độ khó'
