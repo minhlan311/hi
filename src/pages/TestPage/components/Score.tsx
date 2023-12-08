@@ -2,7 +2,6 @@
 import useResponsives from '@/hooks/useResponsives'
 import { ExamResultsState } from '@/interface/exam'
 import { Progress, Row, Space, Table } from 'antd'
-import moment from 'moment-timezone'
 import { BsCheckCircle, BsPencil } from 'react-icons/bs'
 import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
@@ -69,16 +68,13 @@ const Score = ({ data, testQuestion, time }: Props) => {
   ]
 
   const { md } = useResponsives()
+  const durations = data?.[0]?.time
 
-  const durations = moment.duration(data?.[0]?.time, 'minutes')
-  const minutes = Math.floor(durations.asMinutes())
-  const seconds = Math.floor(durations.asSeconds() % 60)
-
-  // Hiển thị dưới dạng mm:ss
-  const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+  const minutes = Math.floor(durations)
+  const seconds = Math.round((durations - minutes) * 60)
+  const formattedTime = `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
 
   const filteredColumns = columns.filter((column) => data?.[0]?.score?.some((item) => item.skill === column.dataIndex))
-  console.log(filteredColumns)
 
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>

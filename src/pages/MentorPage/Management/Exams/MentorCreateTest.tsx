@@ -135,7 +135,7 @@ const MentorCreateTest = () => {
           skillData={skillData?.data?.docs ? skillData?.data?.docs : []}
         />
       ),
-      disabled: skillSelected.length === 0,
+      disabled: skillSelected.length < 4,
     },
   ]
 
@@ -147,7 +147,7 @@ const MentorCreateTest = () => {
       <div>{stepItem[current]?.content}</div>
       <Space>
         {current >= 0 && current < stepItem.length - 1 && (
-          <ButtonCustom type='primary' onClick={() => next()}>
+          <ButtonCustom type='primary' onClick={() => next()} disabled={skillSelected.length < 4 && current > 0}>
             Tiếp theo
           </ButtonCustom>
         )}

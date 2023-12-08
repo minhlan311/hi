@@ -7,16 +7,15 @@ import LoadingCustom from '@/components/LoadingCustom'
 import PaginationCustom from '@/components/PaginationCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { ExamState, SkillType } from '@/interface/exam'
 import { useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Flex, Row, Space, Tooltip } from 'antd'
-import { useState } from 'react'
-import { TbPencilQuestion, TbUserEdit } from 'react-icons/tb'
+import { Card, Col, Flex, Row, Space } from 'antd'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import listeningBaner from '../../assets/images/banner/listening_banner.png'
 import multySkillBanner from '../../assets/images/banner/multi_skill_banner.jpg'
-import quizBanner from '../../assets/images/banner/quiz_banner.jpg'
 import readingBanner from '../../assets/images/banner/reading_banner.png'
 import speakingBanner from '../../assets/images/banner/speaking_banner.png'
 import writingBanner from '../../assets/images/banner/writing_banner.png'
@@ -24,8 +23,96 @@ import css from './styles.module.scss'
 
 const { Meta } = Card
 
-const ChoiceQuestionPage = () => {
+const RenderItem = ({ item, courses }: { item: ExamState; courses: any }) => {
   const navigate = useNavigate()
+  const { profile } = useContext(AppContext)
+  const filteredData = item.usersDoned.filter((i) => i.userId === profile._id)
+
+  const maxPoint = Math.max(...filteredData.map((i) => i.point))
+
+  const elementWithMaxPoint = filteredData.find((i) => i.point === maxPoint)
+
+  const { sm } = useResponsives()
+
+  return (
+    <Col span={24}>
+      <Card
+        hoverable
+        // cover={
+        //   <div className={`${css.quizBanner}`}>
+        //     <img
+        //       src={
+        //         item?.coverUrl ? `${import.meta.env.VITE_FILE_ENDPOINT}/${item?.coverUrl}` : quizBanner
+        //       }
+        //       alt={item.name}
+        //       height={250}
+        //     ></img>
+        //   </div>
+        // }
+        size='small'
+      >
+        <Flex align='center' justify='space-between'>
+          <Row gutter={[12, 12]}>
+            <Col span={24}>
+              <Meta title={item.name}></Meta>
+            </Col>
+            <Col span={24}>
+              <Flex align='center' gap={!sm ? 12 : 0}>
+                {!sm && (
+                  <Space align='center'>
+                    <img
+                      src={`${import.meta.env.VITE_FILE_ENDPOINT}/${courses?.children?.find(
+                        (sj: any) => sj._id === item.categoryId,
+                      )?.icon}`}
+                      width='30'
+                    ></img>
+                    {courses?.children?.find((sj: any) => sj._id === item.categoryId)?.name}
+                  </Space>
+                )}
+                {item.skillName?.length > 0 && (
+                  <TagCustom
+                    intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
+                    intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
+                    intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
+                    content={item.skillName}
+                  ></TagCustom>
+                )}
+                {elementWithMaxPoint && (
+                  <>
+                    <TagCustom
+                      intColor={['success', 'error']}
+                      intArrType={['PASS', 'FAIL']}
+                      intAlternativeType={['Qua', 'Không qua']}
+                      content={elementWithMaxPoint.status}
+                    ></TagCustom>
+
+                    <TagCustom color='yellow' content={`${elementWithMaxPoint.point} điểm`}></TagCustom>
+                  </>
+                )}
+              </Flex>
+            </Col>
+          </Row>
+          <ButtonCustom
+            type={elementWithMaxPoint ? 'default' : 'primary'}
+            onClick={() => {
+              navigate('/lam-bai-thi-online', {
+                state: {
+                  testId: item._id,
+                  testTime: 300,
+                  addTime: 0,
+                },
+              })
+            }}
+          >
+            {elementWithMaxPoint ? 'Làm lại' : 'Làm bài'}
+          </ButtonCustom>
+        </Flex>
+      </Card>
+    </Col>
+  )
+}
+
+const ChoiceQuestionPage = () => {
   const queryClient = useQueryClient()
   const [skillChange, setSkillChange] = useState<SkillType>()
   const [examData, setExamData] = useState<{
@@ -141,83 +228,8 @@ const ChoiceQuestionPage = () => {
               {examData?.totalDocs === 0 ? (
                 <EmptyCustom description='Không có bài trắc nghiệm nào'></EmptyCustom>
               ) : (
-                <Row gutter={[24, 24]}>
-                  {examData?.docs.map((item) => (
-                    <Col span={24} md={12} lg={8} xl={6} key={item._id}>
-                      <Card
-                        hoverable
-                        cover={
-                          <div className={`${css.quizBanner}`}>
-                            <img
-                              src={
-                                item?.coverUrl ? `${import.meta.env.VITE_FILE_ENDPOINT}/${item?.coverUrl}` : quizBanner
-                              }
-                              alt={item.name}
-                              height={250}
-                            ></img>
-                          </div>
-                        }
-                        size='small'
-                      >
-                        <Space direction='vertical' className={'sp100'}>
-                          <Meta title={item.name}></Meta>
-                          <Space size='large'>
-                            <Space align='center'>
-                              <img
-                                src={`${import.meta.env.VITE_FILE_ENDPOINT}/${courses?.children?.find(
-                                  (sj: any) => sj._id === item.categoryId,
-                                )?.icon}`}
-                                width='30'
-                              ></img>
-                              {courses?.children?.find((sj: any) => sj._id === item.categoryId)?.name}
-                            </Space>
-
-                            <Tooltip title='Số câu hỏi'>
-                              <Space>
-                                <TbPencilQuestion />
-                                <b>{item.countQuestions}</b>
-                              </Space>
-                            </Tooltip>
-                            <Tooltip title='Số người đã làm'>
-                              <Space>
-                                <TbUserEdit />
-                                <b>{item.countUsersTested}</b>
-                              </Space>
-                            </Tooltip>
-                          </Space>
-
-                          <Space>
-                            {item.skillName?.length > 0 && (
-                              <TagCustom
-                                intColor={['#7555F2', '#F5C046', '#ee723f', '#44c4ab']}
-                                intArrType={['READING', 'LISTENING', 'WRITING', 'SPEAKING']}
-                                intAlternativeType={['Đọc', 'Nghe', 'Viết', 'Nói']}
-                                content={item.skillName}
-                              ></TagCustom>
-                            )}
-                          </Space>
-                          <Flex justify='space-between' align='center'>
-                            <p></p>
-                            <ButtonCustom
-                              type='primary'
-                              onClick={() => {
-                                navigate('/lam-bai-thi-online', {
-                                  state: {
-                                    testId: item._id,
-
-                                    testTime: 300,
-                                    addTime: 0,
-                                  },
-                                })
-                              }}
-                            >
-                              Làm thử ngay
-                            </ButtonCustom>
-                          </Flex>
-                        </Space>
-                      </Card>
-                    </Col>
-                  ))}
+                <Row gutter={[0, 12]}>
+                  {examData?.docs.map((item) => <RenderItem item={item} courses={courses} key={item._id} />)}
                 </Row>
               )}
             </div>
