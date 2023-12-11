@@ -164,9 +164,9 @@ const TestPage = () => {
 
   const handleNext = () => {
     form.submit()
+    setIsLoad(true)
 
     if (question && current < question.length - 1) {
-      setIsLoad(true)
       setTimeout(() => {
         setCurrent((prev) => prev + 1)
         setIsLoad(false)
@@ -174,7 +174,8 @@ const TestPage = () => {
     } else {
       setTimeout(() => {
         handleFinish()
-      }, 250)
+        setIsLoad(false)
+      }, 500)
     }
   }
 
@@ -252,7 +253,7 @@ const TestPage = () => {
 
             {startTest && !finishTest && (
               <>
-                <Col span={24} md={20} lg={18}>
+                <Col span={24} xl={20} lg={19}>
                   {md && (
                     <Row justify='space-between' align='bottom' className={css.testNav}>
                       <Col>
@@ -302,7 +303,7 @@ const TestPage = () => {
                     </LoadingCustom>
                   </Card>
                 </Col>
-                <Col span={24} md={4} lg={5} className={'sticky'} style={{ top: 100 }}>
+                <Col span={24} xl={4} lg={5} className={'sticky'} style={{ top: 100 }}>
                   {!md && (
                     <Space className={`sp100`} direction='vertical' size='large' align='center'>
                       <CountDownTimer
