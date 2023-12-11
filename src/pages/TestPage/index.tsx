@@ -106,7 +106,6 @@ const TestPage = () => {
         localStorage.removeItem(`${test._id}`)
       }
 
-      setStartTest(false)
       const newData = [data.data]
 
       setResultsData(newData as unknown as ExamResultsState[])
@@ -139,12 +138,13 @@ const TestPage = () => {
   }, [testData, finishTest, isLoad])
 
   const handleFinish = () => {
+    setStartTest(false)
     setHandleScore(true)
     localAction(testData?.data._id as string, null, 'delete')
   }
 
   useEffect(() => {
-    if (handleScore && !finishTest && time) {
+    if (handleScore && !finishTest) {
       setTimeout(() => {
         const payload = {
           _id: testData?.data._id,
@@ -154,7 +154,7 @@ const TestPage = () => {
         testMutation.mutate(payload as unknown as any)
       }, 150)
     }
-  }, [handleScore, time])
+  }, [handleScore, finishTest, time])
 
   const handleReset = () => {
     setFinishTest(false)
