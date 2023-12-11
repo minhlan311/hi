@@ -23,7 +23,7 @@ import css from './styles.module.scss'
 
 const { Meta } = Card
 
-const RenderItem = ({ item, courses }: { item: ExamState; courses: any }) => {
+const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any; initType: 'TEST' | 'QUIZ' }) => {
   const navigate = useNavigate()
   const { profile } = useContext(AppContext)
   const filteredData = item.usersDoned.filter((i) => i.userId === profile._id)
@@ -95,13 +95,15 @@ const RenderItem = ({ item, courses }: { item: ExamState; courses: any }) => {
           <ButtonCustom
             type={elementWithMaxPoint ? 'default' : 'primary'}
             onClick={() => {
-              navigate('/lam-bai-thi-online', {
-                state: {
-                  testId: item._id,
-                  testTime: 300,
-                  addTime: 0,
-                },
-              })
+              initType === 'TEST'
+                ? navigate(`/lam-bai-thi/${item._id}`)
+                : navigate('/lam-bai-thi-online', {
+                    state: {
+                      testId: item._id,
+                      testTime: 300,
+                      addTime: 0,
+                    },
+                  })
             }}
           >
             {elementWithMaxPoint ? 'Làm lại' : 'Làm bài'}
@@ -210,7 +212,7 @@ const ChoiceQuestionPage = () => {
             apiFind={examApi.findExam}
             type='test'
             keyFilter='examFind'
-            filterQuery={{ type: 'QUIZ' }}
+            filterQuery={{ type: skillChange !== 'ALL' ? 'QUIZ' : 'TEST' }}
             callBackData={setExamData}
             setLoading={setIsLoad}
             page={pageSize}
@@ -229,7 +231,14 @@ const ChoiceQuestionPage = () => {
                 <EmptyCustom description='Không có bài trắc nghiệm nào'></EmptyCustom>
               ) : (
                 <Row gutter={[0, 12]}>
-                  {examData?.docs.map((item) => <RenderItem item={item} courses={courses} key={item._id} />)}
+                  {examData?.docs.map((item) => (
+                    <RenderItem
+                      item={item}
+                      courses={courses}
+                      key={item._id}
+                      initType={skillChange !== 'ALL' ? 'QUIZ' : 'TEST'}
+                    />
+                  ))}
                 </Row>
               )}
             </div>

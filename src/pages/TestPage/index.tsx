@@ -106,7 +106,6 @@ const TestPage = () => {
         localStorage.removeItem(`${test._id}`)
       }
 
-      setStartTest(false)
       const newData = [data.data]
 
       setResultsData(newData as unknown as ExamResultsState[])
@@ -139,12 +138,13 @@ const TestPage = () => {
   }, [testData, finishTest, isLoad])
 
   const handleFinish = () => {
+    setStartTest(false)
     setHandleScore(true)
     localAction(testData?.data._id as string, null, 'delete')
   }
 
   useEffect(() => {
-    if (handleScore && !finishTest && time) {
+    if (handleScore && !finishTest) {
       setTimeout(() => {
         const payload = {
           _id: testData?.data._id,
@@ -154,7 +154,7 @@ const TestPage = () => {
         testMutation.mutate(payload as unknown as any)
       }, 150)
     }
-  }, [handleScore, time])
+  }, [handleScore, finishTest, time])
 
   const handleReset = () => {
     setFinishTest(false)
@@ -164,9 +164,9 @@ const TestPage = () => {
 
   const handleNext = () => {
     form.submit()
+    setIsLoad(true)
 
     if (question && current < question.length - 1) {
-      setIsLoad(true)
       setTimeout(() => {
         setCurrent((prev) => prev + 1)
         setIsLoad(false)
@@ -174,7 +174,8 @@ const TestPage = () => {
     } else {
       setTimeout(() => {
         handleFinish()
-      }, 250)
+        setIsLoad(false)
+      }, 500)
     }
   }
 
@@ -252,7 +253,7 @@ const TestPage = () => {
 
             {startTest && !finishTest && (
               <>
-                <Col span={24} md={20} lg={18}>
+                <Col span={24} xl={20} lg={19}>
                   {md && (
                     <Row justify='space-between' align='bottom' className={css.testNav}>
                       <Col>
@@ -302,7 +303,7 @@ const TestPage = () => {
                     </LoadingCustom>
                   </Card>
                 </Col>
-                <Col span={24} md={4} lg={5} className={'sticky'} style={{ top: 100 }}>
+                <Col span={24} xl={4} lg={5} className={'sticky'} style={{ top: 100 }}>
                   {!md && (
                     <Space className={`sp100`} direction='vertical' size='large' align='center'>
                       <CountDownTimer
