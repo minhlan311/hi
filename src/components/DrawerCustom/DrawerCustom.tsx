@@ -51,9 +51,7 @@ const DrawerCustom = (props: Props) => {
             onFinish()
           }}
           style={{ padding: 12 }}
-        >
-          ca
-        </ButtonCustom>
+        ></ButtonCustom>
       }
       {children}
     </Drawer>

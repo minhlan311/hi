@@ -196,7 +196,13 @@ export default function Navigation({ user }: Props) {
           <MenuNav user={user} />
         </AffixCustom>
       )}
-      <DrawerCustom open={open} onClose={() => setOpen(false)} placement='left' width={sm ? '80vw' : '30vw'}>
+      <DrawerCustom
+        open={open}
+        onClose={setOpen}
+        onFinish={() => setOpen(false)}
+        placement='left'
+        width={sm ? '80vw' : '30vw'}
+      >
         <MenuNav user={user} type='subMenu' />
       </DrawerCustom>
     </div>
