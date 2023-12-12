@@ -6,12 +6,13 @@ import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import { Attendance, EventState } from '@/interface/event'
 import { UserState } from '@/interface/user'
 import { useQuery } from '@tanstack/react-query'
-import { Col, Descriptions, Row, Space, Table } from 'antd'
+import { Col, Descriptions, Progress, Row, Space, Table } from 'antd'
 import moment from 'moment-timezone'
 import { useState } from 'react'
 import { TbListDetails } from 'react-icons/tb'
 import { Link, useLocation } from 'react-router-dom'
 import AttendanceDetail from './AttendanceDetail'
+import LoadingCustom from '@/components/LoadingCustom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const ClassDetail = () => {
@@ -21,7 +22,7 @@ const ClassDetail = () => {
 
   const [eventData, setEventData] = useState<{ docs: EventState[]; limit: number; page: number; totalDocs: number }>()
   const [attendanceData, setAttendanceData] = useState<{ name: string; data: Attendance[] }>()
-  const { data: classData } = useQuery({
+  const { data: classData, isLoading } = useQuery({
     queryKey: ['classOne', classId],
     queryFn: () => classApi.getOneClass(classId),
     enabled: Boolean(classId),
@@ -66,6 +67,11 @@ const ClassDetail = () => {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+    },
+    {
+      title: 'Lộ trình học',
+      key: 'note',
+      render: (_: any, _a: any, index: number) => <Progress percent={index * 100} />,
     },
   ]
 
@@ -127,91 +133,99 @@ const ClassDetail = () => {
   ]
 
   return (
-    <Row>
-      <Col span={24}>
-        <Space direction='vertical' size='large'>
-          <h2>{data?.title}</h2>
-          <Descriptions column={4}>
-            <Descriptions.Item label='Khóa học'>
-              <b>{data?.courseData?.name}</b>
-            </Descriptions.Item>
-            <Descriptions.Item label='Thời gian'>
-              <b>{`${moment(data?.startDate).format('DD/MM/YYYY')} - ${moment(data?.endDate).format('DD/MM/YYYY')}`}</b>
-            </Descriptions.Item>
-            <Descriptions.Item label='Sĩ số'>
-              <b>{data?.countStudents}</b>
-            </Descriptions.Item>
-            <Descriptions.Item label='Số buổi đã học'>
-              <b>{eventData?.docs.filter((item) => data?._id === item.classId && item.attendance.length > 0).length}</b>
-            </Descriptions.Item>
-          </Descriptions>
-        </Space>
-      </Col>
-      <Col span={24}>
-        <TabsCustom
-          data={[
-            {
-              name: 'Danh sách lớp',
-              id: 'studenList',
-              children: (
-                <Table
-                  bordered
-                  scroll={{
-                    x: 1024,
-                  }}
-                  dataSource={data?.studentList}
-                  columns={tableColumns}
-                  pagination={{
-                    current: pages,
-                    pageSize: 10,
-                    total: data?.studentList?.length,
-                    onChange: (p) => setPages(p),
-                  }}
-                />
-              ),
-            },
-            {
-              name: 'Học trực tuyến',
-              id: 'online',
-              children: (
-                <Space direction='vertical' className='sp100'>
-                  <FilterAction
-                    type='event'
-                    apiFind={eventApi.getEvent}
-                    keyFilter='eventsData'
-                    filterQuery={{ classId: data?._id }}
-                    sort={{ start: -1 }}
-                    checkQuery={Boolean(data?._id)}
-                    callBackData={setEventData}
-                    page={page}
-                    limit={10}
-                  ></FilterAction>
+    <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
+      <Row>
+        <Col span={24}>
+          <Space direction='vertical' size='large'>
+            <h2>{data?.title}</h2>
+            <Descriptions column={4}>
+              <Descriptions.Item label='Khóa học'>
+                <b>{data?.courseData?.name}</b>
+              </Descriptions.Item>
+              <Descriptions.Item label='Thời gian'>
+                <b>{`${moment(data?.startDate).format('DD/MM/YYYY')} - ${moment(data?.endDate).format(
+                  'DD/MM/YYYY',
+                )}`}</b>
+              </Descriptions.Item>
+              <Descriptions.Item label='Sĩ số'>
+                <b>{data?.countStudents}</b>
+              </Descriptions.Item>
+
+              <Descriptions.Item label='Số buổi đã học'>
+                <b>
+                  {eventData &&
+                    eventData.docs?.filter((item) => data?._id === item.classId && item.attendance.length > 0).length}
+                </b>
+              </Descriptions.Item>
+            </Descriptions>
+          </Space>
+        </Col>
+        <Col span={24}>
+          <TabsCustom
+            data={[
+              {
+                name: 'Học trực tuyến',
+                id: 'online',
+                children: (
+                  <Space direction='vertical' className='sp100'>
+                    <FilterAction
+                      type='event'
+                      apiFind={eventApi.getEvent}
+                      keyFilter='eventsData'
+                      filterQuery={{ classId: data?._id }}
+                      sort={{ start: -1 }}
+                      checkQuery={Boolean(data?._id)}
+                      callBackData={setEventData}
+                      page={page}
+                      limit={10}
+                    ></FilterAction>
+                    <Table
+                      bordered
+                      scroll={{
+                        x: 1024,
+                      }}
+                      dataSource={eventData?.docs}
+                      columns={attendanceColumns}
+                      pagination={{
+                        current: eventData?.page,
+                        pageSize: eventData?.limit,
+                        total: eventData?.totalDocs,
+                        onChange: (p) => setPage(p),
+                      }}
+                    />
+                  </Space>
+                ),
+              },
+              {
+                name: 'Danh sách lớp',
+                id: 'studenList',
+                children: (
                   <Table
                     bordered
                     scroll={{
                       x: 1024,
                     }}
-                    dataSource={eventData?.docs}
-                    columns={attendanceColumns}
+                    dataSource={data?.studentList}
+                    columns={tableColumns}
                     pagination={{
-                      current: eventData?.page,
-                      pageSize: eventData?.limit,
-                      total: eventData?.totalDocs,
-                      onChange: (p) => setPage(p),
+                      current: pages,
+                      pageSize: 10,
+                      total: data?.studentList?.length,
+                      onChange: (p) => setPages(p),
                     }}
                   />
-                </Space>
-              ),
-            },
-          ]}
-        ></TabsCustom>
-      </Col>
-      <AttendanceDetail
-        isOpen={openDetail}
-        setOpen={setOpenDetail}
-        attendanceList={attendanceData ? attendanceData : null}
-      ></AttendanceDetail>
-    </Row>
+                ),
+              },
+            ]}
+          ></TabsCustom>
+        </Col>
+        <AttendanceDetail
+          isOpen={openDetail}
+          setOpen={setOpenDetail}
+          attendanceList={attendanceData ? attendanceData : null}
+        ></AttendanceDetail>
+      </Row>
+    </LoadingCustom>
   )
 }
 
