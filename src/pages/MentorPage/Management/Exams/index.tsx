@@ -18,9 +18,10 @@ import DrawerExam from './Drawer/DrawerExam'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
   const [open, setOpen] = useState<boolean>(false)
-  const [data, setData] = useState<{ docs: ExamState[] }>()
+  const [data, setData] = useState<{ docs: ExamState[]; limit: number; page: number; totalDocs: number }>()
   const [loading, setLoading] = useState<boolean>(true)
   const [examData, setExamData] = useState<ExamState>()
+  const [page, setPage] = useState<number>(1)
   const navitage = useNavigate()
 
   const queryClient = useQueryClient()
@@ -241,6 +242,8 @@ const MentorExams = () => {
         callBackData={setData}
         setLoading={setLoading}
         filterQuery={{ createdById: profile._id }}
+        limit={10}
+        page={page}
       />
       <Table
         columns={columns}
@@ -249,6 +252,12 @@ const MentorExams = () => {
         bordered
         scroll={{
           x: 1024,
+        }}
+        pagination={{
+          current: data?.page,
+          pageSize: data?.limit,
+          total: data?.totalDocs,
+          onChange: (p) => setPage(p),
         }}
       />
       <DrawerExam

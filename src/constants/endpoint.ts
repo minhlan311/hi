@@ -95,6 +95,7 @@ export const ENDPOINT = {
   // :::::::::::::::::::: EVENT PATH :::::::::::::::::::::
   FIND_EVENT_PATH: '/event/find',
   EVENT_PATH: '/event/',
+  EVENT_ATTENDANCE_PATH: '/event/attendance/',
 
   // :::::::::::::::::::: TOPIC PATH :::::::::::::::::::::
   FIND_TOPIC_PATH: '/edu/topics/find',

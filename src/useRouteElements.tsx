@@ -19,7 +19,7 @@ import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
 import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
-import CLassCourse from './pages/MentorPage/Management/ClassCourse/CLassCourse.tsx'
+
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
@@ -32,6 +32,8 @@ import QADetail from './pages/QAPage/QAPageDetail.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
+import ClassManage from './pages/MentorPage/Management/ClassCourse/index.tsx'
+import ClassDetail from './pages/MentorPage/Management/ClassCourse/components/ClassDetail.tsx'
 
 const MentorExamDetail = lazy(() => import('./pages/MentorPage/Management/Exams/ExamDetail/index.tsx'))
 const Courses = lazy(() => import('./pages/CoursesPage/Courses.tsx'))
@@ -145,7 +147,15 @@ export default function useRouteElements() {
           path: PATH.MENTOR_CLASS,
           element: (
             <MentorLayout user={profile} title='Quản lý lớp học'>
-              <CLassCourse />
+              <ClassManage />
+            </MentorLayout>
+          ),
+        },
+        {
+          path: PATH.MENTOR_CLASS_DETAIL,
+          element: (
+            <MentorLayout user={profile} title=''>
+              <ClassDetail />
             </MentorLayout>
           ),
         },

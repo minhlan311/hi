@@ -54,6 +54,11 @@ const EventDetailModal = (props: Props) => {
       setOpen(false)
     },
   })
+
+  const attendanceMutation = useMutation({
+    mutationFn: (data: any) => eventApi.attendanceEvent(data),
+  })
+
   const { sm } = useResponsives()
 
   const { data: record } = useQuery({
@@ -165,7 +170,7 @@ const EventDetailModal = (props: Props) => {
                 <Descriptions.Item label='Giảng viên'>
                   <PopoverCustom type='showProfile' userData={eventDetail.classData?.owner} trigger='click'>
                     <ButtonCustom type='link' style={{ padding: 0, height: 0 }}>
-                      <b>{eventDetail.classData?.owner.fullName}</b>
+                      <b>{eventDetail?.owner.fullName}</b>
                     </ButtonCustom>
                   </PopoverCustom>
                 </Descriptions.Item>
@@ -190,7 +195,7 @@ const EventDetailModal = (props: Props) => {
                   <ButtonCustom
                     type='primary'
                     disabled={!between || endClass}
-                    onClick={() =>
+                    onClick={() => {
                       navigate('/lam-bai-thi-online', {
                         state: {
                           testId: eventDetail.testId,
@@ -199,7 +204,9 @@ const EventDetailModal = (props: Props) => {
                           addTime: examTime - closestTime.value,
                         },
                       })
-                    }
+
+                      attendanceMutation.mutate({ id: eventDetail._id, type: 'JOIN' })
+                    }}
                   >
                     Làm bài thi
                   </ButtonCustom>
@@ -207,7 +214,12 @@ const EventDetailModal = (props: Props) => {
                   <ButtonCustom
                     type='primary'
                     disabled={!between || endClass}
-                    href={`/live/#/${slugify(eventDetail.name, '_')}-${eventDetail._id}`}
+                    onClick={() => {
+                      attendanceMutation.mutate({ id: eventDetail._id, type: 'JOIN' })
+                      setTimeout(() => {
+                        window.location.href = `/live/#/${slugify(eventDetail.name, '_')}-${eventDetail._id}`
+                      }, 300)
+                    }}
                     linkTarget='_parent'
                   >
                     Tham gia

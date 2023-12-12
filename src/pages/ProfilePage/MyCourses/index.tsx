@@ -39,7 +39,7 @@ const MyCourses = ({ userId }: Props) => {
           />
         }
         size='small'
-        style={{ minHeight: 400 }}
+        style={{ minHeight: 405 }}
       >
         <Card.Meta
           title={

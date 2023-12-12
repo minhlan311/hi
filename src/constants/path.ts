@@ -36,6 +36,7 @@ export const PATH = {
   MY_COURSE: '/myCourse/',
   MENTOR_COURSES: '/mentor/courses',
   MENTOR_CLASS: '/mentor/class',
+  MENTOR_CLASS_DETAIL: '/mentor/class/:id',
   MENTOR_COURSES_CREATE: '/mentor/courses/create',
   MENTOR_COURSES_UPDATE: '/mentor/courses/update/:id',
   MENTOR_CALENDAR: '/mentor/calendar',
