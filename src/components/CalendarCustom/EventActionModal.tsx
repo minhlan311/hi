@@ -14,6 +14,7 @@ import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
 import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
 import useResponsives from '@/hooks/useResponsives'
+import { Class } from '@/types/class.type'
 
 type Props = {
   open: boolean
@@ -37,7 +38,7 @@ const EventActionModal = (props: Props) => {
   const [classSelect, setClassSelect] = useState()
   const [studentIds, setStudentIds] = useState<string[]>([])
 
-  const [classData, setClassData] = useState<any>()
+  const [classData, setClassData] = useState<Class[]>()
   const [initVal, setInitVal] = useState<any>()
 
   const queryClient = useQueryClient()
@@ -290,7 +291,7 @@ const EventActionModal = (props: Props) => {
                 searchKey='user'
                 apiFind={userApi.findUser}
                 filterQuery={{ _id: studentsId }}
-                defaultValue={eventDetail?.students}
+                defaultValue={studentsId ? studentsId : eventDetail?.students}
                 mode='multiple'
                 allowClear
                 selectAll

@@ -20,6 +20,9 @@ const eventApi = {
   updateEvent(body: any) {
     return http.put<EventState>(ENDPOINT.EVENT_PATH + body.id, body)
   },
+  attendanceEvent(body: any) {
+    return http.put<{ id: string; type: 'JOIN' | 'OUT' }>(ENDPOINT.EVENT_ATTENDANCE_PATH + body.id, body)
+  },
   getRecord(id: string) {
     return http.get<RecordState[]>(`https://api.hiblue.fun/recordings/${id}`)
   },

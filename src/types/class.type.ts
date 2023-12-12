@@ -1,3 +1,5 @@
+import { UserState } from '@/interface/user'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Class {
   createdById: string
@@ -7,17 +9,19 @@ export interface Class {
   description?: string
   startDate?: string
   endDate?: string
-  courseId?: {
+  courseData?: {
     name: string
     _id?: string
   }
   schedules?: string[]
   startAt?: string
   endAt?: string
-  course?: {
-    name?: string
-  }
-  limitStudent?: string
+  courseId?: string
+  limitStudent: number
+  countStudents: number
+  categoryId: string
+  students: string[]
+  studentList: UserState[]
 }
 export interface ClassList {
   _id: string

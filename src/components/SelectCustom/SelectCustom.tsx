@@ -123,7 +123,8 @@ const SelectCustom = (props: Props) => {
 
   useEffect(() => {
     if (defaultValue) setSelectedValues(defaultValue as unknown as any)
-  }, [defaultValue])
+    if (value && value?.length > 0) setSelectedValues(value as unknown as any)
+  }, [defaultValue, value])
 
   return type === 'search' ? (
     <Select
@@ -165,7 +166,7 @@ const SelectCustom = (props: Props) => {
         <Option
           value={item.value}
           label={
-            <Flex align='middle'>
+            <Flex align='center' gap={5}>
               {searchKey !== 'user' ? <p>{item.icon}</p> : null}
               <p className='dangerHTMLOneLine'>{item.label}</p>
             </Flex>
@@ -173,7 +174,7 @@ const SelectCustom = (props: Props) => {
           key={item.value}
           disabled={item.disabled}
         >
-          <Flex align='middle'>
+          <Flex align='center' gap={5}>
             {item.icon && <div style={{ display: 'flex' }}>{item.icon}</div>}
             <p className='dangerHTMLOneLine'>{item.label}</p>
           </Flex>

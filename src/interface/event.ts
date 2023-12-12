@@ -34,6 +34,13 @@ export interface EventSchedule {
   }
   state?: string
 }
+
+export interface Attendance {
+  userId: string
+  type: 'JOIN' | 'OUT'
+  timeJoin?: Date
+  timeOut?: Date
+}
 export interface EventState {
   _id: string
   createdById: string
@@ -55,6 +62,8 @@ export interface EventState {
   schedules: number[]
   testData: TestState
   isRepeat: boolean
+  owner: UserState
+  attendance: Attendance[]
   id: string
 }
 
