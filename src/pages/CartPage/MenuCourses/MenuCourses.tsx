@@ -89,7 +89,7 @@ export default function MenuCourses({ coursesData, setPriceParent, setselectLeng
             }}
             type={allSelected ? 'primary' : 'dashed'}
             onClick={toggleSelectAll}
-            className='dashed'
+            className='default'
           >
             <CheckOutlined /> Chọn tất cả
           </Button>
@@ -159,7 +159,7 @@ export default function MenuCourses({ coursesData, setPriceParent, setselectLeng
                   <Col span={2}>
                     <ButtonCustom
                       onClick={() => deleteCart(item?._id)}
-                      className='dashed'
+                      className='default'
                       type='dashed'
                       icon={<DeleteOutlined style={{ fontSize: '22px', marginTop: '3px' }} />}
                       size='large'

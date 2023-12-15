@@ -274,7 +274,7 @@ export default function ExamCourse({ data, name }: Props) {
                   <div>
                     <Button
                       type='dashed'
-                      className='dashed'
+                      className='default'
                       disabled={currentPage <= 0}
                       onClick={() => setCurrentPage(currentPage - 1)}
                     >
@@ -289,7 +289,7 @@ export default function ExamCourse({ data, name }: Props) {
                     ) : (
                       <Button
                         type='dashed'
-                        className='dashed'
+                        className='default'
                         disabled={currentPage >= questions.length - 1}
                         onClick={() => {
                           setCurrentPage(currentPage + 1)
@@ -318,7 +318,7 @@ export default function ExamCourse({ data, name }: Props) {
                     onClick={() => setShowDetails(!showDetails)}
                     style={{ marginTop: '20px', width: '150px' }}
                     type='dashed'
-                    className='dashed'
+                    className='default'
                   >
                     Xem chi tiết
                   </Button>

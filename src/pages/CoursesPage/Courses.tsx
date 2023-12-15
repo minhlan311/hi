@@ -57,7 +57,7 @@ export default function Courses() {
           <Row className={style.content}>
             {/* cột bên trái */}
             <Col xs={24} xl={18}>
-              <Detail data={dataCourse?.data} checkEnrolls={checkEnrolls}/>
+              <Detail data={dataCourse?.data} checkEnrolls={checkEnrolls} />
             </Col>
             {/* cột bên phải  */}
             {!lg ? (
@@ -82,6 +82,9 @@ export default function Courses() {
             >
               <LayoutGrid item={items} />
             </WrapMore> */}
+            <WrapMoreDetail>
+              <CommentDetail data={dataCourse?.data as any} />
+            </WrapMoreDetail>
             <div
               style={{
                 margin: '40px 10px',
@@ -93,9 +96,6 @@ export default function Courses() {
               </WrapMoreDetail>
             </div>
 
-            <WrapMoreDetail>
-              <CommentDetail data={dataCourse?.data as any} />
-            </WrapMoreDetail>
             <Feedback />
           </div>
           <div className={style.col22}>

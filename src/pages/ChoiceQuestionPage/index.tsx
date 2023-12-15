@@ -26,11 +26,11 @@ const { Meta } = Card
 const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any; initType: 'TEST' | 'QUIZ' }) => {
   const navigate = useNavigate()
   const { profile } = useContext(AppContext)
-  const filteredData = item.usersDoned.filter((i) => i.userId === profile._id)
+  const filteredData = item?.usersDoned?.filter((i) => i.userId === profile._id)
 
   const maxPoint = Math.max(...filteredData.map((i) => i.point))
 
-  const elementWithMaxPoint = filteredData.find((i) => i.point === maxPoint)
+  const elementWithMaxPoint = item?.usersDoned ? undefined : filteredData?.find((i) => i.point === maxPoint)
 
   const { sm } = useResponsives()
 
@@ -96,7 +96,7 @@ const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any
             type={elementWithMaxPoint ? 'default' : 'primary'}
             onClick={() => {
               initType === 'TEST'
-                ? navigate(`/lam-bai-thi/${item._id}`)
+                ? navigate(`/lam-bai-thi/${item?._id}`)
                 : navigate('/lam-bai-thi-online', {
                     state: {
                       testId: item._id,
