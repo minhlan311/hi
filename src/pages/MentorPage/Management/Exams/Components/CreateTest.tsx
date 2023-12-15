@@ -4,7 +4,7 @@ import LoadingCustom from '@/components/LoadingCustom'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { ExamState } from '@/interface/exam'
 import { useQuery } from '@tanstack/react-query'
-import { Col, Form, Input, Row, Select, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, Row, Select, Switch } from 'antd'
 import { FormInstance } from 'antd/lib'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -123,18 +123,38 @@ const CreateTest = ({ form, testMutation, examData, isLoading }: Props) => {
             </Col>
           )}
         </Row>
-        <Form.Item
-          name='name'
-          label='Tiêu đề bộ đề'
-          rules={[
-            {
-              required: true,
-              message: 'Vui lòng nhập tiêu đề bộ đề',
-            },
-          ]}
-        >
-          <Input placeholder='Nhập tên tiêu đề bộ đề' />
-        </Form.Item>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item
+              name='name'
+              label='Tiêu đề bộ đề'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tiêu đề bộ đề',
+                },
+              ]}
+            >
+              <Input placeholder='Nhập tên tiêu đề bộ đề' />
+            </Form.Item>
+          </Col>
+
+          <Col span={12}>
+            <Form.Item
+              name='duration'
+              label='Thời gian làm bài (phút)'
+              rules={[{ required: true, message: 'Vui lòng nhập thời gian làm bài' }]}
+            >
+              <InputNumber
+                min={1}
+                placeholder='Nhập thời gian làm bài'
+                style={{
+                  width: '100%',
+                }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
         <TextAreaCustom name='description' label='Chú thích' data={examData} />{' '}
       </Form>
     </LoadingCustom>

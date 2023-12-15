@@ -7,7 +7,7 @@ import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd'
+import { Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -229,7 +229,7 @@ const DrawerExam = (props: Props) => {
               </Form.Item>
             </Col>
 
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
                 name='name'
                 label='Tiêu đề bộ đề'
@@ -243,6 +243,23 @@ const DrawerExam = (props: Props) => {
                 <Input placeholder='Nhập tên tiêu đề bộ đề' />
               </Form.Item>
             </Col>
+
+            <Col span={12}>
+              <Form.Item
+                name='duration'
+                label='Thời gian làm bài (phút)'
+                rules={[{ required: true, message: 'Vui lòng nhập thời gian làm bài' }]}
+              >
+                <InputNumber
+                  min={1}
+                  placeholder='Nhập thời gian làm bài'
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </Form.Item>
+            </Col>
+
             <Col span={24}>
               <TextAreaCustom name='description' label='Chú thích' data={examData} />
             </Col>

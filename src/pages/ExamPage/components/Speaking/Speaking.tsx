@@ -1,33 +1,28 @@
-import examApi from '@/apis/exam.api'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Logo from '@/components/Logo/Logo'
-import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
-import { useQuery } from '@tanstack/react-query'
-import { Button, Flex, Modal } from 'antd'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Button, Col, Flex, Modal, Row } from 'antd'
+import { useState } from 'react'
 import './Speaking.scss'
+import SpeechToText from '@/components/SpeechToText/SpeechToText'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
+  data: any
+  submit: any
 }
 
-export default function Speaking({ nextSteps }: Props) {
+export default function Speaking({ nextSteps, data, submit }: Props) {
+  console.log(data, 'dataSSSSSSSSSSSSS')
+
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const { data: dataQuestion } = useQuery({
-    queryKey: ['questionList'],
-    queryFn: () => examApi.getExamDetail('6541e1106580b32bd7dd8f14'),
-  })
-
-  const dataListQuestion = dataQuestion?.data.questionsDetail
-
-  console.log(dataListQuestion, 'dataQuestiondataQuestion')
 
   const showModal = () => {
     setIsModalOpen(true)
   }
 
   const handleOk = () => {
+    submit(true)
     nextSteps(6)
     setIsModalOpen(false)
   }
@@ -35,33 +30,12 @@ export default function Speaking({ nextSteps }: Props) {
   const handleCancel = () => {
     setIsModalOpen(false)
   }
-  const { volume } = useContext(AppContext)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const [isAudioPlayed, setIsAudioPlayed] = useState(false)
-  const { sm } = useResponsives()
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100
-    }
-  }, [volume])
 
-  const handleAudioEnded = () => {
-    if (!isAudioPlayed && audioRef.current) {
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0
-          audioRef.current.play()
-          setIsAudioPlayed(true)
-        }
-      }, 5000)
-    }
-  }
+  const { sm } = useResponsives()
 
   // const handleNextStep = () => {
   //   nextSteps(3)
   // }
-
-  console.log(dataQuestion, 'dataQuestiondataQuestion')
 
   return (
     <div className='listen-div-fixed'>
@@ -74,7 +48,7 @@ export default function Speaking({ nextSteps }: Props) {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Do you want to submit this test?</p>
+        <p>Bạn có muốn nộp bài kiểm tra?</p>
       </Modal>
       <Flex className='div-in-part' justify='space-between' align='center'>
         <Flex gap={'large'}>
@@ -84,44 +58,18 @@ export default function Speaking({ nextSteps }: Props) {
             <p>Speaking to the audio and answer questions below.</p>
           </Flex>
         </Flex>
-        <Button type='dashed' className='dashed' onClick={showModal}>
+        <Button type='default' className='default' onClick={showModal}>
           Submit
         </Button>
       </Flex>
 
-      <audio
-        autoPlay
-        hidden
-        onEnded={handleAudioEnded}
-        ref={audioRef}
-        src='https://ielts-computer-api.smartcom.vn/api/files/fGruXpxj-zE5z89z9118zsection1zpart1.mp3'
-        controls
-        controlsList='nodownload noplaybackrate'
-      >
-        Your browser does not support the audio element.
-      </audio>
-
       <div className='border-2-div'>
-        {dataListQuestion &&
-          dataListQuestion?.length &&
-          dataListQuestion?.map((item, index) => (
-            <>
-              <p
-                style={{
-                  marginTop: '20px',
-                  fontWeight: '700',
-                }}
-              >
-                Câu số {index + 1}
-              </p>
-              <div className='html-ques-choice' dangerouslySetInnerHTML={{ __html: item?.question }}></div>
-              {item?.choices?.map((choice) => (
-                <>
-                  <Button>{choice?.answer}</Button>
-                </>
-              ))}
-            </>
-          ))}
+        <Row gutter={16}>
+          <Col span={24}>
+            <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+          </Col>
+          <SpeechToText />
+        </Row>
       </div>
     </div>
   )

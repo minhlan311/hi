@@ -1,27 +1,19 @@
-import { Button, Col, Flex, Modal, Row } from 'antd'
-import { useState } from 'react'
-import './Writing.scss'
-import { useQuery } from '@tanstack/react-query'
-import examApi from '@/apis/exam.api'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Logo from '@/components/Logo/Logo'
 import useResponsives from '@/hooks/useResponsives'
+import { Button, Col, Flex, Modal, Row } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { useState } from 'react'
+import './Writing.scss'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
+  data: any
 }
 
-export default function Writing({ nextSteps }: Props) {
+export default function Writing({ nextSteps, data }: Props) {
   const { sm } = useResponsives()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { data: dataQuestion } = useQuery({
-    queryKey: ['questionList'],
-    queryFn: () => examApi.getExamDetail('6541e1106580b32bd7dd8f14'),
-  })
-
-  const dataListQuestion = dataQuestion?.data.questionsDetail
-
-  console.log(dataListQuestion, 'dataQuestiondataQuestion')
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -47,7 +39,7 @@ export default function Writing({ nextSteps }: Props) {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Do you want to finish this skill?</p>
+        <p>Bạn có muốn hoàn thành kỹ năng này?</p>
       </Modal>
       <Flex className='div-in-part' justify='space-between' align='center'>
         <Flex gap={'large'}>
@@ -57,87 +49,14 @@ export default function Writing({ nextSteps }: Props) {
             <p>Writing to the audio and answer questions below.</p>
           </Flex>
         </Flex>
-        <Button type='dashed' className='dashed' onClick={showModal}>
+        <Button type='default' className='default' onClick={showModal}>
           Go to Speaking
         </Button>
       </Flex>
       <div className='container-div-reading'>
         <Row gutter={16}>
           <Col span={12}>
-            <div className='border-1-div'>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium
-                aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo
-                cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta
-                laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda
-                ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates
-                perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint
-                voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit?
-                Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet
-                consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet
-                suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor
-                sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui
-                sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem
-                ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium
-                aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo
-                cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta
-                laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda
-                ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates
-                perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint
-                voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit?
-                Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet
-                consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet
-                suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor
-                sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui
-                sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem
-                ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium
-                aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo
-                cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta
-                laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda
-                ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum dolor sit amet
-                consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet
-                suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor
-                sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui
-                sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem
-                ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium
-                aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo
-                cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta
-                laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda
-                ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates
-                perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint
-                voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit?
-                Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet
-                consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet
-                suscipit? Assumenda earum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione
-                dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda
-                ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates
-                perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint
-                voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet suscipit?
-                Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor sit amet
-                consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui sit amet
-                suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem ipsum dolor
-                sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium aliquid cum et qui
-                sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo cumque est! Lorem
-                ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta laudantium
-                aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel eveniet nemo
-                cumque est! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem assumenda ratione dicta
-                laudantium aliquid cum et qui sit amet suscipit? Assumenda earum sint voluptates perspiciatis, vel
-                eveniet nemo cumque est!
-              </p>
-            </div>
+            <div className='border-1-div' dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
           </Col>
           <Col span={12}>
             <div className='border-2-div-w'>
