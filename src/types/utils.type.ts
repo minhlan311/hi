@@ -30,10 +30,10 @@ export enum TargetModelEnum {
   QUIZ = 'QUIZ',
   DOCUMENT = 'DOCUMENT',
   QUESTION = 'QUESTION',
-  ANSWER = 'ANSWER'
+  ANSWER = 'ANSWER',
 }
 
 export enum TypeForm {
   CREATE = 'CREATE',
-  UPDATE = 'UPDATE'
+  UPDATE = 'UPDATE',
 }

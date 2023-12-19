@@ -2,20 +2,16 @@
 import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
+import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
 import { UserState } from '@/interface/user'
-import { CheckCircleOutlined, StopOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, DatePicker, Divider, Form, Input, Modal, Row, Space } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, Modal, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
-import { BsFillTelephoneFill } from 'react-icons/bs'
-import { FaBirthdayCake, FaUserAlt } from 'react-icons/fa'
-import { FaEarthAsia } from 'react-icons/fa6'
-import { MdEmail } from 'react-icons/md'
+import { BiPlus } from 'react-icons/bi'
 import { useParams } from 'react-router-dom'
-import css from './styles.module.scss'
-type Props = { user: UserState; checkOk: any }
+type Props = { user: UserState; setUpdate: React.Dispatch<React.SetStateAction<boolean>> }
 
 type FieldType = {
   _id?: string
@@ -26,7 +22,7 @@ type FieldType = {
   social?: string
 }
 
-const UpdateMentor = ({ user, checkOk }: Props) => {
+const UpdateMentor = ({ user, setUpdate }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [DataSocial, setDataSocial] = useState<{ type: string; url: string }[]>([])
   const queryClient = useQueryClient()
@@ -60,7 +56,7 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
             message: 'Thông báo',
             description: 'Cập Nhật thông tin thành công !',
           })
-          checkOk(false)
+          setUpdate(false)
           queryClient.invalidateQueries({ queryKey: ['userDetail'] })
         },
         onError: () => {
@@ -104,182 +100,88 @@ const UpdateMentor = ({ user, checkOk }: Props) => {
   })
 
   return (
-    <div className={css.cardUpdate}>
+    <div>
       <Form disabled={mutation.isLoading} form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
-        <Col span={24} md={17} xl={14}>
-          <div className={css.infor}>
-            <Space direction='vertical' className={'sp100'}>
-              <Row justify='space-between'>
-                <Col span={24} md={8}>
-                  <Space>
-                    <div className={css.icon}>
-                      <FaUserAlt />
-                    </div>
-                    <Space direction='vertical'>
-                      <b>Giảng viên</b>
-                      <Form.Item<FieldType>
-                        name='fullName'
-                        rules={[{ required: true, message: 'Vui lòng điền đầy đủ họ tên' }]}
-                      >
-                        <Input
-                          size='middle'
-                          style={{
-                            width: '150px',
-                          }}
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Space>
-                </Col>
-                <Col>
-                  <Space>
-                    <ButtonCustom
-                      htmlType='button'
-                      onClick={() => {
-                        checkOk(false)
-                      }}
-                      icon={<StopOutlined />}
-                      tooltip='Hủy bỏ'
-                    >
-                      Hủy
-                    </ButtonCustom>
-
-                    <ButtonCustom type='primary' htmlType='submit' icon={<CheckCircleOutlined />} tooltip='Lưu'>
-                      Lưu
-                    </ButtonCustom>
-                  </Space>
-                </Col>
-              </Row>
-              <Divider />
-              <Row justify='space-between'>
-                <Col span={24} md={8}>
-                  <Space>
-                    <div className={css.icon}>
-                      <MdEmail />
-                    </div>
-                    <Space direction='vertical'>
-                      <b>Email</b>
-                      <Form.Item<FieldType>
-                        name='email'
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Vui lòng nhập email',
-                          },
-                          {
-                            pattern: REGEX_PATTERN.regexEmail,
-                            message: `Email không hợp lệ!`,
-                          },
-                        ]}
-                      >
-                        <Input
-                          size='middle'
-                          style={{
-                            width: '150px',
-                          }}
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Space>
-                </Col>
-                <Col span={24} md={12}>
-                  <Space>
-                    <div className={css.icon}>
-                      <FaEarthAsia />
-                    </div>
-                    <Space direction='vertical'>
-                      <b>Mạng xã hội</b>
-                      <Form.Item<FieldType> name='social'>
-                        <Modal
-                          destroyOnClose
-                          footer={[]}
-                          title='Mạng xã hội của bạn'
-                          open={isModalOpen}
-                          onCancel={handleCancel}
-                        >
-                          <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>
-                            <Form.Item name='facebook' label='Facebook'>
-                              <Input></Input>
-                            </Form.Item>
-                            <Form.Item name='instagram' label='Instagram'>
-                              <Input></Input>
-                            </Form.Item>
-                            <Form.Item name='tiktok' label='Tiktok'>
-                              <Input></Input>
-                            </Form.Item>
-                            <Form.Item name='youtube' label='Youtube'>
-                              <Input></Input>
-                            </Form.Item>
-                            <Button type='primary' htmlType='submit'>
-                              Đồng ý
-                            </Button>
-                          </Form>
-                        </Modal>
-                        <Button type='dashed' className={css.dashed} onClick={showModal}>
-                          Mạng xã hội
-                        </Button>
-                      </Form.Item>
-                    </Space>
-                  </Space>
-                </Col>
-              </Row>
-              <Divider />
-              <Row justify='space-between'>
-                <Col span={24} md={8}>
-                  <Space>
-                    <div className={css.icon}>
-                      <BsFillTelephoneFill />
-                    </div>
-                    <Space direction='vertical'>
-                      <b>Điện thoại liên hệ</b>
-                      <Form.Item<FieldType>
-                        required
-                        name='phoneNumber'
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Vui lòng nhập số điện thoại',
-                          },
-                          {
-                            pattern: REGEX_PATTERN.regexPhoneNumber,
-                            message: `SĐT không hợp lệ!`,
-                          },
-                        ]}
-                      >
-                        <Input
-                          size='middle'
-                          style={{
-                            width: '150px',
-                          }}
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Space>
-                </Col>
-                <Col span={24} md={12}>
-                  <Space>
-                    <div className={css.icon}>
-                      <FaBirthdayCake />
-                    </div>
-                    <Space direction='vertical'>
-                      <b>Ngày sinh</b>
-                      <Form.Item<FieldType> name='birthday'>
-                        <DatePicker
-                          placeholder={formatDate(user?.birthday)}
-                          style={{
-                            width: '150px',
-                          }}
-                          format={'DD/MM/YYYY'}
-                          size='middle'
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Space>
-                </Col>
-              </Row>
+        <Row gutter={[24, 12]}>
+          <Col span={24}>
+            <h3>Chỉnh sửa thông tin</h3>
+          </Col>
+          <Col span={24} md={10}>
+            <Form.Item name='fullName' rules={[{ required: true, message: 'Vui lòng nhập Họ tên' }]}>
+              <Input placeholder='Họ tên'></Input>
+            </Form.Item>
+          </Col>
+          <Col span={24} md={14}>
+            <Form.Item
+              name='email'
+              rules={[
+                { required: true, message: 'Vui lòng nhập Email' },
+                {
+                  pattern: REGEX_PATTERN.regexEmail,
+                  message: `Email không hợp lệ!`,
+                },
+              ]}
+            >
+              <Input placeholder='Email'></Input>
+            </Form.Item>
+          </Col>
+          <Col span={24} md={12}>
+            <Form.Item
+              name='phoneNumber'
+              rules={[
+                { required: true, message: 'Vui lòng nhập SĐT' },
+                {
+                  pattern: REGEX_PATTERN.regexPhoneNumber,
+                  message: `SĐT không hợp lệ!`,
+                },
+              ]}
+            >
+              <Input placeholder='Số điện thoại'></Input>
+            </Form.Item>
+          </Col>
+          <Col span={24} md={12}>
+            <Form.Item name='birthday' rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}>
+              <DatePicker
+                placeholder={formatDate(user?.birthday)}
+                format='DD/MM/YYYY'
+                style={{ width: '100%' }}
+              ></DatePicker>
+            </Form.Item>
+          </Col>
+        </Row>
+        <TextAreaCustom name='descriptions' data={user?.descriptions ? user : undefined} />
+        <Form.Item<FieldType> name='social'>
+          <Modal destroyOnClose footer={[]} title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
+            <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>
+              <Form.Item name='facebook' label='Facebook'>
+                <Input></Input>
+              </Form.Item>
+              <Form.Item name='instagram' label='Instagram'>
+                <Input></Input>
+              </Form.Item>
+              <Form.Item name='tiktok' label='Tiktok'>
+                <Input></Input>
+              </Form.Item>
+              <Form.Item name='youtube' label='Youtube'>
+                <Input></Input>
+              </Form.Item>
+              <Button type='primary' htmlType='submit'>
+                Đồng ý
+              </Button>
+            </Form>
+          </Modal>
+          <Flex justify='space-between'>
+            <Button onClick={showModal}>
+              <BiPlus /> Mạng xã hội
+            </Button>
+            <Space>
+              <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
+              <ButtonCustom onClick={() => form.submit()} type='primary'>
+                Lưu
+              </ButtonCustom>
             </Space>
-          </div>
-        </Col>
+          </Flex>
+        </Form.Item>
       </Form>
     </div>
   )
