@@ -52,16 +52,16 @@ export default function TestSound({ nextSteps }: Props) {
       </Flex>
       <div className='p-sound-div'>
         <p className='p-sound'>
-          Put on your headphones and click on the <strong> Play sound </strong>button to play a sample sound.
+          Đeo tai nghe vào và nhấp vào nút <strong>Phát âm thanh</strong> để phát âm thanh mẫu.
         </p>
         <Flex justify='center' className='flex-sound-buttton'>
           {!isPlay ? (
             <Button type='primary' onClick={playAudio}>
-              Play sound
+              Phát âm thanh
             </Button>
           ) : (
             <Button type='primary' onClick={playAudio}>
-              Stop sound
+              Dừng âm thanh
             </Button>
           )}
         </Flex>
@@ -83,11 +83,11 @@ export default function TestSound({ nextSteps }: Props) {
             scale: '1.4',
           }}
         />
-        <p className='p-sound'>If you cannot hear the sound clearly, please tell the invigilator.</p>
+        <p className='p-sound'>Nếu bạn không thể nghe rõ âm thanh, hãy báo cho giám thị biết.</p>
       </Flex>
       <Flex justify='center' className='flex-sound-buttton'>
         <Button type='primary' onClick={() => handleNextStep()}>
-          Continue
+          Tiếp tục
         </Button>
       </Flex>
     </div>

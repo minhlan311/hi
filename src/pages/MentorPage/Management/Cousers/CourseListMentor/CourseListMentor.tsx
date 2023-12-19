@@ -9,6 +9,7 @@ import { Card, Col, Row } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './CourseListMentor.scss'
+import { formatPriceVND } from '@/helpers/common'
 
 export default function CourseListMentor({ data }: any) {
   console.log(data, 'lolpwodpwld')
@@ -87,7 +88,14 @@ export default function CourseListMentor({ data }: any) {
                         description={
                           <>
                             <p>Mentor : {item?.mentor?.fullName}</p>
-                            {/* <p>{item?.descriptions || 'Không có mô tả'}</p> */}
+                            <p
+                              style={{
+                                fontWeight: '700',
+                              }}
+                            >
+                              {' '}
+                              Giá tiền : {item?.plan === 'FREE' ? 'Miễn phí' : formatPriceVND(item?.cost)}
+                            </p>
                           </>
                         }
                       />

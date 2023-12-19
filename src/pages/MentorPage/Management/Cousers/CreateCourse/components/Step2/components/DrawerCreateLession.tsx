@@ -5,6 +5,7 @@ import examApi from '@/apis/exam.api'
 import lessionApi from '@/apis/lession.api'
 import { TypeLessonEnum } from '@/constants'
 import { ENDPOINT } from '@/constants/endpoint'
+import { AppContext } from '@/contexts/app.context'
 import { LessionForm } from '@/types/lession.type'
 import { InboxOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -13,7 +14,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input, InputNumber, Select, UploadFile, message } from 'antd'
 import Dragger from 'antd/es/upload/Dragger'
 import { UploadProps } from 'antd/lib'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 type Props = {
   onOpen: boolean
@@ -30,14 +31,19 @@ export default function DrawerCreateLession({ onOpen, onClose, userId, dataColla
   const [dataDrawer, setDataDrawer] = useState<any[]>([])
   const [id, setId] = useState<string>()
   const [showAll, setShowAll] = useState<boolean>(false)
-
+  const { profile } = useContext(AppContext)
   useEffect(() => {
     dataCollapLession(dataDrawer)
   }, [dataDrawer])
 
   const { data: dataExamLession } = useQuery({
     queryKey: ['queryExam'],
-    queryFn: () => examApi.findExam({}),
+    queryFn: () =>
+      examApi.findExam({
+        filterQuery: {
+          mentorId: profile?._id,
+        },
+      }),
   })
 
   const optionsLession = dataExamLession?.data?.docs?.map((item) => ({

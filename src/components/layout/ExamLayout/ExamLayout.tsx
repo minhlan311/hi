@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppContext } from '@/contexts/app.context'
 import { QuestionCircleOutlined, SoundOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Layout, Modal, Row, Slider } from 'antd'
-import { Content, Header } from 'antd/es/layout/layout'
-import { useContext, useState } from 'react'
+import { Content } from 'antd/es/layout/layout'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ExamLayout.scss'
 
@@ -39,10 +40,9 @@ const CustomModal = ({
 }
 
 export default function ExamLayout({ children }: Props) {
-  const { profile, setVolume, volume } = useContext(AppContext)
+  const { setVolume, volume, duration } = useContext(AppContext)
 
   const [modal1Visible, setModal1Visible] = useState(false)
-  const [modal2Visible, setModal2Visible] = useState(false)
   const [modal3Visible, setModal3Visible] = useState(false)
 
   const onChange = (value: number) => {
@@ -55,14 +55,6 @@ export default function ExamLayout({ children }: Props) {
 
   const navigate = useNavigate()
 
-  const showModal1 = () => {
-    setModal1Visible(true)
-  }
-
-  const showModal2 = () => {
-    setModal2Visible(true)
-  }
-
   const showModal3 = () => {
     setModal3Visible(true)
   }
@@ -73,7 +65,6 @@ export default function ExamLayout({ children }: Props) {
         setModal1Visible(false)
         break
       case 2:
-        setModal2Visible(false)
         break
       case 3:
         setModal3Visible(false)
@@ -90,7 +81,6 @@ export default function ExamLayout({ children }: Props) {
         setModal1Visible(false)
         break
       case 2:
-        setModal2Visible(false)
         break
       case 3:
         setModal3Visible(false)
@@ -98,11 +88,72 @@ export default function ExamLayout({ children }: Props) {
       default:
         break
     }
+  } // 45 phút tính bằng giây
+
+  console.log(duration, 'duration========')
+
+  const [time, setTime] = useState<number>()
+
+  useEffect(() => {
+    setTime(duration * 60)
+  }, [duration])
+
+  useEffect(() => {
+    let timer: any
+
+    if (time && time > 0) {
+      timer = setInterval(() => {
+        setTime((prevTime) => prevTime! - 1)
+      }, 1000)
+    } else {
+      // Thêm xử lý khi hết thời gian ở đây
+      // Ví dụ: thông báo hoặc chuyển trang
+    }
+
+    return () => clearInterval(timer)
+  }, [time])
+
+  // Format the time as mm:ss
+  const formatTime = () => {
+    if (time && time <= 0) {
+      return '00:00'
+    }
+    const minutes = Math.floor(time! / 60)
+    const seconds = time! % 60
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   }
 
   return (
     <Layout className='layout-antd-exam'>
-      <Header className='bg-white-layout exam-header'>
+      <Content className='exam-content-layout'>{children}</Content>
+      {/* <Footer className='exam-footer-layout'>
+        <Flex justify='space-between' align={'center'}>
+          <div>
+            <Button className='default' type='dashed'>
+              1
+            </Button>
+          </div>
+          <div>
+            <Button className='default' type='dashed'>
+              2
+            </Button>
+          </div>
+          <div>
+            <Button className='default' type='dashed'>
+              3
+            </Button>
+          </div>
+          <div>
+            <Button className='default' type='dashed'>
+              4
+            </Button>
+          </div>
+          <div>
+            <Button type='primary'>Next</Button>
+          </div>
+        </Flex>
+      </Footer> */}
+      <div className='bg-white-layout exam-header-layout'>
         <CustomModal
           title={
             <>
@@ -139,14 +190,6 @@ export default function ExamLayout({ children }: Props) {
 
         <CustomModal
           title='Screen hidden'
-          visible={modal2Visible}
-          onOk={() => handleOk(2)}
-          onCancel={() => handleCancel(2)}
-          content={<p>Some contents for Modal 2...</p>}
-        />
-
-        <CustomModal
-          title='Screen hidden'
           visible={modal3Visible}
           onOk={() => handleOk(3)}
           onCancel={() => handleCancel(3)}
@@ -154,21 +197,18 @@ export default function ExamLayout({ children }: Props) {
         />
         <Row justify={'center'} align={'middle'} gutter={16}>
           <Col xl={6}>
-            <p>{profile?.fullName}</p>
+            <p>Bộ đề test </p>
           </Col>
           <Col xl={6}>
-            <p>TIME</p>
+            <Flex justify='end'>
+              <h3>{formatTime()}</h3>
+              {time === 0 && <p>Đã hết thời gian!</p>}
+            </Flex>
           </Col>
           <Col xl={10}>
             <Flex justify='end' align='center' gap={'small'}>
-              <Button className='dashed' type='dashed' onClick={showModal1}>
-                Help <QuestionCircleOutlined />
-              </Button>
-              <Button className='dashed' type='dashed' onClick={showModal2}>
-                Hide
-              </Button>
-              <Button className='dashed' type='dashed' onClick={showModal3}>
-                Go to Test list
+              <Button className='default' type='dashed' onClick={showModal3}>
+                Thoát
               </Button>
             </Flex>
           </Col>
@@ -193,35 +233,7 @@ export default function ExamLayout({ children }: Props) {
             </Flex>
           </Col>
         </Row>
-      </Header>
-      <Content className='exam-content-layout'>{children}</Content>
-      {/* <Footer className='exam-footer-layout'>
-        <Flex justify='space-between' align={'center'}>
-          <div>
-            <Button className='dashed' type='dashed'>
-              1
-            </Button>
-          </div>
-          <div>
-            <Button className='dashed' type='dashed'>
-              2
-            </Button>
-          </div>
-          <div>
-            <Button className='dashed' type='dashed'>
-              3
-            </Button>
-          </div>
-          <div>
-            <Button className='dashed' type='dashed'>
-              4
-            </Button>
-          </div>
-          <div>
-            <Button type='primary'>Next</Button>
-          </div>
-        </Flex>
-      </Footer> */}
+      </div>
     </Layout>
   )
 }

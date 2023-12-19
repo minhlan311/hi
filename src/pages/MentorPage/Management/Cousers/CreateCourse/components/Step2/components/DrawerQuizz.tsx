@@ -160,7 +160,7 @@ export default function DrawerQuizz({ onOpen, onClose, dataUpdateLession }: any)
               cancelText='Không'
               // onConfirm={() => deleteQuestion(record._id)}
             >
-              <Button type='dashed' className='dashed'>
+              <Button type='default' className='default'>
                 <DeleteOutlined />
               </Button>
             </Popconfirm>

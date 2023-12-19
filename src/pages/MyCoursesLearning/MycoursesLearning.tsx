@@ -126,9 +126,9 @@ export default function MycoursesLearning() {
 
   useEffect(() => {
     if (lessonsFlat && lessonsFlat.length > 0) {
-      handleLessonType(lessonsFlat[0])
+      handleLessonType(lessonsFlat[currentLessonIndex])
     }
-  }, []) //
+  }, [lessonsFlat])
 
   const myTabs = [
     {
@@ -151,30 +151,25 @@ export default function MycoursesLearning() {
                 ) : (
                   <div className={style.scroll}>
                     {
-                      <Collapse destroyInactivePanel>
+                      <Collapse accordion defaultActiveKey={['1']}>
                         {Array.isArray(dataTopics) && dataTopics?.length > 0
                           ? dataTopics?.map((course, courseIndex) => (
                               <>
                                 <Panel
-                                  key={courseIndex}
+                                  key={courseIndex.toString()}
                                   header={<h4>{course?.name}</h4>}
                                   extra={
-                                    <div
-                                      style={{
-                                        display: 'flex',
-                                        gap: '10px',
-                                      }}
-                                    ></div>
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                      {/* Bạn có thể thêm các phần tử nút điều khiển ở đây nếu cần */}
+                                    </div>
                                   }
                                 >
                                   {course?.lessons?.map((lesson: any, lessonIndex: number) => (
                                     <>
                                       <div
-                                        key={lesson._id}
+                                        key={lesson._id.toString()}
                                         onClick={() => handleLessonClick(courseIndex, lessonIndex, lesson)}
-                                        style={{
-                                          marginTop: '20px',
-                                        }}
+                                        style={{ marginTop: '20px' }}
                                         className={active === lesson?._id ? 'div-flex-active' : 'div-flex'}
                                       >
                                         <div>{lesson?.name}</div>
@@ -185,64 +180,56 @@ export default function MycoursesLearning() {
                                             alignItems: 'center',
                                             gap: '10px',
                                           }}
-                                        ></div>
+                                        >
+                                          {/* Bạn có thể thêm các phần tử điều khiển khác ở đây nếu cần */}
+                                        </div>
                                       </div>
                                       <div className={style.flexBest}>
                                         {lesson?.type === TypeLessonEnum.VIDEO_LESSON ? (
                                           <div>
-                                            <p>
-                                              Thời lượng : {lesson?.length} phút {''}
-                                            </p>
-                                            Thể loại : <PlayCircleOutlined /> video
+                                            <p>Thời lượng: {lesson?.length} phút</p>
+                                            Thể loại: <PlayCircleOutlined /> video
                                           </div>
                                         ) : lesson?.type === TypeLessonEnum.DOCUMENT_LESSON ? (
                                           <p>
-                                            Thể loại : <FileOutlined /> Văn bản
+                                            Thể loại: <FileOutlined /> Văn bản
                                           </p>
                                         ) : lesson?.type === TypeLessonEnum.LIVE_LESSON ? (
                                           <p>
-                                            Thể loại : <VideoCameraOutlined /> live
+                                            Thể loại: <VideoCameraOutlined /> live
                                           </p>
                                         ) : (
                                           <p>
-                                            Thể loại : <FileTextOutlined /> Bài kiểm tra
+                                            Thể loại: <FileTextOutlined /> Bài kiểm tra
                                           </p>
                                         )}
 
                                         <div>
                                           <Popover
                                             placement='bottomLeft'
-                                            style={{
-                                              maxWidth: '100px',
-                                            }}
+                                            style={{ maxWidth: '100px' }}
                                             title={
                                               <>
                                                 {lesson?.documents?.map((item: any, index: number) => (
-                                                  <>
-                                                    <Button
-                                                      style={{
-                                                        width: '150px',
-                                                        margin: '0 5px',
-                                                      }}
-                                                      onClick={() => handleDownload(item?.files)}
-                                                    >
-                                                      <DownloadOutlined />
-                                                      Tài liệu {index + 1}
-                                                    </Button>
-                                                  </>
+                                                  <Button
+                                                    key={index}
+                                                    style={{ width: '150px', margin: '0 5px' }}
+                                                    onClick={() => handleDownload(item?.files)}
+                                                  >
+                                                    <DownloadOutlined />
+                                                    Tài liệu {index + 1}
+                                                  </Button>
                                                 ))}
                                               </>
                                             }
                                             trigger={'click'}
                                           >
-                                            <>
-                                              {lesson?.documents?.length > 0 && (
-                                                <Button>
-                                                  <FolderOutlined />
-                                                  Tài liệu
-                                                </Button>
-                                              )}
-                                            </>
+                                            {lesson?.documents?.length > 0 && (
+                                              <Button>
+                                                <FolderOutlined />
+                                                Tài liệu
+                                              </Button>
+                                            )}
                                           </Popover>
                                         </div>
                                       </div>

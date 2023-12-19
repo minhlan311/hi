@@ -67,6 +67,7 @@ export interface ExamState {
   skillName: any[]
   skillData: Skill[]
   coverUrl?: string
+  duration?: number
 }
 
 export interface InCorrectAnswer {

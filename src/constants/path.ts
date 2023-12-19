@@ -26,7 +26,7 @@ export const PATH = {
   QA_PAGE: '/hoi-dap',
   QA_PAGE_DETAIL: '/hoi-dap/:id',
   TEST_PAGE: '/lam-bai-thi-online',
-  TEST_EXAM_PAGE: '/lam-bai-thi',
+  TEST_EXAM_PAGE: '/lam-bai-thi/:id',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
