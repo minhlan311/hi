@@ -67,8 +67,6 @@ export const ENDPOINT = {
   PROGRESSIONS_PATH: '/edu/progressions/',
   FIND_PROGRESSIONS_PATH: '/edu/progressions/find',
   JOIN_COURSE_PATH: '/edu/enrolls',
-  ASSESSMENT_PATH: '/assessment/',
-  FIND_ASSESSMENT_PATH: '/assessment/find',
 
   // :::::::::::::::::::: NOTES PATH :::::::::::::::::::::
   FIND_NOTE_PATH: '/edu/notes/find',
@@ -85,6 +83,11 @@ export const ENDPOINT = {
   // :::::::::::::::::::: LESSONS PATH :::::::::::::::::::::
   FIND_LESSONS_PATH: '/edu/lessons/find',
   LESSONS_PATH: '/edu/lessons/',
+
+  // :::::::::::::::::::: ASSESSMENTS PATH :::::::::::::::::::::
+  FIND_ASSESSMENTS_PATH: '/assessment/find',
+  ASSESSMENTS_PATH: '/assessment/',
+
   // :::::::::::::::::::: CLASS PATH :::::::::::::::::::::
   FIND_CLASS_PATH: '/class/find',
   CLASS_PATH: '/class/',

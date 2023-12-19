@@ -19,12 +19,12 @@ import { Card, Col, Descriptions, Form, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { useEffect, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import { BiCheckDouble } from 'react-icons/bi'
 import { useLocation } from 'react-router-dom'
 import loadingBg from '../../assets/images/examimg/loading.png'
 import QuestionItem from './components/QuestionItem'
 import Score from './components/Score'
 import css from './styles.module.scss'
-import { BiCheckDouble } from 'react-icons/bi'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {

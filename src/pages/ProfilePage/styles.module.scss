@@ -7,11 +7,21 @@
     position: relative;
     width: 100vw;
     height: 300px;
-    filter: brightness(0.8);
+
+    h1 {
+      position: absolute;
+      z-index: 100;
+      bottom: 15%;
+      left: 20%;
+      font-size: 35px;
+      color: white;
+      text-shadow: 2px 2px 2px #00000050;
+    }
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: brightness(0.8);
     }
     .editBg {
       display: none;

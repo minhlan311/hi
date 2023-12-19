@@ -26,4 +26,7 @@ export interface UserState {
     type: string
     url: string
   }[]
+  createdAt: Date
+  descriptions?: string
+  gender: 'male' | 'famale'
 }
