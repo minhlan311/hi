@@ -1,14 +1,15 @@
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
-import dayjs from 'dayjs'
 import DrawerCustom from '@/components/DrawerCustom/DrawerCustom'
 import openNotification from '@/components/Notification'
 import SelectCustom from '@/components/SelectCustom/SelectCustom'
 import { AppContext } from '@/contexts/app.context'
-import { DatePicker, Form, Input } from 'antd'
-import { useContext, useEffect } from 'react'
-import { useForm } from 'antd/es/form/Form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { DatePicker, Form, Input } from 'antd'
+import { useForm } from 'antd/es/form/Form'
+import dayjs from 'dayjs'
+import moment from 'moment-timezone'
+import { useContext, useEffect } from 'react'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -76,12 +77,13 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
 
     if (categoryId) {
       const payload = {
+        id: idClass ? idClass : undefined,
         title: values.title,
         courseId: values.courseId,
         limitStudent: parseInt(values.limitStudent),
         categoryId: categoryId.categoryId,
-        startDate: values.dates[0].$d,
-        endDate: values.dates[1].$d,
+        startDate: moment(values.dates[0].$d).startOf('day'),
+        endDate: moment(values.dates[1].$d).endOf('day'),
         mentorId: profile._id,
       }
 
@@ -95,7 +97,7 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
       open={onOpen}
       onClose={onClose}
       onFinish={() => {
-        idClass ? onClose(false) : form.submit()
+        form.submit()
       }}
     >
       <Form form={form} onFinish={onFinish} layout='vertical'>
