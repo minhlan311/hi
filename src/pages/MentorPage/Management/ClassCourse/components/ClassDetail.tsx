@@ -2,6 +2,7 @@ import classApi from '@/apis/class.api'
 import eventApi from '@/apis/event.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
+import LoadingCustom from '@/components/LoadingCustom'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import { Attendance, EventState } from '@/interface/event'
 import { UserState } from '@/interface/user'
@@ -12,7 +13,6 @@ import { useState } from 'react'
 import { TbListDetails } from 'react-icons/tb'
 import { Link, useLocation } from 'react-router-dom'
 import AttendanceDetail from './AttendanceDetail'
-import LoadingCustom from '@/components/LoadingCustom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const ClassDetail = () => {

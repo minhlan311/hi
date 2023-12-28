@@ -1,20 +1,20 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import classApi from '@/apis/class.api'
-import ClassCreate from './components/ClassCreate'
 import eventApi from '@/apis/event.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
-import moment from 'moment-timezone'
 import openNotification from '@/components/Notification'
 import { AppContext } from '@/contexts/app.context'
-import { BiPlus } from 'react-icons/bi'
 import { Class } from '@/types/class.type'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { MyPageTableOptions } from '@/types/page.type'
-import { Popconfirm, Space, Table } from 'antd'
-import { TbListDetails } from 'react-icons/tb'
-import { useContext, useEffect, useState } from 'react'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Popconfirm, Space, Table } from 'antd'
+import moment from 'moment-timezone'
+import { useContext, useEffect, useState } from 'react'
+import { BiPlus } from 'react-icons/bi'
+import { TbListDetails } from 'react-icons/tb'
 import './ClassManage.scss'
+import ClassCreate from './components/ClassCreate'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function ClassManage() {
@@ -113,7 +113,7 @@ export default function ClassManage() {
       key: 'limitStudent',
       align: 'center',
       render: (_: any, record: Class) =>
-        eventsData?.data.docs?.filter((item) => record._id === item.classId && item.attendance.length > 0).length,
+        eventsData?.data.docs?.filter((item) => record._id === item.classId && item.attendance?.length > 0).length,
     },
     {
       title: 'Hành động',

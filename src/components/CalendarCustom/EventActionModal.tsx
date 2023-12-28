@@ -4,7 +4,9 @@ import eventApi from '@/apis/event.api'
 import examApi from '@/apis/exam.api'
 import userApi from '@/apis/user.api'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { EventState } from '@/interface/event'
+import { Class } from '@/types/class.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, TimePicker } from 'antd'
 import dayjs from 'dayjs'
@@ -13,8 +15,6 @@ import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
 import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
-import useResponsives from '@/hooks/useResponsives'
-import { Class } from '@/types/class.type'
 
 type Props = {
   open: boolean
@@ -37,7 +37,7 @@ const EventActionModal = (props: Props) => {
   const [allDay, setAllDay] = useState(false)
   const [classSelect, setClassSelect] = useState()
   const [studentIds, setStudentIds] = useState<string[]>([])
-
+  const [nowTime, setNowTime] = useState<Date>()
   const [classData, setClassData] = useState<Class[]>()
   const [initVal, setInitVal] = useState<any>()
 
@@ -187,6 +187,8 @@ const EventActionModal = (props: Props) => {
   }, [selectTime])
 
   useEffect(() => {
+    setNowTime(new Date())
+
     if (initVal) {
       form.setFieldsValue(initVal)
       setClassSelect(initVal.classId)
@@ -275,7 +277,10 @@ const EventActionModal = (props: Props) => {
                 searchKey='classId'
                 labelKey='title'
                 apiFind={classApi.getClass}
-                filterQuery={{ mentorId: profile._id }}
+                filterQuery={{
+                  mentorId: profile._id,
+                  betweenDate: nowTime,
+                }}
                 callBackDataSearch={setClassData}
                 defaultValue={initVal?.classId}
                 onChange={setClassSelect}
