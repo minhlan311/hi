@@ -118,7 +118,11 @@ const RenderSkillItem = ({
               {skillData?.map(
                 (item) =>
                   choosePack.find((i) => i === item._id) && (
-                    <Card key={item._id} hoverable>
+                    <Card
+                      key={item._id}
+                      hoverable
+                      style={{ border: choosePack.includes(item._id) ? '2px solid var(--red)' : undefined }}
+                    >
                       <Row justify='space-between' align='middle' gutter={[12, 12]}>
                         <Col>
                           <Card.Meta
@@ -130,7 +134,7 @@ const RenderSkillItem = ({
                             description={
                               <div
                                 dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLTwoLine'
+                                className='dangerHTMLFourLine'
                               ></div>
                             }
                           ></Card.Meta>
@@ -179,7 +183,7 @@ const RenderSkillItem = ({
                             description={
                               <div
                                 dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLTwoLine'
+                                className='dangerHTMLFourLine'
                               ></div>
                             }
                           ></Card.Meta>

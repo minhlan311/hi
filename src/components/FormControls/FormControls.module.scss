@@ -9,6 +9,7 @@
     &:hover {
       background-color: var(--lighish-white);
       border: 1px solid var(--green);
+
       color: var(--green);
     }
   }
@@ -26,4 +27,19 @@
 }
 .answerMain {
   width: 100%;
+}
+
+.contentChecked {
+  position: absolute;
+  font-weight: 500;
+  top: -8px;
+  left: -8px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background-color: var(--whiteBg);
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+.contentCheckedBorder {
+  border: 1px solid var(--green);
 }

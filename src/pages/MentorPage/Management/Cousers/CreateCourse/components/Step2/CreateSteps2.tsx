@@ -114,7 +114,7 @@ const CreateSteps2 = ({ dataId }: any) => {
     <>
       <div className='text-end'>
         <div>
-          <Button onClick={() => setOnOpenExam(true)} type='dashed' className='dashed'>
+          <Button onClick={() => setOnOpenExam(true)} type='default' className='default'>
             <PlusCircleOutlined />
             Thêm chuyên đề mới
           </Button>
@@ -147,11 +147,11 @@ const CreateSteps2 = ({ dataId }: any) => {
                               title='Bạn có muốn xóa chuyên đề này không ?'
                               onConfirm={() => mutation.mutate(item._id as string)}
                             >
-                              <Button type='dashed' className='dashed'>
+                              <Button type='default' className='default'>
                                 <DeleteOutlined />
                               </Button>
                             </PopConfirmAntd>
-                            <Button type='dashed' className='dashed' onClick={() => updateTopic(item as any)}>
+                            <Button type='default' className='default' onClick={() => updateTopic(item as any)}>
                               <EditOutlined />
                             </Button>
                           </div>
@@ -172,11 +172,11 @@ const CreateSteps2 = ({ dataId }: any) => {
                                 title='Bạn có muốn xóa bài học này không ?'
                                 onConfirm={() => mutationDelete.mutate(lession._id as string)}
                               >
-                                <Button type='dashed' className='dashed'>
+                                <Button type='default' className='default'>
                                   <DeleteOutlined />
                                 </Button>
                               </PopConfirmAntd>
-                              <Button type='dashed' className='dashed' onClick={() => updateLession(lession)}>
+                              <Button type='default' className='default' onClick={() => updateLession(lession)}>
                                 <EditOutlined />
                               </Button>
                             </div>

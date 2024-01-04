@@ -12,7 +12,7 @@
   --light-gray-2: #868585;
   --light-gray-3: #3e4143;
   --red: #d72831;
-  --red-2: #ff636f;
+  --red-2: #fb9199;
   --green: #019d44;
   --green-2: #0ec25c;
   --greenBg: #21c12130;
@@ -259,6 +259,13 @@ table {
   overflow-y: hidden;
 }
 
+.dangerHTMLOneLine {
+  white-space: break-spaces;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
 .dangerHTMLTwoLine {
   white-space: break-spaces;
   overflow: hidden;
@@ -279,6 +286,18 @@ table {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+  figure,
+  img {
+    display: none;
+  }
+}
+
+.dangerHTMLImg {
+  figure,
+  img {
+    width: 100% !important;
+    padding: 10px 0;
+  }
 }
 
 .userContainer {

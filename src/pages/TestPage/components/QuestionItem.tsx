@@ -5,13 +5,14 @@ import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import { Answer, Choice, QuestionState } from '@/interface/question'
-import { Col, Form, Row, Space } from 'antd'
+import { Flex, Form, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
 import { useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbArrowBack } from 'react-icons/tb'
 import css from '../styles.module.scss'
 import RenderAnswer from './RenderAnswer'
+import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   type: string
@@ -26,6 +27,7 @@ type Props = {
 }
 
 const QuestionItem = (props: Props) => {
+  const { xl, xxl } = useResponsives()
   const { type, questionData, questionLength, questionKey, testId, loading, selectId, form, dataValue } = props
   const [reset, setReset] = useState<boolean>(false)
 
@@ -41,34 +43,31 @@ const QuestionItem = (props: Props) => {
   }
 
   if (loading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
-  const index = dataValue.findIndex((q) => q._id === selectId)
+  const dataSubmit = dataValue.find((q) => q._id === selectId)
 
   if (questionData)
     return (
       <Space direction='vertical' className={'sp100'} style={{ minHeight: '78vh' }}>
-        <Row justify='space-between'>
-          <Col span={24} sm={5}>
-            <h2>
-              Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
-            </h2>
-          </Col>
-          <Col span={24} xxl={6} xl={6} lg={8} md={8} sm={8}>
-            <Space>
-              <TagCustom content={type}></TagCustom>
-              <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
-              <ButtonCustom
-                size='small'
-                onClick={() => {
-                  setReset(true)
-                  localAction(testId + 'data', null, 'remove', '_id')
-                }}
-                icon={<TbArrowBack />}
-              >
-                Làm lại
-              </ButtonCustom>
-            </Space>
-          </Col>
-        </Row>
+        <Flex justify='space-between' vertical={!xl || !xxl}>
+          <h2>
+            Câu: {questionKey + 1} <span style={{ fontSize: 14 }}>/{questionLength}</span>
+          </h2>
+
+          <Space>
+            <TagCustom content={type}></TagCustom>
+            <TagCustom color='gold' content={questionData.point + ' Điểm'}></TagCustom>
+            <ButtonCustom
+              size='small'
+              onClick={() => {
+                setReset(true)
+                localAction(testId + 'data', questionData._id, 'remove', '_id')
+              }}
+              icon={<TbArrowBack />}
+            >
+              Làm lại
+            </ButtonCustom>
+          </Space>
+        </Flex>
 
         <p
           className={css.question}
@@ -99,7 +98,7 @@ const QuestionItem = (props: Props) => {
             choices={shuffleArray(questionData.choices as unknown as Choice[])}
             reset={reset}
             setReset={setReset}
-            data={index >= 0 ? dataValue?.[index] : null}
+            data={dataSubmit && dataSubmit._id === selectId ? dataSubmit : null}
             questId={questionData._id}
             form={form}
             questionText={questionData?.questionText}

@@ -3,15 +3,9 @@
 export const localAction = (
   localKey: string = 'default',
   updateData?: any | any[] | null,
-  type?: 'update' | 'remove' | 'delete',
+  type?: 'add' | 'update' | 'remove' | 'delete',
   updateKey?: any,
 ): any => {
-  if (!type) {
-    const data = localStorage.getItem(localKey)
-
-    return data ? JSON.parse(data) : null
-  }
-
   let localData: any = localStorage.getItem(localKey)
 
   if (!localData) {
@@ -20,49 +14,74 @@ export const localAction = (
     localData = JSON.parse(localData)
   }
 
-  if (type === 'update') {
-    if (updateData && typeof updateData === 'string') {
-      const existingIndex = localData.findIndex((item: any) => item === updateData)
-
-      if (existingIndex !== -1) {
-        localData[existingIndex] = updateData
-      } else {
-        localData.push(updateData)
+  if (type && updateData) {
+    if (type === 'add') {
+      if (localData && typeof Array.isArray(localData)) localData.push(updateData)
+      else localStorage.setItem(localKey, JSON.stringify(localData))
+    } else {
+      // local data type: string
+      if (typeof localData === 'string') {
+        if (type === 'update') {
+          localData = updateData
+        } else if (type === 'remove') {
+          localStorage.removeItem(localKey)
+        }
       }
-    } else if (updateData && typeof updateData === 'object' && updateKey) {
-      const existingIndex = localData.findIndex((item: any) =>
-        updateKey ? item?.[updateKey] === updateData?.[updateKey] : item._id === updateData._id,
-      )
+      // local data type: arr | obj
+      else {
+        if (type === 'update') {
+          // local data type: arr
+          if (Array.isArray(localData)) {
+            if (typeof updateData === 'string') {
+              const existingIndex = localData.findIndex((item: any) => item === updateData)
 
-      if (existingIndex !== -1) {
-        const filteredData = localData.filter((item: any) =>
-          updateKey ? item?.[updateKey] !== updateData?.[updateKey] : item._id !== updateData._id,
-        )
+              if (existingIndex !== -1) {
+                localData[existingIndex] = updateData
+              } else {
+                localData.push(updateData)
+              }
+            } else if (typeof updateData === 'object' && updateKey) {
+              const existingIndex = localData.findIndex((item: any) =>
+                updateKey ? item?.[updateKey] === updateData?.[updateKey] : item._id === updateData._id,
+              )
 
-        localData = [...filteredData, updateData]
-      } else {
-        localData.push(updateData)
+              if (existingIndex !== -1) {
+                const filteredData = localData.filter((item: any) =>
+                  updateKey ? item?.[updateKey] !== updateData?.[updateKey] : item._id !== updateData._id,
+                )
+
+                localData = [...filteredData, updateData]
+              } else {
+                localData.push(updateData)
+              }
+            }
+          }
+          // local data type: obj
+          else {
+            if (typeof updateData === 'string') {
+              console.log('required updateKey')
+            } else {
+              localData[updateKey] = updateData
+            }
+          }
+        } else if (type === 'remove') {
+          if (typeof updateData === 'string') {
+            if (updateKey) {
+              localData = localData.filter((item: any) => item[updateKey] !== updateData)
+            } else {
+              localData = localData.filter((item: any) => item !== updateData)
+            }
+          } else if (typeof updateData === 'object' && updateKey) {
+            localData = localData.filter((item: any) => item[updateKey] !== updateData[updateKey])
+          }
+        } else if (type === 'delete') {
+          localStorage.removeItem(localKey)
+        }
       }
+
+      localStorage.setItem(localKey, JSON.stringify(localData))
     }
-  } else if (type === 'remove') {
-    if (updateData && typeof updateData === 'string') {
-      const dataIndex = localData.findIndex((item: any) => item === updateData)
-
-      if (dataIndex !== -1) {
-        localData.splice(dataIndex, 1)
-      }
-    } else if (updateData && typeof updateData === 'object' && updateKey) {
-      const dataIndex = localData.findIndex((item: any) => item[updateKey] === updateData[updateKey])
-
-      if (dataIndex !== -1) {
-        localData.splice(dataIndex, 1)
-      }
-    }
-  } else if (type === 'delete') {
-    localStorage.removeItem(localKey)
   }
-
-  localStorage.setItem(localKey, JSON.stringify(localData))
 
   return localData
 }

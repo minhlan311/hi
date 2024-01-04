@@ -26,7 +26,7 @@ export const PATH = {
   QA_PAGE: '/hoi-dap',
   QA_PAGE_DETAIL: '/hoi-dap/:id',
   TEST_PAGE: '/lam-bai-thi-online',
-  TEST_EXAM_PAGE: '/lam-bai-thi',
+  TEST_EXAM_PAGE: '/lam-bai-thi/:id',
 
   // COURSE_PAGE: '/courses',
   COURSE_DETAIL: '/courses/:id',
@@ -36,6 +36,7 @@ export const PATH = {
   MY_COURSE: '/myCourse/',
   MENTOR_COURSES: '/mentor/courses',
   MENTOR_CLASS: '/mentor/class',
+  MENTOR_CLASS_DETAIL: '/mentor/class/:id',
   MENTOR_COURSES_CREATE: '/mentor/courses/create',
   MENTOR_COURSES_UPDATE: '/mentor/courses/update/:id',
   MENTOR_CALENDAR: '/mentor/calendar',

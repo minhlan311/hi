@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { debounce } from '@/helpers/common'
 import { useQuery } from '@tanstack/react-query'
-import { Col, Row, Select, Space } from 'antd'
+import { Flex, Select, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Avatar from '../Avatar/Avatar'
 import EmptyCustom from '../EmptyCustom/EmptyCustom'
@@ -26,6 +26,7 @@ type Props = {
   className?: string
   size?: 'large' | 'middle' | 'small'
   defaultValue?: string | string[]
+  value?: any[]
   onChange?: (e: any) => void
   options?: OptionType[]
   allowClear?: boolean
@@ -33,6 +34,7 @@ type Props = {
   selectAll?: boolean
   selectAllLabel?: string
   suffixIcon?: boolean
+  showType?: boolean
   callBackDataSearch?: React.Dispatch<React.SetStateAction<any>>
   callBackSelected?: React.Dispatch<React.SetStateAction<any>>
 }
@@ -49,6 +51,7 @@ const SelectCustom = (props: Props) => {
     style,
     className,
     size,
+    value,
     defaultValue,
     onChange,
     options,
@@ -57,13 +60,14 @@ const SelectCustom = (props: Props) => {
     selectAll,
     selectAllLabel = 'Select All',
     suffixIcon,
+    showType,
     labelKey = 'name',
     callBackDataSearch,
     callBackSelected,
   } = props
 
   const { Option } = Select
-  const [selectedValues, setSelectedValues] = useState<string[] | number[]>([])
+  const [selectedValues, setSelectedValues] = useState<string[] | number[]>(value || [])
   const [selectAllVal, setSelectAll] = useState(false)
   const [searchText, setSearchText] = useState<string>()
   const [callBOption, setCallBOptions] = useState<OptionType[]>([])
@@ -84,7 +88,10 @@ const SelectCustom = (props: Props) => {
       const optionFind: OptionType[] = data.data.docs.map((ops: any) => ({
         value: ops._id,
         label: searchKey === 'user' ? ops.fullName : ops?.[labelKey],
-        icon: searchKey === 'user' ? <Avatar avtUrl={ops.avatarUrl} userData={ops} /> : ops.icon,
+        icon:
+          (searchKey === 'user' && <Avatar avtUrl={ops.avatarUrl} userData={ops} />) ||
+          (showType && `[${ops.type}]`) ||
+          ops.icon,
       }))
       callBackDataSearch && callBackDataSearch(data.data.docs)
 
@@ -116,7 +123,8 @@ const SelectCustom = (props: Props) => {
 
   useEffect(() => {
     if (defaultValue) setSelectedValues(defaultValue as unknown as any)
-  }, [defaultValue])
+    if (value && value?.length > 0) setSelectedValues(value as unknown as any)
+  }, [defaultValue, value])
 
   return type === 'search' ? (
     <Select
@@ -158,18 +166,18 @@ const SelectCustom = (props: Props) => {
         <Option
           value={item.value}
           label={
-            <Row align='middle' gutter={10}>
-              {searchKey !== 'user' ? <Col>{item.icon}</Col> : null}
-              <Col>{item.label}</Col>
-            </Row>
+            <Flex align='center' gap={5}>
+              {searchKey !== 'user' ? <p>{item.icon}</p> : null}
+              <p className='dangerHTMLOneLine'>{item.label}</p>
+            </Flex>
           }
           key={item.value}
           disabled={item.disabled}
         >
-          <Row align='middle' gutter={10}>
-            <Col>{item.icon && <div style={{ display: 'flex', width: 40, height: 40 }}>{item.icon}</div>}</Col>
-            <Col>{item.label}</Col>
-          </Row>
+          <Flex align='center' gap={5}>
+            {item.icon && <div style={{ display: 'flex' }}>{item.icon}</div>}
+            <p className='dangerHTMLOneLine'>{item.label}</p>
+          </Flex>
         </Option>
       ))}
     </Select>
@@ -200,7 +208,7 @@ const SelectCustom = (props: Props) => {
             label={
               <Space>
                 {item.icon && <div style={{ display: 'flex' }}>{item.icon}</div>}
-                {item.label}
+                <p className='dangerHTMLOneLine'>{item.label}</p>
               </Space>
             }
             key={item.value}
@@ -208,7 +216,7 @@ const SelectCustom = (props: Props) => {
           >
             <Space>
               {item.icon && item.icon}
-              {item.label}
+              <p className='dangerHTMLOneLine'>{item.label}</p>
             </Space>
           </Option>
         ))}

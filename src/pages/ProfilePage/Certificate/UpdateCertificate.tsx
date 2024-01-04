@@ -148,7 +148,7 @@ export default function UpdateCertificate() {
                         listType='picture'
                         maxCount={1}
                       >
-                        <Button type='dashed' className='dashed' icon={<UploadOutlined />}>
+                        <Button type='dashed' className='default' icon={<UploadOutlined />}>
                           Tải hình ảnh
                         </Button>
                       </Upload>
@@ -156,7 +156,7 @@ export default function UpdateCertificate() {
                     {fields.length > 1 ? (
                       <Button
                         type='dashed'
-                        className='dashed'
+                        className='default'
                         onClick={() => remove(field.name)}
                         icon={<MinusCircleOutlined />}
                       >
@@ -167,7 +167,7 @@ export default function UpdateCertificate() {
                 ))}
                 <Divider />
                 <Form.Item>
-                  <Button type='dashed' className='dashed' onClick={() => add()} style={{ width: '100%' }}>
+                  <Button type='dashed' className='default' onClick={() => add()} style={{ width: '100%' }}>
                     <PlusOutlined /> Thêm bằng cấp
                   </Button>
                   <Form.ErrorList errors={errors} />

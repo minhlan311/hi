@@ -8,6 +8,7 @@ import { createContext, useState } from 'react'
 interface AppContextInterface {
   isAuthenticated: boolean
   volume: number
+  duration: number
   setVolume: React.Dispatch<React.SetStateAction<number>>
   scaleScreen: boolean
   setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
@@ -18,11 +19,13 @@ interface AppContextInterface {
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
   questionList: string[]
   setQuestionList: React.Dispatch<React.SetStateAction<string[]>>
+  setDuration: React.Dispatch<React.SetStateAction<number>>
 }
 
 const initialAppContext: AppContextInterface = {
   isAuthenticated: Boolean(getAccessTokenFromLS()),
   volume: 50,
+  duration: 0,
   configs: getConfigFromLS(),
   scaleScreen: false,
   setScaleScreen: () => {},
@@ -33,6 +36,7 @@ const initialAppContext: AppContextInterface = {
   setConfigs: () => {},
   questionList: getQuestionsList(),
   setQuestionList: () => {},
+  setDuration: () => {},
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
@@ -48,6 +52,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
   const [configs, setConfigs] = useState<Configs>(initialAppContext.configs)
   const [volume, setVolume] = useState<number>(initialAppContext.volume)
+  const [duration, setDuration] = useState<number>(initialAppContext.duration)
 
   return (
     <AppContext.Provider
@@ -55,6 +60,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setConfigs,
         volume,
         setVolume,
+        duration,
+        setDuration,
         configs,
         scaleScreen,
         setScaleScreen,
