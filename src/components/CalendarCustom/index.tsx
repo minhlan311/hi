@@ -74,33 +74,32 @@ const CalendarCustom = ({ calendarType }: Props) => {
     }
   }
 
+  const filter =
+    calendarType === 'mentor'
+      ? {
+          start: timeSelect?.startDate,
+          end: timeSelect?.endDate,
+          mentorId: profile._id,
+          type: type,
+          classId: classId ? classId : undefined,
+        }
+      : {
+          start: timeSelect?.startDate,
+          end: timeSelect?.endDate,
+          students: [profile._id],
+          type: type,
+          classId: classId ? classId : undefined,
+        }
+
   const { data: eventsData, isLoading } = useQuery({
     queryKey: ['eventsData', timeSelect, type],
     queryFn: () => {
-      const filter =
-        calendarType === 'mentor'
-          ? {
-              start: timeSelect?.startDate,
-              end: timeSelect?.endDate,
-              mentorId: profile._id,
-              type: type,
-              classId: classId ? classId : undefined,
-            }
-          : {
-              start: timeSelect?.startDate,
-              end: timeSelect?.endDate,
-              students: [profile._id],
-              type: type,
-              classId: classId ? classId : undefined,
-            }
-
       return eventApi.getEvent({
         filterQuery: filter,
 
         options: { pagination: false },
       })
     },
-    // enabled: Boolean(timeSelect) || Boolean(classId) || Boolean(callBackWeekSelect),
   })
 
   useEffect(() => {

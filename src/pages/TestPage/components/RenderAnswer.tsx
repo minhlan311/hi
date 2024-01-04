@@ -1,14 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { localAction, shuffleArray } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
+import PageFillTest from './FillTest/PageFillTest'
+import PageTestDrag from './DragTest/PageTestDrag'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Answer, Choice } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
+import { localAction, shuffleArray } from '@/common'
 import { useEffect, useState } from 'react'
-import PageTestDrag from './DragTest/PageTestDrag'
-import PageFillTest from './FillTest/PageFillTest'
+import './style.scss'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
   type:
@@ -33,6 +34,7 @@ type Props = {
 }
 
 const LikertScale = ({
+  anwsData,
   reset,
   rows,
   cols,
@@ -40,6 +42,7 @@ const LikertScale = ({
   questId,
   testId,
 }: {
+  anwsData: string[]
   reset: boolean
   rows: any[]
   cols: any[]
@@ -66,18 +69,28 @@ const LikertScale = ({
     }
   }, [reset])
 
-  const handleAnswerChange = (rowId: string, colId: string) => {
-    const newAnswers = [...correctAnswers]
-
-    const questionIndex = newAnswers.indexOf(rowId)
-
-    if (questionIndex !== -1) {
-      newAnswers[questionIndex + 1] = colId
-    } else {
-      newAnswers.push(rowId, colId)
+  useEffect(() => {
+    if (anwsData.length > 0) {
+      setCorrectAnswers(anwsData)
     }
+  }, [anwsData])
 
-    setCorrectAnswers(newAnswers)
+  const handleAnswerChange = (rowId: string, colId: string) => {
+    if (anwsData.length > 0) {
+      setCorrectAnswers(anwsData)
+    } else {
+      const newAnswers = [...correctAnswers]
+
+      const questionIndex = newAnswers.indexOf(rowId)
+
+      if (questionIndex !== -1) {
+        newAnswers[questionIndex + 1] = colId
+      } else {
+        newAnswers.push(rowId, colId)
+      }
+
+      setCorrectAnswers(newAnswers)
+    }
   }
 
   useEffect(() => {
@@ -98,7 +111,7 @@ const LikertScale = ({
       }
       setTimeout(() => {
         localAction(testId + 'data', payload, 'update', '_id')
-      }, 1000)
+      }, 500)
     }
   }, [correctAnswers])
 
@@ -112,6 +125,28 @@ const LikertScale = ({
 
   const colCount = 24 % cols.length > 0 ? 24 % cols.length : cols.length
 
+  const chunkArray = (arr: any[], chunkSize: number) => {
+    const chunkedArr = []
+
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      chunkedArr.push(arr.slice(i, i + chunkSize))
+    }
+
+    return chunkedArr
+  }
+
+  const groupedArr = chunkArray(correctAnswers, 2)
+
+  const findGroupNumber = (value: any, groupedArray: any[]) => {
+    for (let i = 0; i < groupedArray.length; i++) {
+      if (groupedArray[i].includes(value)) {
+        return i + 1
+      }
+    }
+  }
+
+  const corrArr = correctAnswers.filter((_, index) => index % 2 !== 0)
+
   return type === 'MATCHING' ? (
     <Row gutter={24}>
       <Col span={12}>
@@ -123,7 +158,7 @@ const LikertScale = ({
             value={row.value}
             label={row.label}
             callbackValue={(e) => handleElementClick(e as unknown as string, true)}
-            disabled={correctAnswers.includes(row.value)}
+            contentChecked={findGroupNumber(row.value, groupedArr)}
           />
         ))}
       </Col>
@@ -136,7 +171,7 @@ const LikertScale = ({
             value={col.value}
             label={col.label}
             callbackValue={(e) => handleElementClick(e as unknown as string, false)}
-            disabled={correctAnswers.includes(col.value)}
+            contentChecked={findGroupNumber(col.value, groupedArr)}
           />
         ))}
       </Col>
@@ -153,6 +188,7 @@ const LikertScale = ({
               options={optionsList}
               gutter={[12, 12]}
               md={colCount}
+              value={corrArr.length > 0 ? corrArr[id] : null}
               callbackValue={(e) => {
                 handleAnswerChange(r.id, e as unknown as string)
               }}
@@ -177,8 +213,10 @@ const RenderAnswer = (props: Props) => {
   }, [reset])
 
   useEffect(() => {
-    if (data && data.correctAnswers?.length > 0) {
+    if (data && data.correctAnswers.length > 0) {
       const newData = choices.sort((a, b) => data.correctAnswers.indexOf(a.id) - data.correctAnswers.indexOf(b.id))
+      console.log(newData)
+
       setDndData(newData)
     }
   }, [data])
@@ -192,7 +230,7 @@ const RenderAnswer = (props: Props) => {
       }
       setTimeout(() => {
         localAction(testId + 'data', payload, 'update', '_id')
-      }, 1000)
+      }, 500)
     }
   }, [dataCallback])
 
@@ -204,9 +242,6 @@ const RenderAnswer = (props: Props) => {
     if (data && data.correctAnswers?.length > 0) {
       if (type === 'NUMERICAL') {
         form.setFieldsValue({ correctAnswers: data.correctAnswers[0] })
-      } else if (type === 'SORT') {
-        const newData = choices.sort((a, b) => data.correctAnswers.indexOf(a.id) - data.correctAnswers.indexOf(b.id))
-        setDndData(newData)
       }
     }
   }, [data, type])
@@ -229,7 +264,7 @@ const RenderAnswer = (props: Props) => {
         type='card'
         options={optionsList}
         gutter={[12, 12]}
-        value={data?.correctAnswers[0]}
+        value={data && data.correctAnswers[0]}
       />
     )
   if (type === 'MULTIPLE CHOICE')
@@ -240,7 +275,7 @@ const RenderAnswer = (props: Props) => {
         type='card'
         options={optionsList}
         gutter={[12, 12]}
-        value={data?.correctAnswers}
+        value={data ? data.correctAnswers : []}
       />
     )
   if (type === 'SORT')
@@ -258,9 +293,10 @@ const RenderAnswer = (props: Props) => {
   if (type === 'LIKERT SCALE' || type === 'MATCHING')
     return (
       <LikertScale
+        anwsData={data ? data.correctAnswers : []}
         reset={reset}
         rows={shuffleArray(choices[0]?.rows)}
-        cols={shuffleArray(choices[0]?.cols)}
+        cols={type === 'LIKERT SCALE' ? choices[0]?.cols : shuffleArray(choices[0]?.cols)}
         type={type}
         questId={questId}
         testId={testId}

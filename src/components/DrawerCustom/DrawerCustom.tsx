@@ -8,12 +8,13 @@ type Props = {
   title?: string
   placement?: 'top' | 'right' | 'bottom' | 'left'
   open: boolean
-  onClose: () => void
+  onClose: React.Dispatch<React.SetStateAction<boolean>>
+  onFinish: () => void
   width?: string | number
 }
 
 const DrawerCustom = (props: Props) => {
-  const { children, title, placement, onClose, open, width } = props
+  const { children, title, placement, onClose, onFinish, open, width } = props
 
   return (
     <Drawer
@@ -21,13 +22,19 @@ const DrawerCustom = (props: Props) => {
       title={title}
       placement={placement}
       closable={false}
-      onClose={onClose}
+      onClose={() => onClose(!open)}
       open={open}
       width={width}
       extra={
         title ? (
           <Space>
-            <ButtonCustom type='primary' onClick={onClose}>
+            <ButtonCustom
+              type='primary'
+              onClick={() => {
+                onClose(!open)
+                onFinish()
+              }}
+            >
               OK
             </ButtonCustom>
           </Space>
@@ -39,7 +46,10 @@ const DrawerCustom = (props: Props) => {
           shape='circle'
           icon={<CloseOutlined />}
           className={`${css.buttonClose} ${!open && css.buttonHidden}`}
-          onClick={onClose}
+          onClick={() => {
+            onClose(!open)
+            onFinish()
+          }}
           style={{ padding: 12 }}
         ></ButtonCustom>
       }

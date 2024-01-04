@@ -50,7 +50,7 @@ const MentorCreateTest = () => {
       if (typeAction === 'createTest') localStorage.setItem('createTest', data.data._id)
       if (current === 0) setCurrent(current + 1)
     },
-    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi xảy ra' }),
+    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Tiêu đề đã tồn tại' }),
   })
   const [skillSelected, setSkillSelected] = useState<string[]>([])
 
@@ -135,7 +135,7 @@ const MentorCreateTest = () => {
           skillData={skillData?.data?.docs ? skillData?.data?.docs : []}
         />
       ),
-      disabled: skillSelected.length === 0,
+      disabled: skillSelected.length < 4,
     },
   ]
 
@@ -147,7 +147,7 @@ const MentorCreateTest = () => {
       <div>{stepItem[current]?.content}</div>
       <Space>
         {current >= 0 && current < stepItem.length - 1 && (
-          <ButtonCustom type='primary' onClick={() => next()}>
+          <ButtonCustom type='primary' onClick={() => next()} disabled={skillSelected.length < 4 && current > 0}>
             Tiếp theo
           </ButtonCustom>
         )}

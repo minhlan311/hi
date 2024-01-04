@@ -3,12 +3,11 @@ import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { CategoryState } from '@/interface/category'
 import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd'
+import { Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,7 +22,7 @@ type Props = {
 const DrawerExam = (props: Props) => {
   const { open, setOpen, setLoading, examData, size } = props
   const navitage = useNavigate()
-  const [imgUrl, setImgUrl] = useState<any>()
+  // const [imgUrl, setImgUrl] = useState<any>()
   const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [testOptions, setTestOptions] = useState<
@@ -102,8 +101,9 @@ const DrawerExam = (props: Props) => {
   const onFinish = (values: any) => {
     const payload = {
       ...values,
-      coverUrl: imgUrl ? imgUrl?.[0]?.url : undefined,
+      // coverUrl: imgUrl ? imgUrl?.[0]?.url : undefined,
       id: examData?._id,
+      skillName: [values.skillName],
     }
 
     mutate(payload)
@@ -206,7 +206,7 @@ const DrawerExam = (props: Props) => {
               >
                 <Select
                   placeholder='Chọn loại kỹ năng'
-                  mode='multiple'
+                  showSearch
                   options={[
                     {
                       value: 'READING',
@@ -229,7 +229,7 @@ const DrawerExam = (props: Props) => {
               </Form.Item>
             </Col>
 
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
                 name='name'
                 label='Tiêu đề bộ đề'
@@ -243,10 +243,27 @@ const DrawerExam = (props: Props) => {
                 <Input placeholder='Nhập tên tiêu đề bộ đề' />
               </Form.Item>
             </Col>
+
+            <Col span={12}>
+              <Form.Item
+                name='duration'
+                label='Thời gian làm bài (phút)'
+                rules={[{ required: true, message: 'Vui lòng nhập thời gian làm bài' }]}
+              >
+                <InputNumber
+                  min={1}
+                  placeholder='Nhập thời gian làm bài'
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </Form.Item>
+            </Col>
+
             <Col span={24}>
               <TextAreaCustom name='description' label='Chú thích' data={examData} />
             </Col>
-            <Col span={24}>
+            {/* <Col span={24}>
               <Form.Item name='coverUrl' label='Ảnh bộ đề'>
                 <UploadCustom
                   uploadKey='image'
@@ -263,7 +280,7 @@ const DrawerExam = (props: Props) => {
                   }
                 ></UploadCustom>
               </Form.Item>
-            </Col>
+            </Col> */}
           </Row>
         </Form>
       </Drawer>

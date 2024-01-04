@@ -37,7 +37,8 @@ const RenderSubMenu = ({ item, parentSlug }: Props) => {
             </div>
             <DrawerCustom
               open={openSub}
-              onClose={() => setOpenSub(false)}
+              onClose={setOpenSub}
+              onFinish={() => setOpenSub(false)}
               placement='left'
               width={sm ? '80vw' : '30vw'}
             >

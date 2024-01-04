@@ -15,21 +15,23 @@ export default function PreListening({ nextSteps }: Props) {
   return (
     <div className='container-prelisten'>
       <h2>IELTS Listening</h2>
-      <p className='p-sound'>Time: Approximately 30 minutes</p>
-      <h3>INSTRUCTIONS TO CANDIDATES</h3>
+      <p className='p-sound'>Thời gian: Khoảng 30 phút</p>
+      <h3>HƯỚNG DẪN DÀNH CHO THÍ SINH</h3>
       <ul className='p-sound-ul'>
-        <li className='p-sound'>Answer all the questions.</li>
-        <li className='p-sound'>You can change your answers at any time during the test.</li>
+        <li className='p-sound'>Trả lời tất cả các câu hỏi.</li>
+        <li className='p-sound'>
+          Bạn có thể thay đổi câu trả lời của mình bất cứ lúc nào trong quá trình làm bài thi.
+        </li>
       </ul>
-      <h3>INFORMATION FOR CANDIDATES</h3>
+      <h3>THÔNG TIN DÀNH CHO THÍ SINH</h3>
       <ul className='p-sound-ul'>
-        <li>There are 40 questions in this test.</li>
-        <li>Each question carries one mark.</li>
-        <li>There are four parts to the test.</li>
-        <li>You will hear each part once.</li>
+        <li>Có 40 câu hỏi trong bài kiểm tra này.</li>
+        <li>Mỗi câu hỏi mang một dấu hiệu.</li>
+        <li>Có bốn phần của bài kiểm tra.</li>
+        <li>Bạn sẽ nghe mỗi phần một lần.</li>
         <li>
-          For each part of the test there will be time for you to look through the questions and time for you to check
-          your answers.
+          Đối với mỗi phần của bài thi sẽ có thời gian để bạn xem qua các câu hỏi và thời gian để bạn kiểm tra câu trả
+          lời của bạn.
         </li>
       </ul>
       <Flex
@@ -42,12 +44,12 @@ export default function PreListening({ nextSteps }: Props) {
       >
         <WarningOutlined />
         <p className='p-sound'>
-          Do not click <strong>Start test</strong> until you are told to do so.
+          Không nhấp vào <strong>Bắt đầu kiểm tra</strong> cho đến khi bạn được yêu cầu làm như vậy.
         </p>
       </Flex>
       <Flex justify='center' align='center'>
         <Button type='primary' onClick={() => handleNextStep()}>
-          Start test
+          Bắt đầu kiểm tra
         </Button>
       </Flex>
     </div>

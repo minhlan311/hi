@@ -181,10 +181,10 @@ const MentorExamDetail = () => {
       key: 'time',
       align: 'center',
       render: (time) => {
-        const durations = moment.duration(time, 'minutes')
-        const minutes = Math.floor(durations.asMinutes())
-        const seconds = Math.floor(durations.asSeconds() % 60)
-        const formattedTime = moment({ minutes, seconds }).format('mm:ss')
+        const durations = time
+        const minutes = Math.floor(durations)
+        const seconds = Math.round((durations - minutes) * 60)
+        const formattedTime = `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
 
         return formattedTime
       },

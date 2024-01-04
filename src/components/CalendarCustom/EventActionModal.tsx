@@ -4,7 +4,9 @@ import eventApi from '@/apis/event.api'
 import examApi from '@/apis/exam.api'
 import userApi from '@/apis/user.api'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { EventState } from '@/interface/event'
+import { Class } from '@/types/class.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, TimePicker } from 'antd'
 import dayjs from 'dayjs'
@@ -13,7 +15,6 @@ import { useContext, useEffect, useState } from 'react'
 import openNotification from '../Notification'
 import SelectCustom from '../SelectCustom/SelectCustom'
 import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
-import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   open: boolean
@@ -36,26 +37,12 @@ const EventActionModal = (props: Props) => {
   const [allDay, setAllDay] = useState(false)
   const [classSelect, setClassSelect] = useState()
   const [studentIds, setStudentIds] = useState<string[]>([])
-
-  const [classData, setClassData] = useState<any>()
+  const [nowTime, setNowTime] = useState<Date>()
+  const [classData, setClassData] = useState<Class[]>()
   const [initVal, setInitVal] = useState<any>()
+  const [dateSelect, setDateSelect] = useState<any[]>([])
 
   const queryClient = useQueryClient()
-  const { mutate } = useMutation({
-    mutationFn: (body) => (eventDetail ? eventApi.updateEvent(body) : eventApi.createEvent(body)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['eventsData'] })
-      openNotification({
-        status: 'success',
-        message: 'Thông báo',
-        description: eventDetail
-          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`
-          : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`,
-      })
-      form.resetFields()
-      setType && setType('event')
-    },
-  })
 
   const studentsId = classData?.find((e: any) => e._id === classSelect)?.students
 
@@ -82,8 +69,27 @@ const EventActionModal = (props: Props) => {
   ]
 
   const [repeat, setRepeat] = useState(false)
+  const [repeatType, setRepeatType] = useState<string>()
 
   const [schedules, setSchedules] = useState<number[]>([])
+
+  const { mutate } = useMutation({
+    mutationFn: (body) => (eventDetail ? eventApi.updateEvent(body) : eventApi.createEvent(body)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['eventsData'] })
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: eventDetail
+          ? `Cập nhật ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`
+          : `Tạo ${type === 'test' ? 'lịch thi' : 'cuộc họp'} thành công`,
+      })
+      form.resetFields()
+      setType && setType('event')
+      setRepeat(false)
+      setRepeatType('')
+    },
+  })
 
   const handleChangeRepeat = (e: string) => {
     if (e === 'none') {
@@ -93,23 +99,57 @@ const EventActionModal = (props: Props) => {
       return
     }
 
-    setRepeat(true)
-
-    setSchedules(
-      (e === 'allWeek' && [0, 1, 2, 3, 4, 5, 6]) ||
-        (e === 'T2-T6' && [1, 2, 3, 4, 5]) ||
-        (e === 'weekEnd' && [0, 6]) ||
-        [],
-    )
+    setRepeatType(e)
   }
+
+  useEffect(() => {
+    if (repeatType) {
+      setSchedules(
+        (repeatType === 'allWeek' && [0, 1, 2, 3, 4, 5, 6]) ||
+          (repeatType === 'T2-T6' && [1, 2, 3, 4, 5]) ||
+          (repeatType === 'weekEnd' && [0, 6]) ||
+          [],
+      )
+      setRepeat(true)
+    }
+  }, [repeatType])
+
+  useEffect(() => {
+    if (dateSelect.length > 0) {
+      const start = dateSelect[0].format('YYYY/MM/DD')
+      const end = dateSelect[1].format('YYYY/MM/DD')
+
+      if (start !== end) {
+        setRepeatType('allWeek')
+      }
+    }
+  }, [dateSelect])
 
   const onChangeDate = (list: any[]) => {
     setSchedules(list)
   }
 
-  useEffect(() => {
-    form.setFieldsValue({ schedules: schedules })
-  }, [schedules])
+  const checkSchedule = (arr: number[]) => {
+    const fullWeek = [0, 1, 2, 3, 4, 5, 6]
+
+    if (arr.length === 0) {
+      return 'none'
+    } else if (arr.length === fullWeek.length && arr.every((item) => fullWeek.includes(item))) {
+      return 'allWeek'
+    } else if (arr.length === 2 && ((arr.includes(0) && arr.includes(6)) || (arr.includes(6) && arr.includes(0)))) {
+      return 'weekEnd'
+    } else if (arr.length === 5) {
+      const sortedArr = arr.slice().sort((a, b) => a - b)
+      const isT2T6 =
+        sortedArr[0] === 1 && sortedArr[1] === 2 && sortedArr[2] === 3 && sortedArr[3] === 4 && sortedArr[4] === 5
+
+      if (isT2T6) {
+        return 'T2-T6'
+      }
+    }
+
+    return 'any'
+  }
 
   useEffect(() => {
     if (eventDetail) {
@@ -138,14 +178,19 @@ const EventActionModal = (props: Props) => {
             timeTest: closestTime.value,
             timeAdd: examTime - closestTime.value,
           })
-      } else
+      } else {
         setInitVal({
           name: eventDetail.name,
           classId: eventDetail.classId,
           students: eventDetail.students,
           status: eventDetail.status,
           time: [dayjs(eventDetail.start), dayjs(eventDetail.end)],
+          date: [dayjs(eventDetail.start), dayjs(eventDetail.end)],
+          schedules: eventDetail.schedules,
         })
+        setRepeat(eventDetail.isRepeat)
+        setRepeatType(checkSchedule(eventDetail.schedules))
+      }
     }
   }, [eventDetail])
 
@@ -161,20 +206,31 @@ const EventActionModal = (props: Props) => {
   }, [selectTime])
 
   useEffect(() => {
+    setNowTime(new Date())
+
     if (initVal) {
       form.setFieldsValue(initVal)
+      setClassSelect(initVal.classId)
     }
   }, [initVal])
 
   const handleFinish = (values: any) => {
     if (type === 'event') {
+      const newTime: any[] = []
+      if (values.time)
+        values.date.forEach((d: any, index: number) => {
+          const time = moment(values.time[index].$d).format('HH:mm')
+          const date = moment(d.$d).format('YYYY/MM/DD')
+          newTime.push(moment(date + ` ${time}`))
+        })
+
       const payload = {
         id: eventDetail?._id,
         name: values.name,
         description: values.description,
         classId: values.classId,
-        start: allDay ? moment(values.time[0].$d).startOf('day') : moment(values.time[0].$d),
-        end: allDay ? moment(values.time[1].$d).endOf('day') : moment(values.time[1].$d),
+        start: allDay ? moment(values.date[0]).startOf('day') : newTime[0],
+        end: allDay ? moment(values.date[1]).endOf('day') : newTime[1],
         students: studentIds,
         mentorId: profile?._id,
         type: 'CLASS',
@@ -214,6 +270,10 @@ const EventActionModal = (props: Props) => {
 
   const { xs, sm, md, lg } = useResponsives()
 
+  useEffect(() => {
+    form.setFieldValue('schedules', schedules)
+  }, [schedules])
+
   return (
     <Modal
       title={
@@ -248,31 +308,31 @@ const EventActionModal = (props: Props) => {
                 searchKey='classId'
                 labelKey='title'
                 apiFind={classApi.getClass}
-                filterQuery={{ mentorId: profile._id }}
+                filterQuery={{
+                  mentorId: profile._id,
+                  betweenDate: nowTime,
+                }}
                 callBackDataSearch={setClassData}
+                defaultValue={initVal?.classId}
                 onChange={setClassSelect}
                 allowClear
               />
             </Form.Item>
           </Col>
           <Col span={24} md={eventDetail ? 9 : 12}>
-            <Form.Item
-              label='Thêm người tham dự'
-              name='students'
-              // rules={[{ required: true, message: 'Vui lòng chọn người dự' }]}
-            >
+            <Form.Item label='Thêm người tham dự' name='students'>
               <SelectCustom
                 placeholder='Tìm kiếm tham người dự'
                 type='search'
                 searchKey='user'
                 apiFind={userApi.findUser}
                 filterQuery={{ _id: studentsId }}
-                defaultValue={eventDetail?.students}
+                defaultValue={studentsId ? studentsId : eventDetail?.students}
                 mode='multiple'
                 allowClear
                 selectAll
                 selectAllLabel='Chọn tất cả'
-                disabled={classSelect ? false : true}
+                disabled={Boolean(!classSelect)}
                 callBackSelected={setStudentIds}
               />
             </Form.Item>
@@ -299,11 +359,12 @@ const EventActionModal = (props: Props) => {
                 <Form.Item label='Bài thi' name='testId' rules={[{ required: true, message: 'Vui lòng chọn bài thi' }]}>
                   <SelectCustom
                     placeholder='Tìm kiếm bài thi'
+                    showType
                     type='search'
                     searchKey='exams'
                     apiFind={examApi.findExam}
+                    defaultValue={initVal?.testId}
                     filterQuery={{ createdById: profile._id }}
-                    defaultValue={eventDetail?.students}
                   />
                 </Form.Item>
               </Col>
@@ -318,16 +379,18 @@ const EventActionModal = (props: Props) => {
 
         {type === 'event' ? (
           <Row gutter={12}>
-            <Col span={24} md={16}>
-              <Form.Item
-                label='Thời gian cuộc họp'
-                name='time'
-                rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}
-              >
-                <DatePicker.RangePicker format='HH:mm DD-MM-YYYY' showTime />
+            <Col span={24} md={9}>
+              <Form.Item label='Ngày' name='date' rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}>
+                <DatePicker.RangePicker format='DD-MM-YYYY' className='sp100' onChange={(e: any) => setDateSelect(e)} />
               </Form.Item>
             </Col>
-            <Col span={24} md={8}>
+            <Col span={24} md={9}>
+              <Form.Item label='Thời gian' name='time' rules={[{ required: !allDay, message: 'Vui lòng chọn ngày' }]}>
+                <TimePicker.RangePicker format='HH:mm' className='sp100' disabled={allDay} />
+              </Form.Item>
+            </Col>
+
+            <Col span={24} md={6}>
               <Form.Item name='allDay' label={sm ? '' : ' '}>
                 <Checkbox onChange={(e) => setAllDay(e.target.checked)} checked={allDay}>
                   Cả ngày
@@ -352,7 +415,7 @@ const EventActionModal = (props: Props) => {
                 name='timeTest'
                 rules={[{ required: true, message: 'Vui lòng chọn thời gian làm bài' }]}
               >
-                <SelectCustom placeholder='Chọn thời gian' options={testTime} />
+                <SelectCustom placeholder='Chọn thời gian' options={testTime} defaultValue={initVal?.timeTest} />
               </Form.Item>
             </Col>
             <Col span={24} md={8}>
@@ -365,7 +428,7 @@ const EventActionModal = (props: Props) => {
         {type === 'event' && (
           <Row gutter={24}>
             <Col span={24} md={6}>
-              <Form.Item name='repeat'>
+              <Form.Item name='repeat' label='Lặp lại'>
                 <SelectCustom
                   options={[
                     { label: 'Không lặp lại', value: 'none' },
@@ -375,13 +438,14 @@ const EventActionModal = (props: Props) => {
                     { label: 'Chọn ngày', value: 'any' },
                   ]}
                   placeholder='Lặp lại'
+                  defaultValue={repeatType}
                   onChange={handleChangeRepeat}
                 ></SelectCustom>
               </Form.Item>
             </Col>
 
             <Col span={24} md={18}>
-              <Form.Item name='schedules' rules={[{ required: repeat, message: 'Vui lòng chọn thứ' }]}>
+              <Form.Item name='schedules' label='Thứ' rules={[{ required: repeat, message: 'Vui lòng chọn thứ' }]}>
                 <Checkbox.Group
                   value={schedules}
                   options={daysOfWeek}

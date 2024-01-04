@@ -2,7 +2,7 @@
 import categoryApi from '@/apis/categories.api'
 import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
-import { Col, Form, Input, Row, Select, Space } from 'antd'
+import { Col, DatePicker, Form, Input, Row, Select, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
@@ -10,12 +10,13 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 import { debounce } from '@/helpers/common'
 import DrawerCustom from '../DrawerCustom/DrawerCustom'
+import moment from 'moment-timezone'
 
 type Props = {
   apiFind: any
   keyFilter: string
   callBackData: React.Dispatch<React.SetStateAction<any>>
-  type: 'course' | 'test' | 'question'
+  type: 'course' | 'test' | 'question' | 'class' | 'event'
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   addOnButton?: React.ReactNode
   limit?: number
@@ -29,7 +30,7 @@ type Props = {
 
 const FilterAction = (props: Props) => {
   const {
-    type = 'course',
+    type: typeFilter = 'course',
     apiFind,
     keyFilter,
     callBackData,
@@ -87,6 +88,7 @@ const FilterAction = (props: Props) => {
       point,
       status,
       createdAt,
+      dates,
     } = form.getFieldsValue()
 
     const body = {
@@ -98,6 +100,10 @@ const FilterAction = (props: Props) => {
       categoryId,
       plan,
       status,
+      start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
+      end: typeFilter === 'event' && dates ? moment(dates.$d).endOf('day') : undefined,
+      startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
+      endDate: typeFilter !== 'event' && dates ? dates[1] : undefined,
       search: keyword || undefined,
     }
 
@@ -172,73 +178,107 @@ const FilterAction = (props: Props) => {
       <Form form={form} autoComplete='off'>
         <Row justify='space-between' className={className}>
           <Space direction={lg ? 'vertical' : 'horizontal'} className={`${lg && 'sp100'}`}>
-            {type === 'course' || type === 'test' ? (
+            {typeFilter !== 'question' ? (
               <>
-                <Form.Item name='categoryId' style={{ width: lg ? '100%' : 120 }}>
-                  <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
-                </Form.Item>
-                <Form.Item name='plan'>
-                  <Select
-                    placeholder='Loại phí'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'FREE',
-                        label: 'Miễn phí',
-                      },
-                      {
-                        value: 'PREMIUM',
-                        label: 'Có phí',
-                      },
-                    ]}
-                  />
-                </Form.Item>
-                {type === 'test' ? (
-                  <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
-                    <Select
-                      placeholder='Loại kỹ năng'
-                      allowClear
-                      onChange={onChangeFilter}
-                      options={[
-                        {
-                          value: 'READING',
-                          label: 'Đọc',
-                        },
-                        {
-                          value: 'LISTENING',
-                          label: 'Nghe',
-                        },
-                        {
-                          value: 'WRITING',
-                          label: 'Viết',
-                        },
-                        {
-                          value: 'SPEAKING',
-                          label: 'Nói',
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                ) : (
-                  <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
-                    <Select
-                      placeholder='Đánh giá'
-                      allowClear
-                      onChange={onChangeFilter}
-                      options={[
-                        {
-                          value: 'highestRating',
-                          label: 'Đánh giá tốt nhất',
-                        },
-                        {
-                          value: 'highestParticipant',
-                          label: 'Đánh giá nhiều nhất',
-                        },
-                      ]}
-                    />
+                {typeFilter !== 'event' && (
+                  <Form.Item name='categoryId' style={{ width: lg ? '100%' : 120 }}>
+                    <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
                   </Form.Item>
                 )}
+
+                {(typeFilter === 'class' && (
+                  <Form.Item name='dates' style={{ width: lg ? '100%' : 250 }}>
+                    <DatePicker.RangePicker format='DD/MM/YYYY' allowClear onChange={onChangeFilter} />
+                  </Form.Item>
+                )) ||
+                  (typeFilter === 'event' && (
+                    <Form.Item name='dates' style={{ width: '100%' }}>
+                      <DatePicker format='DD/MM/YYYY' allowClear onChange={onChangeFilter} />
+                    </Form.Item>
+                  )) ||
+                  (typeFilter === 'test' ? (
+                    <>
+                      <Form.Item name='type' style={{ width: lg ? '100%' : 100 }}>
+                        <Select
+                          placeholder='Loại bài'
+                          allowClear
+                          onChange={onChangeFilter}
+                          options={[
+                            {
+                              value: 'QUIZ',
+                              label: 'Bài quiz',
+                            },
+                            {
+                              value: 'TEST',
+                              label: 'Bài test',
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                      <Form.Item name='skillName' style={{ width: lg ? '100%' : 120 }}>
+                        <Select
+                          placeholder='Loại kỹ năng'
+                          allowClear
+                          onChange={onChangeFilter}
+                          options={[
+                            {
+                              value: 'READING',
+                              label: 'Đọc',
+                            },
+                            {
+                              value: 'LISTENING',
+                              label: 'Nghe',
+                            },
+                            {
+                              value: 'WRITING',
+                              label: 'Viết',
+                            },
+                            {
+                              value: 'SPEAKING',
+                              label: 'Nói',
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </>
+                  ) : (
+                    <>
+                      <Form.Item name='viewCountDownCount' style={{ width: lg ? '100%' : 160 }}>
+                        <Select
+                          placeholder='Đánh giá'
+                          allowClear
+                          onChange={onChangeFilter}
+                          options={[
+                            {
+                              value: 'highestRating',
+                              label: 'Đánh giá tốt nhất',
+                            },
+                            {
+                              value: 'highestParticipant',
+                              label: 'Đánh giá nhiều nhất',
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                      <Form.Item name='plan'>
+                        <Select
+                          placeholder='Loại phí'
+                          allowClear
+                          onChange={onChangeFilter}
+                          options={[
+                            {
+                              value: 'FREE',
+                              label: 'Miễn phí',
+                            },
+                            {
+                              value: 'PREMIUM',
+                              label: 'Có phí',
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </>
+                  ))}
                 <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
                   <Select
                     placeholder='Trạng thái'
@@ -256,23 +296,25 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='createdAt'>
-                  <Select
-                    placeholder='Ngày tải lên'
-                    onChange={onChangeFilter}
-                    allowClear
-                    options={[
-                      {
-                        value: '-1',
-                        label: 'Mới nhất',
-                      },
-                      {
-                        value: '1',
-                        label: 'Cũ nhất',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+                {typeFilter !== 'event' && (
+                  <Form.Item name='createdAt'>
+                    <Select
+                      placeholder='Ngày tải lên'
+                      onChange={onChangeFilter}
+                      allowClear
+                      options={[
+                        {
+                          value: '-1',
+                          label: 'Mới nhất',
+                        },
+                        {
+                          value: '1',
+                          label: 'Cũ nhất',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                )}
               </>
             ) : (
               <>
@@ -326,31 +368,7 @@ const FilterAction = (props: Props) => {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item name='skill' style={{ width: lg ? '100%' : 120 }}>
-                  <Select
-                    placeholder='Loại kỹ năng'
-                    allowClear
-                    onChange={onChangeFilter}
-                    options={[
-                      {
-                        value: 'READING',
-                        label: 'Đọc',
-                      },
-                      {
-                        value: 'LISTENING',
-                        label: 'Nghe',
-                      },
-                      {
-                        value: 'WRITING',
-                        label: 'Viết',
-                      },
-                      {
-                        value: 'SPEAKING',
-                        label: 'Nói',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+
                 <Form.Item name='difficulty' style={{ width: lg ? '100%' : 87 }}>
                   <Select
                     placeholder='Độ khó'
@@ -479,7 +497,13 @@ const FilterAction = (props: Props) => {
             <ButtonCustom onClick={() => setOpen(true)}>Lọc</ButtonCustom>
           </Space>
         </Col>
-        <DrawerCustom open={open} onClose={() => setOpen(false || !lg)} placement='right' title='Lọc'>
+        <DrawerCustom
+          open={open}
+          onFinish={() => setOpen(false || !lg)}
+          onClose={setOpen}
+          placement='right'
+          title='Lọc'
+        >
           <FormFilter />
         </DrawerCustom>
       </Row>

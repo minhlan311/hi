@@ -331,7 +331,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
           }}
         >
           <Tooltip placement='bottom' title='Thêm ghi chú'>
-            <Button type='dashed' className='dashed' onClick={handleAddBookmark}>
+            <Button type='dashed' className='default' onClick={handleAddBookmark}>
               <PlusCircleOutlined />
             </Button>
           </Tooltip>
@@ -368,7 +368,7 @@ export default function VideoComponent({ video, names, dataLession }: VideoProps
                           <Button
                             disabled={mutateDelete.isLoading}
                             type='dashed'
-                            className='dashed'
+                            className='default'
                             onClick={() => handleDeleteBookmark(bookmark._id)}
                           >
                             <DeleteOutlined

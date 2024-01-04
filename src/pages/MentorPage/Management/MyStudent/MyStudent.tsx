@@ -187,7 +187,7 @@ export default function MyStudent() {
               <Tooltip placement='top' title='Đổi lịch học'>
                 <Button
                   type='dashed'
-                  className='dashed'
+                  className='default'
                   onClick={() => handleClass(record?.course?._id as string, record?.user?._id, TypeForm.UPDATE)}
                 >
                   <EditOutlined />
@@ -198,8 +198,8 @@ export default function MyStudent() {
                 <Space size='middle'>
                   <Tooltip placement='top' title='Xếp lớp '>
                     <Button
-                      type='dashed'
-                      className={'dashed'}
+                      type='default'
+                      className={'default'}
                       onClick={() => handleClass(record?.course?._id as string, record?.user?._id, TypeForm.CREATE)}
                     >
                       <ReconciliationOutlined className='icon-button' />
