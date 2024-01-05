@@ -3,6 +3,7 @@ import assessmentApi from '@/apis/assessment.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Col, Flex, Progress, Row, Space } from 'antd'
@@ -78,6 +79,8 @@ const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
     }
   }
 
+  const { sm } = useResponsives()
+
   return (
     <Header padding={'30px 0 50px 0'} size='sm'>
       <div className={css.card}>
@@ -135,8 +138,12 @@ const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
                   <Flex justify='space-between' align='center'>
                     <h1>{user.fullName}</h1>
                     {user._id === profile?._id && (
-                      <ButtonCustom onClick={() => setUpdate(true)} icon={<TbUserEdit />}>
-                        Chỉnh sửa
+                      <ButtonCustom
+                        onClick={() => setUpdate(true)}
+                        icon={<TbUserEdit />}
+                        tooltip={sm ? 'Chỉnh sửa' : ''}
+                      >
+                        {!sm && 'Chỉnh sửa'}
                       </ButtonCustom>
                     )}
                   </Flex>
@@ -172,65 +179,73 @@ const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
                       </Col>
                     ))}
                   </Row>
-                  <Row gutter={[24, 24]} className={css.progress}>
-                    <Col span={12} md={12} lg={6} className={css.main}>
-                      <Progress
-                        type='circle'
-                        format={() => (
-                          <div>
-                            <h3>{formatNumber(coursesLength)}</h3>
-                            <p>Khóa học</p>
-                          </div>
-                        )}
-                      ></Progress>
-                      <div className={css.icon}>
-                        <FaBookOpen size={32} />
+                  <Row gutter={[24, 30]} className={css.progress}>
+                    <Col span={12} md={12} lg={6}>
+                      <div className={css.main}>
+                        <Progress
+                          type='circle'
+                          format={() => (
+                            <div>
+                              <h3>{formatNumber(coursesLength)}</h3>
+                              <p>Khóa học</p>
+                            </div>
+                          )}
+                        ></Progress>
+                        <div className={css.icon}>
+                          <FaBookOpen size={33} />
+                        </div>
                       </div>
                     </Col>
-                    <Col span={12} md={12} lg={6} className={css.main}>
-                      <Progress
-                        type='circle'
-                        format={() => (
-                          <div>
-                            <h3>
-                              {getAssessmentDetail?.data?.totalAssessmentsAverages
-                                ? getAssessmentDetail?.data?.totalAssessmentsAverages
-                                : 0}
-                            </h3>
-                            <p>Đánh giá</p>
-                          </div>
-                        )}
-                      ></Progress>
-                      <div className={css.icon}>
-                        <FaStar size={32} />
+                    <Col span={12} md={12} lg={6}>
+                      <div className={css.main}>
+                        <Progress
+                          type='circle'
+                          format={() => (
+                            <div>
+                              <h3>
+                                {getAssessmentDetail?.data?.totalAssessmentsAverages
+                                  ? getAssessmentDetail?.data?.totalAssessmentsAverages
+                                  : 0}
+                              </h3>
+                              <p>Đánh giá</p>
+                            </div>
+                          )}
+                        ></Progress>
+                        <div className={css.icon}>
+                          <FaStar size={34} />
+                        </div>
                       </div>
                     </Col>
-                    <Col span={12} md={12} lg={6} className={css.main}>
-                      <Progress
-                        type='circle'
-                        format={() => (
-                          <div>
-                            <h3>{formatNumber(totalStudent)}</h3>
-                            <p>Học viên</p>
-                          </div>
-                        )}
-                      ></Progress>
-                      <div className={css.icon}>
-                        <FaUserAlt size={30} />
+                    <Col span={12} md={12} lg={6}>
+                      <div className={css.main}>
+                        <Progress
+                          type='circle'
+                          format={() => (
+                            <div>
+                              <h3>{formatNumber(totalStudent)}</h3>
+                              <p>Học viên</p>
+                            </div>
+                          )}
+                        ></Progress>
+                        <div className={css.icon}>
+                          <FaUserAlt size={30} />
+                        </div>
                       </div>
                     </Col>
-                    <Col span={12} md={12} lg={6} className={css.main}>
-                      <Progress
-                        type='circle'
-                        format={() => (
-                          <div>
-                            <h3>{time}</h3>
-                            <p>Kinh nghiệm</p>
-                          </div>
-                        )}
-                      ></Progress>
-                      <div className={css.icon}>
-                        <FaClock size={34} />
+                    <Col span={12} md={12} lg={6}>
+                      <div className={css.main}>
+                        <Progress
+                          type='circle'
+                          format={() => (
+                            <div>
+                              <h3>{time}</h3>
+                              <p>Kinh nghiệm</p>
+                            </div>
+                          )}
+                        ></Progress>
+                        <div className={css.icon}>
+                          <FaClock size={34} />
+                        </div>
                       </div>
                     </Col>
                   </Row>
