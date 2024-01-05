@@ -69,8 +69,8 @@ const EventActionModal = (props: Props) => {
   ]
 
   const [repeat, setRepeat] = useState(false)
-  const [repeatType, setRepeatType] = useState<string>()
-
+  const [repeatType, setRepeatType] = useState<'allWeek' | 'T2-T6' | 'weekEnd' | 'any'>()
+  const [target, setTarget] = useState<boolean>(false)
   const [schedules, setSchedules] = useState<number[]>([])
 
   const { mutate } = useMutation({
@@ -87,23 +87,31 @@ const EventActionModal = (props: Props) => {
       form.resetFields()
       setType && setType('event')
       setRepeat(false)
-      setRepeatType('')
+      setRepeatType(undefined)
     },
   })
 
-  const handleChangeRepeat = (e: string) => {
-    if (e === 'none') {
-      setSchedules([])
-      setRepeat(false)
-
-      return
-    }
-
+  const handleChangeRepeat = (e: 'allWeek' | 'T2-T6' | 'weekEnd' | 'any') => {
+    setTarget(false)
     setRepeatType(e)
   }
 
+  const start = dateSelect?.[0]?.format('YYYY/MM/DD')
+  const end = dateSelect?.[1]?.format('YYYY/MM/DD')
+  const checkDate = start === end
+
   useEffect(() => {
-    if (repeatType) {
+    if (checkDate) {
+      setRepeat(false)
+      setSchedules([])
+    } else {
+      setRepeatType('allWeek')
+      setTarget(false)
+    }
+  }, [checkDate])
+
+  useEffect(() => {
+    if (repeatType && !target) {
       setSchedules(
         (repeatType === 'allWeek' && [0, 1, 2, 3, 4, 5, 6]) ||
           (repeatType === 'T2-T6' && [1, 2, 3, 4, 5]) ||
@@ -112,28 +120,18 @@ const EventActionModal = (props: Props) => {
       )
       setRepeat(true)
     }
-  }, [repeatType])
-
-  useEffect(() => {
-    if (dateSelect.length > 0) {
-      const start = dateSelect[0].format('YYYY/MM/DD')
-      const end = dateSelect[1].format('YYYY/MM/DD')
-
-      if (start !== end) {
-        setRepeatType('allWeek')
-      }
-    }
-  }, [dateSelect])
+  }, [repeatType, target])
 
   const onChangeDate = (list: any[]) => {
     setSchedules(list)
+    setTarget(true)
   }
 
   const checkSchedule = (arr: number[]) => {
     const fullWeek = [0, 1, 2, 3, 4, 5, 6]
 
     if (arr.length === 0) {
-      return 'none'
+      return
     } else if (arr.length === fullWeek.length && arr.every((item) => fullWeek.includes(item))) {
       return 'allWeek'
     } else if (arr.length === 2 && ((arr.includes(0) && arr.includes(6)) || (arr.includes(6) && arr.includes(0)))) {
@@ -188,8 +186,8 @@ const EventActionModal = (props: Props) => {
           date: [dayjs(eventDetail.start), dayjs(eventDetail.end)],
           schedules: eventDetail.schedules,
         })
-        setRepeat(eventDetail.isRepeat)
-        setRepeatType(checkSchedule(eventDetail.schedules))
+        // setRepeat(eventDetail.isRepeat)
+        // setRepeatType(checkSchedule(eventDetail.schedules))
       }
     }
   }, [eventDetail])
@@ -202,6 +200,7 @@ const EventActionModal = (props: Props) => {
     } else
       form.setFieldsValue({
         time: [dayjs(selectTime.start), dayjs(selectTime.end)],
+        date: [dayjs(selectTime.start), dayjs(selectTime.end)],
       })
   }, [selectTime])
 
@@ -272,6 +271,10 @@ const EventActionModal = (props: Props) => {
 
   useEffect(() => {
     form.setFieldValue('schedules', schedules)
+
+    if (target) {
+      setRepeatType(checkSchedule(schedules))
+    }
   }, [schedules])
 
   return (
@@ -431,7 +434,6 @@ const EventActionModal = (props: Props) => {
               <Form.Item name='repeat' label='Lặp lại'>
                 <SelectCustom
                   options={[
-                    { label: 'Không lặp lại', value: 'none' },
                     { label: 'Hàng ngày', value: 'allWeek' },
                     { label: 'T2-T6', value: 'T2-T6' },
                     { label: 'Cuối tuần', value: 'weekEnd' },
@@ -440,6 +442,7 @@ const EventActionModal = (props: Props) => {
                   placeholder='Lặp lại'
                   defaultValue={repeatType}
                   onChange={handleChangeRepeat}
+                  disabled={checkDate}
                 ></SelectCustom>
               </Form.Item>
             </Col>
