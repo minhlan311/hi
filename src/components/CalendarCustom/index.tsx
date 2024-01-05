@@ -1,5 +1,6 @@
 import eventApi from '@/apis/event.api'
 import { AppContext } from '@/contexts/app.context'
+import { debounce } from '@/helpers/common'
 import useResponsives from '@/hooks/useResponsives'
 import { EventObject } from '@/interface/class'
 import { EventSchedule } from '@/interface/event'
@@ -59,6 +60,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
   const eventData = data?.data
 
   const [timeSelect, setTimeSelect] = useState<{ startDate: Moment; endDate: Moment }>()
+  const [search, setSearch] = useState<string>('')
 
   const calAction: any = calRef?.current?.calendarInstance
 
@@ -92,10 +94,10 @@ const CalendarCustom = ({ calendarType }: Props) => {
         }
 
   const { data: eventsData, isLoading } = useQuery({
-    queryKey: ['eventsData', timeSelect, type],
+    queryKey: ['eventsData', timeSelect, type, search],
     queryFn: () => {
       return eventApi.getEvent({
-        filterQuery: filter,
+        filterQuery: { ...filter, search },
 
         options: { pagination: false },
       })
@@ -292,7 +294,13 @@ const CalendarCustom = ({ calendarType }: Props) => {
         direction='vertical'
       /> */}
 
-      {sm && md && <Input.Search placeholder='Tìm kiếm' />}
+      {sm && md && (
+        <Input.Search
+          placeholder='Tìm kiếm'
+          onChange={debounce((e: any) => setSearch(e.target.value), 500)}
+          allowClear
+        />
+      )}
       {sm ? (
         <Row gutter={[0, 24]}>
           <Col span={24}>
@@ -429,7 +437,13 @@ const CalendarCustom = ({ calendarType }: Props) => {
             )}
             <Col>
               <Space>
-                {!sm && !md && <Input.Search placeholder='Tìm kiếm' />}
+                {!sm && !md && (
+                  <Input.Search
+                    placeholder='Tìm kiếm'
+                    onChange={debounce((e: any) => setSearch(e.target.value), 500)}
+                    allowClear
+                  />
+                )}
                 {!profile.isMentor ? null : !md ? (
                   <Space.Compact>
                     <ButtonCustom

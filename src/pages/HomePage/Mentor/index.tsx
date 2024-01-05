@@ -5,8 +5,10 @@ import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import SliderCustom from '@/components/SliderCustom'
 import useResponsives from '@/hooks/useResponsives'
+import { UserState } from '@/interface/user'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Rate, Space, Tooltip } from 'antd'
+import moment from 'moment-timezone'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 import book from '../../../assets/icons/book.svg'
 import point2 from '../../../assets/icons/point2.svg'
@@ -28,6 +30,48 @@ const Mentor = () => {
     },
   })
   const mentorData = userData?.data.docs
+  const now = moment()
+
+  const RenderMentor = ({ user }: { user: UserState }) => {
+    const diffDuration = moment.duration(now.diff(user.createdAt))
+
+    return (
+      <Card className='mentor-introduce'>
+        <Space direction='vertical' align='center' className='it-main'>
+          <div className='image'>
+            <Avatar avtUrl={user.avatarUrl} userData={user} size={140} />
+          </div>
+          <div>
+            <Tooltip title={user.fullName}>
+              <h2 className='oneLine'>{user.fullName}</h2>
+            </Tooltip>
+            <div>Chứng chỉ Teft</div>
+            <Rate value={4.5} allowHalf style={{ fontSize: 12 }} />
+            <p>
+              <b>{350}</b> lượt đánh giá
+            </p>
+          </div>
+
+          <Space className='it-butt'>
+            <ButtonCustom size='small' type='primary'>
+              {diffDuration.asHours().toFixed(0)} giờ
+            </ButtonCustom>
+            <ButtonCustom size='small'>{370} học viên</ButtonCustom>
+          </Space>
+          <ButtonCustom className='sm-butt' size='large' style={{ width: '100%' }} href={`/profiles/${user._id}`}>
+            <Space>
+              <div>Chọn giáo viên</div>
+              <BsArrowRight
+                style={{
+                  margin: '0 0 -3px',
+                }}
+              />
+            </Space>
+          </ButtonCustom>
+        </Space>
+      </Card>
+    )
+  }
 
   return (
     <Header
@@ -65,45 +109,7 @@ const Mentor = () => {
                 prevArrow={<BsArrowLeft />}
               >
                 {mentorData.map((item) => (
-                  <Card key={item._id} className='mentor-introduce'>
-                    <Space direction='vertical' align='center' className='it-main'>
-                      <div className='image'>
-                        <Avatar avtUrl={item.avatarUrl} userData={item} size={140} />
-                      </div>
-                      <div>
-                        <Tooltip title={item.fullName}>
-                          <h2 className='oneLine'>{item.fullName}</h2>
-                        </Tooltip>
-                        <div>Chứng chỉ Teft</div>
-                        <Rate value={4.5} allowHalf style={{ fontSize: 12 }} />
-                        <p>
-                          <b>{350}</b> lượt đánh giá
-                        </p>
-                      </div>
-
-                      <Space className='it-butt'>
-                        <ButtonCustom size='small' type='primary'>
-                          {360} giờ
-                        </ButtonCustom>
-                        <ButtonCustom size='small'>{370} học viên</ButtonCustom>
-                      </Space>
-                      <ButtonCustom
-                        className='sm-butt'
-                        size='large'
-                        style={{ width: '100%' }}
-                        href={`/profiles/${item._id}`}
-                      >
-                        <Space>
-                          <div>Chọn giáo viên</div>
-                          <BsArrowRight
-                            style={{
-                              margin: '0 0 -3px',
-                            }}
-                          />
-                        </Space>
-                      </ButtonCustom>
-                    </Space>
-                  </Card>
+                  <RenderMentor user={item} key={item._id} />
                 ))}
               </SliderCustom>
             )) || <EmptyCustom description='Không có Mentor nào' />}
