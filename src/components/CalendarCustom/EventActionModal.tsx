@@ -34,17 +34,18 @@ const EventActionModal = (props: Props) => {
   const { open, setOpen, setType, type = 'event', eventDetail, selectTime, setSelectTime } = props
   const { profile } = useContext(AppContext)
   const [form] = Form.useForm()
-  const [allDay, setAllDay] = useState(false)
+  const [allDay, setAllDay] = useState<boolean>(false)
+  const [OT, setOT] = useState<boolean>(false)
   const [classSelect, setClassSelect] = useState()
   const [studentIds, setStudentIds] = useState<string[]>([])
-  const [nowTime, setNowTime] = useState<Date>()
+  // const [nowTime, setNowTime] = useState<Date>()
   const [classData, setClassData] = useState<Class[]>()
   const [initVal, setInitVal] = useState<any>()
   const [dateSelect, setDateSelect] = useState<any[]>([])
 
   const queryClient = useQueryClient()
 
-  const studentsId = classData?.find((e: any) => e._id === classSelect)?.students
+  const studentsId = classData ? classData?.find((e: any) => e._id === classSelect)?.students : false
 
   const handleSubmit = () => {
     form.submit()
@@ -177,6 +178,7 @@ const EventActionModal = (props: Props) => {
             timeAdd: examTime - closestTime.value,
           })
       } else {
+        setOT(Boolean(eventDetail.type === 'OVERTIME'))
         setInitVal({
           name: eventDetail.name,
           classId: eventDetail.classId,
@@ -205,7 +207,7 @@ const EventActionModal = (props: Props) => {
   }, [selectTime])
 
   useEffect(() => {
-    setNowTime(new Date())
+    // setNowTime(new Date())
 
     if (initVal) {
       form.setFieldsValue(initVal)
@@ -214,7 +216,7 @@ const EventActionModal = (props: Props) => {
   }, [initVal])
 
   const handleFinish = (values: any) => {
-    if (type === 'event') {
+    if (type === 'event' || OT) {
       const newTime: any[] = []
       if (values.time)
         values.date.forEach((d: any, index: number) => {
@@ -232,7 +234,7 @@ const EventActionModal = (props: Props) => {
         end: allDay ? moment(values.date[1]).endOf('day') : newTime[1],
         students: studentIds,
         mentorId: profile?._id,
-        type: 'CLASS',
+        type: OT ? 'OVERTIME' : 'CLASS',
         isRepeat: repeat,
         schedules: !repeat ? [] : schedules,
       }
@@ -301,6 +303,14 @@ const EventActionModal = (props: Props) => {
         >
           <Input placeholder='Nhập tiêu đề' />
         </Form.Item>
+        {type !== 'test' && (
+          <Form.Item name='OT' style={{ margin: '-10px 0 5px 0 ' }}>
+            <Checkbox onChange={(e) => setOT(e.target.checked)} checked={OT}>
+              Học bù
+            </Checkbox>
+          </Form.Item>
+        )}
+
         <TextAreaCustom name='description' data={eventDetail} label='Ghi chú' />
         <Row gutter={12}>
           <Col span={24} md={eventDetail ? 9 : 12}>
@@ -313,7 +323,7 @@ const EventActionModal = (props: Props) => {
                 apiFind={classApi.getClass}
                 filterQuery={{
                   mentorId: profile._id,
-                  betweenDate: nowTime,
+                  // betweenDate: nowTime,
                 }}
                 callBackDataSearch={setClassData}
                 defaultValue={initVal?.classId}
@@ -329,7 +339,8 @@ const EventActionModal = (props: Props) => {
                 type='search'
                 searchKey='user'
                 apiFind={userApi.findUser}
-                filterQuery={{ _id: studentsId }}
+                filterQuery={{ _id: studentsId && studentsId.length > 0 ? studentsId : '657025f0123cb123e10d8abc' }}
+                enabled={Boolean(classSelect)}
                 defaultValue={studentsId ? studentsId : eventDetail?.students}
                 mode='multiple'
                 allowClear
