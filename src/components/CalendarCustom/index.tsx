@@ -125,7 +125,11 @@ const CalendarCustom = ({ calendarType }: Props) => {
           title: item.name,
           start: new Date(item.start),
           end: new Date(item.end),
-          backgroundColor: (between && '#757575b5') || (item.testId && '#d72831a8') || '#019d44b5',
+          backgroundColor:
+            (between && '#757575b5') ||
+            (item.testId && '#d72831a8') ||
+            (item.type === 'OVERTIME' && '#be22be73') ||
+            '#019d44b5',
           color: 'var(--white)',
           isReadOnly: profile._id !== item.mentorId,
           type: item.type,
@@ -530,7 +534,11 @@ const CalendarCustom = ({ calendarType }: Props) => {
                 Lịch thi
               </Space>
               <Space>
-                <div className={`${css.boxHint} ${css.endEvnet}`}></div>
+                <div className={`${css.boxHint} ${css.otEvent}`}></div>
+                Học bù
+              </Space>
+              <Space>
+                <div className={`${css.boxHint} ${css.endEvent}`}></div>
                 Đã kết thúc
               </Space>
             </Space>

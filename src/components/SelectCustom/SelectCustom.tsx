@@ -35,6 +35,7 @@ type Props = {
   selectAllLabel?: string
   suffixIcon?: boolean
   showType?: boolean
+  enabled?: boolean
   callBackDataSearch?: React.Dispatch<React.SetStateAction<any>>
   callBackSelected?: React.Dispatch<React.SetStateAction<any>>
 }
@@ -62,6 +63,7 @@ const SelectCustom = (props: Props) => {
     suffixIcon,
     showType,
     labelKey = 'name',
+    enabled = true,
     callBackDataSearch,
     callBackSelected,
   } = props
@@ -77,10 +79,11 @@ const SelectCustom = (props: Props) => {
     isLoading,
     status,
   } = useQuery({
-    queryKey: [searchKey, filterData],
+    queryKey: [searchKey, filterData, enabled],
     queryFn: () => {
       return apiFind(filterData)
     },
+    enabled: enabled,
   })
 
   useEffect(() => {
