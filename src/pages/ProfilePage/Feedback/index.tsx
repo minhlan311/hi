@@ -17,10 +17,11 @@ import css from './styles.module.scss'
 
 type Props = {
   userId: string
-  meId: string
+  meId?: string
+  fullSize?: boolean
 }
 
-const Feedback = ({ userId, meId }: Props) => {
+const Feedback = ({ userId, meId, fullSize }: Props) => {
   const [data, setData] = useState<AssessmentState[]>([])
   const queryClient = useQueryClient()
 
@@ -116,7 +117,7 @@ const Feedback = ({ userId, meId }: Props) => {
   const check = checkData && checkData?.data.totalDocs > 0
 
   return (
-    <Header background='var(--whiteBg)' padding={'25px 0 50px 0'} size='sm'>
+    <Header background='var(--whiteBg)' padding={'25px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
       <h2>Đánh giá</h2>
       <div className={css.fbMain}>
         <Row gutter={[24, 24]}>

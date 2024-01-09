@@ -21,12 +21,14 @@ import UpdateMentor from './UpdateMentor'
 import css from './styles.module.scss'
 type Props = {
   user: UserState
-  profile: UserState
+  profile?: UserState
   coursesLength: number
-  setPayload: React.Dispatch<React.SetStateAction<UserState | null>>
+  fullSize?: boolean
+  md?: number
+  setPayload?: React.Dispatch<React.SetStateAction<UserState | null>>
 }
 
-const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
+const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }: Props) => {
   const [update, setUpdate] = useState(false)
 
   const examDesc =
@@ -82,16 +84,16 @@ const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
   const { sm } = useResponsives()
 
   return (
-    <Header padding={'30px 0 50px 0'} size='sm'>
+    <Header padding={'30px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
       <div className={css.card}>
         <Row align='middle' gutter={[24, 24]}>
-          <Col span={24} md={10} className={css.avt}>
-            {profile?._id === user._id ? (
+          <Col span={24} md={md ? md : 10} className={css.avt}>
+            {profile && profile._id === user._id ? (
               <UploadCustom
                 cropBeforeUpload
                 cropAspect={1 / 1}
                 callBackFileList={(data: any) => {
-                  setPayload({ avatarUrl: data?.[0].url } as UserState)
+                  setPayload && setPayload({ avatarUrl: data?.[0].url } as UserState)
                 }}
                 uploadQuality='high'
               >
@@ -131,7 +133,7 @@ const MentorInfor = ({ user, profile, coursesLength, setPayload }: Props) => {
               </div>
             )}
           </Col>
-          <Col span={24} md={14}>
+          <Col span={24} md={md ? 24 - md : 14}>
             {!update ? (
               <div className={css.infor}>
                 <Space direction='vertical' size='large'>

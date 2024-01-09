@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Class } from '@/types/class.type'
-import { UserState } from './user'
 import { CategoryState } from './category'
+import { UserState } from './user'
 
 export interface CoursesState {
   _id: string
@@ -28,4 +28,6 @@ export interface CoursesState {
   avgAssessment?: any
   id?: string
   cost: number
+  owner: UserState
+  typeCourse: any
 }
