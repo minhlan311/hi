@@ -66,7 +66,6 @@ export const ENDPOINT = {
   COURSES_QUIZ_PATH: '/exam/questions/find',
   PROGRESSIONS_PATH: '/edu/progressions/',
   FIND_PROGRESSIONS_PATH: '/edu/progressions/find',
-  JOIN_COURSE_PATH: '/edu/enrolls',
 
   // :::::::::::::::::::: NOTES PATH :::::::::::::::::::::
   FIND_NOTE_PATH: '/edu/notes/find',
@@ -118,7 +117,7 @@ export const ENDPOINT = {
   ACTIVATION_CODE_PATH: '/edu/activations',
 
   // :::::::::::::::::::: Enroll PATH :::::::::::::::::::::
-  ENROLL_PATH_FIND: '/enrolls/find',
+  FIND_ENROLL_PATH: '/enrolls/find',
   ENROLL_PATH: '/enrolls/',
 
   // :::::::::::::::::::: ANNOUNCEMENT PATH :::::::::::::::::::::

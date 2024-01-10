@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
+import enrollsApi from '@/apis/enrolls.api'
+import vnpayApi from '@/apis/vnpay.api'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import openNotification from '@/components/Notification'
 import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import Header from '@/components/layout/Header/Header'
@@ -26,13 +29,15 @@ import BannerProfile from '../ProfilePage/Banner'
 import Feedback from '../ProfilePage/Feedback'
 import MentorInfor from '../ProfilePage/MentorInfor'
 import MyCourses from '../ProfilePage/MyCourses'
+
 import FeedbackCourse from './components/FeedbackCourse'
 import TopCourse from './components/TopCourse'
 import style from './style.module.scss'
 
 const CoursesDetail = () => {
   const { id } = useParams()
-  const navitage = useNavigate()
+  const navigate = useNavigate()
+
   const { profile } = useContext(AppContext)
   const { data: courseData } = useQuery({
     queryKey: ['courseDetail', id],
@@ -55,6 +60,32 @@ const CoursesDetail = () => {
     enabled: Boolean(courseDetail?.mentorId),
   })
 
+  const mutationLocked = useMutation({
+    mutationFn: (body: any) => enrollsApi.createEnroll(body),
+    onSuccess: () => {
+      openNotification({
+        description: 'Tham gia khóa học thành công',
+        status: 'success',
+        message: 'Thông báo',
+      })
+    },
+  })
+
+  const { data: enrollData } = useQuery({
+    queryKey: ['enrolls', mutationLocked.isSuccess],
+    queryFn: () => {
+      return enrollsApi.findEnroll({
+        filterQuery: {
+          userId: profile._id,
+          targetId: courseDetail && courseDetail._id,
+          targetModel: 'COURSE',
+        },
+      })
+    },
+    enabled: Boolean(courseDetail?._id),
+  })
+
+  const checkEnrolls = enrollData?.data.docs && enrollData.data.docs.some((item) => item.targetId === courseDetail?._id)
   const coursesData = courseList?.data
   const user = courseDetail?.owner
 
@@ -95,24 +126,35 @@ const CoursesDetail = () => {
 
   const shareLink = window.location.href
   const { md, lg, sm } = useResponsives()
-  // const mutationPay = useMutation({
-  //   mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
-  //   onSuccess: (data: any) => {
-  //     window.open(data?.data?.url)
-  //   },
-  // })
+  const mutationCheckout = useMutation({
+    mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
+    onSuccess: (data: any) => {
+      window.open(data?.data?.url)
+    },
+  })
 
   const handleBuy = () => {
     if (courseDetail) {
       if (!profile?._id) {
-        navitage('/login')
+        navigate('/login')
       } else {
-        // navitage('/myCourseLearning/' + courseDetail?._id)
-        // mutationPay.mutate({
-        //   value: courseDetail.cost,
-        //   targetModel: 'COURSE',
-        //   targetId: courseDetail._id,
-        // })
+        if (checkEnrolls) navigate('/myCourseLearning/' + courseDetail?._id)
+        else {
+          if (courseDetail.plan === 'FREE') {
+            mutationLocked.mutate({
+              targetId: courseDetail?._id,
+              targetModel: 'COURSE',
+              type: profile.isMentor ? 'MENTOR' : 'STUDENT',
+              userIds: [profile._id],
+            })
+          } else {
+            mutationCheckout.mutate({
+              value: courseDetail.cost ? courseDetail.cost : 0,
+              targetModel: 'COURSE',
+              targetId: courseDetail._id,
+            })
+          }
+        }
       }
     }
   }
@@ -195,11 +237,7 @@ const CoursesDetail = () => {
                       preview={{
                         imageRender: () =>
                           courseDetail.coverVideo ? (
-                            <video
-                              width='100%'
-                              controls
-                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverVideo}
-                            />
+                            <video width='100%' controls src={courseDetail.coverVideo} />
                           ) : (
                             <img
                               src={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverMedia}
@@ -241,8 +279,19 @@ const CoursesDetail = () => {
                         </Space>
                       </h2>
                     </ButtonCustom>
-                    <ButtonCustom className={'sp100'} size='large' type='primary' onClick={handleBuy}>
-                      Mua ngay
+
+                    <ButtonCustom
+                      className={'sp100'}
+                      size='large'
+                      type='primary'
+                      onClick={handleBuy}
+                      disabled={courseDetail.countTopics < 1}
+                    >
+                      {courseDetail.countTopics > 0
+                        ? (checkEnrolls && 'Vào học ngay') ||
+                          (courseDetail.plan === 'FREE' && 'Tham gia ngay') ||
+                          'Mua ngay'
+                        : 'Đang cập nhật'}
                     </ButtonCustom>
                   </Space>
                   <Flex justify='center' gap={10}>
@@ -294,8 +343,20 @@ const CoursesDetail = () => {
                     </Col>
 
                     <Col span={12} md={16}>
-                      <ButtonCustom className={'sp100'} size='small' type='primary' onClick={handleBuy}>
-                        <p style={{ fontSize: 20 }}>Mua ngay</p>
+                      <ButtonCustom
+                        className={'sp100'}
+                        size='small'
+                        type='primary'
+                        onClick={handleBuy}
+                        disabled={courseDetail.countTopics < 1}
+                      >
+                        <p style={{ fontSize: 20 }}>
+                          {courseDetail.countTopics > 0
+                            ? (checkEnrolls && 'Vào học ngay') ||
+                              (courseDetail.plan === 'FREE' && 'Tham gia ngay') ||
+                              'Mua ngay'
+                            : 'Đang cập nhật'}
+                        </p>
                       </ButtonCustom>
                     </Col>
                   </Row>
