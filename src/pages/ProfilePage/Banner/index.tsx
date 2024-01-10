@@ -7,19 +7,20 @@ import css from '../styles.module.scss'
 
 type Props = {
   user: UserState
-  profile: UserState
-  setPayload: React.Dispatch<React.SetStateAction<UserState | null>>
+  profile?: UserState
+  showInfor?: boolean
+  setPayload?: React.Dispatch<React.SetStateAction<UserState | null>>
 }
 
 const BannerProfile = (props: Props) => {
-  const { user, profile, setPayload } = props
+  const { user, profile, showInfor, setPayload } = props
 
-  return profile?._id === user._id ? (
+  return profile && profile._id === user._id ? (
     <UploadCustom
       cropBeforeUpload
       cropAspect={32 / 9}
       callBackFileList={(data: any) => {
-        setPayload({ coverUrl: data?.[0].url } as UserState)
+        setPayload && setPayload({ coverUrl: data?.[0].url } as UserState)
       }}
       uploadQuality='high'
     >
@@ -47,11 +48,16 @@ const BannerProfile = (props: Props) => {
     <div className={css.bg}>
       <img
         src={
-          user?.coverUrl ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user?.coverUrl : 'https://picsum.photos/1920/300'
+          user?.coverUrl
+            ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user?.coverUrl
+            : showInfor
+            ? 'https://picsum.photos/1920/650'
+            : 'https://picsum.photos/1920/300'
         }
         alt='background'
+        style={{ width: '100%', height: showInfor ? 550 : undefined, objectFit: 'cover' }}
       />
-      <h1>{user.fullName}</h1>
+      {showInfor ? <p></p> : <h1>{user.fullName}</h1>}
     </div>
   )
 }

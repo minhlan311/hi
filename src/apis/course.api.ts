@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import http from '@/utils/http'
-import { SuccessResponse } from '@/types/utils.type'
 import { ENDPOINT } from '@/constants/endpoint'
-import { TCourse, CourseForm, Topic } from '@/types/course.type'
+import { CoursesState } from '@/interface/coursesData'
+import { CourseForm, Topic } from '@/types/course.type'
+import { SuccessResponse } from '@/types/utils.type'
+import http from '@/utils/http'
 type Props = {
   filterQuery?: any
   options?: any
@@ -31,25 +32,25 @@ const courseApi = {
       options: options,
     }
 
-    return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
+    return http.post<SuccessResponse<CoursesState[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
   },
   createCourses(body: CourseForm) {
-    return http.post<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH, body)
+    return http.post<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH, body)
   },
   updateCourses(body: CourseForm) {
-    return http.put<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + body.id, body)
+    return http.put<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + body.id, body)
   },
   createTopics(body: TopicsForm) {
     return http.post<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH, body)
   },
   deleteCourses(ids: string) {
-    return http.delete<SuccessResponse<TCourse>>(ENDPOINT.COURSES_PATH + `${ids}`)
+    return http.delete<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + `${ids}`)
   },
-  getOneCourse(ids: string) {
-    return http.get<TCourse>(ENDPOINT.COURSES_PATH + `${ids}`)
+  courseDetail(id: string) {
+    return http.get<CoursesState>(ENDPOINT.COURSES_PATH + `${id}`)
   },
   getUserErolls(body: any) {
-    return http.post<SuccessResponse<TCourse>>(ENDPOINT.ENROLL_PATH_USER, body)
+    return http.post<SuccessResponse<CoursesState>>(ENDPOINT.ENROLL_PATH_USER, body)
   },
 }
 

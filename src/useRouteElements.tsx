@@ -16,10 +16,12 @@ import CartPage from './pages/CartPage/CartPage.tsx'
 import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
 import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
 import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
+import CoursesDetail from './pages/CoursesPage/index.tsx'
 import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
-
+import ClassDetail from './pages/MentorPage/Management/ClassCourse/components/ClassDetail.tsx'
+import ClassManage from './pages/MentorPage/Management/ClassCourse/index.tsx'
 import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
@@ -32,11 +34,7 @@ import QADetail from './pages/QAPage/QAPageDetail.tsx'
 import SchedulePage from './pages/SchedulePage/index.tsx'
 import TestPage from './pages/TestPage/index.tsx'
 import VnpayPage from './pages/VnpayPage/VnpayPage.tsx'
-import ClassManage from './pages/MentorPage/Management/ClassCourse/index.tsx'
-import ClassDetail from './pages/MentorPage/Management/ClassCourse/components/ClassDetail.tsx'
-
 const MentorExamDetail = lazy(() => import('./pages/MentorPage/Management/Exams/ExamDetail/index.tsx'))
-const Courses = lazy(() => import('./pages/CoursesPage/Courses.tsx'))
 const MentorExamQuestions = lazy(() => import('./pages/MentorPage/Management/Exams/Questions/index.tsx'))
 const MentorExams = lazy(() => import('./pages/MentorPage/Management/Exams/index.tsx'))
 const MycoursesLearning = lazy(() => import('./pages/MyCoursesLearning/MycoursesLearning.tsx'))
@@ -306,7 +304,7 @@ export default function useRouteElements() {
           element: (
             <Layout user={profile} title='Trang chủ'>
               <SuspenseWrapper>
-                <Courses />
+                <CoursesDetail />
               </SuspenseWrapper>
             </Layout>
           ),

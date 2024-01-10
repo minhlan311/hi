@@ -103,7 +103,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   const { data: courseDetail, isLoading } = useQuery({
     queryKey: ['courseMentor'],
-    queryFn: () => courseApi.getOneCourse(id!),
+    queryFn: () => courseApi.courseDetail(id!),
     enabled: id ? true : false,
   })
 

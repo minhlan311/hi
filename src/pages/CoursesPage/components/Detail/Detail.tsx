@@ -12,13 +12,13 @@ import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { TCourse } from '@/types/course.type'
 import { TargetModelEnum } from '@/types/utils.type'
-import { CreditCardOutlined, GlobalOutlined, WarningFilled, PlayCircleFilled } from '@ant-design/icons'
+import { CreditCardOutlined, GlobalOutlined, PlayCircleFilled, WarningFilled } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Breadcrumb, Button, Modal } from 'antd'
 import { useContext, useEffect, useState } from 'react'
+import ReactPlayer from 'react-player'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import style from './Detail.module.scss'
-import ReactPlayer from 'react-player'
 
 type Props = {
   data?: TCourse
@@ -113,6 +113,7 @@ export default function Detail({ data, checkEnrolls }: Props) {
       navigate('/myCourse')
     },
   })
+
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -124,6 +125,7 @@ export default function Detail({ data, checkEnrolls }: Props) {
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['products'] })
   }, [mutationLocked.isSuccess])
+
   const checkLession = datas?.topics && datas?.topics?.some((item: any) => item?.countLessons > 0)
 
   return (
