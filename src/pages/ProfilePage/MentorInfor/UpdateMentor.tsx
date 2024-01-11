@@ -3,6 +3,8 @@ import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
+import UploadCustom from '@/components/UploadCustom/UploadCustom'
+import { ENDPOINT } from '@/constants/endpoint'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
 import { UserState } from '@/interface/user'
@@ -46,6 +48,8 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
   const mutation = useMutation((dataForm: UserState) => {
     return userApi.updateUser(dataForm)
   })
+  const [fileList, setFileList] = useState<any[]>([])
+  console.log(fileList)
 
   const onFinish = (values: any) => {
     mutation.mutate(
@@ -172,6 +176,15 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
           </Col>
         </Row>
         <TextAreaCustom name='descriptions' data={user?.descriptions ? user : undefined} />
+        <UploadCustom
+          action={import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT}
+          accessType='video/*'
+          uploadKey='attachment'
+          callBackFileList={setFileList}
+          dropArea
+          showUploadList
+          name='video'
+        />
         <Form.Item<FieldType> name='social'>
           <Modal destroyOnClose footer={[]} title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
             <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>

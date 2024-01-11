@@ -53,7 +53,7 @@ const CoursesDetail = () => {
   const courseDetail = courseData?.data
 
   const { data: topicData } = useQuery({
-    queryKey: ['topicData'],
+    queryKey: ['topicData', courseDetail],
     queryFn: () => {
       return topicApi.findTopic({
         filterQuery: {
@@ -239,36 +239,40 @@ const CoursesDetail = () => {
                                   label: item.name,
                                   children: (
                                     <Space direction='vertical' className={'sp100'}>
-                                      {item.lessons.map((ls, index) => (
-                                        <div key={ls._id}>
-                                          <Flex justify='space-between' align='center'>
-                                            <Space>
-                                              <FaRegEdit />
-                                              <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
-                                            </Space>
-                                            <Space>
-                                              {index === 0 ? (
-                                                <ButtonCustom
-                                                  size='small'
-                                                  href={'/myCourseLearning/' + courseDetail?._id}
-                                                  type='primary'
-                                                >
-                                                  Preview
-                                                </ButtonCustom>
-                                              ) : (
-                                                <>
-                                                  <TagCustom
-                                                    content={`${ls.length ? ls.length : 0} phút`}
-                                                    color='green'
-                                                  />
-                                                  <TbLock />
-                                                </>
-                                              )}
-                                            </Space>
-                                          </Flex>
-                                          {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
-                                        </div>
-                                      ))}
+                                      {item.lessons.length > 0 ? (
+                                        item.lessons.map((ls, index) => (
+                                          <div key={ls._id}>
+                                            <Flex justify='space-between' align='center'>
+                                              <Space>
+                                                <FaRegEdit />
+                                                <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
+                                              </Space>
+                                              <Space>
+                                                {index === 0 && checkEnrolls ? (
+                                                  <ButtonCustom
+                                                    size='small'
+                                                    href={'/myCourseLearning/' + courseDetail?._id}
+                                                    type='primary'
+                                                  >
+                                                    Preview
+                                                  </ButtonCustom>
+                                                ) : (
+                                                  <>
+                                                    <TagCustom
+                                                      content={`${ls.length ? ls.length : 0} phút`}
+                                                      color='green'
+                                                    />
+                                                    <TbLock />
+                                                  </>
+                                                )}
+                                              </Space>
+                                            </Flex>
+                                            {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
+                                          </div>
+                                        ))
+                                      ) : (
+                                        <EmptyCustom description='Không có bài học nào!' />
+                                      )}
                                     </Space>
                                   ),
                                 },
