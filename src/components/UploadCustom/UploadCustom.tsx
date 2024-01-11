@@ -197,6 +197,12 @@ const UploadCustom = (props: Props) => {
           <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
           <p className={'ant-upload-hint'}></p>
         </div>
+      ) : name === 'video' ? (
+        <video
+          width={'100%'}
+          style={{ maxHeight: '40vh' }}
+          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+        ></video>
       ) : (
         <Image width={'96%'} preview={false} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}></Image>
       )}

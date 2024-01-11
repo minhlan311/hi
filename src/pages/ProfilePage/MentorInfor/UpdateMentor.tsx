@@ -53,7 +53,7 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
 
   const onFinish = (values: any) => {
     mutation.mutate(
-      { ...values, _id: id, socials: DataSocial },
+      { ...values, _id: id, socials: DataSocial, videoInfoUrl: fileList.length > 0 ? fileList?.[0].url : undefined },
       {
         onSuccess: () => {
           openNotification({
@@ -174,49 +174,60 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
               />
             </Form.Item>
           </Col>
-        </Row>
-        <TextAreaCustom name='descriptions' data={user?.descriptions ? user : undefined} />
-        <UploadCustom
-          action={import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT}
-          accessType='video/*'
-          uploadKey='attachment'
-          callBackFileList={setFileList}
-          dropArea
-          showUploadList
-          name='video'
-        />
-        <Form.Item<FieldType> name='social'>
-          <Modal destroyOnClose footer={[]} title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
-            <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>
-              <Form.Item name='facebook' label='Facebook'>
-                <Input></Input>
-              </Form.Item>
-              <Form.Item name='instagram' label='Instagram'>
-                <Input></Input>
-              </Form.Item>
-              <Form.Item name='tiktok' label='Tiktok'>
-                <Input></Input>
-              </Form.Item>
-              <Form.Item name='youtube' label='Youtube'>
-                <Input></Input>
-              </Form.Item>
-              <Button type='primary' htmlType='submit'>
-                Đồng ý
-              </Button>
-            </Form>
-          </Modal>
-          <Flex justify='space-between'>
-            <Button onClick={showModal}>
-              <BiPlus /> Mạng xã hội
-            </Button>
-            <Space>
-              <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
-              <ButtonCustom onClick={() => form.submit()} type='primary'>
-                Lưu
-              </ButtonCustom>
+          <Col span={24}>
+            <TextAreaCustom name='descriptions' data={user?.descriptions ? user : undefined} />
+          </Col>
+          <Col span={24}>
+            <Space direction='vertical' className='sp100'>
+              Video giới thiệu:
+              <UploadCustom
+                action={import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT}
+                uploadKey='attachment'
+                callBackFileList={setFileList}
+                dropArea
+                showUploadList={false}
+                name='video'
+                maxFileSize={10}
+                maxCount={1}
+              />
             </Space>
-          </Flex>
-        </Form.Item>
+          </Col>
+
+          <Form.Item<FieldType> name='social'>
+            <Modal destroyOnClose footer={[]} title='Mạng xã hội của bạn' open={isModalOpen} onCancel={handleCancel}>
+              <Form layout='vertical' form={formSocial} onFinish={onFinishSocial}>
+                <Form.Item name='facebook' label='Facebook'>
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item name='instagram' label='Instagram'>
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item name='tiktok' label='Tiktok'>
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item name='youtube' label='Youtube'>
+                  <Input></Input>
+                </Form.Item>
+                <Button type='primary' htmlType='submit'>
+                  Đồng ý
+                </Button>
+              </Form>
+            </Modal>
+          </Form.Item>
+          <Col span={24}>
+            <Flex justify='space-between'>
+              <Button onClick={showModal}>
+                <BiPlus /> Mạng xã hội
+              </Button>
+              <Space>
+                <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
+                <ButtonCustom onClick={() => form.submit()} type='primary'>
+                  Lưu
+                </ButtonCustom>
+              </Space>
+            </Flex>
+          </Col>
+        </Row>
       </Form>
     </div>
   )
