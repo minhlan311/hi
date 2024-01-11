@@ -3,12 +3,16 @@ import courseApi from '@/apis/course.api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import enrollsApi from '@/apis/enrolls.api'
+import topicApi from '@/apis/topic.api'
 import vnpayApi from '@/apis/vnpay.api'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import CollapseCustom from '@/components/CollapseCustom/CollapseCustom'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import openNotification from '@/components/Notification'
 import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
+import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
@@ -16,20 +20,19 @@ import { Card, Col, Divider, Flex, Image, Rate, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { useContext } from 'react'
 import { BsPeople } from 'react-icons/bs'
-import { FaChalkboardTeacher } from 'react-icons/fa'
+import { FaChalkboardTeacher, FaRegEdit } from 'react-icons/fa'
 import { FaFacebookF, FaLinkedinIn, FaPinterestP, FaTwitter } from 'react-icons/fa6'
 import { HiOutlineNewspaper } from 'react-icons/hi2'
 import { IoPodiumOutline } from 'react-icons/io5'
 import { MdAccessTime, MdOutlineCalendarMonth, MdPlayArrow } from 'react-icons/md'
 import { RiBookReadLine } from 'react-icons/ri'
-import { TbLanguage } from 'react-icons/tb'
+import { TbLanguage, TbLock } from 'react-icons/tb'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FacebookShareButton, LinkedinShareButton, PinterestShareButton, TwitterShareButton } from 'react-share'
 import BannerProfile from '../ProfilePage/Banner'
 import Feedback from '../ProfilePage/Feedback'
 import MentorInfor from '../ProfilePage/MentorInfor'
 import MyCourses from '../ProfilePage/MyCourses'
-
 import FeedbackCourse from './components/FeedbackCourse'
 import TopCourse from './components/TopCourse'
 import style from './style.module.scss'
@@ -48,6 +51,18 @@ const CoursesDetail = () => {
   })
 
   const courseDetail = courseData?.data
+
+  const { data: topicData } = useQuery({
+    queryKey: ['topicData'],
+    queryFn: () => {
+      return topicApi.findTopic({
+        filterQuery: {
+          parentId: courseDetail && courseDetail._id,
+        },
+      })
+    },
+    enabled: Boolean(courseDetail?._id),
+  })
 
   const { data: courseList, isLoading } = useQuery({
     queryKey: ['coursesByMentor'],
@@ -104,14 +119,14 @@ const CoursesDetail = () => {
           },
           {
             label: 'Số học viên',
-            value: courseDetail.class.reduce((acc, obj) => {
+            value: courseDetail.class?.reduce((acc, obj) => {
               return acc + obj.students.length
             }, 0),
             icon: <BsPeople />,
           },
           { label: 'Bài học', value: courseDetail.countTopics, icon: <RiBookReadLine /> },
           { label: 'Cấp độ', value: '', icon: <IoPodiumOutline /> },
-          { label: 'Ngôn ngữ', value: courseDetail.category.name, icon: <TbLanguage /> },
+          { label: 'Ngôn ngữ', value: courseDetail.category?.name, icon: <TbLanguage /> },
           { label: 'Bài kiểm tra', value: courseDetail.countTests, icon: <HiOutlineNewspaper /> },
           {
             label: 'Ngày bắt đầu',
@@ -159,6 +174,8 @@ const CoursesDetail = () => {
     }
   }
 
+  const topicList = topicData?.data
+
   if (courseDetail && user)
     return (
       <div className={style.courseMain}>
@@ -183,16 +200,88 @@ const CoursesDetail = () => {
               <h1 style={{ marginTop: 24 }}>{courseDetail.name}</h1>
 
               <TabsCustom
+                align='center'
                 data={[
                   {
                     name: 'Tổng quan',
                     id: 'overview',
-                    children: <p>Tổng quan</p>,
+                    children: (
+                      <div>
+                        <Space
+                          direction='vertical'
+                          className={'sp100'}
+                          style={{ paddingBottom: 24, minHeight: '40vh' }}
+                        >
+                          <h2>Mô tả khóa học</h2>
+                          <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
+                        </Space>
+                      </div>
+                    ),
                   },
                   {
                     name: 'Lộ trình',
                     id: 'lession',
-                    children: <p>Lộ trình</p>,
+                    children: (
+                      <Space
+                        direction='vertical'
+                        size='large'
+                        className={'sp100'}
+                        style={{ paddingBottom: 24, minHeight: '40vh' }}
+                      >
+                        {topicList?.docs && topicList?.docs.length > 0 ? (
+                          topicList?.docs?.map((item) => (
+                            <CollapseCustom
+                              size='large'
+                              expandIconPosition='end'
+                              items={[
+                                {
+                                  key: item._id,
+                                  label: item.name,
+                                  children: (
+                                    <Space direction='vertical' className={'sp100'}>
+                                      {item.lessons.map((ls, index) => (
+                                        <div key={ls._id}>
+                                          <Flex justify='space-between' align='center'>
+                                            <Space>
+                                              <FaRegEdit />
+                                              <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
+                                            </Space>
+                                            <Space>
+                                              {index === 0 ? (
+                                                <ButtonCustom
+                                                  size='small'
+                                                  href={'/myCourseLearning/' + courseDetail?._id}
+                                                  type='primary'
+                                                >
+                                                  Preview
+                                                </ButtonCustom>
+                                              ) : (
+                                                <>
+                                                  <TagCustom
+                                                    content={`${ls.length ? ls.length : 0} phút`}
+                                                    color='green'
+                                                  />
+                                                  <TbLock />
+                                                </>
+                                              )}
+                                            </Space>
+                                          </Flex>
+                                          {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
+                                        </div>
+                                      ))}
+                                    </Space>
+                                  ),
+                                },
+                              ]}
+                              defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
+                              key={item._id}
+                            />
+                          ))
+                        ) : (
+                          <EmptyCustom description='Không có lộ trình nào!' />
+                        )}
+                      </Space>
+                    ),
                   },
                   {
                     name: 'Giảng viên',
@@ -241,7 +330,7 @@ const CoursesDetail = () => {
                           ) : (
                             <img
                               src={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverMedia}
-                              alt={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverMedia}
+                              alt='Không có vi deo giới thiệu nào'
                             />
                           ),
                         toolbarRender: () => null,

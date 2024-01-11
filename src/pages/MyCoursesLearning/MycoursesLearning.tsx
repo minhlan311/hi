@@ -111,7 +111,7 @@ export default function MycoursesLearning() {
   const { data: topics, isLoading } = useQuery({
     queryKey: ['topicLearning', id, checkEnrolls?.data?.docs?.length],
     queryFn: () => {
-      return topicApi.getAllTopic({
+      return topicApi.findTopic({
         filterQuery: {
           parentId: id!,
         },
