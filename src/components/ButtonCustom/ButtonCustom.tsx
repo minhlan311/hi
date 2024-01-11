@@ -75,6 +75,7 @@ const ButtonCustom = (props: Props) => {
             background,
             fontSize,
             fontWeight: bold ? 700 : fontWeight,
+            height: 'auto',
             width: (fullWidth && '100%') || (width && width) || undefined,
           }}
           form={form}
@@ -103,6 +104,7 @@ const ButtonCustom = (props: Props) => {
               background,
               fontSize,
               fontWeight: bold ? 700 : fontWeight,
+              height: 'auto',
               width: (fullWidth && '100%') || (width && width) || undefined,
             }}
             form={form}
@@ -132,6 +134,7 @@ const ButtonCustom = (props: Props) => {
           ...style,
           fontWeight: bold ? 700 : fontWeight,
           fontSize,
+          height: 'auto',
           width: (fullWidth && '100%') || (width && width) || undefined,
         }}
         form={form}

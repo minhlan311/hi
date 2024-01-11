@@ -22,13 +22,15 @@ export default function Roles({ pickRoleChange }: any) {
         onClick={() => {
           pickRoles(ROLE.MENTOR)
         }}
-        icon={<GiTeacher />}
         size='large'
         className='sp100'
       >
         <Flex justify='space-between' align='center'>
-          <b> Giảng viên</b>
-          <MdOutlineNavigateNext />
+          <Space>
+            <GiTeacher size={25} />
+            <h2>Giảng viên</h2>
+          </Space>
+          <MdOutlineNavigateNext size={25} />
         </Flex>
       </ButtonCustom>
 
@@ -36,13 +38,15 @@ export default function Roles({ pickRoleChange }: any) {
         onClick={() => {
           pickRoles(ROLE.STUDENT)
         }}
-        icon={<PiStudentFill />}
         size='large'
         className='sp100'
       >
         <Flex justify='space-between' align='center'>
-          <b className='sp100'>Học viên</b>
-          <MdOutlineNavigateNext />
+          <Space>
+            <PiStudentFill size={25} />
+            <h2>Học viên</h2>
+          </Space>
+          <MdOutlineNavigateNext size={25} />
         </Flex>
       </ButtonCustom>
     </Space>
