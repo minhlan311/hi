@@ -1,18 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { Topic } from '@/types/course.type'
+import { TopicState } from '@/interface/topic'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
+type Props = {
+  filterQuery?: any
+  options?: any
+  payload?: any
+}
 const topicApi = {
-  getAllTopic(body: any) {
-    return http.post<SuccessResponse<Topic>>(ENDPOINT.FIND_TOPIC_PATH, body)
+  findTopic(props: Props) {
+    const {
+      filterQuery = {},
+      options = {
+        pagination: false,
+        sort: { createdAt: -1 },
+      },
+      payload,
+    } = props
+
+    const data = {
+      filterQuery: filterQuery,
+      options: options,
+    }
+
+    return http.post<SuccessResponse<TopicState[]>>(ENDPOINT.FIND_TOPIC_PATH, payload ? payload : data)
   },
+
   deleteTopic(id: string) {
-    return http.delete<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH + id)
+    return http.delete<SuccessResponse<TopicState>>(ENDPOINT.TOPIC_PATH + id)
   },
-  updateTopic(body: Topic) {
-    return http.put<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH + body.id, body)
+  updateTopic(body: TopicState) {
+    return http.put<SuccessResponse<TopicState>>(ENDPOINT.TOPIC_PATH + body.id, body)
   },
 }
 

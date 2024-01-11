@@ -82,46 +82,51 @@ const AuthLayout = (props: Props) => {
     titleStyle,
     descForm,
     descSize = 14,
-    descStyle
+    descStyle,
   } = props
   window.document.title = title + ' | Ucam'
+
   return (
     <div className={css.authMain}>
-      <Row justify='space-between' style={{ flexDirection: align === 'end' ? 'row-reverse' : 'row' }}>
+      <Row justify='space-between' style={{ flexDirection: align === 'end' ? 'row-reverse' : 'row' }} gutter={24}>
         <Col
           span={24}
-          md={
+          lg={
             (imgSize && !formSize && imgSize) ||
             (imgSize && formSize && imgSize) ||
             (!imgSize && formSize && 24 - formSize) ||
             24
           }
         >
-          <Space direction='vertical' size='large'>
-            <Logo />
-            <img src={imgBg} alt='bg' width={imgBgSize} />
-          </Space>
+          <div className={css.leftAuth}>
+            <Space direction='vertical' size='large'>
+              <Logo />
+              <img src={imgBg} alt='bg' width={imgBgSize} />
+            </Space>
+          </div>
         </Col>
         <Col
           span={24}
-          md={
+          lg={
             (imgSize && !formSize && 24 - imgSize) ||
             (imgSize && formSize && formSize) ||
             (!imgSize && formSize && formSize) ||
             24
           }
         >
-          <Space direction='vertical' size='large' className={`sp100`}>
-            <Space direction='vertical'>
-              <h1 style={{ fontSize: titleSize, ...titleStyle }} className={css.title}>
-                {titleForm}
-              </h1>
-              <p style={{ fontSize: descSize, ...descStyle }} className={css.desc}>
-                {descForm}
-              </p>
+          <div className={css.rightAuth}>
+            <Space direction='vertical' size='large' className={`sp100`}>
+              <Space direction='vertical'>
+                <h1 style={{ fontSize: titleSize, ...titleStyle }} className={css.title}>
+                  {titleForm}
+                </h1>
+                <p style={{ fontSize: descSize, ...descStyle }} className={css.desc}>
+                  {descForm}
+                </p>
+              </Space>
+              <div className={css.formMain}> {children}</div>
             </Space>
-            <div className={css.formMain}> {children}</div>
-          </Space>
+          </div>
         </Col>
       </Row>
     </div>

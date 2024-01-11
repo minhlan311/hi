@@ -1,17 +1,18 @@
-import { Button, Tooltip } from 'antd'
+import { Button, Flex, Tooltip } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 type Props = {
-  type?: 'default' | 'primary' | 'dashed' | 'link' | 'text'
+  type?: 'default' | 'primary' | 'primary' | 'dashed' | 'link' | 'text'
+  bold?: boolean
   icon?: React.ReactNode
   href?: string
   size?: 'small' | 'middle' | 'large' | undefined
   shape?: 'default' | 'circle' | 'round'
   disabled?: boolean
-  onClick?: () => void
   className?: string
   style?: React.CSSProperties
   fontWeight?: string | number
+  fontSize?: string | number
   htmlType?: 'button' | 'submit' | 'reset' | undefined
   form?: string
   children?: React.ReactNode
@@ -21,20 +22,25 @@ type Props = {
   danger?: boolean
   linkTarget?: '_self' | '_blank' | '_parent' | '_top'
   loading?: boolean
+  width?: number | string
+  fullWidth?: boolean
+  align?: 'start' | 'end' | 'center'
+  onClick?: () => void
 }
 
 const ButtonCustom = (props: Props) => {
   const {
     type,
+    bold = false,
     icon,
     href,
     size,
     shape,
     disabled,
-    onClick,
     className,
     style,
     fontWeight = 400,
+    fontSize = 16,
     htmlType,
     form,
     children,
@@ -44,6 +50,10 @@ const ButtonCustom = (props: Props) => {
     danger,
     linkTarget,
     loading,
+    width,
+    fullWidth,
+    align = 'center',
+    onClick,
   } = props
 
   return href ? (
@@ -60,19 +70,24 @@ const ButtonCustom = (props: Props) => {
           }}
           className={`${className}`}
           style={{
-            color: color,
-            background: background,
-            fontWeight: fontWeight,
             ...style,
+            color,
+            background,
+            fontSize,
+            fontWeight: bold ? 700 : fontWeight,
+            height: 'auto',
+            width: (fullWidth && '100%') || (width && width) || undefined,
           }}
           form={form}
           htmlType={htmlType}
           danger={danger}
           loading={loading}
         >
-          <div className={'custom-butt-icon'}>
-            {icon} {children}
-          </div>
+          {!loading && (
+            <Flex align='center' justify={align} gap={5}>
+              {icon && icon} {children && <div>{children}</div>}
+            </Flex>
+          )}
         </Button>
       ) : (
         <Link to={`${href}`}>
@@ -84,19 +99,24 @@ const ButtonCustom = (props: Props) => {
             onClick={onClick}
             className={`${className} `}
             style={{
-              color: color,
-              background: background,
-              fontWeight: fontWeight,
               ...style,
+              color,
+              background,
+              fontSize,
+              fontWeight: bold ? 700 : fontWeight,
+              height: 'auto',
+              width: (fullWidth && '100%') || (width && width) || undefined,
             }}
             form={form}
             htmlType={htmlType}
             loading={loading}
             danger={danger}
           >
-            <div className={'custom-butt-icon'}>
-              {icon} {children}
-            </div>
+            {!loading && (
+              <Flex align='center' justify={align} gap={5}>
+                {icon && icon} {children && <div>{children}</div>}
+              </Flex>
+            )}
           </Button>
         </Link>
       )}
@@ -110,15 +130,23 @@ const ButtonCustom = (props: Props) => {
         disabled={disabled}
         onClick={onClick}
         className={`${className} `}
-        style={{ fontWeight: fontWeight, ...style, height: 'auto' }}
+        style={{
+          ...style,
+          fontWeight: bold ? 700 : fontWeight,
+          fontSize,
+          height: 'auto',
+          width: (fullWidth && '100%') || (width && width) || undefined,
+        }}
         form={form}
         htmlType={htmlType}
         danger={danger}
         loading={loading}
       >
-        <div className={'custom-butt-icon'}>
-          {icon} {children}
-        </div>
+        {!loading && (
+          <Flex align='center' justify={align} gap={5}>
+            {icon && icon} {children && <div>{children}</div>}
+          </Flex>
+        )}
       </Button>
     </Tooltip>
   )

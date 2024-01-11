@@ -1,23 +1,23 @@
-import Avatar from '@/components/Avatar/Avatar'
-import AvatarDropMenu from '../../AvatarDropMenu'
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import categoryApi from '@/apis/categories.api'
-import Header from '../../Header/Header'
+import Avatar from '@/components/Avatar/Avatar'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import LanguageChange from '@/components/LanguageChange'
-import RenderSubMenu from './RenderSubMenu'
-import useResponsives from '../../../../hooks/useResponsives'
-import { BiSolidUserCircle } from 'react-icons/bi'
-import { Button, Divider, Drawer, Row, Space } from 'antd'
 import { CategoryState } from '@/interface/category'
+import { UserState } from '@/interface/user'
 import { DownOutlined } from '@ant-design/icons'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, Divider, Drawer, Row, Space } from 'antd'
+import { useEffect, useState } from 'react'
+import { BiSolidUserCircle } from 'react-icons/bi'
 import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
 import { IoCalendar, IoCalendarOutline, IoSchoolOutline } from 'react-icons/io5'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { MdSchool } from 'react-icons/md'
 import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
-import { useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { UserState } from '@/interface/user'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import useResponsives from '../../../../hooks/useResponsives'
+import AvatarDropMenu from '../../AvatarDropMenu'
+import Header from '../../Header/Header'
+import RenderSubMenu from './RenderSubMenu'
 import './styles.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -41,7 +41,7 @@ export default function MenuNav({ user, type }: Props) {
   const { data: categories } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ parentId: null }, { sort: { createdAt: -1 } })
     },
   })
 

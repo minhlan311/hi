@@ -79,7 +79,7 @@ export default function MycoursesLearning() {
   const { data: checkEnrolls, isSuccess } = useQuery({
     queryKey: ['enrollsss', id],
     queryFn: () => {
-      return enrollsApi.getEnroll({
+      return enrollsApi.findEnroll({
         filterQuery: {
           userId: profile._id,
           targetId: id,
@@ -111,7 +111,7 @@ export default function MycoursesLearning() {
   const { data: topics, isLoading } = useQuery({
     queryKey: ['topicLearning', id, checkEnrolls?.data?.docs?.length],
     queryFn: () => {
-      return topicApi.getAllTopic({
+      return topicApi.findTopic({
         filterQuery: {
           parentId: id!,
         },
@@ -383,6 +383,7 @@ export default function MycoursesLearning() {
   const handleLessonType = (lesson: any) => {
     if (!lesson) {
       console.error('Bài học không tồn tại!')
+
       return
     }
 
@@ -418,6 +419,7 @@ export default function MycoursesLearning() {
   const handleLessonClick = (courseIndex: number, lessonIndex: number, lesson: any) => {
     let flatIndex = 0
     scrollToTop()
+
     for (let i = 0; i < courseIndex; i++) {
       if (dataTopics && Array.isArray(dataTopics)) {
         flatIndex += dataTopics[i]?.lessons?.length || 0
@@ -484,7 +486,7 @@ export default function MycoursesLearning() {
                       style={{
                         padding: '10px',
                       }}
-                      className='flex'
+                      className={'flex'}
                     >
                       <div>Chế độ tối</div>
                       <div>
@@ -547,7 +549,7 @@ export default function MycoursesLearning() {
               <div className={style.document}>
                 {/* <h3>Bài test</h3> */}
                 <div
-                  className='scroll-div'
+                  className={'scroll-div'}
                   ref={examDivRef}
                   style={{ overflowY: 'auto', height: '100%', background: 'white', padding: '30px 0' }}
                 >

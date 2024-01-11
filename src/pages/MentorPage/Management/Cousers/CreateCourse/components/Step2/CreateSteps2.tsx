@@ -45,7 +45,7 @@ const CreateSteps2 = ({ dataId }: any) => {
 
       if (id || dataId) {
         try {
-          const data = await topicApi.getAllTopic({
+          const data = await topicApi.findTopic({
             filterQuery: { parentId: id ? id : dataId },
             options: {
               sort: { createdAt: -1 },

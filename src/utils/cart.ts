@@ -1,5 +1,5 @@
 import { CodeState } from '@/interface/code'
-import { CoursesState } from '@/interface/coursesData'
+import { CoursesState } from '@/interface/courses'
 
 export const LocalStorageEventTarget = new EventTarget()
 

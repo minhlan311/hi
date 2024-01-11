@@ -16,6 +16,7 @@ export type DataFormMentor = {
 export type MentorForm = {
   _id?: string
   fullName?: string
+  gender?: 'MALE' | 'FEMALE' | 'OTHER'
   email?: string
   password?: string
   confirmPassword?: string

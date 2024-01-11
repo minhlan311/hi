@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Collapse } from 'antd'
 import React from 'react'
 
@@ -10,7 +11,7 @@ interface ItemCollapse {
 type Props = {
   items: ItemCollapse[]
   defaultActiveKey?: string | string[]
-  onChange?: () => {}
+  onChange?: () => void
   expandIconPosition?: 'start' | 'end'
   size?: 'large' | 'middle' | 'small'
   collapsible?: 'header' | 'icon' | 'disabled'
@@ -39,7 +40,7 @@ const CollapseCustom = (props: Props) => {
     background,
     lableSize,
     styleLable,
-    sigleActive = false
+    sigleActive = false,
   } = props
 
   const renderNestedPanels = (children: ItemCollapse[]) => {
@@ -78,7 +79,7 @@ const CollapseCustom = (props: Props) => {
           : undefined
       }
       style={{
-        background: background
+        background: background,
       }}
     >
       {items.map((item) => (

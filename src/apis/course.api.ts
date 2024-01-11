@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { CoursesState } from '@/interface/coursesData'
+import { CoursesState } from '@/interface/courses'
 import { CourseForm, Topic } from '@/types/course.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'

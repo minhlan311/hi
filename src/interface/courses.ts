@@ -31,3 +31,36 @@ export interface CoursesState {
   owner: UserState
   typeCourse: any
 }
+
+export interface EnrollsState {
+  _id: string
+  createdById: string
+  updatedById: string
+  targetModel: string
+  targetId: string
+  userId: string
+  type: string
+  status: string
+  createdAt: string
+  updatedAt: string
+  user: UserState
+  activation?: any
+  progression?: ProgressionState
+  course: CoursesState
+  document?: any
+  test?: any
+  id: string
+}
+export interface ProgressionState {
+  _id: string
+  _destroy: boolean
+  targetModel: string
+  targetModelId: string
+  userId: string
+  done: any[]
+  doing: string
+  remains: any[]
+  createdAt: string
+  updatedAt: string
+  id: string
+}

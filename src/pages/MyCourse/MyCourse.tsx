@@ -1,107 +1,117 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext, useState } from 'react'
-import { Card, Col, Row, Pagination, Button } from 'antd'
-import { SendOutlined } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
-import { AppContext } from '@/contexts/app.context'
 import enrollsApi from '@/apis/enrolls.api'
+import { formatNumber } from '@/common'
+import Avatar from '@/components/Avatar/Avatar'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import LoadingCustom from '@/components/LoadingCustom'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import PaginationCustom from '@/components/PaginationCustom'
+import Header from '@/components/layout/Header/Header'
+import { AppContext } from '@/contexts/app.context'
+import { EnrollsState } from '@/interface/courses'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Flex, Progress, Row, Space } from 'antd'
+import { useContext, useState } from 'react'
+import { LuBookMarked, LuUsers } from 'react-icons/lu'
+import { MdLanguage } from 'react-icons/md'
 import './MyCourse.scss'
-import { useNavigate } from 'react-router-dom'
-import Meta from 'antd/es/card/Meta'
+
+const RenderCourse = ({ item }: { item: EnrollsState }) => {
+  let percent = item.progression ? (item.progression?.done?.length / item.progression?.remains?.length) * 100 : 0
+
+  if (isNaN(percent)) {
+    percent = 0
+  }
+
+  return (
+    <Card
+      hoverable
+      cover={
+        <ImageCustom
+          preview={false}
+          height='160px'
+          width='100%'
+          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.course.coverMedia}
+        />
+      }
+      size='small'
+    >
+      <Space direction='vertical' style={{ display: 'flex' }}>
+        <Flex justify='space-between' align='center' gap={12}>
+          <Card.Meta title={item.course.name} />
+        </Flex>
+        <Space>
+          <Avatar avtUrl={item.course.owner.avatarUrl} userData={item.course.owner} />
+          {item.course.owner.fullName}
+        </Space>
+        <Flex align='center' justify='space-between'>
+          <Space align='center'>
+            <MdLanguage />
+            {item.course.category?.name}
+          </Space>
+          <Flex align='center'>
+            <LuBookMarked style={{ marginRight: 5 }} />
+            {item.course.countTopics} bài học
+          </Flex>
+
+          <Flex align='center'>
+            <LuUsers style={{ marginRight: 5 }} />
+            {`(${formatNumber(item.course.countStudents ? item.course.countStudents : 0)} Học viên)`}
+          </Flex>
+        </Flex>
+
+        <Progress percent={percent} />
+        <Flex justify='flex-end'>
+          <ButtonCustom type='primary' href={'/myCourseLearning/' + item.course._id}>
+            Vào học ngay
+          </ButtonCustom>
+        </Flex>
+      </Space>
+    </Card>
+  )
+}
 
 export default function MyCourse() {
   const { profile } = useContext(AppContext)
-  const navigate = useNavigate()
-  const pageSize = 6
   const [current, setCurrent] = useState<number>(1)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['myCourse'],
+    queryKey: ['enrollData', current],
     queryFn: () =>
-      enrollsApi.getEnroll({
+      enrollsApi.findEnroll({
         filterQuery: {
           userId: profile._id,
+          targetModel: 'COURSE',
         },
         options: {
-          pagination: false,
+          page: current,
+          limit: 6,
           sort: { createdAt: -1 },
         },
       }),
   })
 
-  const enrollData = data?.data?.docs || []
-  const listData = enrollData.filter((item: any) => item.course)
+  const enrollData = data?.data
 
-  const currentData = listData.slice((current - 1) * pageSize, current * pageSize)
-
-  const onChange = (page: number) => {
-    setCurrent(page)
-  }
-
-  return (
-    <div className='div-mycourse'>
-      <div className='h1-title'>
-        <h1>Khóa học của tôi</h1>
-        <div>
-          {isLoading ? (
-            <LoadingCustom
-              style={{
-                marginTop: '50px',
-              }}
-            />
-          ) : listData.length > 0 ? (
-            <>
-              <Row justify={'center'} gutter={{ xs: 0, sm: 0, md: 24, lg: 32 }}>
-                {currentData.map((item: any) => (
-                  <Col className='col' key={item.course._id}>
-                    <Card
-                      onClick={() => navigate('/myCourseLearning/' + item?.course?._id)}
-                      hoverable
-                      style={{ width: 340, height: 300 }}
-                      cover={
-                        <ImageCustom
-                          preview={false}
-                          height='160px'
-                          width='100%'
-                          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.course?.coverMedia}
-                        />
-                      }
-                    >
-                      <Meta
-                        description={
-                          <>
-                            <TextWithTooltip rows={1} children={item?.course?.name} className='link-h4-config' />
-                            <div className='flexButton-mycourse'>
-                              <Button type='primary'>
-                                Vào học ngay
-                                <SendOutlined />
-                              </Button>
-                            </div>
-                          </>
-                        }
-                      />
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-              <div className='pagina'>
-                <Pagination
-                  total={listData.length}
-                  pageSize={pageSize}
-                  current={current}
-                  defaultCurrent={1}
-                  onChange={onChange}
-                />
-              </div>
-            </>
-          ) : (
-            <h2 style={{ marginTop: '30px', textAlign: 'center' }}>Bạn chưa tham gia khóa học nào!</h2>
-          )}
-        </div>
-      </div>
-    </div>
-  )
+  if (enrollData)
+    return (
+      <Header title='Khóa học của tôi' padding='24px 0' size='sm'>
+        {enrollData.totalDocs > 0 ? (
+          <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
+            <Row gutter={[24, 24]}>
+              {enrollData?.docs?.map((item) => (
+                <Col key={item._id} span={24} md={8}>
+                  <RenderCourse item={item} />
+                </Col>
+              ))}
+              <Col span={24}>
+                <PaginationCustom callbackCurrent={setCurrent} totalData={enrollData?.totalDocs} limit={6} />
+              </Col>
+            </Row>
+          </LoadingCustom>
+        ) : (
+          <h2 style={{ marginTop: '30px', textAlign: 'center' }}>Bạn chưa tham gia khóa học nào!</h2>
+        )}
+      </Header>
+    )
 }

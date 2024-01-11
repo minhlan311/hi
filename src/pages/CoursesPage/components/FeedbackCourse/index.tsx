@@ -5,10 +5,9 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
-import { AssessmentState } from '@/interface/assessment'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Flex, Form, Input, Rate, Row, Space } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import style from './styles.module.scss'
 type Props = {
@@ -17,22 +16,16 @@ type Props = {
 }
 
 const FeedbackCourse = ({ courseId, userId }: Props) => {
-  const [data, setData] = useState<AssessmentState[]>([])
   const navitage = useNavigate()
-  useEffect(() => {
-    setData([])
-  }, [])
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: (body) => assessmentApi.createAssessment(body),
-
-    onSuccess: (data) => {
+    onSuccess: () => {
       openNotification({
         status: 'success',
         message: 'Thông báo',
         description: 'Đã gửi đánh giá của bạn!',
       })
-      setData((prev) => [data.data, ...prev])
       form.resetFields()
     },
   })
@@ -40,7 +33,7 @@ const FeedbackCourse = ({ courseId, userId }: Props) => {
   const [page, setPage] = useState<number>(1)
   const [value, setValue] = useState<number>(5)
   const { data: assessmentList, isLoading } = useQuery({
-    queryKey: ['assessmentList', page],
+    queryKey: ['assessmentList', page, isSuccess, courseId],
     queryFn: () => {
       return assessmentApi.findAssessment({
         filterQuery: { targetId: courseId },
@@ -70,15 +63,6 @@ const FeedbackCourse = ({ courseId, userId }: Props) => {
   }
 
   const assessData = assessmentList?.data
-
-  useEffect(() => {
-    if (assessData && assessData?.totalDocs > 0) {
-      setData((prev) => {
-        if (assessData.docs) return [...(prev as any), ...assessData.docs]
-        else return prev
-      })
-    }
-  }, [assessData])
 
   const { data: checkData } = useQuery({
     queryKey: ['checkData', isSuccess],
@@ -123,8 +107,8 @@ const FeedbackCourse = ({ courseId, userId }: Props) => {
             </Row>
           </Form>
         )}
-        {data.length > 0 ? (
-          data.map((item) => (
+        {assessData?.docs && assessData?.docs.length > 0 ? (
+          assessData?.docs.map((item) => (
             <Card key={item._id}>
               <Space direction='vertical'>
                 <Space>
@@ -142,7 +126,7 @@ const FeedbackCourse = ({ courseId, userId }: Props) => {
         ) : (
           <EmptyCustom description='Không có đánh giá nào'></EmptyCustom>
         )}
-        {assessData && data.length < assessData.totalDocs && (
+        {assessData?.totalPages && assessData.totalPages > page && (
           <Flex justify='center'>
             <ButtonCustom onClick={() => setPage((prev) => prev++)}>Xem thêm</ButtonCustom>
           </Flex>

@@ -7,7 +7,8 @@ import { REGEX_PATTERN } from '@/constants/utils'
 import { formatDate } from '@/helpers/common'
 import { UserState } from '@/interface/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, DatePicker, Flex, Form, Input, Modal, Row, Space } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, Modal, Radio, Row, Space } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useParams } from 'react-router-dom'
@@ -90,6 +91,8 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
     fullName: user?.fullName,
     phoneNumber: user?.phoneNumber,
     email: user?.email,
+    birthday: dayjs(user?.birthday),
+    gender: user?.gender,
   })
 
   formSocial.setFieldsValue({
@@ -106,7 +109,7 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
           <Col span={24}>
             <h3>Chỉnh sửa thông tin</h3>
           </Col>
-          <Col span={24} md={10}>
+          <Col span={24}>
             <Form.Item name='fullName' rules={[{ required: true, message: 'Vui lòng nhập Họ tên' }]}>
               <Input placeholder='Họ tên'></Input>
             </Form.Item>
@@ -125,7 +128,7 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
               <Input placeholder='Email'></Input>
             </Form.Item>
           </Col>
-          <Col span={24} md={12}>
+          <Col span={24} md={10}>
             <Form.Item
               name='phoneNumber'
               rules={[
@@ -146,6 +149,25 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
                 format='DD/MM/YYYY'
                 style={{ width: '100%' }}
               ></DatePicker>
+            </Form.Item>
+          </Col>
+          <Col span={24} md={12}>
+            <Form.Item
+              name='gender'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn giới tính',
+                },
+              ]}
+            >
+              <Radio.Group
+                options={[
+                  { label: 'Nam', value: 'MALE' },
+                  { label: 'Nữ', value: 'FEMALE' },
+                  { label: 'Khác', value: 'OTHER' },
+                ]}
+              />
             </Form.Item>
           </Col>
         </Row>

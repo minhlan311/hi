@@ -1,7 +1,7 @@
-import css from './TabsCustom.module.scss'
-import { Tabs } from 'antd'
-import type { TabsProps as TabType } from 'antd'
 import TabProps from '@/interface/tabs'
+import type { TabsProps as TabType } from 'antd'
+import { Tabs } from 'antd'
+import css from './TabsCustom.module.scss'
 type TabsItemProps = {
   data: TabProps[]
   defaultActiveKey?: string

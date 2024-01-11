@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from 'react'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { BiSolidDashboard } from 'react-icons/bi'
 import { BsFillCartFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import facebook from '../../../assets/icons/facebook-logo.svg'
 import tiktok from '../../../assets/icons/tiktok-icon.svg'
 import youtube from '../../../assets/icons/youtube-logo.svg'
@@ -30,7 +30,6 @@ type Props = {
 }
 
 export default function Navigation({ user }: Props) {
-  const navigate = useNavigate()
   const { sm, md, lg, xl, xxl } = useResponsives()
   const users = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
 
@@ -69,7 +68,7 @@ export default function Navigation({ user }: Props) {
           userId: user?._id,
         },
       }),
-    enabled: user?._id ? true : false,
+    enabled: Boolean(user?._id),
   })
 
   const [open, setOpen] = useState(false)
@@ -151,11 +150,10 @@ export default function Navigation({ user }: Props) {
                           }}
                         >
                           {user
-                            ? user?.isMentor && (
-                                // user?.mentorStatus === 'APPROVED'
-
+                            ? user.isMentor &&
+                              user.mentorStatus === 'APPROVED' && (
                                 <ButtonCustom
-                                  icon={<BiSolidDashboard />}
+                                  icon={<BiSolidDashboard size={20} />}
                                   tooltip='Chuyển qua màn Mentor'
                                   href='/mentor'
                                   className='cartIcon'
@@ -164,9 +162,12 @@ export default function Navigation({ user }: Props) {
                             : null}
 
                           <Badge color='#D72831' count={data?.data?.totalDocs}>
-                            <div className='cartIcon' onClick={() => navigate('/cart-page')}>
-                              <BsFillCartFill />
-                            </div>
+                            <ButtonCustom
+                              icon={<BsFillCartFill size={20} />}
+                              tooltip='Giỏ hàng'
+                              href='/cart-page'
+                              className='cartIcon'
+                            ></ButtonCustom>
                           </Badge>
                           <div className='phoneIcon'>
                             <BsFillTelephoneFill />
