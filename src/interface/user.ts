@@ -29,4 +29,5 @@ export interface UserState {
   createdAt: Date
   descriptions?: string
   gender: 'MALE' | 'FEMALE' | 'OTHER'
+  videoInfoUrl?: string
 }

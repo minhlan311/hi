@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import openNotification from '@/components/Notification'
-import { TopicList } from '@/interface/topic'
+import { TopicState } from '@/interface/topic'
 import { Topic } from '@/types/course.type'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { QueryClient, useMutation } from '@tanstack/react-query'
 import { Button, Drawer, Form, Input } from 'antd'
-import { useState, useEffect, Dispatch, SetStateAction, useRef } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 type Props = {
   onOpen?: boolean
   onClose?: any
   userId?: string
-  dataCollap: React.Dispatch<React.SetStateAction<TopicList[]>>
+  dataCollap: React.Dispatch<React.SetStateAction<TopicState[]>>
   dataTopic?: Topic | undefined
   reFetchData: Dispatch<SetStateAction<string>>
 }
@@ -21,11 +21,11 @@ type Props = {
 export default function DrawerCreateExam({ onOpen, onClose, userId, dataCollap, reFetchData }: Props) {
   const [form] = Form.useForm()
   const [refetch, setRefetch] = useState('')
-  const [dataDrawer, setDataDrawer] = useState<TopicList | []>([])
+  const [dataDrawer, setDataDrawer] = useState<TopicState | []>([])
 
   const queryClient = new QueryClient()
   useEffect(() => {
-    dataCollap(dataDrawer as TopicList[])
+    dataCollap(dataDrawer as TopicState[])
   }, [dataDrawer])
 
   useEffect(() => {

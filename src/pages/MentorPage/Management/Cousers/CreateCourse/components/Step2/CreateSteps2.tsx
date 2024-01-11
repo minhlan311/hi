@@ -5,7 +5,7 @@ import topicApi from '@/apis/topic.api'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import PopConfirmAntd from '@/components/PopConfirmAntd/PopConfirmAntd'
-import { TopicList } from '@/interface/topic'
+import { TopicState } from '@/interface/topic'
 import { Topic } from '@/types/course.type'
 import { Lession } from '@/types/lession.type'
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -34,8 +34,8 @@ const CreateSteps2 = ({ dataId }: any) => {
   const [onOpenUpdateLession, setOnOpenUpdateLession] = useState(false)
   const [onOpenQuizz, setOnOpenQuizz] = useState(false)
   const [reFetch, setRefetch] = useState<string>('')
-  const [dataColl, setDataColl] = useState<TopicList[] | []>([])
-  const [dataCollLession, setDataCollLession] = useState<TopicList[] | []>([])
+  const [dataColl, setDataColl] = useState<TopicState[] | []>([])
+  const [dataCollLession, setDataCollLession] = useState<TopicState[] | []>([])
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 

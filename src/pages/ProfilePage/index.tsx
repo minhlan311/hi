@@ -15,6 +15,7 @@ import BannerProfile from './Banner'
 import Certificate from './Certificate'
 import Feedback from './Feedback'
 import MentorInfor from './MentorInfor'
+import MentorVideo from './MentorVideo'
 import MyCourses from './MyCourses'
 import css from './styles.module.scss'
 
@@ -82,7 +83,7 @@ const ProfilePage = ({ profile }: Props) => {
           profile={profile}
           setPayload={setPayload}
         />
-        {/* <MentorVideo /> */}
+        {user?.videoInfoUrl && <MentorVideo videoUrl={user.videoInfoUrl} />}
         {isShow && <Certificate user={user} />}
         <MyCourses coursesData={coursesData as unknown as any} loading={loading} setCurrent={setCurrent} />
         <Feedback userId={user._id} meId={profile?._id} />

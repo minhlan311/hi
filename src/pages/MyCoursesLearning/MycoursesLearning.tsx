@@ -10,7 +10,7 @@ import VideoComponent from '@/components/VideoComponent/VideoComponent'
 import { TypeLessonEnum } from '@/constants'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
-import { Topic } from '@/types/course.type'
+
 import {
   DownloadOutlined,
   ExpandOutlined,
@@ -108,7 +108,7 @@ export default function MycoursesLearning() {
     }
   }, [isSuccess, checkEnrolls?.data?.docs?.length])
 
-  const { data: topics, isLoading } = useQuery({
+  const { data: topicsData, isLoading } = useQuery({
     queryKey: ['topicLearning', id, checkEnrolls?.data?.docs?.length],
     queryFn: () => {
       return topicApi.findTopic({
@@ -120,7 +120,7 @@ export default function MycoursesLearning() {
     enabled: checkEnrolls?.data?.docs?.length ? true : false,
   })
 
-  const dataTopics: Topic | undefined = topics?.data?.docs
+  const dataTopics = topicsData?.data?.docs
   const lessonsFlat =
     dataTopics && Array.isArray(dataTopics) && dataTopics?.map((course: any) => course.lessons)?.flat()
 
