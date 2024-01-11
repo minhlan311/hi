@@ -97,24 +97,22 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }:
                 }}
                 uploadQuality='high'
               >
-                <div className={css.bg}>
-                  <img
-                    src={
-                      user.avatarUrl
-                        ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
-                        : user?.gender === 'male'
-                        ? malePic
-                        : famalePic
-                    }
-                    alt='avt'
-                  />
-                  <div className={css.editBg}>
-                    <div className={css.icon}>
-                      <Space direction='vertical'>
-                        <LuImagePlus />
-                        <p>Thay đổi ảnh đại diện</p>
-                      </Space>
-                    </div>
+                <img
+                  src={
+                    user.avatarUrl
+                      ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
+                      : user?.gender === 'MALE'
+                      ? malePic
+                      : famalePic
+                  }
+                  alt='avt'
+                />
+                <div className={css.editBg}>
+                  <div className={css.icon}>
+                    <Space direction='vertical'>
+                      <LuImagePlus />
+                      <p>Thay đổi ảnh đại diện</p>
+                    </Space>
                   </div>
                 </div>
               </UploadCustom>
@@ -124,7 +122,7 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }:
                   src={
                     user.avatarUrl
                       ? import.meta.env.VITE_FILE_ENDPOINT + '/' + user.avatarUrl
-                      : user?.gender === 'male'
+                      : user?.gender === 'MALE'
                       ? malePic
                       : famalePic
                   }
@@ -154,7 +152,13 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }:
                       <Flex justify='space-between'>
                         <Space>
                           <IoSchoolSharp size={30} />
-                          <b>{user.mentorInfo?.educationType}</b>
+                          <b>
+                            {user.mentorInfo?.educationType
+                              ? user.mentorInfo?.educationType
+                              : user.isMentor
+                              ? 'Giảng viên'
+                              : 'Học viên'}
+                          </b>
                         </Space>
                         <Space>
                           <PiCertificateFill size={30} />

@@ -3,19 +3,8 @@
   background-color: var(--whiteBg);
   margin: 0 auto;
   max-width: 1600px;
-  overflow: hidden;
-  border-radius: 0 0 15px 15px;
-  margin-bottom: 50px;
+  width: 100%;
 
-  @include respond-to(sm) {
-    width: 100%;
-  }
-  @include respond-to(xs) {
-    width: 100%;
-  }
-  @include respond-to(md) {
-    width: 100%;
-  }
   .avt {
     height: 100%;
     filter: brightness(0.8);
@@ -25,7 +14,7 @@
       object-fit: cover;
     }
     .editBg {
-      display: none;
+      opacity: 0;
       position: absolute;
       inset: 0;
       background-color: rgba(0, 0, 0, 0.5);
@@ -43,11 +32,7 @@
       }
     }
     &:hover .editBg {
-      display: block;
-    }
-    img {
-      width: 100%;
-      object-fit: cover;
+      opacity: 1;
     }
   }
   .infor {

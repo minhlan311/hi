@@ -48,7 +48,7 @@ const ProfilePage = ({ profile }: Props) => {
   const user = userData?.data
 
   if (user)
-    document.title = (user.isMentor ? (user?.gender === 'famale' ? 'Cô' : 'Thầy ') : '') + user?.fullName + ' | Ucam'
+    document.title = (user.isMentor ? (user?.gender === 'FEMALE' ? 'Cô' : 'Thầy ') : '') + user?.fullName + ' | Ucam'
 
   const [payload, setPayload] = useState<UserState | null>(null)
 

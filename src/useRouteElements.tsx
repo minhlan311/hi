@@ -92,7 +92,7 @@ export default function useRouteElements() {
           element: (
             <AuthLayout
               title='Đăng ký'
-              imgSize={14}
+              imgSize={12}
               titleForm='Đăng ký'
               descForm='Học tập là công việc của cả cuộc đời, hãy để Ucam là người bạn đồng hành cùng bạn, trải nghiệm ngay!'
             >

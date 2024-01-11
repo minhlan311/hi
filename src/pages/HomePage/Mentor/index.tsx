@@ -58,7 +58,7 @@ const Mentor = () => {
             </ButtonCustom>
             <ButtonCustom size='small'>{370} học viên</ButtonCustom>
           </Space>
-          <ButtonCustom className='sm-butt' size='large' style={{ width: '100%' }} href={`/profiles/${user._id}`}>
+          <ButtonCustom className='sm-butt sp100' size='large' href={`/profiles/${user._id}`}>
             <Space>
               <div>Chọn giáo viên</div>
               <BsArrowRight

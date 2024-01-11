@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect } from 'react'
-import { Button, Steps, theme } from 'antd'
-import './Register.scss'
-import Roles from './Roles/Roles'
-import MentorForm from './MentorForm/Info/MentorForm'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import { Flex, Space, Steps } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import MentorForm from './MentorForm/Info/MentorForm'
+import Roles from './Roles/Roles'
 import { DataFormMentor, MentorForm as TMentorForm } from './constants'
 
 const Register: React.FC = () => {
@@ -23,7 +23,6 @@ const Register: React.FC = () => {
     educationType: '',
   })
   const formRef = useRef<HTMLFormElement>(null)
-  const { token } = theme.useToken()
 
   useEffect(() => {
     if (checkStep2 && current === 1) {
@@ -117,40 +116,27 @@ const Register: React.FC = () => {
 
   const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
-  const contentStyle: React.CSSProperties = {
-    minHeight: '300px',
-    lineHeight: '50px',
-    textAlign: 'center',
-    color: token.colorTextTertiary,
-    marginTop: 16,
-  }
-
   return (
-    <>
-      <div className='container-reg'>
-        <Steps current={current} items={items} />
-        <div style={contentStyle}>{steps[current].content}</div>
-        <div style={{ marginTop: 24 }}>
-          {current === steps.length - 1 && (
-            <div className='dix-flex'>
-              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                Quay lại
-              </Button>
-              <Button type='primary' onClick={handleSubmit}>
-                Hoàn thành
-              </Button>
-            </div>
-          )}
+    <Space direction='vertical' className='sp100' size='large'>
+      <Steps current={current} items={items} />
+      {steps[current].content}
 
-          <p className='res'>
-            Bạn đã có tài khoản ?
-            <Link className='link' to={'/login'}>
-              Đăng nhập ngay
-            </Link>
-          </p>
-        </div>
-      </div>
-    </>
+      {current === steps.length - 1 && (
+        <Flex justify='space-between'>
+          <ButtonCustom onClick={() => prev()}>Quay lại</ButtonCustom>
+          <ButtonCustom type='primary' onClick={handleSubmit}>
+            Đăng ký
+          </ButtonCustom>
+        </Flex>
+      )}
+
+      <p style={{ textAlign: 'center' }}>
+        Bạn đã có tài khoản?{' '}
+        <Link className='link' to={'/login'}>
+          Đăng nhập ngay
+        </Link>
+      </p>
+    </Space>
   )
 }
 
