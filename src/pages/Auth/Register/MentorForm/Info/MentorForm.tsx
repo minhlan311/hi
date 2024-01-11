@@ -63,7 +63,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
               },
             ]}
           >
-            <Input placeholder='Nhập họ và tên của bạn' />
+            <Input placeholder='Nhập họ và tên của bạn' size='large' />
           </Form.Item>
         </Col>
         <Col span={24} sm={12}>
@@ -72,7 +72,13 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
             name='birthday'
             rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
           >
-            <DatePicker style={{ width: '100%' }} format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' placement='topLeft' />
+            <DatePicker
+              style={{ width: '100%' }}
+              format={'DD/MM/YYYY'}
+              placeholder='DD/MM/YYYY'
+              placement='topLeft'
+              size='large'
+            />
           </Form.Item>
         </Col>
         <Col span={24} sm={12}>
@@ -92,6 +98,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
                 { label: 'Nữ', value: 'FEMALE' },
                 { label: 'Khác', value: 'OTHER' },
               ]}
+              size='large'
             />
           </Form.Item>
         </Col>
@@ -110,7 +117,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
               },
             ]}
           >
-            <Input placeholder='Nhập email của bạn' />
+            <Input placeholder='Nhập email của bạn' size='large' />
           </Form.Item>
         </Col>
         <Col span={24} md={10}>
@@ -128,7 +135,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
               },
             ]}
           >
-            <Input placeholder='Nhập số điện thoại' />
+            <Input placeholder='Nhập số điện thoại' size='large' />
           </Form.Item>
         </Col>
 
@@ -142,7 +149,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
               },
             ]}
           >
-            <Input.Password placeholder='Nhập mật khẩu' />
+            <Input.Password placeholder='Nhập mật khẩu' size='large' />
           </Form.Item>
         </Col>
         <Col span={24} md={12}>
@@ -167,7 +174,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
               }),
             ]}
           >
-            <Input.Password placeholder='Nhập lại mật khẩu' />
+            <Input.Password placeholder='Nhập lại mật khẩu' size='large' />
           </Form.Item>
         </Col>
       </Row>
