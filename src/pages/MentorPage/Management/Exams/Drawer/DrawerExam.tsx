@@ -272,7 +272,7 @@ const DrawerExam = (props: Props) => {
                   dropArea
                   accessType='image/*'
                   callBackFileList={setImgUrl}
-                  maxCount={1}
+            
                   defaultFileList={
                     examData && examData.coverUrl
                       ? [{ name: examData.name as string, url: examData.coverUrl as string }]

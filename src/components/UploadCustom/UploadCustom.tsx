@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { Image, Space, Upload, message } from 'antd'
+import { Form, Image, Space, Upload, message } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import type { RcFile } from 'antd/es/upload/interface'
-import { UploadProps } from 'antd/lib'
-import axios from 'axios'
+import { FormInstance, UploadProps } from 'antd/lib'
 import React, { useEffect, useState } from 'react'
 import { TbDragDrop } from 'react-icons/tb'
 import css from './UploadCustom.module.scss'
@@ -18,7 +17,7 @@ interface FileList {
 type Props = {
   children?: React.ReactNode
   action?: string
-  uploadKey?: 'attachment' | 'image' | 'video'
+  uploadKey?: 'attachment' | 'image' | 'certificates'
   uploadQuality?: 'medium' | 'high'
   showUploadList?: boolean
   cropBeforeUpload?: boolean
@@ -30,12 +29,13 @@ type Props = {
   maxFileSize?: number
   dropArea?: boolean
   cropShape?: 'rect' | 'round'
-  name?: string
+  name?: string | any[]
+  form?: FormInstance
   defaultFileList?: FileList[]
   showPreview?: boolean
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   setPreviewUrl?: React.Dispatch<React.SetStateAction<string>>
-  callBackFileList?: React.Dispatch<React.SetStateAction<FileList[]>>
+  callBackFileList?: React.Dispatch<React.SetStateAction<FileList[] | any[]>>
 }
 
 const UploadCustom = (props: Props) => {
@@ -57,45 +57,19 @@ const UploadCustom = (props: Props) => {
     name,
     defaultFileList,
     showPreview = false,
+    form,
     setLoading,
     setPreviewUrl,
     callBackFileList,
   } = props
   const { Dragger } = Upload
-  const [fileList, setFileList] = useState<FileList[]>(defaultFileList || [])
-  //   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 100, height: 50, x: 0, y: 25 })
+  const [fileList, setFileList] = useState<FileList[]>([])
 
-  const convertFilelist = (arr: any) => {
-    if (!arr) {
-      return []
-    }
-
-    if (Array.isArray(arr)) {
-      const convertedArray = arr.map((item) => ({
-        uid: item.url,
-        name: item.name,
-        status: 'done',
-        url: item.url,
-      }))
-
-      return convertedArray
-    }
-
-    if (arr) {
-      const convertedArray = {
-        uid: arr.url,
-        name: arr.name,
-        status: 'done',
-        url: arr.url,
-      }
-
-      return [convertedArray]
-    }
-  }
+  useEffect(() => {
+    if (defaultFileList) setFileList(defaultFileList)
+  }, [defaultFileList])
 
   const handleBeforeUpload = async (file: RcFile) => {
-    setLoading && setLoading(true)
-
     if (maxFileSize) {
       const max = file.size / 1024 / 1024 < maxFileSize
 
@@ -103,7 +77,6 @@ const UploadCustom = (props: Props) => {
         message.error(
           `File của bạn có kích thước quá lớn, vui lòng upload file có dung lượng từ ${maxFileSize}MB trở xuống!`,
         )
-        setLoading && setLoading(false)
 
         return false
       }
@@ -115,30 +88,6 @@ const UploadCustom = (props: Props) => {
     reader.onload = (e) => {
       if (setPreviewUrl) setPreviewUrl(`${e?.target?.result}`)
     }
-
-    const formData = new FormData()
-    formData.append(uploadKey, file)
-
-    try {
-      const response = await axios.post(
-        action
-          ? action
-          : uploadQuality === 'high'
-          ? import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_LARGE_IMAGE
-          : import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
-        formData,
-      )
-      const newData = convertFilelist(response.data)
-
-      if (multiple) setFileList([...fileList, ...(newData as unknown as FileList[])])
-      else setFileList(newData as unknown as FileList[])
-
-      message.success('Đăng tải thành công')
-    } catch (error) {
-      message.error('Đăng tải lỗi')
-    }
-
-    setLoading && setLoading(false)
   }
 
   useEffect(() => {
@@ -147,64 +96,130 @@ const UploadCustom = (props: Props) => {
     }
   }, [fileList])
 
+  const handleChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    let newFileList: any[] = []
+
+    if (status === 'uploading') {
+      setLoading && setLoading(true)
+
+      return
+    }
+
+    if (status === 'done') {
+      message.success(`Tải file ${info.file.name} thành công.`)
+      console.log(info.file)
+
+      if (uploadKey === 'attachment') {
+        form && form.setFieldValue(name, info.file.response[0].url)
+        const newFileArr = info.fileList.map((file) => {
+          if (file.response) {
+            return { uid: file.response[0].url, name: file.name, status: 'done', url: file.response[0].url }
+          }
+
+          return file
+        })
+
+        newFileList = newFileArr
+      } else {
+        form && form.setFieldValue(name, info.file.response.url)
+        const newFileArr = info.fileList.map((file) => {
+          if (file.response) {
+            return { uid: file.response.url, name: file.name, status: 'done', url: file.response.url }
+          }
+
+          return file
+        })
+
+        newFileList = newFileArr
+      }
+
+      setLoading && setLoading(false)
+    } else if (status === 'error') {
+      message.error(`Tải file ${info.file.name} thất bại.`)
+      setLoading && setLoading(false)
+    }
+
+    setFileList(newFileList)
+    callBackFileList && callBackFileList(newFileList)
+  }
+
   const uploadProps: UploadProps = {
-    name: name,
+    name: uploadKey,
     multiple: multiple || (!multiple && maxCount > 1) ? true : undefined,
     maxCount: maxCount,
     listType: listType,
     defaultFileList: fileList as unknown as any,
-    fileList: fileList as unknown as any,
     showUploadList: showUploadList,
-    beforeUpload: handleBeforeUpload,
     accept: accessType,
+
+    action:
+      (action && action) ||
+      (uploadQuality === 'high' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_LARGE_IMAGE) ||
+      (uploadKey === 'certificates' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_CERTIFICATES) ||
+      (uploadKey === 'attachment' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT) ||
+      import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
+    beforeUpload: handleBeforeUpload,
+    onChange: handleChange,
   }
 
-  if (cropBeforeUpload) {
-    return (
-      <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
-        {dropArea ? (
-          <Dragger {...uploadProps}>
-            {!fileList.length && !showPreview ? (
-              <div className={css.dropArea}>
-                <p className={'ant-upload-drag-icon'}>
-                  <TbDragDrop style={{ fontSize: 40 }} />
-                </p>
-                <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-                <p className={'ant-upload-hint'}></p>
-              </div>
-            ) : (
-              <Image
-                width={'96%'}
-                preview={false}
-                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
-              ></Image>
-            )}
-          </Dragger>
-        ) : (
-          <Upload {...uploadProps}>{children}</Upload>
-        )}
-      </ImgCrop>
-    )
-  }
-
-  return dropArea ? (
-    <Dragger {...uploadProps}>
-      {!fileList.length && !showPreview ? (
-        <div className={css.dropArea}>
-          <p className={'ant-upload-drag-icon'}>
-            <TbDragDrop style={{ fontSize: 40 }} />
-          </p>
-          <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-          <p className={'ant-upload-hint'}></p>
-        </div>
+  return (
+    <div>
+      {form && <Form.Item name={name} noStyle></Form.Item>}
+      {cropBeforeUpload ? (
+        <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
+          {dropArea ? (
+            <Dragger {...uploadProps}>
+              {!fileList.length && !showPreview ? (
+                <div className={css.dropArea}>
+                  <p className={'ant-upload-drag-icon'}>
+                    <TbDragDrop style={{ fontSize: 40 }} />
+                  </p>
+                  <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+                  <p className={'ant-upload-hint'}></p>
+                </div>
+              ) : (
+                <Image
+                  width={'96%'}
+                  preview={false}
+                  src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+                ></Image>
+              )}
+            </Dragger>
+          ) : (
+            <Upload {...uploadProps}>{children}</Upload>
+          )}
+        </ImgCrop>
+      ) : dropArea ? (
+        <Dragger {...uploadProps}>
+          {!fileList.length && !showPreview ? (
+            <div className={css.dropArea}>
+              <p className={'ant-upload-drag-icon'}>
+                <TbDragDrop style={{ fontSize: 40 }} />
+              </p>
+              <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+              <p className={'ant-upload-hint'}></p>
+            </div>
+          ) : name?.includes('video') ? (
+            <video
+              width={'100%'}
+              style={{ maxHeight: '40vh' }}
+              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+            ></video>
+          ) : (
+            <Image
+              width={'96%'}
+              preview={false}
+              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+            ></Image>
+          )}
+        </Dragger>
       ) : (
-        <Image width={'96%'} preview={false} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}></Image>
+        <Upload {...uploadProps}>
+          <Space.Compact className={css.buttGr}>{children}</Space.Compact>
+        </Upload>
       )}
-    </Dragger>
-  ) : (
-    <Upload {...uploadProps}>
-      <Space.Compact className={css.buttGr}>{children}</Space.Compact>
-    </Upload>
+    </div>
   )
 }
 
