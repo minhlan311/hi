@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
-import { UploadOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Col, Divider, Form, Input, Popconfirm, Row, Select, Upload } from 'antd'
-import { MentorForm, MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import userApi from '@/apis/user.api'
 import openNotification from '@/components/Notification'
-import { useParams } from 'react-router-dom'
-import { optionsEducationType } from './constants/ultil'
-import UploadCer from '@/pages/ProfilePage/Certificate/components/UploadCer'
-import UploadOtherDilopma from './components/UploadOtherDIlopma'
+import { MentorForm, MentorForm as TMentorForm } from '@/pages/Auth/Register/constants'
 import UploadCMNDBefore from '@/pages/ProfilePage/Certificate/components/UploadCMNDBefore'
+import UploadCer from '@/pages/ProfilePage/Certificate/components/UploadCer'
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button, Col, Divider, Form, Input, Popconfirm, Row, Select, Upload } from 'antd'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import UploadCMNDAfter from './components/UploadCMNDAfter'
+import UploadOtherDilopma from './components/UploadOtherDIlopma'
+import { optionsEducationType } from './constants/ultil'
 
 export default function UpdateCertificate() {
   const [data, setData] = useState<MentorForm>()
@@ -121,6 +121,7 @@ export default function UpdateCertificate() {
                 if (!items || items.length === 0) {
                   return Promise.reject(new Error('Bạn cần ít nhất một bằng cấp'))
                 }
+
                 return Promise.resolve()
               },
             },
@@ -146,7 +147,6 @@ export default function UpdateCertificate() {
                         name='image'
                         action={import.meta.env.VITE_FILE_ENDPOINT + '/upload/image'}
                         listType='picture'
-                        maxCount={1}
                       >
                         <Button type='dashed' className='default' icon={<UploadOutlined />}>
                           Tải hình ảnh

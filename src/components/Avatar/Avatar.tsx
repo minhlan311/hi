@@ -31,6 +31,7 @@ const Avatar = (props: Props) => {
       callbackPayload && callbackPayload(payload as unknown as UserState)
     }
   }, [fileList])
+  console.log(fileList)
 
   if (!userData && !avtUrl) {
     return <Avt src={noAvt} className={className}></Avt>

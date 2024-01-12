@@ -9,7 +9,7 @@ const MentorVideo = ({ videoUrl }: { videoUrl: string }) => {
       <video
         width='100%'
         height={(md && '420') || (sm && '350') || '523'}
-        src={import.meta.env.VITE_FILE_ENDPOINT + videoUrl}
+        src={import.meta.env.VITE_FILE_ENDPOINT + '/' + videoUrl}
         title='Video info'
         controls
         style={{ borderRadius: 4 }}
