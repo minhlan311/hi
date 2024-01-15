@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { formatNumber } from '@/common'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
@@ -23,16 +24,6 @@ type Props = {
 }
 
 const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxLength, setCurrent }: Props) => {
-  const formatNumber = (num: number) => {
-    if (num < 1000) {
-      return num.toString()
-    } else if (num < 1000000) {
-      return (num / 1000).toFixed(0) + 'k'
-    } else {
-      return (num / 1000000).toFixed(0) + 'm'
-    }
-  }
-
   const RenderCourse = ({ item }: { item: any }) => {
     return (
       <Link to={'/courses/' + item._id}>
@@ -51,11 +42,11 @@ const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxL
           <Space direction='vertical' style={{ display: 'flex' }}>
             <Card.Meta title={item.name} />
             <Space>
-              <Avatar avtUrl={item.owner?.avatarUrl} userData={item.owner} />
-              {item.owner?.fullName}
+              <Avatar avtUrl={item.mentor?.avatarUrl} userData={item.mentor} />
+              {item.mentor?.fullName}
             </Space>
             <Space>
-              <Rate value={item.avgAssessment} style={{ fontSize: 14 }} allowHalf disabled />
+              <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
               {`(${formatNumber(item.countAssessment)} Đánh giá)`}
             </Space>
             <Flex align='center' justify='space-between'>

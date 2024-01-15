@@ -28,7 +28,6 @@ export interface CoursesState {
   avgAssessment?: any
   id?: string
   cost: number
-  owner: UserState
   typeCourse: any
 }
 

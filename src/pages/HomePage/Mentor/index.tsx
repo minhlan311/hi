@@ -1,4 +1,5 @@
 import userApi from '@/apis/user.api'
+import { formatNumber } from '@/common'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
@@ -46,9 +47,9 @@ const Mentor = () => {
               <h2 className='oneLine'>{user.fullName}</h2>
             </Tooltip>
             <div>Chứng chỉ Teft</div>
-            <Rate value={4.5} allowHalf style={{ fontSize: 12 }} />
+            <Rate defaultValue={user.assessment?.totalAssessmentsAverages} allowHalf style={{ fontSize: 12 }} />
             <p>
-              <b>{350}</b> lượt đánh giá
+              <b>{formatNumber(user.countAssessment as number)}</b> lượt đánh giá
             </p>
           </div>
 

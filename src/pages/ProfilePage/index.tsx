@@ -61,10 +61,10 @@ const ProfilePage = ({ profile }: Props) => {
           profile={profile}
         />
         {user?.videoInfoUrl && <MentorVideo videoUrl={user.videoInfoUrl} />}
-        {user.mentorInfo.showCentificate?.length > 0 && (
+        {user.mentorInfo?.showCentificate?.length > 0 && (
           <Header title='Bằng cấp & Chứng chỉ' titleSize={35} size='sm'>
             <Space direction='vertical' className={'sp100'} size={'large'}>
-              {user.mentorInfo.showCentificate?.map((item) => (
+              {user.mentorInfo?.showCentificate?.map((item) => (
                 <div key={item}>
                   <h3 style={{ marginBottom: 10 }}>{item === 'centificate' ? 'Chứng chỉ' : 'Bằng cấp'}</h3>
                   <Row gutter={[24, 24]} justify='center'>
@@ -85,7 +85,9 @@ const ProfilePage = ({ profile }: Props) => {
             </Space>
           </Header>
         )}
-        <MyCourses coursesData={coursesData as unknown as any} loading={loading} setCurrent={setCurrent} />
+        {user.isMentor && (
+          <MyCourses coursesData={coursesData as unknown as any} loading={loading} setCurrent={setCurrent} />
+        )}
         <Feedback userId={user._id} meId={profile?._id} />
       </Header>
     </div>

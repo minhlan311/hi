@@ -224,8 +224,32 @@ table {
         padding: 15px 0;
         font-size: 18px;
         font-weight: 500;
+        &:hover {
+          color: var(--green) !important;
+        }
+      }
+
+      .ant-tabs-tab-active * {
+        color: var(--green) !important;
+      }
+      .ant-tabs-ink-bar {
+        background: var(--green);
       }
       gap: 60px;
+      @include respond-to(xs) {
+        gap: 0px;
+        .ant-tabs-tab {
+          font-size: 14px;
+          padding: auto;
+        }
+      }
+      @include respond-to(sm) {
+        gap: 0px;
+        .ant-tabs-tab {
+          font-size: 14px;
+          padding: auto;
+        }
+      }
     }
   }
 }
