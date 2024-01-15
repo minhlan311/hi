@@ -41,8 +41,8 @@ const RenderCourse = ({ item }: { item: EnrollsState }) => {
           <Card.Meta title={item.course.name} />
         </Flex>
         <Space>
-          <Avatar avtUrl={item.course.owner.avatarUrl} userData={item.course.owner} />
-          {item.course.owner.fullName}
+          <Avatar avtUrl={item.course.mentor.avatarUrl} userData={item.course.mentor} />
+          {item.course.mentor.fullName}
         </Space>
         <Flex align='center' justify='space-between'>
           <Space align='center'>
