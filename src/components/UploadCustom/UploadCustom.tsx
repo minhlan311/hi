@@ -135,6 +135,7 @@ const UploadCustom = (props: Props) => {
           return file
         })
         callBackFileList && callBackFileList(newFileArr)
+        setFileList(newFileArr as any[])
       } else {
         form && form.setFieldValue(name, info.file.response.url)
 
@@ -197,6 +198,8 @@ const UploadCustom = (props: Props) => {
         rules={[{ required: required, message: 'Vui lòng đăng tải file' }]}
         getValueFromEvent={(e) => {
           if (e.file.response) {
+            if (Array.isArray(e.file.response)) return e.file.response.map((item: any) => item.url)
+
             return e.file.response.url
           }
         }}

@@ -191,121 +191,127 @@ const CoursesDetail = () => {
             </Space>
 
             <p>
-              <Rate disabled style={{ fontSize: 14, marginRight: 5 }}></Rate>
+              <Rate disabled style={{ fontSize: 14, marginRight: 5 }} defaultValue={5}></Rate>
               (1 Đánh giá)
             </p>
           </Space>
           <Row gutter={24}>
-            <Col span={24} lg={17}>
+            <Col span={24} lg={16}>
               <h1 style={{ marginTop: 24 }}>{courseDetail.name}</h1>
 
-              <TabsCustom
-                align='center'
-                data={[
-                  {
-                    name: 'Tổng quan',
-                    id: 'overview',
-                    children: (
-                      <div>
+              <div className={'tabCourseCustom'}>
+                <TabsCustom
+                  align='center'
+                  data={[
+                    {
+                      name: 'Tổng quan',
+                      id: 'overview',
+                      children: (
+                        <div>
+                          <Space
+                            direction='vertical'
+                            className={'sp100'}
+                            style={{ paddingBottom: 24, minHeight: '60vh' }}
+                          >
+                            <h2>Mô tả khóa học</h2>
+                            {courseDetail.descriptions ? (
+                              <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
+                            ) : (
+                              'Không có mô tả'
+                            )}
+                          </Space>
+                        </div>
+                      ),
+                    },
+                    {
+                      name: 'Lộ trình',
+                      id: 'lession',
+                      children: (
                         <Space
                           direction='vertical'
+                          size='large'
                           className={'sp100'}
-                          style={{ paddingBottom: 24, minHeight: '40vh' }}
+                          style={{ paddingBottom: 24, minHeight: '60vh' }}
                         >
-                          <h2>Mô tả khóa học</h2>
-                          <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
+                          {topicList?.docs && topicList?.docs.length > 0 ? (
+                            topicList?.docs?.map((item) => (
+                              <CollapseCustom
+                                size='large'
+                                expandIconPosition='end'
+                                items={[
+                                  {
+                                    key: item._id,
+                                    label: item.name,
+                                    children: (
+                                      <Space direction='vertical' className={'sp100'}>
+                                        {item.lessons.length > 0 ? (
+                                          item.lessons.map((ls, index) => (
+                                            <div key={ls._id}>
+                                              <Flex justify='space-between' align='center'>
+                                                <Space>
+                                                  <FaRegEdit />
+                                                  <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
+                                                </Space>
+                                                <Space>
+                                                  {index === 0 && checkEnrolls ? (
+                                                    <ButtonCustom
+                                                      size='small'
+                                                      href={'/myCourseLearning/' + courseDetail?._id}
+                                                      type='primary'
+                                                    >
+                                                      Preview
+                                                    </ButtonCustom>
+                                                  ) : (
+                                                    <>
+                                                      <TagCustom
+                                                        content={`${ls.length ? ls.length : 0} phút`}
+                                                        color='green'
+                                                      />
+                                                      <TbLock />
+                                                    </>
+                                                  )}
+                                                </Space>
+                                              </Flex>
+                                              {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <EmptyCustom description='Không có bài học nào!' />
+                                        )}
+                                      </Space>
+                                    ),
+                                  },
+                                ]}
+                                defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
+                                key={item._id}
+                              />
+                            ))
+                          ) : (
+                            <EmptyCustom description='Không có lộ trình nào!' />
+                          )}
                         </Space>
-                      </div>
-                    ),
-                  },
-                  {
-                    name: 'Lộ trình',
-                    id: 'lession',
-                    children: (
-                      <Space
-                        direction='vertical'
-                        size='large'
-                        className={'sp100'}
-                        style={{ paddingBottom: 24, minHeight: '40vh' }}
-                      >
-                        {topicList?.docs && topicList?.docs.length > 0 ? (
-                          topicList?.docs?.map((item) => (
-                            <CollapseCustom
-                              size='large'
-                              expandIconPosition='end'
-                              items={[
-                                {
-                                  key: item._id,
-                                  label: item.name,
-                                  children: (
-                                    <Space direction='vertical' className={'sp100'}>
-                                      {item.lessons.length > 0 ? (
-                                        item.lessons.map((ls, index) => (
-                                          <div key={ls._id}>
-                                            <Flex justify='space-between' align='center'>
-                                              <Space>
-                                                <FaRegEdit />
-                                                <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
-                                              </Space>
-                                              <Space>
-                                                {index === 0 && checkEnrolls ? (
-                                                  <ButtonCustom
-                                                    size='small'
-                                                    href={'/myCourseLearning/' + courseDetail?._id}
-                                                    type='primary'
-                                                  >
-                                                    Preview
-                                                  </ButtonCustom>
-                                                ) : (
-                                                  <>
-                                                    <TagCustom
-                                                      content={`${ls.length ? ls.length : 0} phút`}
-                                                      color='green'
-                                                    />
-                                                    <TbLock />
-                                                  </>
-                                                )}
-                                              </Space>
-                                            </Flex>
-                                            {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
-                                          </div>
-                                        ))
-                                      ) : (
-                                        <EmptyCustom description='Không có bài học nào!' />
-                                      )}
-                                    </Space>
-                                  ),
-                                },
-                              ]}
-                              defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
-                              key={item._id}
-                            />
-                          ))
-                        ) : (
-                          <EmptyCustom description='Không có lộ trình nào!' />
-                        )}
-                      </Space>
-                    ),
-                  },
-                  {
-                    name: 'Giảng viên',
-                    id: 'owner',
-                    children: (
-                      <MentorInfor
-                        user={user}
-                        coursesLength={coursesData?.totalDocs ? coursesData?.totalDocs : 0}
-                        fullSize
-                        md={(md && 10) || (lg && 6) || 8}
-                      />
-                    ),
-                  },
-                  {
-                    name: 'Đánh giá',
-                    id: 'feedback',
-                    children: <Feedback userId={user._id} fullSize />,
-                  },
-                ]}
-              />
+                      ),
+                    },
+                    {
+                      name: 'Giảng viên',
+                      id: 'owner',
+                      children: (
+                        <MentorInfor
+                          user={user}
+                          coursesLength={coursesData?.totalDocs ? coursesData?.totalDocs : 0}
+                          fullSize
+                          md={(md && 10) || (lg && 6) || 8}
+                        />
+                      ),
+                    },
+                    {
+                      name: 'Đánh giá',
+                      id: 'feedback',
+                      children: <Feedback userId={user._id} fullSize />,
+                    },
+                  ]}
+                />
+              </div>
 
               <h1>Khóa học nổi bật</h1>
               <MyCourses
@@ -316,9 +322,9 @@ const CoursesDetail = () => {
                 maxLength={2}
               />
               <h1>Đánh giá</h1>
-              <FeedbackCourse courseId={courseDetail._id} userId={profile?._id} />
+              <FeedbackCourse courseId={courseDetail._id} userId={profile?._id} checkEnrolls={checkEnrolls} />
             </Col>
-            <Col span={24} lg={7}>
+            <Col span={24} lg={8}>
               <Card
                 className={`sticky ${style.courseAction}`}
                 cover={
@@ -428,16 +434,14 @@ const CoursesDetail = () => {
                 <div className={style.buttonAction}>
                   <Row gutter={12} align='middle'>
                     <Col span={12} md={8}>
-                      <ButtonCustom className={'sp100'} size='small'>
-                        <h2>
-                          <PriceCalculator price={courseDetail.cost ? courseDetail.cost : 2500000} />
-                        </h2>
+                      <ButtonCustom className={style.price} size='small'>
+                        <PriceCalculator price={courseDetail.cost ? courseDetail.cost : 2500000} />
                       </ButtonCustom>
                     </Col>
 
                     <Col span={12} md={16}>
                       <ButtonCustom
-                        className={'sp100'}
+                        className={style.buy}
                         size='small'
                         type='primary'
                         onClick={handleBuy}
