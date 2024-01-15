@@ -1,86 +1,90 @@
 @import '../../components/GlobalStyles/responsive.scss';
 
-.courseAction {
-  position: fixed !important;
-  bottom: 55px;
-  left: 0;
-  right: 0;
-  top: auto !important;
-  height: auto !important;
-  z-index: 10;
+.courseMain {
+  .courseAction {
+    position: fixed !important;
+    bottom: 55px;
+    left: 0;
+    right: 0;
+    top: auto !important;
+    height: auto !important;
+    z-index: 10;
 
-  & > :first-child {
-    position: relative;
-    padding: 12px;
-    border-radius: 4px;
-    .playIcon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 5px;
-      height: 50px;
-      width: 50px;
-      background-color: var(--whiteBg);
-      border-radius: 50%;
-      svg {
-        color: var(--green);
-        font-size: 40px;
+    & > :first-child {
+      position: relative;
+      padding: 24px 24px 8px 24px;
+      border-radius: 4px;
+      .playIcon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 5px;
+        height: 50px;
+        width: 50px;
+        background-color: var(--whiteBg);
+        border-radius: 50%;
+        svg {
+          color: var(--green);
+          font-size: 40px;
+        }
+      }
+      &:hover .playIcon {
+        display: none;
       }
     }
-    &:hover .playIcon {
-      display: none;
+    .icon {
+      color: var(--green);
     }
-  }
-  .icon {
-    color: var(--green);
-  }
 
-  .buttonAction {
-    display: block;
-  }
-
-  .courseInfor,
-  & > :first-child {
-    display: none;
-  }
-
-  & > * {
-    padding: 10px !important;
-  }
-
-  @include respond-to(lg) {
-    position: sticky !important;
-    margin-top: -140px;
-    margin-right: 24px;
-    max-height: 98vh;
-    margin-bottom: 50px;
-    height: auto !important;
-    top: 15px !important;
-    z-index: 1;
     .buttonAction {
-      display: none;
+      display: block;
+      .price,
+      .buy {
+        * {
+          font-weight: bold;
+        }
+      }
     }
+
     .courseInfor,
     & > :first-child {
-      display: block;
-    }
-  }
-  @include respond-to(xl) {
-    position: sticky !important;
-    margin-top: -140px;
-    margin-right: 24px;
-    max-height: 98vh;
-    margin-bottom: 50px;
-    height: auto !important;
-    top: 15px !important;
-    z-index: 1;
-    .buttonAction {
       display: none;
     }
-    .courseInfor,
-    & > :first-child {
-      display: block;
+
+    @include respond-to(lg) {
+      position: sticky !important;
+      margin-top: -140px;
+      margin-right: 24px;
+      max-height: 98vh;
+      margin-bottom: 50px;
+      height: auto !important;
+      top: 15px !important;
+      z-index: 1;
+      .buttonAction {
+        display: none;
+      }
+      .courseInfor,
+      & > :first-child {
+        display: block;
+      }
+    }
+    @include respond-to(xl) {
+      position: sticky !important;
+      margin-top: -140px;
+      margin-right: 24px;
+      max-height: 98vh;
+      margin-bottom: 50px;
+      height: auto !important;
+      top: 15px !important;
+      z-index: 1;
+      .buttonAction {
+        display: none;
+      }
+      .courseInfor,
+      & > :first-child {
+        display: block;
+      }
     }
   }
 }

@@ -13,9 +13,10 @@ import style from './styles.module.scss'
 type Props = {
   courseId: string
   userId: string
+  checkEnrolls?: boolean
 }
 
-const FeedbackCourse = ({ courseId, userId }: Props) => {
+const FeedbackCourse = ({ courseId, userId, checkEnrolls }: Props) => {
   const navitage = useNavigate()
 
   const { mutate, isSuccess } = useMutation({
@@ -80,7 +81,7 @@ const FeedbackCourse = ({ courseId, userId }: Props) => {
   return (
     <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
       <Space direction='vertical' size='large' className={`sp100 ${style.fbCourseMain}`}>
-        {!check && (
+        {!check && checkEnrolls && (
           <Form form={form} onFinish={onFinish}>
             <Form.Item name='description'>
               <Input.TextArea

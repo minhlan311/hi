@@ -1,41 +1,30 @@
-.card {
-  background-color: var(--whiteBg);
-  margin: 0 auto;
-  width: 60vw;
-  overflow: hidden;
-  border-radius: 0 0 15px 15px;
-
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
-  .cardTitle {
+.videoMain {
+  position: relative;
+  transition: 0.5s;
+  .video {
+    border-radius: 4;
+  }
+  .playIcon {
     position: absolute;
-    z-index: 10;
-    left: 35%;
-    top: 20px;
-    padding: 20px 25px;
-    background-color: var(--red);
-    color: var(--white);
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  .avt {
-    img {
-      width: 100%;
-      background-color: var(--green);
-      object-fit: cover;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    height: 50px;
+    width: 50px;
+    background-color: var(--whiteBg);
+    border-radius: 50%;
+    svg {
+      color: var(--green);
+      font-size: 40px;
     }
+    transition: 0.5s;
   }
-  .infor {
-    padding: 100px 20px 20px 20px;
-    .data {
-      text-transform: uppercase;
-      a {
-        text-transform: lowercase;
-        color: var(--red);
-      }
-    }
-    .icon {
-      font-size: 35px;
-      color: var(--red);
+  &:hover {
+    .playIcon {
+      opacity: 1;
+      background-color: var(--whiteBg);
     }
   }
 }
