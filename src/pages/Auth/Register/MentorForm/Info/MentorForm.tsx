@@ -7,7 +7,6 @@ import { Col, DatePicker, Form, Input, Radio, Row } from 'antd'
 import { forwardRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ROLE } from '../../Roles/constants'
-import { MentorForm as TMentorForm } from '../../constants'
 
 const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
   const [userId, setUserId] = useState<string>('')
@@ -54,7 +53,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
     <Form layout='vertical' form={form} onFinish={onFinish} autoComplete='off'>
       <Row gutter={24}>
         <Col span={24}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Họ tên'
             name='fullName'
             rules={[
@@ -67,11 +66,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
           </Form.Item>
         </Col>
         <Col span={24} sm={12}>
-          <Form.Item<TMentorForm>
-            label='Ngày sinh'
-            name='birthday'
-            rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}
-          >
+          <Form.Item label='Ngày sinh' name='birthday' rules={[{ required: true, message: 'Vui lòng chọn ngày sinh' }]}>
             <DatePicker
               style={{ width: '100%' }}
               format={'DD/MM/YYYY'}
@@ -82,7 +77,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
           </Form.Item>
         </Col>
         <Col span={24} sm={12}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Giới tính'
             name='gender'
             rules={[
@@ -103,7 +98,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
           </Form.Item>
         </Col>
         <Col span={24} md={14}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Email'
             name='email'
             rules={[
@@ -121,7 +116,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
           </Form.Item>
         </Col>
         <Col span={24} md={10}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Số điện thoại'
             name='phoneNumber'
             rules={[
@@ -140,7 +135,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
         </Col>
 
         <Col span={24} md={12}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Mật khẩu'
             name='password'
             rules={[
@@ -153,7 +148,7 @@ const MentorForm = forwardRef(({ onFinishs, formRef, roles, ids }: any) => {
           </Form.Item>
         </Col>
         <Col span={24} md={12}>
-          <Form.Item<TMentorForm>
+          <Form.Item
             label='Nhập lại mật khẩu'
             name='confirmPassword'
             dependencies={['password']}

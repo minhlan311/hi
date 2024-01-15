@@ -7,9 +7,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import CentificateUpdate from '../Components/CentificateUpdate'
 import InforUpdate from '../Components/InforUpdate'
 import VideoUpdate from '../Components/VideoUpdate'
-type Props = { user: UserState; setUpdate: React.Dispatch<React.SetStateAction<boolean>> }
+type Props = { user: UserState; activeKey?: string; setUpdate: React.Dispatch<React.SetStateAction<boolean>> }
 
-const UpdateMentor = ({ user, setUpdate }: Props) => {
+const UpdateMentor = ({ user, activeKey, setUpdate }: Props) => {
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: (body: UserState) => userApi.updateUser(body),
@@ -35,6 +35,7 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
     <div>
       <h2>Chỉnh sửa thông tin</h2>
       <TabsCustom
+        defaultActiveKey={activeKey}
         data={[
           {
             id: 'infor',
@@ -49,7 +50,7 @@ const UpdateMentor = ({ user, setUpdate }: Props) => {
           {
             id: 'centificate',
             name: 'Bằng cấp',
-            children: <CentificateUpdate user={user} setUpdate={setUpdate} mutation={mutation} />,
+            children: <CentificateUpdate user={user} setUpdate={setUpdate} />,
           },
         ]}
       />

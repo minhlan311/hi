@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import userApi from '@/apis/user.api'
+import openNotification from '@/components/Notification'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { UserState } from '@/interface/user'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Space } from 'antd'
 import { LuImagePlus } from 'react-icons/lu'
 import css from '../styles.module.scss'
@@ -9,18 +12,28 @@ type Props = {
   user: UserState
   profile?: UserState
   showInfor?: boolean
-  setPayload?: React.Dispatch<React.SetStateAction<UserState | null>>
 }
 
 const BannerProfile = (props: Props) => {
-  const { user, profile, showInfor, setPayload } = props
+  const { user, profile, showInfor } = props
+  const queryClient = useQueryClient()
+  const uploadProfile = useMutation({
+    mutationFn: (body: UserState) => userApi.updateUser(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userDetail'] })
+      openNotification({ status: 'success', message: 'Thông báo', description: 'Cập nhật ảnh bìa thành công!' })
+    },
+    onError: () => {
+      openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi sảy ra' })
+    },
+  })
 
   return profile && profile._id === user._id ? (
     <UploadCustom
       cropBeforeUpload
       cropAspect={32 / 9}
-      callBackFileList={(data: any) => {
-        setPayload && setPayload({ coverUrl: data?.[0].url } as UserState)
+      onChange={(data: any) => {
+        if (data.file.response) uploadProfile.mutate({ _id: user._id, coverUrl: data.file.response.url } as UserState)
       }}
       uploadQuality='high'
     >

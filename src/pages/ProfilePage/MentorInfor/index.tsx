@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import assessmentApi from '@/apis/assessment.api'
+import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import openNotification from '@/components/Notification'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import Header from '@/components/layout/Header/Header'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Flex, Progress, Row, Space } from 'antd'
 import moment from 'moment-timezone'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
 import { FaBookOpen, FaClock, FaStar } from 'react-icons/fa6'
 import { IoSchoolSharp } from 'react-icons/io5'
 import { LuImagePlus } from 'react-icons/lu'
 import { PiCertificateFill } from 'react-icons/pi'
 import { TbUserEdit } from 'react-icons/tb'
+import { useLocation } from 'react-router-dom'
 import famalePic from '../../../assets/images/examimg/famale-teacher.png'
 import malePic from '../../../assets/images/examimg/male-teacher.png'
 import UpdateMentor from './UpdateMentor'
@@ -25,11 +29,17 @@ type Props = {
   coursesLength: number
   fullSize?: boolean
   md?: number
-  setPayload?: React.Dispatch<React.SetStateAction<UserState | null>>
 }
 
-const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }: Props) => {
+const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
   const [update, setUpdate] = useState(false)
+  const { setProfile } = useContext(AppContext)
+  const location = useLocation().state
+  useEffect(() => {
+    if (location) {
+      setUpdate(true)
+    }
+  }, [location])
 
   const examDesc =
     '<p>Tôi là một giáo viên Tiếng Anh với niềm đam mê sâu sắc trong việc truyền đạt kiến thức và kỹ năng ngôn ngữ cho học viên. Sứ mệnh của tôi không chỉ đơn giản là dạy ngữ pháp và từ vựng, mà còn là tạo ra môi trường học tập thú vị và cung cấp những cơ hội để học viên thể hiện bản thân một cách tự tin.</p><br/><p>Trâm ngôn của tôi về học tập bằng Tiếng Anh là: <b>"Embrace the challenge, embrace the growth."</b> Đối mặt với thách thức, chấp nhận nó và từ đó, bạn sẽ trưởng thành. Việc học ngôn ngữ không chỉ là việc học từ sách vở, mà còn là việc mở cửa tâm hồn và sẵn sàng đối mặt với những cơ hội mới, từ đó phát triển bản thân một cách toàn diện.</p>'
@@ -82,18 +92,31 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }:
   }
 
   const { sm } = useResponsives()
+  const queryClient = useQueryClient()
+  const uploadProfile = useMutation({
+    mutationFn: (body: UserState) => userApi.updateUser(body),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['userDetail'] })
+      setProfile(data.data as unknown as UserState)
+      openNotification({ status: 'success', message: 'Thông báo', description: 'Cập nhật ảnh đại diện thành công!' })
+    },
+    onError: () => {
+      openNotification({ status: 'error', message: 'Thông báo', description: 'Có lỗi sảy ra' })
+    },
+  })
 
   return (
     <Header padding={'30px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
       <div className={css.card}>
-        <Row align='middle' gutter={[24, 24]}>
-          <Col span={24} md={md ? md : 10} className={css.avt}>
+        <Row gutter={[24, 24]}>
+          <Col span={24} md={md ? md : 10} className={`${css.avt} ${sm ? '' : 'sticky'}`} style={{ top: 30 }}>
             {profile && profile._id === user._id ? (
               <UploadCustom
                 cropBeforeUpload
                 cropAspect={1 / 1}
-                callBackFileList={(data: any) => {
-                  setPayload && setPayload({ avatarUrl: data?.[0].url } as UserState)
+                onChange={(data: any) => {
+                  if (data.file.response)
+                    uploadProfile.mutate({ _id: user._id, avatarUrl: data.file.response.url } as UserState)
                 }}
                 uploadQuality='high'
               >
@@ -258,7 +281,7 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize, setPayload }:
                 </Space>
               </div>
             ) : (
-              <UpdateMentor user={user} setUpdate={setUpdate} />
+              <UpdateMentor user={user} setUpdate={setUpdate} activeKey={location?.key} />
             )}
           </Col>
         </Row>

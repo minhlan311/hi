@@ -31,7 +31,7 @@ export default function ClassManage() {
         description: `Xóa lớp học thành công!`,
         status: 'success',
       })
-      queryClient.invalidateQueries({ queryKey: ['dataClass'] })
+      queryClient.invalidateQueries({ queryKey: ['classList'] })
     },
     onError: () => {
       openNotification({
