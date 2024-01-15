@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { UserState } from '@/interface/user'
-import http from '@/utils/http'
-import { MentorForm } from '@/pages/Auth/Register/constants'
+import { MentorInfo } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
+import http from '@/utils/http'
 type Props = {
   filterQuery?: any
   options?: any
@@ -31,10 +31,17 @@ const userApi = {
     return http.post<SuccessResponse<UserState[]>>(ENDPOINT.FIND_USER_PATH, payload ? payload : data)
   },
   updateUser(body: UserState) {
-    return http.put<MentorForm>(ENDPOINT.UPDATE_USER_INFO + body._id, body)
+    return http.put<MentorInfo>(ENDPOINT.UPDATE_USER_INFO + body._id, body)
   },
-  updateMentorForm(body: MentorForm) {
-    return http.post<MentorForm>(ENDPOINT.MENTOR, body)
+  getMentorDetail(id: string) {
+    return http.get<MentorInfo>(ENDPOINT.MENTOR_DETAIL + id)
+  },
+
+  createMentor(body: MentorInfo) {
+    return http.post<MentorInfo>(ENDPOINT.MENTOR, body)
+  },
+  updateMentor(body: MentorInfo) {
+    return http.put<MentorInfo>(ENDPOINT.MENTOR + body._id, body)
   },
 }
 

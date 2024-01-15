@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { Form, Image, Space, Upload, message } from 'antd'
+import { Form, Image, Modal, Space, Upload, message } from 'antd'
 import ImgCrop from 'antd-img-crop'
-import type { RcFile } from 'antd/es/upload/interface'
+import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { FormInstance, UploadProps } from 'antd/lib'
 import React, { useEffect, useState } from 'react'
 import { TbDragDrop } from 'react-icons/tb'
@@ -15,6 +15,7 @@ interface FileList {
 }
 
 type Props = {
+  restField?: { fieldKey?: number | undefined }
   children?: React.ReactNode
   action?: string
   uploadKey?: 'attachment' | 'image' | 'certificates'
@@ -33,13 +34,24 @@ type Props = {
   form?: FormInstance
   defaultFileList?: FileList[]
   showPreview?: boolean
+  required?: boolean
+  label?: React.ReactNode | string
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   setPreviewUrl?: React.Dispatch<React.SetStateAction<string>>
   callBackFileList?: React.Dispatch<React.SetStateAction<FileList[] | any[]>>
+  onChange?: (e: any) => void
 }
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
 
 const UploadCustom = (props: Props) => {
   const {
+    restField,
     children,
     action,
     uploadKey = 'image',
@@ -57,17 +69,16 @@ const UploadCustom = (props: Props) => {
     name,
     defaultFileList,
     showPreview = false,
+    required,
     form,
+    label,
     setLoading,
     setPreviewUrl,
     callBackFileList,
+    onChange,
   } = props
   const { Dragger } = Upload
   const [fileList, setFileList] = useState<FileList[]>([])
-
-  useEffect(() => {
-    if (defaultFileList) setFileList(defaultFileList)
-  }, [defaultFileList])
 
   const handleBeforeUpload = async (file: RcFile) => {
     if (maxFileSize) {
@@ -96,9 +107,17 @@ const UploadCustom = (props: Props) => {
     }
   }, [fileList])
 
+  useEffect(() => {
+    if (defaultFileList && !fileList.length) {
+      setFileList(defaultFileList)
+    }
+  }, [defaultFileList])
+
   const handleChange: UploadProps['onChange'] = (info) => {
+    onChange && onChange(info)
     const { status } = info.file
-    let newFileList: any[] = []
+
+    setFileList(info.fileList as any[])
 
     if (status === 'uploading') {
       setLoading && setLoading(true)
@@ -107,11 +126,7 @@ const UploadCustom = (props: Props) => {
     }
 
     if (status === 'done') {
-      message.success(`Tải file ${info.file.name} thành công.`)
-      console.log(info.file)
-
       if (uploadKey === 'attachment') {
-        form && form.setFieldValue(name, info.file.response[0].url)
         const newFileArr = info.fileList.map((file) => {
           if (file.response) {
             return { uid: file.response[0].url, name: file.name, status: 'done', url: file.response[0].url }
@@ -119,10 +134,10 @@ const UploadCustom = (props: Props) => {
 
           return file
         })
-
-        newFileList = newFileArr
+        callBackFileList && callBackFileList(newFileArr)
       } else {
         form && form.setFieldValue(name, info.file.response.url)
+
         const newFileArr = info.fileList.map((file) => {
           if (file.response) {
             return { uid: file.response.url, name: file.name, status: 'done', url: file.response.url }
@@ -130,8 +145,7 @@ const UploadCustom = (props: Props) => {
 
           return file
         })
-
-        newFileList = newFileArr
+        callBackFileList && callBackFileList(newFileArr)
       }
 
       setLoading && setLoading(false)
@@ -139,9 +153,20 @@ const UploadCustom = (props: Props) => {
       message.error(`Tải file ${info.file.name} thất bại.`)
       setLoading && setLoading(false)
     }
+  }
 
-    setFileList(newFileList)
-    callBackFileList && callBackFileList(newFileList)
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+  const [previewTitle, setPreviewTitle] = useState('')
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile)
+    }
+
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
+    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
   }
 
   const uploadProps: UploadProps = {
@@ -149,75 +174,91 @@ const UploadCustom = (props: Props) => {
     multiple: multiple || (!multiple && maxCount > 1) ? true : undefined,
     maxCount: maxCount,
     listType: listType,
-    defaultFileList: fileList as unknown as any,
+    fileList: fileList as unknown as any,
     showUploadList: showUploadList,
     accept: accessType,
-
     action:
       (action && action) ||
       (uploadQuality === 'high' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_LARGE_IMAGE) ||
       (uploadKey === 'certificates' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_CERTIFICATES) ||
       (uploadKey === 'attachment' && import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT) ||
       import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_IMAGE,
+    onPreview: previewImage ? handlePreview : undefined,
     beforeUpload: handleBeforeUpload,
     onChange: handleChange,
   }
 
   return (
     <div>
-      {form && <Form.Item name={name} noStyle></Form.Item>}
-      {cropBeforeUpload ? (
-        <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
-          {dropArea ? (
-            <Dragger {...uploadProps}>
-              {!fileList.length && !showPreview ? (
-                <div className={css.dropArea}>
-                  <p className={'ant-upload-drag-icon'}>
-                    <TbDragDrop style={{ fontSize: 40 }} />
-                  </p>
-                  <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-                  <p className={'ant-upload-hint'}></p>
-                </div>
-              ) : (
-                <Image
-                  width={'96%'}
-                  preview={false}
-                  src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
-                ></Image>
-              )}
-            </Dragger>
-          ) : (
-            <Upload {...uploadProps}>{children}</Upload>
-          )}
-        </ImgCrop>
-      ) : dropArea ? (
-        <Dragger {...uploadProps}>
-          {!fileList.length && !showPreview ? (
-            <div className={css.dropArea}>
-              <p className={'ant-upload-drag-icon'}>
-                <TbDragDrop style={{ fontSize: 40 }} />
-              </p>
-              <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
-              <p className={'ant-upload-hint'}></p>
-            </div>
-          ) : name?.includes('video') ? (
-            <video
-              width={'100%'}
-              style={{ maxHeight: '40vh' }}
-              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
-            ></video>
-          ) : (
-            <Image
-              width={'96%'}
-              preview={false}
-              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
-            ></Image>
-          )}
-        </Dragger>
-      ) : (
-        <Upload {...uploadProps}>
-          <Space.Compact className={css.buttGr}>{children}</Space.Compact>
-        </Upload>
+      <Form.Item
+        {...restField}
+        label={label}
+        name={name}
+        rules={[{ required: required, message: 'Vui lòng đăng tải file' }]}
+        getValueFromEvent={(e) => {
+          if (e.file.response) {
+            return e.file.response.url
+          }
+        }}
+      >
+        {cropBeforeUpload ? (
+          <ImgCrop rotationSlider cropShape={cropShape} showReset resetText='Đặt lại' aspect={cropAspect}>
+            {dropArea ? (
+              <Dragger {...uploadProps}>
+                {!fileList.length && !showPreview ? (
+                  <div className={css.dropArea}>
+                    <p className={'ant-upload-drag-icon'}>
+                      <TbDragDrop style={{ fontSize: 40 }} />
+                    </p>
+                    <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+                    <p className={'ant-upload-hint'}></p>
+                  </div>
+                ) : (
+                  <Image
+                    width={'96%'}
+                    preview={false}
+                    src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+                  ></Image>
+                )}
+              </Dragger>
+            ) : (
+              <Upload {...uploadProps}>{children}</Upload>
+            )}
+          </ImgCrop>
+        ) : dropArea ? (
+          <Dragger {...uploadProps}>
+            {!fileList.length && !showPreview ? (
+              <div className={css.dropArea}>
+                <p className={'ant-upload-drag-icon'}>
+                  <TbDragDrop style={{ fontSize: 40 }} />
+                </p>
+                <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
+                <p className={'ant-upload-hint'}></p>
+              </div>
+            ) : name?.includes('video') ? (
+              <video
+                width={'100%'}
+                style={{ maxHeight: '40vh' }}
+                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+              ></video>
+            ) : (
+              <Image
+                width={'96%'}
+                preview={false}
+                src={import.meta.env.VITE_FILE_ENDPOINT + '/' + fileList[0].url}
+              ></Image>
+            )}
+          </Dragger>
+        ) : (
+          <Upload {...uploadProps}>
+            <Space.Compact className={css.buttGr}>{children}</Space.Compact>
+          </Upload>
+        )}
+      </Form.Item>
+      {previewImage && (
+        <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)}>
+          <img alt='example' style={{ width: '100%' }} src={previewImage} />
+        </Modal>
       )}
     </div>
   )

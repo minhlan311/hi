@@ -2,17 +2,16 @@
 import courseApi from '@/apis/course.api'
 import userApi from '@/apis/user.api'
 import LoadingCustom from '@/components/LoadingCustom'
-import openNotification from '@/components/Notification'
 import PageResult from '@/components/PageResult'
 import Header from '@/components/layout/Header/Header'
-import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
-import { setProfileToLS } from '@/utils/auth'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import BannerProfile from './Banner'
-import Certificate from './Certificate'
+
+import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import { Col, Row, Space } from 'antd'
 import Feedback from './Feedback'
 import MentorInfor from './MentorInfor'
 import MentorVideo from './MentorVideo'
@@ -25,41 +24,20 @@ type Props = {
 
 const ProfilePage = ({ profile }: Props) => {
   const location = useLocation()
-  const { setProfile } = useContext(AppContext)
-  const userId = location.pathname.split('/')[2]
-  const queryClient = useQueryClient()
 
-  const uploadProfile = useMutation({
-    mutationFn: (body: UserState) => userApi.updateUser(body),
-    onSuccess: () => {
-      const newData = { ...profile, ...payload }
-      setProfile(newData)
-      setProfileToLS(newData)
-      queryClient.invalidateQueries({ queryKey: ['userDetail'] })
-      openNotification({ status: 'success', message: 'Thông báo', description: 'Cập nhật thông tin thành công!' })
-    },
-  })
+  const userId = location.pathname.split('/')[2]
+
   const { data: userData, isLoading } = useQuery({
-    queryKey: ['userDetail', location, uploadProfile],
+    queryKey: ['userDetail', location],
     queryFn: () => {
       return userApi.getUserDetail(userId)
     },
-    enabled: Boolean(userId) || uploadProfile.isSuccess,
+    enabled: Boolean(userId),
   })
   const user = userData?.data
 
   if (user)
-    document.title = (user.isMentor ? (user?.gender === 'FEMALE' ? 'Cô' : 'Thầy ') : '') + user?.fullName + ' | Ucam'
-
-  const [payload, setPayload] = useState<UserState | null>(null)
-
-  useEffect(() => {
-    if (payload) {
-      uploadProfile.mutate({ ...payload, _id: profile?._id })
-    }
-  }, [payload])
-
-  const isShow = false
+    document.title = (user.isMentor ? (user?.gender === 'FEMALE' ? 'Cô ' : 'Thầy ') : '') + user?.fullName + ' | Ucam'
 
   const [current, setCurrent] = useState<number>(1)
 
@@ -75,16 +53,38 @@ const ProfilePage = ({ profile }: Props) => {
     <LoadingCustom tip='Vui lòng chờ...' className={css.loading} />
   ) : user ? (
     <div className={css.prfMain}>
-      <BannerProfile user={user} profile={profile} setPayload={setPayload} />
+      <BannerProfile user={user} profile={profile} />
       <Header background='var(--whiteBg)' padding='0 0 50px 0'>
         <MentorInfor
           user={user}
           coursesLength={coursesData?.totalDocs ? coursesData?.totalDocs : 0}
           profile={profile}
-          setPayload={setPayload}
         />
         {user?.videoInfoUrl && <MentorVideo videoUrl={user.videoInfoUrl} />}
-        {isShow && <Certificate user={user} />}
+        {user.mentorInfo.showCentificate?.length > 0 && (
+          <Header title='Bằng cấp & Chứng chỉ' titleSize={35} size='sm'>
+            <Space direction='vertical' className={'sp100'} size={'large'}>
+              {user.mentorInfo.showCentificate?.map((item) => (
+                <div key={item}>
+                  <h3 style={{ marginBottom: 10 }}>{item === 'centificate' ? 'Chứng chỉ' : 'Bằng cấp'}</h3>
+                  <Row gutter={[24, 24]} justify='center'>
+                    {item === 'centificate'
+                      ? user.mentorInfo.certificates.map((c) => (
+                          <Col span={24} md={8} key={c.name}>
+                            <ImageCustom width='100%' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + c.url} />
+                          </Col>
+                        ))
+                      : user.mentorInfo.diploma.map((d) => (
+                          <Col span={24} md={8} key={d.name}>
+                            <ImageCustom width='100%' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + d.url} />
+                          </Col>
+                        ))}
+                  </Row>
+                </div>
+              ))}
+            </Space>
+          </Header>
+        )}
         <MyCourses coursesData={coursesData as unknown as any} loading={loading} setCurrent={setCurrent} />
         <Feedback userId={user._id} meId={profile?._id} />
       </Header>

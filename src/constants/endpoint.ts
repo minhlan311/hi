@@ -5,13 +5,14 @@ export const ENDPOINT = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/signup',
   LOGOUT: '/auth/logout',
-  MENTOR: '/mentorInfo/',
   CHANGE_PASSWORD: '/users/change-password/',
   FORGOT_PASSWORD: '/users/reset-password/',
 
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
   GET_ALL_MENTOR: '/users/find',
+  MENTOR: '/mentorInfo/',
+  MENTOR_DETAIL: '/mentorInfo/user/',
 
   // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::
   DOCUMENT_PATH: '/edu/documents',

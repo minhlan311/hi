@@ -286,7 +286,7 @@ export default function MenuNav({ user, type }: Props) {
                 className='btn-ms'
                 type='primary'
                 onClick={() => {
-                  navigate('/profiles/' + `${userData?.data?._id}`)
+                  navigate('/profiles/' + `${userData?.data?._id}`, { state: { key: 'centificate' } })
                 }}
               >
                 Cập nhật ngay

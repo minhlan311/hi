@@ -7,6 +7,7 @@ export const REGEX_PATTERN = {
   regexCombineEmailPhoneNumber: /^([a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,6}$)|([0-9]{10})+$/,
   regexPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
   regexUrl: /^(https?:\/\/)?(http?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|biz|info|vn)(\/[^\s]*)?$/,
+  cccd: /^\d{8,12}$/,
 }
 
 export const validatePassword = (_rule: any, value: any, callback: any) => {

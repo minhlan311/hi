@@ -21,7 +21,10 @@ export type MentorInfo = {
   _id: string
   _destroy: boolean
   educationType: string
-  certificates: string[]
+  certificates: {
+    url: string
+    name: string
+  }[]
   prizes: never[]
   specializes: never[]
   levels: never[]
@@ -30,11 +33,11 @@ export type MentorInfo = {
   updatedAt: string
   cccd: string
   diploma: {
-    image: string
-    diploma: string
-    schoolName: string
+    url: string
+    name: string
   }[]
   imageAfter: string
   imageBefore: string
   updatedById: string
+  showCentificate: string[]
 }

@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserState } from '@/interface/user'
 import { Avatar as Avt } from 'antd'
-import type { UploadFile } from 'antd/es/upload/interface'
-import { useEffect, useState } from 'react'
 import { LuImagePlus } from 'react-icons/lu'
 import noAvt from '../../assets/images/navigation/No-avt.jpg'
 import UploadCustom from '../UploadCustom/UploadCustom'
@@ -20,18 +18,6 @@ type Props = {
 
 const Avatar = (props: Props) => {
   const { avtUrl, userData, size, style, className, uploadImg = false, callbackPayload } = props
-
-  const [fileList, setFileList] = useState<UploadFile[]>([])
-
-  useEffect(() => {
-    if (fileList?.length > 0 && uploadImg) {
-      const payload = {
-        avatarUrl: fileList[0].url,
-      }
-      callbackPayload && callbackPayload(payload as unknown as UserState)
-    }
-  }, [fileList])
-  console.log(fileList)
 
   if (!userData && !avtUrl) {
     return <Avt src={noAvt} className={className}></Avt>
@@ -74,8 +60,14 @@ const Avatar = (props: Props) => {
             cropBeforeUpload
             cropAspect={1}
             cropShape='round'
-            callBackFileList={setFileList as unknown as any}
-            maxFileSize={1}
+            onChange={(data: any) => {
+              if (data.file.response) {
+                const payload = {
+                  avatarUrl: data.file.response.url,
+                }
+                callbackPayload && callbackPayload(payload as unknown as UserState)
+              }
+            }}
           >
             <div className={css.iconAdd}>
               <div className={css.icon}>
