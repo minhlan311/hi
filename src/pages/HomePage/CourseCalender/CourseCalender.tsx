@@ -35,6 +35,7 @@ export default function CourseCalender() {
         },
         options: {
           limit: 6,
+          sort: { createdAt: -1 },
         },
       })
     },
