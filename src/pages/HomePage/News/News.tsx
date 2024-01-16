@@ -1,10 +1,10 @@
-import { Button, Col, Image, Row, Tooltip, Typography } from 'antd'
-import './News.scss'
-import { useQuery } from '@tanstack/react-query'
 import newsApi from '@/apis/news.api'
-import { Link, useNavigate } from 'react-router-dom'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
 import LoadingCustom from '@/components/LoadingCustom'
+import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import { useQuery } from '@tanstack/react-query'
+import { Button, Col, Image, Row, Tooltip, Typography } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import './News.scss'
 
 export default function News() {
   const navigate = useNavigate()
@@ -69,7 +69,7 @@ export default function News() {
             ))
           )}
         </Row>
-        <Button className='buttonMore' onClick={() => navigate('/tin-tuc-4pa1v')}>
+        <Button className='buttonMore' onClick={() => navigate('/tin-tuc')}>
           Xem tất cả
         </Button>
       </div>

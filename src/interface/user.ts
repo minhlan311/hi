@@ -1,5 +1,6 @@
 import { Class } from '@/types/class.type'
 import { MentorInfo } from '@/types/mentor.type'
+import { AssessmentState } from './assessment'
 
 export interface UserState {
   _id: string
@@ -30,4 +31,6 @@ export interface UserState {
   descriptions?: string
   gender: 'MALE' | 'FEMALE' | 'OTHER'
   videoInfoUrl?: string
+  countAssessment?: number
+  assessment?: AssessmentState
 }

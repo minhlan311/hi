@@ -39,14 +39,39 @@
 
     .buttonAction {
       display: block;
-      .price,
-      .buy {
-        * {
-          font-weight: bold;
-        }
+    }
+    .price,
+    .buy {
+      width: 100%;
+      * {
+        font-weight: bold;
+        font-size: 18px;
       }
     }
-
+    .price {
+      color: var(--green) !important;
+      border: 1px solid var(--green);
+      padding: 10px 13px !important;
+      &:hover {
+        & * {
+          color: var(--white) !important;
+        }
+        border: 1px solid var(--green);
+        background-color: var(--green);
+      }
+    }
+    .buy {
+      color: var(--white);
+      border: 1px solid var(--green);
+      background-color: var(--green);
+      &:hover {
+        & * {
+          color: var(--green);
+        }
+        border: 1px solid var(--green-2);
+        background-color: var(--greenBg);
+      }
+    }
     .courseInfor,
     & > :first-child {
       display: none;
@@ -86,5 +111,17 @@
         display: block;
       }
     }
+  }
+}
+
+.price {
+  color: var(--green) !important;
+
+  &:hover {
+    & * {
+      color: var(--white) !important;
+    }
+    border: 1px solid var(--green) !important;
+    background-color: var(--green) !important;
   }
 }

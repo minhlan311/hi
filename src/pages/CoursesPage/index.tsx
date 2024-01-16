@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import enrollsApi from '@/apis/enrolls.api'
 import topicApi from '@/apis/topic.api'
 import vnpayApi from '@/apis/vnpay.api'
+import { formatNumber } from '@/common'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CollapseCustom from '@/components/CollapseCustom/CollapseCustom'
@@ -31,9 +32,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { FacebookShareButton, LinkedinShareButton, PinterestShareButton, TwitterShareButton } from 'react-share'
 import BannerProfile from '../ProfilePage/Banner'
 import Feedback from '../ProfilePage/Feedback'
-import MentorInfor from '../ProfilePage/MentorInfor'
 import MyCourses from '../ProfilePage/MyCourses'
 import FeedbackCourse from './components/FeedbackCourse'
+import MentorData from './components/MentorData'
 import TopCourse from './components/TopCourse'
 import style from './style.module.scss'
 
@@ -102,7 +103,7 @@ const CoursesDetail = () => {
 
   const checkEnrolls = enrollData?.data.docs && enrollData.data.docs.some((item) => item.targetId === courseDetail?._id)
   const coursesData = courseList?.data
-  const user = courseDetail?.owner
+  const user = courseDetail?.mentor
 
   const courseInfor: { label: string; value: any; icon: React.ReactNode }[] =
     user && courseDetail
@@ -119,9 +120,7 @@ const CoursesDetail = () => {
           },
           {
             label: 'Số học viên',
-            value: courseDetail.class?.reduce((acc, obj) => {
-              return acc + obj.students.length
-            }, 0),
+            value: courseDetail?.countStudents,
             icon: <BsPeople />,
           },
           { label: 'Bài học', value: courseDetail.countTopics, icon: <RiBookReadLine /> },
@@ -140,7 +139,7 @@ const CoursesDetail = () => {
       : []
 
   const shareLink = window.location.href
-  const { md, lg, sm } = useResponsives()
+  const { sm } = useResponsives()
   const mutationCheckout = useMutation({
     mutationFn: (body: { value: number; targetModel: string; targetId: string }) => vnpayApi.pay(body),
     onSuccess: (data: any) => {
@@ -191,8 +190,12 @@ const CoursesDetail = () => {
             </Space>
 
             <p>
-              <Rate disabled style={{ fontSize: 14, marginRight: 5 }} defaultValue={5}></Rate>
-              (1 Đánh giá)
+              <Rate
+                disabled
+                style={{ fontSize: 14, marginRight: 5 }}
+                defaultValue={user.assessment?.totalAssessmentsAverages}
+              ></Rate>
+              ({formatNumber(user.countAssessment as number)} Đánh giá)
             </p>
           </Space>
           <Row gutter={24}>
@@ -234,7 +237,7 @@ const CoursesDetail = () => {
                           style={{ paddingBottom: 24, minHeight: '60vh' }}
                         >
                           {topicList?.docs && topicList?.docs.length > 0 ? (
-                            topicList?.docs?.map((item) => (
+                            topicList?.docs?.map((item, id) => (
                               <CollapseCustom
                                 size='large'
                                 expandIconPosition='end'
@@ -253,7 +256,7 @@ const CoursesDetail = () => {
                                                   <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
                                                 </Space>
                                                 <Space>
-                                                  {index === 0 && checkEnrolls ? (
+                                                  {index === 0 && id === 0 && checkEnrolls ? (
                                                     <ButtonCustom
                                                       size='small'
                                                       href={'/myCourseLearning/' + courseDetail?._id}
@@ -295,14 +298,7 @@ const CoursesDetail = () => {
                     {
                       name: 'Giảng viên',
                       id: 'owner',
-                      children: (
-                        <MentorInfor
-                          user={user}
-                          coursesLength={coursesData?.totalDocs ? coursesData?.totalDocs : 0}
-                          fullSize
-                          md={(md && 10) || (lg && 6) || 8}
-                        />
-                      ),
+                      children: <MentorData user={user} />,
                     },
                     {
                       name: 'Đánh giá',
@@ -327,6 +323,7 @@ const CoursesDetail = () => {
             <Col span={24} lg={8}>
               <Card
                 className={`sticky ${style.courseAction}`}
+                size={sm ? 'small' : undefined}
                 cover={
                   <div className={style.preview}>
                     <Image
@@ -371,16 +368,15 @@ const CoursesDetail = () => {
                     ))}
                   </div>
                   <Space direction='vertical' className={'sp100'} style={{ margin: '20px 0' }}>
-                    <ButtonCustom className={'sp100'}>
-                      <h2>
-                        <Space>
-                          <p>Giá:</p> <PriceCalculator price={courseDetail.cost ? courseDetail.cost : 0} />
-                        </Space>
-                      </h2>
+                    <ButtonCustom className={style.price}>
+                      <Space>
+                        <p>Giá:</p>
+                        <PriceCalculator price={courseDetail.cost ? courseDetail.cost : 0} />
+                      </Space>
                     </ButtonCustom>
 
                     <ButtonCustom
-                      className={'sp100'}
+                      className={style.buy}
                       size='large'
                       type='primary'
                       onClick={handleBuy}
@@ -398,7 +394,7 @@ const CoursesDetail = () => {
                     <Flex align='center'>
                       <LinkedinShareButton url={shareLink}>
                         <ButtonCustom
-                          icon={<FaLinkedinIn size={14} />}
+                          icon={<FaLinkedinIn size={18} />}
                           type='link'
                           size='small'
                           shape='circle'
@@ -406,7 +402,7 @@ const CoursesDetail = () => {
                       </LinkedinShareButton>
                       <FacebookShareButton url={shareLink}>
                         <ButtonCustom
-                          icon={<FaFacebookF size={12} />}
+                          icon={<FaFacebookF size={16} />}
                           type='link'
                           size='small'
                           shape='circle'
@@ -414,7 +410,7 @@ const CoursesDetail = () => {
                       </FacebookShareButton>
                       <TwitterShareButton url={shareLink}>
                         <ButtonCustom
-                          icon={<FaTwitter size={14} />}
+                          icon={<FaTwitter size={18} />}
                           type='link'
                           size='small'
                           shape='circle'
@@ -422,7 +418,7 @@ const CoursesDetail = () => {
                       </TwitterShareButton>
                       <PinterestShareButton url={shareLink} media={`${String(window.location)}`}>
                         <ButtonCustom
-                          icon={<FaPinterestP size={14} />}
+                          icon={<FaPinterestP size={18} />}
                           type='link'
                           size='small'
                           shape='circle'
@@ -442,18 +438,16 @@ const CoursesDetail = () => {
                     <Col span={12} md={16}>
                       <ButtonCustom
                         className={style.buy}
-                        size='small'
+                        style={{ padding: '10px 13px' }}
                         type='primary'
                         onClick={handleBuy}
                         disabled={courseDetail.countTopics < 1}
                       >
-                        <p style={{ fontSize: 20 }}>
-                          {courseDetail.countTopics > 0
-                            ? (checkEnrolls && 'Vào học ngay') ||
-                              (courseDetail.plan === 'FREE' && 'Tham gia ngay') ||
-                              'Mua ngay'
-                            : 'Đang cập nhật'}
-                        </p>
+                        {courseDetail.countTopics > 0
+                          ? (checkEnrolls && 'Vào học ngay') ||
+                            (courseDetail.plan === 'FREE' && 'Tham gia ngay') ||
+                            'Mua ngay'
+                          : 'Đang cập nhật'}
                       </ButtonCustom>
                     </Col>
                   </Row>

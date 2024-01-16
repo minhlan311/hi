@@ -30,30 +30,34 @@ const UpdateMentor = ({ user, activeKey, setUpdate }: Props) => {
       })
     },
   })
+  const initTabs = [
+    {
+      id: 'infor',
+      name: 'Thông tin cơ bản',
+      children: <InforUpdate user={user} setUpdate={setUpdate} mutation={mutation} />,
+    },
+  ]
+
+  const tabs = user.isMentor
+    ? [
+        ...initTabs,
+        {
+          id: 'videoInfo',
+          name: 'Video giới thiệu',
+          children: <VideoUpdate user={user} setUpdate={setUpdate} mutation={mutation} />,
+        },
+        {
+          id: 'centificate',
+          name: 'Bằng cấp',
+          children: <CentificateUpdate user={user} setUpdate={setUpdate} />,
+        },
+      ]
+    : initTabs
 
   return (
     <div>
       <h2>Chỉnh sửa thông tin</h2>
-      <TabsCustom
-        defaultActiveKey={activeKey}
-        data={[
-          {
-            id: 'infor',
-            name: 'Thông tin cơ bản',
-            children: <InforUpdate user={user} setUpdate={setUpdate} mutation={mutation} />,
-          },
-          {
-            id: 'videoInfo',
-            name: 'Video giới thiệu',
-            children: <VideoUpdate user={user} setUpdate={setUpdate} mutation={mutation} />,
-          },
-          {
-            id: 'centificate',
-            name: 'Bằng cấp',
-            children: <CentificateUpdate user={user} setUpdate={setUpdate} />,
-          },
-        ]}
-      />
+      <TabsCustom defaultActiveKey={activeKey} data={tabs as any} />
     </div>
   )
 }

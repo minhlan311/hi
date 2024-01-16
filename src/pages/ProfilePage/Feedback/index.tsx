@@ -115,6 +115,7 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
   })
 
   const check = checkData && checkData?.data.totalDocs > 0
+  console.log(data)
 
   return (
     <Header background='var(--whiteBg)' padding={'25px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
