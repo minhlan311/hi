@@ -22,7 +22,9 @@ const MentorData = ({ user }: Props) => {
         <Space size='large' direction='vertical' className={style.sp100}>
           <div>
             <h1>{user.fullName}</h1>
-            <h4 style={{ color: 'var(--green)' }}>{user.mentorInfo.educationType}</h4>
+            <h4 style={{ color: 'var(--green)' }}>
+              {user.mentorInfo?.educationType ? user.mentorInfo?.educationType : 'Giảng viên'}
+            </h4>
           </div>
           {user.descriptions ? (
             <div dangerouslySetInnerHTML={{ __html: user.descriptions as string }}></div>

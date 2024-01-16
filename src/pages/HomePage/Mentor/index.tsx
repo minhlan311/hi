@@ -46,7 +46,7 @@ const Mentor = () => {
             <Tooltip title={user.fullName}>
               <h2 className='oneLine'>{user.fullName}</h2>
             </Tooltip>
-            <div>Chứng chỉ Teft</div>
+            {user.mentorInfo?.certificateType ? <div>Chứng chỉ {user.mentorInfo?.certificateType}</div> : <br />}
             <Rate defaultValue={user.assessment?.totalAssessmentsAverages} allowHalf style={{ fontSize: 12 }} />
             <p>
               <b>{formatNumber(user.countAssessment as number)}</b> lượt đánh giá

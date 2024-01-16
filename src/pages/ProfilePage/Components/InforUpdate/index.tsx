@@ -16,7 +16,6 @@ type Props = {
 
 const InforUpdate = (props: Props) => {
   const { user, setUpdate, mutation } = props
-
   const [form] = Form.useForm()
   const [formSocial] = Form.useForm()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -195,7 +194,7 @@ const InforUpdate = (props: Props) => {
             <Space>
               <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
               <ButtonCustom onClick={() => form.submit()} type='primary'>
-                Lưu
+                Lưu thông tin
               </ButtonCustom>
             </Space>
           </Flex>

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import assessmentApi from '@/apis/assessment.api'
+import enrollsApi from '@/apis/enrolls.api'
 import Avatar from '@/components/Avatar/Avatar'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
@@ -13,11 +14,12 @@ import { Card, Col, Flex, Form, Input, Rate, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { BiHappyAlt } from 'react-icons/bi'
 import { FaArrowRight, FaRegFaceSadTear } from 'react-icons/fa6'
+import { RiInformationLine } from 'react-icons/ri'
 import css from './styles.module.scss'
 
 type Props = {
   userId: string
-  meId?: string
+  meId: string
   fullSize?: boolean
 }
 
@@ -41,6 +43,20 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
       form.resetFields()
       queryClient.invalidateQueries(['getAssessmentDetail'])
     },
+  })
+
+  const { data: enrollData } = useQuery({
+    queryKey: ['enrolls'],
+    queryFn: () => {
+      return enrollsApi.findEnroll({
+        filterQuery: {
+          userId: meId,
+          mentorId: userId,
+          targetModel: 'COURSE',
+        },
+      })
+    },
+    enabled: Boolean(userId) && Boolean(meId),
   })
 
   const [page, setPage] = useState<number>(1)
@@ -115,14 +131,26 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
   })
 
   const check = checkData && checkData?.data.totalDocs > 0
-  console.log(data)
 
   return (
     <Header background='var(--whiteBg)' padding={'25px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
-      <h2>Đánh giá</h2>
+      <Space direction='vertical'>
+        <h2>Đánh giá</h2>
+        {meId && userId !== meId && !check && enrollData && enrollData?.data.totalDocs === 0 && (
+          <i>
+            <Flex align='center'>
+              <RiInformationLine />
+              Hãy tham gia khóa học của giảng viên để gửi đánh giá của bạn
+            </Flex>
+          </i>
+        )}
+      </Space>
       <div className={css.fbMain}>
         <Row gutter={[24, 24]}>
-          <Col span={24} md={userId !== meId && !check ? 17 : 24}>
+          <Col
+            span={24}
+            md={meId && userId !== meId && !check && enrollData && enrollData?.data.totalDocs > 0 ? 17 : 24}
+          >
             <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
               <Space direction='vertical' size='large' className={'sp100'}>
                 {data.length > 0 ? (
@@ -159,7 +187,7 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
               </Space>
             </LoadingCustom>
           </Col>
-          {userId !== meId && !check && (
+          {meId && userId !== meId && !check && enrollData && enrollData?.data.totalDocs > 0 && (
             <Col span={24} md={7} className={css.form}>
               <Form form={form} onFinish={onFinish} layout='vertical'>
                 <Row gutter={[24, 7]}>
