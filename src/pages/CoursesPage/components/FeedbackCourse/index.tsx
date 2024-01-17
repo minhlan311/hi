@@ -34,11 +34,11 @@ const FeedbackCourse = ({ courseId, userId, checkEnrolls }: Props) => {
   const [page, setPage] = useState<number>(1)
   const [value, setValue] = useState<number>(5)
   const { data: assessmentList, isLoading } = useQuery({
-    queryKey: ['assessmentList', page, isSuccess, courseId],
+    queryKey: ['assessmentList', page, isSuccess],
     queryFn: () => {
       return assessmentApi.findAssessment({
         filterQuery: { targetId: courseId },
-        options: { limit: 3, page: page, sort: { createdAt: -1, totalAssessments: -1 } },
+        options: { limit: 3, page, sort: { createdAt: -1, totalAssessments: -1 } },
       })
     },
 

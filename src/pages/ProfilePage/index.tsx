@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import BannerProfile from './Banner'
 
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import { Col, Row, Space } from 'antd'
 import Feedback from './Feedback'
@@ -68,17 +69,25 @@ const ProfilePage = ({ profile }: Props) => {
                 <div key={item}>
                   <h3 style={{ marginBottom: 10 }}>{item === 'centificate' ? 'Chứng chỉ' : 'Bằng cấp'}</h3>
                   <Row gutter={[24, 24]} justify='center'>
-                    {item === 'centificate'
-                      ? user.mentorInfo.certificates.map((c) => (
+                    {item === 'centificate' ? (
+                      user.mentorInfo?.certificates?.length > 0 ? (
+                        user.mentorInfo.certificates.map((c) => (
                           <Col span={24} md={8} key={c.name}>
                             <ImageCustom width='100%' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + c.url} />
                           </Col>
                         ))
-                      : user.mentorInfo.diploma.map((d) => (
-                          <Col span={24} md={8} key={d.name}>
-                            <ImageCustom width='100%' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + d.url} />
-                          </Col>
-                        ))}
+                      ) : (
+                        <EmptyCustom description='Không có chứng chỉ nào' />
+                      )
+                    ) : user.mentorInfo?.diploma?.length > 0 ? (
+                      user.mentorInfo.diploma.map((d) => (
+                        <Col span={24} md={8} key={d.name}>
+                          <ImageCustom width='100%' src={import.meta.env.VITE_FILE_ENDPOINT + '/' + d.url} />
+                        </Col>
+                      ))
+                    ) : (
+                      <EmptyCustom description='Không có bằng cấp nào' />
+                    )}
                   </Row>
                 </div>
               ))}

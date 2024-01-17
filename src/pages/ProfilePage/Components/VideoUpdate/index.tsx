@@ -37,12 +37,13 @@ const VideoUpdate = (props: Props) => {
           maxFileSize={10}
           form={form}
           accessType='video/*'
+          required
         />
 
         <Flex justify='end' gap={12}>
           <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
           <ButtonCustom onClick={() => form.submit()} type='primary'>
-            Lưu
+            Lưu video
           </ButtonCustom>
         </Flex>
       </Space>

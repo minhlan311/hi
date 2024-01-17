@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import userApi from '@/apis/user.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
@@ -6,7 +7,7 @@ import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { UserState } from '@/interface/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Checkbox, Divider, Flex, Form, Input, Select, Space } from 'antd'
+import { Checkbox, Col, Divider, Flex, Form, Input, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { BsPlus } from 'react-icons/bs'
 import { MdDeleteOutline, MdOutlineAddPhotoAlternate } from 'react-icons/md'
@@ -44,6 +45,22 @@ const CentificateUpdate = (props: Props) => {
     },
   })
 
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categoriesList'],
+    queryFn: () => {
+      return categoryApi.getCategories({ parentId: null })
+    },
+  })
+  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+
+  const subjectList = coursesList?.children?.map((sj) => {
+    return {
+      value: sj.name,
+      label: sj.name,
+    }
+  })
+  const [changeLang, setChangeLang] = useState<'Tiếng Anh' | 'Tiếng Đức' | 'Tiếng Nhật' | 'Tiếng Hàn' | 'Tiếng Trung'>()
+  const [type, setType] = useState<string>()
   useEffect(() => {
     if (mentorDetail) {
       form.setFieldsValue({
@@ -54,13 +71,110 @@ const CentificateUpdate = (props: Props) => {
         imageBefore: mentorDetail.imageBefore,
         diploma: mentorDetail.diploma,
         certificates: mentorDetail.certificates,
+        categoryName: mentorDetail?.categoryName,
+        certificateType: mentorDetail?.certificateType,
+        certificate: mentorDetail?.certificate,
+        score: mentorDetail?.score,
       })
+
+      setType(mentorDetail?.certificateType)
+      setChangeLang(mentorDetail?.categoryName)
     }
   }, [mentorDetail])
 
   const onFinish = (values: any) => {
-    mutate({ ...values, _id: mentorDetail?._id, userId: user._id })
+    mutate({ ...values, _id: mentorDetail?._id, userId: user._id, score: parseFloat(values.score) })
   }
+
+  const dataSelect = [
+    {
+      name: 'Tiếng Anh',
+      options: [
+        {
+          name: 'IELTS',
+          score: {
+            min: 0,
+            max: 9,
+          },
+        },
+        {
+          name: 'TOEFL',
+          score: {
+            min: 0,
+            max: 120,
+          },
+        },
+        {
+          name: 'TOEIC',
+          score: {
+            min: 10,
+            max: 990,
+          },
+        },
+      ],
+    },
+    {
+      name: 'Tiếng Đức',
+      options: [
+        {
+          name: 'DAF',
+          score: {
+            min: 3,
+            max: 5,
+          },
+        },
+        {
+          name: 'GZ',
+          options: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+        },
+      ],
+    },
+    {
+      name: 'Tiếng Nhật',
+      options: [
+        {
+          name: 'JLPT',
+          options: ['N5', 'N4', 'N3', 'N2', 'N1'],
+        },
+        {
+          name: 'J.TEST',
+          score: {
+            min: 0,
+            max: 400,
+          },
+        },
+      ],
+    },
+    {
+      name: 'Tiếng Hàn',
+      options: [
+        {
+          name: 'TOPIK',
+          options: ['1', '2', '3', '4', '5', '6'],
+        },
+        {
+          name: 'KLPT',
+          options: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        },
+      ],
+    },
+    {
+      name: 'Tiếng Trung',
+      options: [
+        {
+          name: 'HSK',
+          options: ['1', '2', '3', '4', '5', '6'],
+        },
+        {
+          name: 'HSKK',
+          options: ['Cơ bản', 'Trung cấp', 'Cao cấp'],
+        },
+      ],
+    },
+  ]
+
+  const langSelect = dataSelect.find((item) => item.name === changeLang)
+  const centifiSelect = langSelect?.options.find((item) => item.name === type)
 
   return (
     <Space direction='vertical' className='sp100' size='large'>
@@ -158,11 +272,74 @@ const CentificateUpdate = (props: Props) => {
           />
         </Form.Item>
 
+        <Row gutter={24}>
+          <Col span={24} md={type ? 8 : 12}>
+            <Form.Item
+              label='Ngôn ngữ giảng dạy'
+              name='categoryName'
+              rules={[{ required: true, message: 'Vui lòng chọn ngôn ngữ giảng dạy' }]}
+            >
+              <Select placeholder='Chọn ngôn ngữ giảng dạy' options={subjectList} onChange={(e) => setChangeLang(e)} />
+            </Form.Item>
+          </Col>
+          <Col span={24} md={type ? 8 : 12}>
+            <Form.Item
+              label='Loại đánh giá'
+              name='certificateType'
+              rules={[{ required: true, message: 'Vui lòng chọn loại đánh giá' }]}
+            >
+              <Select
+                placeholder='Chọn loại đánh giá'
+                options={langSelect?.options?.map((item) => {
+                  return { label: item.name, value: item.name }
+                })}
+                onChange={(e) => setType(e)}
+                disabled={!langSelect}
+              />
+            </Form.Item>
+          </Col>
+          {centifiSelect && (
+            <Col span={24} md={8}>
+              {centifiSelect?.options && centifiSelect?.options?.length > 0 ? (
+                <Form.Item
+                  label='Chứng chỉ đánh giá'
+                  name='certificate'
+                  rules={[
+                    { required: true, message: 'Vui lòng chọn chứng chỉ đánh giá' },
+                    { min: 0, max: 1000 },
+                  ]}
+                >
+                  <Select
+                    placeholder='Chọn chứng chỉ đánh giá'
+                    options={centifiSelect?.options?.map((item) => {
+                      return { label: item, value: item }
+                    })}
+                    disabled={!langSelect}
+                  />
+                </Form.Item>
+              ) : (
+                <Form.Item
+                  label='Điểm đánh giá'
+                  name='score'
+                  rules={[{ required: true, message: 'Vui lòng nhập điểm đánh giá' }]}
+                >
+                  <Input
+                    type='number'
+                    min={centifiSelect.score?.min}
+                    max={centifiSelect.score?.max}
+                    placeholder='Nhập số điểm'
+                  />
+                </Form.Item>
+              )}
+            </Col>
+          )}
+        </Row>
+
         <Form.Item label='Hiển thị bằng cấp' name='showCentificate'>
           <Checkbox.Group
             options={[
-              { label: 'Bằng cấp', value: 'centificate' },
-              { label: 'Chứng chỉ', value: 'diploma' },
+              { label: 'Bằng cấp', value: 'diploma' },
+              { label: 'Chứng chỉ', value: 'centificate' },
             ]}
             onChange={(e) => setShow(e)}
             value={show}
@@ -210,7 +387,7 @@ const CentificateUpdate = (props: Props) => {
                         showPreview
                         showUploadList
                         defaultFileList={
-                          mentorDetail?.certificates?.[name]?.url
+                          mentorDetail?.diploma?.[name]?.url
                             ? [
                                 {
                                   uid: mentorDetail?.diploma?.[name].url,
@@ -316,7 +493,7 @@ const CentificateUpdate = (props: Props) => {
       <Flex justify='end' gap={12}>
         <ButtonCustom onClick={() => setUpdate(false)}>Hủy</ButtonCustom>
         <ButtonCustom onClick={() => form.submit()} type='primary'>
-          Lưu
+          Lưu bằng cấp
         </ButtonCustom>
       </Flex>
     </Space>

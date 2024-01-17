@@ -26,11 +26,14 @@ const assessmentApi = {
     } = props
 
     const data = {
-      filterQuery: filterQuery,
-      options: options,
+      filterQuery,
+      options,
     }
 
-    return http.post<SuccessResponse<AssessmentState[]>>(ENDPOINT.FIND_ASSESSMENTS_PATH, payload ? payload : data)
+    return http.post<SuccessResponse<AssessmentState[]>>(
+      ENDPOINT.FIND_ASSESSMENTS_PATH,
+      data.filterQuery || data.options ? data : payload,
+    )
   },
 
   getAssessmentDetail(id: string) {

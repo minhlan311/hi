@@ -157,6 +157,7 @@ const CoursesDetail = () => {
           if (courseDetail.plan === 'FREE') {
             mutationLocked.mutate({
               targetId: courseDetail?._id,
+              mentorId: courseDetail.mentorId,
               targetModel: 'COURSE',
               type: profile.isMentor ? 'MENTOR' : 'STUDENT',
               userIds: [profile._id],
@@ -303,7 +304,7 @@ const CoursesDetail = () => {
                     {
                       name: 'Đánh giá',
                       id: 'feedback',
-                      children: <Feedback userId={user._id} fullSize />,
+                      children: <Feedback userId={user._id} meId={profile?._id} fullSize />,
                     },
                   ]}
                 />

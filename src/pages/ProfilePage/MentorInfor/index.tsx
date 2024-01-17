@@ -105,6 +105,8 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
     },
   })
 
+  const mentorData = user.mentorInfo
+
   return (
     <Header padding={'30px 0 50px 0'} size={fullSize ? undefined : 'sm'}>
       <div className={css.card}>
@@ -172,21 +174,30 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
                   </Flex>
                   <div className={css.certificate}>
                     <Card className={css.cerCard} size='small'>
-                      <Flex justify='space-between'>
-                        <Space>
+                      <Flex justify='space-between' gap={10}>
+                        <Flex align='center' gap={5}>
                           <IoSchoolSharp size={30} />
                           <b>
-                            {user.mentorInfo?.educationType
-                              ? user.mentorInfo?.educationType
+                            {mentorData?.educationType
+                              ? mentorData?.educationType
                               : user.isMentor
                               ? 'Giảng viên'
                               : 'Học viên'}
                           </b>
-                        </Space>
-                        <Space>
+                        </Flex>
+                        <Flex align='center' gap={5}>
                           <PiCertificateFill size={30} />
-                          <b>Ielts 8.0</b>
-                        </Space>
+                          <b>
+                            {mentorData?.certificateType ? (
+                              <Space>
+                                {mentorData.certificateType}
+                                {mentorData?.score ? mentorData?.score : mentorData?.certificate}
+                              </Space>
+                            ) : (
+                              'Đang cập nhật'
+                            )}
+                          </b>
+                        </Flex>
                       </Flex>
                     </Card>
                   </div>

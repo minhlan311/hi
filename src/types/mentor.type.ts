@@ -25,9 +25,6 @@ export type MentorInfo = {
     url: string
     name: string
   }[]
-  prizes: never[]
-  specializes: never[]
-  levels: never[]
   userId: string
   createdAt: string
   updatedAt: string
@@ -40,4 +37,8 @@ export type MentorInfo = {
   imageBefore: string
   updatedById: string
   showCentificate: string[]
+  categoryName: 'Tiếng Anh' | 'Tiếng Đức' | 'Tiếng Nhật' | 'Tiếng Hàn' | 'Tiếng Trung'
+  certificateType: string
+  certificate: string
+  score: number
 }

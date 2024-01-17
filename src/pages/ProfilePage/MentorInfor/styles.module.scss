@@ -41,7 +41,9 @@
       display: flex;
       justify-content: center;
       .cerCard {
-        width: 250px;
+        @include respond-to(sm) {
+          width: 100%;
+        }
         background-color: var(--red-2);
         & > * {
           padding: 3px 10px !important;
