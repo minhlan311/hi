@@ -319,13 +319,14 @@ const CoursesDetail = () => {
 
                 <div style={{ minHeight: 300 }}>
                   <h1 style={{ marginBottom: 10 }}>Lịch khai giảng</h1>
-                  {courseDetail.class.length > 0 ? (
+                  {courseDetail.class?.length > 0 ? (
                     <Space direction='vertical' className={'sp100'}>
-                      {courseDetail.class.map((item, id) => (
+                      {courseDetail.class?.map((item, id) => (
                         <Card size='small' key={id} hoverable>
                           {id + 1}.{' '}
                           <b>
-                            {moment(item.startDate).format('DD/MM/YYYY')} - {moment(item.endDate).format('DD/MM/YYYY')}
+                            {moment(item?.startDate).format('DD/MM/YYYY')} -{' '}
+                            {moment(item?.endDate).format('DD/MM/YYYY')}
                           </b>
                         </Card>
                       ))}
