@@ -172,10 +172,20 @@ export default function MenuNav({ user, type }: Props) {
                           </Link>
                         ) : (
                           <div className='labelItem'>
-                            <Space style={{ width: '100%' }} size='small'>
-                              {item?.href ? item.label : <div className='title'>{item.label}</div>}
-                              {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
-                            </Space>
+                            {item.label === 'Khóa học' ? (
+                              <Link to={item.href} style={{ color: 'var(--white)' }}>
+                                <Space style={{ width: '100%' }} size='small'>
+                                  {item?.href ? item.label : <div className='title'>{item.label}</div>}
+                                  {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
+                                </Space>
+                              </Link>
+                            ) : (
+                              <Space style={{ width: '100%' }} size='small'>
+                                {item?.href ? item.label : <div className='title'>{item.label}</div>}
+                                {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
+                              </Space>
+                            )}
+
                             {item.children ? item.children.length > 0 && <div className='arr'></div> : null}
                           </div>
                         )}

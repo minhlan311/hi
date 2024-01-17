@@ -7,7 +7,7 @@ import UploadCustom from '@/components/UploadCustom/UploadCustom'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { UserState } from '@/interface/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Checkbox, Col, Divider, Flex, Form, Input, Row, Select, Space } from 'antd'
+import { Checkbox, Col, Divider, Flex, Form, Input, InputNumber, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { BsPlus } from 'react-icons/bs'
 import { MdDeleteOutline, MdOutlineAddPhotoAlternate } from 'react-icons/md'
@@ -63,19 +63,7 @@ const CentificateUpdate = (props: Props) => {
   const [type, setType] = useState<string>()
   useEffect(() => {
     if (mentorDetail) {
-      form.setFieldsValue({
-        cccd: mentorDetail.cccd,
-        educationType: mentorDetail.educationType,
-        showCentificate: mentorDetail.showCentificate,
-        imageAfter: mentorDetail.imageAfter,
-        imageBefore: mentorDetail.imageBefore,
-        diploma: mentorDetail.diploma,
-        certificates: mentorDetail.certificates,
-        categoryName: mentorDetail?.categoryName,
-        certificateType: mentorDetail?.certificateType,
-        certificate: mentorDetail?.certificate,
-        score: mentorDetail?.score,
-      })
+      form.setFieldsValue({ ...mentorDetail })
 
       setType(mentorDetail?.certificateType)
       setChangeLang(mentorDetail?.categoryName)
@@ -83,7 +71,7 @@ const CentificateUpdate = (props: Props) => {
   }, [mentorDetail])
 
   const onFinish = (values: any) => {
-    mutate({ ...values, _id: mentorDetail?._id, userId: user._id, score: parseFloat(values.score) })
+    mutate({ ...values, _id: mentorDetail?._id, userId: user._id })
   }
 
   const dataSelect = [
@@ -323,8 +311,8 @@ const CentificateUpdate = (props: Props) => {
                   name='score'
                   rules={[{ required: true, message: 'Vui lòng nhập điểm đánh giá' }]}
                 >
-                  <Input
-                    type='number'
+                  <InputNumber
+                    className='sp100'
                     min={centifiSelect.score?.min}
                     max={centifiSelect.score?.max}
                     placeholder='Nhập số điểm'

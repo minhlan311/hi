@@ -9,8 +9,9 @@ import { LuFilterX } from 'react-icons/lu'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 import { debounce } from '@/helpers/common'
-import DrawerCustom from '../DrawerCustom/DrawerCustom'
 import moment from 'moment-timezone'
+import { useLocation } from 'react-router-dom'
+import DrawerCustom from '../DrawerCustom/DrawerCustom'
 
 type Props = {
   apiFind: any
@@ -50,15 +51,7 @@ const FilterAction = (props: Props) => {
   const [form] = Form.useForm()
   const [open, setOpen] = useState<boolean>(false)
   const [forcus, setForcus] = useState<boolean>(false)
-
-  const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>({
-    filterQuery: filterQuery || {},
-    options: {
-      limit,
-      page: page || 1,
-      sort,
-    },
-  })
+  const location = useLocation().pathname
 
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
@@ -66,6 +59,7 @@ const FilterAction = (props: Props) => {
       return categoryApi.getCategories({ parentId: null })
     },
   })
+
   const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
 
   const subjectList = coursesList?.children?.map((sj) => {
@@ -74,10 +68,22 @@ const FilterAction = (props: Props) => {
       label: sj.name,
     }
   })
+  const [categoryId, setCategoryId] = useState('')
+
+  const cateSelect = coursesList?.children.find((item) => item._id === categoryId)
+
+  const subCateList = cateSelect?.children.map((sj) => {
+    return {
+      value: sj._id,
+      label: sj.name,
+    }
+  })
+  const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>()
 
   const onChangeFilter = () => {
     const {
       categoryId,
+      subCategoryId,
       plan,
       viewCountDownCount,
       type,
@@ -98,6 +104,7 @@ const FilterAction = (props: Props) => {
       skillName,
       difficulty,
       categoryId,
+      subCategoryId,
       plan,
       status,
       start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
@@ -105,6 +112,11 @@ const FilterAction = (props: Props) => {
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
       endDate: typeFilter !== 'event' && dates ? dates[1] : undefined,
       search: keyword || undefined,
+    }
+
+    if (!categoryId) {
+      form.setFieldValue('subCategoryId', null)
+      delete body.subCategoryId
     }
 
     setFilterData({
@@ -116,12 +128,15 @@ const FilterAction = (props: Props) => {
           ...sort,
           point,
           createdAt,
-          countAsseslgent: viewCountDownCount === 'highestRating' ? -1 : undefined,
-          countStudents: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
+          totalAssessmentsAverages: viewCountDownCount === 'highestRating' ? -1 : undefined,
+          countAssessment: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
         },
       },
     })
-    setForcus(true)
+
+    setCategoryId(categoryId)
+
+    if (keyword) setForcus(true)
   }
 
   const handleReset = () => {
@@ -158,18 +173,18 @@ const FilterAction = (props: Props) => {
     queryFn: () => {
       return apiFind(filterData)
     },
-    enabled: initFilter ? Boolean(initFilter) : Boolean(checkQuery) || true,
+    enabled: checkQuery,
   })
-
-  useEffect(() => {
-    callBackData(filterCallbackData?.data)
-  }, [filterCallbackData])
 
   useEffect(() => {
     if (setLoading) {
       setLoading(isLoading)
     }
   }, [isLoading])
+
+  useEffect(() => {
+    callBackData(filterCallbackData?.data)
+  }, [filterCallbackData])
 
   const { lg } = useResponsives()
 
@@ -182,7 +197,19 @@ const FilterAction = (props: Props) => {
               <>
                 {typeFilter !== 'event' && (
                   <Form.Item name='categoryId' style={{ width: lg ? '100%' : 120 }}>
-                    <Select placeholder='Khóa học' onChange={onChangeFilter} options={subjectList}></Select>
+                    <Select placeholder='Môn học' options={subjectList} onChange={onChangeFilter} allowClear />
+                  </Form.Item>
+                )}
+
+                {typeFilter === 'course' && (
+                  <Form.Item name='subCategoryId' style={{ width: lg ? '100%' : 180 }}>
+                    <Select
+                      placeholder='Danh mục'
+                      options={subCateList}
+                      disabled={!categoryId}
+                      allowClear
+                      onChange={onChangeFilter}
+                    />
                   </Form.Item>
                 )}
 
@@ -279,23 +306,25 @@ const FilterAction = (props: Props) => {
                       </Form.Item>
                     </>
                   ))}
-                <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
-                  <Select
-                    placeholder='Trạng thái'
-                    onChange={onChangeFilter}
-                    allowClear
-                    options={[
-                      {
-                        value: 'ACTIVE',
-                        label: 'Hoạt động',
-                      },
-                      {
-                        value: 'INACTIVE',
-                        label: 'Không hoạt động',
-                      },
-                    ]}
-                  />
-                </Form.Item>
+                {location.includes('mentor') && (
+                  <Form.Item name='status' style={{ width: lg ? '100%' : 150 }}>
+                    <Select
+                      placeholder='Trạng thái'
+                      onChange={onChangeFilter}
+                      allowClear
+                      options={[
+                        {
+                          value: 'ACTIVE',
+                          label: 'Hoạt động',
+                        },
+                        {
+                          value: 'INACTIVE',
+                          label: 'Không hoạt động',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                )}
                 {typeFilter !== 'event' && (
                   <Form.Item name='createdAt'>
                     <Select
