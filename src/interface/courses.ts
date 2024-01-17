@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Class } from '@/types/class.type'
+
+import { AssessmentState } from './assessment'
 import { CategoryState } from './category'
+import { ClassState } from './class'
 import { UserState } from './user'
 
 export interface CoursesState {
@@ -17,12 +19,12 @@ export interface CoursesState {
   updatedAt: string
   coverMedia?: string
   coverVideo: string
-  class: Class[]
-  countStudents?: number
+  class: ClassState[]
+  countStudents: number
   countTopics: number
   countTests: number
   mentor: UserState
-  assessment?: any[]
+  assessment?: AssessmentState
   countAssessment: number
   category: CategoryState
   avgAssessment?: any

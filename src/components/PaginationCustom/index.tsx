@@ -47,14 +47,7 @@ const PaginationCustom = (props: Props) => {
 
     return (
       dataArr.length > limit && (
-        <Pagination
-          pageSize={limit}
-          showQuickJumper
-          defaultCurrent={1}
-          current={current}
-          total={dataArr.length}
-          onChange={onChange}
-        />
+        <Pagination pageSize={limit} showQuickJumper current={current} total={dataArr.length} onChange={onChange} />
       )
     )
   }
@@ -64,11 +57,12 @@ const PaginationCustom = (props: Props) => {
       totalData > limit && (
         <Pagination
           pageSize={limit}
-          showQuickJumper
           defaultCurrent={1}
           current={current}
           total={totalData}
           onChange={onChange}
+          showSizeChanger={false}
+          showQuickJumper
         />
       )
     )

@@ -30,7 +30,7 @@ type Props = {
   maxFileSize?: number
   dropArea?: boolean
   cropShape?: 'rect' | 'round'
-  name?: string | any[]
+  name?: any | any[]
   form?: FormInstance
   defaultFileList?: FileList[]
   showPreview?: boolean
@@ -129,7 +129,13 @@ const UploadCustom = (props: Props) => {
       if (uploadKey === 'attachment') {
         const newFileArr = info.fileList.map((file) => {
           if (file.response) {
-            return { uid: file.response[0].url, name: file.name, status: 'done', url: file.response[0].url }
+            return {
+              uid: file.response[0].url,
+              name: file.name,
+              status: 'done',
+              url: file.response[0].url,
+              thumbUrl: import.meta.env.VITE_FILE_ENDPOINT + '/' + file.response[0].url,
+            }
           }
 
           return file
@@ -141,7 +147,13 @@ const UploadCustom = (props: Props) => {
 
         const newFileArr = info.fileList.map((file) => {
           if (file.response) {
-            return { uid: file.response.url, name: file.name, status: 'done', url: file.response.url }
+            return {
+              uid: file.response.url,
+              name: file.name,
+              status: 'done',
+              url: file.response.url,
+              thumbUrl: import.meta.env.VITE_FILE_ENDPOINT + '/' + file.response[0].url,
+            }
           }
 
           return file
@@ -238,7 +250,7 @@ const UploadCustom = (props: Props) => {
                 <p className={'ant-upload-text'}>Click hoặc kéo thả file vào đây để đăng tải</p>
                 <p className={'ant-upload-hint'}></p>
               </div>
-            ) : name?.includes('video') ? (
+            ) : name?.toLowerCase().includes('video') ? (
               <video
                 width={'100%'}
                 style={{ maxHeight: '40vh' }}

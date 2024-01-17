@@ -13,9 +13,8 @@ import ForgotPassword from './pages/Auth/ForgotPassword/index.tsx'
 import Login from './pages/Auth/Login/index.tsx'
 import Register from './pages/Auth/Register/index.tsx'
 import CartPage from './pages/CartPage/CartPage.tsx'
-import CategogyDetail from './pages/CategoryPage/CategogyDetail.tsx'
-import CategorySub from './pages/CategoryPage/CategorySub/CategorySub.tsx'
-import MemuSlug from './pages/CategoryPage/MenuSlug/MenuSlug.tsx'
+import CategoryPage from './pages/CategoryPage/index.tsx'
+import CourseListPage from './pages/CourseListPage/index.tsx'
 import CoursesDetail from './pages/CoursesPage/index.tsx'
 import ExamPage from './pages/ExamPage/ExamPage.tsx'
 import HomePage from './pages/HomePage/index.tsx'
@@ -300,12 +299,18 @@ export default function useRouteElements() {
 
       children: [
         {
+          path: PATH.COURSE_PAGE,
+          element: (
+            <Layout user={profile} title='Khóa học'>
+              <CourseListPage />
+            </Layout>
+          ),
+        },
+        {
           path: PATH.COURSE_DETAIL,
           element: (
-            <Layout user={profile} title='Trang chủ'>
-              <SuspenseWrapper>
-                <CoursesDetail />
-              </SuspenseWrapper>
+            <Layout user={profile}>
+              <CoursesDetail />
             </Layout>
           ),
         },
@@ -345,27 +350,26 @@ export default function useRouteElements() {
           ),
         },
         {
-          path: PATH.SUBMENU_2,
+          path: PATH.SUBMENU_1,
           element: (
             <Layout user={profile} title=''>
-              <CategorySub />
+              <CategoryPage />
             </Layout>
           ),
         },
         {
-          path: PATH.SUBMENU_1,
+          path: PATH.SUBMENU_2,
           element: (
             <Layout user={profile} title=''>
-              <MemuSlug />
+              <CategoryPage />
             </Layout>
           ),
         },
-
         {
           path: PATH.SUBMENU_3,
           element: (
             <Layout user={profile}>
-              <CategogyDetail />
+              <CategoryPage />
             </Layout>
           ),
         },

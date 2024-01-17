@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { ClassState } from '@/interface/class'
+import { CoursesState } from '@/interface/courses'
 import { Class } from '@/types/class.type'
-import { TCourse } from '@/types/course.type'
 import { findUserEnroll } from '@/types/eroll.type'
-
 import { SuccessResponse } from '@/types/utils.type'
+
 import http from '@/utils/http'
 const classApi = {
   getClass(body: any) {
@@ -30,7 +30,7 @@ const classApi = {
     return http.post<SuccessResponse<findUserEnroll>>(ENDPOINT.ARRANGE_UPDATE_PATH, body)
   },
   openingClass(body: any) {
-    return http.post<SuccessResponse<TCourse[]>>(ENDPOINT.OPENING_PATH, body)
+    return http.post<SuccessResponse<CoursesState[]>>(ENDPOINT.OPENING_PATH, body)
   },
 }
 

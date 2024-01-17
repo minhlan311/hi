@@ -70,13 +70,13 @@ const ButtonCustom = (props: Props) => {
           }}
           className={`${className}`}
           style={{
-            ...style,
             color,
             background,
             fontSize,
             fontWeight: bold ? 700 : fontWeight,
             height: 'auto',
             width: (fullWidth && '100%') || (width && width) || undefined,
+            ...style,
           }}
           form={form}
           htmlType={htmlType}
@@ -99,13 +99,13 @@ const ButtonCustom = (props: Props) => {
             onClick={onClick}
             className={`${className} `}
             style={{
-              ...style,
               color,
               background,
               fontSize,
               fontWeight: bold ? 700 : fontWeight,
               height: 'auto',
               width: (fullWidth && '100%') || (width && width) || undefined,
+              ...style,
             }}
             form={form}
             htmlType={htmlType}
@@ -131,11 +131,11 @@ const ButtonCustom = (props: Props) => {
         onClick={onClick}
         className={`${className} `}
         style={{
-          ...style,
           fontWeight: bold ? 700 : fontWeight,
           fontSize,
           height: 'auto',
           width: (fullWidth && '100%') || (width && width) || undefined,
+          ...style,
         }}
         form={form}
         htmlType={htmlType}

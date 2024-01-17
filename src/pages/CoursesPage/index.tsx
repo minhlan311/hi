@@ -28,7 +28,7 @@ import { IoPodiumOutline } from 'react-icons/io5'
 import { MdAccessTime, MdOutlineCalendarMonth, MdPlayArrow } from 'react-icons/md'
 import { RiBookReadLine } from 'react-icons/ri'
 import { TbLanguage, TbLock } from 'react-icons/tb'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FacebookShareButton, LinkedinShareButton, PinterestShareButton, TwitterShareButton } from 'react-share'
 import BannerProfile from '../ProfilePage/Banner'
 import Feedback from '../ProfilePage/Feedback'
@@ -70,7 +70,7 @@ const CoursesDetail = () => {
     queryFn: () => {
       return courseApi.getCourses({
         filterQuery: { createdById: courseDetail?.mentorId },
-        options: { limit: 3 },
+        options: { limit: 10 },
       })
     },
     enabled: Boolean(courseDetail?.mentorId),
@@ -147,6 +147,8 @@ const CoursesDetail = () => {
     },
   })
 
+  document.title = courseDetail?.name + ' | Ucam'
+
   const handleBuy = () => {
     if (courseDetail) {
       if (!profile?._id) {
@@ -185,11 +187,12 @@ const CoursesDetail = () => {
         </Header>
         <Header size='sm'>
           <Space direction={sm ? 'vertical' : 'horizontal'} size='large' style={{ margin: '24px 0 0' }}>
-            <Space>
-              <Avatar userData={user} avtUrl={user.avatarUrl} />
-              <h4>{user.fullName}</h4>
-            </Space>
-
+            <Link to={'/profiles/' + courseDetail?.mentorId}>
+              <Space>
+                <Avatar userData={user} avtUrl={user.avatarUrl} />
+                <h4>{user.fullName}</h4>
+              </Space>
+            </Link>
             <p>
               <Rate
                 disabled
@@ -201,125 +204,153 @@ const CoursesDetail = () => {
           </Space>
           <Row gutter={24}>
             <Col span={24} lg={16}>
-              <h1 style={{ marginTop: 24 }}>{courseDetail.name}</h1>
-
-              <div className={'tabCourseCustom'}>
-                <TabsCustom
-                  align='center'
-                  data={[
-                    {
-                      name: 'Tổng quan',
-                      id: 'overview',
-                      children: (
-                        <div>
-                          <Space
-                            direction='vertical'
-                            className={'sp100'}
-                            style={{ paddingBottom: 24, minHeight: '60vh' }}
-                          >
-                            <h2>Mô tả khóa học</h2>
-                            {courseDetail.descriptions ? (
-                              <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
-                            ) : (
-                              'Không có mô tả'
-                            )}
-                          </Space>
-                        </div>
-                      ),
-                    },
-                    {
-                      name: 'Lộ trình',
-                      id: 'lession',
-                      children: (
-                        <Space
-                          direction='vertical'
-                          size='large'
-                          className={'sp100'}
-                          style={{ paddingBottom: 24, minHeight: '60vh' }}
-                        >
-                          {topicList?.docs && topicList?.docs.length > 0 ? (
-                            topicList?.docs?.map((item, id) => (
-                              <CollapseCustom
-                                size='large'
-                                expandIconPosition='end'
-                                items={[
-                                  {
-                                    key: item._id,
-                                    label: item.name,
-                                    children: (
-                                      <Space direction='vertical' className={'sp100'}>
-                                        {item.lessons.length > 0 ? (
-                                          item.lessons.map((ls, index) => (
-                                            <div key={ls._id}>
-                                              <Flex justify='space-between' align='center'>
-                                                <Space>
-                                                  <FaRegEdit />
-                                                  <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
-                                                </Space>
-                                                <Space>
-                                                  {index === 0 && id === 0 && checkEnrolls ? (
-                                                    <ButtonCustom
-                                                      size='small'
-                                                      href={'/myCourseLearning/' + courseDetail?._id}
-                                                      type='primary'
-                                                    >
-                                                      Preview
-                                                    </ButtonCustom>
-                                                  ) : (
-                                                    <>
-                                                      <TagCustom
-                                                        content={`${ls.length ? ls.length : 0} phút`}
-                                                        color='green'
-                                                      />
-                                                      <TbLock />
-                                                    </>
+              <Space direction='vertical' className={'sp100'} size='large'>
+                <div>
+                  <h1 style={{ marginTop: 15 }}>{courseDetail.name}</h1>
+                  <div className={'tabCourseCustom'}>
+                    <TabsCustom
+                      align='center'
+                      data={[
+                        {
+                          name: 'Tổng quan',
+                          id: 'overview',
+                          children: (
+                            <div>
+                              <Space
+                                direction='vertical'
+                                className={'sp100'}
+                                style={{ paddingBottom: 24, minHeight: '60vh' }}
+                              >
+                                <h2>Mô tả khóa học</h2>
+                                {courseDetail.descriptions ? (
+                                  <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
+                                ) : (
+                                  'Không có mô tả'
+                                )}
+                              </Space>
+                            </div>
+                          ),
+                        },
+                        {
+                          name: 'Lộ trình',
+                          id: 'lession',
+                          children: (
+                            <Space
+                              direction='vertical'
+                              size='large'
+                              className={'sp100'}
+                              style={{ paddingBottom: 24, minHeight: '60vh' }}
+                            >
+                              {topicList?.docs && topicList?.docs.length > 0 ? (
+                                topicList?.docs?.map((item, id) => (
+                                  <CollapseCustom
+                                    size='large'
+                                    expandIconPosition='end'
+                                    items={[
+                                      {
+                                        key: item._id,
+                                        label: item.name,
+                                        children: (
+                                          <Space direction='vertical' className={'sp100'}>
+                                            {item.lessons.length > 0 ? (
+                                              item.lessons.map((ls, index) => (
+                                                <div key={ls._id}>
+                                                  <Flex justify='space-between' align='center'>
+                                                    <Space>
+                                                      <FaRegEdit />
+                                                      <h3 className={'dangerHTMLOneLine'}>{ls.name}</h3>
+                                                    </Space>
+                                                    <Space>
+                                                      {index === 0 && id === 0 && checkEnrolls ? (
+                                                        <ButtonCustom
+                                                          size='small'
+                                                          href={'/myCourseLearning/' + courseDetail?._id}
+                                                          type='primary'
+                                                        >
+                                                          Preview
+                                                        </ButtonCustom>
+                                                      ) : (
+                                                        <>
+                                                          <TagCustom
+                                                            content={`${ls.length ? ls.length : 0} phút`}
+                                                            color='green'
+                                                          />
+                                                          <TbLock />
+                                                        </>
+                                                      )}
+                                                    </Space>
+                                                  </Flex>
+                                                  {index < item.countLessons - 1 && (
+                                                    <Divider style={{ margin: '8px 0' }} />
                                                   )}
-                                                </Space>
-                                              </Flex>
-                                              {index < item.countLessons - 1 && <Divider style={{ margin: '8px 0' }} />}
-                                            </div>
-                                          ))
-                                        ) : (
-                                          <EmptyCustom description='Không có bài học nào!' />
-                                        )}
-                                      </Space>
-                                    ),
-                                  },
-                                ]}
-                                defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
-                                key={item._id}
-                              />
-                            ))
-                          ) : (
-                            <EmptyCustom description='Không có lộ trình nào!' />
-                          )}
-                        </Space>
-                      ),
-                    },
-                    {
-                      name: 'Giảng viên',
-                      id: 'owner',
-                      children: <MentorData user={user} />,
-                    },
-                    {
-                      name: 'Đánh giá',
-                      id: 'feedback',
-                      children: <Feedback userId={user._id} meId={profile?._id} fullSize />,
-                    },
-                  ]}
-                />
-              </div>
+                                                </div>
+                                              ))
+                                            ) : (
+                                              <EmptyCustom description='Không có bài học nào!' />
+                                            )}
+                                          </Space>
+                                        ),
+                                      },
+                                    ]}
+                                    defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
+                                    key={item._id}
+                                  />
+                                ))
+                              ) : (
+                                <EmptyCustom description='Không có lộ trình nào!' />
+                              )}
+                            </Space>
+                          ),
+                        },
+                        {
+                          name: 'Giảng viên',
+                          id: 'owner',
+                          children: <MentorData user={user} />,
+                        },
+                        {
+                          name: 'Đánh giá',
+                          id: 'feedback',
+                          children: <Feedback userId={user._id} meId={profile?._id} fullSize />,
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
 
-              <h1>Khóa học nổi bật</h1>
-              <MyCourses
-                coursesData={coursesData as unknown as any}
-                loading={isLoading}
-                showPagination={false}
-                fullSize
-                maxLength={2}
-              />
-              <h1>Đánh giá</h1>
-              <FeedbackCourse courseId={courseDetail._id} userId={profile?._id} checkEnrolls={checkEnrolls} />
+                <div style={{ minHeight: 300 }}>
+                  <h1 style={{ marginBottom: 10 }}>Lịch khai giảng</h1>
+                  {courseDetail.class.length > 0 ? (
+                    <Space direction='vertical' className={'sp100'}>
+                      {courseDetail.class.map((item, id) => (
+                        <Card size='small' key={id} hoverable>
+                          {id + 1}.{' '}
+                          <b>
+                            {moment(item.startDate).format('DD/MM/YYYY')} - {moment(item.endDate).format('DD/MM/YYYY')}
+                          </b>
+                        </Card>
+                      ))}
+                    </Space>
+                  ) : (
+                    <EmptyCustom description='Không có lịch khai giảng nào!' />
+                  )}
+                </div>
+
+                <div>
+                  <h1 style={{ marginBottom: 10 }}>Khóa học nổi bật</h1>
+                  <MyCourses
+                    coursesData={coursesData as unknown as any}
+                    loading={isLoading}
+                    showPagination={false}
+                    fullSize
+                    maxLength={2}
+                  />
+                </div>
+
+                <div>
+                  <h1>Đánh giá</h1>
+                  <FeedbackCourse courseId={courseDetail._id} userId={profile?._id} checkEnrolls={checkEnrolls} />
+                </div>
+              </Space>
             </Col>
             <Col span={24} lg={8}>
               <Card
@@ -457,7 +488,13 @@ const CoursesDetail = () => {
             </Col>
           </Row>
           <h1>Khóa học liên quan</h1>
-          <MyCourses coursesData={coursesData as unknown as any} loading={isLoading} showPagination={false} fullSize />
+          <MyCourses
+            coursesData={coursesData as unknown as any}
+            maxLength={3}
+            loading={isLoading}
+            showPagination={false}
+            fullSize
+          />
         </Header>
       </div>
     )
