@@ -8,18 +8,17 @@ import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
-import { ENDPOINT } from '@/constants/endpoint'
 import useResponsives from '@/hooks/useResponsives'
 import { Skill, SkillType } from '@/interface/exam'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Form, Input, Modal, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
+import { BsQuestionCircle } from 'react-icons/bs'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
 import { RiVoiceprintLine } from 'react-icons/ri'
 import CreateQuestion from './CreateQuestion'
 import RenderItem from './RenderItem'
 import ShowSkillDetail from './ShowSkillDetail'
-import { BsQuestionCircle } from 'react-icons/bs'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const RenderSkillItem = ({
@@ -47,7 +46,6 @@ const RenderSkillItem = ({
   const [openDetail, setOpenDetail] = useState<boolean>(false)
   const [openData, setOpenData] = useState<Skill | null>(null)
   const [skillCreatedData, setSkillCreatedData] = useState<Skill>()
-  const [callbackUrl, setCallbackUrl] = useState<any>(null || skillCreatedData?.url)
 
   const { sm } = useResponsives()
 
@@ -77,6 +75,7 @@ const RenderSkillItem = ({
       testId: testId,
       categoryId: categoryId,
       skill: skillName,
+      url: values.audio[0],
     }
 
     if (skillCreatedData && skillCreatedData._id) {
@@ -248,12 +247,7 @@ const RenderSkillItem = ({
               <>
                 <Col span={24} md={5}>
                   <Form.Item label='Ghi âm'>
-                    <UploadCustom
-                      accessType='audio/*'
-                      uploadKey='attachment'
-                      action={import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT}
-                      callBackFileList={setCallbackUrl}
-                    >
+                    <UploadCustom accessType='audio/*' uploadKey='attachment' name='audio' required form={form}>
                       <ButtonCustom icon={<RiVoiceprintLine />} className='sp100'>
                         Thêm file ghi âm
                       </ButtonCustom>
@@ -264,7 +258,7 @@ const RenderSkillItem = ({
                 <Col span={24} md={11}>
                   <Form.Item label=' '>
                     <audio controls className='sp100' style={{ height: 40 }}>
-                      <source src={callbackUrl} type='audio/mpeg' />
+                      <source src={skillCreatedData?.url} type='audio/mpeg' />
                     </audio>
                   </Form.Item>
                 </Col>

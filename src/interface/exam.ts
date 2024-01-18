@@ -35,7 +35,7 @@ export interface Skill {
   skill: SkillType
   title: string
   description: string
-  url?: string[]
+  url?: any | any[]
   questions?: string[]
   countQuestions: number | any
 }

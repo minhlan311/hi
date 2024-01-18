@@ -28,6 +28,10 @@ const topicApi = {
     return http.post<SuccessResponse<TopicState[]>>(ENDPOINT.FIND_TOPIC_PATH, payload ? payload : data)
   },
 
+  createTopic(body: TopicState) {
+    return http.post<SuccessResponse<TopicState>>(ENDPOINT.TOPIC_PATH, body)
+  },
+
   deleteTopic(id: string) {
     return http.delete<SuccessResponse<TopicState>>(ENDPOINT.TOPIC_PATH + id)
   },

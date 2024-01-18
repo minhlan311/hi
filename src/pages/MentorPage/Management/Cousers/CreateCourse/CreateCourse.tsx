@@ -38,7 +38,7 @@ export default function CreateCourse({ next, dataIdCouser }: any) {
 
   const onFinish = (values: any) => {
     next(1)
-    mutation.mutate({ ...values, mentorId: profile._id, id })
+    mutation.mutate({ ...values, coverVideo: values.coverVideo[0], mentorId: profile._id, id })
   }
 
   const { data: categoriesData } = useQuery({

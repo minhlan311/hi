@@ -65,9 +65,7 @@
       border: 1px solid var(--green);
       background-color: var(--green);
       &:hover {
-        & * {
-          color: var(--green);
-        }
+        color: var(--green);
         border: 1px solid var(--green-2);
         background-color: var(--greenBg);
       }

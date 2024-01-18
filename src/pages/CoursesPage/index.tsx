@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
-import { useMutation, useQuery } from '@tanstack/react-query'
-
 import enrollsApi from '@/apis/enrolls.api'
 import topicApi from '@/apis/topic.api'
 import vnpayApi from '@/apis/vnpay.api'
@@ -17,6 +15,7 @@ import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Divider, Flex, Image, Rate, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { useContext } from 'react'
@@ -31,7 +30,6 @@ import { TbLanguage, TbLock } from 'react-icons/tb'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FacebookShareButton, LinkedinShareButton, PinterestShareButton, TwitterShareButton } from 'react-share'
 import BannerProfile from '../ProfilePage/Banner'
-import Feedback from '../ProfilePage/Feedback'
 import MyCourses from '../ProfilePage/MyCourses'
 import FeedbackCourse from './components/FeedbackCourse'
 import MentorData from './components/MentorData'
@@ -310,7 +308,13 @@ const CoursesDetail = () => {
                         {
                           name: 'Đánh giá',
                           id: 'feedback',
-                          children: <Feedback userId={user._id} meId={profile?._id} fullSize />,
+                          children: (
+                            <FeedbackCourse
+                              courseId={courseDetail._id}
+                              userId={profile?._id}
+                              checkEnrolls={checkEnrolls}
+                            />
+                          ),
                         },
                       ]}
                     />
@@ -345,11 +349,6 @@ const CoursesDetail = () => {
                     fullSize
                     maxLength={2}
                   />
-                </div>
-
-                <div>
-                  <h1>Đánh giá</h1>
-                  <FeedbackCourse courseId={courseDetail._id} userId={profile?._id} checkEnrolls={checkEnrolls} />
                 </div>
               </Space>
             </Col>

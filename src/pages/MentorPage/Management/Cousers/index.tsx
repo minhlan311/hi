@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
-import { Col, Divider, Pagination, Row, Skeleton } from 'antd'
-import { useContext, useState } from 'react'
-import { BiPlus } from 'react-icons/bi'
-import './index.scss'
-import CourseListMentor from './CourseListMentor/CourseListMentor'
-import { PaginationProps } from 'antd/lib'
-import { useNavigate } from 'react-router-dom'
 import PATH from '@/constants/path'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
-import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import { Col, Pagination, Row, Skeleton } from 'antd'
+import { PaginationProps } from 'antd/lib'
+import { useContext, useState } from 'react'
+import { BiPlus } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+import CourseListMentor from './CourseListMentor/CourseListMentor'
+import './index.scss'
 
 const MentorCourses = () => {
   const [data, setData] = useState<any>([])
@@ -75,7 +75,7 @@ const MentorCourses = () => {
           {divs}
         </Row>
       )}
-      <Divider />
+
       {data && data?.totalDocs > 0 && (
         <div className='pagination'>
           <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />
