@@ -198,6 +198,14 @@ table {
   }
 }
 
+.link-2 {
+  color: var(--green);
+  &:hover {
+    color: var(--green) !important;
+    text-decoration: underline;
+  }
+}
+
 .butt-link {
   color: var(--red);
   border: 1px solid var(--red);

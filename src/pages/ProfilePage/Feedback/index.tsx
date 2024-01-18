@@ -60,6 +60,7 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
   })
 
   const [page, setPage] = useState<number>(1)
+
   const { data: assessmentList, isLoading } = useQuery({
     queryKey: ['assessmentList', userId, page],
     queryFn: () => {
@@ -102,7 +103,8 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
       targetModel: 'USER',
       targetId: userId,
       description: values.description,
-      detailedAssessments: resultArray,
+      evaluate: resultArray.length > 0 ? undefined : 5,
+      detailedAssessments: resultArray.length > 0 ? resultArray : [],
     }
 
     mutate(payload as any)
@@ -181,7 +183,7 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
                 )}
                 {assessData && data.length < assessData.totalDocs && (
                   <Flex justify='center'>
-                    <ButtonCustom onClick={() => setPage((prev) => prev++)}>Xem thêm</ButtonCustom>
+                    <ButtonCustom onClick={() => setPage((prev) => prev + 1)}>Xem thêm</ButtonCustom>
                   </Flex>
                 )}
               </Space>
@@ -193,20 +195,7 @@ const Feedback = ({ userId, meId, fullSize }: Props) => {
                 <Row gutter={[24, 7]}>
                   {detailedAssessments.map((item) => (
                     <Col span={12} md={24} key={item.name}>
-                      <Form.Item
-                        name={item.name}
-                        label={item.label}
-                        style={{ margin: 0 }}
-                        rules={[
-                          {
-                            validator: async (_, names) => {
-                              if (!names || names.length < 1) {
-                                return Promise.reject(new Error('Vui lòng lựa chọn đánh giá'))
-                              }
-                            },
-                          },
-                        ]}
-                      >
+                      <Form.Item name={item.name} label={item.label} style={{ margin: 0 }}>
                         <Rate character={({ index }: any) => customIcons[index + 1] as any} />
                       </Form.Item>
                     </Col>

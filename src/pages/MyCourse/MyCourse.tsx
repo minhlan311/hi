@@ -31,38 +31,38 @@ const RenderCourse = ({ item }: { item: EnrollsState }) => {
           preview={false}
           height='160px'
           width='100%'
-          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.course.coverMedia}
+          src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.course?.coverMedia}
         />
       }
       size='small'
     >
       <Space direction='vertical' style={{ display: 'flex' }}>
         <Flex justify='space-between' align='center' gap={12}>
-          <Card.Meta title={item.course.name} />
+          <Card.Meta title={item.course?.name} />
         </Flex>
         <Space>
-          <Avatar avtUrl={item.course.mentor.avatarUrl} userData={item.course.mentor} />
-          {item.course.mentor.fullName}
+          <Avatar avtUrl={item.course?.mentor?.avatarUrl} userData={item.course?.mentor} />
+          {item.course?.mentor?.fullName}
         </Space>
         <Flex align='center' justify='space-between'>
           <Space align='center'>
             <MdLanguage />
-            {item.course.category?.name}
+            {item.course?.category?.name}
           </Space>
           <Flex align='center'>
             <LuBookMarked style={{ marginRight: 5 }} />
-            {item.course.countTopics} bài học
+            {item.course?.countTopics} bài học
           </Flex>
 
           <Flex align='center'>
             <LuUsers style={{ marginRight: 5 }} />
-            {`(${formatNumber(item.course.countStudents ? item.course.countStudents : 0)} Học viên)`}
+            {`(${formatNumber(item.course?.countStudents ? item.course?.countStudents : 0)} Học viên)`}
           </Flex>
         </Flex>
 
         <Progress percent={percent} />
         <Flex justify='flex-end'>
-          <ButtonCustom type='primary' href={'/myCourseLearning/' + item.course._id}>
+          <ButtonCustom type='primary' href={'/myCourseLearning/' + item.course?._id}>
             Vào học ngay
           </ButtonCustom>
         </Flex>

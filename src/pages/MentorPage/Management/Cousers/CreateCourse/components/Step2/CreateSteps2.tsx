@@ -203,7 +203,7 @@ const CreateSteps2 = ({ dataId }: any) => {
       )}
 
       <DrawerCreateExam
-        userId={dataId}
+        userId={dataId || id}
         dataTopic={dataUpdateTopic}
         onOpen={onOpenExam}
         onClose={setOnOpenExam}

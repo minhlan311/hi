@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import questionApi from '@/apis/question.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
-import { ENDPOINT } from '@/constants/endpoint'
-import { Drawer, Space } from 'antd'
-import { useEffect, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Drawer, Form, Space } from 'antd'
+import { useEffect } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { HiOutlineUpload } from 'react-icons/hi'
 import css from './styles.module.scss'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import questionApi from '@/apis/question.api'
 
 type Props = {
   open: boolean
@@ -18,6 +17,7 @@ type Props = {
 }
 
 const DrawerUpload = (props: Props) => {
+  const [form] = Form.useForm()
   const { open, setOpen, categoryId, setLoading } = props
   const queryClient = useQueryClient()
 
@@ -27,18 +27,16 @@ const DrawerUpload = (props: Props) => {
       queryClient.invalidateQueries({ queryKey: ['questionsBank'] })
     },
   })
-  const [fileList, setFileList] = useState<any | null>(null)
 
   const onCloseDrawer = () => {
     setOpen(false)
-    setFileList(null)
   }
 
-  const onFinish = () => {
-    if (fileList && categoryId) {
+  const onFinish = (value: any) => {
+    if (categoryId) {
       const payload = {
         categoryId: categoryId,
-        url: fileList[0]?.url,
+        url: value.attachment[0],
       }
       mutate(payload as unknown as any)
 
@@ -79,24 +77,18 @@ const DrawerUpload = (props: Props) => {
             >
               Hủy
             </ButtonCustom>
-            <ButtonCustom onClick={onFinish} type='primary'>
+            <ButtonCustom onClick={() => form.submit()} type='primary'>
               Thêm câu hỏi
             </ButtonCustom>
           </Space>
         }
       >
         <Space direction='vertical' size='large' align='center' className={css.uploadQues}>
-          <UploadCustom
-            action={import.meta.env.VITE_FILE_ENDPOINT + ENDPOINT.UPLOAD_ATTACHMENT}
-            accessType='.xlsx, .xls'
-            uploadKey='attachment'
-            callBackFileList={setFileList}
-            dropArea
-            showUploadList
-          >
-            <ButtonCustom icon={<HiOutlineUpload />} tooltip='Thêm file câu hỏi'></ButtonCustom>
-          </UploadCustom>
-
+          <Form form={form} onFinish={onFinish}>
+            <UploadCustom accessType='.xlsx, .xls' uploadKey='attachment' name='attachment' dropArea showUploadList>
+              <ButtonCustom icon={<HiOutlineUpload />} tooltip='Thêm file câu hỏi'></ButtonCustom>
+            </UploadCustom>
+          </Form>
           <Space align='center'>
             <AiOutlineQuestionCircle />
             <p>

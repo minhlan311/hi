@@ -1,19 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { CoursesState } from '@/interface/courses'
-import { CourseForm, Topic } from '@/types/course.type'
+import { CourseForm } from '@/types/course.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 type Props = {
   filterQuery?: any
   options?: any
   payload?: any
-}
-
-type TopicsForm = {
-  descriptions?: string
-  name?: string
-  parentId?: string
 }
 
 const courseApi = {
@@ -39,9 +33,6 @@ const courseApi = {
   },
   updateCourses(body: CourseForm) {
     return http.put<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + body.id, body)
-  },
-  createTopics(body: TopicsForm) {
-    return http.post<SuccessResponse<Topic>>(ENDPOINT.TOPIC_PATH, body)
   },
   deleteCourses(ids: string) {
     return http.delete<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + `${ids}`)

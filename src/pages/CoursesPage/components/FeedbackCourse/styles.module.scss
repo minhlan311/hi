@@ -1,4 +1,18 @@
 .fbCourseMain {
   margin: 12px 0;
   min-height: 50vh;
+  .fbContainer {
+    margin: 0 auto;
+    width: 80%;
+  }
+  .fbButt {
+    color: var(--white);
+    border: 1px solid var(--green);
+    background-color: var(--green);
+    &:hover {
+      color: var(--green) !important;
+      border: 1px solid var(--green-2) !important;
+      background-color: var(--greenBg);
+    }
+  }
 }
