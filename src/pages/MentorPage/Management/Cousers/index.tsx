@@ -3,31 +3,26 @@ import courseApi from '@/apis/course.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
+import PaginationCustom from '@/components/PaginationCustom'
 import PATH from '@/constants/path'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
-import { Col, Pagination, Row, Skeleton } from 'antd'
-import { PaginationProps } from 'antd/lib'
+import { CoursesState } from '@/interface/courses'
+import { SuccessResponse } from '@/types/utils.type'
+import { Col, Row, Skeleton, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
-import CourseListMentor from './CourseListMentor/CourseListMentor'
-import './index.scss'
+import CourseCard from './components/CourseCard'
 
 const MentorCourses = () => {
-  const [data, setData] = useState<any>([])
+  const [data, setData] = useState<SuccessResponse<CoursesState[]>>()
   const [current, setCurrent] = useState(1)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { profile } = useContext(AppContext)
 
-  const onChange: PaginationProps['onChange'] = (page) => {
-    setCurrent(page)
-  }
-
-  const numberOfDivs = 12
-
-  const divs = Array.from({ length: numberOfDivs }, (_, index) => (
+  const skeletonData = Array.from({ length: 12 }, (_, index) => (
     <Col xs={24} lg={6} xxl={4} key={index}>
       <Skeleton paragraph={{ rows: 6 }} />
     </Col>
@@ -36,9 +31,9 @@ const MentorCourses = () => {
   const { sm } = useResponsives()
 
   return (
-    <div>
+    <Space direction='vertical' className='sp100'>
       <FilterAction
-        keyFilter='course'
+        keyFilter='courseData'
         limit={12}
         filterQuery={{ mentorId: profile?._id }}
         type='course'
@@ -60,28 +55,24 @@ const MentorCourses = () => {
         }
       />
 
-      {!loading ? (
-        data && data.docs?.length === 0 ? (
-          <EmptyCustom
-            style={{
-              marginTop: '50px',
-            }}
-          />
+      <Row gutter={[24, 24]}>
+        {loading ? (
+          skeletonData
+        ) : data?.totalDocs === 0 ? (
+          <EmptyCustom description='Không có khóa học nào' />
         ) : (
-          <CourseListMentor data={data} />
-        )
-      ) : (
-        <Row className='div-row-container' gutter={[16, 32]}>
-          {divs}
-        </Row>
-      )}
+          data?.docs?.map((item) => (
+            <Col span={24} md={8} lg={6} key={item._id}>
+              <CourseCard data={item} />
+            </Col>
+          ))
+        )}
+      </Row>
 
-      {data && data?.totalDocs > 0 && (
-        <div className='pagination'>
-          <Pagination total={data?.totalDocs} current={current} defaultCurrent={1} onChange={onChange} />
-        </div>
-      )}
-    </div>
+      <div className='pagination'>
+        <PaginationCustom callbackCurrent={setCurrent} totalData={data?.totalDocs} limit={data?.limit} />
+      </div>
+    </Space>
   )
 }
 

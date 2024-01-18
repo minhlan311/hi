@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
 import { CoursesState } from '@/interface/courses'
-import { CourseForm } from '@/types/course.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 type Props = {
@@ -28,10 +27,10 @@ const courseApi = {
 
     return http.post<SuccessResponse<CoursesState[]>>(ENDPOINT.FIND_COURSES_PATH, payload ? payload : data)
   },
-  createCourses(body: CourseForm) {
+  createCourses(body: any) {
     return http.post<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH, body)
   },
-  updateCourses(body: CourseForm) {
+  updateCourses(body: any) {
     return http.put<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + body.id, body)
   },
   deleteCourses(ids: string) {
