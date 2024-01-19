@@ -1,10 +1,10 @@
 import AffixCustom from '@/components/AffixCustom'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
-import Logo from '@/components/Logo/Logo'
-import { UserState } from '@/interface/user'
-import { CarryOutOutlined, DatabaseOutlined, BookOutlined, TeamOutlined } from '@ant-design/icons'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import Logo from '@/components/Logo/Logo'
 import useResponsives from '@/hooks/useResponsives'
+import { UserState } from '@/interface/user'
+import { BookOutlined, CarryOutOutlined, DatabaseOutlined, TeamOutlined } from '@ant-design/icons'
 import { Button, Drawer, Layout, Menu, Row, Space } from 'antd'
 import { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
@@ -124,11 +124,7 @@ const MentorLayout = (props: Props) => {
           <div className={css.children}>
             <Space direction='vertical' className={`sp100`}>
               <h2>{title}</h2>
-              <BreadCrumbsDynamic
-                homeUrl='/mentor'
-                homeTitle='Mentor'
-                homeIcon={<LuLayoutDashboard style={{ marginTop: 5 }} />}
-              />
+              <BreadCrumbsDynamic homeIcon={<LuLayoutDashboard style={{ marginTop: 5 }} />} />
               <div className={css.chilItem}>{children}</div>
             </Space>
           </div>

@@ -56,11 +56,7 @@ const ProfilePage = ({ profile }: Props) => {
     <div className={css.prfMain}>
       <BannerProfile user={user} profile={profile} />
       <Header background='var(--whiteBg)' padding='0 0 50px 0'>
-        <MentorInfor
-          user={user}
-          coursesLength={coursesData?.totalDocs ? coursesData?.totalDocs : 0}
-          profile={profile}
-        />
+        <MentorInfor user={user} profile={profile} />
         {user?.videoInfoUrl && <MentorVideo videoUrl={user.videoInfoUrl} />}
         {user.mentorInfo?.showCentificate?.length > 0 && (
           <Header title='Bằng cấp & Chứng chỉ' titleSize={35} size='sm'>

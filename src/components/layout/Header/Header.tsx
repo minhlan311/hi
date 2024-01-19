@@ -53,11 +53,11 @@ const Header = (props: Props) => {
     <div
       className={css.header}
       style={{
+        ...style,
         padding: padding,
         background: background || `${theme === 'dark' && ' var(--gray)'}`,
         color: theme === 'dark' ? 'var(--white)' : undefined,
         margin: margin,
-        ...style,
       }}
     >
       <div

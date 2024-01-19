@@ -2,17 +2,21 @@
 import categoryApi from '@/apis/categories.api'
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
+import userApi from '@/apis/user.api'
 import CourseCard from '@/components/CourseCard'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
+import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import PaginationCustom from '@/components/PaginationCustom'
+import UserCard from '@/components/UserCard'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
+import { UserState } from '@/interface/user'
+import { SuccessResponse } from '@/types/utils.type'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Row, Space } from 'antd'
 import { useState } from 'react'
-
 import { useNavigate, useParams } from 'react-router-dom'
 import ChoiceQuestionPage from '../ChoiceQuestionPage'
 import CourseListPage from '../CourseListPage'
@@ -69,12 +73,14 @@ const CategoryPage = () => {
     enabled: Boolean(category?._id) && (Boolean(s3) || Boolean(s2)),
   })
 
+  const [mentorData, setMentorData] = useState<SuccessResponse<UserState[]>>()
+
   return (
     <LoadingCustom tip='Vui lòng chờ...' loading={isLoading}>
       {!s2 && !s3 ? (
         (category?.name === 'Trắc nghiệm' && <ChoiceQuestionPage />) ||
         (category?.name === 'Khóa học' && <CourseListPage />) || (
-          <div className='box-desc' dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}></div>
+          <div dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}></div>
         )
       ) : (
         <div>
@@ -84,18 +90,49 @@ const CategoryPage = () => {
               <WrapMore
                 title=''
                 maxWidth='100%'
-                children={
-                  <div
-                    className='box-desc'
-                    dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}
-                  ></div>
-                }
+                children={<div dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}></div>}
                 wrapper={'nonBorder'}
               ></WrapMore>
             ) : null}
-
+            {menuSlug?.includes('giao-vien') && (
+              <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
+                <FilterAction
+                  type='user'
+                  keyFilter='mentorData'
+                  apiFind={userApi.findUser}
+                  filterQuery={{
+                    isMentor: true,
+                    mentorStatus: 'APPROVED',
+                  }}
+                  page={current}
+                  callBackData={setMentorData}
+                  checkQuery={Boolean(s3) || Boolean(s2)}
+                  limit={10}
+                />
+                <LoadingCustom loading={courseLoad}>
+                  {mentorData && mentorData?.totalDocs > 0 ? (
+                    <Row gutter={[24, 24]}>
+                      {mentorData?.docs?.map((item) => (
+                        <Col span={24} md={12} key={item._id}>
+                          <UserCard data={item} />
+                        </Col>
+                      ))}
+                    </Row>
+                  ) : (
+                    <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
+                  )}
+                </LoadingCustom>
+                <div className={'pagination'}>
+                  <PaginationCustom
+                    limit={mentorData?.limit}
+                    totalData={mentorData?.totalDocs}
+                    callbackCurrent={setCurrent}
+                  />
+                </div>
+              </Space>
+            )}
             {s3 && s2 && !menuSlug?.includes('giao-vien') && (
-              <Space direction='vertical' size='large' className='sp100' style={{ marginTop: 80 }}>
+              <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
                 <h1>Khóa học {menuSlug?.includes('luyen-thi') && ' luyện thi'}</h1>
                 <LoadingCustom loading={courseLoad}>
                   {coursesData && coursesData?.data?.totalDocs > 0 ? (
@@ -110,7 +147,7 @@ const CategoryPage = () => {
                     <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
                   )}
                 </LoadingCustom>
-                <div className='pagination'>
+                <div className={'pagination'}>
                   <PaginationCustom
                     limit={coursesData?.data?.limit}
                     totalData={coursesData?.data?.totalDocs}

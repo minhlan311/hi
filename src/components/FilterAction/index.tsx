@@ -2,7 +2,7 @@
 import categoryApi from '@/apis/categories.api'
 import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
-import { Col, DatePicker, Form, Input, Row, Select, Space } from 'antd'
+import { Col, DatePicker, Form, Input, Radio, Row, Select, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
@@ -10,14 +10,14 @@ import ButtonCustom from '../ButtonCustom/ButtonCustom'
 
 import { debounce } from '@/helpers/common'
 import moment from 'moment-timezone'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import DrawerCustom from '../DrawerCustom/DrawerCustom'
 
 type Props = {
   apiFind: any
   keyFilter: string
   callBackData: React.Dispatch<React.SetStateAction<any>>
-  type: 'course' | 'test' | 'question' | 'class' | 'event'
+  type: 'course' | 'test' | 'question' | 'class' | 'event' | 'user'
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>
   addOnButton?: React.ReactNode
   limit?: number
@@ -52,7 +52,7 @@ const FilterAction = (props: Props) => {
   const [open, setOpen] = useState<boolean>(false)
   const [forcus, setForcus] = useState<boolean>(false)
   const location = useLocation().pathname
-
+  const navitgate = useNavigate()
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
@@ -70,6 +70,14 @@ const FilterAction = (props: Props) => {
   })
   const [categoryId, setCategoryId] = useState('')
 
+  const mentorCate = categoriesData?.data?.docs?.find((item) => item.name === 'Giáo viên')
+
+  const mentorPath = mentorCate?.children?.map((item) => {
+    return { label: item.name, value: item._id, slug: item.slug, children: item.children }
+  })
+
+  const mentorSub = mentorPath?.find((item) => location.includes(item.slug))
+
   const cateSelect = coursesList?.children.find((item) => item._id === categoryId)
 
   const subCateList = cateSelect?.children.map((sj) => {
@@ -83,6 +91,7 @@ const FilterAction = (props: Props) => {
   const onChangeFilter = () => {
     const {
       categoryId,
+      categoryName,
       subCategoryId,
       plan,
       viewCountDownCount,
@@ -95,6 +104,7 @@ const FilterAction = (props: Props) => {
       status,
       createdAt,
       dates,
+      mentorType,
     } = form.getFieldsValue()
 
     const body = {
@@ -107,6 +117,8 @@ const FilterAction = (props: Props) => {
       subCategoryId,
       plan,
       status,
+      categoryName: categoryName.label,
+      mentorType,
       start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
       end: typeFilter === 'event' && dates ? moment(dates.$d).endOf('day') : undefined,
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
@@ -164,9 +176,21 @@ const FilterAction = (props: Props) => {
     })
   }, [page, checkQuery])
 
+  const check = subjectList?.find(
+    (sj) =>
+      mentorSub?.children
+        ?.find((item) => location.includes(item.slug))
+        ?.name.toLowerCase()
+        .includes(sj.label.toLowerCase()),
+  )
+
   useEffect(() => {
     form.setFieldsValue({ skillName: initFilter?.skillName })
-  }, [])
+    form.setFieldsValue({ mentorType: mentorSub?.label })
+    form.setFieldsValue({
+      categoryName: check?.label,
+    })
+  }, [check])
 
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
@@ -196,8 +220,17 @@ const FilterAction = (props: Props) => {
             {typeFilter !== 'question' ? (
               <>
                 {typeFilter !== 'event' && (
-                  <Form.Item name='categoryId' style={{ width: lg ? '100%' : 120 }}>
-                    <Select placeholder='Môn học' options={subjectList} onChange={onChangeFilter} allowClear />
+                  <Form.Item
+                    name={location.includes('giao-vien') ? 'categoryName' : 'categoryId'}
+                    style={{ width: lg ? '100%' : 120 }}
+                  >
+                    <Select
+                      placeholder='Môn học'
+                      options={subjectList}
+                      onChange={onChangeFilter}
+                      allowClear
+                      labelInValue={location.includes('giao-vien')}
+                    />
                   </Form.Item>
                 )}
 
@@ -287,23 +320,44 @@ const FilterAction = (props: Props) => {
                           ]}
                         />
                       </Form.Item>
-                      <Form.Item name='plan'>
-                        <Select
-                          placeholder='Loại phí'
-                          allowClear
-                          onChange={onChangeFilter}
-                          options={[
-                            {
-                              value: 'FREE',
-                              label: 'Miễn phí',
-                            },
-                            {
-                              value: 'PREMIUM',
-                              label: 'Có phí',
-                            },
-                          ]}
-                        />
-                      </Form.Item>
+                      {typeFilter !== 'user' && (
+                        <Form.Item name='plan'>
+                          <Select
+                            placeholder='Loại phí'
+                            allowClear
+                            onChange={onChangeFilter}
+                            options={[
+                              {
+                                value: 'FREE',
+                                label: 'Miễn phí',
+                              },
+                              {
+                                value: 'PREMIUM',
+                                label: 'Có phí',
+                              },
+                            ]}
+                          />
+                        </Form.Item>
+                      )}
+                      {typeFilter === 'user' && (
+                        <Form.Item name='mentorType'>
+                          <Radio.Group
+                            value={'Giáo viên Việt Nam'}
+                            defaultValue={mentorSub?.label}
+                            buttonStyle='solid'
+                            className='radio-custom'
+                          >
+                            {mentorPath?.map((item) => (
+                              <Radio.Button
+                                value={item.label}
+                                onClick={() => navitgate(`/${mentorCate?.slug}/${item.slug}`)}
+                              >
+                                {item.label}
+                              </Radio.Button>
+                            ))}
+                          </Radio.Group>
+                        </Form.Item>
+                      )}
                     </>
                   ))}
                 {location.includes('mentor') && (
@@ -325,7 +379,7 @@ const FilterAction = (props: Props) => {
                     />
                   </Form.Item>
                 )}
-                {typeFilter !== 'event' && (
+                {typeFilter !== 'event' && typeFilter !== 'user' && (
                   <Form.Item name='createdAt'>
                     <Select
                       placeholder='Ngày tải lên'

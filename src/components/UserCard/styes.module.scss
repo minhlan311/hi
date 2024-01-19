@@ -1,0 +1,61 @@
+@import '../GlobalStyles/responsive.scss';
+.mentorCard {
+  & > * {
+    padding: 0 !important;
+  }
+  * {
+    transition: 0.3s;
+  }
+  .cardBody {
+    background-color: white;
+    overflow: hidden;
+    padding-left: 12px;
+    z-index: 1;
+    padding: 35px 12px;
+    min-height: 200px;
+    @include respond-to(sm) {
+      padding: 10px !important;
+      min-height: 100%;
+    }
+    @include respond-to(md) {
+      padding: 10px !important;
+      min-height: 100%;
+    }
+  }
+
+  overflow: hidden;
+
+  &:hover {
+    img {
+      transform: scale(1.1);
+    }
+  }
+
+  .org {
+    color: var(--red);
+  }
+  .green {
+    color: var(--green);
+  }
+  .yellow {
+    color: orange;
+  }
+  .pdOrg {
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+    background-color: rgba(255, 0, 0, 0.15);
+  }
+  .pdGreen {
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+    background-color: var(--greenBg);
+  }
+  .pdYellow {
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+    background-color: rgba(255, 166, 0, 0.2);
+  }
+}

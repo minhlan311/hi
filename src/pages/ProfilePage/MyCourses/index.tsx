@@ -26,7 +26,7 @@ const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxL
         padding={'25px 0 50px 0'}
         size={fullSize ? undefined : 'sm'}
       >
-        <Space direction='vertical' className={'sp100'}>
+        <Space direction='vertical' className={'sp100'} size='large'>
           <LoadingCustom loading={loading} tip='Vui lòng chờ...'>
             {coursesData?.totalDocs === 0 ? (
               <EmptyCustom description='Hiện không có khóa học nào' />
@@ -48,6 +48,7 @@ const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxL
 
           {showPagination ? (
             <PaginationCustom
+              align='center'
               limit={6}
               dataArr={coursesData?.docs}
               totalData={coursesData?.totalDocs}

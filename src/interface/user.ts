@@ -33,4 +33,6 @@ export interface UserState {
   videoInfoUrl?: string
   countAssessment?: number
   assessment?: AssessmentState
+  countCourses?: number
+  countStudents: number
 }

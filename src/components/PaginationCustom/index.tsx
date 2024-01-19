@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Pagination } from 'antd'
+import { Flex, Pagination } from 'antd'
 import { useEffect, useState } from 'react'
 
 type Props = {
   limit?: number
   totalData?: number
   dataArr?: any[]
+  align?: 'center' | 'start' | 'end'
   callbackDataArr?: React.Dispatch<React.SetStateAction<any>>
   callbackCurrent?: React.Dispatch<React.SetStateAction<number>>
 }
 
 const PaginationCustom = (props: Props) => {
-  const { dataArr, totalData, limit = 5, callbackDataArr, callbackCurrent } = props
+  const { dataArr, totalData, limit = 5, align, callbackDataArr, callbackCurrent } = props
 
   const [current, setCurrent] = useState<number>(1)
 
@@ -55,15 +56,17 @@ const PaginationCustom = (props: Props) => {
   if (totalData) {
     return (
       totalData > limit && (
-        <Pagination
-          pageSize={limit}
-          defaultCurrent={1}
-          current={current}
-          total={totalData}
-          onChange={onChange}
-          showSizeChanger={false}
-          showQuickJumper
-        />
+        <Flex justify={align}>
+          <Pagination
+            pageSize={limit}
+            defaultCurrent={1}
+            current={current}
+            total={totalData}
+            onChange={onChange}
+            showSizeChanger={false}
+            showQuickJumper
+          />
+        </Flex>
       )
     )
   }
