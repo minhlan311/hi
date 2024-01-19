@@ -219,7 +219,6 @@ const CoursesDetail = () => {
                                 className={'sp100'}
                                 style={{ paddingBottom: 24, minHeight: '60vh' }}
                               >
-                                <h2>Mô tả khóa học</h2>
                                 {courseDetail.descriptions ? (
                                   <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
                                 ) : (

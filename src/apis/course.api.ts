@@ -33,8 +33,8 @@ const courseApi = {
   updateCourses(body: any) {
     return http.put<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + body.id, body)
   },
-  deleteCourses(ids: string) {
-    return http.delete<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + `${ids}`)
+  deleteCourses(id: string) {
+    return http.delete<SuccessResponse<CoursesState>>(ENDPOINT.COURSES_PATH + `${id}`)
   },
   courseDetail(id: string) {
     return http.get<CoursesState>(ENDPOINT.COURSES_PATH + `${id}`)

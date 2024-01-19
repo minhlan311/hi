@@ -75,8 +75,8 @@ const CourseForm = ({ setCourseId, setCurrent }: Props) => {
   })
 
   const { data: courseDetail, isLoading } = useQuery({
-    queryKey: ['courseMentor'],
-    queryFn: () => courseApi.courseDetail(id!),
+    queryKey: ['courseDetail', id],
+    queryFn: () => courseApi.courseDetail(id as string),
     enabled: Boolean(id),
   })
 
@@ -250,7 +250,7 @@ const CourseForm = ({ setCourseId, setCurrent }: Props) => {
           </UploadCustom>
         </Col>
       </Row>
-      <TextAreaCustom name='descriptions' data={courseDetail?.data} label='Nội dung' />
+      <TextAreaCustom name='descriptions' data={courseDetail?.data ? courseDetail.data : null} label='Nội dung' />
     </Form>
   )
 }

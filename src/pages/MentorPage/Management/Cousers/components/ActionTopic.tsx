@@ -5,6 +5,7 @@ import CollapseCustom from '@/components/CollapseCustom/CollapseCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
+import useResponsives from '@/hooks/useResponsives'
 import { TopicState } from '@/interface/topic'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Flex, Popconfirm, Space } from 'antd'
@@ -52,44 +53,54 @@ const ActionTopic = ({ courseId }: Props) => {
     },
   })
 
+  const { sm } = useResponsives()
+
   const collapseList = topicList?.data?.docs?.map((item) => {
     return {
       key: item._id,
-      label: item.name,
-      children: <LessionData topicId={item._id} />,
-      extra: (
-        <Space>
-          <ButtonCustom
-            onClick={() => {
-              setTopicId(item._id)
-            }}
-            icon={<BiPlus />}
-          >
-            Thêm bài học
-          </ButtonCustom>
-          <ButtonCustom
-            onClick={(e) => {
-              e.stopPropagation()
-              setTopicData(item)
-            }}
-            icon={<BiEdit size={20} />}
-          ></ButtonCustom>
-
-          <Popconfirm
-            placement='right'
-            title='Bạn có chắc chắn muốn xóa chuyên đề này?'
-            okText='Xóa'
-            cancelText='Không'
-            onConfirm={() => mutate(item._id)}
-          >
+      label: (
+        <Flex
+          gap={12}
+          justify='space-between'
+          style={{ flexDirection: sm ? 'column' : 'row', alignItems: sm ? 'start' : 'center' }}
+        >
+          <b>{item.name}</b>
+          <Space>
             <ButtonCustom
-              onClick={(e) => e.stopPropagation()}
-              icon={<MdDeleteOutline size={18} />}
-              danger
+              onClick={() => {
+                setTopicId(item._id)
+              }}
+              icon={<BiPlus size={sm ? 20 : undefined} />}
+              tooltip={sm ? 'Thêm bài học' : undefined}
+            >
+              {!sm && 'Thêm bài học'}
+            </ButtonCustom>
+            <ButtonCustom
+              onClick={(e) => {
+                e.stopPropagation()
+                setTopicData(item)
+              }}
+              icon={<BiEdit size={20} />}
+              tooltip={sm ? 'Sửa bài học' : undefined}
             ></ButtonCustom>
-          </Popconfirm>
-        </Space>
+
+            <Popconfirm
+              placement='right'
+              title='Bạn có chắc chắn muốn xóa chuyên đề này?'
+              okText='Xóa'
+              cancelText='Không'
+              onConfirm={() => mutate(item._id)}
+            >
+              <ButtonCustom
+                onClick={(e) => e.stopPropagation()}
+                icon={<MdDeleteOutline size={18} />}
+                danger
+              ></ButtonCustom>
+            </Popconfirm>
+          </Space>
+        </Flex>
       ),
+      children: <LessionData courseId={courseId} topicId={item._id} />,
     }
   })
 
@@ -105,7 +116,7 @@ const ActionTopic = ({ courseId }: Props) => {
       </Flex>
       {collapseList && collapseList?.length > 0 ? (
         <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
-          <CollapseCustom items={collapseList as any} size='large' />
+          <CollapseCustom items={collapseList as any} size={sm ? 'small' : 'large'} />
         </LoadingCustom>
       ) : (
         <EmptyCustom description='Không có chuyên đề nào' />
@@ -120,7 +131,14 @@ const ActionTopic = ({ courseId }: Props) => {
           setOpenTopic(e)
         }}
       />
-      <LessionForm topicId={topicId as string} openLession={Boolean(topicId)} setOpenLession={() => setTopicId('')} />
+      {topicId && (
+        <LessionForm
+          courseId={courseId}
+          topicId={topicId as string}
+          openLession={Boolean(topicId)}
+          setOpenLession={() => setTopicId('')}
+        />
+      )}
     </Space>
   )
 }

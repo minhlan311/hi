@@ -11,7 +11,8 @@ export type DocumentForm = {
   name: string
   type: string
 }
-export type Document = {
+
+export type DocumentState = {
   avgAssessment: number
   cost: number
   courseId: string
@@ -37,5 +38,3 @@ export type Document = {
   _destroy: boolean
   _id: string
 }
-
-export type ListDocument = Document[]

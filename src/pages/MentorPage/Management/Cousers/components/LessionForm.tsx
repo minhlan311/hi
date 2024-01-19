@@ -14,34 +14,36 @@ import { Form, Input, InputNumber, Select } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 
 type Props = {
+  courseId: string
   topicId: string
-  lessionId?: string
+  lessonId?: string
   lessionData?: LessionState
   openLession: boolean
   setOpenLession: React.Dispatch<React.SetStateAction<any>>
 }
 
-const LessionForm = ({ topicId, lessionId, openLession, lessionData, setOpenLession }: Props) => {
+const LessionForm = ({ courseId, topicId, lessonId, openLession, lessionData, setOpenLession }: Props) => {
   const { sm, md } = useResponsives()
   const [form] = Form.useForm()
   const { profile } = useContext(AppContext)
-
   const [type, setType] = useState<'VIDEO' | 'TEST' | 'LIVE' | 'DOCUMENT'>()
   const [fileList, setFileList] = useState<any[]>([])
   const queryClient = useQueryClient()
   const lessionMutation = useMutation({
-    mutationFn: (body) => (lessionId ? lessionApi.updateLession(body) : lessionApi.createLession(body)),
+    mutationFn: (body) => (lessonId ? lessionApi.updateLession(body) : lessionApi.createLession(body)),
     onSuccess: (value: any) => {
       openNotification({
         status: 'success',
         message: 'Thông báo',
-        description: `${lessionId ? 'Cập nhật' : 'Tạo'} bài học thành công`,
+        description: `${lessonId ? 'Cập nhật' : 'Tạo'} bài học thành công`,
       })
+      setFileList([])
       form.resetFields()
       setOpenLession('')
       queryClient.invalidateQueries({ queryKey: ['lessionList', value?.data?.parentId] })
     },
   })
+
   const mutationDocument = useMutation({
     mutationFn: (body: any) => documentApi.createDocument(body),
   })
@@ -49,21 +51,20 @@ const LessionForm = ({ topicId, lessionId, openLession, lessionData, setOpenLess
   const onFinish = (values: any) => {
     const payload = {
       ...values,
-      id: lessionId,
+      id: lessonId,
       parentId: topicId,
     }
     lessionMutation.mutate(payload)
-    if (payload.length > 0)
+    if (fileList.length > 0)
       mutationDocument.mutate({
         isDownloadable: true,
-        name: `Tài liệu`,
-        description: values.description,
+        name: `Tài liệu ${values.name}`,
+        description: values.descriptions,
         type: 'CURRICULUM',
-        files: payload[0],
-        courseId: topicId,
-        lessonId: lessionId,
+        files: fileList.map((item) => item.response.url),
+        courseId,
+        lessonId,
       })
-    setFileList([])
   }
 
   useEffect(() => {
@@ -88,7 +89,30 @@ const LessionForm = ({ topicId, lessionId, openLession, lessionData, setOpenLess
     label: item.name,
     value: item._id,
   }))
-  console.log(lessionId)
+
+  const { data: documentData } = useQuery({
+    queryKey: ['documentData', lessonId],
+    queryFn: () =>
+      documentApi.findDocument({
+        filterQuery: { lessonId },
+      }),
+    enabled: Boolean(lessonId) && Boolean(openLession),
+  })
+
+  useEffect(() => {
+    if (documentData?.data?.docs && documentData.data.docs[0]?.files?.length > 0) {
+      setFileList(
+        documentData.data.docs[0].files?.map((item) => {
+          return {
+            uid: item.name,
+            name: item.url,
+            status: 'done',
+            url: item.url,
+          }
+        }),
+      )
+    }
+  }, [documentData])
 
   return (
     <DrawerCustom
@@ -98,9 +122,9 @@ const LessionForm = ({ topicId, lessionId, openLession, lessionData, setOpenLess
       }}
       onClose={setOpenLession}
       placement='right'
-      title={`${lessionId ? 'Cập nhật' : 'Tạo'} bài học`}
+      title={`${lessonId ? 'Cập nhật' : 'Tạo'} bài học`}
       width={sm || md ? '100%' : '50vw'}
-      okText={lessionId ? 'Cập nhật' : 'Tạo'}
+      okText={lessonId ? 'Cập nhật' : 'Tạo'}
     >
       <Form form={form} layout='vertical' onFinish={onFinish}>
         <Form.Item label='Tiêu đề bài học' name='name' rules={[{ required: true, message: 'Nhập tiêu đề bài học' }]}>
@@ -152,6 +176,8 @@ const LessionForm = ({ topicId, lessionId, openLession, lessionData, setOpenLess
             defaultFileList={fileList}
             callBackFileList={setFileList}
             dropArea
+            showUploadList
+            maxCount={5}
           />
         )}
       </Form>

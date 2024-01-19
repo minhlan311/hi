@@ -242,7 +242,7 @@ const UploadCustom = (props: Props) => {
           </ImgCrop>
         ) : dropArea ? (
           <Dragger {...uploadProps}>
-            {!fileList.length && !showPreview ? (
+            {(!fileList.length && !showPreview) || name?.toLowerCase().includes('file') ? (
               <div className={css.dropArea}>
                 <p className={'ant-upload-drag-icon'}>
                   <TbDragDrop style={{ fontSize: 40 }} />
