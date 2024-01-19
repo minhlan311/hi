@@ -11,7 +11,8 @@ interface ItemCollapse {
 type Props = {
   items: ItemCollapse[]
   defaultActiveKey?: string | string[]
-  onChange?: () => void
+  activeKey?: string
+  onChange?: (e: any) => void
   expandIconPosition?: 'start' | 'end'
   size?: 'large' | 'middle' | 'small'
   collapsible?: 'header' | 'icon' | 'disabled'
@@ -28,6 +29,7 @@ type Props = {
 const CollapseCustom = (props: Props) => {
   const {
     items,
+    activeKey,
     defaultActiveKey,
     onChange,
     expandIconPosition,
@@ -61,6 +63,7 @@ const CollapseCustom = (props: Props) => {
 
   return (
     <Collapse
+      activeKey={activeKey}
       defaultActiveKey={defaultActiveKey}
       accordion={sigleActive}
       onChange={onChange}

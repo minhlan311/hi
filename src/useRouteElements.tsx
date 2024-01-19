@@ -21,7 +21,7 @@ import HomePage from './pages/HomePage/index.tsx'
 import MentorCalendar from './pages/MentorPage/Management/Calendar/index.tsx'
 import ClassDetail from './pages/MentorPage/Management/ClassCourse/components/ClassDetail.tsx'
 import ClassManage from './pages/MentorPage/Management/ClassCourse/index.tsx'
-import StepCreate from './pages/MentorPage/Management/Cousers/CreateCourse/StepCreate.tsx'
+import ActionCourse from './pages/MentorPage/Management/Cousers/components/ActionCourse.tsx'
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
@@ -136,7 +136,15 @@ export default function useRouteElements() {
           path: PATH.MENTOR_COURSES_CREATE,
           element: (
             <MentorLayout user={profile} title='Tạo khóa học'>
-              <StepCreate />
+              <ActionCourse />
+            </MentorLayout>
+          ),
+        },
+        {
+          path: PATH.MENTOR_COURSES_UPDATE,
+          element: (
+            <MentorLayout user={profile} title='Sửa khóa học'>
+              <ActionCourse />
             </MentorLayout>
           ),
         },
@@ -156,14 +164,7 @@ export default function useRouteElements() {
             </MentorLayout>
           ),
         },
-        {
-          path: PATH.MENTOR_COURSES_UPDATE,
-          element: (
-            <MentorLayout user={profile} title='Sửa khóa học'>
-              <StepCreate />
-            </MentorLayout>
-          ),
-        },
+
         {
           path: PATH.MENTOR_CALENDAR,
           element: (

@@ -16,6 +16,7 @@ export const ENDPOINT = {
 
   // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::
   DOCUMENT_PATH: '/edu/documents',
+  FIND_DOCUMENT_PATH: '/edu/documents/find',
 
   // :::::::::::::::::::: CONFIG PATH :::::::::::::::::::::
   CONFIG_PATH: '/configs',

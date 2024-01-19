@@ -25,7 +25,7 @@ type Props = {
   width?: number | string
   fullWidth?: boolean
   align?: 'start' | 'end' | 'center'
-  onClick?: () => void
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void
 }
 
 const ButtonCustom = (props: Props) => {

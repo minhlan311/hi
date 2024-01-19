@@ -1,20 +1,22 @@
-import React from 'react'
-import { Drawer, Space } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
-import css from './DrawerCustom.module.scss'
+import { Drawer, Space } from 'antd'
+import React from 'react'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import css from './DrawerCustom.module.scss'
 type Props = {
   children: React.ReactNode
   title?: string
   placement?: 'top' | 'right' | 'bottom' | 'left'
   open: boolean
+  okText?: string
+  cancelText?: string
   onClose: React.Dispatch<React.SetStateAction<boolean>>
   onFinish: () => void
   width?: string | number
 }
 
 const DrawerCustom = (props: Props) => {
-  const { children, title, placement, onClose, onFinish, open, width } = props
+  const { children, title, placement, onClose, onFinish, open, width, okText = 'Ok', cancelText = 'Hủy' } = props
 
   return (
     <Drawer
@@ -29,30 +31,35 @@ const DrawerCustom = (props: Props) => {
         title ? (
           <Space>
             <ButtonCustom
-              type='primary'
               onClick={() => {
                 onClose(!open)
+              }}
+            >
+              {cancelText}
+            </ButtonCustom>
+            <ButtonCustom
+              type='primary'
+              onClick={() => {
                 onFinish()
               }}
             >
-              OK
+              {okText}
             </ButtonCustom>
           </Space>
         ) : undefined
       }
     >
-      {
-        <ButtonCustom
-          shape='circle'
-          icon={<CloseOutlined />}
-          className={`${css.buttonClose} ${!open && css.buttonHidden}`}
-          onClick={() => {
-            onClose(!open)
-            onFinish()
-          }}
-          style={{ padding: 12 }}
-        ></ButtonCustom>
-      }
+      <ButtonCustom
+        shape='circle'
+        icon={<CloseOutlined />}
+        className={`${css.buttonClose} ${!open && css.buttonHidden}`}
+        onClick={() => {
+          onClose(!open)
+          onFinish()
+        }}
+        style={{ padding: 12 }}
+      ></ButtonCustom>
+
       {children}
     </Drawer>
   )
