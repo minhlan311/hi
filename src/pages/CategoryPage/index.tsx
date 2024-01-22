@@ -12,7 +12,7 @@ import UserCard from '@/components/UserCard'
 import WrapMore from '@/components/WrapMore/WrapMore'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
-import { UserState } from '@/interface/user'
+import { MentorInfo } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Row, Space } from 'antd'
@@ -73,7 +73,7 @@ const CategoryPage = () => {
     enabled: Boolean(category?._id) && (Boolean(s3) || Boolean(s2)),
   })
 
-  const [mentorData, setMentorData] = useState<SuccessResponse<UserState[]>>()
+  const [mentorData, setMentorData] = useState<SuccessResponse<MentorInfo[]>>()
 
   return (
     <LoadingCustom tip='Vui lòng chờ...' loading={isLoading}>
@@ -99,11 +99,7 @@ const CategoryPage = () => {
                 <FilterAction
                   type='user'
                   keyFilter='mentorData'
-                  apiFind={userApi.findUser}
-                  filterQuery={{
-                    isMentor: true,
-                    mentorStatus: 'APPROVED',
-                  }}
+                  apiFind={userApi.findMentor}
                   page={current}
                   callBackData={setMentorData}
                   checkQuery={Boolean(s3) || Boolean(s2)}

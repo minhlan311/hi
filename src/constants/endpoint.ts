@@ -11,7 +11,8 @@ export const ENDPOINT = {
   // :::::::::::::::::::: USER PATH :::::::::::::::::::::
   USER_DETAIL_PATH: '/users/',
   GET_ALL_MENTOR: '/users/find',
-  MENTOR: '/mentorInfo/',
+  MENTOR_PATH: '/mentor-info/',
+  FIND_MENTOR_PATH: '/mentor-info/find',
   MENTOR_DETAIL: '/mentorInfo/user/',
 
   // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::

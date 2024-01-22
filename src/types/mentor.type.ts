@@ -1,3 +1,5 @@
+import { UserState } from '@/interface/user'
+
 export type Register = {
   fullName: string
   email: string
@@ -33,6 +35,7 @@ export type MentorInfo = {
     url: string
     name: string
   }[]
+  userData: UserState
   imageAfter: string
   imageBefore: string
   updatedById: string
