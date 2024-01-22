@@ -2,8 +2,7 @@ import { ENDPOINT } from '@/constants/endpoint'
 import { AuthState } from '@/interface/auth'
 import { UserState } from '@/interface/user'
 import { AuthResponse, ChangePassword } from '@/types/auth.type'
-import { Register } from '@/types/mentor.type'
-import { RegisterMentor } from '@/types/mentor.type'
+import { Register, RegisterMentor } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
@@ -12,7 +11,7 @@ const authApi = {
     return http.post<AuthResponse>(ENDPOINT.REGISTER, body)
   },
   registerMentor(body: RegisterMentor) {
-    return http.post<AuthResponse>(ENDPOINT.MENTOR, body)
+    return http.post<AuthResponse>(ENDPOINT.MENTOR_PATH, body)
   },
   login(body: { email: string; password: string }) {
     return http.post<AuthState>(ENDPOINT.LOGIN, body)
