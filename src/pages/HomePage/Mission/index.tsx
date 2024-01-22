@@ -1,8 +1,8 @@
+import useResponsives from '@/hooks/useResponsives'
 import { Col, Row, Space } from 'antd'
 import sixstep from '../../../assets/images/backgrounds/6step.svg'
 import Header from '../../../components/layout/Header/Header'
 import './styles.scss'
-import useResponsives from '@/hooks/useResponsives'
 
 export default function Mission() {
   const { sm } = useResponsives()
@@ -21,8 +21,9 @@ export default function Mission() {
               <Space direction='vertical' size='large' style={{ float: 'right' }} className='ms-content'>
                 <h1 style={{ float: 'right' }}>TẦM NHÌN</h1>
                 <p>
-                  Trở thành hệ sinh thái đào tạo tiếng Anh giao tiếp & tạo môi trường chuyển hoá toàn diện cho nhiều học
-                  viên nhất tại Việt Nam
+                  Đào tạo 5 ngoại ngữ Online nhưng vẫn đảm bảo được chất lượng, và hiệu quả từng buổi học cho học viên.
+                  UCAM không chỉ mang ngoại ngữ đến các học viên trong nước nhưng còn muốn vươn xa ra tầm cỡ quốc tế để
+                  xóa bỏ rào cản giao tiếp và góp phần thực hiện ước mơ của học viên.
                 </p>
               </Space>
             </div>
@@ -36,7 +37,12 @@ export default function Mission() {
               />
               <Space direction='vertical' size='large' className='ms-content'>
                 <h1>SỨ MỆNH</h1>
-                <p>Chuyển hóa người khác bằng việc thay đổi chính mình</p>
+                <p>
+                  UCAM mong muốn mang đến cho thế hệ trẻ Việt Nam 5 ngoại ngữ Anh, Trung, Nhật, Hàn, Đức trên bước đường
+                  hội nhập quốc tế. UCAM mang đến cho học viên một môi trường học tập chuyên nghiệp hàng đầu với đội ngũ
+                  Giáo viên giỏi trong nước và ngoài nước. Từ đó học viên sử dụng được ngoại ngữ một cách thành thạo với
+                  chi phí tiết kiệm và hiệu quả nhất.
+                </p>
               </Space>
             </div>
           </Col>
