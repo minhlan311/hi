@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
+import { debounce } from '@/helpers/common'
 import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
 import { Col, DatePicker, Form, Input, Radio, Row, Select, Space } from 'antd'
+import moment from 'moment-timezone'
 import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { LuFilterX } from 'react-icons/lu'
-import ButtonCustom from '../ButtonCustom/ButtonCustom'
-
-import { debounce } from '@/helpers/common'
-import moment from 'moment-timezone'
 import { useLocation, useNavigate } from 'react-router-dom'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import DrawerCustom from '../DrawerCustom/DrawerCustom'
 
 type Props = {
@@ -104,7 +103,6 @@ const FilterAction = (props: Props) => {
       status,
       createdAt,
       dates,
-      mentorType,
     } = form.getFieldsValue()
 
     const body = {
@@ -117,8 +115,7 @@ const FilterAction = (props: Props) => {
       subCategoryId,
       plan,
       status,
-      categoryName: categoryName.label,
-      mentorType,
+      categoryName: categoryName?.label ? categoryName?.label : undefined,
       start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
       end: typeFilter === 'event' && dates ? moment(dates.$d).endOf('day') : undefined,
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
@@ -132,7 +129,7 @@ const FilterAction = (props: Props) => {
     }
 
     setFilterData({
-      filterQuery: { ...body, ...filterQuery },
+      filterQuery: { ...body, ...filterQuery, mentorType: mentorSub?.label },
       options: {
         limit,
         page,
@@ -155,7 +152,7 @@ const FilterAction = (props: Props) => {
     form.resetFields()
     setFilterData((prev) => {
       return {
-        filterQuery: filterQuery || {},
+        filterQuery: { ...filterQuery, mentorType: mentorSub?.label } || {},
         options: {
           page,
           ...prev?.options,
@@ -164,17 +161,6 @@ const FilterAction = (props: Props) => {
       }
     })
   }
-
-  useEffect(() => {
-    setFilterData({
-      filterQuery: { ...filterQuery, ...initFilter } || {},
-      options: {
-        limit,
-        page,
-        sort,
-      },
-    })
-  }, [page, checkQuery])
 
   const check = subjectList?.find(
     (sj) =>
@@ -185,13 +171,20 @@ const FilterAction = (props: Props) => {
   )
 
   useEffect(() => {
-    form.setFieldsValue({ skillName: initFilter?.skillName })
-    form.setFieldsValue({ mentorType: mentorSub?.label })
+    setFilterData({
+      filterQuery: { ...filterQuery, ...initFilter, mentorType: mentorSub?.label, categoryName: check?.label } || {},
+      options: {
+        limit,
+        page,
+        sort,
+      },
+    })
     form.setFieldsValue({
       categoryName: check?.label,
     })
-  }, [check])
-
+    form.setFieldsValue({ skillName: initFilter?.skillName })
+    form.setFieldsValue({ mentorType: mentorSub?.label })
+  }, [page, checkQuery, location])
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
     queryFn: () => {

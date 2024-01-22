@@ -37,11 +37,29 @@ const userApi = {
     return http.get<MentorInfo>(ENDPOINT.MENTOR_DETAIL + id)
   },
 
+  findMentor(props: Props) {
+    const {
+      filterQuery,
+      options = {
+        pagination: false,
+        sort: { createdAt: -1 },
+      },
+      payload,
+    } = props
+
+    const data = {
+      filterQuery: filterQuery,
+      options: options,
+    }
+
+    return http.post<SuccessResponse<MentorInfo[]>>(ENDPOINT.FIND_MENTOR_PATH, payload ? payload : data)
+  },
+
   createMentor(body: MentorInfo) {
-    return http.post<MentorInfo>(ENDPOINT.MENTOR, body)
+    return http.post<MentorInfo>(ENDPOINT.MENTOR_PATH, body)
   },
   updateMentor(body: MentorInfo) {
-    return http.put<MentorInfo>(ENDPOINT.MENTOR + body._id, body)
+    return http.put<MentorInfo>(ENDPOINT.MENTOR_PATH + body._id, body)
   },
 }
 

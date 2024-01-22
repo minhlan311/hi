@@ -1,6 +1,6 @@
 import { formatNumber } from '@/common'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import { UserState } from '@/interface/user'
+import { MentorInfo } from '@/types/mentor.type'
 import { Card, Col, Flex, Rate, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2'
@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import style from './styes.module.scss'
 
 type Props = {
-  data: UserState
+  data: MentorInfo
 }
 
 const UserCard = ({ data }: Props) => {
@@ -24,9 +24,9 @@ const UserCard = ({ data }: Props) => {
     <Card className={style.mentorCard} hoverable size='small'>
       <Row align='middle'>
         <Col span={24} md={10}>
-          <Link to={'/profiles/' + data._id}>
+          <Link to={'/profiles/' + data.userData._id}>
             <ImageCustom
-              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data.coverUrl}
+              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data.userData.avatarUrl}
               height='200px'
               width='100%'
               preview={false}
@@ -35,29 +35,29 @@ const UserCard = ({ data }: Props) => {
         </Col>
         <Col span={24} md={14} className={style.cardBody}>
           <Space direction='vertical' className={'sp100'}>
-            <Link to={'/profiles/' + data._id}>
-              <h2>{data.fullName}</h2>
+            <Link to={'/profiles/' + data.userData._id}>
+              <h2>{data.userData.fullName}</h2>
             </Link>
             <Flex justify='space-between'>
-              {data.mentorInfo?.categoryName && (
+              {data.categoryName && (
                 <Space>
                   <PiMedalLight size={22} className={style.org} />
-                  <b> {data.mentorInfo?.categoryName}</b>
+                  <b> {data.categoryName}</b>
                 </Space>
               )}
 
-              {data.mentorInfo?.educationType && (
+              {data.educationType && (
                 <Space>
                   <LuGraduationCap size={24} className={style.green} />
-                  <b>{data.mentorInfo?.educationType}</b>
+                  <b>{data.educationType}</b>
                 </Space>
               )}
 
-              {data.mentorInfo?.certificateType && (
+              {data.certificateType && (
                 <Space>
                   <TbCertificate size={24} className={style.yellow} />
                   <b>
-                    {data.mentorInfo?.certificateType} {data.mentorInfo?.score}
+                    {data.certificateType} {data.score}
                   </b>
                 </Space>
               )}
@@ -65,7 +65,7 @@ const UserCard = ({ data }: Props) => {
             <Flex justify='space-between'>
               <Space>
                 <HiOutlineClipboardDocumentList size={15} className={`${style.pdOrg} ${style.org}`} />
-                <b>{formatNumber(data?.countCourses as number)} Khóa học</b>
+                <b>{formatNumber(data?.userData.countCourses as number)} Khóa học</b>
               </Space>
 
               <Flex gap={5} align='center'>
@@ -79,12 +79,16 @@ const UserCard = ({ data }: Props) => {
 
               <Space>
                 <RiGroupLine className={`${style.pdYellow} ${style.yellow}`} />
-                <b>{formatNumber(data?.countStudents)}</b>
+                <b>{formatNumber(data?.userData.countStudents)}</b>
               </Space>
             </Flex>
             <Flex justify='end' align='center' gap={12}>
-              <Rate value={data.assessment?.totalAssessmentsAverages} style={{ fontSize: 18, marginTop: 4 }} disabled />
-              ({formatNumber(data.countAssessment as number)})
+              <Rate
+                value={data.userData.assessment?.totalAssessmentsAverages}
+                style={{ fontSize: 18, marginTop: 4 }}
+                disabled
+              />
+              ({formatNumber(data.userData.countAssessment as number)})
             </Flex>
           </Space>
         </Col>
