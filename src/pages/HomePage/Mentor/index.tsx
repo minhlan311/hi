@@ -57,7 +57,7 @@ const Mentor = () => {
             <ButtonCustom size='small' type='primary'>
               {diffDuration.asHours().toFixed(0)} giờ
             </ButtonCustom>
-            <ButtonCustom size='small'>{370} học viên</ButtonCustom>
+            <ButtonCustom size='small'>{formatNumber(user.countStudents)} học viên</ButtonCustom>
           </Space>
           <ButtonCustom className='sm-butt sp100' size='large' href={`/profiles/${user._id}`}>
             <Space>

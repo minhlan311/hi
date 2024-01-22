@@ -248,19 +248,42 @@ const CentificateUpdate = (props: Props) => {
           ></ButtonCustom>
         </UploadCustom>
         <h3>Thông tin pháp lý</h3>
-        <Form.Item label='Học vị' name='educationType' rules={[{ required: true, message: 'Vui lòng chọn học vị' }]}>
-          <Select
-            placeholder='Chọn học vị'
-            options={[
-              { value: 'Cử nhân', label: 'Cử nhân' },
-              { value: 'Thạc sĩ', label: 'Thạc sĩ' },
-              { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
-              { value: 'Phó giáo sư', label: 'Phó giáo sư' },
-            ]}
-          />
-        </Form.Item>
 
         <Row gutter={24}>
+          <Col span={24} md={12}>
+            <Form.Item
+              label='Học vị'
+              name='educationType'
+              rules={[{ required: true, message: 'Vui lòng chọn học vị' }]}
+            >
+              <Select
+                placeholder='Chọn học vị'
+                options={[
+                  { value: 'Cử nhân', label: 'Cử nhân' },
+                  { value: 'Thạc sĩ', label: 'Thạc sĩ' },
+                  { value: 'Tiến sĩ ', label: 'Tiến sĩ' },
+                  { value: 'Phó giáo sư', label: 'Phó giáo sư' },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={24} md={12}>
+            <Form.Item
+              label='Loại giáo viên'
+              name='mentorType'
+              rules={[{ required: true, message: 'Vui lòng chọn loại giáo viên' }]}
+            >
+              <Select
+                placeholder='Chọn loại giáo viên'
+                options={[
+                  { value: 'Giáo viên Việt Nam', label: 'Giáo viên Việt Nam' },
+                  { value: 'Giáo viên Bản địa', label: 'Giáo viên Bản địa' },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+
           <Col span={24} md={type ? 8 : 12}>
             <Form.Item
               label='Ngôn ngữ giảng dạy'

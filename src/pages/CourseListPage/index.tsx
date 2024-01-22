@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
 import { CoursesState } from '@/interface/courses'
 import { SuccessResponse } from '@/types/utils.type'
-import { Col, Row } from 'antd'
+import { Col, Row, Space } from 'antd'
 import { useState } from 'react'
 
 const CourseListPage = () => {
@@ -21,30 +21,35 @@ const CourseListPage = () => {
     <Header padding={'24px 0 50px'} title='Danh sách khóa học' titleSize={35}>
       <FilterAction
         keyFilter='course'
-        limit={(sm && 10) || (md && 9) || 12}
+        limit={(sm && 10) || (md && 9) || 20}
         type='course'
         setLoading={setLoading}
         apiFind={courseApi.getCourses}
         callBackData={setCourses}
         page={current}
       />
-      <LoadingCustom loading={loading}>
-        {courses && courses.totalDocs > 0 ? (
-          <Row gutter={[24, 24]}>
-            {courses.docs?.map((item) => (
-              <Col span={24} md={8} lg={6} key={item._id}>
-                <CourseCard item={item} />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
-        )}
-      </LoadingCustom>
+      <Space direction='vertical' className='sp100' size='large'>
+        <LoadingCustom loading={loading}>
+          {courses && courses.totalDocs > 0 ? (
+            <Row gutter={[24, 24]}>
+              {courses.docs?.map((item) => (
+                <Col span={24} md={8} lg={6} key={item._id}>
+                  <CourseCard item={item} />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
+          )}
+        </LoadingCustom>
 
-      <div className='pagination'>
-        <PaginationCustom limit={courses?.limit} totalData={courses?.totalDocs} callbackCurrent={setCurrent} />
-      </div>
+        <PaginationCustom
+          limit={courses?.limit}
+          totalData={courses?.totalDocs}
+          align='center'
+          callbackCurrent={setCurrent}
+        />
+      </Space>
     </Header>
   )
 }

@@ -48,6 +48,7 @@ const CourseCard = ({ data }: Props) => {
           height='180px'
           width='100%'
           src={import.meta.env.VITE_FILE_ENDPOINT + '/' + data?.coverMedia}
+          onClick={() => navigate('/courses/' + data._id)}
         />
       }
       actions={[

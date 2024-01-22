@@ -364,7 +364,11 @@ const CoursesDetail = () => {
                       preview={{
                         imageRender: () =>
                           courseDetail.coverVideo ? (
-                            <video width='100%' controls src={courseDetail.coverVideo} />
+                            <video
+                              width='100%'
+                              controls
+                              src={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverVideo}
+                            />
                           ) : (
                             <img
                               src={import.meta.env.VITE_FILE_ENDPOINT + '/' + courseDetail.coverMedia}

@@ -62,7 +62,7 @@ const MentorCourses = () => {
           <EmptyCustom description='Không có khóa học nào' />
         ) : (
           data?.docs?.map((item) => (
-            <Col span={24} md={8} lg={6} key={item._id}>
+            <Col span={24} md={8} lg={6} xxl={4} key={item._id}>
               <CourseCard data={item} />
             </Col>
           ))

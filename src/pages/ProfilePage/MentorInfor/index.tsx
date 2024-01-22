@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import assessmentApi from '@/apis/assessment.api'
 import userApi from '@/apis/user.api'
+import { formatNumber } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
@@ -26,12 +27,11 @@ import css from './styles.module.scss'
 type Props = {
   user: UserState
   profile?: UserState
-  coursesLength: number
   fullSize?: boolean
   md?: number
 }
 
-const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
+const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
   const [update, setUpdate] = useState(false)
   const { setProfile } = useContext(AppContext)
   const location = useLocation().state
@@ -66,30 +66,6 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
 
   const now = moment()
   const diffDuration = moment.duration(now.diff(user.createdAt))
-  let days = diffDuration.asDays()
-  let time = ''
-
-  if (days >= 365) {
-    time += `${Math.floor(days / 365)} năm`
-    days %= 365
-  } else if (days >= 30) {
-    time += `${Math.floor(days / 30)} tháng`
-    days %= 30
-  } else if (days > 0) {
-    time += `${Math.floor(days)} ngày`
-  }
-
-  const totalStudent = 0
-
-  const formatNumber = (num: number) => {
-    if (num < 1000) {
-      return num.toString()
-    } else if (num < 1000000) {
-      return (num / 1000).toFixed(0) + 'k'
-    } else {
-      return (num / 1000000).toFixed(0) + 'm'
-    }
-  }
 
   const { sm } = useResponsives()
   const queryClient = useQueryClient()
@@ -226,7 +202,7 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
                           type='circle'
                           format={() => (
                             <div>
-                              <h3>{formatNumber(coursesLength)}</h3>
+                              <h3>{formatNumber(user.countCourses as number)}</h3>
                               <p>Khóa học</p>
                             </div>
                           )}
@@ -262,7 +238,7 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
                           type='circle'
                           format={() => (
                             <div>
-                              <h3>{formatNumber(totalStudent)}</h3>
+                              <h3>{formatNumber(user.countStudents as number)}</h3>
                               <p>Học viên</p>
                             </div>
                           )}
@@ -278,7 +254,11 @@ const MentorInfor = ({ user, profile, coursesLength, md, fullSize }: Props) => {
                           type='circle'
                           format={() => (
                             <div>
-                              <h3>{time}</h3>
+                              <h3>
+                                {(diffDuration.asDays() < 30 && diffDuration.asDays().toFixed(0) + ' ngày') ||
+                                  (diffDuration.asDays() > 30 && diffDuration.asMonths().toFixed(0)) + ' tháng' ||
+                                  (diffDuration.asDays() > 365 && diffDuration.asYears().toFixed(0)) + ' năm'}
+                              </h3>
                               <p>Kinh nghiệm</p>
                             </div>
                           )}
