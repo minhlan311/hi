@@ -218,7 +218,6 @@ const ChoiceQuestionPage = () => {
             page={current}
             limit={((xxl || xl) && 8) || 6}
             sort={{ createdAt: -1 }}
-            initFilter={{ skillName: skillChange !== 'ALL' ? skillChange : undefined }}
           ></FilterAction>
 
           {isLoad ? (

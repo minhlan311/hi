@@ -16,7 +16,7 @@ import { MentorInfo } from '@/types/mentor.type'
 import { SuccessResponse } from '@/types/utils.type'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Row, Space } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ChoiceQuestionPage from '../ChoiceQuestionPage'
 import CourseListPage from '../CourseListPage'
@@ -25,29 +25,33 @@ const CategoryPage = () => {
   const { menuSlug, categorySlug, subCategorySlug } = useParams()
 
   const navigate = useNavigate()
-  const { data: categories, isLoading } = useQuery({
-    queryKey: ['categoriesList'],
+  const {
+    data: categoriesParent,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['categoriesParent', menuSlug],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null }, { sort: { createdAt: -1 } })
+      return categoryApi.getCategorieDetailSlug(menuSlug!)
     },
+    enabled: Boolean(menuSlug),
   })
 
-  const s1 = categories?.data.docs?.find((item) => item.slug === menuSlug!)
+  useEffect(() => {
+    if (error) {
+      navigate('/404')
+    }
+  }, [error])
+
+  const parent = categoriesParent?.data
+
+  const s1 = parent
   const s2 = s1?.children?.find((item) => item.slug === categorySlug!)
   const s3 = s2?.children?.find((item) => item.slug === subCategorySlug!)
 
   const category = (!s3 && !s2 && s1) || (!s3 && s2 && s2) || (s3 && s2 && s3)
-  if (!category) navigate('/404')
 
   document.title = category?.name + ' | Ucam'
-
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categoriesData', category],
-    queryFn: () => {
-      return categoryApi.getCategorieDetail(category?._id as string)
-    },
-    enabled: Boolean(category?._id),
-  })
 
   const [current, setCurrent] = useState<number>(1)
   const { sm, md } = useResponsives()
@@ -79,26 +83,75 @@ const CategoryPage = () => {
 
   const [mentorData, setMentorData] = useState<SuccessResponse<MentorInfo[]>>()
 
+  function covString(string: string) {
+    // Tách chuỗi thành các từ
+    const mangTu = string.split(' ')
+
+    const tuCuoiCung = mangTu[mangTu.length - 1]
+    const tuThuHaiCuoiCung = mangTu[mangTu.length - 2]
+
+    const tuDaChuyenDoi = tuCuoiCung.charAt(0).toUpperCase() + tuCuoiCung.slice(1)
+    const tuThuHaiDaChuyenDoi = tuThuHaiCuoiCung.charAt(0).toUpperCase() + tuThuHaiCuoiCung.slice(1)
+
+    const ketQua = tuThuHaiDaChuyenDoi + ' ' + tuDaChuyenDoi
+
+    return ketQua
+  }
+
   return (
     <LoadingCustom tip='Vui lòng chờ...' loading={isLoading} style={{ minHeight: '50vh' }}>
       {!s2 && !s3 ? (
         (category?.name === 'Trắc nghiệm' && <ChoiceQuestionPage />) ||
-        (category?.name === 'Khóa học' && <CourseListPage />) || (
-          <div dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}></div>
-        )
+        (category?.name === 'Khóa học' && <CourseListPage />) ||
+        (category?.slug?.includes('giao-vien') && (
+          <Header title={category?.name} padding={50}>
+            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
+              <FilterAction
+                type='user'
+                keyFilter='mentorData'
+                apiFind={userApi.findMentor}
+                page={current}
+                filterQuery={{ categoryName: covString(category?.name) }}
+                callBackData={setMentorData}
+                limit={10}
+                checkQuery={Boolean(covString(category?.name))}
+              />
+              <LoadingCustom loading={menuSlug?.includes('khoa-hoc') && courseLoad}>
+                {mentorData && mentorData?.totalDocs > 0 ? (
+                  <Row gutter={[24, 24]}>
+                    {mentorData?.docs?.map((item) => (
+                      <Col span={24} md={12} key={item._id}>
+                        <UserCard data={item} />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <EmptyCustom description='Không có giảng viên nào'></EmptyCustom>
+                )}
+              </LoadingCustom>
+
+              <PaginationCustom
+                page={mentorData?.page}
+                limit={mentorData?.limit}
+                totalData={mentorData?.totalDocs}
+                callbackCurrent={setCurrent}
+              />
+            </Space>
+          </Header>
+        )) || <div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
       ) : (
         <div>
           <img src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + category?.coverUrl}`} style={{ width: '100%' }} />
           <Header title={category?.name} padding={50}>
-            {categoriesData?.data?.content ? (
+            {category?.content ? (
               <WrapMore
                 title=''
                 maxWidth='100%'
-                children={<div dangerouslySetInnerHTML={{ __html: categoriesData?.data?.content as any }}></div>}
+                children={<div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>}
                 wrapper={'nonBorder'}
               ></WrapMore>
             ) : null}
-            {menuSlug?.includes('giao-vien') && (
+            {category?.slug?.includes('giao-vien') && (
               <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
                 <FilterAction
                   type='user'
@@ -131,9 +184,9 @@ const CategoryPage = () => {
                 />
               </Space>
             )}
-            {s3 && s2 && !menuSlug?.includes('giao-vien') && (
+            {s3 && s2 && !category?.slug.includes('giao-vien') && (
               <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
-                <h1>Khóa học {menuSlug?.includes('luyen-thi') && ' luyện thi'}</h1>
+                <h1>Khóa học {category?.slug.includes('luyen-thi') && ' luyện thi'}</h1>
                 <LoadingCustom loading={courseLoad}>
                   {coursesData && coursesData?.data?.totalDocs > 0 ? (
                     <Row gutter={[24, 24]}>
