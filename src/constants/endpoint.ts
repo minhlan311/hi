@@ -13,7 +13,7 @@ export const ENDPOINT = {
   GET_ALL_MENTOR: '/users/find',
   MENTOR_PATH: '/mentor-info/',
   FIND_MENTOR_PATH: '/mentor-info/find',
-  MENTOR_DETAIL: '/mentorInfo/user/',
+  MENTOR_DETAIL: '/mentor-info/user/',
 
   // :::::::::::::::::::: DOCUMENT PATH :::::::::::::::::::::
   DOCUMENT_PATH: '/edu/documents',
