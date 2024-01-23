@@ -14,6 +14,7 @@ import { Card, Col, Flex, Progress, Row, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { LuBookMarked, LuUsers } from 'react-icons/lu'
 import { MdLanguage } from 'react-icons/md'
+import { Link } from 'react-router-dom'
 import './MyCourse.scss'
 
 const RenderCourse = ({ item }: { item: EnrollsState }) => {
@@ -40,10 +41,12 @@ const RenderCourse = ({ item }: { item: EnrollsState }) => {
         <Flex justify='space-between' align='center' gap={12}>
           <Card.Meta title={item.course?.name} />
         </Flex>
-        <Space>
-          <Avatar avtUrl={item.course?.mentor?.avatarUrl} userData={item.course?.mentor} />
-          {item.course?.mentor?.fullName}
-        </Space>
+        <Link to={'/profiles/' + item.course.mentor._id}>
+          <Space>
+            <Avatar avtUrl={item.course?.mentor?.avatarUrl} userData={item.course?.mentor} />
+            {item.course?.mentor?.fullName}
+          </Space>
+        </Link>
         <Flex align='center' justify='space-between'>
           <Space align='center'>
             <MdLanguage />
