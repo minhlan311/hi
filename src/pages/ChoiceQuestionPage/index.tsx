@@ -126,7 +126,7 @@ const ChoiceQuestionPage = () => {
   const [isLoad, setIsLoad] = useState<boolean>(true)
   const categoryList = queryClient.getQueryData<{ data: { docs: any[] } }>(['categoriesList'])
 
-  const [pageSize, setCurrent] = useState<number>(1)
+  const [current, setCurrent] = useState<number>(1)
 
   const courses = categoryList?.data?.docs?.find((item) => item.name === 'Khóa học')
   const { xl, xxl } = useResponsives()
@@ -215,7 +215,7 @@ const ChoiceQuestionPage = () => {
             filterQuery={{ type: skillChange !== 'ALL' ? 'QUIZ' : 'TEST' }}
             callBackData={setExamData}
             setLoading={setIsLoad}
-            page={pageSize}
+            page={current}
             limit={((xxl || xl) && 8) || 6}
             sort={{ createdAt: -1 }}
             initFilter={{ skillName: skillChange !== 'ALL' ? skillChange : undefined }}
@@ -244,7 +244,12 @@ const ChoiceQuestionPage = () => {
             </div>
           )}
 
-          <PaginationCustom callbackCurrent={setCurrent} totalData={examData?.totalDocs} limit={examData?.limit} />
+          <PaginationCustom
+            callbackCurrent={setCurrent}
+            totalData={examData?.totalDocs}
+            limit={examData?.limit}
+            page={examData?.page}
+          />
         </Space>
       )}
     </Header>

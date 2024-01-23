@@ -4,6 +4,7 @@ import { UserState } from '@/interface/user'
 import { Col, Row, Space } from 'antd'
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa'
 import { FaInstagram } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 import style from '../../style.module.scss'
 type Props = { user: UserState }
 
@@ -20,12 +21,12 @@ const MentorData = ({ user }: Props) => {
       </Col>
       <Col span={24} md={12}>
         <Space size='large' direction='vertical' className={style.sp100}>
-          <div>
+          <Link to={'/profiles/' + user._id}>
             <h1>{user.fullName}</h1>
             <h4 style={{ color: 'var(--green)' }}>
               {user.mentorInfo?.educationType ? user.mentorInfo?.educationType : 'Giảng viên'}
             </h4>
-          </div>
+          </Link>
           {user.descriptions ? (
             <div dangerouslySetInnerHTML={{ __html: user.descriptions as string }}></div>
           ) : (

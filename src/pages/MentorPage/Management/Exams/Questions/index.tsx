@@ -1,32 +1,32 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import css from './styles.module.scss'
-import DrawerQuestion from '../Drawer/DrawerQuestion'
-import DrawerUpload from '../Drawer/DrawerUpload'
 import examApi from '@/apis/exam.api'
+import questionApi from '@/apis/question.api'
+import { stateAction } from '@/common'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import PaginationCustom from '@/components/PaginationCustom'
-import questionApi from '@/apis/question.api'
-import RenderQuestion from '../Components/RenderQuestion'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
-import { AiOutlineDelete, AiOutlineOrderedList, AiOutlinePlus } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
-import { BsListCheck } from 'react-icons/bs'
+import { ExamState } from '@/interface/exam'
+import { QuestionState } from '@/interface/question'
+import { SuccessResponse } from '@/types/utils.type'
+import { setQuestionsListFromLS } from '@/utils/questons'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Checkbox, Popconfirm, Space } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { ExamState } from '@/interface/exam'
+import { useContext, useEffect, useState } from 'react'
+import { AiOutlineDelete, AiOutlineOrderedList, AiOutlinePlus } from 'react-icons/ai'
+import { BsListCheck } from 'react-icons/bs'
 import { FiSave } from 'react-icons/fi'
 import { HiOutlineUpload } from 'react-icons/hi'
 import { MdClear, MdDoneAll } from 'react-icons/md'
-import { QuestionState } from '@/interface/question'
-import { setQuestionsListFromLS } from '@/utils/questons'
-import { stateAction } from '@/common'
-import { SuccessResponse } from '@/types/utils.type'
 import { TbUserQuestion } from 'react-icons/tb'
-import { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import RenderQuestion from '../Components/RenderQuestion'
+import DrawerQuestion from '../Drawer/DrawerQuestion'
+import DrawerUpload from '../Drawer/DrawerUpload'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const MentorQuestions = () => {
@@ -255,6 +255,7 @@ const MentorQuestions = () => {
                 callbackCurrent={setSelectedCurrent}
                 totalData={questionsSelectCallback?.totalDocs}
                 limit={10}
+                page={questionsSelectCallback?.page}
               />
             </Space>
           )}
@@ -378,7 +379,12 @@ const MentorQuestions = () => {
                   questionsSelect={questionsSelect}
                 />
               )}
-              <PaginationCustom callbackCurrent={setCurrent} totalData={questionsCallback?.totalDocs} limit={10} />
+              <PaginationCustom
+                callbackCurrent={setCurrent}
+                totalData={questionsCallback?.totalDocs}
+                limit={10}
+                page={questionsCallback?.page}
+              />
             </Space>
           )}
         </div>

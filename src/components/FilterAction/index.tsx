@@ -85,7 +85,7 @@ const FilterAction = (props: Props) => {
       label: sj.name,
     }
   })
-  const [filterData, setFilterData] = useState<{ filterQuery: object; options: object } | null>()
+  const [filterData, setFilterData] = useState<{ filterQuery: any; options: any } | null>()
 
   const onChangeFilter = () => {
     const {
@@ -132,7 +132,7 @@ const FilterAction = (props: Props) => {
       filterQuery: { ...body, ...filterQuery, mentorType: mentorSub?.label },
       options: {
         limit,
-        page,
+        page: 1,
         sort: {
           ...sort,
           point,
@@ -150,15 +150,13 @@ const FilterAction = (props: Props) => {
 
   const handleReset = () => {
     form.resetFields()
-    setFilterData((prev) => {
-      return {
-        filterQuery: { ...filterQuery, mentorType: mentorSub?.label } || {},
-        options: {
-          page,
-          ...prev?.options,
-          sort,
-        },
-      }
+    setFilterData({
+      filterQuery: { ...filterQuery, mentorType: mentorSub?.label } || {},
+      options: {
+        limit,
+        page: 1,
+        sort,
+      },
     })
   }
 
@@ -171,20 +169,27 @@ const FilterAction = (props: Props) => {
   )
 
   useEffect(() => {
-    setFilterData({
-      filterQuery: { ...filterQuery, ...initFilter, mentorType: mentorSub?.label, categoryName: check?.label } || {},
-      options: {
-        limit,
-        page,
-        sort,
-      },
-    })
+    if (page || checkQuery) {
+      setFilterData((prev) => {
+        return {
+          filterQuery:
+            { ...prev?.filterQuery, ...initFilter, mentorType: mentorSub?.label, categoryName: check?.label } || {},
+          options: {
+            limit,
+            page,
+            sort: { ...prev?.options.sort, ...sort },
+          },
+        }
+      })
+    }
+
     form.setFieldsValue({
       categoryName: check?.label,
     })
     form.setFieldsValue({ skillName: initFilter?.skillName })
     form.setFieldsValue({ mentorType: mentorSub?.label })
   }, [page, checkQuery, location])
+
   const { data: filterCallbackData, isLoading } = useQuery({
     queryKey: [keyFilter, filterData],
     queryFn: () => {

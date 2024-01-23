@@ -46,6 +46,7 @@ const CourseListPage = () => {
         <PaginationCustom
           limit={courses?.limit}
           totalData={courses?.totalDocs}
+          page={courses?.page}
           align='center'
           callbackCurrent={setCurrent}
         />

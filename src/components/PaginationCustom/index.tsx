@@ -7,18 +7,23 @@ type Props = {
   totalData?: number
   dataArr?: any[]
   align?: 'center' | 'start' | 'end'
+  page?: number
   callbackDataArr?: React.Dispatch<React.SetStateAction<any>>
   callbackCurrent?: React.Dispatch<React.SetStateAction<number>>
 }
 
 const PaginationCustom = (props: Props) => {
-  const { dataArr, totalData, limit = 5, align, callbackDataArr, callbackCurrent } = props
+  const { dataArr, totalData, limit = 5, align, page, callbackDataArr, callbackCurrent } = props
 
   const [current, setCurrent] = useState<number>(1)
 
   const onChange = (e: number) => {
     setCurrent(e)
   }
+
+  useEffect(() => {
+    if (page) setCurrent(page)
+  }, [page])
 
   const paginateData = (data: any[], limit: number, page: number) => {
     const startIndex = (page - 1) * limit

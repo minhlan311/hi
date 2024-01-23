@@ -42,7 +42,7 @@ const CategoryPage = () => {
   document.title = category?.name + ' | Ucam'
 
   const { data: categoriesData } = useQuery({
-    queryKey: ['categoriesList', category],
+    queryKey: ['categoriesData', category],
     queryFn: () => {
       return categoryApi.getCategorieDetail(category?._id as string)
     },
@@ -52,11 +52,15 @@ const CategoryPage = () => {
   const [current, setCurrent] = useState<number>(1)
   const { sm, md } = useResponsives()
 
-  const Api = menuSlug?.includes('lich-khai-giang') ? classApi.openingClass : courseApi.getCourses
+  const Api =
+    (menuSlug?.includes('lich-khai-giang') && classApi.openingClass) ||
+    (menuSlug?.includes('khoa-hoc') && courseApi.getCourses) ||
+    null
 
   const { data: coursesData, isLoading: courseLoad } = useQuery({
     queryKey: ['courseCate', current, menuSlug, category],
     queryFn: () =>
+      Api &&
       Api({
         filterQuery: {
           categoryId: category?._id,
@@ -76,7 +80,7 @@ const CategoryPage = () => {
   const [mentorData, setMentorData] = useState<SuccessResponse<MentorInfo[]>>()
 
   return (
-    <LoadingCustom tip='Vui lòng chờ...' loading={isLoading}>
+    <LoadingCustom tip='Vui lòng chờ...' loading={isLoading} style={{ minHeight: '50vh' }}>
       {!s2 && !s3 ? (
         (category?.name === 'Trắc nghiệm' && <ChoiceQuestionPage />) ||
         (category?.name === 'Khóa học' && <CourseListPage />) || (
@@ -115,16 +119,16 @@ const CategoryPage = () => {
                       ))}
                     </Row>
                   ) : (
-                    <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
+                    <EmptyCustom description='Không có giảng viên nào'></EmptyCustom>
                   )}
                 </LoadingCustom>
-                <div className={'pagination'}>
-                  <PaginationCustom
-                    limit={mentorData?.limit}
-                    totalData={mentorData?.totalDocs}
-                    callbackCurrent={setCurrent}
-                  />
-                </div>
+
+                <PaginationCustom
+                  page={mentorData?.page}
+                  limit={mentorData?.limit}
+                  totalData={mentorData?.totalDocs}
+                  callbackCurrent={setCurrent}
+                />
               </Space>
             )}
             {s3 && s2 && !menuSlug?.includes('giao-vien') && (
@@ -143,13 +147,12 @@ const CategoryPage = () => {
                     <EmptyCustom description='Không có khóa học nào'></EmptyCustom>
                   )}
                 </LoadingCustom>
-                <div className={'pagination'}>
-                  <PaginationCustom
-                    limit={coursesData?.data?.limit}
-                    totalData={coursesData?.data?.totalDocs}
-                    callbackCurrent={setCurrent}
-                  />
-                </div>
+
+                <PaginationCustom
+                  limit={coursesData?.data?.limit}
+                  totalData={coursesData?.data?.totalDocs}
+                  callbackCurrent={setCurrent}
+                />
               </Space>
             )}
           </Header>
