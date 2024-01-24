@@ -18,7 +18,7 @@ type Props = {
 
 const UserCard = ({ data }: Props) => {
   const now = moment()
-  const diffDuration = moment.duration(now.diff(data.createdAt))
+  const diffDuration = moment.duration(now.diff(data.userData.createdAt))
 
   return (
     <Card className={style.mentorCard} hoverable size='small'>

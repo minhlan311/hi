@@ -111,7 +111,7 @@ const CategoryPage = () => {
                 keyFilter='mentorData'
                 apiFind={userApi.findMentor}
                 page={current}
-                filterQuery={{ categoryName: covString(category?.name) }}
+                filterQuery={{ categoryName: category?.name === 'Giáo viên' ? undefined : covString(category?.name) }}
                 callBackData={setMentorData}
                 limit={10}
                 checkQuery={Boolean(covString(category?.name))}

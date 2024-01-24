@@ -92,6 +92,7 @@ const FilterAction = (props: Props) => {
     const {
       categoryId,
       categoryName,
+      mentorType,
       subCategoryId,
       plan,
       viewCountDownCount,
@@ -110,12 +111,13 @@ const FilterAction = (props: Props) => {
       type,
       skill,
       skillName,
+      mentorType: mentorType || mentorSub?.label,
       difficulty,
       categoryId,
       subCategoryId,
       plan,
       status,
-      categoryName: categoryName?.label ? categoryName?.label : undefined,
+      categoryName: categoryName?.label ? categoryName?.label : categoryName,
       start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
       end: typeFilter === 'event' && dates ? moment(dates.$d).endOf('day') : undefined,
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
@@ -130,7 +132,7 @@ const FilterAction = (props: Props) => {
 
     setFilterData((prev) => {
       return {
-        filterQuery: { ...body, ...prev?.filterQuery, mentorType: mentorSub?.label },
+        filterQuery: { ...prev?.filterQuery, ...body },
         options: {
           limit,
           page: 1,
@@ -171,7 +173,7 @@ const FilterAction = (props: Props) => {
   )
 
   useEffect(() => {
-    if (mentorSub || check)
+    if (mentorSub || check || page)
       setFilterData((prev) => {
         return {
           filterQuery: { mentorType: mentorSub?.label, categoryName: check?.label, ...prev?.filterQuery },
@@ -188,6 +190,10 @@ const FilterAction = (props: Props) => {
     })
     form.setFieldsValue({ skillName: filterQuery?.skillName })
     form.setFieldsValue({ mentorType: mentorSub?.label })
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }, [page, checkQuery, location])
 
   const { data: filterCallbackData, isLoading } = useQuery({
@@ -344,6 +350,7 @@ const FilterAction = (props: Props) => {
                             defaultValue={mentorSub?.label}
                             buttonStyle='solid'
                             className='radio-custom'
+                            onChange={onChangeFilter}
                           >
                             {mentorPath?.map((item) => (
                               <Radio.Button
