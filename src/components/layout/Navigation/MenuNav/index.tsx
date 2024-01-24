@@ -172,7 +172,7 @@ export default function MenuNav({ user, type }: Props) {
                           </Link>
                         ) : (
                           <div className='labelItem'>
-                            {item.label === 'Khóa học' ? (
+                            {item.label === 'Khóa học' || item.label === 'Giáo viên' ? (
                               <Link to={item.href} style={{ color: 'var(--white)' }}>
                                 <Space style={{ width: '100%' }} size='small'>
                                   {item?.href ? item.label : <div className='title'>{item.label}</div>}
