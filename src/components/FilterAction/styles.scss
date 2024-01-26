@@ -1,7 +1,8 @@
 .filterMain {
   .ant-select-selector,
   .ant-radio-button-wrapper,
-  .ant-btn,
+  .ant-btn-default,
+  .ant-picker-range,
   .ant-input-affix-wrapper {
     border: 1px solid var(--green) !important;
     &:hover {

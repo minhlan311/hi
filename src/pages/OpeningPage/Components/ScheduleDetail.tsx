@@ -5,6 +5,7 @@ import TagCustom from '@/components/TagCustom/TagCustom'
 import { useQuery } from '@tanstack/react-query'
 import { Collapse, Flex, Select, Space, Table, TableColumnsType } from 'antd'
 import moment from 'moment-timezone'
+import { FaAngleDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import style from './styles.module.scss'
 type Props = {
@@ -83,7 +84,18 @@ const ExpandedRowRender = () => {
     })
   }
 
-  return <Table columns={columns} dataSource={data} pagination={false} showHeader={false} size='small' />
+  return (
+    <Table
+      columns={columns}
+      dataSource={data}
+      pagination={false}
+      showHeader={false}
+      size='small'
+      scroll={{
+        x: 720,
+      }}
+    />
+  )
 }
 
 const ScheduleDetail = ({ type }: Props) => {
@@ -100,6 +112,29 @@ const ScheduleDetail = ({ type }: Props) => {
       label: sj.name,
     }
   })
+
+  // const { data: classList } = useQuery({
+  //   queryKey: ['classList'],
+  //   queryFn: () => {
+  //     return classApi.getClass({
+  //       filterQuery: {},
+
+  //       options: { pagination: false },
+  //     })
+  //   },
+  // })
+
+  // const { data: eventsList } = useQuery({
+  //   queryKey: ['eventsList'],
+  //   queryFn: () => {
+  //     return eventApi.getEvent({
+  //       filterQuery: { classId: classList?.docs.map((item) => item._id) },
+
+  //       options: { pagination: false },
+  //     })
+  //   },
+  //   enabled: Boolean(classList?.totalDocs),
+  // })
 
   return (
     <Space direction='vertical' className={'sp100'} style={{ marginBottom: 48 }}>
@@ -129,6 +164,9 @@ const ScheduleDetail = ({ type }: Props) => {
           ]}
           bordered
           pagination={false}
+          scroll={{
+            x: 720,
+          }}
         />
         {subjectList?.map((item) => (
           <Collapse
@@ -141,6 +179,11 @@ const ScheduleDetail = ({ type }: Props) => {
               },
             ]}
             className={style.collapse}
+            expandIcon={({ isActive }) => (
+              <FaAngleDown
+                style={{ transform: `rotate(${isActive ? 180 : 0}deg)`, marginRight: 10, transition: '0.3s' }}
+              />
+            )}
           />
         ))}
       </div>

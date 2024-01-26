@@ -3,6 +3,7 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
 import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
 import { Col, Flex, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { HiOutlineBookOpen, HiOutlineUserGroup } from 'react-icons/hi2'
@@ -10,6 +11,8 @@ import ScheduleDetail from './Components/ScheduleDetail'
 import style from './styles.module.scss'
 
 const OpeningPage = () => {
+  const { sm, md } = useResponsives()
+
   return (
     <Header padding={'35px 0 50px 0'}>
       <Space direction='vertical' size='large' className={'sp100'}>
@@ -18,8 +21,8 @@ const OpeningPage = () => {
           <Row gutter={40} align='middle'>
             <Col span={24} md={15} className={style.desc}>
               <Space direction='vertical' size='large' className={'sp100'}>
-                <Flex align='center' gap={12} className={style.content}>
-                  <HiOutlineBookOpen size={24} />
+                <Flex align='center' gap={12} vertical={sm} className={style.content}>
+                  <HiOutlineBookOpen size={sm || md ? 35 : 24} />
                   <p>
                     Khóa
                     <b>IELTS</b>
@@ -31,8 +34,8 @@ const OpeningPage = () => {
                     </b>
                   </p>
                 </Flex>
-                <Flex align='center' gap={12} className={style.content}>
-                  <HiOutlineBookOpen size={24} />
+                <Flex align='center' gap={12} vertical={sm} className={style.content}>
+                  <HiOutlineBookOpen size={sm || md ? 35 : 24} />
                   <p>
                     Khóa
                     <b>TOEIC/SAT</b>
@@ -45,8 +48,8 @@ const OpeningPage = () => {
                   </p>
                 </Flex>
 
-                <Flex align='center' gap={12} className={style.content}>
-                  <HiOutlineUserGroup size={24} />
+                <Flex align='center' gap={12} vertical={sm} className={style.content}>
+                  <HiOutlineUserGroup size={(sm && 32) || (md && 28) || 24} />
                   <p>
                     Có
                     <b>5925</b>
@@ -63,9 +66,10 @@ const OpeningPage = () => {
                 <p className={style.desc}>Kết thúc sau:</p>
                 <Flex align='center' vertical gap={55}>
                   <CountDownTimer
+                    size={((sm || md) && 25) || 50}
                     type='text'
                     className={style.timer}
-                    initCountdown={1440}
+                    initCountdown={moment().endOf('day').diff(moment(), 'minutes')}
                     space=':'
                     spaceStyle={{ color: 'var(--white)' }}
                     showAlex={false}
