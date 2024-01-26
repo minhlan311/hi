@@ -1,17 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import courseApi from '@/apis/course.api'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
 import PriceCalculator from '@/components/PriceCalculator/PriceCalculator'
 import Header from '@/components/layout/Header/Header'
 import useResponsives from '@/hooks/useResponsives'
+import { useQuery } from '@tanstack/react-query'
 import { Col, Flex, Row, Space } from 'antd'
 import moment from 'moment-timezone'
 import { HiOutlineBookOpen, HiOutlineUserGroup } from 'react-icons/hi2'
+import MyCourses from '../ProfilePage/MyCourses'
 import ScheduleDetail from './Components/ScheduleDetail'
 import style from './styles.module.scss'
 
 const OpeningPage = () => {
   const { sm, md } = useResponsives()
+
+  const { data: courseData } = useQuery({
+    queryKey: ['courseData'],
+    queryFn: () => {
+      return courseApi.getCourses({ options: { sort: { createdAt: -1 }, limit: 3 } })
+    },
+  })
 
   return (
     <Header padding={'35px 0 50px 0'}>
@@ -86,10 +97,10 @@ const OpeningPage = () => {
         <Space direction='vertical' className={'sp100'}>
           <h1>Lịch học</h1>
           <BreadCrumbsDynamic />
-          <ScheduleDetail type='online' />
-          <ScheduleDetail type='offline' />
+          <ScheduleDetail type='Online' />
+          <ScheduleDetail type='Offline' />
           <h1>Khóa học trong tháng</h1>
-          {/* <MyCourses coursesData={[]} maxLength={3} loading={false} showPagination={false} fullSize /> */}
+          <MyCourses coursesData={courseData?.data as any} maxLength={3} loading={false} showMore={false} fullSize />
         </Space>
       </Space>
     </Header>

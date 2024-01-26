@@ -382,6 +382,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
                   </ButtonCustom>
                   <ButtonCustom
                     icon={<AiOutlineLeft />}
+                    style={{ height: 40 }}
                     onClick={() => {
                       calAction.prev()
                       getDate()
@@ -389,6 +390,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
                   ></ButtonCustom>
                   <ButtonCustom
                     icon={<AiOutlineRight />}
+                    style={{ height: 40 }}
                     onClick={() => {
                       calAction.next()
                       getDate()

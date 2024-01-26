@@ -1,4 +1,6 @@
 import { CategoryState } from './category'
+import { CoursesState } from './courses'
+import { EventState } from './event'
 import { UserState } from './user'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -48,6 +50,7 @@ export interface ClassState {
   updatedById: string
   _destroy: boolean
   title: string
+  type: 'ONLINE' | 'OFFLINE'
   limitStudent: number
   startDate: string
   endDate: string
@@ -58,4 +61,13 @@ export interface ClassState {
   owner: UserState
   category?: CategoryState
   id: string
+  createdBy: any
+  description?: string
+  courseData?: CoursesState
+  schedules?: string[]
+  countStudents: number
+  categoryId: string
+  studentList: UserState[]
+  mentorId: string
+  event: EventState
 }

@@ -1,46 +1,53 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
+import classApi from '@/apis/class.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
+import { ClassState } from '@/interface/class'
 import { useQuery } from '@tanstack/react-query'
 import { Collapse, Flex, Select, Space, Table, TableColumnsType } from 'antd'
 import moment from 'moment-timezone'
+import { useState } from 'react'
 import { FaAngleDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import style from './styles.module.scss'
 type Props = {
-  type: 'online' | 'offline'
+  type: 'Online' | 'Offline'
 }
 
 const columns: TableColumnsType<any> = [
-  { title: 'Ngôn ngữ', dataIndex: 'category', key: 'category', width: '20%' },
+  { title: 'Ngôn ngữ', key: 'category', width: '20%' },
   {
     title: 'Tên lớp',
-    dataIndex: 'name',
     key: 'name',
     width: '25%',
-    render: (record: any) => (
+    render: (record: ClassState) => (
       <div>
         <TagCustom content='Luyện thi lớp 10   ' color='#019d44' colorText='white' />
-        <div className={style.classType}>{record.name}</div>
-        <Link to={'/profiles/id'}>Cô Lê Anh Thư</Link>
+        <div className={style.classType}>{record.title}</div>
+        <Link to={'/profiles/' + record.owner?._id}>
+          {record.owner?.gender === 'MALE' ? 'Thầy' : 'Cô'} {record.owner?.fullName}
+        </Link>
       </div>
     ),
   },
-
   {
     title: 'Ngày bắt đầu',
-    dataIndex: 'startDate',
     key: 'startDate',
     width: '15%',
-    render: () => (
+    render: (record: ClassState) => (
       <div>
-        <p>{moment().format('DD [tháng] MM, YYYY')}</p>
+        <p>{moment(record.startDate).format('DD [tháng] MM, YYYY')}</p>
         <TagCustom
-          content='almost'
+          content={
+            (record.limitStudent - record.countStudents <= parseInt(((record.limitStudent * 15) / 100).toFixed(0)) &&
+              'almost') ||
+            (record.limitStudent === record.countStudents && 'full') ||
+            'null'
+          }
           intArrType={['full', 'almost', 'null']}
           intAlternativeType={['Full', 'Gần Full', '']}
-          intColor={['red', '#fcae1e', 'white']}
+          intColor={['#d72831', '#fcae1e', '']}
           colorText='white'
         />
       </div>
@@ -48,106 +55,128 @@ const columns: TableColumnsType<any> = [
   },
   {
     title: 'Ca - Thời gian học',
-    dataIndex: 'time',
     key: 'time',
     width: '20%',
-    render: () => (
-      <div>
-        <p>Thứ 3/5/7</p>
-        <p>
-          {moment().format('HH:mm')} - {moment().format('HH:mm')}
-        </p>
-      </div>
-    ),
+    render: (record: ClassState) =>
+      record?.event ? (
+        <div>
+          {record.event.schedules.length > 0 && (
+            <p>
+              Thứ{' '}
+              {record.event.schedules.map((item, id) => (
+                <>
+                  {item === 1 ? 'CN' : item}
+                  {record.event.schedules.length - 1 > id && '/'}
+                </>
+              ))}
+            </p>
+          )}
+          <p>
+            {moment(record.event.start).format('HH:mm')} - {moment(record.event.end).format('HH:mm')}
+          </p>
+        </div>
+      ) : null,
   },
   {
     title: 'Đăng ký',
     key: 'action',
     width: '10%',
-    render: () => (
-      <ButtonCustom size='small' href='/' type='primary'>
+    render: (record: ClassState) => (
+      <ButtonCustom size='small' href={'/courses/' + record.courseId} type='primary'>
         Đăng ký ngay
       </ButtonCustom>
     ),
   },
 ]
 
-const ExpandedRowRender = () => {
-  const data = []
+const ExpandedRowRender = ({
+  categoryId,
+  type,
+  gender,
+}: {
+  categoryId: string
+  type: 'Online' | 'Offline'
+  gender: 'MALE' | 'FEMALE' | undefined
+}) => {
+  const { data: classList } = useQuery({
+    queryKey: ['classList' + type, categoryId],
+    queryFn: () => {
+      return classApi.getClass({
+        filterQuery: { categoryId, type: type.toUpperCase() },
+        options: { pagination: false },
+      })
+    },
+    enabled: Boolean(categoryId),
+  })
 
-  for (let i = 0; i < 3; ++i) {
-    data.push({
-      key: i.toString(),
-      date: '2014-12-24 23:12:00',
-      name: 'This is production name',
-      upgradeNum: 'Upgraded: 56',
-    })
-  }
+  const data = classList?.data.docs
+  const filterData = gender ? data?.filter((item) => item.owner.gender === gender) : data
 
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={filterData}
       pagination={false}
       showHeader={false}
       size='small'
       scroll={{
         x: 720,
       }}
-    />
+    ></Table>
   )
 }
 
 const ScheduleDetail = ({ type }: Props) => {
+  const [cateSelect, setCateSelect] = useState<string>('')
+  const [genderSelect, setGenderSelect] = useState<'MALE' | 'FEMALE'>()
+
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
       return categoryApi.getCategories({ parentId: null })
     },
   })
-  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
-  const subjectList = coursesList?.children?.map((sj) => {
+  const cateList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+  const subjectList = [{ value: 'all', label: 'Tất cả' }]
+
+  const collapseList = cateList?.children?.map((sj) => {
     return {
       value: sj._id,
       label: sj.name,
     }
   })
 
-  // const { data: classList } = useQuery({
-  //   queryKey: ['classList'],
-  //   queryFn: () => {
-  //     return classApi.getClass({
-  //       filterQuery: {},
+  const collapseItem = cateSelect ? collapseList?.filter((item) => item.value === cateSelect) : collapseList
 
-  //       options: { pagination: false },
-  //     })
-  //   },
-  // })
-
-  // const { data: eventsList } = useQuery({
-  //   queryKey: ['eventsList'],
-  //   queryFn: () => {
-  //     return eventApi.getEvent({
-  //       filterQuery: { classId: classList?.docs.map((item) => item._id) },
-
-  //       options: { pagination: false },
-  //     })
-  //   },
-  //   enabled: Boolean(classList?.totalDocs),
-  // })
+  collapseList && subjectList.push(...collapseList)
 
   return (
     <Space direction='vertical' className={'sp100'} style={{ marginBottom: 48 }}>
       <Flex justify='space-between' align='center'>
         <Space>
-          <Select placeholder='Ngôn ngữ' options={subjectList} size='small' />
+          <Select
+            placeholder='Ngôn ngữ'
+            options={subjectList}
+            size='small'
+            style={{ width: 110 }}
+            onChange={(e) => {
+              e == 'all' ? setCateSelect('') : setCateSelect(e)
+            }}
+            allowClear
+          />
           <Select
             placeholder='Thầy/Cô'
             options={[
+              { value: 'all', label: 'Tất cả' },
               { value: 'MALE', label: 'Thầy' },
-              { value: 'FAMALE', label: 'Cô' },
+              { value: 'FEMALE', label: 'Cô' },
             ]}
+            style={{ width: 90 }}
+            onChange={(e) => {
+              e == 'all' ? setGenderSelect(undefined) : setGenderSelect(e)
+            }}
             size='small'
+            allowClear
           />
         </Space>
         <div className={style.type}>{type}</div>
@@ -168,14 +197,14 @@ const ScheduleDetail = ({ type }: Props) => {
             x: 720,
           }}
         />
-        {subjectList?.map((item) => (
+        {collapseItem?.map((item) => (
           <Collapse
             key={item.value}
             items={[
               {
                 key: item.value,
                 label: item.label,
-                children: <ExpandedRowRender />,
+                children: <ExpandedRowRender categoryId={item.value} type={type} gender={genderSelect} />,
               },
             ]}
             className={style.collapse}

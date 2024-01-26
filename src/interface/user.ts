@@ -1,6 +1,7 @@
 import { Class } from '@/types/class.type'
 import { MentorInfo } from '@/types/mentor.type'
 import { AssessmentState } from './assessment'
+import { ProgressionState } from './courses'
 
 export interface UserState {
   _id: string
@@ -35,4 +36,5 @@ export interface UserState {
   assessment?: AssessmentState
   countCourses?: number
   countStudents: number
+  progression: ProgressionState
 }

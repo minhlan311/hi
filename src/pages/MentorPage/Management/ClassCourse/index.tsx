@@ -3,6 +3,7 @@ import eventApi from '@/apis/event.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import openNotification from '@/components/Notification'
+import TagCustom from '@/components/TagCustom/TagCustom'
 import { AppContext } from '@/contexts/app.context'
 import { Class } from '@/types/class.type'
 import { MyPageTableOptions } from '@/types/page.type'
@@ -80,6 +81,21 @@ export default function ClassManage() {
       key: 'title',
       width: '25%',
       render: (_: any, record: Class) => record.title,
+    },
+    {
+      title: 'Dạng lớp học',
+      key: 'type',
+      align: 'center',
+      dataIndex: 'type',
+      render: (type) => (
+        <TagCustom
+          content={type ? type : undefined}
+          intArrType={['ONLINE', 'OFFLINE']}
+          intAlternativeType={['Online', 'Offline']}
+          intColor={['#0ec25c', '#d72831']}
+          colorText='white'
+        />
+      ),
     },
     {
       title: 'Khóa học',
