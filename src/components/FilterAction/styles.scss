@@ -1,0 +1,15 @@
+.filterMain {
+  .ant-select-selector,
+  .ant-radio-button-wrapper,
+  .ant-btn,
+  .ant-input-affix-wrapper {
+    border: 1px solid var(--green) !important;
+    &:hover {
+      border: 1px solid var(--green-2) !important;
+    }
+  }
+
+  .ant-radio-button-wrapper:not(:first-child)::before {
+    border: none !important;
+  }
+}

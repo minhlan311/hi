@@ -66,7 +66,7 @@ const PriceCalculator = (props: Props) => {
         >
           <Space style={{ color: priceColor }}>
             <div className={css.title} style={{ fontSize: priceSize }}>
-              {total.lastPrice === 0 ? 'Miễn phí' : formatPrice(total.lastPrice)}
+              {total.lastPrice === 0 ? 'Miễn phí' : <b>{formatPrice(total.lastPrice)}</b>}
             </div>
             {showDiscountTag && <TagFilled style={{ transform: 'scaleX(-1)' }} />}
           </Space>
@@ -89,7 +89,7 @@ const PriceCalculator = (props: Props) => {
               Miễn phí
             </h2>
           ) : (
-            formatPrice(total.lastPrice)
+            <b>{formatPrice(total.lastPrice)}</b>
           )}
         </div>
       </Space>

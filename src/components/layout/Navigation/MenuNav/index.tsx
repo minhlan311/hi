@@ -154,17 +154,7 @@ export default function MenuNav({ user, type }: Props) {
                     <div key={`${item._id}`} className='menuLabel'>
                       <div>
                         {item.children && item.children.length === 0 ? (
-                          <Link
-                            to={`${
-                              item.label === 'Giáo viên' ||
-                              item.label === 'Khóa học' ||
-                              item.label === 'Luyện thi' ||
-                              item.label === 'Lịch khai giảng'
-                                ? '#'
-                                : item.href
-                            } `}
-                            className='labelItem'
-                          >
+                          <Link to={`${item.href} `} className='labelItem'>
                             <Space style={{ width: '100%' }} size='small'>
                               {item?.href ? item.label : <div className='title'>{item.label}</div>}
                               {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
@@ -172,7 +162,9 @@ export default function MenuNav({ user, type }: Props) {
                           </Link>
                         ) : (
                           <div className='labelItem'>
-                            {item.label === 'Khóa học' || item.label === 'Giáo viên' ? (
+                            {item.label === 'Khóa học' ||
+                            item.label === 'Giáo viên' ||
+                            item.label === 'Lịch khai giảng' ? (
                               <Link to={item.href} style={{ color: 'var(--white)' }}>
                                 <Space style={{ width: '100%' }} size='small'>
                                   {item?.href ? item.label : <div className='title'>{item.label}</div>}

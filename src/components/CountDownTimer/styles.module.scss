@@ -87,6 +87,9 @@
   }
 }
 .textCountdown {
+  .space {
+    height: 1.2em;
+  }
   .item {
     display: flex;
     flex-direction: column;

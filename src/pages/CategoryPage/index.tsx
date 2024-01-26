@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ChoiceQuestionPage from '../ChoiceQuestionPage'
 import CourseListPage from '../CourseListPage'
+import OpeningPage from '../OpeningPage'
 
 const CategoryPage = () => {
   const { menuSlug, categorySlug, subCategorySlug } = useParams()
@@ -83,19 +84,22 @@ const CategoryPage = () => {
 
   const [mentorData, setMentorData] = useState<SuccessResponse<MentorInfo[]>>()
 
-  function covString(string: string) {
-    // Tách chuỗi thành các từ
-    const mangTu = string.split(' ')
+  function covString(string: string, count: number, direction: 'left' | 'right' = 'right'): string {
+    const arrStr = string.split(' ')
 
-    const tuCuoiCung = mangTu[mangTu.length - 1]
-    const tuThuHaiCuoiCung = mangTu[mangTu.length - 2]
+    let selectedWords: string[]
 
-    const tuDaChuyenDoi = tuCuoiCung.charAt(0).toUpperCase() + tuCuoiCung.slice(1)
-    const tuThuHaiDaChuyenDoi = tuThuHaiCuoiCung.charAt(0).toUpperCase() + tuThuHaiCuoiCung.slice(1)
+    if (direction === 'left') {
+      selectedWords = arrStr.slice(0, count)
+    } else {
+      selectedWords = arrStr.slice(-count)
+    }
 
-    const ketQua = tuThuHaiDaChuyenDoi + ' ' + tuDaChuyenDoi
+    const capitalize = selectedWords.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
-    return ketQua
+    const result = capitalize.join(' ')
+
+    return result
   }
 
   return (
@@ -103,6 +107,7 @@ const CategoryPage = () => {
       {!s2 && !s3 ? (
         (category?.name === 'Trắc nghiệm' && <ChoiceQuestionPage />) ||
         (category?.name === 'Khóa học' && <CourseListPage />) ||
+        (category?.name === 'Lịch khai giảng' && <OpeningPage />) ||
         (category?.slug?.includes('giao-vien') && (
           <Header title={category?.name} padding={50}>
             <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
@@ -111,10 +116,12 @@ const CategoryPage = () => {
                 keyFilter='mentorData'
                 apiFind={userApi.findMentor}
                 page={current}
-                filterQuery={{ categoryName: category?.name === 'Giáo viên' ? undefined : covString(category?.name) }}
+                filterQuery={{
+                  categoryName: category?.name === 'Giáo viên' ? undefined : covString(category?.name, 2),
+                }}
                 callBackData={setMentorData}
                 limit={10}
-                checkQuery={Boolean(covString(category?.name))}
+                checkQuery={Boolean(covString(category?.name, 2))}
               />
               <LoadingCustom loading={menuSlug?.includes('khoa-hoc') && courseLoad}>
                 {mentorData && mentorData?.totalDocs > 0 ? (
