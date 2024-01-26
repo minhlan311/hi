@@ -1,7 +1,7 @@
-import css from './styles.module.scss'
+import { Card, Progress, Space } from 'antd'
 import moment, { Moment } from 'moment-timezone'
 import { BsClockHistory } from 'react-icons/bs'
-import { Card, Progress, Space } from 'antd'
+import css from './styles.module.scss'
 
 type Props = {
   type: 'text' | 'number' | 'flip' | 'progress'
@@ -9,11 +9,14 @@ type Props = {
   size: number
   initTime: number
   timeFormat?: string
+  className?: string
+  space?: string
+  spaceStyle?: React.CSSProperties
 }
 
 const nowTime = moment()
 
-const TextCountdown = ({ type, countdown, size, initTime }: Props) => {
+const TextCountdown = ({ type, countdown, size, initTime, className, space, spaceStyle }: Props) => {
   const getTimeRemaining = (targetDateTime: Moment | null, minutesRemaining?: number) => {
     const targetMinutes = nowTime.clone().add(minutesRemaining, 'seconds')
     const targetData = targetDateTime ? targetDateTime : targetMinutes
@@ -51,26 +54,41 @@ const TextCountdown = ({ type, countdown, size, initTime }: Props) => {
   return (
     <div className={css.textCountdown}>
       {(type === 'text' && (
-        <Space>
-          <Card size='small'>
+        <Space align='center'>
+          <Card size='small' className={className}>
             <div className={css.item} style={{ fontSize: size }}>
               <b className={css.number}>{time.days}</b>
               <p className={css.label}>Ngày</p>
             </div>
           </Card>
-          <Card size='small'>
+          {space && (
+            <p style={{ ...spaceStyle, fontSize: size }} className={css.space}>
+              {space}
+            </p>
+          )}
+          <Card size='small' className={className}>
             <div className={css.item} style={{ fontSize: size }}>
               <b className={css.number}>{time.hours}</b>
               <p className={css.label}>Giờ</p>
             </div>
           </Card>
-          <Card size='small'>
+          {space && (
+            <p style={{ ...spaceStyle, fontSize: size }} className={css.space}>
+              {space}
+            </p>
+          )}
+          <Card size='small' className={className}>
             <div className={css.item} style={{ fontSize: size }}>
               <b className={css.number}>{time.minutes}</b>
               <p className={css.label}>Phút</p>
             </div>
           </Card>
-          <Card size='small'>
+          {space && (
+            <p style={{ ...spaceStyle, fontSize: size }} className={css.space}>
+              {space}
+            </p>
+          )}
+          <Card size='small' className={className}>
             <div className={css.item} style={{ fontSize: size }}>
               <b className={css.number}>{time.seconds}</b>
               <p className={css.label}>Giây</p>

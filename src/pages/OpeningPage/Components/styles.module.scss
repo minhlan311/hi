@@ -1,0 +1,18 @@
+.type {
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--green);
+  padding: 5px;
+  border: 2px dashed var(--green);
+  border-radius: 8px;
+}
+.collapse {
+  border-top: none;
+  & > div > div > div {
+    padding: 0 !important;
+    span {
+      padding-right: 16px;
+    }
+  }
+}

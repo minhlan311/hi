@@ -16,6 +16,10 @@ type Props = {
   action?: boolean
   start?: boolean
   localId?: string
+  className?: string
+  space?: string
+  spaceStyle?: React.CSSProperties
+  showAlex?: boolean
   callbackTimeEnd?: React.Dispatch<React.SetStateAction<number>>
   onListenEvent?: () => void
 }
@@ -32,6 +36,10 @@ const CountDownTimer = (props: Props) => {
     type = 'text',
     start = true,
     localId,
+    className,
+    space = type === 'flip' && ':',
+    spaceStyle,
+    showAlex = true,
     callbackTimeEnd,
     onListenEvent,
   } = props
@@ -40,22 +48,23 @@ const CountDownTimer = (props: Props) => {
   const minutesInit = timeTillDate ? moment(timeTillDate).diff(now, 'seconds') : initTime && initTime * 60
   const [countdown, setCountdown] = useState<number>(minutesInit || 0)
   const [isRunning, setIsRunning] = useState<boolean>(false)
-
   const [stopedTime, setStopedTime] = useState<number>(0)
   useEffect(() => {
-    window.onbeforeunload = (e) => {
-      e.preventDefault()
-      e.returnValue =
-        'Bạn đang làm bài kiểm tra. Bạn có chắc chắn muốn rời khỏi trang này? Mọi thay đổi chưa được lưu sẽ bị mất.'
+    if (showAlex) {
+      window.onbeforeunload = (e) => {
+        e.preventDefault()
+        e.returnValue =
+          'Bạn đang làm bài kiểm tra. Bạn có chắc chắn muốn rời khỏi trang này? Mọi thay đổi chưa được lưu sẽ bị mất.'
 
-      if (localId)
-        localStorage.setItem(localId as string, JSON.stringify(moment.duration(stopedTime, 'seconds').asMinutes()))
+        if (localId)
+          localStorage.setItem(localId as string, JSON.stringify(moment.duration(stopedTime, 'seconds').asMinutes()))
+      }
     }
 
     return () => {
       window.onbeforeunload = null
     }
-  }, [stopedTime])
+  }, [stopedTime, showAlex])
 
   useEffect(() => {
     setIsRunning(start)
@@ -104,20 +113,23 @@ const CountDownTimer = (props: Props) => {
         <>
           <FlipCountdown number={countdown} size={size} getTime='hours' numRender='firstNumber' />
           <FlipCountdown number={countdown} size={size} getTime='hours' numRender='secondNumber' />
-          <p style={{ fontSize: size }}>:</p>
+          <p style={{ fontSize: size, ...spaceStyle }}>{space}</p>
           <FlipCountdown number={countdown} size={size} getTime='minutes' numRender='firstNumber' />
           <FlipCountdown number={countdown} size={size} getTime='minutes' numRender='secondNumber' />
-          <p style={{ fontSize: size }}>:</p>
+          <p style={{ fontSize: size, ...spaceStyle }}>{space}</p>
           <FlipCountdown number={countdown} size={size} getTime='seconds' numRender='firstNumber' />
           <FlipCountdown number={countdown} size={size} getTime='seconds' numRender='secondNumber' />
         </>
       )) || (
         <TextCountdown
+          className={className}
           countdown={countdown}
           size={size}
           type={type}
           timeFormat={timeFormat}
           initTime={initTime}
+          space={space ? space : undefined}
+          spaceStyle={spaceStyle}
         ></TextCountdown>
       )}
 

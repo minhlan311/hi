@@ -11,6 +11,7 @@ import { LuFilterX } from 'react-icons/lu'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import DrawerCustom from '../DrawerCustom/DrawerCustom'
+import './styles.scss'
 
 type Props = {
   apiFind: any
@@ -125,12 +126,13 @@ const FilterAction = (props: Props) => {
       search: keyword || undefined,
     }
 
-    if (!categoryId) {
-      form.setFieldValue('subCategoryId', null)
-      delete body.subCategoryId
-    }
-
     setFilterData((prev) => {
+      if (!categoryId) {
+        form.setFieldValue('subCategoryId', null)
+        delete body.subCategoryId
+        delete prev?.filterQuery.subCategoryId
+      }
+
       return {
         filterQuery: { ...prev?.filterQuery, ...body },
         options: {
@@ -164,19 +166,19 @@ const FilterAction = (props: Props) => {
     })
   }
 
-  const check = subjectList?.find(
-    (sj) =>
-      mentorSub?.children
-        ?.find((item) => location.includes(item.slug))
-        ?.name.toLowerCase()
-        .includes(sj.label.toLowerCase()),
-  )
-
   useEffect(() => {
+    const check = subjectList?.find(
+      (sj) =>
+        mentorSub?.children
+          ?.find((item) => location.includes(item.slug))
+          ?.name.toLowerCase()
+          .includes(sj.label.toLowerCase()),
+    )
+
     if (mentorSub || check || page)
       setFilterData((prev) => {
         return {
-          filterQuery: { mentorType: mentorSub?.label, categoryName: check?.label, ...prev?.filterQuery },
+          filterQuery: { mentorType: mentorSub?.label, ...prev?.filterQuery, categoryName: check?.label },
           options: {
             limit,
             page,
@@ -218,7 +220,7 @@ const FilterAction = (props: Props) => {
 
   const FormFilter = () => {
     return (
-      <Form form={form} autoComplete='off'>
+      <Form form={form} autoComplete='off' className='filterMain'>
         <Row justify='space-between' className={className}>
           <Space direction={lg ? 'vertical' : 'horizontal'} className={`${lg && 'sp100'}`}>
             {typeFilter !== 'question' ? (
