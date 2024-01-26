@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
-import { CategoryState } from '@/interface/category'
-import { SuccessResponse } from '@/types/utils.type'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Collapse, Flex, Select, Space, Table, TableColumnsType } from 'antd'
 import moment from 'moment-timezone'
 import { Link } from 'react-router-dom'
@@ -88,8 +87,12 @@ const ExpandedRowRender = () => {
 }
 
 const ScheduleDetail = ({ type }: Props) => {
-  const queryClient = useQueryClient()
-  const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categoriesList'],
+    queryFn: () => {
+      return categoryApi.getCategories({ parentId: null })
+    },
+  })
   const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
   const subjectList = coursesList?.children?.map((sj) => {
     return {
