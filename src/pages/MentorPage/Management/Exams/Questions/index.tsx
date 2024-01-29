@@ -1,6 +1,6 @@
 import examApi from '@/apis/exam.api'
 import questionApi from '@/apis/question.api'
-import { stateAction } from '@/common'
+import { localAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import FilterAction from '@/components/FilterAction'
 import LoadingCustom from '@/components/LoadingCustom'
@@ -8,67 +8,30 @@ import openNotification from '@/components/Notification'
 import PaginationCustom from '@/components/PaginationCustom'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { ExamState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
 import { setQuestionsListFromLS } from '@/utils/questons'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Checkbox, Popconfirm, Space } from 'antd'
-import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { useContext, useEffect, useState } from 'react'
 import { AiOutlineDelete, AiOutlineOrderedList, AiOutlinePlus } from 'react-icons/ai'
 import { BsListCheck } from 'react-icons/bs'
 import { FiSave } from 'react-icons/fi'
 import { HiOutlineUpload } from 'react-icons/hi'
 import { MdClear, MdDoneAll } from 'react-icons/md'
-import { TbUserQuestion } from 'react-icons/tb'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import RenderQuestion from '../Components/RenderQuestion'
 import DrawerQuestion from '../Drawer/DrawerQuestion'
 import DrawerUpload from '../Drawer/DrawerUpload'
 import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const MentorQuestions = () => {
-  const location = useLocation()
-  const examSlug = location.pathname.split('/')[3]
-  const { data: exam, isLoading } = useQuery({
-    queryKey: ['examDetail'],
-    queryFn: () => {
-      return examApi.getExamDetail(examSlug)
-    },
-  })
-
-  const examDetail = exam?.data
-  const [open, setOpen] = useState<boolean>(false)
-
-  // question select
-  const { setQuestionList, profile } = useContext(AppContext)
-
-  const [questionsSelectCallback, setQuestionsSelectCallback] = useState<SuccessResponse<QuestionState[]>>()
-  const [questionsSelect, setQuestionsSelect] = useState<string[]>([])
-  useEffect(() => {
-    setQuestionList([])
-    setQuestionsSelect([])
-    setQuestionsListFromLS([])
-  }, [examSlug])
-
-  useEffect(() => {
-    if (examDetail) {
-      setQuestionsListFromLS(examDetail.questions)
-      setQuestionsSelect(examDetail.questions)
-      setQuestionList(examDetail.questions)
-    }
-  }, [examDetail])
-
-  // action question
-  const [openUpload, setOpenUpload] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
+const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChange: string }) => {
+  const { questionList, setQuestionList } = useContext(AppContext)
   const [remove, setRemove] = useState<boolean>(false)
-
-  const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
-  const [current, setCurrent] = useState<number>(1)
-  const [currentSelected, setSelectedCurrent] = useState<number>(1)
+  const queryClient = useQueryClient()
   const examMutation = useMutation({
     mutationFn: (data: ExamState) => examApi.putExam(data),
     onSuccess: () => {
@@ -87,137 +50,55 @@ const MentorQuestions = () => {
       }),
   })
 
-  // bank questons
-  const [questionsCallback, setQuestionsCallback] = useState<SuccessResponse<QuestionState[]>>()
+  const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
+  const [loading, setLoading] = useState<boolean>(false)
 
-  const [myQues, setMyQues] = useState<boolean>(false)
-
-  const dataActive = questionsCallback?.docs?.filter((item) => item.status === 'ACTIVE')
-  const quesId = dataActive?.map((it) => it._id)
-
-  const checkAll = quesId?.length === questionsSelect.length
-
-  const [indeterminate, setIndeterminate] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (questionsSelect && questionsSelect.length > 0)
-      setIndeterminate(questionsSelect.some((e) => questionsCallback?.docs?.some((it) => it._id === e)) && !checkAll)
-  }, [questionsSelect, checkAll])
-
-  const onCheckAllChange = (e: CheckboxChangeEvent) => {
-    e.target.checked
-      ? stateAction(setQuestionsSelect, null, quesId, 'switch', setQuestionsListFromLS)
-      : stateAction(setQuestionsSelect, null, quesId, 'remove', setQuestionsListFromLS)
-  }
-
-  const [tabChange, setTabChange] = useState<string>('questions')
-
-  const handleChangeTab = (e: string) => {
-    setTabChange(e)
-  }
-
-  const uniqueSkills = [...new Set(questionsSelectCallback?.docs?.map((item) => item.skill))]
+  const questionDetail = questionList?.find((item) => item._id === examData?._id)
 
   const handleSave = () => {
-    if (examDetail) {
+    if (examData) {
       const payload = {
-        id: examDetail._id,
-        questions: questionsSelect,
-        skillName: uniqueSkills,
+        id: examData?._id,
+        questions: questionDetail?.data,
+        skillName: examData?.skillName,
       }
 
       examMutation.mutate(payload as unknown as any)
+      queryClient.invalidateQueries({ queryKey: [questionList] })
     }
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
-  }
+  const [page, setPage] = useState<number>(1)
 
-  useEffect(() => {
-    scrollToTop()
-  }, [current, currentSelected])
+  const { sm, md } = useResponsives()
 
-  const questionTabs = [
-    {
-      id: 'questions',
-      name: 'Câu hỏi đã chọn',
-      children: (
-        <div>
-          {examDetail && (
-            <FilterAction
-              type='question'
-              apiFind={questionApi.findQuestion}
-              callBackData={setQuestionsSelectCallback}
-              filterQuery={{
-                _id: questionsSelect,
-              }}
-              limit={10}
-              page={currentSelected}
-              keyFilter='questionsSelect'
-              setLoading={setLoading}
-              checkQuery={questionsSelect && questionsSelect.length > 0 && tabChange === 'questions'}
-              addOnButton={
-                <Space className={css.mb}>
-                  <Popconfirm
-                    placement='right'
-                    title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
-                    onConfirm={() => {
-                      setRemove(true)
-                      setTabChange('')
-                      setQuestionsListFromLS([])
-                      setQuestionsSelect([])
-
-                      const payload = {
-                        id: examDetail?._id,
-                        questions: [],
-                      }
-
-                      examMutation.mutate(payload as unknown as any)
-                    }}
-                    okText='Xóa'
-                    cancelText='Hủy'
-                  >
-                    <ButtonCustom
-                      disabled={!questionsSelect?.length}
-                      icon={<AiOutlineDelete />}
-                      tooltip='Xóa tất cả câu hỏi'
-                      danger
-                    ></ButtonCustom>
-                  </Popconfirm>
-
-                  <ButtonCustom
-                    type='primary'
-                    disabled={!questionsSelect?.length}
-                    onClick={handleSave}
-                    icon={<FiSave />}
-                    tooltip='Lưu gói câu hỏi'
-                  ></ButtonCustom>
-                </Space>
-              }
-            />
-          )}
-          <Space size='large' className={css.infor}>
+  return (
+    <Space direction='vertical' style={{ width: '100%' }}>
+      <FilterAction
+        type='question'
+        keyFilter='questionList'
+        apiFind={questionApi.findQuestion}
+        filterQuery={{
+          _id: questionDetail?.data,
+        }}
+        checkQuery={tabChange === 'questions' && Boolean(questionDetail)}
+        limit={10}
+        page={page}
+        setLoading={setLoading}
+        callBackData={setQuestions}
+        addOnButton={
+          sm &&
+          md && (
             <Space>
-              <p>Số câu hỏi:</p>
-              <b>{questionsSelect?.length}</b>
-            </Space>
-
-            <Space className={css.pc}>
               <Popconfirm
                 placement='right'
                 title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
                 onConfirm={() => {
                   setRemove(true)
-                  setTabChange('')
                   setQuestionsListFromLS([])
-                  setQuestionsSelect([])
 
                   const payload = {
-                    id: examDetail?._id,
+                    id: examData?._id,
                     questions: [],
                   }
 
@@ -227,176 +108,265 @@ const MentorQuestions = () => {
                 cancelText='Hủy'
               >
                 <ButtonCustom
-                  disabled={!questionsSelect?.length}
-                  icon={<AiOutlineDelete />}
+                  disabled={!questionList?.length}
+                  icon={<AiOutlineDelete size={22} />}
                   tooltip='Xóa tất cả câu hỏi'
                   danger
                 ></ButtonCustom>
               </Popconfirm>
 
-              <ButtonCustom type='primary' disabled={!questionsSelect?.length} onClick={handleSave}>
+              <ButtonCustom
+                type='primary'
+                disabled={!questionList?.length}
+                onClick={handleSave}
+                icon={<FiSave size={22} />}
+                tooltip='Lưu gói câu hỏi'
+              ></ButtonCustom>
+            </Space>
+          )
+        }
+      />
+      <Space className={css.infor}>
+        {!sm && !md ? (
+          <>
+            <Space size='small'>
+              <p>Số câu hỏi:</p>
+              <b>{questionDetail?.data?.length || questions?.totalDocs}</b>
+            </Space>
+            <Space>
+              <Popconfirm
+                placement='right'
+                title='Bạn có muốn xóa tất cả câu hỏi trong bộ đề này?'
+                onConfirm={() => {
+                  setRemove(true)
+                  setQuestionsListFromLS([])
+
+                  const payload = {
+                    id: examData?._id,
+                    questions: [],
+                  }
+
+                  examMutation.mutate(payload as unknown as any)
+                  localAction(
+                    'questionsList',
+                    { _id: examData._id, data: [] },
+                    'updateSwitch',
+                    null,
+                    'data',
+                    setQuestionList,
+                  )
+                }}
+                okText='Xóa'
+                cancelText='Hủy'
+              >
+                <ButtonCustom
+                  disabled={!questionList?.length}
+                  icon={<AiOutlineDelete size={22} />}
+                  tooltip='Xóa tất cả câu hỏi'
+                  danger
+                ></ButtonCustom>
+              </Popconfirm>
+              <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
             </Space>
+          </>
+        ) : (
+          <Space size='small' className={css.cardInfor}>
+            <BsListCheck size={22} />
+            <b>{questionList?.length}</b>
           </Space>
-          {isLoading ? (
-            <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
-          ) : (
-            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 15 }}>
-              <RenderQuestion
-                data={questionsSelectCallback?.docs}
-                type='questionsSelected'
-                setOpen={setOpen}
-                setQuestionUpdate={setQuestionUpdate}
-                questionsSelect={questionsSelect}
-                setQuestionsSelect={setQuestionsSelect}
-              />
-              <PaginationCustom
-                callbackCurrent={setSelectedCurrent}
-                totalData={questionsSelectCallback?.totalDocs}
-                limit={10}
-                page={questionsSelectCallback?.page}
-              />
-            </Space>
-          )}
-        </div>
-      ),
-    },
-    {
-      id: 'bankQuestion',
-      name: 'Ngân hàng câu hỏi',
-      children: (
-        <div>
-          {examDetail && (
-            <FilterAction
-              type='question'
-              apiFind={questionApi.findQuestion}
-              callBackData={setQuestionsCallback}
-              filterQuery={{
-                categoryId: examDetail.categoryId,
-                createdById: myQues ? profile._id : undefined,
-                typeQuestion: examDetail.type,
-                skill: examDetail.skillName,
-              }}
-              limit={10}
-              page={current}
-              keyFilter='questionsBank'
-              addOnButton={
-                <Space className={css.mb}>
-                  <ButtonCustom
-                    icon={<HiOutlineUpload />}
-                    tooltip='Thêm file câu hỏi'
-                    onClick={() => setOpenUpload(true)}
-                  ></ButtonCustom>
+        )}
+      </Space>
 
-                  <ButtonCustom
-                    onClick={() => setOpen(true)}
-                    icon={<AiOutlinePlus />}
-                    tooltip='Thêm câu hỏi'
-                    type='primary'
-                  ></ButtonCustom>
-                </Space>
-              }
-            />
-          )}
-          <Space className={`${css.infor} ${css.pc}`}>
+      <LoadingCustom style={{ minHeight: '40vh' }} tip='Vui lòng chờ...' loading={loading}>
+        <RenderQuestion data={questions?.docs} type='questionsSelected' />
+      </LoadingCustom>
+      <PaginationCustom
+        callbackCurrent={setPage}
+        totalData={questions?.totalDocs}
+        limit={questions?.limit}
+        page={questions?.page}
+      />
+    </Space>
+  )
+}
+
+const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabChange: string }) => {
+  const { questionList, setQuestionList } = useContext(AppContext)
+  const [current, setCurrent] = useState<number>(1)
+  const [open, setOpen] = useState<boolean>(false)
+  const [openUpload, setOpenUpload] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
+  const dataActive = questions?.docs?.filter((item) => item.status === 'ACTIVE')
+  const quesId = dataActive?.map((it) => it._id)
+  const questionDetail = questionList?.find((item) => item._id === examDetail?._id)
+  const checkAll = quesId?.length === questionDetail?.data?.length
+
+  const [indeterminate, setIndeterminate] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (questionDetail && questionDetail?.data.length > 0)
+      setIndeterminate(questionDetail?.data.some((e) => questions?.docs?.some((it) => it._id === e)) && !checkAll)
+  }, [questionDetail, checkAll])
+
+  const [questionUpdate, setQuestionUpdate] = useState<QuestionState | null>(null)
+
+  const onCheckAllChange = () => {
+    localAction('questionsList', { _id: examDetail._id, data: quesId }, 'updateSwitch', '_id', 'data', setQuestionList)
+  }
+
+  const { sm, md } = useResponsives()
+
+  const examMutation = useMutation({
+    mutationFn: (data: ExamState) => examApi.putExam(data),
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: 'Cập nhật bộ đề thành công',
+      })
+    },
+    onError: () =>
+      openNotification({
+        status: 'error',
+        message: 'Thông báo',
+        description: ' Có lỗi xảy ra',
+      }),
+  })
+
+  const handleSave = () => {
+    if (examDetail) {
+      const payload = {
+        id: examDetail?._id,
+        questions: questionDetail?.data,
+        skillName: examDetail?.skillName,
+      }
+
+      examMutation.mutate(payload as unknown as any)
+    }
+  }
+
+  return (
+    <Space direction='vertical' style={{ width: '100%' }}>
+      <FilterAction
+        type='question'
+        apiFind={questionApi.findQuestion}
+        callBackData={setQuestions}
+        filterQuery={{
+          categoryId: examDetail.categoryId,
+          typeQuestion: examDetail.type,
+          skill: examDetail.skillName,
+        }}
+        setLoading={setLoading}
+        limit={10}
+        page={current}
+        keyFilter='questionsBank'
+        checkQuery={tabChange === 'bankQuestion'}
+        addOnButton={
+          sm &&
+          md && (
+            <Space>
+              <ButtonCustom
+                icon={<HiOutlineUpload size={22} />}
+                tooltip='Thêm file câu hỏi'
+                onClick={() => setOpenUpload(true)}
+              ></ButtonCustom>
+
+              <ButtonCustom
+                onClick={() => setOpen(true)}
+                icon={<AiOutlinePlus size={22} />}
+                tooltip='Thêm câu hỏi'
+                type='primary'
+              ></ButtonCustom>
+
+              <ButtonCustom
+                type='primary'
+                disabled={!questionDetail?.data?.length}
+                onClick={handleSave}
+                icon={<FiSave size={22} />}
+                tooltip='Lưu gói câu hỏi'
+              ></ButtonCustom>
+            </Space>
+          )
+        }
+      />
+      <Space className={css.infor}>
+        {!sm && !md ? (
+          <>
             <Space size='small'>
               <p>Số câu hỏi:</p>
-              <b>{questionsCallback?.totalDocs}</b>
+              <b>{questions?.totalDocs}</b>
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
-              <b>{questionsSelect?.length}</b>
+              <b>{questionDetail?.data?.length}</b>
             </Space>
-            <Checkbox onChange={(e) => setMyQues(e.target.checked)}>Câu hỏi của tôi</Checkbox>
 
             <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
               {!indeterminate ? 'Chọn' : 'Bỏ chọn'} tất cả
             </Checkbox>
 
-            <Space className={css.pc}>
+            <Space>
               <ButtonCustom
-                icon={<HiOutlineUpload />}
+                icon={<HiOutlineUpload size={22} />}
                 tooltip='Thêm file câu hỏi'
                 onClick={() => setOpenUpload(true)}
               ></ButtonCustom>
-
               <ButtonCustom
                 onClick={() => setOpen(true)}
-                icon={<AiOutlinePlus />}
+                icon={<AiOutlinePlus size={22} />}
                 tooltip='Thêm câu hỏi'
                 type='primary'
               ></ButtonCustom>
+              <ButtonCustom
+                type='primary'
+                disabled={!questionDetail?.data?.length}
+                onClick={handleSave}
+                icon={<FiSave size={22} />}
+                tooltip='Lưu gói câu hỏi'
+              ></ButtonCustom>
             </Space>
-          </Space>
-          <Space className={`${css.infor} ${css.mb}`}>
+          </>
+        ) : (
+          <>
             <Space size='small' className={css.cardInfor}>
               <AiOutlineOrderedList size={22} />
-              <b>{questionsCallback?.totalDocs}</b>
+              <b>{questions?.totalDocs}</b>
             </Space>
             <Space size='small' className={css.cardInfor}>
               <BsListCheck size={22} />
-              <b>{questionsSelect?.length}</b>
+              <b>{questionList?.length}</b>
             </Space>
-            <Checkbox onChange={(e) => setMyQues(e.target.checked)}>
-              <TbUserQuestion size={22} />
-            </Checkbox>
 
             <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-              {questionsSelect.some((e) => questionsCallback?.docs?.some((it) => it._id === e)) ? (
+              {questionDetail?.data?.some((e) => questions?.docs?.some((it) => it._id === e)) ? (
                 <MdClear size={22} />
               ) : (
                 <MdDoneAll size={22} />
               )}
             </Checkbox>
+          </>
+        )}
+      </Space>
 
-            <Space className={css.pc}>
-              <ButtonCustom
-                icon={<HiOutlineUpload />}
-                tooltip='Thêm file câu hỏi'
-                onClick={() => setOpenUpload(true)}
-              ></ButtonCustom>
-
-              <ButtonCustom
-                onClick={() => setOpen(true)}
-                icon={<AiOutlinePlus />}
-                tooltip='Thêm câu hỏi'
-                type='primary'
-              ></ButtonCustom>
-            </Space>
-          </Space>
-          {loading ? (
-            <LoadingCustom style={{ marginTop: 100 }} tip='Vui lòng chờ...' />
-          ) : (
-            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 15 }}>
-              {questionsCallback && (
-                <RenderQuestion
-                  data={questionsCallback.docs}
-                  type='questionsBank'
-                  setOpen={setOpen}
-                  setQuestionUpdate={setQuestionUpdate}
-                  setQuestionsSelect={setQuestionsSelect}
-                  questionsSelect={questionsSelect}
-                />
-              )}
-              <PaginationCustom
-                callbackCurrent={setCurrent}
-                totalData={questionsCallback?.totalDocs}
-                limit={10}
-                page={questionsCallback?.page}
-              />
-            </Space>
-          )}
-        </div>
-      ),
-    },
-  ]
-
-  return (
-    <div className={`${css.quesList}`}>
-      {/* <DragAndDrop /> */}
-
-      <TabsCustom data={questionTabs} setting={{ onChange: handleChangeTab }} />
+      <LoadingCustom loading={loading} style={{ minHeight: '40vh' }} tip='Vui lòng chờ...'>
+        {questions && (
+          <RenderQuestion
+            data={questions.docs}
+            type='questionsBank'
+            setOpen={setOpen}
+            setQuestionUpdate={setQuestionUpdate}
+          />
+        )}
+      </LoadingCustom>
+      <PaginationCustom
+        callbackCurrent={setCurrent}
+        totalData={questions?.totalDocs}
+        limit={10}
+        page={questions?.page}
+      />
 
       <DrawerQuestion
         open={open}
@@ -413,6 +383,60 @@ const MentorQuestions = () => {
         categoryId={examDetail ? examDetail.categoryId : ''}
         setLoading={setLoading}
       />
+    </Space>
+  )
+}
+
+const MentorQuestions = () => {
+  const { id } = useParams()
+  const { data: exam } = useQuery({
+    queryKey: ['examDetail'],
+    queryFn: () => {
+      return examApi.getExamDetail(id!)
+    },
+    enabled: Boolean(id),
+  })
+
+  const examDetail = exam?.data
+  const { setQuestionList } = useContext(AppContext)
+
+  useEffect(() => {
+    if (examDetail) {
+      if (examDetail.questions.length > 0) {
+        localAction(
+          'questionsList',
+          { _id: examDetail._id, data: examDetail.questions },
+          'update',
+          '_id',
+          'data',
+          setQuestionList,
+        )
+      }
+    }
+  }, [examDetail])
+
+  const [tabChange, setTabChange] = useState<string>('questions')
+
+  const handleChangeTab = (e: string) => {
+    setTabChange(e)
+  }
+
+  const questionTabs = [
+    {
+      id: 'questions',
+      name: 'Câu hỏi đã chọn',
+      children: <QuestionsSelect examData={examDetail!} tabChange={tabChange} />,
+    },
+    {
+      id: 'bankQuestion',
+      name: 'Ngân hàng câu hỏi',
+      children: <QuestionsBank examDetail={examDetail!} tabChange={tabChange} />,
+    },
+  ]
+
+  return (
+    <div className={`${css.quesList}`}>
+      <TabsCustom data={questionTabs} setting={{ onChange: handleChangeTab }} />
     </div>
   )
 }

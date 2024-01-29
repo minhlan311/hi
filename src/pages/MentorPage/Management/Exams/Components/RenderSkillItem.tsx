@@ -309,13 +309,7 @@ const RenderSkillItem = ({
               {questionsData?.data?.docs && questionsData?.data?.docs?.length > 0 ? (
                 <Space direction='vertical' className='sp100'>
                   {questionsData?.data?.docs?.map((item) => (
-                    <RenderItem
-                      data={item}
-                      type='questionsData'
-                      typeQuestion='TEST'
-                      key={item._id}
-                      setQuestionsSelect={setQuestions}
-                    ></RenderItem>
+                    <RenderItem data={item} type='questionsData' typeQuestion='TEST' key={item._id}></RenderItem>
                   ))}
                 </Space>
               ) : (

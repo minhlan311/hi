@@ -1,34 +1,31 @@
 import questionApi from '@/apis/question.api'
-import { stateAction } from '@/common'
+import { localAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import { AppContext } from '@/contexts/app.context'
 import { QuestionState } from '@/interface/question'
-import { setQuestionsListFromLS } from '@/utils/questons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Popconfirm, Row, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineQuestionCircle } from 'react-icons/ai'
 import { MdOutlineDisabledVisible } from 'react-icons/md'
 import { RiCloseCircleFill } from 'react-icons/ri'
+import { useParams } from 'react-router-dom'
 import css from './RenderIten.module.scss'
 
 type Props = {
   type: 'questionsSelected' | 'questionsBank' | string
   data: QuestionState
-  questionsSelect?: string[]
   typeQuestion?: 'TEST' | 'QUIZ'
   setQuestionUpdate?: React.Dispatch<React.SetStateAction<QuestionState | null>>
-  setQuestionsSelect?: React.Dispatch<React.SetStateAction<string[]>>
-
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RenderItem = (props: Props) => {
-  const { type, data, questionsSelect, typeQuestion, setQuestionUpdate, setQuestionsSelect, setOpen } = props
-  const { setQuestionList, profile } = useContext(AppContext)
-
+  const { type, data, typeQuestion, setQuestionUpdate, setOpen } = props
+  const { questionList, profile, setQuestionList } = useContext(AppContext)
+  const { id } = useParams()
   const [isHover, setIsHover] = useState(false)
   const queryClient = useQueryClient()
 
@@ -48,7 +45,8 @@ const RenderItem = (props: Props) => {
   })
 
   if (data) {
-    const check = questionsSelect && questionsSelect.includes(data._id)
+    const questionDetail = questionList && questionList.find((item) => item._id === id)
+    const check = questionDetail?.data.includes(data._id)
 
     return (
       <div className={css.qItem}>
@@ -56,9 +54,8 @@ const RenderItem = (props: Props) => {
           <div
             className={`${data.status === 'INACTIVE' && css.disable} ${check ? css.unSave : css.save}`}
             onClick={() => {
-              setQuestionList(data._id as unknown as string[])
-              setQuestionsSelect && stateAction(setQuestionsSelect, null, data._id, 'switch', setQuestionsListFromLS)
-              // queryClient.invalidateQueries({ queryKey: ['questionsSelected'] })
+              localAction('questionsList', { _id: id, data: [data._id] }, 'updateSwitch', null, 'data', setQuestionList)
+              queryClient.cancelQueries({ queryKey: ['questionList'], exact: true })
             }}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
@@ -75,7 +72,7 @@ const RenderItem = (props: Props) => {
               ) : (
                 check && (
                   <b className={css.check}>
-                    {questionsSelect && questionsSelect.findIndex((val) => val === data._id) + 1}
+                    {questionDetail && questionDetail.data.findIndex((val) => val === data._id) + 1}
                   </b>
                 )
               )}
@@ -106,7 +103,7 @@ const RenderItem = (props: Props) => {
                       <ButtonCustom
                         shape='circle'
                         type='text'
-                        icon={<AiOutlineEdit />}
+                        icon={<AiOutlineEdit size={22} />}
                         size='small'
                         onClick={() => {
                           setQuestionUpdate && setQuestionUpdate(data)
@@ -124,7 +121,7 @@ const RenderItem = (props: Props) => {
                       <ButtonCustom
                         shape='circle'
                         type='text'
-                        icon={<AiOutlineDelete />}
+                        icon={<AiOutlineDelete size={22} />}
                         size='small'
                         danger
                       ></ButtonCustom>

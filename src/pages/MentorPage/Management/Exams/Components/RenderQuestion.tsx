@@ -6,14 +6,12 @@ import RenderItem from './RenderItem'
 type Props = {
   data?: QuestionState[] | undefined
   type: 'questionsSelected' | 'questionsBank'
-  setQuestionUpdate: React.Dispatch<React.SetStateAction<QuestionState | null>>
-  setQuestionsSelect?: React.Dispatch<React.SetStateAction<string[]>>
-  questionsSelect: string[]
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setQuestionUpdate?: React.Dispatch<React.SetStateAction<QuestionState | null>>
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RenderQuestion = (props: Props) => {
-  const { data, type, setQuestionUpdate, setQuestionsSelect, questionsSelect, setOpen } = props
+  const { data, type, setQuestionUpdate, setOpen } = props
 
   return !data?.length || !data ? (
     <div style={{ marginTop: 100 }}>
@@ -39,8 +37,6 @@ const RenderQuestion = (props: Props) => {
           data={item}
           setOpen={setOpen}
           setQuestionUpdate={setQuestionUpdate}
-          setQuestionsSelect={setQuestionsSelect && setQuestionsSelect}
-          questionsSelect={questionsSelect}
         ></RenderItem>
       ))}
     </Space>

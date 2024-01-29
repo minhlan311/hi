@@ -3,8 +3,10 @@
 export const localAction = (
   localKey: string = 'default',
   updateData?: any | any[] | null,
-  type?: 'add' | 'update' | 'remove' | 'delete',
+  type?: 'add' | 'update' | 'updateSwitch' | 'remove' | 'delete',
+  checkKey?: any,
   updateKey?: any,
+  setContextData?: React.Dispatch<React.SetStateAction<any>>,
 ): any => {
   let localData: any = localStorage.getItem(localKey)
 
@@ -29,7 +31,7 @@ export const localAction = (
       }
       // local data type: arr | obj
       else {
-        if (type === 'update') {
+        if (type === 'update' || type === 'updateSwitch') {
           // local data type: arr
           if (Array.isArray(localData)) {
             if (typeof updateData === 'string') {
@@ -40,17 +42,26 @@ export const localAction = (
               } else {
                 localData.push(updateData)
               }
-            } else if (typeof updateData === 'object' && updateKey) {
-              const existingIndex = localData.findIndex((item: any) =>
-                updateKey ? item?.[updateKey] === updateData?.[updateKey] : item._id === updateData._id,
+            } else if (typeof updateData === 'object') {
+              const filteredData = localData.find((item: any) =>
+                checkKey ? item?.[checkKey] === updateData?.[checkKey] : item._id === updateData._id,
               )
 
-              if (existingIndex !== -1) {
-                const filteredData = localData.filter((item: any) =>
-                  updateKey ? item?.[updateKey] !== updateData?.[updateKey] : item._id !== updateData._id,
-                )
+              if (filteredData) {
+                if (type === 'updateSwitch') {
+                  const dataArr = updateData?.[updateKey]
+                  updateData?.[updateKey].forEach((_: any, id: number) => {
+                    if (filteredData?.[updateKey].includes(dataArr[id])) {
+                      filteredData[updateKey] = filteredData[updateKey].filter((data: any) => data !== dataArr[id])
+                    } else {
+                      filteredData?.[updateKey].push(dataArr[id])
+                    }
+                  })
+                } else {
+                  const dataArr = updateData?.[updateKey]
 
-                localData = [...filteredData, updateData]
+                  filteredData[updateKey] = dataArr
+                }
               } else {
                 localData.push(updateData)
               }
@@ -66,18 +77,20 @@ export const localAction = (
           }
         } else if (type === 'remove') {
           if (typeof updateData === 'string') {
-            if (updateKey) {
-              localData = localData.filter((item: any) => item[updateKey] !== updateData)
+            if (checkKey) {
+              localData = localData.filter((item: any) => item[checkKey] !== updateData)
             } else {
               localData = localData.filter((item: any) => item !== updateData)
             }
-          } else if (typeof updateData === 'object' && updateKey) {
-            localData = localData.filter((item: any) => item[updateKey] !== updateData[updateKey])
+          } else if (typeof updateData === 'object' && checkKey) {
+            localData = localData.filter((item: any) => item[checkKey] !== updateData[checkKey])
           }
         } else if (type === 'delete') {
           localStorage.removeItem(localKey)
         }
       }
+
+      setContextData && setContextData(localData)
 
       localStorage.setItem(localKey, JSON.stringify(localData))
     }
@@ -102,7 +115,7 @@ export const stateAction = (
   id: string | null,
   dataUpdate: any | any[] | null,
   actionType: 'update' | 'remove' | 'add' | 'switch',
-  setLocalFunction?: React.Dispatch<React.SetStateAction<any>>,
+  setLocalFunction?: React.Dispatch<React.SetStateAction<any>> | null,
   key?: string,
 ) => {
   setData((prevData: any[]) => {

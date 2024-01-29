@@ -212,7 +212,7 @@ const ChoiceQuestionPage = () => {
             apiFind={examApi.findExam}
             type='test'
             keyFilter='examFind'
-            filterQuery={{ type: skillChange !== 'ALL' ? 'QUIZ' : 'TEST' }}
+            filterQuery={{ type: skillChange !== 'ALL' ? 'QUIZ' : 'TEST', skillName: [skillChange] }}
             callBackData={setExamData}
             setLoading={setIsLoad}
             page={current}

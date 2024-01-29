@@ -3,37 +3,18 @@
 .quesList {
   .infor {
     position: absolute;
-    margin-top: -120px;
+    top: -59px;
     right: 0;
     @include respond-to(md) {
       position: relative;
-      margin-top: 0;
-      display: flex;
+      top: 0;
     }
     @include respond-to(xs) {
       position: relative;
-      margin-top: 0;
-      display: flex;
+      top: 0;
     }
   }
-  .mb {
-    display: none;
-    @include respond-to(md) {
-      display: flex;
-    }
-    @include respond-to(xs) {
-      display: flex;
-    }
-  }
-  .pc {
-    display: flex;
-    @include respond-to(md) {
-      display: none;
-    }
-    @include respond-to(xs) {
-      display: none;
-    }
-  }
+
   .cardInfor {
     display: flex;
     align-items: stretch;
