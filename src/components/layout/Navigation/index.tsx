@@ -31,7 +31,11 @@ type Props = {
 
 export default function Navigation({ user }: Props) {
   const { sm, md, lg, xl, xxl } = useResponsives()
-  const users = useQuery({ queryKey: ['userDetail'], queryFn: () => userApi.getUserDetail(user ? user._id : '') })
+  const users = useQuery({
+    queryKey: ['userDetail'],
+    queryFn: () => userApi.getUserDetail(user ? user._id : ''),
+    enabled: Boolean(user && user._id),
+  })
 
   const { configs } = useContext(AppContext)
 
