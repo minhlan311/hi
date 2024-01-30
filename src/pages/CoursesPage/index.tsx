@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
 import enrollsApi from '@/apis/enrolls.api'
-import topicApi from '@/apis/topic.api'
 import vnpayApi from '@/apis/vnpay.api'
 import { formatNumber } from '@/common'
 import Avatar from '@/components/Avatar/Avatar'
@@ -50,18 +49,6 @@ const CoursesDetail = () => {
   })
 
   const courseDetail = courseData?.data
-
-  const { data: topicData } = useQuery({
-    queryKey: ['topicData', courseDetail],
-    queryFn: () => {
-      return topicApi.findTopic({
-        filterQuery: {
-          parentId: courseDetail && courseDetail._id,
-        },
-      })
-    },
-    enabled: Boolean(courseDetail?._id),
-  })
 
   const { data: courseList, isLoading } = useQuery({
     queryKey: ['coursesByMentor'],
@@ -174,8 +161,6 @@ const CoursesDetail = () => {
     }
   }
 
-  const topicList = topicData?.data
-
   if (courseDetail && user)
     return (
       <div className={style.courseMain}>
@@ -238,8 +223,8 @@ const CoursesDetail = () => {
                               className={'sp100'}
                               style={{ paddingBottom: 24, minHeight: '60vh' }}
                             >
-                              {topicList?.docs && topicList?.docs.length > 0 ? (
-                                topicList?.docs?.map((item, id) => (
+                              {courseDetail.countTopics > 0 ? (
+                                courseDetail.topics?.map((item, id) => (
                                   <CollapseCustom
                                     size='large'
                                     expandIconPosition='end'
@@ -249,8 +234,8 @@ const CoursesDetail = () => {
                                         label: item.name,
                                         children: (
                                           <Space direction='vertical' className={'sp100'}>
-                                            {item.lessons.length > 0 ? (
-                                              item.lessons.map((ls, index) => (
+                                            {item.lessons?.length > 0 ? (
+                                              item.lessons?.map((ls, index) => (
                                                 <div key={ls._id}>
                                                   <Flex justify='space-between' align='center'>
                                                     <Space>
@@ -289,7 +274,7 @@ const CoursesDetail = () => {
                                         ),
                                       },
                                     ]}
-                                    defaultActiveKey={topicList?.docs?.[0] ? [topicList?.docs?.[0]._id] : []}
+                                    defaultActiveKey={courseDetail?.topics?.[0] ? [courseDetail?.topics?.[0]._id] : []}
                                     key={item._id}
                                   />
                                 ))

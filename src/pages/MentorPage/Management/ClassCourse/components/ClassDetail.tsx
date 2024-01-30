@@ -62,6 +62,17 @@ const ClassDetail = () => {
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       width: '15%',
+      render: (phoneNumber: string) => {
+        if (typeof phoneNumber !== 'string' || phoneNumber.length < 3) {
+          return phoneNumber
+        }
+
+        const lastThreeDigits = phoneNumber.slice(-3)
+        const hiddenPart = '*'.repeat(phoneNumber.length - 3)
+        const maskedPhoneNumber = hiddenPart + lastThreeDigits
+
+        return maskedPhoneNumber
+      },
     },
     {
       title: 'Email',

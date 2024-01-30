@@ -39,7 +39,7 @@ export default function ModalFormAnswer(props: IModalFormProps) {
     },
     onError() {
       message.error('Lỗi không mong muốn, vui lòng thử lại vào lúc khác')
-    }
+    },
   })
 
   const handleCancel = () => {
@@ -59,7 +59,7 @@ export default function ModalFormAnswer(props: IModalFormProps) {
           return item.response.url
         }),
         userId: profile?._id,
-        parentId: parentId
+        parentId: parentId,
       }
       delete query.files
       delete query.content
@@ -86,11 +86,11 @@ export default function ModalFormAnswer(props: IModalFormProps) {
               name: item,
               status: 'done',
               response: {
-                url: `${item}`
-              }
+                url: `${item}`,
+              },
             } as UploadFile<any>
-          })
-        }
+          }),
+        },
       })
       setImages(
         answer?.files?.map((item: string) => {
@@ -98,9 +98,9 @@ export default function ModalFormAnswer(props: IModalFormProps) {
             uid: item,
             name: item,
             status: 'done',
-            url: `${import.meta.env.VITE_FILE_ENDPOINT}/${item}`
+            url: `${import.meta.env.VITE_FILE_ENDPOINT}/${item}`,
           } as UploadFile<any>
-        })
+        }),
       )
     }
   }, [answer, form])
@@ -140,12 +140,13 @@ export default function ModalFormAnswer(props: IModalFormProps) {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập nội dung'
-              }
+                message: 'Vui lòng nhập nội dung',
+              },
             ]}
           >
             <CKEditor
               editor={ClassicEditor}
+              disabled={false}
               data={answer?.content}
               onChange={(_event: any, editor: any) => {
                 const data = editor.getData()

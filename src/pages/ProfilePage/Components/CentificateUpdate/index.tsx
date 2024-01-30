@@ -250,7 +250,7 @@ const CentificateUpdate = (props: Props) => {
         <h3>Thông tin pháp lý</h3>
 
         <Row gutter={24}>
-          <Col span={24} md={12}>
+          <Col span={24} md={8}>
             <Form.Item
               label='Học vị'
               name='educationType'
@@ -268,7 +268,7 @@ const CentificateUpdate = (props: Props) => {
             </Form.Item>
           </Col>
 
-          <Col span={24} md={12}>
+          <Col span={24} md={8}>
             <Form.Item
               label='Loại giáo viên'
               name='mentorType'
@@ -283,7 +283,15 @@ const CentificateUpdate = (props: Props) => {
               />
             </Form.Item>
           </Col>
-
+          <Col span={24} md={8}>
+            <Form.Item
+              label='Kinh nghiệm làm việc'
+              name='experienceTime'
+              rules={[{ required: true, message: 'Vui lòng nhập số năm kinh nghiệm' }]}
+            >
+              <InputNumber placeholder='Nhập số năm kinh nghiệm' className='sp100' min={0} max={100} />
+            </Form.Item>
+          </Col>
           <Col span={24} md={type ? 8 : 12}>
             <Form.Item
               label='Ngôn ngữ giảng dạy'

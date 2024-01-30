@@ -11,7 +11,6 @@ import useResponsives from '@/hooks/useResponsives'
 import { UserState } from '@/interface/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Flex, Progress, Row, Space } from 'antd'
-import moment from 'moment-timezone'
 import { useContext, useEffect, useState } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
 import { FaBookOpen, FaClock, FaStar } from 'react-icons/fa6'
@@ -63,9 +62,6 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
 
     enabled: Boolean(user._id),
   })
-
-  const now = moment()
-  const diffDuration = moment.duration(now.diff(user.createdAt))
 
   const { sm } = useResponsives()
   const queryClient = useQueryClient()
@@ -136,16 +132,18 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
             {!update ? (
               <div className={css.infor}>
                 <Space direction='vertical' size='large'>
-                  <Flex justify='space-between' align='center'>
+                  <Flex justify='space-between' align='center' className={css.mentorName}>
+                    <p style={{ width: 40 }}></p>
                     <h1>{user.fullName}</h1>
-                    {user._id === profile?._id && (
+                    {user._id === profile?._id ? (
                       <ButtonCustom
                         onClick={() => setUpdate(true)}
                         icon={<TbUserEdit />}
-                        tooltip={sm ? 'Chỉnh sửa' : ''}
-                      >
-                        {!sm && 'Chỉnh sửa'}
-                      </ButtonCustom>
+                        tooltip='Chỉnh sửa'
+                        type='link'
+                      ></ButtonCustom>
+                    ) : (
+                      <p style={{ width: 40 }}></p>
                     )}
                   </Flex>
                   <div className={css.certificate}>
@@ -185,12 +183,11 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
                     {getAssessmentDetail?.data?.totalDetailedAverages?.map((item) => (
                       <Col span={24} md={12}>
                         <div>
-                          <p>{detailedAssessments.find((i) => i.name === item.name)?.label}</p>
-                          <Progress
-                            percent={(item.evaluate / 5) * 100}
-                            strokeColor='var(--green)'
-                            format={(percent) => `${percent}%`}
-                          />
+                          <Progress percent={(item.evaluate / 5) * 100} strokeColor='var(--green)' showInfo={false} />
+                          <Flex justify='space-between'>
+                            <p>{detailedAssessments.find((i) => i.name === item.name)?.label}</p>
+                            <b>{((item.evaluate / 5) * 10).toFixed(1)}</b>
+                          </Flex>
                         </div>
                       </Col>
                     ))}
@@ -254,11 +251,7 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
                           type='circle'
                           format={() => (
                             <div>
-                              <h3>
-                                {(diffDuration.asDays() < 30 && diffDuration.asDays().toFixed(0) + ' ngày') ||
-                                  (diffDuration.asDays() > 30 && diffDuration.asMonths().toFixed(0)) + ' tháng' ||
-                                  (diffDuration.asDays() > 365 && diffDuration.asYears().toFixed(0)) + ' năm'}
-                              </h3>
+                              <h3>{user.mentorInfo?.experienceTime + ' năm'}</h3>
                               <p>Kinh nghiệm</p>
                             </div>
                           )}

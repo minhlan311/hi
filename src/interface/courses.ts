@@ -3,6 +3,7 @@
 import { AssessmentState } from './assessment'
 import { CategoryState } from './category'
 import { ClassState } from './class'
+import { TopicState } from './topic'
 import { UserState } from './user'
 
 export interface CoursesState {
@@ -31,6 +32,7 @@ export interface CoursesState {
   id?: string
   cost: number
   typeCourse: any
+  topics: TopicState[]
 }
 
 export interface EnrollsState {

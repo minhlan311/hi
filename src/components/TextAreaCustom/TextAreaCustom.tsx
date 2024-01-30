@@ -69,6 +69,7 @@ const TextAreaCustom = (props: Props) => {
       <CKEditor
         ref={ref}
         onBlur={onBlur}
+        disabled={false}
         // name={name}
         editor={ClassicEditor}
         data={editorContent}
