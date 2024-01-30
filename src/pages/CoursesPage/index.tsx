@@ -234,8 +234,8 @@ const CoursesDetail = () => {
                                         label: item.name,
                                         children: (
                                           <Space direction='vertical' className={'sp100'}>
-                                            {item.lessons.length > 0 ? (
-                                              item.lessons.map((ls, index) => (
+                                            {item.lessons?.length > 0 ? (
+                                              item.lessons?.map((ls, index) => (
                                                 <div key={ls._id}>
                                                   <Flex justify='space-between' align='center'>
                                                     <Space>
