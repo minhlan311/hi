@@ -100,7 +100,7 @@ const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any
                 : navigate('/lam-bai-thi-online', {
                     state: {
                       testId: item._id,
-                      testTime: 300,
+                      testTime: item?.duration || 300,
                       addTime: 0,
                     },
                   })
@@ -132,7 +132,7 @@ const ChoiceQuestionPage = () => {
   const { xl, xxl } = useResponsives()
 
   return (
-    <Header title='Trắc nghiệm' padding={'25px 0 50px'}>
+    <Header title={skillChange?.includes('ALL') ? 'Bài thi' : 'Trắc nghiệm'} padding={'25px 0 50px'}>
       {!skillChange && !examData && (
         <Row gutter={[24, 24]}>
           <Col span={24}>
@@ -212,7 +212,10 @@ const ChoiceQuestionPage = () => {
             apiFind={examApi.findExam}
             type='test'
             keyFilter='examFind'
-            filterQuery={{ type: skillChange !== 'ALL' ? 'QUIZ' : 'TEST' }}
+            initFilterQuery={{
+              type: skillChange === 'ALL' ? 'TEST' : 'QUIZ',
+              skillName: skillChange === 'ALL' ? undefined : [skillChange],
+            }}
             callBackData={setExamData}
             setLoading={setIsLoad}
             page={current}

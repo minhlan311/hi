@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import userApi from '@/apis/user.api'
 import { Attendance } from '@/interface/event'
+import { UserState } from '@/interface/user'
 import { useQuery } from '@tanstack/react-query'
 import { Modal, Progress, Table } from 'antd'
 import { useState } from 'react'
@@ -50,7 +51,15 @@ const AttendanceDetail = (props: Props) => {
     {
       title: 'Lộ trình học',
       key: 'note',
-      render: (_: any, _a: any, index: number) => <Progress percent={index * 100} />,
+      render: (record: UserState) => (
+        <Progress
+          percent={
+            (record.progression.done.length / (record.progression.remains.length + record.progression.doing.length)) *
+            100
+          }
+          format={(percent) => percent + '%'}
+        />
+      ),
     },
   ]
 

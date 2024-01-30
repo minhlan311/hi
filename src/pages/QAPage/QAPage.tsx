@@ -1,44 +1,28 @@
-import { Col, Row } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
+import { Card, Col, Row } from 'antd'
+import { useSearchParams } from 'react-router-dom'
 import './QAPage.scss'
 import CateGoriesList from './components/category'
 import Questions from './components/question'
 
 export default function QAPage() {
-  const [categoryId, setCategoryId] = useState<string>('')
-
-  const useQuery = () => {
-    const { search } = useLocation()
-
-    return useMemo(() => new URLSearchParams(search), [search])
-  }
-
-  const query = useQuery()
-
-  useEffect(() => {
-    const categoryId = query.get('categoryId')
-
-    if (categoryId) {
-      setCategoryId(categoryId)
-    }
-  }, [query])
+  const [searchParams] = useSearchParams()
+  const categoryId = searchParams.get('categoryId')
+  const { md, sm } = useResponsives()
 
   return (
-    <div id='qa-page_container'>
-      <Row gutter={16} justify={'center'}>
-        <Col span={7} lg={6} className='position-fixed-div'>
-          <CateGoriesList
-            setCategoryId={(id: string) => {
-              console.log('categoryId', id)
-              setCategoryId(id)
-            }}
-          ></CateGoriesList>
+    <Header padding={'50px 0'} title='Hỏi đáp'>
+      <Row gutter={[24, 24]}>
+        <Col span={24} lg={6} className={sm && md ? '' : 'sticky'}>
+          <Card className='category_card' style={{ height: sm && md ? undefined : 'calc(100vh - 30px)' }}>
+            <CateGoriesList categoryId={categoryId!} />
+          </Card>
         </Col>
-        <Col span={17} lg={18}>
-          <Questions categoryId={categoryId} />
+        <Col span={24} lg={18}>
+          <Questions categoryId={categoryId!} />
         </Col>
       </Row>
-    </div>
+    </Header>
   )
 }

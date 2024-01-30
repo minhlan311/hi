@@ -70,8 +70,12 @@ const ClassDetail = () => {
     },
     {
       title: 'Lộ trình học',
-      key: 'note',
-      render: (_: any, _a: any, index: number) => <Progress percent={index * 100} />,
+      render: (record: UserState) => (
+        <Progress
+          percent={(record?.progression?.done.length / (record?.progression?.remains.length + 1)) * 100}
+          format={(percent) => percent?.toFixed(0) + '%'}
+        />
+      ),
     },
   ]
 

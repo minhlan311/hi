@@ -17,8 +17,8 @@ interface AppContextInterface {
   configs: Configs
   setConfigs: React.Dispatch<React.SetStateAction<Configs>>
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
-  questionList: string[]
-  setQuestionList: React.Dispatch<React.SetStateAction<string[]>>
+  questionList: { _id: string; data: string[] }[]
+  setQuestionList: React.Dispatch<React.SetStateAction<{ _id: string; data: string[] }[]>>
   setDuration: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -48,7 +48,7 @@ interface AppProviderProps {
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [profile, setProfile] = useState<UserState>(initialAppContext.profile)
-  const [questionList, setQuestionList] = useState<string[]>(initialAppContext.questionList)
+  const [questionList, setQuestionList] = useState<{ _id: string; data: string[] }[]>(initialAppContext.questionList)
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
   const [configs, setConfigs] = useState<Configs>(initialAppContext.configs)
   const [volume, setVolume] = useState<number>(initialAppContext.volume)

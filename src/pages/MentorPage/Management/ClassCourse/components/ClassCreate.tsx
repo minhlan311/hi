@@ -5,7 +5,7 @@ import openNotification from '@/components/Notification'
 import SelectCustom from '@/components/SelectCustom/SelectCustom'
 import { AppContext } from '@/contexts/app.context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { DatePicker, Form, Input } from 'antd'
+import { DatePicker, Form, Input, Radio } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
 import moment from 'moment-timezone'
@@ -79,6 +79,7 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
       const payload = {
         id: idClass ? idClass : undefined,
         title: values.title,
+        type: values.type,
         courseId: values.courseId,
         limitStudent: parseInt(values.limitStudent),
         categoryId: categoryId.categoryId,
@@ -112,6 +113,23 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
           ]}
         >
           <Input placeholder='Nhập tên đề lớp học' />
+        </Form.Item>
+        <Form.Item
+          label='Dạng lớp học'
+          name='type'
+          rules={[
+            {
+              required: true,
+              message: 'Vui lòng chọn dạng lớp học',
+            },
+          ]}
+        >
+          <Radio.Group
+            options={[
+              { label: 'Lớp học Online', value: 'ONLINE' },
+              { label: 'Lớp học Offline', value: 'OFFLINE' },
+            ]}
+          />
         </Form.Item>
         <Form.Item
           label='Khóa học'

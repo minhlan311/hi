@@ -14,10 +14,19 @@ type Props = {
   showPagination?: boolean
   fullSize?: boolean
   maxLength?: number
+  showMore?: boolean
   setCurrent?: React.Dispatch<React.SetStateAction<number>>
 }
 
-const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxLength, setCurrent }: Props) => {
+const MyCourses = ({
+  coursesData,
+  loading,
+  showPagination = true,
+  fullSize,
+  maxLength,
+  showMore = true,
+  setCurrent,
+}: Props) => {
   return (
     <div>
       <Header
@@ -46,18 +55,22 @@ const MyCourses = ({ coursesData, loading, showPagination = true, fullSize, maxL
             )}
           </LoadingCustom>
 
-          {showPagination ? (
-            <PaginationCustom
-              align='center'
-              limit={6}
-              dataArr={coursesData?.docs}
-              totalData={coursesData?.totalDocs}
-              callbackCurrent={setCurrent}
-            ></PaginationCustom>
-          ) : (
-            <Flex justify='center' style={{ marginTop: 24 }}>
-              <ButtonCustom href={'/profiles/' + coursesData?.docs?.[0]?.mentorId}>Xem thêm</ButtonCustom>
-            </Flex>
+          {showMore && (
+            <div>
+              {showPagination ? (
+                <PaginationCustom
+                  align='center'
+                  limit={6}
+                  dataArr={coursesData?.docs}
+                  totalData={coursesData?.totalDocs}
+                  callbackCurrent={setCurrent}
+                ></PaginationCustom>
+              ) : (
+                <Flex justify='center' style={{ marginTop: 24 }}>
+                  <ButtonCustom href={'/profiles/' + coursesData?.docs?.[0]?.mentorId}>Xem thêm</ButtonCustom>
+                </Flex>
+              )}
+            </div>
           )}
         </Space>
       </Header>

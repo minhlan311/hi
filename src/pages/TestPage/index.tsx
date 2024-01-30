@@ -243,7 +243,12 @@ const TestPage = () => {
                         </Descriptions.Item>
                       </Descriptions>
                     </div>
-                    <ButtonCustom size='large' type='primary' onClick={() => setStartTest(true)}>
+                    <ButtonCustom
+                      size='large'
+                      type='primary'
+                      onClick={() => setStartTest(true)}
+                      disabled={!testData.data.countQuestions}
+                    >
                       Bắt đầu thi
                     </ButtonCustom>
                   </Space>

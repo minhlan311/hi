@@ -15,7 +15,7 @@
     z-index: 1;
     color: var(--white);
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 4px;
     .iconDisable {
       font-size: 30px;
     }
@@ -88,11 +88,10 @@
   .isAnswer {
     background-color: #0ec25c61;
     border: 1px solid var(--green-2);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 11px 10px;
   }
   .hint {
-    color: 12px;
     color: var(--light-gray);
     align-items: center;
     & svg {

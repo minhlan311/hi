@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AppContext } from '@/contexts/app.context'
 import { Row, Space } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/vi'
 import { useContext, useEffect, useState } from 'react'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import ButtonCustom from '../ButtonCustom/ButtonCustom'
 import css from './styles.module.scss'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
-import { AppContext } from '@/contexts/app.context'
 type Props = {
   callBackWeekSelect?: React.Dispatch<React.SetStateAction<string | object>>
   callBackDateOfWeek?: React.Dispatch<React.SetStateAction<Dayjs[]>>
@@ -98,8 +98,8 @@ const CalendarWeek = ({ callBackWeekSelect, callBackDateOfWeek, showCurrent, but
         <Row justify='space-between'>
           <Space className={css.currentButt}>
             <ButtonCustom onClick={nowWeek}>Bây giờ</ButtonCustom>
-            <ButtonCustom onClick={prevWeek} icon={<AiOutlineLeft />}></ButtonCustom>
-            <ButtonCustom onClick={nextWeek} icon={<AiOutlineRight />}></ButtonCustom>
+            <ButtonCustom onClick={prevWeek} icon={<AiOutlineLeft />} style={{ height: 40 }}></ButtonCustom>
+            <ButtonCustom onClick={nextWeek} icon={<AiOutlineRight />} style={{ height: 40 }}></ButtonCustom>
           </Space>
           {profile.isMentor && buttonAdd}
         </Row>
