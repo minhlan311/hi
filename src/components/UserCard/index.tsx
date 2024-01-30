@@ -2,7 +2,6 @@ import { formatNumber } from '@/common'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
 import { MentorInfo } from '@/types/mentor.type'
 import { Card, Col, Flex, Rate, Row, Space } from 'antd'
-import moment from 'moment-timezone'
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2'
 import { LuGraduationCap } from 'react-icons/lu'
 import { MdAccessTime } from 'react-icons/md'
@@ -17,9 +16,6 @@ type Props = {
 }
 
 const UserCard = ({ data }: Props) => {
-  const now = moment()
-  const diffDuration = moment.duration(now.diff(data.userData.createdAt))
-
   return (
     <Card className={style.mentorCard} hoverable size='small'>
       <Row align='middle'>
@@ -70,11 +66,7 @@ const UserCard = ({ data }: Props) => {
 
               <Flex gap={5} align='center'>
                 <MdAccessTime size={15} className={`${style.pdGreen} ${style.green}`} />
-                <b>
-                  {(diffDuration.asDays() < 30 && diffDuration.asDays().toFixed(0) + ' Ngày') ||
-                    (diffDuration.asDays() > 30 && diffDuration.asMonths().toFixed(0)) + ' Tháng' ||
-                    (diffDuration.asDays() > 365 && diffDuration.asYears().toFixed(0)) + ' Năm'}
-                </b>
+                <b>{(data?.experienceTime ? data?.experienceTime : 0) + ' Năm'}</b>
               </Flex>
 
               <Space>

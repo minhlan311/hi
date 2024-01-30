@@ -1,4 +1,8 @@
+import configApi from '@/apis/config.api'
 import Mentor from '@/pages/HomePage/Mentor'
+import { setConfigFromLS } from '@/utils/auth'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import Banner from './Banner'
 import CourseCalender from './CourseCalender/CourseCalender'
 import Gift from './Gift/Gift'
@@ -8,10 +12,6 @@ import News from './News/News'
 import TopCourses from './TopCourses'
 import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
-import { useQuery } from '@tanstack/react-query'
-import configApi from '@/apis/config.api'
-import { useEffect } from 'react'
-import { setConfigFromLS } from '@/utils/auth'
 
 export default function HomePage() {
   const { data } = useQuery({
