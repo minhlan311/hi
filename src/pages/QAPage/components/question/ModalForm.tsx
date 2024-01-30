@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import categoryApi from '@/apis/categories.api'
+import FaqApi from '@/apis/faq.api'
 import { CategoryState } from '@/interface/category'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Form, Input, Modal, Select, Upload, Button, message } from 'antd'
-import { useForm } from 'antd/es/form/Form'
+import { FaqSate } from '@/interface/faq'
+import { UploadOutlined } from '@ant-design/icons'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, Form, Input, Modal, Select, Upload, message } from 'antd'
+import { useForm } from 'antd/es/form/Form'
 import { UploadFile } from 'antd/lib'
-import { useState, useEffect } from 'react'
-import { UploadOutlined } from '@ant-design/icons'
-import FaqApi from '@/apis/faq.api'
-import { FaqSate } from '@/interface/faq'
+import { useEffect, useState } from 'react'
 
 interface IModalFormProps {
   isModalOpen: boolean
@@ -28,9 +28,9 @@ export default function ModalForm(props: IModalFormProps) {
   const { data } = useQuery({
     queryFn: () =>
       categoryApi.getCategories({
-        parentId: '64ffde9c746fe5413cf8d1af'
+        parentId: '64ffde9c746fe5413cf8d1af',
       }),
-    queryKey: ['getCategoryOptions']
+    queryKey: ['getCategoryOptions'],
   })
   const mutate = useMutation({
     mutationFn: (body: FaqSate) => (!faq ? FaqApi.createFaq(body) : FaqApi.updateFaq(body)),
@@ -49,13 +49,13 @@ export default function ModalForm(props: IModalFormProps) {
     },
     onError() {
       message.error('Lỗi không mong muốn, vui lòng thử lại vào lúc khác')
-    }
+    },
   })
 
   const categoryOptions = data?.data.docs?.map((item: CategoryState) => {
     return {
       label: item.name,
-      value: item._id
+      value: item._id,
     }
   })
 
@@ -95,11 +95,11 @@ export default function ModalForm(props: IModalFormProps) {
               name: item,
               status: 'done',
               response: {
-                url: `${item}`
-              }
+                url: `${item}`,
+              },
             } as UploadFile<any>
-          })
-        }
+          }),
+        },
       })
       setImages(
         faq?.files?.map((item: string) => {
@@ -107,9 +107,9 @@ export default function ModalForm(props: IModalFormProps) {
             uid: item,
             name: item,
             status: 'done',
-            url: `${import.meta.env.VITE_FILE_ENDPOINT}/${item}`
+            url: `${import.meta.env.VITE_FILE_ENDPOINT}/${item}`,
           }
-        })
+        }),
       )
     }
   }, [faq, form])
@@ -153,6 +153,7 @@ export default function ModalForm(props: IModalFormProps) {
           </Form.Item>
           <Form.Item label='Nội dung' name='content'>
             <CKEditor
+              disabled={false}
               editor={ClassicEditor}
               data={form.getFieldValue('content')}
               onChange={(_event: any, editor: any) => {
