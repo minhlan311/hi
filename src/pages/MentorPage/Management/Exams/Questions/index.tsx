@@ -63,7 +63,7 @@ const QuestionsSelect = ({
 
   const questionDetail = idSelect?.find((item) => item._id === examData?._id)
 
-  const questionContext = questionList.find((item) => item._id === examData?._id)
+  const questionContext = questionList?.find((item) => item._id === examData?._id)
   const questionLength = questionContext?.data.length || questions?.totalDocs
 
   const handleSave = () => {
