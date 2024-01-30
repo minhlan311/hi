@@ -86,7 +86,11 @@ export const localAction = (
             localData = localData.filter((item: any) => item[checkKey] !== updateData[checkKey])
           }
         } else if (type === 'delete') {
-          localStorage.removeItem(localKey)
+          if (checkKey) {
+            localData = localData.filter((item: any) =>
+              checkKey ? item?.[checkKey] !== updateData : item._id === updateData,
+            )
+          } else localStorage.removeItem(localKey)
         }
       }
 

@@ -12,7 +12,7 @@ import useResponsives from '@/hooks/useResponsives'
 import { ExamState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { SuccessResponse } from '@/types/utils.type'
-import { setQuestionsListFromLS } from '@/utils/questons'
+import { getQuestionsList, setQuestionsListFromLS } from '@/utils/questons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Checkbox, Popconfirm, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
@@ -28,7 +28,15 @@ import DrawerUpload from '../Drawer/DrawerUpload'
 import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChange: string }) => {
+const QuestionsSelect = ({
+  examData,
+  tabChange,
+  idSelect,
+}: {
+  examData: ExamState
+  tabChange: string
+  idSelect: { _id: string; data: string[] }[]
+}) => {
   const { questionList, setQuestionList } = useContext(AppContext)
   const [remove, setRemove] = useState<boolean>(false)
   const queryClient = useQueryClient()
@@ -53,18 +61,22 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
   const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
   const [loading, setLoading] = useState<boolean>(false)
 
-  const questionDetail = questionList?.find((item) => item._id === examData?._id)
+  const questionDetail = idSelect?.find((item) => item._id === examData?._id)
+
+  const questionContext = questionList.find((item) => item._id === examData?._id)
+  const questionLength = questionContext?.data.length || questions?.totalDocs
 
   const handleSave = () => {
     if (examData) {
       const payload = {
         id: examData?._id,
-        questions: questionDetail?.data,
+        questions: questionContext?.data,
         skillName: examData?.skillName,
       }
 
       examMutation.mutate(payload as unknown as any)
-      queryClient.invalidateQueries({ queryKey: [questionList] })
+      queryClient.invalidateQueries({ queryKey: ['questionList'] })
+      localAction('questionsList', examData._id, 'delete', '_id', setQuestionList)
     }
   }
 
@@ -79,9 +91,9 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
         keyFilter='questionList'
         apiFind={questionApi.findQuestion}
         filterQuery={{
-          _id: questionDetail?.data,
+          _id: questionDetail ? questionDetail?.data : [],
         }}
-        checkQuery={tabChange === 'questions' && Boolean(questionDetail)}
+        checkQuery={tabChange === 'questions' || Boolean(questionDetail)}
         limit={10}
         page={page}
         setLoading={setLoading}
@@ -108,7 +120,7 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
                 cancelText='Hủy'
               >
                 <ButtonCustom
-                  disabled={!questionList?.length}
+                  disabled={!questionLength}
                   icon={<AiOutlineDelete size={22} />}
                   tooltip='Xóa tất cả câu hỏi'
                   danger
@@ -117,7 +129,7 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
 
               <ButtonCustom
                 type='primary'
-                disabled={!questionList?.length}
+                disabled={!questionLength}
                 onClick={handleSave}
                 icon={<FiSave size={22} />}
                 tooltip='Lưu gói câu hỏi'
@@ -131,7 +143,7 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
           <>
             <Space size='small'>
               <p>Số câu hỏi:</p>
-              <b>{questionDetail?.data?.length || questions?.totalDocs}</b>
+              <b>{questionLength}</b>
             </Space>
             <Space>
               <Popconfirm
@@ -160,13 +172,13 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
                 cancelText='Hủy'
               >
                 <ButtonCustom
-                  disabled={!questionList?.length}
+                  disabled={!questionLength}
                   icon={<AiOutlineDelete size={22} />}
                   tooltip='Xóa tất cả câu hỏi'
                   danger
                 ></ButtonCustom>
               </Popconfirm>
-              <ButtonCustom type='primary' disabled={!questionList?.length} onClick={handleSave}>
+              <ButtonCustom type='primary' disabled={!questionLength} onClick={handleSave}>
                 Lưu gói câu hỏi
               </ButtonCustom>
             </Space>
@@ -174,7 +186,7 @@ const QuestionsSelect = ({ examData, tabChange }: { examData: ExamState; tabChan
         ) : (
           <Space size='small' className={css.cardInfor}>
             <BsListCheck size={22} />
-            <b>{questionList?.length}</b>
+            <b>{questionLength}</b>
           </Space>
         )}
       </Space>
@@ -201,13 +213,15 @@ const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabCh
   const [questions, setQuestions] = useState<SuccessResponse<QuestionState[]>>()
   const dataActive = questions?.docs?.filter((item) => item.status === 'ACTIVE')
   const quesId = dataActive?.map((it) => it._id)
+
   const questionDetail = questionList?.find((item) => item._id === examDetail?._id)
-  const checkAll = quesId?.length === questionDetail?.data?.length
+  const questionLength = questionDetail?.data.length
+  const checkAll = quesId?.length === questionLength
 
   const [indeterminate, setIndeterminate] = useState<boolean>(false)
 
   useEffect(() => {
-    if (questionDetail && questionDetail?.data.length > 0)
+    if (questionLength && questionLength > 0)
       setIndeterminate(questionDetail?.data.some((e) => questions?.docs?.some((it) => it._id === e)) && !checkAll)
   }, [questionDetail, checkAll])
 
@@ -283,7 +297,7 @@ const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabCh
 
               <ButtonCustom
                 type='primary'
-                disabled={!questionDetail?.data?.length}
+                disabled={!questionLength}
                 onClick={handleSave}
                 icon={<FiSave size={22} />}
                 tooltip='Lưu gói câu hỏi'
@@ -301,7 +315,7 @@ const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabCh
             </Space>
             <Space size='small'>
               <p>Số câu đã chọn:</p>
-              <b>{questionDetail?.data?.length}</b>
+              <b>{questionLength}</b>
             </Space>
 
             <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
@@ -322,7 +336,7 @@ const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabCh
               ></ButtonCustom>
               <ButtonCustom
                 type='primary'
-                disabled={!questionDetail?.data?.length}
+                disabled={!questionLength}
                 onClick={handleSave}
                 icon={<FiSave size={22} />}
                 tooltip='Lưu gói câu hỏi'
@@ -396,6 +410,7 @@ const MentorQuestions = () => {
     },
     enabled: Boolean(id),
   })
+  const [idSelect, setIdSelect] = useState<{ _id: string; data: string[] }[]>()
 
   const examDetail = exam?.data
   const { setQuestionList } = useContext(AppContext)
@@ -411,6 +426,7 @@ const MentorQuestions = () => {
           'data',
           setQuestionList,
         )
+        setIdSelect([{ _id: examDetail._id, data: examDetail.questions }])
       }
     }
   }, [examDetail])
@@ -421,11 +437,19 @@ const MentorQuestions = () => {
     setTabChange(e)
   }
 
+  useEffect(() => {
+    if (tabChange === 'questions') {
+      const newID = getQuestionsList()
+
+      setIdSelect(newID)
+    }
+  }, [tabChange])
+
   const questionTabs = [
     {
       id: 'questions',
       name: 'Câu hỏi đã chọn',
-      children: <QuestionsSelect examData={examDetail!} tabChange={tabChange} />,
+      children: <QuestionsSelect examData={examDetail!} tabChange={tabChange} idSelect={idSelect ? idSelect : []} />,
     },
     {
       id: 'bankQuestion',
