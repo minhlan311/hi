@@ -131,6 +131,7 @@ export default function MyStudent() {
             userId: studentId as string,
           })
     }
+
     setIsModalOpen(false)
   }
 
@@ -158,19 +159,8 @@ export default function MyStudent() {
     },
     {
       title: 'Lớp học',
-      dataIndex: 'courseName',
       key: 'courseName',
-      render: (_: any, record: findUserEnroll) => {
-        const filterClassName = record?.user?.classData?.filter((item) => item?.courseId === record?.course?._id)
-
-        return (
-          <>
-            <span>{filterClassName?.map((item) => item?.title)}</span>
-          </>
-        )
-      },
-
-      //
+      render: (_: any, record: findUserEnroll) => record.course.class?.[0].title,
     },
     {
       title: 'Hành động',

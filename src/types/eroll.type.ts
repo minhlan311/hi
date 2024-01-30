@@ -1,4 +1,4 @@
-import { TCourse } from './course.type'
+import { CoursesState } from '@/interface/courses'
 import { UserInfo } from './user.type'
 
 export type findUserEnroll = {
@@ -28,7 +28,7 @@ export type findUserEnroll = {
     updatedAt: string
     id: string
   }
-  course: TCourse
+  course: CoursesState
   document: null
   test: null
   id: string
