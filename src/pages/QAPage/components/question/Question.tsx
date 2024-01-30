@@ -1,19 +1,19 @@
 import FaqApi from '@/apis/faq.api'
 import { AnswerState, FaqSate } from '@/interface/faq'
-import { UserOutlined, CommentOutlined } from '@ant-design/icons'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Avatar, Button, Card, Pagination, Space, Tooltip, message } from 'antd'
-import Meta from 'antd/es/card/Meta'
-import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useContext } from 'react'
 import { LikeState, TargetModelEnum, TypeEnum } from '@/interface/like'
+import { CommentOutlined, UserOutlined } from '@ant-design/icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Avatar, Button, Card, Flex, Pagination, Space, Tooltip, message } from 'antd'
+import Meta from 'antd/es/card/Meta'
+import { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
 import { AppContext } from '@/contexts/app.context'
+import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
 
 import LikeApi from '@/apis/like.api'
-import { AxiosError } from 'axios'
 import { formatDate } from '@/helpers/common'
+import { AxiosError } from 'axios'
 
 interface IFaqListProp {
   categoryId?: string
@@ -173,15 +173,17 @@ export default function FaqList(props: IFaqListProp) {
         </Card>
       ))}
 
-      {faqs?.length && (
-        <Pagination
-          defaultCurrent={page}
-          total={data?.data.totalDocs}
-          onChange={(page) => {
-            setPage(page)
-          }}
-        />
-      )}
+      <Flex justify='center'>
+        {faqs?.length && (
+          <Pagination
+            defaultCurrent={page}
+            total={data?.data.totalDocs}
+            onChange={(page) => {
+              setPage(page)
+            }}
+          />
+        )}
+      </Flex>
     </>
   )
 }

@@ -141,11 +141,7 @@ export default function QADetail() {
     <div id='qa-page_container'>
       <Row gutter={16}>
         <Col span={7} lg={6}>
-          <CateGoriesList
-            setCategoryId={() => {
-              // setCategoryId(id)
-            }}
-          ></CateGoriesList>
+          <CateGoriesList></CateGoriesList>
         </Col>
         <Col span={10} lg={18}>
           {isLoading ? (
@@ -233,7 +229,6 @@ export default function QADetail() {
                     <h3>Trả lời câu hỏi của {faq?.user?.fullName}</h3>
                     <p>Làm sao để có câu trả lời hay nhất?</p>
                     <ul style={{ marginLeft: '20px' }}>
-                      <li className='list_style'>Luôn có GIẢI THÍCH các bước giải</li>
                       <li className='list_style'>Luôn có GIẢI THÍCH các bước giải</li>
                       <li className='list_style'> Không copy câu trả lời của Timi</li>
                       <li className='list_style'>Không sao chép trên mạng</li>

@@ -25,9 +25,11 @@ type Props = {
   page?: number
   className?: string
   filterQuery?: any
+  initFilterQuery?: any
   checkQuery?: boolean | any
   sort?: object
   callApi?: boolean
+  listenerFilterQuery?: boolean
 }
 
 const FilterAction = (props: Props) => {
@@ -42,11 +44,13 @@ const FilterAction = (props: Props) => {
     page = 1,
     className,
     filterQuery,
+    initFilterQuery,
     checkQuery,
     sort = {
       createdAt: '-1',
     },
     callApi = true,
+    listenerFilterQuery = false,
   } = props
   const { profile } = useContext(AppContext)
   const [form] = Form.useForm()
@@ -88,7 +92,7 @@ const FilterAction = (props: Props) => {
     }
   })
   const [filterData, setFilterData] = useState<{ filterQuery: any; options: any } | null>({
-    filterQuery: { ...filterQuery, mentorType: mentorSub?.label },
+    filterQuery: { ...initFilterQuery, ...filterQuery, mentorType: mentorSub?.label },
     options: { sort, limit, page },
   })
 
@@ -113,7 +117,7 @@ const FilterAction = (props: Props) => {
     } = form.getFieldsValue()
 
     const body = {
-      type,
+      type: type || initFilterQuery?.type,
       skill,
       skillName,
       mentorType: mentorType || mentorSub?.label,
@@ -128,7 +132,7 @@ const FilterAction = (props: Props) => {
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
       endDate: typeFilter !== 'event' && dates ? dates[1] : undefined,
       search: keyword || undefined,
-      createdById,
+      createdById: createdById || filterQuery?.createdById,
     }
 
     setFilterData((prev) => {
@@ -139,7 +143,7 @@ const FilterAction = (props: Props) => {
       }
 
       return {
-        filterQuery: { ...prev?.filterQuery, ...body, ...filterQuery },
+        filterQuery: { ...prev?.filterQuery, ...filterQuery, ...body },
         options: {
           limit,
           page: 1,
@@ -162,7 +166,7 @@ const FilterAction = (props: Props) => {
   const handleReset = () => {
     form.resetFields()
     setFilterData({
-      filterQuery: { ...filterQuery, mentorType: mentorSub?.label } || {},
+      filterQuery: { type: initFilterQuery?.type, ...filterQuery, mentorType: mentorSub?.label } || {},
       options: {
         limit,
         page: 1,
@@ -186,6 +190,7 @@ const FilterAction = (props: Props) => {
           filterQuery: {
             mentorType: mentorSub?.label,
             ...prev?.filterQuery,
+            ...initFilterQuery,
             ...filterQuery,
             categoryName: check?.label,
           },
@@ -198,11 +203,39 @@ const FilterAction = (props: Props) => {
       })
 
     form.setFieldsValue({
-      categoryName: check?.label || filterQuery?.categoryName,
+      categoryName: check?.label || filterQuery?.categoryName || initFilterQuery?.categoryName,
     })
-    form.setFieldsValue({ skillName: filterQuery?.skillName })
+    form.setFieldsValue({ skillName: filterQuery?.skillName || initFilterQuery?.skillName })
     form.setFieldsValue({ mentorType: mentorSub?.label })
-  }, [page, checkQuery, location, filterQuery])
+  }, [page, checkQuery, location])
+
+  useEffect(() => {
+    if (listenerFilterQuery) {
+      const check = subjectList?.find(
+        (sj) =>
+          mentorSub?.children
+            ?.find((item) => location.includes(item.slug))
+            ?.name.toLowerCase()
+            .includes(sj.label.toLowerCase()),
+      )
+      setFilterData((prev) => {
+        return {
+          filterQuery: {
+            mentorType: mentorSub?.label,
+            ...prev?.filterQuery,
+            ...initFilterQuery,
+            ...filterQuery,
+            categoryName: check?.label,
+          },
+          options: {
+            limit,
+            page,
+            sort: { ...prev?.options.sort },
+          },
+        }
+      })
+    }
+  }, [page, checkQuery, location, filterQuery, listenerFilterQuery])
 
   useEffect(() => {
     setTimeout(() => {

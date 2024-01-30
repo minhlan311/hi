@@ -1,10 +1,3 @@
-.news-page-container {
-  position: relative;
-  padding: 50px 20px;
-  max-width: 1400px;
-  margin: auto;
-  min-height: 110vh;
-}
 .flex-col {
   padding: 10px 0;
   line-height: 1.2;
@@ -21,36 +14,21 @@
   font-weight: 700;
   cursor: pointer;
   padding: 10px 0;
-  color: #d72831;
+  color: var(--red);
 }
 .title-new:hover {
   text-decoration: underline;
 }
-.h2-title {
-  padding-bottom: 30px;
-  font-size: 32px;
-  padding-left: 20px;
-}
+
 .pagi {
   margin-top: 50px;
   display: flex;
   justify-content: center;
 }
-.title-ellipsis {
-  max-width: 600px;
-}
-.title-ellipsis-fixed {
-  max-width: 350px;
-}
+
 .fixed {
-  overflow: scroll;
-  padding: 20px;
-  height: 1000px;
+  position: sticky;
+  top: 20px;
   min-width: 400px;
-  position: absolute;
   right: 0;
-}
-.h2 {
-  font-size: 28px;
-  padding-bottom: 30px;
 }

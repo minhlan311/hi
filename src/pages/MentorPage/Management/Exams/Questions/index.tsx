@@ -89,6 +89,7 @@ const QuestionsSelect = ({
       <FilterAction
         type='question'
         keyFilter='questionList'
+        listenerFilterQuery
         apiFind={questionApi.findQuestion}
         filterQuery={{
           _id: questionDetail ? questionDetail?.data : [],
