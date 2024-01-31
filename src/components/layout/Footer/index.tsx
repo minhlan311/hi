@@ -33,7 +33,7 @@ const Footer = () => {
             ))}
           </Row>
           <Row justify={'center'} gutter={[24, 24]}>
-            {configs.footer.map((item) => (
+            {configs.footer?.map((item) => (
               <Col span={24} md={6} key={item.name}>
                 <Flex gap={12} vertical>
                   <Title level={4} style={{ color: 'var(--white)' }}>

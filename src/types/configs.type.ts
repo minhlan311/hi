@@ -3,6 +3,11 @@ type footer = {
   children: { href: string; content: string }[]
 }
 
+type buttonADSLink = {
+  href: string
+  content: string
+}
+
 export type Configs = {
   _id: string
   _destroy: boolean
@@ -27,5 +32,6 @@ export type Configs = {
   updatedAt: string
   banners: string[]
   logoFooter: string
+  buttonADSLink: buttonADSLink[]
   footer: footer[]
 }
