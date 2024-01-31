@@ -1,6 +1,6 @@
-type buttonADSLink = {
-  href: string
-  content: string
+type footer = {
+  name: string
+  children: { href: string; content: string }[]
 }
 
 export type Configs = {
@@ -27,5 +27,5 @@ export type Configs = {
   updatedAt: string
   banners: string[]
   logoFooter: string
-  buttonADSLink: buttonADSLink[]
+  footer: footer[]
 }
