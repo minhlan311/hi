@@ -142,6 +142,7 @@ const CategoryPage = () => {
                 limit={mentorData?.limit}
                 totalData={mentorData?.totalDocs}
                 callbackCurrent={setCurrent}
+                align='center'
               />
             </Space>
           </Header>
@@ -188,6 +189,7 @@ const CategoryPage = () => {
                   limit={mentorData?.limit}
                   totalData={mentorData?.totalDocs}
                   callbackCurrent={setCurrent}
+                  align='center'
                 />
               </Space>
             )}
@@ -212,6 +214,7 @@ const CategoryPage = () => {
                   limit={coursesData?.data?.limit}
                   totalData={coursesData?.data?.totalDocs}
                   callbackCurrent={setCurrent}
+                  align='center'
                 />
               </Space>
             )}

@@ -108,7 +108,12 @@ export default function MyCourse() {
                 </Col>
               ))}
               <Col span={24}>
-                <PaginationCustom callbackCurrent={setCurrent} totalData={enrollData?.totalDocs} limit={6} />
+                <PaginationCustom
+                  callbackCurrent={setCurrent}
+                  totalData={enrollData?.totalDocs}
+                  limit={6}
+                  align='center'
+                />
               </Col>
             </Row>
           </LoadingCustom>

@@ -1,11 +1,11 @@
 import skillApi from '@/apis/skill.api'
+import PaginationCustom from '@/components/PaginationCustom'
 import { ExamState, SkillType } from '@/interface/exam'
 import { useQuery } from '@tanstack/react-query'
 import { Flex, Space, Tabs } from 'antd'
 import { FormInstance } from 'antd/lib'
 import React, { useEffect, useState } from 'react'
 import RenderSkillItem from './RenderSkillItem'
-import PaginationCustom from '@/components/PaginationCustom'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -209,7 +209,12 @@ const CreateSkill = (props: Props) => {
                 />
                 <Flex justify='space-between' style={{ position: 'absolute', right: 0, bottom: -60 }}>
                   <p></p>{' '}
-                  <PaginationCustom callbackCurrent={setCurrent} totalData={skillData?.data.totalDocs} limit={8} />
+                  <PaginationCustom
+                    callbackCurrent={setCurrent}
+                    totalData={skillData?.data.totalDocs}
+                    limit={8}
+                    align='center'
+                  />
                 </Flex>
               </Space>
             </Tabs.TabPane>

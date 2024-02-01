@@ -202,6 +202,7 @@ export default function ClassManage() {
           pageSize: classData?.limit,
           total: classData?.totalDocs,
           onChange: onPageChange,
+          position: ['bottomCenter'],
         }}
         loading={loading}
         columns={tableColumns}

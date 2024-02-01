@@ -231,6 +231,7 @@ export default function MyStudent() {
             current: current,
             pageSize: 10,
             total: data?.data?.totalDocs,
+            position: ['bottomCenter'],
           }}
           onChange={onChange}
           loading={isLoading || mutate.isLoading}

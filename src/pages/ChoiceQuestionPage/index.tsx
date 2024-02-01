@@ -251,6 +251,7 @@ const ChoiceQuestionPage = () => {
             totalData={examData?.totalDocs}
             limit={examData?.limit}
             page={examData?.page}
+            align='center'
           />
         </Space>
       )}

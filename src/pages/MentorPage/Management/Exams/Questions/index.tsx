@@ -200,6 +200,7 @@ const QuestionsSelect = ({
         totalData={questions?.totalDocs}
         limit={questions?.limit}
         page={questions?.page}
+        align='center'
       />
     </Space>
   )
@@ -381,6 +382,7 @@ const QuestionsBank = ({ examDetail, tabChange }: { examDetail: ExamState; tabCh
         totalData={questions?.totalDocs}
         limit={10}
         page={questions?.page}
+        align='center'
       />
 
       <DrawerQuestion

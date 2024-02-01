@@ -258,6 +258,7 @@ const MentorExams = () => {
           pageSize: data?.limit,
           total: data?.totalDocs,
           onChange: (p) => setPage(p),
+          position: ['bottomCenter'],
         }}
       />
       <DrawerExam
