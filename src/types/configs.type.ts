@@ -1,3 +1,8 @@
+type footer = {
+  name: string
+  children: { href: string; content: string }[]
+}
+
 type buttonADSLink = {
   href: string
   content: string
@@ -28,4 +33,5 @@ export type Configs = {
   banners: string[]
   logoFooter: string
   buttonADSLink: buttonADSLink[]
+  footer: footer[]
 }

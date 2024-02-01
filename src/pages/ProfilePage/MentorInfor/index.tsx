@@ -251,7 +251,9 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
                           type='circle'
                           format={() => (
                             <div>
-                              <h3>{user.mentorInfo?.experienceTime + ' năm'}</h3>
+                              <h3>
+                                {(user.mentorInfo?.experienceTime ? user.mentorInfo?.experienceTime : 0) + ' năm'}
+                              </h3>
                               <p>Kinh nghiệm</p>
                             </div>
                           )}
