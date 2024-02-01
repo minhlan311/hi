@@ -77,6 +77,7 @@ const AttendanceDetail = (props: Props) => {
           pageSize: userData?.data?.limit,
           total: userData?.data?.totalDocs,
           onChange: (p) => setPage(p),
+          position: ['bottomCenter'],
         }}
       />
     </Modal>

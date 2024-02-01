@@ -69,14 +69,13 @@ const MentorCourses = () => {
         )}
       </Row>
 
-      <div className='pagination'>
-        <PaginationCustom
-          callbackCurrent={setCurrent}
-          totalData={data?.totalDocs}
-          limit={data?.limit}
-          page={data?.page}
-        />
-      </div>
+      <PaginationCustom
+        callbackCurrent={setCurrent}
+        totalData={data?.totalDocs}
+        limit={data?.limit}
+        page={data?.page}
+        align='center'
+      />
     </Space>
   )
 }

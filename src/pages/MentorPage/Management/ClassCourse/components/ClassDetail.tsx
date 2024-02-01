@@ -206,6 +206,7 @@ const ClassDetail = () => {
                         pageSize: eventData?.limit,
                         total: eventData?.totalDocs,
                         onChange: (p) => setPage(p),
+                        position: ['bottomCenter'],
                       }}
                     />
                   </Space>
@@ -227,6 +228,7 @@ const ClassDetail = () => {
                       pageSize: 10,
                       total: data?.studentList?.length,
                       onChange: (p) => setPages(p),
+                      position: ['bottomCenter'],
                     }}
                   />
                 ),

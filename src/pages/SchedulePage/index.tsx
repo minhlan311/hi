@@ -8,7 +8,7 @@ const SchedulePage = () => {
   return (
     <Header padding={'25px 0 80px'} title='Lịch học của tôi' titleSize={35}>
       <Space direction='vertical' size='large' className='sp100'>
-        <BreadCrumbsDynamic homeIcon={<BiHomeAlt />}></BreadCrumbsDynamic>
+        <BreadCrumbsDynamic homeIcon={<BiHomeAlt />} lastText='Lịch học của tôi'></BreadCrumbsDynamic>
         <CalendarCustom calendarType='student' />
       </Space>
     </Header>

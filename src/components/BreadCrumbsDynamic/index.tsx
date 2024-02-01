@@ -5,10 +5,11 @@ type Props = {
   homeTitle?: string
   homeIcon?: React.ReactNode
   separator?: string
+  lastText?: string
 }
 
 const BreadCrumbsDynamic = (props: Props) => {
-  const { homeUrl = '/', homeTitle = 'Trang chủ', homeIcon, separator } = props
+  const { homeUrl = '/', homeTitle = 'Trang chủ', homeIcon, separator, lastText } = props
   const location = useLocation()
 
   const breadCrumbView = () => {
@@ -36,7 +37,7 @@ const BreadCrumbsDynamic = (props: Props) => {
             const isLast = index === pathnames.length - 1
 
             return isLast ? (
-              <Breadcrumb.Item key={index}>{capatilize(name)}</Breadcrumb.Item>
+              <Breadcrumb.Item key={index}>{lastText ? lastText : capatilize(name)}</Breadcrumb.Item>
             ) : (
               index >= 0 && (
                 <Breadcrumb.Item key={index}>

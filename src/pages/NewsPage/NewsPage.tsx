@@ -43,34 +43,35 @@ export default function NewsPage() {
     <Header padding={'50px 0'}>
       <Row gutter={48}>
         <Col span={24} md={16}>
-          <h1>Tin tức</h1>
-          {isLoading ? (
-            <LoadingCustom tip='Vui lòng chờ ...' />
-          ) : (
-            data?.data?.docs &&
-            data?.data?.docs?.map((item) => (
-              <>
-                <div className='flex-col'>
-                  <div>
-                    <ImageCustom
-                      height='150px'
-                      width='250px'
-                      src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
-                    />
+          <Space direction='vertical' className='sp100'>
+            <h1>Tin tức</h1>
+            {isLoading ? (
+              <LoadingCustom tip='Vui lòng chờ ...' />
+            ) : (
+              data?.data?.docs &&
+              data?.data?.docs?.map((item) => (
+                <>
+                  <div className='flex-col'>
+                    <div>
+                      <ImageCustom
+                        height='150px'
+                        width='250px'
+                        src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverUrl}
+                      />
+                    </div>
+                    <div className='title-ellipsis'>
+                      <h3 onClick={() => navigate(`/tin-tuc/${item?.id}`)} className='title-new'>
+                        {item?.title}
+                      </h3>
+                      <Paragraph ellipsis={{ rows: 3 }}>{item?.description}</Paragraph>
+                    </div>
                   </div>
-                  <div className='title-ellipsis'>
-                    <h3 onClick={() => navigate(`/tin-tuc/${item?.id}`)} className='title-new'>
-                      {item?.title}
-                    </h3>
-                    <Paragraph ellipsis={{ rows: 3 }}>{item?.description}</Paragraph>
-                  </div>
-                </div>
-              </>
-            ))
-          )}
-          <div className='pagi'>
-            <PaginationCustom callbackCurrent={setCurrent} limit={8} totalData={data?.data?.totalDocs} />
-          </div>
+                </>
+              ))
+            )}
+
+            <PaginationCustom callbackCurrent={setCurrent} limit={8} totalData={data?.data?.totalDocs} align='center' />
+          </Space>
         </Col>
 
         <Col span={0} md={7}>

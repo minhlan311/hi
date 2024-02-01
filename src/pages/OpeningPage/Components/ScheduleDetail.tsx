@@ -23,7 +23,7 @@ const columns: TableColumnsType<any> = [
     width: '25%',
     render: (record: ClassState) => (
       <div>
-        <TagCustom content='Luyện thi lớp 10   ' color='#019d44' colorText='white' />
+        <TagCustom content={record.courseData?.name} color='#019d44' colorText='white' />
         <div className={style.classType}>{record.title}</div>
         <Link to={'/profiles/' + record.owner?._id}>
           {record.owner?.gender === 'MALE' ? 'Thầy' : 'Cô'} {record.owner?.fullName}
@@ -65,7 +65,7 @@ const columns: TableColumnsType<any> = [
               Thứ{' '}
               {record.event.schedules.map((item, id) => (
                 <>
-                  {item === 1 ? 'CN' : item}
+                  {item === 0 ? 'CN' : item}
                   {record.event.schedules.length - 1 > id && '/'}
                 </>
               ))}

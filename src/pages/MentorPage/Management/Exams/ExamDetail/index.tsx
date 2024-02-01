@@ -1,23 +1,23 @@
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import categoryApi from '@/apis/categories.api'
-import css from './styles.module.scss'
 import examApi from '@/apis/exam.api'
+import userApi from '@/apis/user.api'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import LoadingCustom from '@/components/LoadingCustom'
-import MentorCreateTest from '../MentorCreateTest'
-import moment from 'moment-timezone'
 import PageResult from '@/components/PageResult'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
-import userApi from '@/apis/user.api'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Col, Row, Space, Table } from 'antd'
+import moment from 'moment-timezone'
+import { useEffect, useState } from 'react'
 import { BiUser } from 'react-icons/bi'
 import { BsQuestionLg } from 'react-icons/bs'
-import { Card, Col, Row, Space, Table } from 'antd'
 import { CgCheckO, CgCloseO } from 'react-icons/cg'
-import { Link, useLocation } from 'react-router-dom'
 import { RiCheckboxMultipleLine } from 'react-icons/ri'
 import { TfiWrite } from 'react-icons/tfi'
-import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { Link, useLocation } from 'react-router-dom'
+import MentorCreateTest from '../MentorCreateTest'
+import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ColumnsType } from 'antd/es/table'
 interface DataType {
@@ -324,7 +324,7 @@ const MentorExamDetail = () => {
           scroll={{
             x: 1024,
           }}
-          pagination={{ pageSize: 5 }}
+          pagination={{ pageSize: 5, position: ['bottomCenter'] }}
         />
       ),
     },
@@ -338,6 +338,7 @@ const MentorExamDetail = () => {
           scroll={{
             x: 1024,
           }}
+          pagination={{ pageSize: 5, position: ['bottomCenter'] }}
         />
       ),
     },

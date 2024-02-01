@@ -14,7 +14,7 @@ const TopCourse = ({ name }: Props) => {
       <Header size='sm'>
         <Space direction='vertical' className={style.title}>
           <h1>{name}</h1>
-          <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' />
+          <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' lastText={name} />
         </Space>
       </Header>
     </div>
