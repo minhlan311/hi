@@ -25,8 +25,8 @@ const { Meta } = Card
 
 const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any; initType: 'TEST' | 'QUIZ' }) => {
   const navigate = useNavigate()
-  const { profile } = useContext(AppContext)
-  const filteredData = item?.usersDoned?.filter((i) => i.userId === profile._id)
+  const { profile, isAuthenticated } = useContext(AppContext)
+  const filteredData = item?.usersDoned?.filter((i) => i.userId === profile?._id)
 
   const maxPoint = Math.max(...filteredData.map((i) => i.point))
 
@@ -95,6 +95,10 @@ const RenderItem = ({ item, courses, initType }: { item: ExamState; courses: any
           <ButtonCustom
             type={elementWithMaxPoint ? 'default' : 'primary'}
             onClick={() => {
+              if (!isAuthenticated) {
+                return navigate('/login')
+              }
+
               initType === 'TEST'
                 ? navigate(`/lam-bai-thi/${item?._id}`)
                 : navigate('/lam-bai-thi-online', {
