@@ -17,10 +17,11 @@ import DrawerExam from './Drawer/DrawerExam'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const MentorExams = () => {
+  const [examId, setExamId] = useState<string | null>(null)
   const [open, setOpen] = useState<boolean>(false)
   const [data, setData] = useState<{ docs: ExamState[]; limit: number; page: number; totalDocs: number }>()
   const [loading, setLoading] = useState<boolean>(true)
-  const [examData, setExamData] = useState<ExamState>()
+
   const [page, setPage] = useState<number>(1)
   const navitage = useNavigate()
 
@@ -70,7 +71,6 @@ const MentorExams = () => {
       width: '30%',
       render: (_: any, record: any) => <Link to={record._id}>{record.name}</Link>,
     },
-
     {
       title: 'Loại',
       dataIndex: 'type',
@@ -157,9 +157,9 @@ const MentorExams = () => {
               className='edit-icon'
               onClick={() => {
                 if (record.type === 'TEST') {
-                  navitage('/mentor/exams/updateTest', { state: record._id })
+                  navitage('/mentor/exams/updateTest', { state: { testId: record._id } })
                 } else {
-                  setExamData(record)
+                  setExamId(record._id)
                   setOpen(true)
                 }
               }}
@@ -180,10 +180,6 @@ const MentorExams = () => {
       ),
     },
   ]
-
-  const onPressCreate = () => {
-    setOpen(true)
-  }
 
   // const [items, setItems] = useState([
   //   {
@@ -229,7 +225,7 @@ const MentorExams = () => {
       /> */}
       <FilterAction
         addOnButton={
-          <ButtonCustom type='primary' onClick={onPressCreate} tooltip={sm ? 'Thêm bộ đề mới' : undefined}>
+          <ButtonCustom type='primary' onClick={() => setOpen(true)} tooltip={sm ? 'Thêm bộ đề mới' : undefined}>
             <Row align='middle'>
               <BiPlus size={22} />
               {!sm && 'Thêm bộ đề mới'}
@@ -266,7 +262,8 @@ const MentorExams = () => {
         open={open}
         setOpen={setOpen}
         setLoading={setLoading}
-        examData={examData}
+        examId={examId}
+        setExamId={setExamId}
       />
     </div>
   )

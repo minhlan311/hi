@@ -64,6 +64,7 @@ const RenderSkillItem = ({
   useEffect(() => {
     if (idCreate) {
       stateAction(setQuestions, idCreate, idCreate, 'add')
+
       setOpenForm(false)
     }
   }, [idCreate])
@@ -75,7 +76,7 @@ const RenderSkillItem = ({
       testId: testId,
       categoryId: categoryId,
       skill: skillName,
-      url: values.audio[0],
+      url: values.audio?.[0],
     }
 
     if (skillCreatedData && skillCreatedData._id) {
@@ -88,7 +89,7 @@ const RenderSkillItem = ({
   }
 
   useEffect(() => {
-    if (questions?.length > 0) {
+    if (questions.length) {
       form.submit()
     }
   }, [questions])

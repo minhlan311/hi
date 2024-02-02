@@ -16,33 +16,6 @@ type Props = {
   setSkillSelected: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-// type TargetKey = React.MouseEvent | React.KeyboardEvent | string
-
-// interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
-//   'data-node-key': string
-// }
-
-// const DraggableTabNode = ({ ...props }: DraggableTabPaneProps) => {
-//   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-//     id: props['data-node-key'],
-//   })
-
-//   const style: React.CSSProperties = {
-//     ...props.style,
-//     transform: CSS.Transform.toString(transform && { ...transform, scaleX: 1 }),
-//     transition,
-//     cursor: 'move',
-//     position: 'relative',
-//   }
-
-//   return React.cloneElement(props.children as React.ReactElement, {
-//     ref: setNodeRef,
-//     style,
-//     ...attributes,
-//     ...listeners,
-//   })
-// }
-
 const CreateSkill = (props: Props) => {
   const { examData, packsSelected, setSkillSelected } = props
 
@@ -69,8 +42,6 @@ const CreateSkill = (props: Props) => {
     },
   ]
 
-  // const [open, setOpen] = useState(false)
-  // const [skillOption, setSkillOption] = useState(initSkill)
   const [changeSkill, setChangeSkill] = useState<SkillType | null>(null)
   const [targetSkill, setTargetSkill] = useState<SkillType>('READING')
   const [items, setItems] = useState<any[]>(initSkill)
@@ -95,49 +66,12 @@ const CreateSkill = (props: Props) => {
 
       setTargetSkill(changeSkill)
 
-      // setSkillOption((prev) => prev.filter((skill) => skill.value !== changeSkill))
-      // setOpen(false)
       setChangeSkill(null)
     }
   }, [changeSkill])
 
-  // const removeTab = (targetKey: TargetKey) => {
-  //   const targetIndex = items.findIndex((pane) => pane.key === targetKey)
-  //   const newPanes = items.filter((pane) => pane.key !== targetKey)
-
-  //   if (newPanes.length && targetKey === targetSkill) {
-  //     const { key } = newPanes[targetIndex === newPanes.length ? targetIndex - 1 : targetIndex]
-  //     setTargetSkill(key)
-  //   }
-
-  //   const newSkill = initSkill.find((item) => item.value === targetKey)
-  //   setSkillOption((prev: any) => [...prev, newSkill])
-  //   setItems(newPanes)
-  // }
-
-  // const onEdit = (targetKey: TargetKey, action: 'add' | 'remove') => {
-  //   if (action === 'add') {
-  //     setOpen(!open)
-  //   } else {
-  //     removeTab(targetKey)
-  //   }
-  // }
-
-  // const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
-
-  // const onDragEnd = ({ active, over }: DragEndEvent) => {
-  //   if (active.id !== over?.id) {
-  //     setItems((prev) => {
-  //       const activeIndex = prev.findIndex((i) => i.key === active.id)
-  //       const overIndex = prev.findIndex((i) => i.key === over?.id)
-
-  //       return arrayMove(prev, activeIndex, overIndex)
-  //     })
-  //   }
-  // }
-
   const { data: skillData, isLoading } = useQuery({
-    queryKey: ['skillData', examData, targetSkill, current],
+    queryKey: ['skillData', targetSkill, current],
     queryFn: () => {
       return skillApi.findSkill({
         filterQuery: {
@@ -153,12 +87,6 @@ const CreateSkill = (props: Props) => {
     enabled: Boolean(targetSkill),
   })
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setSkillOption((prev) => prev.filter((skill) => !examData?.skillData.some((item) => item.skill === skill.value)))
-  //   }
-  // }, [isSuccess])
-
   useEffect(() => {
     if (choosePack.length > 0) setSkillSelected(choosePack)
   }, [choosePack])
@@ -168,33 +96,7 @@ const CreateSkill = (props: Props) => {
       <Space direction='vertical' className='sp100'>
         <h3>Kỹ năng:</h3>
 
-        <Tabs
-          onChange={(e) => setTargetSkill(e)}
-          activeKey={targetSkill}
-          type='card'
-          // onEdit={(e, action) => {
-          //   onEdit(e, action)
-          // }}
-          // addIcon={
-          //   <div style={{ display: 'flex' }}>
-          //     <AiOutlinePlus size={13} />
-          //     <p style={{ fontSize: 13 }}>Thêm kỹ năng</p>
-          //   </div>
-          // }
-          // renderTabBar={(tabBarProps, DefaultTabBar) => (
-          //   <DndContext sensors={[sensor]} modifiers={[restrictToHorizontalAxis]} onDragEnd={onDragEnd}>
-          //     <SortableContext items={items.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
-          //       <DefaultTabBar {...tabBarProps}>
-          //         {(node) => (
-          //           <DraggableTabNode {...node.props} key={node.key}>
-          //             {node}
-          //           </DraggableTabNode>
-          //         )}
-          //       </DefaultTabBar>
-          //     </SortableContext>
-          //   </DndContext>
-          // )}
-        >
+        <Tabs onChange={(e) => setTargetSkill(e)} activeKey={targetSkill} type='card'>
           {items.map((tab) => (
             <Tabs.TabPane key={tab.key} tab={tab.label}>
               <Space className='sp100' direction='vertical' size='large'>
@@ -221,23 +123,6 @@ const CreateSkill = (props: Props) => {
           ))}
         </Tabs>
       </Space>
-
-      {/* <Modal
-        title='Chọn kỹ năng thêm mới'
-        open={open}
-        onCancel={() => {
-          setOpen(!open)
-        }}
-        footer={null}
-      >
-        <Select
-          className='sp100'
-          placeholder='Chọn loại kỹ năng'
-          value={changeSkill}
-          options={skillOption}
-          onChange={(e) => setChangeSkill(e)}
-        />
-      </Modal> */}
     </div>
   )
 }
