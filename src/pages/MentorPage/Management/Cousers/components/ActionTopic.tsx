@@ -8,10 +8,12 @@ import openNotification from '@/components/Notification'
 import useResponsives from '@/hooks/useResponsives'
 import { TopicState } from '@/interface/topic'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Flex, Popconfirm, Space } from 'antd'
+import { Flex, Modal, Popconfirm, Space } from 'antd'
 import { useState } from 'react'
 import { BiEdit, BiPlus } from 'react-icons/bi'
+import { BsExclamationCircle } from 'react-icons/bs'
 import { MdDeleteOutline } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
 import LessionData from './LessionData'
 import LessionForm from './LessionForm'
 import TopicForm from './TopicForm'
@@ -21,6 +23,7 @@ type Props = {
 }
 
 const ActionTopic = ({ courseId }: Props) => {
+  const navigate = useNavigate()
   const [openTopic, setOpenTopic] = useState<boolean>(false)
   const [topicId, setTopicId] = useState<string>()
   const [topicData, setTopicData] = useState<TopicState>()
@@ -104,13 +107,26 @@ const ActionTopic = ({ courseId }: Props) => {
     }
   })
 
+  const confirm = () => {
+    Modal.confirm({
+      title: 'Thông tin',
+      icon: <BsExclamationCircle size={20} style={{ marginRight: 10 }} />,
+      content: 'Bạn có muốn tạo lớp học cho khóa học này không?',
+      okText: 'Có',
+      cancelText: 'Hủy',
+      onOk: () => navigate('/mentor/class', { state: { courseId } }),
+      onCancel: () => navigate('/mentor/courses'),
+    })
+  }
+
   return (
     <Space direction='vertical' className='sp100'>
       <Flex justify='space-between'>
         <ButtonCustom icon={<BiPlus />} onClick={() => setOpenTopic(true)}>
           Thêm chuyên đề
         </ButtonCustom>
-        <ButtonCustom type='primary' href='/mentor/courses'>
+
+        <ButtonCustom type='primary' onClick={confirm}>
           Hoàn thành
         </ButtonCustom>
       </Flex>

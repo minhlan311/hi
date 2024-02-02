@@ -14,13 +14,15 @@ import moment from 'moment-timezone'
 import { useContext, useEffect, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { TbListDetails } from 'react-icons/tb'
+import { useLocation } from 'react-router-dom'
 import './ClassManage.scss'
 import ClassCreate from './components/ClassCreate'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function ClassManage() {
   const { profile } = useContext(AppContext)
-  const [onOpen, setOnOpen] = useState<boolean>(false)
+  const location = useLocation()
+  const [onOpen, setOnOpen] = useState<boolean>(false || Boolean(location?.state?.courseId))
   const [idClass, setIdClass] = useState<string>('')
   const [pages, setPages] = useState<number>(1)
 
@@ -208,7 +210,7 @@ export default function ClassManage() {
         columns={tableColumns}
       />
 
-      <ClassCreate onOpen={onOpen} onClose={setOnOpen} idClass={idClass} />
+      <ClassCreate onOpen={onOpen} courseId={location?.state?.courseId} onClose={setOnOpen} idClass={idClass} />
     </div>
   )
 }

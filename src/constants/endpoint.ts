@@ -22,6 +22,9 @@ export const ENDPOINT = {
   // :::::::::::::::::::: CONFIG PATH :::::::::::::::::::::
   CONFIG_PATH: '/configs',
 
+  // :::::::::::::::::::: PROMOTION PATH :::::::::::::::::::::
+  PROMOTION_PATH: '/promotion/',
+
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
   NEWS: '/news/find',
   GET_ONE_NEWS: '/news/',

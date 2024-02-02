@@ -33,6 +33,7 @@ const { Header, Sider, Content } = Layout
 const MentorLayout = (props: Props) => {
   const { user, title, children } = props
   window.document.title = title + ' | Ucam Mentor'
+  window.history.replaceState({}, document.title)
   const location = useLocation()
   const navitage = useNavigate()
   const { sm } = useResponsives()
