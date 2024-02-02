@@ -4,26 +4,24 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { CategoryState } from '@/interface/category'
-import { ExamState } from '@/interface/exam'
 import { SuccessResponse } from '@/types/utils.type'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Col, Drawer, Form, Input, InputNumber, Radio, Row, Select, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
-  examData?: ExamState
   size?: string
+  open: boolean
+  examId: string | null
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setExamId: React.Dispatch<React.SetStateAction<string | null>>
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DrawerExam = (props: Props) => {
-  const { open, setOpen, setLoading, examData, size } = props
+  const { size, open, examId, setOpen, setExamId, setLoading } = props
   const navitage = useNavigate()
-  // const [imgUrl, setImgUrl] = useState<any>()
-  const [action, setAction] = useState('create')
   const [form] = Form.useForm()
   const [testOptions, setTestOptions] = useState<
     {
@@ -31,21 +29,17 @@ const DrawerExam = (props: Props) => {
       label: string
     }[]
   >()
+  const { data: examDetail } = useQuery({
+    queryKey: ['examDetail', examId],
+    queryFn: () => {
+      return examApi.getExamDetail(examId!)
+    },
+    enabled: Boolean(examId),
+  })
 
-  useEffect(() => {
-    if (examData) {
-      setAction('update')
-      form.setFieldsValue(examData)
-    } else {
-      setAction('create')
-      form.resetFields()
-    }
-  }, [examData])
+  const examData = examDetail?.data
 
-  const onCloseDrawer = () => {
-    setOpen(false)
-  }
-
+  const [subjectName, setSubjectName] = useState<string>()
   const queryClient = useQueryClient()
 
   const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
@@ -58,11 +52,29 @@ const DrawerExam = (props: Props) => {
       }
     })
 
+  useEffect(() => {
+    form.resetFields()
+
+    if (examData) {
+      form.setFieldsValue({ ...examData, skillName: examData.skillName[0] })
+      setSubjectName(subjectList?.find((item) => item.value === examData.categoryId)?.label)
+    }
+  }, [examData])
+
+  const onCloseDrawer = () => {
+    form.resetFields()
+    setExamId(null)
+    setOpen(false)
+  }
+
   const testList = categoriesData?.data?.docs?.find((item) => item.name === 'Luyện thi')
 
   const handleChange = (e: string) => {
-    const subjectName = subjectList?.find((item) => item.value === e)?.label
+    setSubjectName(subjectList?.find((item) => item.value === e)?.label)
+    form.resetFields(['categoryIdDetail'])
+  }
 
+  useEffect(() => {
     if (subjectName && testList) {
       const testData = testList?.children
         ?.find((item) => item.name === subjectName)
@@ -75,18 +87,18 @@ const DrawerExam = (props: Props) => {
 
       setTestOptions(testData)
     }
-  }
+  }, [subjectName])
 
   const { isLoading, mutate } = useMutation({
-    mutationFn: (body) => (action === 'create' ? examApi.createExam(body) : examApi.putExam(body)),
+    mutationFn: (body) => (!examData?._id ? examApi.createExam(body) : examApi.putExam(body)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['examFilter'] })
 
       openNotification({
         status: 'success',
-        message: action === 'create' ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
+        message: !examData?._id ? 'Tạo bộ đề thành công' : 'Cập nhật bộ đề thành công',
       })
-      setOpen(false)
+      onCloseDrawer()
 
       form.resetFields()
     },
@@ -112,22 +124,15 @@ const DrawerExam = (props: Props) => {
   return (
     <div>
       <Drawer
-        title={action === 'create' ? 'Thêm bộ đề' : 'Chỉnh sửa'}
+        title={!examData?._id ? 'Thêm bộ đề' : 'Chỉnh sửa'}
         width={size}
         onClose={onCloseDrawer}
         open={open}
         extra={
           <Space>
-            <ButtonCustom
-              onClick={() => {
-                setOpen(false)
-                form.resetFields()
-              }}
-            >
-              Hủy
-            </ButtonCustom>
+            <ButtonCustom onClick={onCloseDrawer}>Hủy</ButtonCustom>
             <ButtonCustom onClick={() => form.submit()} type='primary'>
-              {action === 'create' ? 'Tạo bộ đề' : 'Cập nhật'}
+              {!examData?._id ? 'Tạo bộ đề' : 'Cập nhật'}
             </ButtonCustom>
           </Space>
         }
@@ -263,24 +268,6 @@ const DrawerExam = (props: Props) => {
             <Col span={24}>
               <TextAreaCustom name='description' label='Chú thích' data={examData} />
             </Col>
-            {/* <Col span={24}>
-              <Form.Item name='coverUrl' label='Ảnh bộ đề'>
-                <UploadCustom
-                  uploadKey='image'
-                  uploadQuality='medium'
-                  cropBeforeUpload
-                  dropArea
-                  accessType='image/*'
-                  callBackFileList={setImgUrl}
-            
-                  defaultFileList={
-                    examData && examData.coverUrl
-                      ? [{ name: examData.name as string, url: examData.coverUrl as string }]
-                      : []
-                  }
-                ></UploadCustom>
-              </Form.Item>
-            </Col> */}
           </Row>
         </Form>
       </Drawer>

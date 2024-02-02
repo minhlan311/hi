@@ -14,51 +14,47 @@ import LastCheck from './Components/LastCheck'
 
 const MentorCreateTest = () => {
   const location = useLocation()
-  const navitage = useNavigate()
+  const navigate = useNavigate()
   const [form] = Form.useForm()
-  const typeAction = location.pathname.split('/')[3]
   const [current, setCurrent] = useState(0)
-
-  const createdId = localStorage.getItem('createTest')
-
-  const { data: exam, isLoading } = useQuery({
-    queryKey: ['examDetail', typeAction, createdId],
-    queryFn: () => {
-      return examApi.getExamDetail(location.state || createdId)
-    },
-    enabled: typeAction === 'updateTest' || Boolean(createdId),
-  })
-
-  const examData = exam?.data
-  const [examDetail, setExamDetail] = useState<ExamState>()
+  const [testId, setTestId] = useState<string>()
 
   useEffect(() => {
-    if (examData?._id) setExamDetail(examData)
-  }, [examData])
+    if (location?.state?.testId) setTestId(location?.state?.testId)
+    else {
+      if (location.pathname.includes('updateTest')) navigate('/mentor/exams')
+    }
+  }, [location])
+
+  const { data: examData, isLoading } = useQuery({
+    queryKey: ['examDetail', testId, current],
+    queryFn: () => {
+      return examApi.getExamDetail(testId!)
+    },
+    enabled: Boolean(testId),
+  })
+
+  const examDetail = examData?.data
 
   const testMutation = useMutation({
-    mutationFn: (body) =>
-      typeAction === 'createTest' && !examDetail?._id ? examApi.createExam(body) : examApi.putExam(body),
+    mutationFn: (body) => (!examDetail?._id ? examApi.createExam(body) : examApi.putExam(body)),
     onSuccess: (data) => {
       openNotification({
         status: 'success',
         message: 'Thông báo',
-        description:
-          typeAction === 'createTest' && !createdId ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
+        description: !examDetail?._id ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
       })
-
-      if (typeAction === 'createTest') localStorage.setItem('createTest', data.data._id)
+      setTestId(data.data._id)
       if (current === 0) setCurrent(current + 1)
     },
-    onError: () => openNotification({ status: 'error', message: 'Thông báo', description: 'Tiêu đề đã tồn tại' }),
   })
   const [skillSelected, setSkillSelected] = useState<string[]>([])
 
   useEffect(() => {
-    if (exam?.data.skill && exam?.data?.skill?.length > 0) {
-      setSkillSelected(exam?.data?.skill as unknown as string[])
+    if (examDetail && examDetail.skill?.length > 0) {
+      setSkillSelected(examDetail.skill)
     }
-  }, [exam])
+  }, [examDetail])
 
   const { data: skillData } = useQuery({
     queryKey: ['skillSelected', skillSelected],
@@ -92,17 +88,16 @@ const MentorCreateTest = () => {
       }
 
       testMutation.mutate(payload as any)
-      localStorage.removeItem('skillPack')
 
       setTimeout(() => {
-        navitage('/mentor/exams')
+        navigate('/mentor/exams')
       }, 1500)
     }
   }
 
   const stepItem = [
     {
-      key: 'infor',
+      key: 'info',
       title: 'Nội dung',
       content: (
         <CreateTest
@@ -124,11 +119,11 @@ const MentorCreateTest = () => {
           setSkillSelected={setSkillSelected}
         />
       ),
-      disabled: typeAction === 'createTest',
+      disabled: !examDetail?._id,
     },
     {
       key: 'finish',
-      title: typeAction === 'createTest' ? 'Thêm mới' : 'Cập nhật',
+      title: !examDetail?._id ? 'Thêm mới' : 'Cập nhật',
       content: (
         <LastCheck
           examData={examDetail as unknown as ExamState}
@@ -141,7 +136,7 @@ const MentorCreateTest = () => {
 
   return (
     <Space direction='vertical' size='large' className='sp100'>
-      <h2>{typeAction === 'createTest' ? 'Thêm mới bộ đề' : 'Cập nhật bộ đề'}</h2>
+      <h2>{!examDetail?._id ? 'Thêm mới bộ đề' : 'Cập nhật bộ đề'}</h2>
 
       <Steps current={current} items={stepItem} onChange={(e) => setCurrent(e)} />
       <div>{stepItem[current]?.content}</div>
@@ -153,7 +148,7 @@ const MentorCreateTest = () => {
         )}
         {current === stepItem.length - 1 && (
           <ButtonCustom type='primary' onClick={() => finished()}>
-            {typeAction === 'createTest' ? 'Tạo bộ đề' : 'Cập nhật bộ đề'}
+            {!examDetail?._id ? 'Tạo bộ đề' : 'Cập nhật bộ đề'}
           </ButtonCustom>
         )}
         {current > 0 && (

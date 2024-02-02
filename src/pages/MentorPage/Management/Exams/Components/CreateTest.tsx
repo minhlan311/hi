@@ -30,8 +30,9 @@ const CreateTest = ({ form, testMutation, examData, isLoading }: Props) => {
 
   useEffect(() => {
     if (examData?._id) {
-      form.setFieldsValue(examData)
       setExamStatus(examData.status === 'ACTIVE')
+      setSubjectName(subjectList?.find((item) => item.value === examData.categoryId)?.label)
+      form.setFieldsValue(examData)
     }
   }, [examData])
 
@@ -50,12 +51,15 @@ const CreateTest = ({ form, testMutation, examData, isLoading }: Props) => {
         label: sj.name,
       }
     })
-
+  const [subjectName, setSubjectName] = useState<string>()
   const testList = categoriesData?.data?.docs?.find((item) => item.name === 'Luyện thi')
 
   const handleChange = (e: string) => {
-    const subjectName = subjectList?.find((item) => item.value === e)?.label
+    setSubjectName(subjectList?.find((item) => item.value === e)?.label)
+    form.resetFields(['categoryIdDetail'])
+  }
 
+  useEffect(() => {
     if (subjectName && testList) {
       const testData = testList?.children
         ?.find((item) => item.name === subjectName)
@@ -68,7 +72,7 @@ const CreateTest = ({ form, testMutation, examData, isLoading }: Props) => {
 
       setTestOptions(testData)
     }
-  }
+  }, [subjectName])
 
   const onFinish = (values: any) => {
     const payload = {
@@ -83,7 +87,7 @@ const CreateTest = ({ form, testMutation, examData, isLoading }: Props) => {
 
   return (
     <LoadingCustom loading={typeAction === 'createTest' ? false : isLoading} tip='Vui lòng chờ...'>
-      <Form onFinish={onFinish} layout='vertical' form={form} initialValues={{ plan: 'FREE' }}>
+      <Form onFinish={onFinish} layout='vertical' form={form}>
         <Row gutter={24}>
           <Col span={24} md={examData ? 8 : 12}>
             <Form.Item
