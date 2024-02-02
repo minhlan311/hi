@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
+import promotionApi from '@/apis/promotions.api'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
@@ -24,75 +25,76 @@ const OpeningPage = () => {
     },
   })
 
+  const { data: promotionData } = useQuery({
+    queryKey: ['promotionData'],
+    queryFn: () => {
+      return promotionApi.getPromotion()
+    },
+  })
+
+  const promotion = promotionData?.data
+
   return (
     <Header padding={'35px 0 50px 0'}>
       <Space direction='vertical' size='large' className={'sp100'}>
-        <div className={style.ads}>
-          <h1 className={style.title}>Ưu đãi tháng {moment().format('M')}</h1>
-          <Row gutter={40} align='middle'>
-            <Col span={24} md={15} className={style.desc}>
-              <Space direction='vertical' size='large' className={'sp100'}>
-                <Flex align='center' gap={12} vertical={sm} className={style.content}>
-                  <HiOutlineBookOpen size={sm || md ? 35 : 24} />
-                  <p>
-                    Khóa
-                    <b>IELTS</b>
-                    còn
-                    <b>0</b>
-                    suất học bổng lên đến
-                    <b>
-                      <PriceCalculator price={2000000} />
-                    </b>
-                  </p>
-                </Flex>
-                <Flex align='center' gap={12} vertical={sm} className={style.content}>
-                  <HiOutlineBookOpen size={sm || md ? 35 : 24} />
-                  <p>
-                    Khóa
-                    <b>TOEIC/SAT</b>
-                    còn
-                    <b>0</b>
-                    suất học bổng lên đến
-                    <b>
-                      <PriceCalculator price={2500000} />
-                    </b>
-                  </p>
-                </Flex>
-
-                <Flex align='center' gap={12} vertical={sm} className={style.content}>
-                  <HiOutlineUserGroup size={(sm && 32) || (md && 28) || 24} />
-                  <p>
-                    Có
-                    <b>5925</b>
-                    người đang quan tâm khóa học ở DOL
-                  </p>
-                </Flex>
-                <Flex align='center' gap={12} className={style.content}>
-                  <p>* Ưu đãi chỉ áp dụng duy nhất cho dịp TẾT trước 26/01/2024</p>
-                </Flex>
-              </Space>
-            </Col>
-            <Col span={24} md={9}>
-              <Space direction='vertical' size='large' className={'sp100'}>
-                <p className={style.desc}>Kết thúc sau:</p>
-                <Flex align='center' vertical gap={55}>
-                  <CountDownTimer
-                    size={((sm || md) && 25) || 50}
-                    type='text'
-                    className={style.timer}
-                    initCountdown={moment().endOf('day').diff(moment(), 'minutes')}
-                    space=':'
-                    spaceStyle={{ color: 'var(--white)' }}
-                    showAlex={false}
-                  />
-                  <ButtonCustom type='primary'>
-                    <h1 style={{ padding: '0 50px' }}>Đăng ký</h1>
-                  </ButtonCustom>
-                </Flex>
-              </Space>
-            </Col>
-          </Row>
-        </div>
+        {promotion && (
+          <div className={style.ads}>
+            <h1 className={style.title}>Ưu đãi tháng {moment().format('M')}</h1>
+            <Row gutter={40} align='middle'>
+              <Col span={24} md={15} className={style.desc}>
+                <Space direction='vertical' size='large' className={'sp100'}>
+                  {promotion.promotions.map((item) => (
+                    <Flex align='center' gap={12} vertical={sm} className={style.content} key={item._id}>
+                      {item.icon ? item.icon : <HiOutlineBookOpen size={sm || md ? 35 : 24} />}
+                      <p>
+                        Khóa
+                        <b>{item.centificateName}</b>
+                        còn
+                        <b>{item.length}</b>
+                        suất học bổng lên đến
+                        <b>
+                          <PriceCalculator price={item.scholarship} />
+                        </b>
+                      </p>
+                    </Flex>
+                  ))}
+                  <Flex align='center' gap={12} vertical={sm} className={style.content}>
+                    <HiOutlineUserGroup size={(sm && 32) || (md && 28) || 24} />
+                    <p>
+                      Có
+                      <b>5925</b>
+                      người đang quan tâm khóa học
+                    </p>
+                  </Flex>
+                  <Flex align='center' gap={12} className={style.content}>
+                    <div dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
+                  </Flex>
+                </Space>
+              </Col>
+              <Col span={24} md={9}>
+                <Space direction='vertical' size='large' className={'sp100'}>
+                  <p className={style.desc}>Kết thúc sau:</p>
+                  <Flex align='center' vertical gap={55}>
+                    <CountDownTimer
+                      size={((sm || md) && 25) || 50}
+                      type='text'
+                      className={style.timer}
+                      initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
+                      space=':'
+                      spaceStyle={{ color: 'var(--white)' }}
+                      showAlex={false}
+                    />
+                    {promotion.href && (
+                      <ButtonCustom type='primary' href={promotion.href}>
+                        <h1 style={{ padding: '0 50px' }}>Đăng ký</h1>
+                      </ButtonCustom>
+                    )}
+                  </Flex>
+                </Space>
+              </Col>
+            </Row>
+          </div>
+        )}
 
         <Space direction='vertical' className={'sp100'}>
           <h1>Lịch học</h1>

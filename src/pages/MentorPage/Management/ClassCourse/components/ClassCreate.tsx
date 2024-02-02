@@ -5,21 +5,25 @@ import openNotification from '@/components/Notification'
 import SelectCustom from '@/components/SelectCustom/SelectCustom'
 import { AppContext } from '@/contexts/app.context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { DatePicker, Form, Input, Radio } from 'antd'
+import { DatePicker, Form, Input, Modal, Radio } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
 import moment from 'moment-timezone'
 import { useContext, useEffect } from 'react'
+import { BsExclamationCircle } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 type Props = {
   onOpen: boolean
-  onClose: React.Dispatch<React.SetStateAction<boolean>>
   idClass: string
+  courseId?: string
+  onClose: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
+export default function ClassCreate({ onOpen, idClass, courseId, onClose }: Props) {
+  const navigate = useNavigate()
   const [form] = useForm()
   const { profile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -47,7 +51,7 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
 
   const actionClass = useMutation({
     mutationFn: (body) => (idClass ? classApi.updateClass(body) : classApi.createClass(body)),
-    onSuccess: () => {
+    onSuccess: (data) => {
       form.resetFields()
       queryClient.invalidateQueries({ queryKey: ['classList'] })
       openNotification({
@@ -56,6 +60,20 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
         description: `${idClass ? 'Cập nhật ' : 'Thêm mới '} lớp học thành công`,
       })
       onClose(false)
+      Modal.confirm({
+        title: 'Thông tin',
+        icon: <BsExclamationCircle size={20} style={{ marginRight: 10 }} />,
+        content: 'Bạn có muốn tạo lịch học cho lớp học này không?',
+        okText: 'Có',
+        cancelText: 'Hủy',
+        onOk: () =>
+          navigate('/mentor/calendar', {
+            state: {
+              classId: data.data._id,
+              date: [data.data.startDate || classDetail?.startDate, data.data.endDate || classDetail?.endDate],
+            },
+          }),
+      })
     },
     onError: () => {
       openNotification({
@@ -71,6 +89,12 @@ export default function ClassCreate({ onOpen, onClose, idClass }: Props) {
       form.resetFields()
     }
   }, [idClass])
+
+  useEffect(() => {
+    if (courseId) {
+      form.setFieldValue('courseId', courseId)
+    }
+  }, [courseId])
 
   const onFinish = (values: any) => {
     const categoryId = dataCource?.data?.docs?.find((item) => item._id === values.courseId)

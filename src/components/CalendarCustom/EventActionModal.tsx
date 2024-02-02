@@ -18,11 +18,12 @@ import TextAreaCustom from '../TextAreaCustom/TextAreaCustom'
 
 type Props = {
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setType?: React.Dispatch<React.SetStateAction<string>>
   type: string
   eventDetail: EventState | null
   selectTime?: { start: Date; end: Date } | null
+  state?: { classId: string; date: Date[] }
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setType?: React.Dispatch<React.SetStateAction<string>>
   setSelectTime?: React.Dispatch<React.SetStateAction<{ start: Date; end: Date } | null>>
 }
 interface Time {
@@ -31,7 +32,7 @@ interface Time {
 }
 
 const EventActionModal = (props: Props) => {
-  const { open, setOpen, setType, type = 'event', eventDetail, selectTime, setSelectTime } = props
+  const { open, type = 'event', eventDetail, selectTime, state, setOpen, setType, setSelectTime } = props
   const { profile } = useContext(AppContext)
   const [form] = Form.useForm()
   const [allDay, setAllDay] = useState<boolean>(false)
@@ -188,8 +189,6 @@ const EventActionModal = (props: Props) => {
           date: [dayjs(eventDetail.start), dayjs(eventDetail.end)],
           schedules: eventDetail.schedules,
         })
-        // setRepeat(eventDetail.isRepeat)
-        // setRepeatType(checkSchedule(eventDetail.schedules))
       }
     }
   }, [eventDetail])
@@ -207,8 +206,18 @@ const EventActionModal = (props: Props) => {
   }, [selectTime])
 
   useEffect(() => {
-    // setNowTime(new Date())
+    if (state) {
+      setInitVal({
+        classId: state.classId,
+        date: [dayjs(state.date[0]), dayjs(state.date[1])],
+      })
 
+      setDateSelect([dayjs(state.date[0]), dayjs(state.date[1])])
+      setType && setType('event')
+    }
+  }, [])
+
+  useEffect(() => {
     if (initVal) {
       form.setFieldsValue(initVal)
       setClassSelect(initVal.classId)

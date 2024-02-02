@@ -26,7 +26,7 @@ const columns: TableColumnsType<any> = [
         <TagCustom content={record.courseData?.name} color='#019d44' colorText='white' />
         <div className={style.classType}>{record.title}</div>
         <Link to={'/profiles/' + record.owner?._id}>
-          {record.owner?.gender === 'MALE' ? 'Thầy' : 'Cô'} {record.owner?.fullName}
+          {record.owner?.gender === 'MALE' ? 'Thầy' : 'Cô'} <b>{record.owner?.fullName}</b>
         </Link>
       </div>
     ),
@@ -63,12 +63,18 @@ const columns: TableColumnsType<any> = [
           {record.event.schedules.length > 0 && (
             <p>
               Thứ{' '}
-              {record.event.schedules.map((item, id) => (
-                <>
-                  {item === 0 ? 'CN' : item}
-                  {record.event.schedules.length - 1 > id && '/'}
-                </>
-              ))}
+              {record.event.schedules
+                .map((num) => {
+                  if (num === 0) {
+                    return 'CN'
+                  } else {
+                    return moment()
+                      .day(num + 1)
+                      .format(`E`)
+                  }
+                })
+                .sort((a, b) => (a === 'CN' ? 1 : b === 'CN' ? -1 : 0))
+                .join('/')}
             </p>
           )}
           <p>

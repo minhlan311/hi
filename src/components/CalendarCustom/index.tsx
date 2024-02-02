@@ -33,12 +33,12 @@ type Props = {
 }
 
 const CalendarCustom = ({ calendarType }: Props) => {
+  const location = useLocation()
   const calRef = useRef<any>(null)
   const { profile } = useContext(AppContext)
   const { sm, md, xl, xxl } = useResponsives()
-
   const [modalType, setModalType] = useState<string>('')
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false || Boolean(location?.state?.classId))
   const [view, setView] = useState<'day' | 'week' | 'month'>('week')
   const [type, setType] = useState<string>()
   const [events, setEvents] = useState<EventSchedule[]>([])
@@ -49,7 +49,6 @@ const CalendarCustom = ({ calendarType }: Props) => {
     mutationFn: (id: string) => eventApi.getOneEvent(id),
   })
 
-  const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const classId = searchParams.get('classId')
 
@@ -556,6 +555,7 @@ const CalendarCustom = ({ calendarType }: Props) => {
         eventDetail={null}
         selectTime={selectTime}
         setSelectTime={setSelectTime}
+        state={location?.state}
       />
     </Space>
   )
