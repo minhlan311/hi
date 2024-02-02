@@ -43,7 +43,7 @@ const OpeningPage = () => {
             <Row gutter={40} align='middle'>
               <Col span={24} md={15} className={style.desc}>
                 <Space direction='vertical' size='large' className={'sp100'}>
-                  {promotion.promotions.map((item) => (
+                  {promotion.promotions?.map((item) => (
                     <Flex align='center' gap={12} vertical={sm} className={style.content} key={item._id}>
                       {item.icon ? item.icon : <HiOutlineBookOpen size={sm || md ? 35 : 24} />}
                       <p>
