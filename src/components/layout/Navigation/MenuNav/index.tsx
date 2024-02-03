@@ -164,6 +164,7 @@ export default function MenuNav({ user, type }: Props) {
                           <div className='labelItem'>
                             {item.label === 'Khóa học' ||
                             item.label === 'Giáo viên' ||
+                            item.label === 'Tin tức' ||
                             item.label === 'Lịch khai giảng' ? (
                               <Link to={item.href} style={{ color: 'var(--white)' }}>
                                 <Space style={{ width: '100%' }} size='small'>
@@ -189,16 +190,29 @@ export default function MenuNav({ user, type }: Props) {
                               {item.children.map((chil) => (
                                 <div className='chil' key={`${chil._id}`}>
                                   <Space direction='vertical'>
-                                    <Link to={`${item.href + chil.href}`}>
-                                      <h3 className='chilTitle'>{chil.label}</h3>
-                                    </Link>
-                                    {chil?.children?.map((menuChil) => (
-                                      <Space className='sp100' direction='vertical' key={`${menuChil._id}`}>
-                                        <Link to={`${item.href + chil.href + menuChil.href}`} className='lastTitle'>
-                                          {menuChil.label}
-                                        </Link>
-                                      </Space>
-                                    ))}
+                                    {chil?.children.length > 0 ? (
+                                      item.label === 'Giáo viên' || (
+                                        <>
+                                          <Link to={`${item.href + chil.href}`}>
+                                            <h3 className='chilTitle'>{chil.label}</h3>
+                                          </Link>
+                                          {chil?.children?.map((menuChil) => (
+                                            <Space className='sp100' direction='vertical' key={`${menuChil._id}`}>
+                                              <Link
+                                                to={`${item.href + chil.href + menuChil.href}`}
+                                                className='lastTitle'
+                                              >
+                                                {menuChil.label}
+                                              </Link>
+                                            </Space>
+                                          ))}
+                                        </>
+                                      )
+                                    ) : (
+                                      <Link to={`${item.href + chil.href + chil.href}`} className='lastTitle'>
+                                        {chil.label}
+                                      </Link>
+                                    )}
                                   </Space>
                                 </div>
                               ))}

@@ -53,10 +53,10 @@ const CourseForm = ({ setCourseId, setCurrent }: Props) => {
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ name: 'Khóa học' })
     },
   })
-  const coursesList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+  const coursesList = categoriesData?.data?.docs?.[0]
 
   const subjectList = coursesList?.children?.map((sj) => {
     return {

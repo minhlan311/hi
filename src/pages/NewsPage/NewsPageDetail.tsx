@@ -1,30 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import newsApi from '@/apis/news.api'
-import { useQuery } from '@tanstack/react-query'
-import { Link, useParams } from 'react-router-dom'
-import './NewsPageDetail.scss'
-import SliderCustom from '@/components/SliderCustom'
-import { Card } from 'antd'
-import Meta from 'antd/es/card/Meta'
 import ImageCustom from '@/components/ImageCustom/ImageCustom'
+import SliderCustom from '@/components/SliderCustom'
+import { useQuery } from '@tanstack/react-query'
+import { Card, Space } from 'antd'
+import Meta from 'antd/es/card/Meta'
 import Paragraph from 'antd/es/typography/Paragraph'
+import { Link, useNavigate } from 'react-router-dom'
+import './NewsPageDetail.scss'
 // import { News } from '@/types/news.type'
+import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import LoadingCustom from '@/components/LoadingCustom'
+import Header from '@/components/layout/Header/Header'
+import { useEffect } from 'react'
 
-export default function NewsPageDetail() {
-  // const queryClient = useQueryClient()
-  const { id } = useParams()
-  // const dataAllNews = queryClient.getQueryData<News>(['news'])
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['oneNew', id],
-    queryFn: () => newsApi.getOneNews(id!),
+export default function NewsPageDetail({ slug }: { slug: string }) {
+  const navigate = useNavigate()
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['newDetail', slug],
+    queryFn: () => newsApi.getDetailSlug(slug),
   })
 
   const { data: dataNewsAll } = useQuery({
     queryKey: ['newsAll'],
     queryFn: () =>
-      newsApi.getNews({
+      newsApi.findNew({
         filterQuery: {},
         options: {
           limit: 10,
@@ -34,12 +34,15 @@ export default function NewsPageDetail() {
       }),
   })
 
+  useEffect(() => {
+    if (isError) navigate('/404')
+  }, [isError])
+
   return (
-    <div className='container-news'>
-      {isLoading ? (
-        <LoadingCustom tip='Vui lòng chờ ...' />
-      ) : (
-        <>
+    <Header padding={'50px 0'}>
+      <Space direction='vertical' className='sp100' size={'large'}>
+        <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' />
+        <LoadingCustom tip='Vui lòng chờ ...' loading={isLoading}>
           <div className='title-box'>
             <h1>{data?.data?.title}</h1>
           </div>
@@ -75,8 +78,8 @@ export default function NewsPageDetail() {
               ))}
             </SliderCustom>
           </div>
-        </>
-      )}
-    </div>
+        </LoadingCustom>
+      </Space>
+    </Header>
   )
 }

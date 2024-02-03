@@ -61,7 +61,7 @@ const FilterAction = (props: Props) => {
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ name: 'Khóa học' })
     },
   })
 

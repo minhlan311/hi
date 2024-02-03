@@ -25,8 +25,6 @@ import ActionCourse from './pages/MentorPage/Management/Cousers/components/Actio
 import MentorCourses from './pages/MentorPage/Management/Cousers/index.tsx'
 import MyStudent from './pages/MentorPage/Management/MyStudent/MyStudent.tsx'
 import MyCourse from './pages/MyCourse/MyCourse.tsx'
-import NewsPage from './pages/NewsPage/NewsPage.tsx'
-import NewsPageDetail from './pages/NewsPage/NewsPageDetail.tsx'
 import ProfilePage from './pages/ProfilePage/index.tsx'
 import QAPage from './pages/QAPage/QAPage.tsx'
 import QADetail from './pages/QAPage/QAPageDetail.tsx'
@@ -324,24 +322,24 @@ export default function useRouteElements() {
             </Layout>
           ),
         },
-        {
-          path: PATH.NEWS,
-          index: true,
-          element: (
-            <Layout user={profile} title='Bài viết'>
-              <NewsPageDetail />
-            </Layout>
-          ),
-        },
-        {
-          path: PATH.NEWS_PAGE,
-          index: true,
-          element: (
-            <Layout user={profile} title='Bài viết'>
-              <NewsPage />
-            </Layout>
-          ),
-        },
+        // {
+        //   path: PATH.NEWS,
+        //   index: true,
+        //   element: (
+        //     <Layout user={profile} title='Bài viết'>
+
+        //     </Layout>
+        //   ),
+        // },
+        // {
+        //   path: PATH.NEWS_PAGE,
+        //   index: true,
+        //   element: (
+        //     <Layout user={profile} title='Bài viết'>
+
+        //     </Layout>
+        //   ),
+        // },
         {
           path: PATH.PROFILES_DETAIL,
           element: (

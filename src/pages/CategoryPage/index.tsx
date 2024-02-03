@@ -20,11 +20,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ChoiceQuestionPage from '../ChoiceQuestionPage'
 import CourseListPage from '../CourseListPage'
+import NewsPage from '../NewsPage/NewsPage'
+import NewsPageDetail from '../NewsPage/NewsPageDetail'
 import OpeningPage from '../OpeningPage'
 
 const CategoryPage = () => {
   const { menuSlug, categorySlug, subCategorySlug } = useParams()
-
   const navigate = useNavigate()
   const {
     data: categoriesParent,
@@ -108,6 +109,7 @@ const CategoryPage = () => {
         (category?.name === 'Trắc nghiệm' && <ChoiceQuestionPage />) ||
         (category?.name === 'Khóa học' && <CourseListPage />) ||
         (category?.name === 'Lịch khai giảng' && <OpeningPage />) ||
+        (category?.name === 'Tin tức' && <NewsPage />) ||
         (category?.slug?.includes('giao-vien') && (
           <Header title={category?.name} padding={50}>
             <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
@@ -147,6 +149,11 @@ const CategoryPage = () => {
             </Space>
           </Header>
         )) || <div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
+      ) : menuSlug?.includes('tin-tuc') ? (
+        <div>
+          {s2 && !subCategorySlug && <NewsPage />}
+          {subCategorySlug && <NewsPageDetail slug={subCategorySlug!} />}
+        </div>
       ) : (
         <div>
           <img src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + category?.coverUrl}`} style={{ width: '100%' }} />
@@ -193,6 +200,7 @@ const CategoryPage = () => {
                 />
               </Space>
             )}
+
             {s3 && s2 && !category?.slug.includes('giao-vien') && (
               <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
                 <h1>Khóa học {category?.slug.includes('luyen-thi') && ' luyện thi'}</h1>
