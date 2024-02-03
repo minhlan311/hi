@@ -4,13 +4,12 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import LanguageChange from '@/components/LanguageChange'
 import { CategoryState } from '@/interface/category'
 import { UserState } from '@/interface/user'
-import { DownOutlined } from '@ant-design/icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Divider, Drawer, Row, Space } from 'antd'
+import { Col, Divider, Drawer, Flex, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { BiSolidUserCircle } from 'react-icons/bi'
 import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
-import { IoCalendar, IoCalendarOutline, IoSchoolOutline } from 'react-icons/io5'
+import { IoCalendar, IoCalendarOutline, IoChevronDown, IoSchoolOutline } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
 import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
@@ -18,7 +17,7 @@ import useResponsives from '../../../../hooks/useResponsives'
 import AvatarDropMenu from '../../AvatarDropMenu'
 import Header from '../../Header/Header'
 import RenderSubMenu from './RenderSubMenu'
-import './styles.scss'
+import style from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -33,23 +32,156 @@ interface TransformedItem {
   href: string
 }
 
-export default function MenuNav({ user, type }: Props) {
+const UpdateMentor = ({ userData }: { userData: UserState }) => {
   const navigate = useNavigate()
+  if (userData?.isMentor && !userData.mentorInfo._id)
+    return (
+      <Flex vertical align='center' gap={12} className={style.verifyInfo}>
+        <p>Hãy cập nhật đầy đủ thông tin để sử dụng những tính năng dành riêng cho bạn</p>
+        <ButtonCustom
+          type='primary'
+          onClick={() => {
+            navigate('/profiles/' + `${userData?._id}`, { state: { key: 'centificate' } })
+          }}
+        >
+          Cập nhật ngay
+        </ButtonCustom>
+      </Flex>
+    )
+}
+
+const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[]; userData: UserState }) => {
+  const { sm, md } = useResponsives()
   const location = useLocation()
   const [open, setOpen] = useState<boolean>(false)
-  const { sm, md } = useResponsives()
+  const [mobileMenu, setMobileMenu] = useState<any[]>([])
+  useEffect(() => {
+    setOpen(false)
+  }, [location])
+  const test = categoriesData?.find((item) => item.label === 'Luyện thi')
+  const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
+  const choice = categoriesData?.find((item) => item.label === 'Trắc nghiệm')
+
+  useEffect(() => {
+    if (categoriesData.length > 0) {
+      setMobileMenu([
+        { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
+        {
+          label: 'Luyện thi',
+          icon: <IoSchoolOutline />,
+          activeIcon: <MdSchool />,
+          href: `${test?.href}${test?.children?.[0]?.href}`,
+        },
+        {
+          label: 'Lịch khai giảng',
+          icon: <IoCalendarOutline />,
+          activeIcon: <IoCalendar />,
+          href: `${opening?.href}`,
+        },
+        {
+          label: 'Trắc nghiệm',
+          icon: <PiExam />,
+          activeIcon: <PiExamFill />,
+          href: `${choice?.href}`,
+        },
+        { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
+      ])
+    }
+  }, [categoriesData])
+
+  return (
+    <Header background='var(--whiteBg)'>
+      <div className={style.menu}>
+        <Flex justify='space-between' align='center' className={style.navMb}>
+          {mobileMenu.map((item) =>
+            item.href ? (
+              <NavLink
+                key={`${item.href}`}
+                to={`${item.href}`}
+                className={({ isActive }) => `${isActive ? (open ? '' : style.navActive) : style.navColor}`}
+              >
+                <div className={style.labelItem}>
+                  <div className={style.labelIcon}>
+                    <div className={style.iconUnActive}>{item.icon}</div>
+                    <div className={style.iconActive}>{item.activeIcon}</div>
+                    <div className={style.title}>{item.label}</div>
+                  </div>
+                </div>
+              </NavLink>
+            ) : (
+              <div className={`${open ? style.navActive : style.navColor}`} onClick={() => setOpen(!open)}>
+                <div className={style.labelItem}>
+                  <div className={style.labelIcon}>
+                    <div className={style.iconUnActive}>{item.icon}</div>
+                    <div className={style.iconActive}>{item.activeIcon}</div>
+                    <div className={style.title}>{item.label}</div>
+                  </div>
+                </div>
+              </div>
+            ),
+          )}
+        </Flex>
+      </div>
+      <Drawer
+        onClose={() => setOpen(!open)}
+        open={!md ? false : open}
+        style={{
+          textAlign: 'center',
+        }}
+        className={style.navDrawer}
+        size={sm ? 'large' : 'default'}
+      >
+        <Space direction='vertical'>
+          {userData ? (
+            <>
+              <Link to={'/profiles/' + `${userData?._id}`}>
+                <Space direction='vertical'>
+                  <Avatar avtUrl={userData?.avatarUrl} userData={userData} size={65}></Avatar>
+                  <h3>{userData?.fullName}</h3>
+                </Space>
+              </Link>
+              <Link to={'/profiles/' + `${userData?._id}`} state='infor'>
+                <ButtonCustom type='text'>Thông tin giới thiệu</ButtonCustom>
+              </Link>
+              <Link to={'/profiles/' + `${userData?._id}`} state='category'>
+                <ButtonCustom type='text'>Bằng cấp</ButtonCustom>
+              </Link>
+
+              {userData?.isMentor && (
+                <Link to={'/profiles/' + `${userData?._id}`} state='feedback'>
+                  <ButtonCustom type='text'>Đánh giá</ButtonCustom>
+                </Link>
+              )}
+              <Divider style={{ margin: '10px 0' }} />
+              <AvatarDropMenu userData={userData} renderMenu />
+            </>
+          ) : (
+            <Space>
+              <ButtonCustom type='text' href='/login'>
+                Đăng nhâp
+              </ButtonCustom>
+              /
+              <ButtonCustom type='text' href='/register'>
+                Đăng ký
+              </ButtonCustom>
+            </Space>
+          )}
+          <LanguageChange />
+        </Space>
+      </Drawer>
+    </Header>
+  )
+}
+
+const MenuNav = ({ user, type }: Props) => {
+  const { md, sm } = useResponsives()
   const { data: categories } = useQuery({
-    queryKey: ['categoriesList'],
+    queryKey: ['categoriesMenu'],
     queryFn: () => {
       return categoryApi.getCategories({ parentId: null }, { sort: { createdAt: -1 } })
     },
   })
-
-  useEffect(() => {
-    setOpen(false)
-  }, [location])
   const queryClient = useQueryClient()
-
   const userData = queryClient.getQueryData<any>(['userDetail'])
 
   const transformArray = (originalArray: CategoryState[]): TransformedItem[] => {
@@ -65,250 +197,115 @@ export default function MenuNav({ user, type }: Props) {
     categories ? (categories?.data.docs as unknown as CategoryState[]) : [],
   )
 
-  const test = categoriesData?.find((item) => item.label === 'Luyện thi')
-  const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
-  const choice = categoriesData?.find((item) => item.label === 'Trắc nghiệm')
-  const mobileMenu = [
-    { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
-    {
-      label: 'Luyện thi',
-      icon: <IoSchoolOutline />,
-      activeIcon: <MdSchool />,
-      href: `${test?.href}${test?.children?.[0]?.href}`,
-    },
-    {
-      label: 'Lịch khai giảng',
-      icon: <IoCalendarOutline />,
-      activeIcon: <IoCalendar />,
-      href: `${opening?.href}${opening?.children?.[0]?.href}`,
-    },
-    {
-      label: 'Trắc nghiệm',
-      icon: <PiExam />,
-      activeIcon: <PiExamFill />,
-      href: `${choice?.href}`,
-    },
-    { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
-  ]
-  if (choice)
-    if (type)
-      return (
-        <Space direction='vertical' className='sp100' size='large'>
-          {categoriesData.map((item) => (
-            <div key={`${item._id}`} className='menuLabel'>
-              <div className='labelItem'>
-                {item.children && !item.children.length ? (
-                  <Link to={item.href} className='title'>
-                    <Space className='sp100' size='small'>
-                      {item.label}
-                    </Space>
-                  </Link>
-                ) : (
-                  <RenderSubMenu item={item} />
-                )}
-              </div>
-            </div>
-          ))}
-          <Divider style={{ margin: 0 }}></Divider>
-          <Link to='/card'>Giỏ hàng</Link>
-        </Space>
-      )
-    else
-      return (
-        <>
-          <div className='menu'>
-            <Header type='fullsize'>
-              {md ? (
-                <Row justify='space-between' align='middle' className='uc-container menuItem'>
-                  {mobileMenu.map((item) =>
-                    item.href ? (
-                      <NavLink
-                        key={`${item.href}`}
-                        to={`${item.href}`}
-                        className={({ isActive }) => `${isActive ? (open ? '' : 'navActive') : ''} navMb`}
-                      >
-                        <div className='labelItem'>
-                          <div className='labelIcon'>
-                            <div className='icon-unActive'>{item.icon}</div>
-                            <div className='icon-active'>{item.activeIcon}</div>
-                            <div className='title'>{item.label}</div>
-                          </div>
-                        </div>
-                      </NavLink>
-                    ) : (
-                      <div className={`${open ? 'navActive' : ''} navMb`} onClick={() => setOpen(!open)}>
-                        <div className='labelItem'>
-                          <div className='labelIcon'>
-                            <div className='icon-unActive'>{item.icon}</div>
-                            <div className='icon-active'>{item.activeIcon}</div>
-                            <div className='title'>{item.label}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ),
-                  )}
-                </Row>
+  if (type) {
+    return (
+      <Space direction='vertical' className={'sp100'} size='large'>
+        {categoriesData.map((item) => (
+          <div key={`${item._id}`} className={style.menuLabel}>
+            <div className={style.labelItem}>
+              {item.children && !item.children.length ? (
+                <Link to={item.href} className={style.title}>
+                  <Flex gap={5}>{item.label}</Flex>
+                </Link>
               ) : (
-                <Row justify='space-between' align='middle' className='uc-container menuItem'>
-                  {categoriesData.map((item) => (
-                    <div key={`${item._id}`} className='menuLabel'>
-                      <div>
-                        {item.children && item.children.length === 0 ? (
-                          <Link to={`${item.href} `} className='labelItem'>
-                            <Space style={{ width: '100%' }} size='small'>
-                              {item?.href ? item.label : <div className='title'>{item.label}</div>}
-                              {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
-                            </Space>
-                          </Link>
-                        ) : (
-                          <div className='labelItem'>
-                            {item.label === 'Khóa học' ||
-                            item.label === 'Giáo viên' ||
-                            item.label === 'Tin tức' ||
-                            item.label === 'Lịch khai giảng' ? (
-                              <Link to={item.href} style={{ color: 'var(--white)' }}>
-                                <Space style={{ width: '100%' }} size='small'>
-                                  {item?.href ? item.label : <div className='title'>{item.label}</div>}
-                                  {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
-                                </Space>
-                              </Link>
-                            ) : (
-                              <Space style={{ width: '100%' }} size='small'>
-                                {item?.href ? item.label : <div className='title'>{item.label}</div>}
-                                {item.children ? item.children.length > 0 && <DownOutlined /> : <></>}
-                              </Space>
-                            )}
-
-                            {item.children ? item.children.length > 0 && <div className='arr'></div> : null}
-                          </div>
-                        )}
-                      </div>
-                      {item.children ? (
-                        item.children.length > 0 && (
-                          <div className='chilMenu uc-container'>
-                            <div className='sub-menu'>
-                              {item.children.map((chil) => (
-                                <div className='chil' key={`${chil._id}`}>
-                                  <Space direction='vertical'>
-                                    {chil?.children.length > 0 ? (
-                                      item.label === 'Giáo viên' || (
-                                        <>
-                                          <Link to={`${item.href + chil.href}`}>
-                                            <h3 className='chilTitle'>{chil.label}</h3>
-                                          </Link>
-                                          {chil?.children?.map((menuChil) => (
-                                            <Space className='sp100' direction='vertical' key={`${menuChil._id}`}>
-                                              <Link
-                                                to={`${item.href + chil.href + menuChil.href}`}
-                                                className='lastTitle'
-                                              >
-                                                {menuChil.label}
-                                              </Link>
-                                            </Space>
-                                          ))}
-                                        </>
-                                      )
-                                    ) : (
-                                      <Link to={`${item.href + chil.href + chil.href}`} className='lastTitle'>
-                                        {chil.label}
-                                      </Link>
-                                    )}
-                                  </Space>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )
+                <RenderSubMenu item={item} />
+              )}
+            </div>
+          </div>
+        ))}
+        <Divider style={{ margin: 0 }}></Divider>
+        <Link to='/card'>Giỏ hàng</Link>
+      </Space>
+    )
+  } else {
+    if (md && sm) {
+      return (
+        <div>
+          <UpdateMentor userData={userData?.data} />
+          <MenuMb categoriesData={categoriesData} userData={userData?.data} />
+        </div>
+      )
+    } else {
+      return (
+        <Header
+          background='var(--green)'
+          style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08),0 4px 12px rgba(0, 0, 0, 0.08)' }}
+        >
+          <div className={style.menu}>
+            <Flex justify='space-between' align='middle'>
+              {categoriesData.map((item) => (
+                <div key={`${item._id}`} className={style.menuLabel}>
+                  <Link to={`${item.href}`}>
+                    <div className={style.labelItem} style={{ color: 'var(--white)' }}>
+                      {item.children && item.children.length === 0 ? (
+                        <div>{item.label}</div>
                       ) : (
-                        <></>
+                        <>
+                          <Flex gap={5}>
+                            <div className={style.title}>{item.label}</div>
+                            {item.children ? item.children.length > 0 && <IoChevronDown /> : null}
+                          </Flex>
+                          {item.children ? item.children.length > 0 && <div className={style.arr}></div> : null}
+                        </>
                       )}
                     </div>
-                  ))}
-
-                  {user ? (
-                    <AvatarDropMenu userData={user} />
-                  ) : (
-                    <div className='butt-auth'>
-                      <Link to='/login'>
-                        <ButtonCustom type='text' className='butt-item'>
-                          Đăng nhâp
-                        </ButtonCustom>
-                      </Link>
-                      /
-                      <Link to='/register'>
-                        <ButtonCustom type='text' className='butt-item'>
-                          Đăng ký
-                        </ButtonCustom>
-                      </Link>
-                    </div>
-                  )}
-                </Row>
-              )}
-            </Header>
-
-            <Drawer
-              placement='right'
-              closable={sm}
-              onClose={() => setOpen(!open)}
-              open={!md ? false : open}
-              style={{
-                textAlign: 'center',
-                maxHeight: '100vh',
-              }}
-              className='nav-drawer'
-              size={sm ? 'large' : 'default'}
-            >
-              <Space direction='vertical'>
-                <Link to={'/profiles/' + `${userData?.data?._id}`}>
-                  <Space direction='vertical'>
-                    <Avatar avtUrl={user?.avatarUrl} userData={user} size={65}></Avatar>
-                    <h3>{user?.fullName}</h3>
-                  </Space>
-                </Link>
-                <Link to={'/profiles/' + `${userData?.data?._id}`} state='infor'>
-                  <ButtonCustom type='text'>Thông tin giới thiệu</ButtonCustom>
-                </Link>
-                <Link to={'/profiles/' + `${userData?.data?._id}`} state='category'>
-                  <ButtonCustom type='text'>Bằng cấp</ButtonCustom>
-                </Link>
-
-                {user?.isMentor && (
-                  <Link to={'/profiles/' + `${userData?.data?._id}`} state='feedback'>
-                    <ButtonCustom type='text'>Đánh giá</ButtonCustom>
                   </Link>
-                )}
-                <Divider style={{ margin: '10px 0' }} />
-                <LanguageChange />
-                {!user ? (
-                  <Space>
-                    <ButtonCustom type='text' href='/login'>
+                  {item.children
+                    ? item.children.length > 0 && (
+                        <Row gutter={[0, 24]} className={style.chilMenu}>
+                          {item.children.map((chil) =>
+                            chil?.children.length > 0 ? (
+                              <Col span={6} className={style.chil} key={`${chil._id}`}>
+                                <Flex vertical gap={15}>
+                                  <Flex gap={10} vertical>
+                                    <Link to={`${item.href + chil.href}`}>
+                                      <h3 className={style.chilTitle}>{chil.label}</h3>
+                                    </Link>
+                                    <Flex gap={5} vertical>
+                                      {chil?.children?.map((menuChil) => (
+                                        <Link to={`${item.href + chil.href + menuChil.href}`} key={`${menuChil._id}`}>
+                                          {menuChil.label}
+                                        </Link>
+                                      ))}
+                                    </Flex>
+                                  </Flex>
+                                </Flex>
+                              </Col>
+                            ) : (
+                              <Col span={6}>
+                                <Link to={`${item.href + chil.href}`}>{chil.label}</Link>
+                              </Col>
+                            ),
+                          )}
+                        </Row>
+                      )
+                    : null}
+                </div>
+              ))}
+              {user ? (
+                <AvatarDropMenu userData={user} />
+              ) : (
+                <div className={style.buttAuth}>
+                  <Link to='/login'>
+                    <ButtonCustom type='text' className={style.buttItem}>
                       Đăng nhâp
                     </ButtonCustom>
-                    /
-                    <ButtonCustom type='text' href='/register'>
+                  </Link>
+                  /
+                  <Link to='/register'>
+                    <ButtonCustom type='text' className={style.buttItem}>
                       Đăng ký
                     </ButtonCustom>
-                  </Space>
-                ) : (
-                  <AvatarDropMenu userData={user} renderMenu />
-                )}
-              </Space>
-            </Drawer>
+                  </Link>
+                </div>
+              )}
+            </Flex>
           </div>
-          {userData?.data?.isMentor && userData?.data?.mentorInfo === null && (
-            <div className='verifyInfo'>
-              Hãy cập nhật đầy đủ thông tin để sử dụng những tính năng dành riêng cho bạn
-              <Button
-                className='btn-ms'
-                type='primary'
-                onClick={() => {
-                  navigate('/profiles/' + `${userData?.data?._id}`, { state: { key: 'centificate' } })
-                }}
-              >
-                Cập nhật ngay
-              </Button>
-            </div>
-          )}
-        </>
+          <UpdateMentor userData={userData?.data} />
+        </Header>
       )
+    }
+  }
 }
+
+export default MenuNav

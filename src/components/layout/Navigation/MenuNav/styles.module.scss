@@ -1,0 +1,152 @@
+@import '../../../GlobalStyles/responsive.scss';
+
+.menu {
+  position: relative;
+  z-index: 999;
+  border-top: 1px solid var(--gray86);
+
+  @include respond-to(xs) {
+    background-color: var(--whiteBg);
+  }
+  @include respond-to(sm) {
+    background-color: var(--whiteBg);
+  }
+  @include respond-to(md) {
+    background-color: var(--whiteBg);
+  }
+  .info {
+    @include respond-to(xl) {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+
+  .navMb {
+    padding: 10px 0;
+    .title {
+      font-size: 11px;
+    }
+    .navColor {
+      color: var(--light-gray3);
+      &:hover {
+        color: var(--green);
+      }
+    }
+    .labelIcon {
+      svg {
+        font-size: 25px;
+      }
+      * {
+        text-align: center;
+      }
+    }
+
+    .iconActive {
+      display: none;
+    }
+    .iconUnActive {
+      display: block;
+    }
+  }
+
+  .navActive {
+    color: var(--green);
+    .iconUnActive {
+      display: none;
+    }
+    .iconActive {
+      display: block;
+    }
+  }
+  .menuLabel {
+    transition: 0.3s;
+
+    .chilMenu {
+      display: none;
+    }
+
+    .labelItem {
+      color: var(--white);
+      position: relative;
+      padding: 18px 10px;
+    }
+
+    &:hover {
+      color: var(--defaultColor);
+      .labelItem {
+        .arr {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%);
+          text-align: center;
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid var(--white);
+        }
+      }
+      .chilMenu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        background: var(--whiteBg);
+        color: var(--black);
+        display: flex;
+        padding: 24px;
+        box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.08),
+          0 4px 12px rgba(0, 0, 0, 0.08);
+        z-index: 1020;
+        min-height: 100px;
+        transition: 0.3s;
+
+        .chil {
+          position: relative;
+          transition: 0.3s;
+          cursor: pointer;
+          .chilTitle {
+            color: var(--green);
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+  }
+
+  .buttAuth {
+    background: var(--red);
+    color: white;
+
+    button {
+      border-radius: 0;
+      color: white;
+    }
+    .buttItem {
+      height: 50px !important;
+    }
+  }
+  .avtDrop {
+    padding: 5px 0;
+  }
+}
+
+.verifyInfo {
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  color: #a70a00;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.navIcon {
+  & > * {
+    display: flex;
+    & > svg {
+      margin-left: 5px;
+    }
+  }
+}
