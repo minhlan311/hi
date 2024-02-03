@@ -10,11 +10,11 @@ export default function CateGoriesList({ categoryId }: { categoryId?: string }) 
   const { data: categoriesData, isLoading } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ name: 'Khóa học' })
     },
   })
 
-  const categoryList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+  const categoryList = categoriesData?.data?.docs?.[0]
   if (categoryList)
     return categoryList.children.map((item) => (
       <Card

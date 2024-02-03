@@ -1,13 +1,3 @@
-.flex-col {
-  padding: 10px 0;
-  line-height: 1.2;
-  display: flex;
-  gap: 20px;
-}
-.flex-col-fixed {
-  display: flex;
-  flex-direction: column;
-}
 .title-new {
   margin: 0 !important;
   font-size: 20px;
@@ -15,20 +5,7 @@
   cursor: pointer;
   padding: 10px 0;
   color: var(--red);
-}
-.title-new:hover {
-  text-decoration: underline;
-}
-
-.pagi {
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-}
-
-.fixed {
-  position: sticky;
-  top: 20px;
-  min-width: 400px;
-  right: 0;
+  &:hover {
+    text-decoration: underline;
+  }
 }

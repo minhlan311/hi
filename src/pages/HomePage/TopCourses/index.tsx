@@ -16,11 +16,11 @@ export default function TopCourses() {
   const { data: categories } = useQuery({
     queryKey: ['coursesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ name: 'Khóa học' })
     },
   })
 
-  const courses = categories?.data?.docs?.find((item: CategoryState) => item.name === 'Khóa học')
+  const courses = categories?.data?.docs?.[0]
 
   const { xl } = useResponsives()
 

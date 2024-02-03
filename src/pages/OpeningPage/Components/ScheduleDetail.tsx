@@ -139,10 +139,10 @@ const ScheduleDetail = ({ type }: Props) => {
   const { data: categoriesData } = useQuery({
     queryKey: ['categoriesList'],
     queryFn: () => {
-      return categoryApi.getCategories({ parentId: null })
+      return categoryApi.getCategories({ name: 'Khóa học' })
     },
   })
-  const cateList = categoriesData?.data?.docs?.find((item) => item.name === 'Khóa học')
+  const cateList = categoriesData?.data?.docs?.[0]
   const subjectList = [{ value: 'all', label: 'Tất cả' }]
 
   const collapseList = cateList?.children?.map((sj) => {

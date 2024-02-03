@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENDPOINT } from '@/constants/endpoint'
-import { ListNews, News } from '@/types/news.type'
+import { News } from '@/types/news.type'
 import { SuccessResponse } from '@/types/utils.type'
 import http from '@/utils/http'
 
 const newsApi = {
-  getNews(body: any) {
-    return http.post<SuccessResponse<ListNews>>(ENDPOINT.NEWS, body)
+  findNew(body: any) {
+    return http.post<SuccessResponse<News[]>>(ENDPOINT.NEWS, body)
   },
-  getOneNews(id: string) {
+  getDetail(id: string) {
     return http.get<News>(ENDPOINT.GET_ONE_NEWS + id)
+  },
+  getDetailSlug(slug: string) {
+    return http.get<News>(ENDPOINT.GET_ONE_NEWS + 'detail/' + slug)
   },
 }
 
