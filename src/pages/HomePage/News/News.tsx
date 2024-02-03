@@ -11,7 +11,7 @@ export default function News() {
   const { data, isLoading } = useQuery({
     queryKey: ['news'],
     queryFn: () =>
-      newsApi.getNews({
+      newsApi.findNew({
         filterQuery: {},
         options: {
           limit: 4,
