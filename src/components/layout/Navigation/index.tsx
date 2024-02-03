@@ -21,6 +21,7 @@ import tiktok from '../../../assets/icons/tiktok-icon.svg'
 import youtube from '../../../assets/icons/youtube-logo.svg'
 import zalo from '../../../assets/icons/zalo.png'
 import Header from '../Header/Header'
+
 import MenuNav from './MenuNav'
 import './styles.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -193,23 +194,25 @@ export default function Navigation({ user }: Props) {
       </div>
 
       {md ? (
-        <AffixCustom type='fixed-bottom' zIndex={9999} style={{ left: 0, right: 0 }}>
-          <MenuNav user={user} />
-        </AffixCustom>
+        <>
+          <AffixCustom type='fixed-bottom' zIndex={9999} style={{ left: 0, right: 0 }}>
+            <MenuNav user={user} />
+          </AffixCustom>
+          <DrawerCustom
+            open={open}
+            onClose={setOpen}
+            onFinish={() => setOpen(false)}
+            placement='left'
+            width={sm ? '80vw' : '30vw'}
+          >
+            <MenuNav user={user} type='subMenu' />
+          </DrawerCustom>
+        </>
       ) : (
         <AffixCustom type='down-hidden' hiddenOffsetTop={150}>
           <MenuNav user={user} />
         </AffixCustom>
       )}
-      <DrawerCustom
-        open={open}
-        onClose={setOpen}
-        onFinish={() => setOpen(false)}
-        placement='left'
-        width={sm ? '80vw' : '30vw'}
-      >
-        <MenuNav user={user} type='subMenu' />
-      </DrawerCustom>
     </div>
   )
 }
