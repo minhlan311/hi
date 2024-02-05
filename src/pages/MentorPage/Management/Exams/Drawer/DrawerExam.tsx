@@ -43,6 +43,7 @@ const DrawerExam = (props: Props) => {
   const queryClient = useQueryClient()
 
   const categoriesData = queryClient.getQueryData<{ data: SuccessResponse<CategoryState[]> }>(['categoriesList'])
+
   const subjectList = categoriesData?.data?.docs
     ?.find((item) => item.name === 'Khóa học')
     ?.children?.map((sj) => {
@@ -87,7 +88,7 @@ const DrawerExam = (props: Props) => {
 
       setTestOptions(testData)
     }
-  }, [subjectName])
+  }, [subjectName, testList])
 
   const { isLoading, mutate } = useMutation({
     mutationFn: (body) => (!examData?._id ? examApi.createExam(body) : examApi.putExam(body)),

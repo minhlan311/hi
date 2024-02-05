@@ -275,6 +275,15 @@ const UploadCustom = (props: Props) => {
           <img alt='example' style={{ width: '100%' }} src={previewImage} />
         </Modal>
       )}
+      {accessType?.includes('audio') && (
+        <Space direction='vertical' className={'sp100'}>
+          {fileList.map((item) => (
+            <audio controls className={'sp100'} style={{ height: 40 }} key={item.uid}>
+              <source src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item.url} type='audio/mpeg' />
+            </audio>
+          ))}
+        </Space>
+      )}
     </div>
   )
 }

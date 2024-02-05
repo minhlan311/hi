@@ -69,13 +69,15 @@ const CreateSkill = (props: Props) => {
       setChangeSkill(null)
     }
   }, [changeSkill])
-
+  const [search, setSearch] = useState<string>('')
   const { data: skillData, isLoading } = useQuery({
-    queryKey: ['skillData', targetSkill, current],
+    queryKey: ['skillData', targetSkill, current, search],
     queryFn: () => {
       return skillApi.findSkill({
         filterQuery: {
           skill: targetSkill,
+          categoryId: examData.categoryIdDetail,
+          search,
         },
         options: {
           limit: 8,
@@ -104,10 +106,11 @@ const CreateSkill = (props: Props) => {
                   skillName={tab.key}
                   choosePack={choosePack}
                   skillData={skillData && (skillData.data.docs as unknown as any)}
-                  categoryId={examData?.categoryId}
+                  categoryId={examData?.categoryIdDetail}
                   testId={examData?._id as string}
                   isLoading={isLoading}
                   setChoosePack={setChoosePack}
+                  setSearch={setSearch}
                 />
                 <Flex justify='space-between' style={{ position: 'absolute', right: 0, bottom: -60 }}>
                   <p></p>{' '}

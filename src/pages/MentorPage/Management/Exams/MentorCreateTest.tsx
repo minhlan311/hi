@@ -42,7 +42,9 @@ const MentorCreateTest = () => {
       openNotification({
         status: 'success',
         message: 'Thông báo',
-        description: !examDetail?._id ? 'Tạo bài thi thành công' : 'Cập nhật bài thi thành công',
+        description: location.pathname.includes('updateTest')
+          ? 'Cập nhật bài thi thành công'
+          : 'Tạo bài thi thành công',
       })
       setTestId(data.data._id)
       if (current === 0) setCurrent(current + 1)
@@ -57,7 +59,7 @@ const MentorCreateTest = () => {
   }, [examDetail])
 
   const { data: skillData } = useQuery({
-    queryKey: ['skillSelected', skillSelected],
+    queryKey: ['skillSelectedData', skillSelected],
     queryFn: () => {
       return skillApi.findSkill({
         filterQuery: {
@@ -68,6 +70,8 @@ const MentorCreateTest = () => {
 
     enabled: skillSelected?.length > 0,
   })
+
+  console.log(skillSelected, skillData)
 
   const next = () => {
     if (current === 0) form.submit()
@@ -123,7 +127,7 @@ const MentorCreateTest = () => {
     },
     {
       key: 'finish',
-      title: !examDetail?._id ? 'Thêm mới' : 'Cập nhật',
+      title: examDetail?._id ? 'Thêm mới' : 'Cập nhật',
       content: (
         <LastCheck
           examData={examDetail as unknown as ExamState}
@@ -148,7 +152,7 @@ const MentorCreateTest = () => {
         )}
         {current === stepItem.length - 1 && (
           <ButtonCustom type='primary' onClick={() => finished()}>
-            {!examDetail?._id ? 'Tạo bộ đề' : 'Cập nhật bộ đề'}
+            {location.pathname.includes('updateTest') ? 'Cập nhật bộ đề' : 'Tạo bộ đề'}
           </ButtonCustom>
         )}
         {current > 0 && (
