@@ -8,6 +8,7 @@ import TabsCustom from '@/components/TabsCustom/TabsCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import UploadCustom from '@/components/UploadCustom/UploadCustom'
+import { debounce } from '@/helpers/common'
 import useResponsives from '@/hooks/useResponsives'
 import { Skill, SkillType } from '@/interface/exam'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -29,6 +30,7 @@ const RenderSkillItem = ({
   isLoading,
   choosePack,
   setChoosePack,
+  setSearch,
 }: {
   skillData: Skill[]
   skillName: SkillType
@@ -37,6 +39,7 @@ const RenderSkillItem = ({
   isLoading: boolean
   choosePack: string[]
   setChoosePack: React.Dispatch<React.SetStateAction<string[]>>
+  setSearch: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const queryClient = useQueryClient()
   const [form] = Form.useForm()
@@ -112,117 +115,120 @@ const RenderSkillItem = ({
       id: 'store',
       name: 'Gói câu từ ngân hàng',
       children: (
-        <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
-          {skillData && skillData?.length > 0 ? (
-            <Space direction='vertical' className='sp100'>
-              {skillData?.map(
-                (item) =>
-                  choosePack.find((i) => i === item._id) && (
-                    <Card
-                      key={item._id}
-                      hoverable
-                      style={{ border: choosePack.includes(item._id) ? '2px solid var(--red)' : undefined }}
-                    >
-                      <Row justify='space-between' align='middle' gutter={[12, 12]}>
-                        <Col>
-                          <Card.Meta
-                            title={
-                              <p>
-                                Bài đọc: <b>{item.title}</b>
-                              </p>
-                            }
-                            description={
-                              <div
-                                dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLFourLine'
-                              ></div>
-                            }
-                          ></Card.Meta>
-                        </Col>
-                        <Col>
-                          <Space>
-                            <div className='custom-butt-icon'>
-                              <FaRegCircleQuestion size={20} />
-                              <b style={{ marginLeft: 5 }}>{item.countQuestions}</b>
-                            </div>
-                            <TagCustom content={item.skill}></TagCustom>
-                            <ButtonCustom
-                              size='small'
-                              onClick={() => {
-                                setOpenDetail(true)
-                                setOpenData(item)
-                              }}
-                            >
-                              Xem chi tiết
-                            </ButtonCustom>
-                            <ButtonCustom
-                              type={choosePack.includes(item._id) ? 'default' : 'primary'}
-                              size='small'
-                              onClick={() => stateAction(setChoosePack, item._id, item._id, 'switch')}
-                            >
-                              {choosePack.includes(item._id) ? 'Hủy chọn gói câu' : 'Chọn gói câu'}
-                            </ButtonCustom>
-                          </Space>
-                        </Col>
-                      </Row>
-                    </Card>
-                  ),
-              )}
-              {skillData?.map(
-                (item) =>
-                  !choosePack.find((i) => i === item._id) && (
-                    <Card key={item._id} hoverable>
-                      <Row justify='space-between' align='middle' gutter={[12, 12]}>
-                        <Col>
-                          <Card.Meta
-                            title={
-                              <p>
-                                Bài đọc: <b>{item.title}</b>
-                              </p>
-                            }
-                            description={
-                              <div
-                                dangerouslySetInnerHTML={{ __html: item.description }}
-                                className='dangerHTMLFourLine'
-                              ></div>
-                            }
-                          ></Card.Meta>
-                        </Col>
-                        <Col>
-                          <Space>
-                            <div className='custom-butt-icon'>
-                              <FaRegCircleQuestion size={20} />
-                              <b style={{ marginLeft: 5 }}>{item.countQuestions}</b>
-                            </div>
-                            <TagCustom content={item.skill}></TagCustom>
-                            <ButtonCustom
-                              size='small'
-                              onClick={() => {
-                                setOpenDetail(true)
-                                setOpenData(item)
-                              }}
-                            >
-                              Xem chi tiết
-                            </ButtonCustom>
-                            <ButtonCustom
-                              type={choosePack.includes(item._id) ? 'default' : 'primary'}
-                              size='small'
-                              onClick={() => stateAction(setChoosePack, item._id, item._id, 'switch')}
-                            >
-                              {choosePack.includes(item._id) ? 'Hủy chọn gói câu' : 'Chọn gói câu'}
-                            </ButtonCustom>
-                          </Space>
-                        </Col>
-                        <ShowSkillDetail data={openData} setOpen={setOpenDetail} open={openDetail}></ShowSkillDetail>
-                      </Row>
-                    </Card>
-                  ),
-              )}
-            </Space>
-          ) : (
-            <EmptyCustom description='Không có gói câu hỏi nào, bạn có thể tạo gói câu cho kỹ năng'></EmptyCustom>
-          )}
-        </LoadingCustom>
+        <Space direction='vertical' className='sp100'>
+          <Input placeholder='Tìm kiếm...' onChange={debounce((e: any) => setSearch(e.target.value), 500)} allowClear />
+          <LoadingCustom loading={isLoading} tip='Vui lòng chờ...'>
+            {skillData && skillData?.length > 0 ? (
+              <Space direction='vertical' className='sp100'>
+                {skillData?.map(
+                  (item) =>
+                    choosePack.find((i) => i === item._id) && (
+                      <Card
+                        key={item._id}
+                        hoverable
+                        style={{ border: choosePack.includes(item._id) ? '2px solid var(--red)' : undefined }}
+                      >
+                        <Row justify='space-between' align='middle' gutter={[12, 12]}>
+                          <Col>
+                            <Card.Meta
+                              title={
+                                <p>
+                                  Bài đọc: <b>{item.title}</b>
+                                </p>
+                              }
+                              description={
+                                <div
+                                  dangerouslySetInnerHTML={{ __html: item.description }}
+                                  className='dangerHTMLFourLine'
+                                ></div>
+                              }
+                            ></Card.Meta>
+                          </Col>
+                          <Col>
+                            <Space>
+                              <div className='custom-butt-icon'>
+                                <FaRegCircleQuestion size={20} />
+                                <b style={{ marginLeft: 5 }}>{item.countQuestions}</b>
+                              </div>
+                              <TagCustom content={item.skill}></TagCustom>
+                              <ButtonCustom
+                                size='small'
+                                onClick={() => {
+                                  setOpenDetail(true)
+                                  setOpenData(item)
+                                }}
+                              >
+                                Xem chi tiết
+                              </ButtonCustom>
+                              <ButtonCustom
+                                type={choosePack.includes(item._id) ? 'default' : 'primary'}
+                                size='small'
+                                onClick={() => stateAction(setChoosePack, item._id, item._id, 'switch')}
+                              >
+                                {choosePack.includes(item._id) ? 'Hủy chọn gói câu' : 'Chọn gói câu'}
+                              </ButtonCustom>
+                            </Space>
+                          </Col>
+                        </Row>
+                      </Card>
+                    ),
+                )}
+                {skillData?.map(
+                  (item) =>
+                    !choosePack.find((i) => i === item._id) && (
+                      <Card key={item._id} hoverable>
+                        <Row justify='space-between' align='middle' gutter={[12, 12]}>
+                          <Col>
+                            <Card.Meta
+                              title={
+                                <p>
+                                  Bài đọc: <b>{item.title}</b>
+                                </p>
+                              }
+                              description={
+                                <div
+                                  dangerouslySetInnerHTML={{ __html: item.description }}
+                                  className='dangerHTMLFourLine'
+                                ></div>
+                              }
+                            ></Card.Meta>
+                          </Col>
+                          <Col>
+                            <Space>
+                              <div className='custom-butt-icon'>
+                                <FaRegCircleQuestion size={20} />
+                                <b style={{ marginLeft: 5 }}>{item.countQuestions}</b>
+                              </div>
+                              <TagCustom content={item.skill}></TagCustom>
+                              <ButtonCustom
+                                size='small'
+                                onClick={() => {
+                                  setOpenDetail(true)
+                                  setOpenData(item)
+                                }}
+                              >
+                                Xem chi tiết
+                              </ButtonCustom>
+                              <ButtonCustom
+                                type={choosePack.includes(item._id) ? 'default' : 'primary'}
+                                size='small'
+                                onClick={() => stateAction(setChoosePack, item._id, item._id, 'switch')}
+                              >
+                                {choosePack.includes(item._id) ? 'Hủy chọn gói câu' : 'Chọn gói câu'}
+                              </ButtonCustom>
+                            </Space>
+                          </Col>
+                          <ShowSkillDetail data={openData} setOpen={setOpenDetail} open={openDetail}></ShowSkillDetail>
+                        </Row>
+                      </Card>
+                    ),
+                )}
+              </Space>
+            ) : (
+              <EmptyCustom description='Không có gói câu hỏi nào, bạn có thể tạo gói câu cho kỹ năng'></EmptyCustom>
+            )}
+          </LoadingCustom>
+        </Space>
       ),
     },
     {
@@ -245,25 +251,22 @@ const RenderSkillItem = ({
               </h3>
             </Col>
             {skillName === 'LISTENING' && (
-              <>
-                <Col span={24} md={5}>
-                  <Form.Item label='Ghi âm'>
-                    <UploadCustom accessType='audio/*' uploadKey='attachment' name='audio' required form={form}>
-                      <ButtonCustom icon={<RiVoiceprintLine />} className='sp100'>
-                        Thêm file ghi âm
-                      </ButtonCustom>
-                    </UploadCustom>
-                  </Form.Item>
-                </Col>
-
-                <Col span={24} md={11}>
-                  <Form.Item label=' '>
-                    <audio controls className='sp100' style={{ height: 40 }}>
-                      <source src={skillCreatedData?.url} type='audio/mpeg' />
-                    </audio>
-                  </Form.Item>
-                </Col>
-              </>
+              <Col span={24}>
+                <Form.Item label='Ghi âm'>
+                  <UploadCustom
+                    accessType='audio/*'
+                    uploadKey='attachment'
+                    name='audio'
+                    required
+                    form={form}
+                    showUploadList
+                  >
+                    <ButtonCustom icon={<RiVoiceprintLine />} className='sp100'>
+                      Thêm file ghi âm
+                    </ButtonCustom>
+                  </UploadCustom>
+                </Form.Item>
+              </Col>
             )}
             {skillName && (
               <>
