@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import authApi from '@/apis/auth.api'
+import openNotification from '@/components/Notification'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Form, Input, Space } from 'antd'
@@ -14,9 +15,19 @@ const ForgotPassword = () => {
 
   const mutate = useMutation({
     mutationFn: (username: string) => authApi.forgot(username),
-    onSuccess: (data) => {
-      console.log(data, 'data')
+    onSuccess: () => {
+      openNotification({
+        status: 'success',
+        message: 'Thông báo',
+        description: 'Đã gửi mật khẩu mới đến email của bạn!',
+      })
     },
+    onError: (err: any) =>
+      openNotification({
+        status: 'error',
+        message: 'Thông báo',
+        description: err.response.data.message,
+      }),
   })
 
   return (

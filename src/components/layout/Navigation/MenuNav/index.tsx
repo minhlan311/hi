@@ -34,7 +34,7 @@ interface TransformedItem {
 
 const UpdateMentor = ({ userData }: { userData: UserState }) => {
   const navigate = useNavigate()
-  if (userData?.isMentor && !userData.mentorInfo._id)
+  if (userData?.isMentor && !userData.mentorInfo?._id)
     return (
       <Flex vertical align='center' gap={12} className={style.verifyInfo}>
         <p>Hãy cập nhật đầy đủ thông tin để sử dụng những tính năng dành riêng cho bạn</p>
@@ -227,82 +227,84 @@ const MenuNav = ({ user, type }: Props) => {
       )
     } else {
       return (
-        <Header
-          background='var(--green)'
-          style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08),0 4px 12px rgba(0, 0, 0, 0.08)' }}
-        >
-          <div className={style.menu}>
-            <Flex justify='space-between' align='middle'>
-              {categoriesData.map((item) => (
-                <div key={`${item._id}`} className={style.menuLabel}>
-                  <Link to={`${item.href}`}>
-                    <div className={style.labelItem} style={{ color: 'var(--white)' }}>
-                      {item.children && item.children.length === 0 ? (
-                        <div>{item.label}</div>
-                      ) : (
-                        <>
-                          <Flex gap={5}>
-                            <div className={style.title}>{item.label}</div>
-                            {item.children ? item.children.length > 0 && <IoChevronDown /> : null}
-                          </Flex>
-                          {item.children ? item.children.length > 0 && <div className={style.arr}></div> : null}
-                        </>
-                      )}
-                    </div>
-                  </Link>
-                  {item.children
-                    ? item.children.length > 0 && (
-                        <Row gutter={[0, 24]} className={style.chilMenu}>
-                          {item.children.map((chil) =>
-                            chil?.children.length > 0 ? (
-                              <Col span={6} className={style.chil} key={`${chil._id}`}>
-                                <Flex vertical gap={15}>
-                                  <Flex gap={10} vertical>
-                                    <Link to={`${item.href + chil.href}`}>
-                                      <h3 className={style.chilTitle}>{chil.label}</h3>
-                                    </Link>
-                                    <Flex gap={5} vertical>
-                                      {chil?.children?.map((menuChil) => (
-                                        <Link to={`${item.href + chil.href + menuChil.href}`} key={`${menuChil._id}`}>
-                                          {menuChil.label}
-                                        </Link>
-                                      ))}
+        <div>
+          <Header
+            background='var(--green)'
+            style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08),0 4px 12px rgba(0, 0, 0, 0.08)' }}
+          >
+            <div className={style.menu}>
+              <Flex justify='space-between' align='middle'>
+                {categoriesData.map((item) => (
+                  <div key={`${item._id}`} className={style.menuLabel}>
+                    <Link to={`${item.href}`}>
+                      <div className={style.labelItem} style={{ color: 'var(--white)' }}>
+                        {item.children && item.children.length === 0 ? (
+                          <div>{item.label}</div>
+                        ) : (
+                          <>
+                            <Flex gap={5}>
+                              <div className={style.title}>{item.label}</div>
+                              {item.children ? item.children.length > 0 && <IoChevronDown /> : null}
+                            </Flex>
+                            {item.children ? item.children.length > 0 && <div className={style.arr}></div> : null}
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                    {item.children
+                      ? item.children.length > 0 && (
+                          <Row gutter={[0, 24]} className={style.chilMenu}>
+                            {item.children.map((chil) =>
+                              chil?.children.length > 0 ? (
+                                <Col span={6} className={style.chil} key={`${chil._id}`}>
+                                  <Flex vertical gap={15}>
+                                    <Flex gap={10} vertical>
+                                      <Link to={`${item.href + chil.href}`}>
+                                        <h3 className={style.chilTitle}>{chil.label}</h3>
+                                      </Link>
+                                      <Flex gap={5} vertical>
+                                        {chil?.children?.map((menuChil) => (
+                                          <Link to={`${item.href + chil.href + menuChil.href}`} key={`${menuChil._id}`}>
+                                            {menuChil.label}
+                                          </Link>
+                                        ))}
+                                      </Flex>
                                     </Flex>
                                   </Flex>
-                                </Flex>
-                              </Col>
-                            ) : (
-                              <Col span={6}>
-                                <Link to={`${item.href + chil.href}`}>{chil.label}</Link>
-                              </Col>
-                            ),
-                          )}
-                        </Row>
-                      )
-                    : null}
-                </div>
-              ))}
-              {user ? (
-                <AvatarDropMenu userData={user} />
-              ) : (
-                <div className={style.buttAuth}>
-                  <Link to='/login'>
-                    <ButtonCustom type='text' className={style.buttItem}>
-                      Đăng nhâp
-                    </ButtonCustom>
-                  </Link>
-                  /
-                  <Link to='/register'>
-                    <ButtonCustom type='text' className={style.buttItem}>
-                      Đăng ký
-                    </ButtonCustom>
-                  </Link>
-                </div>
-              )}
-            </Flex>
-          </div>
+                                </Col>
+                              ) : (
+                                <Col span={6}>
+                                  <Link to={`${item.href + chil.href}`}>{chil.label}</Link>
+                                </Col>
+                              ),
+                            )}
+                          </Row>
+                        )
+                      : null}
+                  </div>
+                ))}
+                {user ? (
+                  <AvatarDropMenu userData={user} />
+                ) : (
+                  <div className={style.buttAuth}>
+                    <Link to='/login'>
+                      <ButtonCustom type='text' className={style.buttItem}>
+                        Đăng nhâp
+                      </ButtonCustom>
+                    </Link>
+                    /
+                    <Link to='/register'>
+                      <ButtonCustom type='text' className={style.buttItem}>
+                        Đăng ký
+                      </ButtonCustom>
+                    </Link>
+                  </div>
+                )}
+              </Flex>
+            </div>
+          </Header>
           <UpdateMentor userData={userData?.data} />
-        </Header>
+        </div>
       )
     }
   }
