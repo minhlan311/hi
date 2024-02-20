@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext } from 'react'
-import { Button, Form, Input } from 'antd'
-import { useMutation } from '@tanstack/react-query'
-import { AppContext } from '@/contexts/app.context'
 import authApi from '@/apis/auth.api'
-import { ChangePassword } from '@/types/auth.type'
 import openNotification from '@/components/Notification'
 import { validatePassword } from '@/constants/utils'
+import { AppContext } from '@/contexts/app.context'
+import { clearLS } from '@/utils/auth'
+import { useMutation } from '@tanstack/react-query'
+import { Button, Form, Input } from 'antd'
+import { useContext } from 'react'
 
 export default function ChangePassword() {
   const { profile } = useContext(AppContext)
@@ -17,19 +17,24 @@ export default function ChangePassword() {
   }
 
   const mutate = useMutation({
-    mutationFn: (body: ChangePassword) => authApi.changePassword(body),
+    mutationFn: (body: any) => authApi.changePassword(body),
     onSuccess: () => {
       openNotification({
         message: 'Thông báo',
         status: 'success',
-        description: 'Thay đổi mật khẩu thành công !',
+        description: 'Thay đổi mật khẩu thành công!',
       })
+      clearLS()
+
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 1000)
     },
     onError: () => {
       openNotification({
         message: 'Thông báo',
         status: 'error',
-        description: 'Có lỗi xảy ra, vui lòng thử lại sau !',
+        description: 'Có lỗi xảy ra, vui lòng thử lại sau!',
       })
     },
   })
@@ -96,7 +101,7 @@ export default function ChangePassword() {
           <Input.Password size='large' />
         </Form.Item>
         <Button type='primary' htmlType='submit'>
-          Cập nhật
+          Đổi mật khẩu
         </Button>
       </Form>
     </div>
