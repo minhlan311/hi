@@ -7,7 +7,7 @@ import { AppContext } from '@/contexts/app.context'
 import { UserState } from '@/interface/user'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Checkbox, Form, Input, Space } from 'antd'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -17,34 +17,36 @@ const Login = () => {
 
   const { isLoading, mutate } = useMutation({ mutationFn: (body: any) => authApi.login(body) })
 
-  // const rememberUser = (account: string, password: string) => {
-  //   const userData = JSON.stringify(`${btoa(account)}/${btoa(password)}`)
-  //   document.cookie = `wer234rffdsa=${userData}; expires=Wed, 31 Dec 2099 23:59:59 UTC; path=/`
-  // }
+  const rememberUser = (account: string, password: string) => {
+    const userData = JSON.stringify(`${btoa(account)}/${btoa(password)}`)
+    document.cookie = `wer234rffdsa=${userData}; expires=Wed, 31 Dec 2099 23:59:59 UTC; path=/`
+  }
 
-  // const getRememberedUser = () => {
-  //   const cookies = document.cookie
-  //   const cookieData = cookies.split('; ').find((cookie) => cookie.startsWith('wer234rffdsa='))
+  const getRememberedUser = () => {
+    const cookies = document.cookie
+    const cookieData = cookies.split('; ').find((cookie) => cookie.startsWith('wer234rffdsa='))
 
-  //   if (cookieData) {
-  //     const userData = cookieData.split('/')
-  //     const newData = { account: userData[0].split('"')[1], password: userData[1].split('"')[0] }
+    if (cookieData) {
+      const userData = cookieData.split('/')
+      const newData = { account: userData[0].split('"')[1], password: userData[1].split('"')[0] }
 
-  //     return newData
-  //   }
+      return newData
+    }
 
-  //   return null
-  // }
+    return null
+  }
 
-  // const userInfo = getRememberedUser()
+  useEffect(() => {
+    const userInfo = getRememberedUser()
 
-  // if (userInfo) {
-  //   const account = userInfo.account
+    if (userInfo) {
+      const account = userInfo.account
 
-  //   const password = userInfo.password
+      const password = userInfo.password
 
-  //   form.setFieldsValue({ account: atob(account), password: atob(password), remember: Boolean(account) })
-  // }
+      form.setFieldsValue({ account: atob(account), password: atob(password), remember: Boolean(account) })
+    }
+  }, [])
 
   const onFinish = (values: any) => {
     mutate(values, {
@@ -52,8 +54,8 @@ const Login = () => {
         navitage('/')
         setIsAuthenticated(true)
         setProfile(data.data as unknown as UserState)
-        // if (values.remember) return rememberUser(values.account, values.password)
-        // else rememberUser('', '')
+        if (values.remember) return rememberUser(values.account, values.password)
+        else rememberUser('', '')
       },
       onError: (data: any) => {
         openNotification({

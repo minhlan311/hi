@@ -11,10 +11,10 @@ export const REGEX_PATTERN = {
 }
 
 export const validatePassword = (_rule: any, value: any, callback: any) => {
-  const regex = /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9!@#$%^&*]*[a-zA-Z0-9!@#$%^&*]{6,}$/
+  console.log(REGEX_PATTERN.regexPassword.test(value))
 
-  if (!regex.test(value)) {
-    callback('Mật khẩu phải có ít nhất 6 ký tự , không được có dấu và khoảng trắng!')
+  if (!REGEX_PATTERN.regexPassword.test(value)) {
+    callback('Mật khẩu phải có ít nhất 6 ký tự, không được có dấu và khoảng trắng!')
   } else {
     callback()
   }
@@ -24,7 +24,7 @@ export const validateName = (_rule: any, value: any, callback: any) => {
   const regex = /^[a-zA-ZÀ-ỹ ]{2,}$/
 
   if (!regex.test(value)) {
-    callback('Tên phải có 2 ký tự trở lên, không chứa ký tự đặc biệt và số !')
+    callback('Tên phải có 2 ký tự trở lên, không chứa ký tự đặc biệt và số!')
   } else {
     callback()
   }
