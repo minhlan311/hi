@@ -133,7 +133,7 @@ const RenderSkillItem = ({
                             <Card.Meta
                               title={
                                 <p>
-                                  Bài đọc: <b>{item.title}</b>
+                                  Gói câu: <b>{item.title}</b>
                                 </p>
                               }
                               description={
@@ -182,7 +182,7 @@ const RenderSkillItem = ({
                             <Card.Meta
                               title={
                                 <p>
-                                  Bài đọc: <b>{item.title}</b>
+                                  Gói câu: <b>{item.title}</b>
                                 </p>
                               }
                               description={
@@ -277,18 +277,18 @@ const RenderSkillItem = ({
                     rules={[
                       {
                         required: true,
-                        message: 'Vui lòng nhập tiêu đề bài đọc',
+                        message: 'Vui lòng nhập tiêu đề Gói câu',
                       },
                     ]}
                   >
-                    <Input placeholder='Tiêu đề bài đọc'></Input>
+                    <Input placeholder='Tiêu đề Gói câu'></Input>
                   </Form.Item>
                 </Col>
 
                 <Col span={24}>
                   <TextAreaCustom
                     name='description'
-                    label={skillName === 'READING' ? 'Nội dung bài đọc' : 'Chú thích'}
+                    label={skillName === 'READING' ? 'Nội dung Gói câu' : 'Chú thích'}
                     required={skillName === 'READING'}
                     data={skillCreatedData}
                   ></TextAreaCustom>

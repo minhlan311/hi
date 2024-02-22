@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Flex } from 'antd'
-import './Result.scss'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import { AppContext } from '@/contexts/app.context'
 import { UndoOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { Flex, Space } from 'antd'
+import { useContext, useEffect } from 'react'
+import './Result.scss'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
@@ -10,39 +12,40 @@ type Props = {
 }
 
 export default function Result({ nextSteps, total }: Props) {
+  const { setStart } = useContext(AppContext)
+
   const handleNextSteps = () => {
     nextSteps(0)
   }
 
-  console.log(total, 'totaltotal')
-
-  const navigate = useNavigate()
+  useEffect(() => {
+    setStart(false)
+  }, [])
 
   return (
-    <div className='div-result-conatiner-w'>
-      <h1>Kết quả của bạn</h1>
-      <br />
-      <Flex align='center' justify='center' gap={'middle'}>
-        <h3>LISTENING : {total?.LISTENING}</h3>
-        <h3>READING :{total?.READING}</h3>
-        <h3>WRITING : {total?.WRITING}</h3>
-        <h3>SPEAKING : {total?.SPEAKING}</h3>
-      </Flex>
-      <Flex
-        style={{
-          margin: '30px',
-        }}
-        justify='center'
-        align='center'
-        gap={'small'}
-      >
-        <Button type='dashed' className='default' onClick={() => handleNextSteps()}>
-          làm lại
-          <UndoOutlined />
-        </Button>
-        <Button type='primary' onClick={() => navigate('/')}>
-          Quay về trang chủ
-        </Button>
+    <div style={{ height: '100%' }}>
+      <Flex align='center' justify='center' vertical gap={48} style={{ height: '100%' }}>
+        <h1>Kết quả của bạn</h1>
+
+        <Space direction='vertical' size='large'>
+          <Flex align='center' justify='center' gap={24}>
+            <h3>LISTENING : {total?.LISTENING}</h3>
+            <h3>READING :{total?.READING}</h3>
+            <h3>WRITING : {total?.WRITING}</h3>
+            <h3>SPEAKING : {total?.SPEAKING}</h3>
+          </Flex>
+          <p>
+            Thời gian làm bài: <b>123</b> phút
+          </p>
+        </Space>
+        <Flex justify='center' align='center' gap={'small'}>
+          <ButtonCustom icon={<UndoOutlined />} onClick={() => handleNextSteps()}>
+            làm lại
+          </ButtonCustom>
+          <ButtonCustom type='primary' href='/'>
+            Quay về trang chủ
+          </ButtonCustom>
+        </Flex>
       </Flex>
     </div>
   )

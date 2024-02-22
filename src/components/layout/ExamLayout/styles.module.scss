@@ -1,0 +1,12 @@
+.testLayout {
+  height: 100vh;
+  .children {
+    height: calc(100vh - 66px);
+    overflow-y: auto;
+  }
+  .bottom {
+    .name {
+      width: 200px;
+    }
+  }
+}

@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Logo from '@/components/Logo/Logo'
-import useResponsives from '@/hooks/useResponsives'
-import { Button, Col, Flex, Modal, Row } from 'antd'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
+import { Flex, Modal, Space } from 'antd'
 import { useState } from 'react'
+import { AudioVisualizer, LiveAudioVisualizer } from 'react-audio-visualize'
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
+import { GrPowerReset } from 'react-icons/gr'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import './Speaking.scss'
-import SpeechToText from '@/components/SpeechToText/SpeechToText'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
@@ -13,13 +16,8 @@ type Props = {
 }
 
 export default function Speaking({ nextSteps, data, submit }: Props) {
-  console.log(data, 'dataSSSSSSSSSSSSS')
-
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition()
 
   const handleOk = () => {
     submit(true)
@@ -27,50 +25,64 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
     setIsModalOpen(false)
   }
 
-  const handleCancel = () => {
-    setIsModalOpen(false)
+  const [blob, setBlob] = useState<any>()
+  const [reset, setReset] = useState<boolean>(false)
+  const recorder = useAudioRecorder()
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>
   }
 
-  const { sm } = useResponsives()
-
-  // const handleNextStep = () => {
-  //   nextSteps(3)
-  // }
+  console.log(transcript)
 
   return (
-    <div className='listen-div-fixed'>
+    <div>
       <Modal
-        okText={'Yes'}
-        cancelText='No'
+        okText='Nộp bài'
+        cancelText='Hủy'
         destroyOnClose
-        title='Notification'
+        title='Thông báo'
         open={isModalOpen}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => setIsModalOpen(false)}
       >
         <p>Bạn có muốn nộp bài kiểm tra?</p>
       </Modal>
-      <Flex className='div-in-part' justify='space-between' align='center'>
-        <Flex gap={'large'}>
-          <Logo size={sm ? 115 : undefined} />
-          <Flex vertical gap={'small'}>
-            <h3>Speaking </h3>
-            <p>Speaking to the audio and answer questions below.</p>
-          </Flex>
-        </Flex>
-        <Button type='default' className='default' onClick={showModal}>
-          Submit
-        </Button>
-      </Flex>
 
-      <div className='border-2-div'>
-        <Row gutter={16}>
-          <Col span={24}>
-            <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
-          </Col>
-          <SpeechToText />
-        </Row>
-      </div>
+      <NavigationTest
+        skillName='Writing'
+        desc='Nhấn vào biểu tượng micro và trả lời câu hỏi bên dưới.'
+        nextSteps={nextSteps}
+        step={7}
+        buttonSubmit={<ButtonCustom onClick={() => setIsModalOpen(true)}>Submit</ButtonCustom>}
+      />
+
+      <Space direction='vertical'>
+        <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+
+        <Flex justify='center' align='center' vertical className='audioMic' gap={24}>
+          <Space>
+            <div onClick={() => (listening ? SpeechRecognition.stopListening : SpeechRecognition.startListening())}>
+              <AudioRecorder onRecordingComplete={setBlob} recorderControls={recorder} />
+            </div>
+            {blob && (
+              <ButtonCustom
+                icon={<GrPowerReset />}
+                onClick={() => {
+                  resetTranscript()
+                  setReset(true)
+                }}
+              ></ButtonCustom>
+            )}
+          </Space>
+
+          {recorder.mediaRecorder ? (
+            <LiveAudioVisualizer mediaRecorder={recorder.mediaRecorder} width={200} height={75} />
+          ) : !reset && blob ? (
+            <AudioVisualizer blob={blob} width={500} height={75} barWidth={1} gap={0} barColor={'#019d44'} />
+          ) : null}
+        </Flex>
+      </Space>
     </div>
   )
 }

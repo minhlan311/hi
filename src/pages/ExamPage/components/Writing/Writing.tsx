@@ -1,73 +1,65 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Logo from '@/components/Logo/Logo'
+import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
 import useResponsives from '@/hooks/useResponsives'
-import { Button, Col, Flex, Modal, Row } from 'antd'
+import { Skill } from '@/interface/exam'
 import TextArea from 'antd/es/input/TextArea'
 import { useState } from 'react'
-import './Writing.scss'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
-  data: any
+  data: Skill[]
 }
 
 export default function Writing({ nextSteps, data }: Props) {
   const { sm } = useResponsives()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [dividerPosition, setDividerPosition] = useState()
 
-  const showModal = () => {
-    setIsModalOpen(true)
+  const handleDividerDrag = (e: any) => {
+    setDividerPosition(sm ? e.clientY : e.clientX)
   }
 
-  const handleOk = () => {
-    nextSteps(5)
-    setIsModalOpen(false)
+  const handleDividerRelease = () => {
+    document.removeEventListener('mousemove', handleDividerDrag)
+    document.removeEventListener('mouseup', handleDividerRelease)
   }
 
-  const handleCancel = () => {
-    setIsModalOpen(false)
+  const handleDividerClick = () => {
+    document.addEventListener('mousemove', handleDividerDrag)
+    document.addEventListener('mouseup', handleDividerRelease)
   }
 
   return (
-    <div className='listen-div-fixed'>
-      <Modal
-        okText={'Yes'}
-        cancelText='No'
-        destroyOnClose
-        title='Notification'
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>Bạn có muốn hoàn thành kỹ năng này?</p>
-      </Modal>
-      <Flex className='div-in-part' justify='space-between' align='center'>
-        <Flex gap={'large'}>
-          <Logo size={sm ? 115 : undefined} />
-          <Flex vertical gap={'small'}>
-            <h3>Writing</h3>
-            <p>Writing to the audio and answer questions below.</p>
-          </Flex>
-        </Flex>
-        <Button type='default' className='default' onClick={showModal}>
-          Go to Speaking
-        </Button>
-      </Flex>
-      <div className='container-div-reading'>
-        <Row gutter={16}>
-          <Col span={12}>
-            <div className='border-1-div' dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
-          </Col>
-          <Col span={12}>
-            <div className='border-2-div-w'>
-              <TextArea
-                style={{
-                  minHeight: '100%',
-                }}
-              />
-            </div>
-          </Col>
-        </Row>
+    <div className='reading'>
+      <NavigationTest
+        skillName='Writing'
+        nextSkillName='Speaking'
+        desc='Viết trả lời vào các câu hỏi bên dưới.'
+        nextSteps={nextSteps}
+        step={5}
+      />
+      <div className='split-screen'>
+        <div
+          className='left-panel'
+          style={
+            sm
+              ? { height: dividerPosition ? `${dividerPosition}px` : '50%' }
+              : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
+          }
+        >
+          <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+        </div>
+        <div className='divider' onMouseDown={handleDividerClick}></div>
+        <div
+          className='right-panel'
+          style={sm ? { height: `calc(100% - ${dividerPosition}px)` } : { width: `calc(100% - ${dividerPosition}px)` }}
+        >
+          <TextArea
+            style={{
+              minHeight: '100%',
+              width: '100%',
+            }}
+          />
+        </div>
       </div>
     </div>
   )

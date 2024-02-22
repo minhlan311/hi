@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import questionApi from '@/apis/question.api'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import TabsCustom from '@/components/TabsCustom/TabsCustom'
-import { AppContext } from '@/contexts/app.context'
 import { Skill } from '@/interface/exam'
-import { Descriptions, Modal, Space } from 'antd'
-import { useContext } from 'react'
-import RenderItem from './RenderItem'
-import questionApi from '@/apis/question.api'
 import { useQuery } from '@tanstack/react-query'
+import { Descriptions, Modal, Space } from 'antd'
+import RenderItem from './RenderItem'
 
 type Props = {
   data: Skill | null
@@ -17,8 +14,6 @@ type Props = {
 }
 
 const ShowSkillDetail = ({ data, open, setOpen }: Props) => {
-  const { profile } = useContext(AppContext)
-
   const handleClose = () => {
     setOpen(!open)
   }
@@ -63,21 +58,18 @@ const ShowSkillDetail = ({ data, open, setOpen }: Props) => {
       <Modal open={open} onCancel={handleClose} footer={null} title={data?.title} style={{ minWidth: '50vw' }}>
         <Space direction='vertical' className='sp100'>
           <Descriptions column={1}>
-            <Descriptions.Item label='Bài đọc'>
-              <b>{data?.title}</b>
-            </Descriptions.Item>
             <Descriptions.Item label='Số câu hỏi'>
               <b>{data?.countQuestions}</b>
             </Descriptions.Item>
           </Descriptions>
-          {data.createdById === profile._id && (
+          {/* {data.createdById === profile._id && (
             <Space>
               <ButtonCustom size='small'>Sửa</ButtonCustom>
               <ButtonCustom size='small' danger>
                 Xóa
               </ButtonCustom>
             </Space>
-          )}
+          )} */}
           <TabsCustom data={tabData}></TabsCustom>
         </Space>
       </Modal>
