@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
 import CourseCard from '@/components/CourseCard'
 import Header from '@/components/layout/Header/Header'
 import { CategoryState } from '@/interface/category'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Button, Col, Row, Skeleton } from 'antd'
 import { useState } from 'react'
 import chinaSVG from '../../../assets/icons/china_flag.svg'
@@ -15,8 +16,12 @@ import koreaSVG from '../../../assets/icons/korea_flag.svg'
 import './CourseCalender.scss'
 
 export default function CourseCalender() {
-  const queryClient = useQueryClient()
-  const categoriesData = queryClient.getQueryData<any>(['categoriesList'])
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categoriesList'],
+    queryFn: () => {
+      return categoryApi.getCategories({ parent: null })
+    },
+  })
   const [active, setActive] = useState('Tiếng Anh')
   const [id, setId] = useState<string>()
 
@@ -49,6 +54,8 @@ export default function CourseCalender() {
       <Skeleton paragraph={{ rows: 8 }} />
     </Col>
   ))
+
+  console.log(categoriesData)
 
   return (
     <Header desc='Lịch khai giảng khóa học online' title='ĐÀO TẠO NHIỀU NGÔN NGỮ'>

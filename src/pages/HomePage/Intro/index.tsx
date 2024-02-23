@@ -47,7 +47,7 @@ export default function Intro() {
 
       <div className='mb-scroll'>
         <div className='intor-main'>
-          {configs.introductions.map((item, id) => (
+          {configs.introductions?.map((item, id) => (
             <Card className='intro-card' key={id}>
               <Space direction='vertical'>
                 <Space>
