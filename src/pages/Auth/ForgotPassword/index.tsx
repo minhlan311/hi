@@ -4,10 +4,27 @@ import openNotification from '@/components/Notification'
 import { REGEX_PATTERN } from '@/constants/utils'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Form, Input, Space } from 'antd'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ForgotPassword = () => {
   const [form] = Form.useForm()
+
+  const [countdown, setCountdown] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prevCountdown) => prevCountdown - 1)
+    }, 1000)
+
+    if (countdown === 0) {
+      clearInterval(interval)
+    }
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [countdown])
 
   const onFinish = (values: any) => {
     mutate.mutate(values.account)
@@ -21,6 +38,7 @@ const ForgotPassword = () => {
         message: 'Thông báo',
         description: 'Đã gửi mật khẩu mới đến email của bạn!',
       })
+      setCountdown(120)
     },
     onError: (err: any) =>
       openNotification({
@@ -50,8 +68,8 @@ const ForgotPassword = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button type='primary' htmlType='submit' size='large' className='sp100'>
-          Gửi yêu cầu
+        <Button type='primary' htmlType='submit' size='large' className='sp100' disabled={countdown > 0}>
+          {countdown > 0 ? <b>{countdown} giây</b> : 'Gửi yêu cầu'}
         </Button>
       </Form.Item>
       <Space direction='vertical' align='center' className='sp100'>

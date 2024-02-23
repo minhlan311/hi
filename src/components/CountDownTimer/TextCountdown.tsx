@@ -1,4 +1,4 @@
-import { Card, Progress, Space } from 'antd'
+import { Card, Flex, Progress, Space } from 'antd'
 import moment, { Moment } from 'moment-timezone'
 import { BsClockHistory } from 'react-icons/bs'
 import css from './styles.module.scss'
@@ -130,14 +130,18 @@ const TextCountdown = ({ type, countdown, size, initTime, className, space, spac
             }
           />
         )) || (
-          <Card size='small' className={css.countdownNumber}>
-            <div style={{ fontSize: size - (size * 25) / 100 }} className={css.timeNumber}>
+          <div className={css.countdownNumber}>
+            <Flex align='center' style={{ fontSize: size - (size * 25) / 100 }} gap={5}>
               <BsClockHistory />
               <div style={{ fontSize: size, fontWeight: 'bold' }}>
-                {time.hours === 0 ? showTime.format('mm:ss') : showTime.format('HH:mm:ss')}
+                {duration.asMilliseconds() === 0
+                  ? 'Hết thời gian'
+                  : time.hours === 0
+                  ? showTime.format('mm:ss')
+                  : showTime.format('HH:mm:ss')}
               </div>
-            </div>
-          </Card>
+            </Flex>
+          </div>
         )}
     </div>
   )

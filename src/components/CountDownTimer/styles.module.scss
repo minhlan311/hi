@@ -103,18 +103,6 @@
       font-size: 0.4em;
     }
   }
-  .countdownNumber {
-    background-color: var(--lighish-white);
-    .timeNumber {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      & svg {
-        margin-right: 0.2em;
-      }
-    }
-  }
 }
 
 @keyframes flip-top {

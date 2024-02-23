@@ -1,45 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useContext } from 'react'
-import TestSound from './TestSound'
+import examApi from '@/apis/exam.api'
+import { ExamState, Skill } from '@/interface/exam'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import Listening from './components/Listening/Listening'
 import PreListening from './components/Listening/PreListening'
 import Reading from './components/Reading/Reading'
-import Writing from './components/Writing/Writing'
-import Speaking from './components/Speaking/Speaking'
 import Result from './components/Result/Result'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import examApi from '@/apis/exam.api'
-import { useParams } from 'react-router-dom'
-import { AppContext } from '@/contexts/app.context'
+import Speaking from './components/Speaking/Speaking'
+import TestSound from './components/TestSound/TestSound'
+import Writing from './components/Writing/Writing'
 
 export default function ExamPage() {
-  const { setDuration } = useContext(AppContext)
-  const [listeningData, setListeningData] = useState([])
-  const [writingData, setWritingData] = useState([])
-  const [readingData, setReadingData] = useState([])
+  const [listeningData, setListeningData] = useState<Skill[]>([])
+  const [writingData, setWritingData] = useState<Skill[]>([])
+  const [readingData, setReadingData] = useState<Skill[]>([])
+  const [listeningDataCallback, setListeningDataCallback] = useState([])
   const [readingDataCallback, setReadingDataCallback] = useState([])
-  const [speakingData, setSpeakingData] = useState([])
+  const [speakingData, setSpeakingData] = useState<Skill[]>([])
   const [dataSubmit, setDataSubmit] = useState<any>()
   const [dataSubmitAll, setDataSubmitAll] = useState<any>()
-  const { id } = useParams()
   const [current, setCurrent] = useState(0)
   const [call, setCall] = useState<boolean>(false)
   const [total, setTotal] = useState<any>()
+  const { id } = useParams()
 
-  const { data: dataQuestion } = useQuery({
-    queryKey: ['questionList'],
-    // queryFn: () => examApi.getExamDetail('6571f12e5c1845b627e9c898'),
-    queryFn: () => examApi.getExamDetail(id!),
-    enabled: !!id,
-  })
-  const dataExam = dataQuestion?.data?.skillData
+  const queryClient = useQueryClient()
+  const examDetail = queryClient.getQueryData<{ data: ExamState }>(['examDetail'])
 
-  console.log(dataQuestion, 'dataQuestiondataQuestion')
+  const dataExam = examDetail?.data
 
-  console.log(dataExam, 'dataExam')
+  const dataQuestion = dataExam?.skillData
 
   useEffect(() => {
-    const updatedData = dataExam?.map((item) => {
+    const updatedData = dataQuestion?.map((item) => {
       switch (item.skill) {
         case 'LISTENING':
           return { ...item, questions: listeningData }
@@ -56,10 +51,8 @@ export default function ExamPage() {
     setDataSubmit(updatedData)
   }, [listeningData, writingData, readingDataCallback, speakingData, dataExam])
 
-  console.log(dataQuestion?.data?.duration, 'dataQuestion?.data?.đuratio')
   useEffect(() => {
-    setDataSubmitAll(dataQuestion?.data)
-    setDuration(dataQuestion?.data?.duration as number)
+    setDataSubmitAll(dataExam)
   }, [dataQuestion])
 
   useEffect(() => {
@@ -89,11 +82,11 @@ export default function ExamPage() {
     },
     {
       title: 'Second',
-      content: <PreListening nextSteps={setCurrent} />,
+      content: <PreListening nextSteps={setCurrent} cateName={dataExam?.category.name as string} />,
     },
     {
       title: 'Listening',
-      content: <Listening data={listeningData} nextSteps={setCurrent} callBackData={setListeningData} />,
+      content: <Listening data={listeningData} nextSteps={setCurrent} callBackData={setListeningDataCallback} />,
     },
     {
       title: 'Reading',
@@ -113,13 +106,13 @@ export default function ExamPage() {
     },
   ]
 
-  function processData(datas: any) {
+  function processData(data: ExamState) {
     const listening: any[] = []
     const writing: any[] = []
     const reading: any[] = []
     const speaking: any[] = []
 
-    datas?.forEach((item: any) => {
+    data.skillData?.forEach((item: any) => {
       switch (item.skill) {
         case 'LISTENING':
           listening.push(item)
@@ -144,9 +137,5 @@ export default function ExamPage() {
     setSpeakingData(speaking as any)
   }
 
-  return (
-    <>
-      <div> {steps[current].content}</div>
-    </>
-  )
+  return steps[current].content
 }

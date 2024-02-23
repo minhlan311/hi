@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Question } from '@/types/question.type'
+import { CategoryState } from './category'
 import { UserState } from './user'
 
 export interface Diploma {
@@ -36,7 +37,7 @@ export interface Skill {
   title: string
   description: string
   url?: any | any[]
-  questions?: string[]
+  questions?: Question[]
   countQuestions: number | any
 }
 export interface ExamState {
@@ -68,6 +69,7 @@ export interface ExamState {
   skillData: Skill[]
   coverUrl?: string
   duration?: number
+  category: CategoryState
 }
 
 export interface InCorrectAnswer {
