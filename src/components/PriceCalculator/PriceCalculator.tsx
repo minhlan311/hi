@@ -62,7 +62,6 @@ const PriceCalculator = (props: Props) => {
               ? 'vertical'
               : 'horizontal'
           }
-          className={css.sp100}
         >
           <Space style={{ color: priceColor }}>
             <div className={css.title} style={{ fontSize: priceSize }}>

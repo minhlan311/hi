@@ -1,17 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseApi from '@/apis/course.api'
-import calenderSVG from '@/assets/icons/calendar.svg'
-import ImageCustom from '@/components/ImageCustom/ImageCustom'
-import TextWithTooltip from '@/components/TextWithTooltip/TextWithTooltip'
+import CourseCard from '@/components/CourseCard'
 import Header from '@/components/layout/Header/Header'
-import { formatDate, formatPriceVND } from '@/helpers/common'
 import { CategoryState } from '@/interface/category'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Card, Col, Row, Skeleton, Tooltip } from 'antd'
-import Meta from 'antd/es/card/Meta'
+import { Button, Col, Row, Skeleton } from 'antd'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import chinaSVG from '../../../assets/icons/china_flag.svg'
 import engSVG from '../../../assets/icons/eng_flag.svg'
 import germanySVG from '../../../assets/icons/germany_flag.svg'
@@ -35,35 +30,28 @@ export default function CourseCalender() {
           categoryId: id ? id : courses?.children[0]?._id,
         },
         options: {
-          limit: 6,
+          limit: 8,
           sort: { createdAt: -1 },
         },
       })
     },
   })
-  const navigate = useNavigate()
 
   const handleActive = (name: string, id: string) => {
     setActive(name)
     setId(id)
   }
 
-  const handleClickCourse = (id: string) => {
-    navigate({
-      pathname: `/courses/` + id,
-    })
-  }
-
   const numberOfDivs = 6
 
   const divs = Array.from({ length: numberOfDivs }, (_, index) => (
-    <Col xs={24} lg={6} xxl={8} key={index}>
-      <Skeleton paragraph={{ rows: 6 }} />
+    <Col span={24} md={6} key={index}>
+      <Skeleton paragraph={{ rows: 8 }} />
     </Col>
   ))
 
   return (
-    <Header desc='Lịch khai giảng khóa học online' title='ĐÀO TẠO NHIỀU NGÔN NGỮ' size='sm'>
+    <Header desc='Lịch khai giảng khóa học online' title='ĐÀO TẠO NHIỀU NGÔN NGỮ'>
       <div className='groupButton'>
         {courses?.children &&
           courses?.children?.map((item: any) => (
@@ -91,114 +79,12 @@ export default function CourseCalender() {
           ))}
       </div>
 
-      <Row justify='center' gutter={[24, 24]}>
+      <Row justify='center' gutter={[12, 12]}>
         {isLoading
           ? divs
           : listData?.data?.docs?.map((item) => (
-              <Col span={24} md={8}>
-                <Card
-                  hoverable
-                  style={{ height: 410 }}
-                  cover={
-                    <ImageCustom
-                      onClick={() => handleClickCourse(item._id!)}
-                      preview={false}
-                      height='160px'
-                      width='100%'
-                      src={import.meta.env.VITE_FILE_ENDPOINT + '/' + item?.coverMedia}
-                    />
-                  }
-                >
-                  <Meta
-                    description={
-                      <>
-                        <TextWithTooltip
-                          rows={1}
-                          children={item?.name}
-                          onClick={() => handleClickCourse(item._id!)}
-                          className='link-h4-config'
-                        />
-                        {item?.class?.slice(0, 2).map((item, index) => (
-                          <div key={index} className='flex'>
-                            <img src={calenderSVG} className='icons' alt='' />
-                            <TextWithTooltip
-                              rows={1}
-                              children={
-                                <>
-                                  {item?.startDate ? (
-                                    <>
-                                      Khai giảng {''}
-                                      {formatDate(item?.startDate)}
-                                    </>
-                                  ) : (
-                                    'Đang cập nhật'
-                                  )}
-                                </>
-                              }
-                              className='text-date'
-                            />
-                          </div>
-                        ))}
-
-                        {item?.class && item?.class?.length > 2 && (
-                          <Tooltip
-                            color='white'
-                            title={
-                              <>
-                                {item?.class && item?.class?.length > 0 && (
-                                  <h3
-                                    style={{
-                                      color: 'black',
-                                    }}
-                                  >
-                                    Tất cả lịch khải giảng
-                                  </h3>
-                                )}
-                                {item?.class && item?.class?.length > 0
-                                  ? item?.class?.map((item, index) => (
-                                      <div key={index} className='flex'>
-                                        <img src={calenderSVG} className='icons' alt='' />
-                                        <TextWithTooltip
-                                          rows={1}
-                                          children={
-                                            <div>
-                                              {item?.startDate ? (
-                                                <>
-                                                  Khai giảng {''}
-                                                  {formatDate(item?.startDate)}
-                                                </>
-                                              ) : (
-                                                'Đang cập nhật'
-                                              )}
-                                            </div>
-                                          }
-                                          className='text-date'
-                                        />
-                                      </div>
-                                    ))
-                                  : 'Khóa học này chưa có lịch khai giảng'}
-                              </>
-                            }
-                          >
-                            <p
-                              style={{
-                                color: '#f2184f',
-                                textAlign: 'start',
-                              }}
-                            >
-                              Xem tất cả lịch khai giảng
-                            </p>
-                          </Tooltip>
-                        )}
-
-                        <div className='flexPrice'>
-                          <span className='name'>Chi phí: </span>
-                          <span className='price'>{item?.cost ? formatPriceVND(item?.cost) : 'Free'}</span>
-                        </div>
-                      </>
-                    }
-                  />
-                </Card>
+              <Col span={24} md={6} key={item._id}>
+                <CourseCard item={item} />
               </Col>
             ))}
       </Row>
