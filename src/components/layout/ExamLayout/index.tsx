@@ -53,6 +53,7 @@ export default function ExamLayout({ children }: Props) {
 
   const [modal1Visible, setModal1Visible] = useState(false)
   const [modal3Visible, setModal3Visible] = useState(false)
+  console.log(modal1Visible)
 
   const onChange = (value: number) => {
     if (isNaN(value)) {
