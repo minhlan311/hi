@@ -46,7 +46,9 @@ const CourseCard = ({ item }: Props) => {
 
             <Flex align='center'>
               <LuUsers style={{ marginRight: 5 }} />
-              {`(${formatNumber(item.countStudents)} Học viên)`}
+              {`${formatNumber(item.countStudents)} / ${
+                item?.class.length ? formatNumber(item?.class?.[0]?.limitStudent) : 0
+              }`}
             </Flex>
             <Flex align='center'>
               <LuCalendarDays style={{ marginRight: 5 }} />

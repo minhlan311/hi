@@ -8,6 +8,10 @@ type buttonADSLink = {
   content: string
 }
 
+type introductions = {
+  label: string
+  content: string
+}
 export type Configs = {
   _id: string
   _destroy: boolean
@@ -34,4 +38,6 @@ export type Configs = {
   logoFooter: string
   buttonADSLink: buttonADSLink[]
   footer: footer[]
+  linkIntroduction: string
+  introductions: introductions[]
 }
