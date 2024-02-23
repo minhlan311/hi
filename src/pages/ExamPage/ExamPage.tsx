@@ -25,6 +25,7 @@ export default function ExamPage() {
   const [call, setCall] = useState<boolean>(false)
   const [total, setTotal] = useState<any>()
   const { id } = useParams()
+  console.log(listeningDataCallback)
 
   const queryClient = useQueryClient()
   const examDetail = queryClient.getQueryData<{ data: ExamState }>(['examDetail'])
