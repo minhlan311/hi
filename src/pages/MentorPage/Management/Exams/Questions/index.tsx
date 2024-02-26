@@ -413,7 +413,7 @@ const MentorQuestions = () => {
     },
     enabled: Boolean(id),
   })
-  const [idSelect, setIdSelect] = useState<{ _id: string; data: string[] }[]>()
+  const [idSelect, setIdSelect] = useState<{ _id: string; data: any[] }[]>()
 
   const examDetail = exam?.data
   const { setQuestionList } = useContext(AppContext)

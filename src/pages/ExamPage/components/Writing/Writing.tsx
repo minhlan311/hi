@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
-  data: Skill[]
+  data: Skill
 }
 
 export default function Writing({ nextSteps, data }: Props) {
@@ -46,7 +46,7 @@ export default function Writing({ nextSteps, data }: Props) {
               : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
           }
         >
-          <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+          <div dangerouslySetInnerHTML={{ __html: data?.description }}></div>
         </div>
         <div className='divider' onMouseDown={handleDividerClick}></div>
         <div

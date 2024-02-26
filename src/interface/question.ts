@@ -12,6 +12,18 @@ export interface Choice {
   key?: string
 }
 
+export type TypeQuestion =
+  | 'SINGLE CHOICE'
+  | 'MULTIPLE CHOICE'
+  | 'TRUE FALSE'
+  | 'SORT'
+  | 'DRAG DROP'
+  | 'LIKERT SCALE'
+  | 'FILL BLANK'
+  | 'MATCHING'
+  | 'NUMERICAL'
+  | 'WRITING'
+
 export interface QuestionState {
   _id: string
   questionText?: string
@@ -22,17 +34,7 @@ export interface QuestionState {
   question: string
   choices: Choice[]
   status: string
-  type:
-    | 'SINGLE CHOICE'
-    | 'MULTIPLE CHOICE'
-    | 'TRUE FALSE'
-    | 'SORT'
-    | 'DRAG DROP'
-    | 'LIKERT SCALE'
-    | 'FILL BLANK'
-    | 'MATCHING'
-    | 'NUMERICAL'
-    | 'WRITING'
+  type: TypeQuestion
   typeQuestion: 'TEST' | 'QUIZ'
   skill: SkillType
   point: number

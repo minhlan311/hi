@@ -87,15 +87,15 @@ export default function ExamPage() {
     },
     {
       title: 'Listening',
-      content: <Listening data={listeningData} nextSteps={setCurrent} callBackData={setListeningDataCallback} />,
+      content: <Listening data={listeningData[0]} nextSteps={setCurrent} callBackData={setListeningDataCallback} />,
     },
     {
       title: 'Reading',
-      content: <Reading data={readingData} nextSteps={setCurrent} callBackData={setReadingDataCallback} />,
+      content: <Reading data={readingData[0]} nextSteps={setCurrent} callBackData={setReadingDataCallback} />,
     },
     {
       title: 'Writing',
-      content: <Writing data={writingData} nextSteps={setCurrent} />,
+      content: <Writing data={writingData[0]} nextSteps={setCurrent} />,
     },
     {
       title: 'Speaking',
@@ -103,7 +103,7 @@ export default function ExamPage() {
     },
     {
       title: 'Last',
-      content: <Result nextSteps={setCurrent} total={total} />,
+      content: <Result total={total} />,
     },
   ]
 

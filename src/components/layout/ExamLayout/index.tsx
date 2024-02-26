@@ -44,6 +44,7 @@ const CustomModal = ({
 
 export default function ExamLayout({ children }: Props) {
   const { setVolume, volume, start } = useContext(AppContext)
+  document.title = 'Làm bài thi | Ucam'
   const { id } = useParams()
   const { data: examDetail } = useQuery({
     queryKey: ['examDetail'],
@@ -107,7 +108,6 @@ export default function ExamLayout({ children }: Props) {
         <Card size='small' className={style.bottom}>
           <Flex justify='space-between' align='center' gap={12}>
             <b className={style.name}>{examDetail?.data.name}</b>
-
             <div className={style.time}>
               <CountDownTimer
                 type='number'
@@ -117,19 +117,16 @@ export default function ExamLayout({ children }: Props) {
                 start={start}
               />
             </div>
-
             <Space size='large' className={style.action}>
               <ButtonCustom className={style.default} onClick={showModal3}>
                 Thoát
               </ButtonCustom>
-
               <Space>
                 <SoundOutlined
                   style={{
                     scale: '1.2',
                   }}
                 />
-
                 <Slider
                   min={0}
                   max={100}
@@ -144,7 +141,6 @@ export default function ExamLayout({ children }: Props) {
             </Space>
           </Flex>
         </Card>
-
         <CustomModal
           title='Kết thúc làm bài'
           visible={modal3Visible}

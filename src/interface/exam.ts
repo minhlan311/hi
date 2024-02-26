@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Question } from '@/types/question.type'
 import { CategoryState } from './category'
+import { QuestionState } from './question'
 import { UserState } from './user'
 
 export interface Diploma {
@@ -37,7 +37,7 @@ export interface Skill {
   title: string
   description: string
   url?: any | any[]
-  questions?: Question[]
+  questions?: QuestionState[]
   countQuestions: number | any
 }
 export interface ExamState {
@@ -50,7 +50,7 @@ export interface ExamState {
   status: string
   slug: string
   owner: UserState
-  questions: string[]
+  questions: QuestionState[]
   countQuestions: number
   countQuestionsBySkill: number
   countSelectedResponseQuestions: number[]
@@ -61,7 +61,7 @@ export interface ExamState {
   id: string
   createdAt: string
   updatedAt: string
-  questionsDetail?: Question[]
+  questionsDetail?: QuestionState[]
   type: 'QUIZ' | 'TEST'
   categoryIdDetail: string
   skill: string[]
