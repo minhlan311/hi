@@ -218,7 +218,7 @@ const MenuNav = ({ user, type }: Props) => {
       </Space>
     )
   } else {
-    if (md && sm) {
+    if (md || sm) {
       return (
         <div>
           <UpdateMentor userData={userData?.data} />

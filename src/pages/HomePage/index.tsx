@@ -33,7 +33,6 @@ export default function HomePage() {
       <TopCourses />
       <Mission />
       <VideoContent />
-      {/* <LanguageSystem /> */}
       <div
         style={{
           margin: '60px 0',

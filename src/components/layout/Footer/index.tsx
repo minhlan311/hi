@@ -1,4 +1,5 @@
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { Col, Flex, Row, Typography } from 'antd'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
@@ -7,12 +8,12 @@ const { Title } = Typography
 
 const Footer = () => {
   const { configs } = useContext(AppContext)
-
+  const { sm, md, lg } = useResponsives()
   if (configs)
     return (
       <Header padding='50px 0' background='var(--green)'>
         <Flex vertical gap={24}>
-          <Row justify={'center'} align={'middle'} gutter={[24, 24]}>
+          <Row justify={'center'} align={'middle'} gutter={[sm || md ? 0 : 24, 24]}>
             <Col>
               <img width={120} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + configs?.logoFooter} />
             </Col>
@@ -32,7 +33,7 @@ const Footer = () => {
               </Col>
             ))}
           </Row>
-          <Row justify={'center'} gutter={[24, 24]}>
+          <Row justify={'center'} gutter={[sm || md || lg ? 0 : 24, 24]}>
             {configs.footer?.map((item) => (
               <Col span={24} md={6} key={item.name}>
                 <Flex gap={12} vertical>

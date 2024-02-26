@@ -19,7 +19,7 @@ type Question = {
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
-  data: Skill[]
+  data: Skill
   callBackData: any
 }
 
@@ -31,8 +31,8 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
   }, [questions])
 
   useEffect(() => {
-    if (data && data.length > 0 && data[0].questions) {
-      setQuestions(data[0].questions)
+    if (data && data.questions) {
+      setQuestions(data.questions)
     }
   }, [data])
 
@@ -90,7 +90,7 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
               : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
           }
         >
-          <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+          <div dangerouslySetInnerHTML={{ __html: data?.description }}></div>
         </div>
         <div className='divider' onMouseDown={handleDividerClick}></div>
         <div

@@ -7,15 +7,14 @@ import { useContext, useEffect } from 'react'
 import './Result.scss'
 
 type Props = {
-  nextSteps: React.Dispatch<React.SetStateAction<number>>
   total: any
 }
 
-export default function Result({ nextSteps, total }: Props) {
+export default function Result({ total }: Props) {
   const { setStart } = useContext(AppContext)
 
   const handleNextSteps = () => {
-    nextSteps(0)
+    window.location.reload()
   }
 
   useEffect(() => {
