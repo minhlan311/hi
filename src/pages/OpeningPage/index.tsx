@@ -15,6 +15,8 @@ import MyCourses from '../ProfilePage/MyCourses'
 import ScheduleDetail from './Components/ScheduleDetail'
 import style from './styles.module.scss'
 
+
+
 const OpeningPage = () => {
   const { sm, md } = useResponsives()
 
@@ -40,8 +42,8 @@ const OpeningPage = () => {
         {promotion && (
           <div className={style.ads}>
             <h1 className={style.title}>Ưu đãi tháng {moment().format('M')}</h1>
-            <Row gutter={40} align='middle'>
-              <Col span={24} md={15} className={style.desc}>
+            <Row gutter={0} align='middle'>
+              <Col span={24} md={12} className={style.desc}>
                 <Space direction='vertical' size='large' className={'sp100'}>
                   {promotion.promotions?.map((item) => (
                     <Flex align='center' gap={12} vertical={sm} className={style.content} key={item._id}>
@@ -70,29 +72,38 @@ const OpeningPage = () => {
                     <div dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
                   </Flex>
                 </Space>
+
+                <Col span={24} md={15}>
+                  <Space direction='vertical' size='large' className={'sp100'}>
+                    <p className={style.desc}>Kết thúc sau:</p>
+                    <Flex align='center' vertical gap={55}>
+                      <CountDownTimer
+                        size={((sm || md) && 25) || 50}
+                        type='text'
+                        className={style.timer}
+                        initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
+                        space=':'
+                        spaceStyle={{ color: 'var(--white)' }}
+                        showAlex={false}
+                      />
+                      {promotion.href && (
+                        <ButtonCustom type='primary' href={promotion.href}>
+                          <h1 style={{ padding: '0 50px' }}>Đăng ký</h1>
+                        </ButtonCustom>
+                      )}
+                    </Flex>
+                  </Space>
+                </Col>
+
               </Col>
-              <Col span={24} md={9}>
-                <Space direction='vertical' size='large' className={'sp100'}>
-                  <p className={style.desc}>Kết thúc sau:</p>
-                  <Flex align='center' vertical gap={55}>
-                    <CountDownTimer
-                      size={((sm || md) && 25) || 50}
-                      type='text'
-                      className={style.timer}
-                      initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
-                      space=':'
-                      spaceStyle={{ color: 'var(--white)' }}
-                      showAlex={false}
-                    />
-                    {promotion.href && (
-                      <ButtonCustom type='primary' href={promotion.href}>
-                        <h1 style={{ padding: '0 50px' }}>Đăng ký</h1>
-                      </ButtonCustom>
-                    )}
-                  </Flex>
-                </Space>
+
+              <Col span={24} md={12}>
+                {/* Thêm hình ảnh phía bên phải ở đây */}
+                <img style={{ float: 'left', width: '100%' }} src="https://th.bing.com/th/id/OIP.RbmfPPiye1wnrRuw6DglYwHaE7?rs=1&pid=ImgDetMain" alt="Your Image" className={style.image} />
               </Col>
+
             </Row>
+
           </div>
         )}
 
