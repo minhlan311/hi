@@ -2,8 +2,9 @@ import configApi from '@/apis/config.api'
 import Mentor from '@/pages/HomePage/Mentor'
 import { setConfigFromLS } from '@/utils/auth'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Banner from './Banner'
+import ContactForm from './ContactForm'
 import CourseCalender from './CourseCalender/CourseCalender'
 import Gift from './Gift/Gift'
 import Intro from './Intro'
@@ -25,6 +26,14 @@ export default function HomePage() {
     }
   }, [data?.data])
 
+  const scrollRef = useRef<null | HTMLDivElement>(null)
+
+  const scrollRefFc = () => {
+    if (scrollRef?.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className='mtz-homepage'>
       <Banner />
@@ -32,7 +41,7 @@ export default function HomePage() {
       <Mentor />
       <TopCourses />
       <Mission />
-      <VideoContent />
+      <VideoContent scrollRefFc={scrollRefFc} />
       <div
         style={{
           margin: '60px 0',
@@ -41,6 +50,10 @@ export default function HomePage() {
       <Gift />
       <CourseCalender />
       <News />
+      <div ref={scrollRef} style={{ marginBottom: 24 }}>
+        {' '}
+      </div>
+      <ContactForm />
     </div>
   )
 }

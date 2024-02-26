@@ -2,6 +2,7 @@ import { UserState } from '@/interface/user'
 import { Outlet } from 'react-router-dom'
 import Footer from './Footer'
 import css from './Layout.module.scss'
+import MessengerButton from './MessengerButton'
 import Navigation from './Navigation'
 type Props = {
   children?: React.ReactNode
@@ -24,6 +25,7 @@ const Layout = (props: Props) => {
         <Outlet />
       </div>
       <Footer />
+      <MessengerButton />
     </div>
   )
 }

@@ -7,9 +7,9 @@ import { Card, List, Radio, Space } from 'antd'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 type Props = {
-  nextSteps: React.Dispatch<React.SetStateAction<number>>
-  data: Skill
   callBackData: any
+  data: Skill
+  nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
 const QuestionsRender = ({
@@ -54,7 +54,12 @@ const QuestionsRender = ({
             return (
               <Space direction='vertical' size='large' className='sp100' key={item.type}>
                 <h2>Questions 1 - {item.data.length}</h2>
-                {(item.type === 'SINGLE CHOICE' && 'Choose the correct letter, A, B, С or D.') || 'a'}
+                {(item.type === 'SINGLE CHOICE' && (
+                  <i>
+                    Choose the correct letter, <b>A</b>, <b>B</b>, <b>С</b> or <b>D</b>.
+                  </i>
+                )) ||
+                  'a'}
                 <List
                   dataSource={item.data}
                   renderItem={(item, index) => (

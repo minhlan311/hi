@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import imac from '@/assets/images/backgrounds/imac.jpg'
 import Header from '@/components/layout/Header/Header'
 import './VideoContent.scss'
 import ButtonShake from './components/ButtonShake/ButtonShake'
 
-export default function VideoContent() {
+export default function VideoContent({ scrollRefFc }: { scrollRefFc: () => void }) {
   return (
     <Header style={{ border: '2px solid var(--red)', borderRadius: 25 }} margin={5}>
       <div className='video-content-container'>
@@ -74,7 +75,7 @@ export default function VideoContent() {
           <span className='desc'>
             Học viên ở Việt Nam và toàn thế giới đã trải nghiệm và giao tiếp tiếng Anh thành công, còn bạn...?
           </span>
-          <div className='button'>
+          <div className='button' onClick={scrollRefFc}>
             <ButtonShake />
           </div>
         </div>
