@@ -218,7 +218,6 @@ const RenderSkillItem = ({
                               </ButtonCustom>
                             </Space>
                           </Col>
-                          <ShowSkillDetail data={openData} setOpen={setOpenDetail} open={openDetail}></ShowSkillDetail>
                         </Row>
                       </Card>
                     ),

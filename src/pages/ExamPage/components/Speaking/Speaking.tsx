@@ -54,6 +54,7 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
         desc='Nhấn vào biểu tượng micro và trả lời câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={7}
+        questionsLength={data?.questions?.length as number}
         buttonSubmit={<ButtonCustom onClick={() => setIsModalOpen(true)}>Submit</ButtonCustom>}
       />
 

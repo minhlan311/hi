@@ -2,8 +2,8 @@
 import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
 import useResponsives from '@/hooks/useResponsives'
 import { Skill } from '@/interface/exam'
-import { Radio, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
+import QuestionsRender from '../QuestionRender'
 import './Reading.scss'
 
 type Choice = {
@@ -36,24 +36,6 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
     }
   }, [data])
 
-  const handleCheckboxChange = (questionId: string, choiceIndex: number) => {
-    const updatedQuestions = questions.map((question) => {
-      if (question._id === questionId) {
-        return {
-          ...question,
-          choices: question.choices.map((choice, index) => ({
-            ...choice,
-            isChosen: index === choiceIndex,
-          })),
-        }
-      }
-
-      return question
-    })
-
-    setQuestions(updatedQuestions)
-  }
-
   const { sm } = useResponsives()
   const [dividerPosition, setDividerPosition] = useState()
 
@@ -79,6 +61,7 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
         desc='Đọc nội dung và trả lời các câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={4}
+        questionsLength={data?.questions?.length as number}
       />
 
       <div className='split-screen'>
@@ -97,28 +80,10 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
           className='right-panel'
           style={sm ? { height: `calc(100% - ${dividerPosition}px)` } : { width: `calc(100% - ${dividerPosition}px)` }}
         >
-          <div>
-            {questions.map((item, index) => (
-              <Space direction='vertical' key={item._id}>
-                <b>Câu số {index + 1}</b>
-                <div dangerouslySetInnerHTML={{ __html: item?.question }}></div>
-                <Radio.Group
-                  value={item.choices.findIndex((choice) => choice.isChosen)}
-                  onChange={(e) => {
-                    handleCheckboxChange(item._id, e.target.value)
-                  }}
-                >
-                  {item.choices.map((choice, choiceIndex) => (
-                    <div key={choiceIndex}>
-                      <Radio value={choiceIndex}>
-                        <div dangerouslySetInnerHTML={{ __html: choice.answer }}></div>
-                      </Radio>
-                    </div>
-                  ))}
-                </Radio.Group>
-              </Space>
-            ))}
-          </div>
+          <QuestionsRender
+            data={data?.questions?.length ? data.questions : []}
+            callbackSubmit={(e) => console.log(e)}
+          />
         </div>
       </div>
     </div>

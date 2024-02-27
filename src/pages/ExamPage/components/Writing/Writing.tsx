@@ -36,6 +36,7 @@ export default function Writing({ nextSteps, data }: Props) {
         desc='Viết trả lời vào các câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={5}
+        questionsLength={data?.questions?.length as number}
       />
       <div className='split-screen'>
         <div

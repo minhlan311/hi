@@ -1,8 +1,11 @@
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import Logo from '@/components/Logo/Logo'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
-import { Card, Flex, Modal, Space } from 'antd'
-import { useState } from 'react'
+import { Card, Col, Flex, Modal, Row, Space } from 'antd'
+import { useContext, useState } from 'react'
+import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
+import { TbListSearch } from 'react-icons/tb'
 
 type Props = {
   skillName: string
@@ -10,12 +13,14 @@ type Props = {
   desc: string
   step: number
   buttonSubmit?: React.ReactNode
+  questionsLength: number
   nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
 const NavigationTest = (props: Props) => {
+  const { overView } = useContext(AppContext)
   const { sm } = useResponsives()
-  const { skillName, nextSkillName, desc, step = 0, buttonSubmit, nextSteps } = props
+  const { skillName, nextSkillName, desc, step = 0, buttonSubmit, questionsLength, nextSteps } = props
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOk = () => {
@@ -31,6 +36,21 @@ const NavigationTest = (props: Props) => {
     setIsModalOpen(true)
   }
 
+  const [isFullScreen, setIsFullScreen] = useState(false)
+  const [openReview, setOpenReview] = useState(false)
+
+  const fullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullScreen(true)
+      })
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullScreen(false)
+      })
+    }
+  }
+
   return (
     <Card size='small'>
       <Flex justify='space-between' align='center'>
@@ -41,11 +61,27 @@ const NavigationTest = (props: Props) => {
             <p>{desc}</p>
           </div>
         </Space>
-        {buttonSubmit ? (
-          buttonSubmit
-        ) : (
-          <ButtonCustom onClick={showModal}>{sm ? nextSkillName : 'Go to ' + nextSkillName}</ButtonCustom>
-        )}
+        <Flex gap={12}>
+          <ButtonCustom
+            icon={isFullScreen ? <BiExitFullscreen size={25} /> : <BiFullscreen size={25} />}
+            onClick={fullScreen}
+            size='small'
+            tooltip='Full màn hình'
+            type='text'
+          ></ButtonCustom>
+          <ButtonCustom
+            icon={<TbListSearch size={25} />}
+            size='small'
+            tooltip='Review'
+            type='text'
+            onClick={() => setOpenReview(!openReview)}
+          ></ButtonCustom>
+          {buttonSubmit ? (
+            buttonSubmit
+          ) : (
+            <ButtonCustom onClick={showModal}>{sm ? nextSkillName : 'Go to ' + nextSkillName}</ButtonCustom>
+          )}
+        </Flex>
       </Flex>
       <Modal
         okText='Tiếp tục'
@@ -57,6 +93,28 @@ const NavigationTest = (props: Props) => {
         onCancel={handleCancel}
       >
         <p>Bạn có muốn hoàn thành kỹ {skillName}?</p>
+      </Modal>
+      <Modal
+        title='Xem lại câu trả lời'
+        open={openReview}
+        onCancel={() => setOpenReview(false)}
+        footer={<ButtonCustom onClick={() => setOpenReview(false)}>Thoát</ButtonCustom>}
+      >
+        <Space direction='vertical' size='large' className='sp100'>
+          <i>* Cửa sổ này chỉ để xem lại câu trả lời của bạn, bạn không thể thay đổi câu trả lời ở đây!</i>
+          <div>
+            <h3>{skillName}</h3>
+            <Row gutter={[24, 24]}>
+              {Array.from({ length: questionsLength }).map((_, index) => (
+                <Col span={12} md={6} key={index}>
+                  <Space>
+                    <p>Q{index + 1}:</p> <b>{overView[index]?.anwser}</b>
+                  </Space>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </Space>
       </Modal>
     </Card>
   )
