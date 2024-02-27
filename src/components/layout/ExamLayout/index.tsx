@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import examApi from '@/apis/exam.api'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import CountDownTimer from '@/components/CountDownTimer'
@@ -10,22 +9,23 @@ import { useContext, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../Header/Header'
 import style from './styles.module.scss'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type Props = {
   children: JSX.Element
 }
 
 const CustomModal = ({
-  title,
   content,
+  title,
   visible,
-  onCancel,
   onOk,
+  onCancel,
 }: {
-  title?: string | JSX.Element
   content: JSX.Element
+  title?: string | JSX.Element
   visible: boolean
-  onCancel: () => void
   onOk: () => void
+  onCancel: () => void
 }) => {
   return (
     <Modal
@@ -110,11 +110,12 @@ export default function ExamLayout({ children }: Props) {
             <b className={style.name}>{examDetail?.data.name}</b>
             <div className={style.time}>
               <CountDownTimer
-                type='number'
                 initCountdown={examDetail?.data.duration}
-                timeFormat='mm:ss'
+                showAlex={false}
                 size={16}
                 start={start}
+                timeFormat='mm:ss'
+                type='number'
               />
             </div>
             <Space size='large' className={style.action}>
@@ -128,11 +129,11 @@ export default function ExamLayout({ children }: Props) {
                   }}
                 />
                 <Slider
-                  min={0}
                   max={100}
-                  value={volume}
+                  min={0}
                   onChange={onChange}
                   step={1}
+                  value={volume}
                   style={{
                     width: '80px',
                   }}
@@ -146,7 +147,7 @@ export default function ExamLayout({ children }: Props) {
           visible={modal3Visible}
           onOk={() => handleOk(3)}
           onCancel={() => handleCancel(3)}
-          content={<p>Bạn có chắc chắn muốn thoát không , bài thi của bạn sẽ không được lưu?</p>}
+          content={<p>Bạn có chắc chắn muốn thoát không, bài thi của bạn sẽ không được lưu?</p>}
         />
       </Flex>
     </Header>

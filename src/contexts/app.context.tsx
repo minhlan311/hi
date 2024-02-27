@@ -6,37 +6,37 @@ import { createContext, useState } from 'react'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface AppContextInterface {
-  isAuthenticated: boolean
-  volume: number
-  start: boolean
-  setVolume: React.Dispatch<React.SetStateAction<number>>
-  scaleScreen: boolean
-  setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-  profile: UserState
   configs: Configs
-  setConfigs: React.Dispatch<React.SetStateAction<Configs>>
-  setProfile: React.Dispatch<React.SetStateAction<UserState>>
+  isAuthenticated: boolean
+  profile: UserState
   questionList: { _id: string; data: string[] }[]
+  scaleScreen: boolean
+  start: boolean
+  volume: number
+  setConfigs: React.Dispatch<React.SetStateAction<Configs>>
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+  setProfile: React.Dispatch<React.SetStateAction<UserState>>
   setQuestionList: React.Dispatch<React.SetStateAction<{ _id: string; data: string[] }[]>>
+  setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
   setStart: React.Dispatch<React.SetStateAction<boolean>>
+  setVolume: React.Dispatch<React.SetStateAction<number>>
 }
 
 const initialAppContext: AppContextInterface = {
-  isAuthenticated: Boolean(getAccessTokenFromLS()),
-  volume: 50,
-  start: false,
   configs: getConfigFromLS(),
-  scaleScreen: false,
-  setScaleScreen: () => {},
-  setIsAuthenticated: () => {},
-  setVolume: () => {},
+  isAuthenticated: Boolean(getAccessTokenFromLS()),
   profile: getProfileFromLS(),
-  setProfile: () => {},
-  setConfigs: () => {},
   questionList: getQuestionsList(),
+  scaleScreen: false,
+  start: false,
+  volume: 50,
+  setConfigs: () => {},
+  setIsAuthenticated: () => {},
+  setProfile: () => {},
   setQuestionList: () => {},
+  setScaleScreen: () => {},
   setStart: () => {},
+  setVolume: () => {},
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
@@ -46,31 +46,31 @@ interface AppProviderProps {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
+  const [configs, setConfigs] = useState<Configs>(initialAppContext.configs)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [profile, setProfile] = useState<UserState>(initialAppContext.profile)
   const [questionList, setQuestionList] = useState<{ _id: string; data: string[] }[]>(initialAppContext.questionList)
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
-  const [configs, setConfigs] = useState<Configs>(initialAppContext.configs)
-  const [volume, setVolume] = useState<number>(initialAppContext.volume)
   const [start, setStart] = useState<boolean>(initialAppContext.start)
+  const [volume, setVolume] = useState<number>(initialAppContext.volume)
 
   return (
     <AppContext.Provider
       value={{
-        setConfigs,
-        volume,
-        setVolume,
-        start,
-        setStart,
         configs,
-        scaleScreen,
-        setScaleScreen,
         isAuthenticated,
-        setIsAuthenticated,
         profile,
-        setProfile,
         questionList,
+        scaleScreen,
+        start,
+        volume,
+        setConfigs,
+        setIsAuthenticated,
+        setProfile,
         setQuestionList,
+        setScaleScreen,
+        setStart,
+        setVolume,
       }}
     >
       {children}
