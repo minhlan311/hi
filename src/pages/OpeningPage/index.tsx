@@ -14,7 +14,7 @@ import { HiOutlineBookOpen, HiOutlineUserGroup } from 'react-icons/hi2'
 import MyCourses from '../ProfilePage/MyCourses'
 import ScheduleDetail from './Components/ScheduleDetail'
 import style from './styles.module.scss'
-import { log } from 'console'
+
 
 const OpeningPage = () => {
   const { sm, md } = useResponsives()

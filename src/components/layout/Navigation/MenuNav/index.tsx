@@ -11,7 +11,7 @@ import { BiSolidUserCircle } from 'react-icons/bi'
 import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
 import { IoCalendar, IoCalendarOutline, IoChevronDown, IoSchoolOutline } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
-import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
+import { PiUserCircle } from 'react-icons/pi'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import useResponsives from '../../../../hooks/useResponsives'
 import AvatarDropMenu from '../../AvatarDropMenu'
@@ -220,7 +220,7 @@ const MenuNav = ({ user, type }: Props) => {
       </Space>
     )
   } else {
-    if (md && sm) {
+    if (md || sm) {
       return (
         <div>
           <UpdateMentor userData={userData?.data} />
