@@ -14,6 +14,7 @@ import { HiOutlineBookOpen, HiOutlineUserGroup } from 'react-icons/hi2'
 import MyCourses from '../ProfilePage/MyCourses'
 import ScheduleDetail from './Components/ScheduleDetail'
 import style from './styles.module.scss'
+import { log } from 'console'
 
 const OpeningPage = () => {
   const { sm, md } = useResponsives()
@@ -69,19 +70,15 @@ const OpeningPage = () => {
                   <Flex align='center' gap={12} className={style.content}>
                     <div dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
                   </Flex>
-                </Space>
-              </Col>
-              <Col span={24} md={9}>
-                <Space direction='vertical' size='large' className={'sp100'}>
                   <p className={style.desc}>Kết thúc sau:</p>
                   <Flex align='center' vertical gap={55}>
                     <CountDownTimer
-                      size={((sm || md) && 25) || 50}
+                      size={((sm || md) && 25) || 40}
                       type='text'
                       className={style.timer}
                       initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
                       space=':'
-                      spaceStyle={{ color: 'var(--white)' }}
+                      spaceStyle={{ color: 'var(--black)' }}
                       showAlex={false}
                     />
                     {promotion.href && (
@@ -91,6 +88,13 @@ const OpeningPage = () => {
                     )}
                   </Flex>
                 </Space>
+              </Col>
+              <Col span={0} md={9}>
+                <img
+                  width='100%'
+                  src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRs5fU9OysjG94M_rKNaBN4oFzrYlVb43EJ7qoMb4G4m56jvAQJpu3zs5XS9y4Kr18Xxs&usqp=CAU'
+                  alt=''
+                />
               </Col>
             </Row>
           </div>

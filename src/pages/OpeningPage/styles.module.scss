@@ -1,7 +1,7 @@
 @import '../../components/GlobalStyles/responsive.scss';
 
 .ads {
-  background-color: var(--green);
+  background-color: var(--whiteBg);
   padding: 60px;
   border-radius: 8px;
   @include respond-to(xs) {
@@ -14,11 +14,10 @@
     @include respond-to(xs) {
       margin-bottom: 20px;
     }
-    color: var(--white);
     text-align: center;
   }
   .desc {
-    color: var(--light-gray);
+    color: var(--black);
     font-size: 20px;
     line-height: 1.4;
 
@@ -28,7 +27,7 @@
         margin-bottom: 20px;
       }
       b {
-        color: var(--white);
+        color: var(--black);
         margin: 0 5px;
         border-bottom: 2px solid orange;
         div {
@@ -39,14 +38,14 @@
   }
   .timer {
     background-color: transparent;
-    color: white;
+    color: var(--black);
     padding: 5px;
-    border: solid 1px black;
+    border: solid 1px var(--black);
     border-radius: 12px;
     p {
       position: absolute;
       bottom: -40px;
-      color: var(--light-gray);
+      color: var(--black);
     }
 
     @include respond-to(xs) {

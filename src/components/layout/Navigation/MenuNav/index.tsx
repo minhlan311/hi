@@ -18,6 +18,8 @@ import AvatarDropMenu from '../../AvatarDropMenu'
 import Header from '../../Header/Header'
 import RenderSubMenu from './RenderSubMenu'
 import style from './styles.module.scss'
+import { CiViewList } from "react-icons/ci";
+import { FaClipboardList } from "react-icons/fa";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -58,30 +60,30 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
   useEffect(() => {
     setOpen(false)
   }, [location])
-  const test = categoriesData?.find((item) => item.label === 'Luyện thi')
-  const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
-  const choice = categoriesData?.find((item) => item.label === 'Trắc nghiệm')
+  const test = categoriesData?.find((item) => item.label === 'Khóa học')
+  const opening = categoriesData?.find((item) => item.label === 'Luyện thi')
+  const choice = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
 
   useEffect(() => {
     if (categoriesData.length > 0) {
       setMobileMenu([
         { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
         {
-          label: 'Luyện thi',
+          label: 'Khóa Học',
+          icon: <CiViewList />,
+          activeIcon: <FaClipboardList />,
+          href: `${test?.href}`,
+        },
+        {
+          label: 'Luyện Thi',
           icon: <IoSchoolOutline />,
           activeIcon: <MdSchool />,
-          href: `${test?.href}${test?.children?.[0]?.href}`,
+          href: `${opening?.href}`,
         },
         {
           label: 'Lịch khai giảng',
           icon: <IoCalendarOutline />,
           activeIcon: <IoCalendar />,
-          href: `${opening?.href}`,
-        },
-        {
-          label: 'Trắc nghiệm',
-          icon: <PiExam />,
-          activeIcon: <PiExamFill />,
           href: `${choice?.href}`,
         },
         { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
@@ -218,7 +220,7 @@ const MenuNav = ({ user, type }: Props) => {
       </Space>
     )
   } else {
-    if (md || sm) {
+    if (md && sm) {
       return (
         <div>
           <UpdateMentor userData={userData?.data} />
