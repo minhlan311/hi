@@ -1,84 +1,33 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react'
-import style from './WrapMore.module.scss'
-// import Header from '@/components/Header/Header'
-import { DownOutlined, UpOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import ButtonCustom from '../ButtonCustom/ButtonCustom'
+import './style.scss'
 
 type Props = {
   children: React.ReactNode
-  padding?: string | number
-  titleStyle?: CSSProperties
-  title: string
-  titleSize?: number
-  wrapper: 'nonBorder' | 'border'
-  maxWidth?: string
-  maxHeight?: string
+  maxHeight?: number | string
 }
 
-export default function WrapMore({
-  children,
-  // padding = '20px 20px',
-  // titleStyle,
-  // title,
-  // titleSize,
-  wrapper,
-  maxWidth,
-  maxHeight,
-}: Props) {
+export default function WrapMore({ children, maxHeight = '80vh' }: Props) {
   const [expanded, setExpanded] = useState(false)
-  const [buttonRef, setButtonRef] = useState(false)
-  const refCon = useRef<HTMLDivElement>(null)
+
+  const contentStyle: React.CSSProperties = {
+    overflow: 'hidden',
+    maxHeight: expanded ? 'none' : maxHeight,
+  }
+
   const toggleExpand = () => {
     setExpanded(!expanded)
   }
 
-  useEffect(() => {
-    if (refCon.current) {
-      const height = refCon.current.clientHeight
-      if (height > 200) {
-        setButtonRef(false)
-      } else {
-        setButtonRef(true)
-      }
-    }
-  }, [])
-
   return (
-    <div
-      style={{
-        maxWidth: maxWidth,
-      }}
-      className={wrapper === 'border' ? `${style.wrapper}` : `${style.wrapperNoneBorder}`}
-    >
-      {/* <Header
-        titleSize={titleSize}
-        margin={`${!buttonRef ? `0 0 50px 0` : '0'}`}
-        background='none'
-        type='fullsize'
-        padding={padding}
-        title={title}
-        titleStyle={titleStyle}
-      > */}
-      <div className={style.App}>
-        <div
-          style={{
-            maxHeight: maxHeight,
-          }}
-          className={`${style.expandableContent} ${expanded ? `${style.expanded}` : ''}`}
-        >
-          <div ref={refCon}>{children}</div>
-        </div>
-        <div hidden={buttonRef} className={`${!expanded ? `${style.blur}` : `${style.blurShow}`}`}>
-          <div className={style.flexButton}>
-            <div>
-              <span className={style.expandButton} onClick={toggleExpand}>
-                {expanded ? 'thu gọn' : 'Xem thêm'}
-              </span>
-            </div>
-            {!expanded ? <DownOutlined className={style.icons} /> : <UpOutlined className={style.icons} />}
-          </div>
-        </div>
+    <div className='sp100'>
+      <div style={contentStyle}>{children}</div>
+      <div className='show-more'>
+        <div className='blur'></div>
+        <ButtonCustom onClick={toggleExpand} type='link' className='link show-more-button'>
+          {expanded ? 'Ẩn bớt' : 'Xem thêm'}
+        </ButtonCustom>
       </div>
-      {/* </Header> */}
     </div>
   )
 }

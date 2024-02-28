@@ -120,7 +120,7 @@ const CategoryPage = () => {
                 apiFind={userApi.findMentor}
                 page={current}
                 callBackData={setMentorData}
-                limit={1}
+                limit={10}
               />
               <LoadingCustom loading={menuSlug?.includes('khoa-hoc') && courseLoad}>
                 {mentorData && mentorData?.totalDocs > 0 ? (
@@ -149,7 +149,7 @@ const CategoryPage = () => {
           <Header padding={'50px 0'}>
             <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' style={{ marginBottom: 8 }} />
             <h1>{categoriesParent && categoriesParent.data.name}</h1>
-            <div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
+            <div className='dangerHTML' dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
           </Header>
         )
       ) : menuSlug?.includes('tin-tuc') ? (
@@ -163,10 +163,9 @@ const CategoryPage = () => {
           <Header title={category?.name} padding={50}>
             {category?.content ? (
               <WrapMore
-                title=''
-                maxWidth='100%'
-                children={<div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>}
-                wrapper={'nonBorder'}
+                children={
+                  <div className='dangerHTML' dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
+                }
               ></WrapMore>
             ) : null}
             {category?.slug?.includes('giao-vien') && (
