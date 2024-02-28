@@ -185,6 +185,7 @@ const EventDetailModal = (props: Props) => {
                 <Descriptions column={1}>
                   <Descriptions.Item label='Ghi chú' className='sp100'>
                     <div
+                      className='dangerHTML'
                       dangerouslySetInnerHTML={{
                         __html: eventDetail.description !== '<p></p>' ? eventDetail.description : 'Không có ghi chú',
                       }}

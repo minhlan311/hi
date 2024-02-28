@@ -19,6 +19,7 @@ const LastCheck = (props: Props) => {
           </Descriptions.Item>
           <Descriptions.Item label='Chú thích'>
             <div
+              className={'dangerHTML'}
               dangerouslySetInnerHTML={{
                 __html: examData.description === '<p></p>' ? 'Không có chú thích' : examData.description,
               }}

@@ -28,7 +28,7 @@ const MentorData = ({ user }: Props) => {
             </h4>
           </Link>
           {user.descriptions ? (
-            <div dangerouslySetInnerHTML={{ __html: user.descriptions as string }}></div>
+            <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: user.descriptions as string }}></div>
           ) : (
             'Không có giới thiệu'
           )}

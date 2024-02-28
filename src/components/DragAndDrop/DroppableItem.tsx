@@ -23,11 +23,14 @@ const DroppableItem = (props: Props) => {
             <DraggableItem key={child.id} id={child.id}>
               {renderType === 'card' && child?.[columnLabelKey] ? (
                 <Card className={css.graggable}>
-                  <div dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}></div>
+                  <div
+                    className={'dangerHTML'}
+                    dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}
+                  ></div>
                 </Card>
               ) : (
                 <div
-                  className={css.graggable}
+                  className={`${css.graggable} dangerHTML`}
                   dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}
                 ></div>
               )}
@@ -43,11 +46,14 @@ const DroppableItem = (props: Props) => {
               <DraggableItem id={child.id}>
                 {renderType === 'card' && child?.[columnLabelKey] ? (
                   <Card className={css.graggable}>
-                    <div dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}></div>
+                    <div
+                      className={'dangerHTML'}
+                      dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}
+                    ></div>
                   </Card>
                 ) : (
                   <div
-                    className={css.graggable}
+                    className={`${css.graggable} dangerHTML`}
                     dangerouslySetInnerHTML={{ __html: columnLabelKey ? child?.[columnLabelKey] : child }}
                   ></div>
                 )}
@@ -62,11 +68,14 @@ const DroppableItem = (props: Props) => {
       <DraggableItem key={data.id} id={data.id}>
         {renderType === 'card' ? (
           <Card className={css.grabbing}>
-            <div dangerouslySetInnerHTML={{ __html: columnLabelKey ? data?.[columnLabelKey] : data }}></div>
+            <div
+              className={'dangerHTML'}
+              dangerouslySetInnerHTML={{ __html: columnLabelKey ? data?.[columnLabelKey] : data }}
+            ></div>
           </Card>
         ) : (
           <div
-            className={css.grabbing}
+            className={`${css.graggable} dangerHTML`}
             dangerouslySetInnerHTML={{ __html: columnLabelKey ? data?.[columnLabelKey] : data }}
           ></div>
         )}

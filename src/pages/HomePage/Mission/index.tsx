@@ -20,7 +20,7 @@ export default function Mission() {
               />
               <Space direction='vertical' size='large' style={{ float: 'right' }} className='ms-content'>
                 <h1 style={{ float: 'right' }}>TẦM NHÌN</h1>
-                <p>
+                <p style={{ lineHeight: 1.2 }}>
                   Đào tạo 5 ngoại ngữ Online nhưng vẫn đảm bảo được chất lượng, và hiệu quả từng buổi học cho học viên.
                   UCAM không chỉ mang ngoại ngữ đến các học viên trong nước nhưng còn muốn vươn xa ra tầm cỡ quốc tế để
                   xóa bỏ rào cản giao tiếp và góp phần thực hiện ước mơ của học viên.
@@ -37,7 +37,7 @@ export default function Mission() {
               />
               <Space direction='vertical' size='large' className='ms-content'>
                 <h1>SỨ MỆNH</h1>
-                <p>
+                <p style={{ lineHeight: 1.2 }}>
                   UCAM mong muốn mang đến cho thế hệ trẻ Việt Nam 5 ngoại ngữ Anh, Trung, Nhật, Hàn, Đức trên bước đường
                   hội nhập quốc tế. UCAM mang đến cho học viên một môi trường học tập chuyên nghiệp hàng đầu với đội ngũ
                   Giáo viên giỏi trong nước và ngoài nước. Từ đó học viên sử dụng được ngoại ngữ một cách thành thạo với

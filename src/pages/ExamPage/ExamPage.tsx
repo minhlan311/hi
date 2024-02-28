@@ -16,9 +16,9 @@ export default function ExamPage() {
   const [listeningData, setListeningData] = useState<Skill[]>([])
   const [writingData, setWritingData] = useState<Skill[]>([])
   const [readingData, setReadingData] = useState<Skill[]>([])
+  const [speakingData, setSpeakingData] = useState<Skill[]>([])
   const [listeningDataCallback, setListeningDataCallback] = useState([])
   const [readingDataCallback, setReadingDataCallback] = useState([])
-  const [speakingData, setSpeakingData] = useState<Skill[]>([])
   const [dataSubmit, setDataSubmit] = useState<any>()
   const [dataSubmitAll, setDataSubmitAll] = useState<any>()
   const [current, setCurrent] = useState(0)
@@ -99,7 +99,7 @@ export default function ExamPage() {
     },
     {
       title: 'Speaking',
-      content: <Speaking data={speakingData} nextSteps={setCurrent} submit={setCall} />,
+      content: <Speaking data={speakingData[0]} nextSteps={setCurrent} submit={setCall} />,
     },
     {
       title: 'Last',

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
+import { Skill } from '@/interface/exam'
 import { Flex, Modal, Space } from 'antd'
 import { useState } from 'react'
 import { AudioVisualizer, LiveAudioVisualizer } from 'react-audio-visualize'
@@ -11,7 +12,7 @@ import './Speaking.scss'
 
 type Props = {
   nextSteps: React.Dispatch<React.SetStateAction<number>>
-  data: any
+  data: Skill
   submit: any
 }
 
@@ -36,7 +37,7 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
   console.log(transcript)
 
   return (
-    <div>
+    <div className='reading'>
       <Modal
         okText='Nộp bài'
         cancelText='Hủy'
@@ -59,7 +60,13 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
       />
 
       <Space direction='vertical'>
-        <div dangerouslySetInnerHTML={{ __html: data[0]?.description }}></div>
+        <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+        <div
+          className={'dangerHTML'}
+          dangerouslySetInnerHTML={{
+            __html: data?.questions?.[0].question as any,
+          }}
+        ></div>
 
         <Flex justify='center' align='center' vertical className='audioMic' gap={24}>
           <Space>

@@ -47,7 +47,13 @@ export default function Writing({ nextSteps, data }: Props) {
               : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
           }
         >
-          <div dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+          <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+          <div
+            className={'dangerHTML'}
+            dangerouslySetInnerHTML={{
+              __html: data?.questions?.length ? (data?.questions?.[0].question as any) : undefined,
+            }}
+          ></div>
         </div>
         <div className='divider' onMouseDown={handleDividerClick}></div>
         <div

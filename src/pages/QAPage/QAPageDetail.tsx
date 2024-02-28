@@ -170,7 +170,8 @@ export default function QADetail() {
                 </div>
                 {faq?.content && (
                   <p
-                    style={{ margin: '10px 0', fontSize: '16px' }}
+                    style={{ margin: '10px 0', fontSize: '16px', display: 'block' }}
+                    className={'dangerHTML'}
                     dangerouslySetInnerHTML={{ __html: faq?.content }}
                   ></p>
                 )}

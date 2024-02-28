@@ -1,8 +1,8 @@
-import React from 'react'
+import { MenuItemData } from '@/interface/menuItemData'
 import { Menu, Space } from 'antd'
+import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import css from './MenuCustom.module.scss'
-import { MenuItemData } from '@/interface/menuItemData'
 
 type Props = {
   items: MenuItemData[]
@@ -16,6 +16,7 @@ type Props = {
   triggerSubMenuAction?: 'hover' | 'click'
   size?: 'small' | 'default' | 'large' | number
 }
+
 const MenuCustom = (props: Props) => {
   const {
     items,
@@ -27,11 +28,12 @@ const MenuCustom = (props: Props) => {
     theme,
     multiple = false,
     triggerSubMenuAction,
-    size = 'default'
+    size = 'default',
   } = props
   const location = useLocation()
 
   const keyActive = items?.find((item) => location.pathname.includes(`${item?.key}`))
+
   return (
     <Space direction='vertical' className={css.sp100}>
       {header && header}
@@ -51,11 +53,11 @@ const MenuCustom = (props: Props) => {
             style={{
               lineHeight:
                 `${(size === 'small' && 32) || (size === 'default' && 38) || (size === 'large' && 50)}px` || size,
-              height: (size === 'small' && 32) || (size === 'default' && 38) || (size === 'large' && 50) || size
+              height: (size === 'small' && 32) || (size === 'default' && 38) || (size === 'large' && 50) || size,
             }}
           >
             <Link to={`${item?.key}`}>
-              <div dangerouslySetInnerHTML={{ __html: `${item?.label}` }}></div>
+              <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: `${item?.label}` }}></div>
             </Link>
           </Menu.Item>
         ))}

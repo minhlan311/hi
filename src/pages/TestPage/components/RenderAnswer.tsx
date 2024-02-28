@@ -1,13 +1,13 @@
+import { localAction, shuffleArray } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
-import PageFillTest from './FillTest/PageFillTest'
-import PageTestDrag from './DragTest/PageTestDrag'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { Answer, Choice } from '@/interface/question'
 import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
-import { localAction, shuffleArray } from '@/common'
 import { useEffect, useState } from 'react'
+import PageTestDrag from './DragTest/PageTestDrag'
+import PageFillTest from './FillTest/PageFillTest'
 import './style.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

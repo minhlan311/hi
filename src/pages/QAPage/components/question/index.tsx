@@ -22,7 +22,9 @@ export default function Questions(props: IQuestionListProp) {
     <>
       <Card style={{ marginBottom: '10px', backgroundColor: 'var(--green)', color: 'var(--white)' }}>
         <h2>Nền tảng hỏi đáp bài tập</h2>
-        <p style={{ margin: '10px 0' }}>Nền tảng kết nối cộng đồng hỗ trợ giải bài tập học sinh trong khối K12</p>
+        <p style={{ margin: '10px 0', display: 'block' }}>
+          Nền tảng kết nối cộng đồng hỗ trợ giải bài tập học sinh trong khối K12
+        </p>
         <Button
           size='large'
           onClick={() => {

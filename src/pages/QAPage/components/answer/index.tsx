@@ -1,19 +1,18 @@
-import { AnswerState, FaqSate } from '@/interface/faq'
-import { Avatar, Button, Card, Image, Space, Tooltip, message, Popconfirm } from 'antd'
-import Meta from 'antd/es/card/Meta'
-import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
-import { useContext, useMemo, useState } from 'react'
-import { AppContext } from '@/contexts/app.context'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import ModalFormAnswer from './ModalFormAnswer'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import FaqApi from '@/apis/faq.api'
+import LikeApi from '@/apis/like.api'
+import { AppContext } from '@/contexts/app.context'
+import { formatDate } from '@/helpers/common'
+import { AnswerState, FaqSate } from '@/interface/faq'
 import { LikeState, TypeEnum } from '@/interface/like'
 import { TargetModelEnum } from '@/types/utils.type'
+import { CommentOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Avatar, Button, Card, Image, Popconfirm, Space, Tooltip, message } from 'antd'
+import Meta from 'antd/es/card/Meta'
 import { AxiosError } from 'axios'
-import LikeApi from '@/apis/like.api'
-import { CommentOutlined } from '@ant-design/icons'
-import { formatDate } from '@/helpers/common'
+import { useContext, useMemo, useState } from 'react'
+import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
+import ModalFormAnswer from './ModalFormAnswer'
 interface IAnswerListProps {
   faq?: FaqSate
 }
@@ -152,6 +151,7 @@ export default function AnswerList(props: IAnswerListProps) {
                 {answer?.content && (
                   <p
                     style={{ margin: '10px 0', fontSize: '16px' }}
+                    className={'dangerHTML'}
                     dangerouslySetInnerHTML={{ __html: answer?.content }}
                   ></p>
                 )}

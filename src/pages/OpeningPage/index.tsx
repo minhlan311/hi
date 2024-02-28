@@ -67,7 +67,7 @@ const OpeningPage = () => {
                     </p>
                   </Flex>
                   <Flex align='center' gap={12} className={style.content}>
-                    <div dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
+                    <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
                   </Flex>
                 </Space>
               </Col>

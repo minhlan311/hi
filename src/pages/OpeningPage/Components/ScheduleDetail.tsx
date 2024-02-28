@@ -59,7 +59,7 @@ const columns: TableColumnsType<any> = [
     width: '20%',
     render: (record: ClassState) =>
       record?.event ? (
-        <div>
+        <Space>
           {record.event.schedules.length > 0 && (
             <p>
               Thứ{' '}
@@ -75,12 +75,13 @@ const columns: TableColumnsType<any> = [
                 })
                 .sort((a, b) => (a === 'CN' ? 1 : b === 'CN' ? -1 : 0))
                 .join('/')}
+              .
             </p>
           )}
           <p>
             {moment(record.event.start).format('HH:mm')} - {moment(record.event.end).format('HH:mm')}
           </p>
-        </div>
+        </Space>
       ) : null,
   },
   {

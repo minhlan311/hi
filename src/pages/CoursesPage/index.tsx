@@ -205,7 +205,10 @@ const CoursesDetail = () => {
                                 style={{ paddingBottom: 24, minHeight: '60vh' }}
                               >
                                 {courseDetail.descriptions ? (
-                                  <div dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}></div>
+                                  <div
+                                    className={'dangerHTML'}
+                                    dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}
+                                  ></div>
                                 ) : (
                                   'Không có mô tả'
                                 )}

@@ -1,6 +1,6 @@
-import css from './BannerBottom.module.scss'
-import { Col, Row, Space } from 'antd'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
+import { Col, Row, Space } from 'antd'
+import css from './BannerBottom.module.scss'
 
 interface DataProps {
   title: string
@@ -20,6 +20,7 @@ type Props = {
 const BannerBottom = (props: Props) => {
   const { data, dir = 'right' } = props
   const { title, desc, imageUrl, href, button, buttonPrimary, buttonPrimaryHref, logo } = data
+
   return (
     <Row
       className={`${dir === 'left' && css.dirLeft} ${css.bodyBanner}`}
@@ -30,7 +31,7 @@ const BannerBottom = (props: Props) => {
       <Col span={24} md={12}>
         {logo && <img src={logo} className={css.logo} alt='logo' />}
         <div className={css.title}>{title}</div>
-        <div className={css.desc} dangerouslySetInnerHTML={{ __html: desc }}></div>
+        <div className={`${css.desc} dangerHTML`} dangerouslySetInnerHTML={{ __html: desc }}></div>
         <Space>
           {buttonPrimary && (
             <ButtonCustom type='primary' href={buttonPrimaryHref}>

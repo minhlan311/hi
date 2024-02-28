@@ -131,7 +131,7 @@ const RenderItem = (props: Props) => {
               )}
             </Row>
 
-            <h4 dangerouslySetInnerHTML={{ __html: data.question }}></h4>
+            <h4 className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data.question }}></h4>
             {data.type !== 'LIKERT SCALE' && data.type !== 'MATCHING' && (
               <Card size='small' className={css.anws}>
                 <Row gutter={[12, 12]}>
@@ -140,7 +140,7 @@ const RenderItem = (props: Props) => {
                       return (
                         <Col span={24} md={12} xl={6} key={anw._id}>
                           <div
-                            className={css.isAnswer}
+                            className={`${css.isAnswer} dangerHTML`}
                             key={anw._id}
                             dangerouslySetInnerHTML={{ __html: anw.answer }}
                           ></div>
@@ -153,7 +153,11 @@ const RenderItem = (props: Props) => {
                       return (
                         <Col span={24} md={12} xl={6} key={anw._id}>
                           <Card size='small'>
-                            <div key={anw._id} dangerouslySetInnerHTML={{ __html: anw.answer }}></div>
+                            <div
+                              key={anw._id}
+                              className={'dangerHTML'}
+                              dangerouslySetInnerHTML={{ __html: anw.answer }}
+                            ></div>
                           </Card>
                         </Col>
                       )
@@ -162,7 +166,7 @@ const RenderItem = (props: Props) => {
                 {data && (data.type === 'WRITING' || data.type === 'NUMERICAL') && (
                   <p>
                     {data?.answer || data?.answer !== '<p></p>' ? (
-                      <div dangerouslySetInnerHTML={{ __html: data?.answer as string }}></div>
+                      <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data?.answer as string }}></div>
                     ) : (
                       'Không có câu trả lời'
                     )}
@@ -173,7 +177,11 @@ const RenderItem = (props: Props) => {
             {(data.explanation !== '<p></p>' || undefined) && (
               <Space className={`${css.hint} sp100 `}>
                 <AiOutlineQuestionCircle />
-                <div dangerouslySetInnerHTML={{ __html: data.explanation }} style={{ marginTop: -3 }}></div>
+                <div
+                  className={'dangerHTML'}
+                  dangerouslySetInnerHTML={{ __html: data.explanation }}
+                  style={{ marginTop: -3 }}
+                ></div>
               </Space>
             )}
           </Space>

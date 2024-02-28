@@ -74,8 +74,9 @@ const QuestionsRender = ({
                       <div key={item._id}>
                         <b
                           dangerouslySetInnerHTML={{
-                            __html: `<div><span>${index + 1}. </span><span>${item?.question}</span></div>`,
+                            __html: `<span>${index + 1}. </span><span>${item?.question}</span>`,
                           }}
+                          style={{ display: 'block', marginBottom: 12 }}
                         ></b>
 
                         <Radio.Group>
@@ -152,7 +153,7 @@ const QuestionsRender = ({
                           <Flex justify='space-between' gap={24}>
                             <p
                               dangerouslySetInnerHTML={{
-                                __html: `<div><span>${index + 1}. </span><span>${item?.question}</span></div>`,
+                                __html: `<span>${index + 1}. </span><span>${item?.question}</span>`,
                               }}
                             ></p>
                             <Radio.Group optionType='button' buttonStyle='outline' size='small'>
@@ -190,6 +191,7 @@ const QuestionsRender = ({
                       {item.data.map((item, index) => (
                         <Space direction='vertical' className={'sp100'}>
                           <p
+                            className={'dangerHTML'}
                             dangerouslySetInnerHTML={{
                               __html: `<div><span>${index + 1}. </span><span>${item?.question}</span></div>`,
                             }}

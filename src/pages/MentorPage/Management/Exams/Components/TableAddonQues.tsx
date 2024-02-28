@@ -80,11 +80,9 @@ const EditableRowDragDrop = ({ children, index, ...props }: RowProps) => {
             if ((child as React.ReactElement).key === 'sort') {
               return React.cloneElement(child as React.ReactElement, {
                 children: (
-                  <AiOutlineMenu
-                    ref={setActivatorNodeRef}
-                    style={{ touchAction: 'none', cursor: 'move' }}
-                    {...listeners}
-                  />
+                  <p ref={setActivatorNodeRef as any}>
+                    <AiOutlineMenu style={{ touchAction: 'none', cursor: 'move' }} {...listeners} />
+                  </p>
                 ),
               })
             }
