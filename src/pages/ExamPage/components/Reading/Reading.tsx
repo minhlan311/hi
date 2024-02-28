@@ -73,7 +73,7 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
               : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
           }
         >
-          <div dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+          <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data?.description }}></div>
         </div>
         <div className='divider' onMouseDown={handleDividerClick}></div>
         <div

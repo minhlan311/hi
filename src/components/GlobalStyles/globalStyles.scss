@@ -441,8 +441,7 @@ table {
 .dangerHTML {
   line-height: 1.4;
   p {
-    font-size: 18px;
-    display: block;
+    font-size: 17px;
     margin-bottom: 12px;
   }
   h1,
@@ -452,13 +451,13 @@ table {
   h2,
   h3,
   h4 {
-    margin: 12px 0;
+    margin: 18px 0 12px;
   }
   strong {
     line-height: 1.6;
   }
   ul {
-    margin-left: 50px;
+    margin-left: 38px;
   }
 }
 
@@ -482,7 +481,7 @@ table {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--light-gray3);
+  background: var(--light-gray-2);
 }
 
 /* Hide the scrollbar when not in use */

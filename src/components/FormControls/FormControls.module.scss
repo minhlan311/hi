@@ -43,3 +43,9 @@
 .contentCheckedBorder {
   border: 1px solid var(--green);
 }
+
+.danger {
+  li {
+    list-style: none;
+  }
+}

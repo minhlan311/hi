@@ -30,7 +30,7 @@ export default function CateGoriesList({ categoryId }: { categoryId?: string }) 
         <Card.Meta
           avatar={<Avatar src={`${import.meta.env.VITE_FILE_ENDPOINT + '/' + item.icon}`} />}
           title={<p>{item.name}</p>}
-          description={<div dangerouslySetInnerHTML={{ __html: item.description }}></div>}
+          description={<div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: item.description }}></div>}
         />
         {isLoading && (
           <Skeleton loading={isLoading} active avatar>

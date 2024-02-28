@@ -35,7 +35,10 @@ const ShowSkillDetail = ({ data, open, setOpen }: Props) => {
       name: 'Nội dung',
       id: 'read',
       children: (
-        <div dangerouslySetInnerHTML={{ __html: data && (data?.description as any) }} className='dangerHTMLImg'></div>
+        <div
+          dangerouslySetInnerHTML={{ __html: data && (data?.description as any) }}
+          className='dangerHTMLImg dangerHTML'
+        ></div>
       ),
     },
     {
