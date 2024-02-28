@@ -97,8 +97,8 @@ const OpeningPage = () => {
         )}
 
         <Space direction='vertical' className={'sp100'}>
+          <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' style={{ marginBottom: 8 }} />
           <h1>Lịch học</h1>
-          <BreadCrumbsDynamic />
           <ScheduleDetail type='Online' />
           <ScheduleDetail type='Offline' />
           <h1>Khóa học trong tháng</h1>

@@ -438,6 +438,27 @@ table {
   cursor: not-allowed;
 }
 
+.dangerHTML {
+  line-height: 1.4;
+  p {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  h1,
+  img {
+    margin-bottom: 24px;
+  }
+  h2,
+  h3,
+  h4 {
+    margin: 12px 0;
+  }
+  strong {
+    line-height: 1.6;
+  }
+}
+
 /* Hide the scrollbar track */
 ::-webkit-scrollbar {
   width: 6px; /* Adjust the width as per your preference */

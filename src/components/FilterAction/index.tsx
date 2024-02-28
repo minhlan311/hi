@@ -126,7 +126,7 @@ const FilterAction = (props: Props) => {
       subCategoryId,
       plan,
       status,
-      categoryName: categoryName?.label ? categoryName?.label : categoryName,
+      categoryName: location.includes('giao-vien') ? categoryName?.label : categoryName,
       start: typeFilter === 'event' && dates ? moment(dates.$d).startOf('day') : undefined,
       end: typeFilter === 'event' && dates ? moment(dates.$d).endOf('day') : undefined,
       startDate: typeFilter !== 'event' && dates ? dates[0] : undefined,
@@ -176,15 +176,7 @@ const FilterAction = (props: Props) => {
   }
 
   useEffect(() => {
-    const check = subjectList?.find(
-      (sj) =>
-        mentorSub?.children
-          ?.find((item) => location.includes(item.slug))
-          ?.name.toLowerCase()
-          .includes(sj.label.toLowerCase()),
-    )
-
-    if (mentorSub || check || page)
+    if (mentorSub || page)
       setFilterData((prev) => {
         return {
           filterQuery: {
@@ -192,7 +184,6 @@ const FilterAction = (props: Props) => {
             ...prev?.filterQuery,
             ...initFilterQuery,
             ...filterQuery,
-            categoryName: check?.label,
           },
           options: {
             limit,
@@ -202,9 +193,6 @@ const FilterAction = (props: Props) => {
         }
       })
 
-    form.setFieldsValue({
-      categoryName: check?.label || filterQuery?.categoryName || initFilterQuery?.categoryName,
-    })
     form.setFieldsValue({ skillName: filterQuery?.skillName || initFilterQuery?.skillName })
     form.setFieldsValue({ mentorType: mentorSub?.label })
   }, [page, checkQuery, location])
@@ -236,6 +224,8 @@ const FilterAction = (props: Props) => {
       })
     }
   }, [page, checkQuery, location, filterQuery, listenerFilterQuery])
+
+  console.log(filterData)
 
   useEffect(() => {
     setTimeout(() => {
