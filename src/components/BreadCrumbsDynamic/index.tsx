@@ -6,10 +6,12 @@ type Props = {
   homeIcon?: React.ReactNode
   separator?: string
   lastText?: string
+  style?: React.CSSProperties
+  className?: string
 }
 
 const BreadCrumbsDynamic = (props: Props) => {
-  const { homeUrl = '/', homeTitle = 'Trang chủ', homeIcon, separator, lastText } = props
+  const { homeUrl = '/', homeTitle = 'Trang chủ', homeIcon, separator, lastText, style, className } = props
   const location = useLocation()
 
   const breadCrumbView = () => {
@@ -51,7 +53,11 @@ const BreadCrumbsDynamic = (props: Props) => {
     )
   }
 
-  return <>{breadCrumbView()}</>
+  return (
+    <div className={className} style={style}>
+      {breadCrumbView()}
+    </div>
+  )
 }
 
 export default BreadCrumbsDynamic

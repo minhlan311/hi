@@ -18,10 +18,13 @@ const MentorCreateTest = () => {
   const [form] = Form.useForm()
   const [current, setCurrent] = useState(0)
   const [testId, setTestId] = useState<string>()
+  const [skillSelected, setSkillSelected] = useState<string[]>([])
 
   useEffect(() => {
-    if (location?.state?.testId) setTestId(location?.state?.testId)
-    else {
+    if (location?.state?.testId) {
+      setTestId(location?.state?.testId)
+      setSkillSelected([])
+    } else {
       if (location.pathname.includes('updateTest')) navigate('/mentor/exams')
     }
   }, [location])
@@ -50,10 +53,9 @@ const MentorCreateTest = () => {
       if (current === 0) setCurrent(current + 1)
     },
   })
-  const [skillSelected, setSkillSelected] = useState<string[]>([])
 
   useEffect(() => {
-    if (examDetail && examDetail.skill?.length > 0) {
+    if (!skillSelected.length && examDetail && examDetail.skill?.length > 0) {
       setSkillSelected(examDetail.skill)
     }
   }, [examDetail])
@@ -70,8 +72,6 @@ const MentorCreateTest = () => {
 
     enabled: skillSelected?.length > 0,
   })
-
-  console.log(skillSelected, skillData)
 
   const next = () => {
     if (current === 0) form.submit()
@@ -94,8 +94,9 @@ const MentorCreateTest = () => {
       testMutation.mutate(payload as any)
 
       setTimeout(() => {
-        navigate('/mentor/exams')
-      }, 1500)
+        // navigate('/mentor/exams')
+        navigate(0)
+      }, 1000)
     }
   }
 

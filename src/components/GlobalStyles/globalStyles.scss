@@ -128,6 +128,9 @@ q:after {
   content: '';
   content: none;
 }
+p {
+  display: unset;
+}
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -433,6 +436,27 @@ table {
     background-color: var(--light-gray);
   }
   cursor: not-allowed;
+}
+
+.dangerHTML {
+  line-height: 1.4;
+  p {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  h1,
+  img {
+    margin-bottom: 24px;
+  }
+  h2,
+  h3,
+  h4 {
+    margin: 12px 0;
+  }
+  strong {
+    line-height: 1.6;
+  }
 }
 
 /* Hide the scrollbar track */

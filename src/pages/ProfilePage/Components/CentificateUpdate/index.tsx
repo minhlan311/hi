@@ -71,7 +71,7 @@ const CentificateUpdate = (props: Props) => {
   }, [mentorDetail])
 
   const onFinish = (values: any) => {
-    mutate({ ...values, _id: mentorDetail?._id, userId: user._id })
+    mutate({ ...values, _id: mentorDetail?._id, userId: user._id, fullName: user.fullName })
   }
 
   const dataSelect = [

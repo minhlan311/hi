@@ -13,6 +13,7 @@ interface AppContextInterface {
   scaleScreen: boolean
   start: boolean
   volume: number
+  overView: { index: number; _id: string; anwser: any; anwserDetail: any }[]
   setConfigs: React.Dispatch<React.SetStateAction<Configs>>
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
@@ -20,6 +21,7 @@ interface AppContextInterface {
   setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
   setStart: React.Dispatch<React.SetStateAction<boolean>>
   setVolume: React.Dispatch<React.SetStateAction<number>>
+  setOverView: React.Dispatch<React.SetStateAction<{ index: number; _id: string; anwser: any; anwserDetail: any }[]>>
 }
 
 const initialAppContext: AppContextInterface = {
@@ -30,6 +32,7 @@ const initialAppContext: AppContextInterface = {
   scaleScreen: false,
   start: false,
   volume: 50,
+  overView: [],
   setConfigs: () => {},
   setIsAuthenticated: () => {},
   setProfile: () => {},
@@ -37,6 +40,7 @@ const initialAppContext: AppContextInterface = {
   setScaleScreen: () => {},
   setStart: () => {},
   setVolume: () => {},
+  setOverView: () => {},
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
@@ -53,6 +57,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
   const [start, setStart] = useState<boolean>(initialAppContext.start)
   const [volume, setVolume] = useState<number>(initialAppContext.volume)
+  const [overView, setOverView] = useState<{ index: number; _id: string; anwser: any; anwserDetail: any }[]>(
+    initialAppContext.overView,
+  )
 
   return (
     <AppContext.Provider
@@ -64,6 +71,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         scaleScreen,
         start,
         volume,
+        overView,
         setConfigs,
         setIsAuthenticated,
         setProfile,
@@ -71,6 +79,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setScaleScreen,
         setStart,
         setVolume,
+        setOverView,
       }}
     >
       {children}

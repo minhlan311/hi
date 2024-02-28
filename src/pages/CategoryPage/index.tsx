@@ -3,6 +3,7 @@ import categoryApi from '@/apis/categories.api'
 import classApi from '@/apis/class.api'
 import courseApi from '@/apis/course.api'
 import userApi from '@/apis/user.api'
+import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
 import CourseCard from '@/components/CourseCard'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import FilterAction from '@/components/FilterAction'
@@ -46,7 +47,7 @@ const CategoryPage = () => {
   }, [error])
 
   const parent = categoriesParent?.data
-
+  console.log(parent)
   const s1 = parent
   const s2 = s1?.children?.find((item) => item.slug === categorySlug!)
   const s3 = s2?.children?.find((item) => item.slug === subCategorySlug!)
@@ -85,23 +86,23 @@ const CategoryPage = () => {
 
   const [mentorData, setMentorData] = useState<SuccessResponse<MentorInfo[]>>()
 
-  function covString(string: string, count: number, direction: 'left' | 'right' = 'right'): string {
-    const arrStr = string.split(' ')
+  // function covString(string: string, count: number, direction: 'left' | 'right' = 'right'): string {
+  //   const arrStr = string.split(' ')
 
-    let selectedWords: string[]
+  //   let selectedWords: string[]
 
-    if (direction === 'left') {
-      selectedWords = arrStr.slice(0, count)
-    } else {
-      selectedWords = arrStr.slice(-count)
-    }
+  //   if (direction === 'left') {
+  //     selectedWords = arrStr.slice(0, count)
+  //   } else {
+  //     selectedWords = arrStr.slice(-count)
+  //   }
 
-    const capitalize = selectedWords.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  //   const capitalize = selectedWords.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
-    const result = capitalize.join(' ')
+  //   const result = capitalize.join(' ')
 
-    return result
-  }
+  //   return result
+  // }
 
   return (
     <LoadingCustom tip='Vui lòng chờ...' loading={isLoading} style={{ minHeight: '50vh' }}>
@@ -112,18 +113,14 @@ const CategoryPage = () => {
         (category?.name === 'Tin tức' && <NewsPage />) ||
         (category?.slug?.includes('giao-vien') && (
           <Header title={category?.name} padding={50}>
-            <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
+            <Space direction='vertical' size='large' className={'sp100'}>
               <FilterAction
                 type='user'
                 keyFilter='mentorData'
                 apiFind={userApi.findMentor}
                 page={current}
-                filterQuery={{
-                  categoryName: category?.name === 'Giáo viên' ? undefined : covString(category?.name, 2),
-                }}
                 callBackData={setMentorData}
-                limit={10}
-                checkQuery={Boolean(covString(category?.name, 2))}
+                limit={1}
               />
               <LoadingCustom loading={menuSlug?.includes('khoa-hoc') && courseLoad}>
                 {mentorData && mentorData?.totalDocs > 0 ? (
@@ -148,7 +145,13 @@ const CategoryPage = () => {
               />
             </Space>
           </Header>
-        )) || <div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
+        )) || (
+          <Header padding={'50px 0'}>
+            <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' style={{ marginBottom: 8 }} />
+            <h1>{categoriesParent && categoriesParent.data.name}</h1>
+            <div dangerouslySetInnerHTML={{ __html: category?.content as any }}></div>
+          </Header>
+        )
       ) : menuSlug?.includes('tin-tuc') ? (
         <div>
           {s2 && !subCategorySlug && <NewsPage />}
@@ -167,7 +170,7 @@ const CategoryPage = () => {
               ></WrapMore>
             ) : null}
             {category?.slug?.includes('giao-vien') && (
-              <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
+              <Space direction='vertical' size='large' className={'sp100'}>
                 <FilterAction
                   type='user'
                   keyFilter='mentorData'
@@ -202,7 +205,7 @@ const CategoryPage = () => {
             )}
 
             {s3 && s2 && !category?.slug.includes('giao-vien') && (
-              <Space direction='vertical' size='large' className={'sp100'} style={{ marginTop: 80 }}>
+              <Space direction='vertical' size='large' className={'sp100'}>
                 <h1>Khóa học {category?.slug.includes('luyen-thi') && ' luyện thi'}</h1>
                 <LoadingCustom loading={courseLoad}>
                   {coursesData && coursesData?.data?.totalDocs > 0 ? (

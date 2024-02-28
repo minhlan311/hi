@@ -177,7 +177,7 @@ const MentorInfor = ({ user, profile, md, fullSize }: Props) => {
                   </div>
                   <p
                     dangerouslySetInnerHTML={{ __html: user?.descriptions ? user?.descriptions : examDesc }}
-                    className={css.desc}
+                    className={'dangerHTML'}
                   ></p>
                   <Row gutter={[24, 6]}>
                     {getAssessmentDetail?.data?.totalDetailedAverages?.map((item) => (

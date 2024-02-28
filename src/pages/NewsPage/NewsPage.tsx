@@ -51,13 +51,13 @@ export default function NewsPage() {
 
   return (
     <Header padding={'50px 0'}>
-      <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' />
+      <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' style={{ marginBottom: 8 }} />
       <Row gutter={[24, 24]}>
         <Col span={24} md={14} lg={16}>
           <Space direction='vertical' size='large' className='sp100'>
             <h1>{categoriesParent ? categoriesParent.data.name : 'Tin tức'}</h1>
             {isLoading ? (
-              <LoadingCustom tip='Vui lòng chờ ...' />
+              <LoadingCustom tip='Vui lòng chờ ...' style={{ minHeight: '40vh' }} />
             ) : (
               data?.data?.docs &&
               data?.data?.docs?.map((item) => (
@@ -86,7 +86,7 @@ export default function NewsPage() {
           <Space direction='vertical' size='large' className='fixed sp100'>
             <h1>Bài viết mới nhất</h1>
             {isLoading ? (
-              <LoadingCustom tip='Vui lòng chờ ...' />
+              <LoadingCustom tip='Vui lòng chờ ...' style={{ minHeight: '40vh' }} />
             ) : (
               dataLimit?.data?.docs &&
               dataLimit?.data?.docs?.map((item) => (

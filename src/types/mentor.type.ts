@@ -45,4 +45,5 @@ export type MentorInfo = {
   certificate: string
   score: number
   experienceTime: number
+  fullName: string
 }

@@ -40,13 +40,12 @@ export default function NewsPageDetail({ slug }: { slug: string }) {
 
   return (
     <Header padding={'50px 0'}>
-      <Space direction='vertical' className='sp100' size={'large'}>
+      <Space direction='vertical' className='sp100 new-detail-main' size='large'>
         <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' />
         <LoadingCustom tip='Vui lòng chờ ...' loading={isLoading}>
-          <div className='title-box'>
-            <h1>{data?.data?.title}</h1>
-          </div>
-          <div className='box-desc' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
+          <h1 className='title-box'>{data?.data?.title}</h1>
+
+          <div className='dangerHTML' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
           <div className='other-news'>
             <h3 className='other-news-title '>Bài viết liên quan</h3>
             <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
