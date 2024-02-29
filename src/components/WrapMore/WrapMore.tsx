@@ -23,8 +23,8 @@ export default function WrapMore({ children, maxHeight = '80vh' }: Props) {
     <div className='sp100'>
       <div style={contentStyle}>{children}</div>
       <div className='show-more'>
-        <div className='blur'></div>
-        <ButtonCustom onClick={toggleExpand} type='link' className='link show-more-button'>
+        {!expanded && <div className='blur'></div>}
+        <ButtonCustom onClick={toggleExpand} type='link' className='link' align='center' style={{ width: '100%' }}>
           {expanded ? 'Ẩn bớt' : 'Xem thêm'}
         </ButtonCustom>
       </div>

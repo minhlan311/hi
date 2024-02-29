@@ -61,7 +61,7 @@ export default function NewsPage() {
             ) : (
               data?.data?.docs &&
               data?.data?.docs?.map((item) => (
-                <Link to={`/tin-tuc/${item?.category?.slug}/${item?.slug}`} key={item._id}>
+                <Link to={`/${menuSlug}/${item?.category?.slug}/${item?.slug}`} key={item._id}>
                   <Row gutter={[24, 12]}>
                     <Col span={24} lg={8}>
                       <ImageCustom
@@ -90,7 +90,7 @@ export default function NewsPage() {
             ) : (
               dataLimit?.data?.docs &&
               dataLimit?.data?.docs?.map((item) => (
-                <Link to={`/tin-tuc/${item?.category?.slug}/${item?.slug}`} key={item._id}>
+                <Link to={`/${menuSlug}/${item?.category?.slug}/${item?.slug}`} key={item._id}>
                   <div>
                     <ImageCustom
                       height='150px'
