@@ -64,7 +64,6 @@ export interface ClassState {
   createdBy: any
   description?: string
   courseData?: CoursesState
-  schedules?: string[]
   countStudents: number
   categoryId: string
   studentList: UserState[]

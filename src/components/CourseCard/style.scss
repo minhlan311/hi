@@ -1,0 +1,13 @@
+.card-course {
+  background: var(--lighish-white);
+  .ant-card-body {
+    height: 372px;
+  }
+  &:hover {
+    background: var(--whiteBg);
+  }
+  .title-course * {
+    color: var(--green);
+    font-size: 20px;
+  }
+}

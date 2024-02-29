@@ -1,6 +1,18 @@
+@import '../../GlobalStyles/responsive.scss';
+
 .messenger-button {
   animation: ripple 1500ms infinite;
-  bottom: 30px;
+  bottom: 70px;
+  @include respond-to(xl) {
+    bottom: 30px;
+  }
+  @include respond-to(xxl) {
+    bottom: 30px;
+  }
+  @include respond-to(lg) {
+    bottom: 30px;
+  }
+
   right: 25px;
   height: 45px;
   width: 45px;
