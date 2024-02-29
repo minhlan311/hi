@@ -109,18 +109,19 @@ const CourseCard = ({ item }: Props) => {
                   Lịch học: {!item?.class.length && 'Đang cập nhật'}
                 </Flex>
                 <Flex vertical style={{ marginLeft: 80 }}>
-                  {item?.class.length > 0 && (
+                  {item.class[0]?.event ? (
                     <ul>
                       {item.class[0]?.event?.schedules?.slice(0, 4).map((num, index) =>
                         index < 3 ? (
-                          <li key={num}>{formatDate(item.class[0].startDate, item.class[0].endDate, num)}</li>
+                          <li key={num}>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.start, num)}</li>
                         ) : (
                           <Popover
                             content={
                               <Space direction='vertical'>
                                 {item.class?.[0]?.event.schedules?.map((num, id) => (
                                   <p key={num}>
-                                    {id + 1}. <b>{formatDate(item.class[0].startDate, item.class[0].endDate, num)}</b>
+                                    {id + 1}.{' '}
+                                    <b>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</b>
                                   </p>
                                 ))}
                               </Space>
@@ -132,6 +133,8 @@ const CourseCard = ({ item }: Props) => {
                         ),
                       )}
                     </ul>
+                  ) : (
+                    'Đang cập nhật'
                   )}
                 </Flex>
               </Col>
