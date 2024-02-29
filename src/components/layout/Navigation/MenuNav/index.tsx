@@ -233,7 +233,7 @@ const MenuNav = ({ user, type }: Props) => {
             style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08),0 4px 12px rgba(0, 0, 0, 0.08)' }}
           >
             <div className={style.menu}>
-              <Flex justify='space-between' align='middle'>
+              <Flex justify='space-between' className={'sp100'}>
                 {categoriesData.map((item) => (
                   <div key={`${item._id}`} className={style.menuLabel}>
                     <Link to={`${item.href}`}>
