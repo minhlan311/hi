@@ -35,7 +35,7 @@ export default function Navigation({ user }: Props) {
   const users = useQuery({
     queryKey: ['userDetail'],
     queryFn: () => userApi.getUserDetail(user ? user._id : ''),
-    enabled: Boolean(user && user._id),
+    enabled: Boolean(user && user._id)
   })
 
   const { configs } = useContext(AppContext)
@@ -70,10 +70,10 @@ export default function Navigation({ user }: Props) {
     queryFn: () =>
       cartApi.getCartList({
         filterQuery: {
-          userId: user?._id,
-        },
+          userId: user?._id
+        }
       }),
-    enabled: Boolean(user?._id),
+    enabled: Boolean(user?._id)
   })
 
   const [open, setOpen] = useState(false)
@@ -151,7 +151,7 @@ export default function Navigation({ user }: Props) {
                         <Space
                           style={{
                             width: '100%',
-                            height: '100%',
+                            height: '100%'
                           }}
                         >
                           {user
@@ -178,7 +178,7 @@ export default function Navigation({ user }: Props) {
                             <BsFillTelephoneFill />
                           </div>
                           <div>
-                            <p className='mb-5 hotline'>Hotline</p>
+                            {/* <p className='mb-5 hotline'>Hotline</p> */}
                             <b>{configs?.hotline}</b>
                           </div>
                         </Space>
