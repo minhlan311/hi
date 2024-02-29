@@ -13,15 +13,19 @@ interface AppContextInterface {
   scaleScreen: boolean
   start: boolean
   volume: number
-  overView: { index: number; _id: string; anwser: any; anwserDetail: any }[]
+  time: number
+  overView: { index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]
   setConfigs: React.Dispatch<React.SetStateAction<Configs>>
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
   setQuestionList: React.Dispatch<React.SetStateAction<{ _id: string; data: string[] }[]>>
   setScaleScreen: React.Dispatch<React.SetStateAction<boolean>>
   setStart: React.Dispatch<React.SetStateAction<boolean>>
+  setTime: React.Dispatch<React.SetStateAction<number>>
   setVolume: React.Dispatch<React.SetStateAction<number>>
-  setOverView: React.Dispatch<React.SetStateAction<{ index: number; _id: string; anwser: any; anwserDetail: any }[]>>
+  setOverView: React.Dispatch<
+    React.SetStateAction<{ index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>
+  >
 }
 
 const initialAppContext: AppContextInterface = {
@@ -32,6 +36,7 @@ const initialAppContext: AppContextInterface = {
   scaleScreen: false,
   start: false,
   volume: 50,
+  time: 0,
   overView: [],
   setConfigs: () => {},
   setIsAuthenticated: () => {},
@@ -39,6 +44,7 @@ const initialAppContext: AppContextInterface = {
   setQuestionList: () => {},
   setScaleScreen: () => {},
   setStart: () => {},
+  setTime: () => {},
   setVolume: () => {},
   setOverView: () => {},
 }
@@ -57,7 +63,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [scaleScreen, setScaleScreen] = useState<boolean>(initialAppContext.scaleScreen)
   const [start, setStart] = useState<boolean>(initialAppContext.start)
   const [volume, setVolume] = useState<number>(initialAppContext.volume)
-  const [overView, setOverView] = useState<{ index: number; _id: string; anwser: any; anwserDetail: any }[]>(
+  const [time, setTime] = useState<number>(initialAppContext.time)
+  const [overView, setOverView] = useState<{ index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>(
     initialAppContext.overView,
   )
 
@@ -71,6 +78,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         scaleScreen,
         start,
         volume,
+        time,
         overView,
         setConfigs,
         setIsAuthenticated,
@@ -79,6 +87,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setScaleScreen,
         setStart,
         setVolume,
+        setTime,
         setOverView,
       }}
     >

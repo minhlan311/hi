@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { stateAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
+import { AppContext } from '@/contexts/app.context'
 import { Skill } from '@/interface/exam'
 import { Flex, Modal, Space } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { AudioVisualizer, LiveAudioVisualizer } from 'react-audio-visualize'
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
 import { GrPowerReset } from 'react-icons/gr'
@@ -11,19 +13,36 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import './Speaking.scss'
 
 type Props = {
-  nextSteps: React.Dispatch<React.SetStateAction<number>>
   data: Skill
-  submit: any
+  nextSteps: React.Dispatch<React.SetStateAction<number>>
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Speaking({ nextSteps, data, submit }: Props) {
+export default function Speaking({ data, nextSteps, setSubmit }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const { setOverView, setStart } = useContext(AppContext)
+
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition()
 
   const handleOk = () => {
-    submit(true)
-    nextSteps(6)
-    setIsModalOpen(false)
+    stateAction(
+      setOverView,
+      data?.questions?.[0]._id as string,
+      {
+        index: 1,
+        _id: data?.questions?.[0]._id,
+        anwser: transcript,
+        correctAnswers: transcript,
+      },
+      'update',
+    )
+    setStart(false)
+    setTimeout(() => {
+      setSubmit(true)
+      nextSteps(6)
+      setIsModalOpen(false)
+    }, 300)
   }
 
   const [blob, setBlob] = useState<any>()
@@ -33,8 +52,6 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>
   }
-
-  console.log(transcript)
 
   return (
     <div className='reading'>
@@ -55,7 +72,6 @@ export default function Speaking({ nextSteps, data, submit }: Props) {
         desc='Nhấn vào biểu tượng micro và trả lời câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={7}
-        questionsLength={data?.questions?.length as number}
         buttonSubmit={<ButtonCustom onClick={() => setIsModalOpen(true)}>Submit</ButtonCustom>}
       />
 

@@ -106,36 +106,32 @@ const CourseCard = ({ item }: Props) => {
               <Col span={24}>
                 <Flex align='center'>
                   <GrSchedulePlay style={{ marginRight: 5 }} />
-                  Lịch học: {!item?.class.length && 'Đang cập nhật'}
+                  Lịch học: {(!item?.class.length || !item.class[0]?.event) && 'Đang cập nhật'}
                 </Flex>
                 <Flex vertical style={{ marginLeft: 80 }}>
-                  {item.class[0]?.event ? (
-                    <ul>
-                      {item.class[0]?.event?.schedules?.slice(0, 4).map((num, index) =>
-                        index < 3 ? (
-                          <li key={num}>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.start, num)}</li>
-                        ) : (
-                          <Popover
-                            content={
-                              <Space direction='vertical'>
-                                {item.class?.[0]?.event.schedules?.map((num, id) => (
-                                  <p key={num}>
-                                    {id + 1}.{' '}
-                                    <b>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</b>
-                                  </p>
-                                ))}
-                              </Space>
-                            }
-                            title='Lịch khai giảng'
-                          >
-                            <p className='link'>Xem thêm</p>
-                          </Popover>
-                        ),
-                      )}
-                    </ul>
-                  ) : (
-                    'Đang cập nhật'
-                  )}
+                  <ul>
+                    {item.class[0]?.event?.schedules?.slice(0, 4).map((num, index) =>
+                      index < 3 ? (
+                        <li key={num}>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</li>
+                      ) : (
+                        <Popover
+                          content={
+                            <Space direction='vertical'>
+                              {item.class?.[0]?.event.schedules?.map((num, id) => (
+                                <p key={num}>
+                                  {id + 1}.{' '}
+                                  <b>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</b>
+                                </p>
+                              ))}
+                            </Space>
+                          }
+                          title='Lịch khai giảng'
+                        >
+                          <p className='link'>Xem thêm</p>
+                        </Popover>
+                      ),
+                    )}
+                  </ul>
                 </Flex>
               </Col>
             </Row>

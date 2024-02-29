@@ -5,8 +5,10 @@
   }
 }
 
-.h3-newpage {
-  color: var(--red);
+.h3-newpage :hover {
+  * {
+    color: var(--red);
+  }
 }
 .box-desc {
   img {
