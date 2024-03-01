@@ -19,6 +19,8 @@ type Props = {
   direction?: 'right' | 'center' | 'column' | 'column-right' | 'column-center'
   showDiscountFromCode?: boolean
   showTotalDiscount?: boolean
+  textPrice?: string
+  textColor?: string
 }
 
 const PriceCalculator = (props: Props) => {
@@ -33,6 +35,8 @@ const PriceCalculator = (props: Props) => {
     showDiscountFromCode = false,
     showTotalDiscount = false,
     direction,
+    textPrice,
+    textColor,
   } = props
 
   const total = useTotalCalculator(price, discount ? discount : 0)
@@ -87,12 +91,14 @@ const PriceCalculator = (props: Props) => {
         className={css.price}
         style={direction === 'right' || direction === 'column-right' ? { justifyContent: 'flex-end' } : {}}
       >
-        <p className={css.title} style={{ fontSize: priceSize }}>
-          Học phí:{' '}
-        </p>
-        <div className={css.title} style={{ fontSize: priceSize }}>
+        {textPrice && (
+          <p className={css.title} style={{ fontSize: priceSize, color: textColor }}>
+            {textPrice}:{' '}
+          </p>
+        )}
+        <div className={css.title} style={{ fontSize: priceSize, color: textColor }}>
           {total.lastPrice === 0 ? (
-            <h2 className={css.free} style={{ fontSize: priceSize }}>
+            <h2 className={css.free} style={{ fontSize: priceSize, color: textColor }}>
               Miễn phí
             </h2>
           ) : (

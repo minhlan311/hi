@@ -44,14 +44,18 @@ const CourseCard = ({ item }: Props) => {
         <Flex vertical justify='space-between' style={{ height: '100%' }}>
           <Space direction='vertical' className='sp100'>
             <Card.Meta title={item.name} className='title-course' />
-            <Space>
+
+            <Flex align='center' gap={12}>
               <Avatar avtUrl={item.mentor?.avatarUrl} userData={item.mentor} />
-              {item.mentor?.fullName}
-            </Space>
-            <Space>
-              <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
-              {`(${formatNumber(item.countAssessment)} Đánh giá)`}
-            </Space>
+
+              <div>
+                <b>{item.mentor?.fullName}</b>
+                <Space>
+                  <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
+                  {`(${formatNumber(item.countAssessment)} Đánh giá)`}
+                </Space>
+              </div>
+            </Flex>
             <Row justify='space-between' gutter={[12, 12]}>
               <Col span={24}>
                 <Flex align='center'>
@@ -140,7 +144,14 @@ const CourseCard = ({ item }: Props) => {
             <Divider style={{ margin: '5px 0' }} />
 
             <Flex justify='space-between'>
-              <PriceCalculator price={item.plan === 'FREE' ? 0 : item.cost} discount={0} showTotal priceSize={20} />
+              <PriceCalculator
+                textPrice='Học phí'
+                price={item.plan === 'FREE' ? 0 : item.cost}
+                discount={0}
+                showTotal
+                priceSize={20}
+                textColor='var(--red)'
+              />
             </Flex>
           </div>
         </Flex>
