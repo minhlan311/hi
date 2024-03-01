@@ -25,7 +25,7 @@ export default function ContactForm() {
   }
 
   return (
-    <Header background='green' size='sm' padding={'60px 0'}>
+    <Header background='#d72831' size='sm' padding={'60px 0'}>
       <Row align='middle' gutter={[50, 50]}>
         <Col span={24} md={12}>
           <Image src='https://i.ytimg.com/vi/QlkPQCeeA04/maxresdefault.jpg' preview={false} />
