@@ -56,7 +56,7 @@ const OpeningPage = () => {
                         <b>{item.length}</b>
                         suất học bổng lên đến
                         <b>
-                          <PriceCalculator price={item.scholarship} />
+                          <PriceCalculator price={item.scholarship} priceSize={24} />
                         </b>
                       </p>
                     </Flex>

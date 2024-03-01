@@ -3,8 +3,8 @@ import { formatNumber } from '@/common'
 import { CoursesState } from '@/interface/courses'
 import { Card, Col, Divider, Flex, Popover, Rate, Row, Space } from 'antd'
 import moment from 'moment-timezone'
-import { GrSchedulePlay } from 'react-icons/gr'
 import { LuBookMarked, LuCalendarDays, LuUsers } from 'react-icons/lu'
+import { MdOutlineEditCalendar } from 'react-icons/md'
 import { TbBrandDaysCounter } from 'react-icons/tb'
 import { Link } from 'react-router-dom'
 import Avatar from '../Avatar/Avatar'
@@ -49,7 +49,7 @@ const CourseCard = ({ item }: Props) => {
               <Avatar avtUrl={item.mentor?.avatarUrl} userData={item.mentor} />
 
               <div>
-                <b>{item.mentor?.fullName}</b>
+                <b style={{ display: 'block' }}>{item.mentor?.fullName}</b>
                 <Space>
                   <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
                   {`(${formatNumber(item.countAssessment)} Đánh giá)`}
@@ -59,14 +59,13 @@ const CourseCard = ({ item }: Props) => {
             <Row justify='space-between' gutter={[12, 12]}>
               <Col span={24}>
                 <Flex align='center'>
-                  <LuBookMarked style={{ marginRight: 5 }} />
+                  <LuBookMarked className='icon-card' />
                   SL bài học: {item.countTopics}
                 </Flex>
               </Col>
-
               <Col span={24}>
                 <Flex align='center'>
-                  <LuUsers style={{ marginRight: 5 }} />
+                  <LuUsers className='icon-card' />
                   SL học viên đã tham gia:{' '}
                   {`${formatNumber(item.countStudents)} / ${
                     item?.class.length ? formatNumber(item?.class?.[0]?.limitStudent) : 0
@@ -75,7 +74,7 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col>
                 <Flex align='center'>
-                  <TbBrandDaysCounter style={{ marginRight: 5 }} />
+                  <TbBrandDaysCounter className='icon-card' />
                   {item?.class.length
                     ? `${moment(item?.class[0]?.endDate).diff(moment(item?.class[0]?.startDate), 'weeks')} Tuần học`
                     : 'Đang cập nhật'}
@@ -83,7 +82,7 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col>
                 <Flex align='center'>
-                  <LuCalendarDays style={{ marginRight: 5 }} />
+                  <LuCalendarDays className='icon-card' />
                   {item?.class.length > 0
                     ? item?.class?.slice(0, 1).map((i) => (
                         <Popover
@@ -109,7 +108,7 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col span={24}>
                 <Flex align='center'>
-                  <GrSchedulePlay style={{ marginRight: 5 }} />
+                  <MdOutlineEditCalendar className='icon-card' />
                   Lịch học: {(!item?.class.length || !item.class[0]?.event) && 'Đang cập nhật'}
                 </Flex>
                 <Flex vertical style={{ marginLeft: 80 }}>
