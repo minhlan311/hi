@@ -1,25 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
-import { AppContext } from '@/contexts/app.context'
+import { ExamResultsState } from '@/interface/exam'
 import { UndoOutlined } from '@ant-design/icons'
 import { Flex, Space } from 'antd'
-import { useContext, useEffect } from 'react'
 import './Result.scss'
 
 type Props = {
-  total: any
+  result: ExamResultsState
 }
 
-export default function Result({ total }: Props) {
-  const { setStart } = useContext(AppContext)
-
+export default function Result({ result }: Props) {
   const handleNextSteps = () => {
     window.location.reload()
   }
 
-  useEffect(() => {
-    setStart(false)
-  }, [])
+  console.log(result)
 
   return (
     <div style={{ height: '100%' }}>
@@ -28,10 +23,11 @@ export default function Result({ total }: Props) {
 
         <Space direction='vertical' size='large'>
           <Flex align='center' justify='center' gap={24}>
-            <h3>LISTENING : {total?.LISTENING}</h3>
-            <h3>READING :{total?.READING}</h3>
-            <h3>WRITING : {total?.WRITING}</h3>
-            <h3>SPEAKING : {total?.SPEAKING}</h3>
+            {/* <h3>LISTENING : {result?.LISTENING}</h3>
+            <h3>READING :{result?.READING}</h3>
+            <h3>WRITING : {result?.WRITING}</h3>
+            <h3>SPEAKING : {result?.SPEAKING}</h3> */}
+            1
           </Flex>
           <p>
             Thời gian làm bài: <b>123</b> phút

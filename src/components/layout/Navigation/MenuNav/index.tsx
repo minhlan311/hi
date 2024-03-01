@@ -7,11 +7,11 @@ import { UserState } from '@/interface/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Col, Divider, Drawer, Flex, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
-import { BiSolidUserCircle } from 'react-icons/bi'
+import { BiBookContent, BiSolidBookContent, BiSolidUserCircle } from 'react-icons/bi'
 import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
 import { IoCalendar, IoCalendarOutline, IoChevronDown, IoSchoolOutline } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
-import { PiExam, PiExamFill, PiUserCircle } from 'react-icons/pi'
+import { PiUserCircle } from 'react-icons/pi'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import useResponsives from '../../../../hooks/useResponsives'
 import AvatarDropMenu from '../../AvatarDropMenu'
@@ -60,12 +60,18 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
   }, [location])
   const test = categoriesData?.find((item) => item.label === 'Luyện thi')
   const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
-  const choice = categoriesData?.find((item) => item.label === 'Trắc nghiệm')
+  const course = categoriesData?.find((item) => item.label === 'Khóa học')
 
   useEffect(() => {
     if (categoriesData.length > 0) {
       setMobileMenu([
         { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
+        {
+          label: 'Khóa học',
+          icon: <BiBookContent />,
+          activeIcon: <BiSolidBookContent />,
+          href: `${course?.href}`,
+        },
         {
           label: 'Luyện thi',
           icon: <IoSchoolOutline />,
@@ -78,12 +84,7 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
           activeIcon: <IoCalendar />,
           href: `${opening?.href}`,
         },
-        {
-          label: 'Trắc nghiệm',
-          icon: <PiExam />,
-          activeIcon: <PiExamFill />,
-          href: `${choice?.href}`,
-        },
+
         { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
       ])
     }

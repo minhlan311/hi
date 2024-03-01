@@ -21,6 +21,7 @@ type Props = {
   spaceStyle?: React.CSSProperties
   showAlex?: boolean
   callbackTimeEnd?: React.Dispatch<React.SetStateAction<number>>
+  callbackCoudown?: React.Dispatch<React.SetStateAction<number>>
   onListenEvent?: () => void
 }
 
@@ -41,6 +42,7 @@ const CountDownTimer = (props: Props) => {
     spaceStyle,
     showAlex = true,
     callbackTimeEnd,
+    callbackCoudown,
     onListenEvent,
   } = props
   const now = moment()
@@ -100,6 +102,7 @@ const CountDownTimer = (props: Props) => {
 
   useEffect(() => {
     setStopedTime(countdown)
+    callbackCoudown && callbackCoudown(countdown)
 
     if (countdown === 0) {
       onListenEvent && onListenEvent()

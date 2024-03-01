@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import examApi from '@/apis/exam.api'
-import { ExamState, Skill } from '@/interface/exam'
+import { AppContext } from '@/contexts/app.context'
+import { ExamResultsState, ExamState, Skill } from '@/interface/exam'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Listening from './components/Listening/Listening'
 import PreListening from './components/Listening/PreListening'
@@ -13,63 +14,67 @@ import TestSound from './components/TestSound/TestSound'
 import Writing from './components/Writing/Writing'
 
 export default function ExamPage() {
+  const { overView, time } = useContext(AppContext)
+
+  const [current, setCurrent] = useState(0)
   const [listeningData, setListeningData] = useState<Skill[]>([])
   const [writingData, setWritingData] = useState<Skill[]>([])
   const [readingData, setReadingData] = useState<Skill[]>([])
   const [speakingData, setSpeakingData] = useState<Skill[]>([])
-  const [listeningDataCallback, setListeningDataCallback] = useState([])
-  const [readingDataCallback, setReadingDataCallback] = useState([])
-  const [dataSubmit, setDataSubmit] = useState<any>()
-  const [dataSubmitAll, setDataSubmitAll] = useState<any>()
-  const [current, setCurrent] = useState(0)
-  const [call, setCall] = useState<boolean>(false)
-  const [total, setTotal] = useState<any>()
+  const [submit, setSubmit] = useState<boolean>(false)
+  const [result, setResult] = useState<ExamResultsState>()
   const { id } = useParams()
-  console.log(listeningDataCallback)
 
   const queryClient = useQueryClient()
   const examDetail = queryClient.getQueryData<{ data: ExamState }>(['examDetail'])
 
   const dataExam = examDetail?.data
 
-  const dataQuestion = dataExam?.skillData
+  // const dataQuestion = dataExam?.skillData
 
-  useEffect(() => {
-    const updatedData = dataQuestion?.map((item) => {
-      switch (item.skill) {
-        case 'LISTENING':
-          return { ...item, questions: listeningData }
-        case 'READING':
-          return { ...item, questions: readingDataCallback }
-        case 'WRITING':
-          return { ...item, questions: writingData }
-        case 'SPEAKING':
-          return { ...item, questions: speakingData }
-        default:
-          return item
-      }
-    })
-    setDataSubmit(updatedData)
-  }, [listeningData, writingData, readingDataCallback, speakingData, dataExam])
+  // useEffect(() => {
+  //   const updatedData = dataQuestion?.map((item) => {
+  //     switch (item.skill) {
+  //       case 'LISTENING':
+  //         return { ...item, questions: listeningData }
+  //       case 'READING':
+  //         return { ...item, questions: readingData }
+  //       case 'WRITING':
+  //         return { ...item, questions: writingData }
+  //       case 'SPEAKING':
+  //         return { ...item, questions: speakingData }
+  //       default:
+  //         return item
+  //     }
+  //   })
+  //   console.log({ updatedData })
+  // }, [listeningData, writingData, readingData, speakingData, dataExam])
 
-  useEffect(() => {
-    setDataSubmitAll(dataExam)
-  }, [dataQuestion])
+  // useEffect(() => {
+  //   setDataSubmitAll(dataExam)
+  // }, [dataQuestion])
 
-  useEffect(() => {
-    setDataSubmitAll({ ...dataSubmitAll, skillData: dataSubmit })
-  }, [dataSubmit])
+  // useEffect(() => {
+  //   setDataSubmitAll({ ...dataSubmitAll, skillData: dataSubmit })
+  // }, [dataSubmit])
 
   const mutateSubmit = useMutation({
     mutationFn: (body: any) => examApi.examSubmit(body),
-    onSuccess: (data) => setTotal(data?.data),
+    onSuccess: (data) => setResult(data?.data as any),
   })
 
   useEffect(() => {
-    if (call) {
-      mutateSubmit.mutate({ ...dataSubmitAll, _id: id })
+    if (submit) {
+      const payload = {
+        _id: id,
+        questions: overView,
+        time,
+      }
+
+      console.log('submit', payload)
+      mutateSubmit.mutate(payload)
     }
-  }, [call])
+  }, [submit])
 
   useEffect(() => {
     if (dataExam) {
@@ -87,11 +92,11 @@ export default function ExamPage() {
     },
     {
       title: 'Listening',
-      content: <Listening data={listeningData[0]} nextSteps={setCurrent} callBackData={setListeningDataCallback} />,
+      content: <Listening data={listeningData[0]} nextSteps={setCurrent} />,
     },
     {
       title: 'Reading',
-      content: <Reading data={readingData[0]} nextSteps={setCurrent} callBackData={setReadingDataCallback} />,
+      content: <Reading data={readingData[0]} nextSteps={setCurrent} />,
     },
     {
       title: 'Writing',
@@ -99,11 +104,11 @@ export default function ExamPage() {
     },
     {
       title: 'Speaking',
-      content: <Speaking data={speakingData[0]} nextSteps={setCurrent} submit={setCall} />,
+      content: <Speaking data={speakingData[0]} nextSteps={setCurrent} setSubmit={setSubmit} />,
     },
     {
       title: 'Last',
-      content: <Result total={total} />,
+      content: <Result result={result as any} />,
     },
   ]
 

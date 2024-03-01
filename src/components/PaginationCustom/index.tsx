@@ -69,7 +69,6 @@ const PaginationCustom = (props: Props) => {
             total={totalData}
             onChange={onChange}
             showSizeChanger={false}
-            showQuickJumper
           />
         </Flex>
       )

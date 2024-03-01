@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Card, Space } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import Paragraph from 'antd/es/typography/Paragraph'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import './NewsPageDetail.scss'
 // import { News } from '@/types/news.type'
 import BreadCrumbsDynamic from '@/components/BreadCrumbsDynamic'
@@ -21,17 +21,18 @@ export default function NewsPageDetail({ slug }: { slug: string }) {
     queryFn: () => newsApi.getDetailSlug(slug),
   })
 
+  const { menuSlug } = useParams()
+
   const { data: dataNewsAll } = useQuery({
-    queryKey: ['newsAll'],
-    queryFn: () =>
-      newsApi.findNew({
+    queryKey: ['dataNewsAll'],
+    queryFn: () => {
+      return newsApi.findNew({
         filterQuery: {},
         options: {
           limit: 10,
-          pagination: false,
-          sort: { createdAt: -1 },
         },
-      }),
+      })
+    },
   })
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function NewsPageDetail({ slug }: { slug: string }) {
             <h3 className='other-news-title '>Bài viết liên quan</h3>
             <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>
               {dataNewsAll?.data?.docs?.map((item) => (
-                <>
+                <Link className='h3-newpage' to={`/${menuSlug}/${item?.category?.slug}/${item?.slug}`}>
                   <Card
                     style={{
                       height: '320px',
@@ -65,15 +66,11 @@ export default function NewsPageDetail({ slug }: { slug: string }) {
                     }
                   >
                     <Meta
-                      title={
-                        <Link className='dt-link' to={`/tin-tuc/${item?.id}`}>
-                          {item?.title}
-                        </Link>
-                      }
+                      title={item?.title}
                       description={<Paragraph ellipsis={{ rows: 4 }}>{item?.description}</Paragraph>}
                     />
                   </Card>
-                </>
+                </Link>
               ))}
             </SliderCustom>
           </div>

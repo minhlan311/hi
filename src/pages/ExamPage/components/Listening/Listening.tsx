@@ -7,12 +7,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import QuestionsRender from '../QuestionRender'
 
 type Props = {
-  callBackData: any
   data: Skill
   nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Listening({ nextSteps, data }: Props) {
+export default function Listening({ data, nextSteps }: Props) {
   const { volume } = useContext(AppContext)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [isAudioPlayed, setIsAudioPlayed] = useState(false)
@@ -42,7 +41,6 @@ export default function Listening({ nextSteps, data }: Props) {
         desc='Hãy nghe đoạn âm thanh và trả lời các câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={3}
-        questionsLength={data?.questions?.length as number}
       />
 
       <audio
@@ -56,9 +54,7 @@ export default function Listening({ nextSteps, data }: Props) {
       >
         Your browser does not support the audio element.
       </audio>
-      {data && (
-        <QuestionsRender data={data?.questions?.length ? data.questions : []} callbackSubmit={(e) => console.log(e)} />
-      )}
+      {data && <QuestionsRender data={data?.questions?.length ? data.questions : []} />}
     </div>
   )
 }

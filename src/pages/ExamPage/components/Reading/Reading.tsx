@@ -2,40 +2,16 @@
 import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
 import useResponsives from '@/hooks/useResponsives'
 import { Skill } from '@/interface/exam'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import QuestionsRender from '../QuestionRender'
 import './Reading.scss'
 
-type Choice = {
-  answer: string
-  isChosen: boolean
-}
-
-type Question = {
-  _id: string
-  question: string
-  choices: Choice[]
-}
-
 type Props = {
-  nextSteps: React.Dispatch<React.SetStateAction<number>>
   data: Skill
-  callBackData: any
+  nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Reading({ nextSteps, data, callBackData }: Props) {
-  const [questions, setQuestions] = useState<Question[]>([])
-
-  useEffect(() => {
-    callBackData(questions)
-  }, [questions])
-
-  useEffect(() => {
-    if (data && data.questions) {
-      setQuestions(data.questions)
-    }
-  }, [data])
-
+export default function Reading({ data, nextSteps }: Props) {
   const { sm } = useResponsives()
   const [dividerPosition, setDividerPosition] = useState()
 
@@ -61,7 +37,6 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
         desc='Đọc nội dung và trả lời các câu hỏi bên dưới.'
         nextSteps={nextSteps}
         step={4}
-        questionsLength={data?.questions?.length as number}
       />
 
       <div className='split-screen'>
@@ -80,10 +55,7 @@ export default function Reading({ nextSteps, data, callBackData }: Props) {
           className='right-panel'
           style={sm ? { height: `calc(100% - ${dividerPosition}px)` } : { width: `calc(100% - ${dividerPosition}px)` }}
         >
-          <QuestionsRender
-            data={data?.questions?.length ? data.questions : []}
-            callbackSubmit={(e) => console.log(e)}
-          />
+          <QuestionsRender data={data?.questions?.length ? data.questions : []} />
         </div>
       </div>
     </div>

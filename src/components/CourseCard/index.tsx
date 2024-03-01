@@ -3,8 +3,8 @@ import { formatNumber } from '@/common'
 import { CoursesState } from '@/interface/courses'
 import { Card, Col, Divider, Flex, Popover, Rate, Row, Space } from 'antd'
 import moment from 'moment-timezone'
-import { GrSchedulePlay } from 'react-icons/gr'
 import { LuBookMarked, LuCalendarDays, LuUsers } from 'react-icons/lu'
+import { MdOutlineEditCalendar } from 'react-icons/md'
 import { TbBrandDaysCounter } from 'react-icons/tb'
 import { Link } from 'react-router-dom'
 import Avatar from '../Avatar/Avatar'
@@ -44,25 +44,28 @@ const CourseCard = ({ item }: Props) => {
         <Flex vertical justify='space-between' style={{ height: '100%' }}>
           <Space direction='vertical' className='sp100'>
             <Card.Meta title={item.name} className='title-course' />
-            <Space>
+
+            <Flex align='center' gap={12}>
               <Avatar avtUrl={item.mentor?.avatarUrl} userData={item.mentor} />
-              {item.mentor?.fullName}
-            </Space>
-            <Space>
-              <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
-              {`(${formatNumber(item.countAssessment)} Đánh giá)`}
-            </Space>
+
+              <div>
+                <b style={{ display: 'block' }}>{item.mentor?.fullName}</b>
+                <Space>
+                  <Rate value={item.assessment?.totalAssessmentsAverages} style={{ fontSize: 14 }} allowHalf disabled />
+                  {`(${formatNumber(item.countAssessment)} Đánh giá)`}
+                </Space>
+              </div>
+            </Flex>
             <Row justify='space-between' gutter={[12, 12]}>
               <Col span={24}>
                 <Flex align='center'>
-                  <LuBookMarked style={{ marginRight: 5 }} />
+                  <LuBookMarked className='icon-card' />
                   SL bài học: {item.countTopics}
                 </Flex>
               </Col>
-
               <Col span={24}>
                 <Flex align='center'>
-                  <LuUsers style={{ marginRight: 5 }} />
+                  <LuUsers className='icon-card' />
                   SL học viên đã tham gia:{' '}
                   {`${formatNumber(item.countStudents)} / ${
                     item?.class.length ? formatNumber(item?.class?.[0]?.limitStudent) : 0
@@ -71,7 +74,7 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col>
                 <Flex align='center'>
-                  <TbBrandDaysCounter style={{ marginRight: 5 }} />
+                  <TbBrandDaysCounter className='icon-card' />
                   {item?.class.length
                     ? `${moment(item?.class[0]?.endDate).diff(moment(item?.class[0]?.startDate), 'weeks')} Tuần học`
                     : 'Đang cập nhật'}
@@ -79,7 +82,7 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col>
                 <Flex align='center'>
-                  <LuCalendarDays style={{ marginRight: 5 }} />
+                  <LuCalendarDays className='icon-card' />
                   {item?.class.length > 0
                     ? item?.class?.slice(0, 1).map((i) => (
                         <Popover
@@ -105,37 +108,33 @@ const CourseCard = ({ item }: Props) => {
               </Col>
               <Col span={24}>
                 <Flex align='center'>
-                  <GrSchedulePlay style={{ marginRight: 5 }} />
-                  Lịch học: {!item?.class.length && 'Đang cập nhật'}
+                  <MdOutlineEditCalendar className='icon-card' />
+                  Lịch học: {(!item?.class.length || !item.class[0]?.event) && 'Đang cập nhật'}
                 </Flex>
                 <Flex vertical style={{ marginLeft: 80 }}>
-                  {item.class[0]?.event ? (
-                    <ul>
-                      {item.class[0]?.event?.schedules?.slice(0, 4).map((num, index) =>
-                        index < 3 ? (
-                          <li key={num}>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.start, num)}</li>
-                        ) : (
-                          <Popover
-                            content={
-                              <Space direction='vertical'>
-                                {item.class?.[0]?.event.schedules?.map((num, id) => (
-                                  <p key={num}>
-                                    {id + 1}.{' '}
-                                    <b>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</b>
-                                  </p>
-                                ))}
-                              </Space>
-                            }
-                            title='Lịch khai giảng'
-                          >
-                            <p className='link'>Xem thêm</p>
-                          </Popover>
-                        ),
-                      )}
-                    </ul>
-                  ) : (
-                    'Đang cập nhật'
-                  )}
+                  <ul>
+                    {item.class[0]?.event?.schedules?.slice(0, 4).map((num, index) =>
+                      index < 3 ? (
+                        <li key={num}>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</li>
+                      ) : (
+                        <Popover
+                          content={
+                            <Space direction='vertical'>
+                              {item.class?.[0]?.event.schedules?.map((num, id) => (
+                                <p key={num}>
+                                  {id + 1}.{' '}
+                                  <b>{formatDate(item.class[0]?.event?.start, item.class[0]?.event?.end, num)}</b>
+                                </p>
+                              ))}
+                            </Space>
+                          }
+                          title='Lịch khai giảng'
+                        >
+                          <p className='link'>Xem thêm</p>
+                        </Popover>
+                      ),
+                    )}
+                  </ul>
                 </Flex>
               </Col>
             </Row>
@@ -144,7 +143,14 @@ const CourseCard = ({ item }: Props) => {
             <Divider style={{ margin: '5px 0' }} />
 
             <Flex justify='space-between'>
-              <PriceCalculator price={item.plan === 'FREE' ? 0 : item.cost} discount={0} showTotal priceSize={20} />
+              <PriceCalculator
+                textPrice='Học phí'
+                price={item.plan === 'FREE' ? 0 : item.cost}
+                discount={0}
+                showTotal
+                priceSize={20}
+                textColor='var(--red)'
+              />
             </Flex>
           </div>
         </Flex>

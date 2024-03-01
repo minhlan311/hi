@@ -2,6 +2,8 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import Logo from '@/components/Logo/Logo'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
+import { ExamState } from '@/interface/exam'
+import { useQueryClient } from '@tanstack/react-query'
 import { Card, Col, Flex, Modal, Row, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
@@ -13,15 +15,16 @@ type Props = {
   desc: string
   step: number
   buttonSubmit?: React.ReactNode
-  questionsLength: number
   nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
 const NavigationTest = (props: Props) => {
   const { overView } = useContext(AppContext)
   const { sm } = useResponsives()
-  const { skillName, nextSkillName, desc, step = 0, buttonSubmit, questionsLength, nextSteps } = props
+  const { skillName, nextSkillName, desc, step = 0, buttonSubmit, nextSteps } = props
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
+  const examDetail = queryClient.getQueryData<{ data: ExamState }>(['examDetail'])
 
   const handleOk = () => {
     nextSteps(step)
@@ -50,6 +53,8 @@ const NavigationTest = (props: Props) => {
       })
     }
   }
+
+  const totalQuestions = examDetail?.data.countQuestionsBySkill.reduce((total, item) => total + item.countQuestions, 0)
 
   return (
     <Card size='small'>
@@ -103,9 +108,8 @@ const NavigationTest = (props: Props) => {
         <Space direction='vertical' size='large' className='sp100'>
           <i>* Cửa sổ này chỉ để xem lại câu trả lời của bạn, bạn không thể thay đổi câu trả lời ở đây!</i>
           <div>
-            <h3>{skillName}</h3>
             <Row gutter={[24, 24]}>
-              {Array.from({ length: questionsLength }).map((_, index) => (
+              {Array.from({ length: totalQuestions as number }).map((_, index) => (
                 <Col span={12} md={6} key={index}>
                   <Space>
                     <p>Q{index + 1}:</p> <b>{overView[index]?.anwser}</b>
