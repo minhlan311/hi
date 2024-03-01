@@ -39,6 +39,7 @@ export interface Skill {
   url?: any | any[]
   questions?: QuestionState[]
   countQuestions: number | any
+  prevNum?: number
 }
 export interface ExamState {
   _id: string

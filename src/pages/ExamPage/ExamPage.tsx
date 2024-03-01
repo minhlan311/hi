@@ -17,10 +17,10 @@ export default function ExamPage() {
   const { overView, time } = useContext(AppContext)
 
   const [current, setCurrent] = useState(0)
-  const [listeningData, setListeningData] = useState<Skill[]>([])
-  const [writingData, setWritingData] = useState<Skill[]>([])
-  const [readingData, setReadingData] = useState<Skill[]>([])
-  const [speakingData, setSpeakingData] = useState<Skill[]>([])
+  const [listeningData, setListeningData] = useState<Skill>()
+  const [writingData, setWritingData] = useState<Skill>()
+  const [readingData, setReadingData] = useState<Skill>()
+  const [speakingData, setSpeakingData] = useState<Skill>()
   const [submit, setSubmit] = useState<boolean>(false)
   const [result, setResult] = useState<ExamResultsState>()
   const { id } = useParams()
@@ -29,34 +29,6 @@ export default function ExamPage() {
   const examDetail = queryClient.getQueryData<{ data: ExamState }>(['examDetail'])
 
   const dataExam = examDetail?.data
-
-  // const dataQuestion = dataExam?.skillData
-
-  // useEffect(() => {
-  //   const updatedData = dataQuestion?.map((item) => {
-  //     switch (item.skill) {
-  //       case 'LISTENING':
-  //         return { ...item, questions: listeningData }
-  //       case 'READING':
-  //         return { ...item, questions: readingData }
-  //       case 'WRITING':
-  //         return { ...item, questions: writingData }
-  //       case 'SPEAKING':
-  //         return { ...item, questions: speakingData }
-  //       default:
-  //         return item
-  //     }
-  //   })
-  //   console.log({ updatedData })
-  // }, [listeningData, writingData, readingData, speakingData, dataExam])
-
-  // useEffect(() => {
-  //   setDataSubmitAll(dataExam)
-  // }, [dataQuestion])
-
-  // useEffect(() => {
-  //   setDataSubmitAll({ ...dataSubmitAll, skillData: dataSubmit })
-  // }, [dataSubmit])
 
   const mutateSubmit = useMutation({
     mutationFn: (body: any) => examApi.examSubmit(body),
@@ -76,11 +48,6 @@ export default function ExamPage() {
     }
   }, [submit])
 
-  useEffect(() => {
-    if (dataExam) {
-      processData(dataExam)
-    }
-  }, [dataExam])
   const steps = [
     {
       title: 'First',
@@ -92,19 +59,19 @@ export default function ExamPage() {
     },
     {
       title: 'Listening',
-      content: <Listening data={listeningData[0]} nextSteps={setCurrent} />,
+      content: <Listening data={listeningData!} nextSteps={setCurrent} />,
     },
     {
       title: 'Reading',
-      content: <Reading data={readingData[0]} nextSteps={setCurrent} />,
+      content: <Reading data={readingData!} nextSteps={setCurrent} />,
     },
     {
       title: 'Writing',
-      content: <Writing data={writingData[0]} nextSteps={setCurrent} />,
+      content: <Writing data={writingData!} nextSteps={setCurrent} />,
     },
     {
       title: 'Speaking',
-      content: <Speaking data={speakingData[0]} nextSteps={setCurrent} setSubmit={setSubmit} />,
+      content: <Speaking data={speakingData!} nextSteps={setCurrent} setSubmit={setSubmit} />,
     },
     {
       title: 'Last',
@@ -112,36 +79,50 @@ export default function ExamPage() {
     },
   ]
 
-  function processData(data: ExamState) {
-    const listening: any[] = []
-    const writing: any[] = []
-    const reading: any[] = []
-    const speaking: any[] = []
+  useEffect(() => {
+    if (dataExam) {
+      let prevNum = 1
+      const listening = dataExam.skillData.find((skill) => skill.skill === 'LISTENING')
+      const reading = dataExam.skillData.find((skill) => skill.skill === 'READING')
+      const writing = dataExam.skillData.find((skill) => skill.skill === 'WRITING')
+      const speaking = dataExam.skillData.find((skill) => skill.skill === 'SPEAKING')
 
-    data.skillData?.forEach((item: any) => {
-      switch (item.skill) {
-        case 'LISTENING':
-          listening.push(item)
-          break
-        case 'WRITING':
-          writing.push(item)
-          break
-        case 'READING':
-          reading.push(item)
-          break
-        case 'SPEAKING':
-          speaking.push(item)
-          break
-        default:
-        // Xử lý trường hợp không khớp
+      if (listening) {
+        setListeningData({
+          ...listening,
+          countQuestions: listening?.questions?.length || 0,
+          prevNum: 1,
+        })
+        prevNum += listening?.questions?.length || 0
       }
-    })
 
-    setListeningData(listening as any)
-    setWritingData(writing as any)
-    setReadingData(reading as any)
-    setSpeakingData(speaking as any)
-  }
+      if (reading) {
+        setReadingData({
+          ...reading,
+          countQuestions: reading?.questions?.length || 0,
+          prevNum,
+        })
+        prevNum += reading?.questions?.length || 0
+      }
+
+      if (writing) {
+        setWritingData({
+          ...writing,
+          countQuestions: writing?.questions?.length || 0,
+          prevNum,
+        })
+        prevNum += writing?.questions?.length || 0
+      }
+
+      if (speaking) {
+        setSpeakingData({
+          ...speaking,
+          countQuestions: speaking?.questions?.length || 0,
+          prevNum,
+        })
+      }
+    }
+  }, [dataExam])
 
   return steps[current].content
 }

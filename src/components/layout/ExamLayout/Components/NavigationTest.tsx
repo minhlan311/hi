@@ -59,6 +59,7 @@ const NavigationTest = (props: Props) => {
     (total: any, item: any) => total + item.questions.length,
     0,
   )
+  console.log(overView)
 
   return (
     <Card size='small'>
@@ -101,7 +102,10 @@ const NavigationTest = (props: Props) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Bạn có muốn hoàn thành kỹ {skillName}?</p>
+        <div>Bạn có muốn hoàn thành kỹ năng {skillName} không?</div>
+        <i>
+          (*) Lưu ý: <b>Sau khi</b> chuyển kỹ năng khác, sẽ <b>không thể quay lại</b> để chỉnh sửa câu trả lời.
+        </i>
       </Modal>
       <Modal
         title='Xem lại câu trả lời'
@@ -115,9 +119,9 @@ const NavigationTest = (props: Props) => {
             <Row gutter={[24, 24]}>
               {Array.from({ length: totalQuestions as number }).map((_, index) => (
                 <Col span={12} md={6} key={index}>
-                  <Space>
+                  <Flex gap={10}>
                     <p>Q{index + 1}:</p> <b>{overView[index]?.anwser}</b>
-                  </Space>
+                  </Flex>
                 </Col>
               ))}
             </Row>

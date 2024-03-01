@@ -54,7 +54,7 @@ export default function Listening({ data, nextSteps }: Props) {
       >
         Your browser does not support the audio element.
       </audio>
-      {data && <QuestionsRender data={data?.questions?.length ? data.questions : []} />}
+      {data && <QuestionsRender prev={data.prevNum || 0} data={data?.questions?.length ? data.questions : []} />}
     </div>
   )
 }
