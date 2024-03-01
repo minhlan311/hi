@@ -82,13 +82,13 @@ const PriceCalculator = (props: Props) => {
       </Space>
     ) : (
       <Flex
-        gap={5}
+        gap={0}
         align='center'
         className={css.price}
         style={direction === 'right' || direction === 'column-right' ? { justifyContent: 'flex-end' } : {}}
       >
         <p className={css.title} style={{ fontSize: priceSize }}>
-          Học phí:{' '}
+          {''}
         </p>
         <div className={css.title} style={{ fontSize: priceSize }}>
           {total.lastPrice === 0 ? (
