@@ -225,8 +225,6 @@ const FilterAction = (props: Props) => {
     }
   }, [page, checkQuery, location, filterQuery, listenerFilterQuery])
 
-  console.log(filterData)
-
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({

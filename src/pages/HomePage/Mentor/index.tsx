@@ -48,9 +48,9 @@ const Mentor = () => {
             </Tooltip>
             {user.mentorInfo?.certificateType ? <div>Chứng chỉ {user.mentorInfo?.certificateType}</div> : <br />}
             <Rate defaultValue={user.assessment?.totalAssessmentsAverages} allowHalf style={{ fontSize: 12 }} />
-            <p>
+            <div>
               <b>{formatNumber(user.countAssessment as number)}</b> lượt đánh giá
-            </p>
+            </div>
           </div>
 
           <Space className='it-butt'>

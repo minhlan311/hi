@@ -38,9 +38,8 @@ const QuestionsRender = ({ data }: { data: QuestionState[] }) => {
     }
   }, [data])
   const [anwsFB, setAnwsFB] = useState<{ _id: string; anwser: string }[]>([])
-
-  // Todo undefined
   const [FBData, setFBData] = useState<{ _id: string; index: number; anwText: string }>()
+  console.log({ FBData })
 
   const replaceArr = (text: string) => {
     const parts = text.split('______')

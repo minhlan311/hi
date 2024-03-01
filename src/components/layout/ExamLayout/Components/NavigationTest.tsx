@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import Logo from '@/components/Logo/Logo'
 import { AppContext } from '@/contexts/app.context'
@@ -54,7 +55,10 @@ const NavigationTest = (props: Props) => {
     }
   }
 
-  const totalQuestions = examDetail?.data.countQuestionsBySkill.reduce((total, item) => total + item.countQuestions, 0)
+  const totalQuestions = examDetail?.data?.countQuestionsBySkill.reduce(
+    (total: any, item: any) => total + item.questions.length,
+    0,
+  )
 
   return (
     <Card size='small'>

@@ -83,13 +83,17 @@ const MentorExamDetail = () => {
 
   // Đổi sang màn tạo
   if (id === 'createTest' || id === 'updateTest') return <MentorCreateTest />
+  console.log(examDetail)
 
   const labelData = [
     {
       icon: <BsQuestionLg />,
       iconColor: '#367b97',
       title: 'Số câu hỏi',
-      data: examDetail?.type === 'TEST' ? examDetail?.countQuestionsBySkill : examDetail?.countQuestions,
+      data:
+        examDetail?.type === 'TEST'
+          ? examDetail?.countQuestionsBySkill.reduce((total, item) => total + item.countQuestions, 0)
+          : examDetail?.countQuestions,
     },
     {
       icon: <RiCheckboxMultipleLine />,
@@ -409,8 +413,7 @@ const MentorExamDetail = () => {
                   </div>
                   <Space direction='vertical' className={css.label}>
                     <div className={css.title}>{item.title}</div>
-                    {/* <div className={css.data}>{item.data}</div>
-                    todo ERR type */}
+                    <div className={css.data}>{item.data}</div>
                   </Space>
                 </Space>
               </Card>
