@@ -1,19 +1,17 @@
 import FaqApi from '@/apis/faq.api'
+import LikeApi from '@/apis/like.api'
+import { AppContext } from '@/contexts/app.context'
+import { formatDate } from '@/helpers/common'
 import { AnswerState, FaqSate } from '@/interface/faq'
 import { LikeState, TargetModelEnum, TypeEnum } from '@/interface/like'
 import { CommentOutlined, UserOutlined } from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Avatar, Button, Card, Flex, Pagination, Space, Tooltip, message } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-
-import { AppContext } from '@/contexts/app.context'
-import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
-
-import LikeApi from '@/apis/like.api'
-import { formatDate } from '@/helpers/common'
 import { AxiosError } from 'axios'
+import { useContext, useEffect, useState } from 'react'
+import { AiFillLike, AiOutlineDislike, AiOutlineLike, AiTwotoneDislike } from 'react-icons/ai'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface IFaqListProp {
   categoryId?: string
@@ -110,7 +108,11 @@ export default function FaqList(props: IFaqListProp) {
           />
 
           <Link to={'/hoi-dap/' + faq._id}>
-            <p style={{ margin: '10px 0', fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: faq.content }}></p>
+            <p
+              style={{ margin: '10px 0', fontSize: '16px', display: 'block' }}
+              className='dangerHTML'
+              dangerouslySetInnerHTML={{ __html: faq.content }}
+            ></p>
           </Link>
 
           <Space align='center'>

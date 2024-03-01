@@ -52,7 +52,7 @@ export interface ExamState {
   owner: UserState
   questions: QuestionState[]
   countQuestions: number
-  countQuestionsBySkill: number
+  countQuestionsBySkill: Skill[]
   countSelectedResponseQuestions: number[]
   countConstructedResponseQuestions: number[]
   countUsersTested: number
@@ -91,4 +91,15 @@ export interface ExamResultsState {
   status: string
   createdAt: string
   updatedAt: string
+}
+
+export interface QuestionSubmit {
+  _id: string
+  correctAnswers: any | any[]
+}
+
+export interface SubmitResults {
+  _id: string
+  questions: QuestionSubmit[]
+  time: number
 }

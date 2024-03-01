@@ -409,7 +409,8 @@ const MentorExamDetail = () => {
                   </div>
                   <Space direction='vertical' className={css.label}>
                     <div className={css.title}>{item.title}</div>
-                    <div className={css.data}>{item.data}</div>
+                    {/* <div className={css.data}>{item.data}</div>
+                    todo ERR type */}
                   </Space>
                 </Space>
               </Card>

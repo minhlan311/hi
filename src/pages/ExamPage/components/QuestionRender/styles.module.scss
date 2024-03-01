@@ -1,0 +1,28 @@
+@import '../../../../components/GlobalStyles/responsive.scss';
+.main {
+  height: 100%;
+  overflow-y: auto;
+  @include respond-to(xs) {
+    height: calc(100% - 94px);
+  }
+  .answer {
+    margin-right: 10px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border: 1px solid var(--light-gray);
+    background-color: var(--lighish-white);
+  }
+  .radio {
+    & > :first-child {
+      display: none;
+    }
+  }
+  .trueFalseMain {
+    width: 100%;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid var(--gray);
+  }
+}

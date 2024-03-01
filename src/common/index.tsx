@@ -140,6 +140,7 @@ export const stateAction = (
 
           if (Array.isArray(dataUpdate as unknown as any[])) {
             const itemIndex = newData.findIndex((item) => (key ? item?.[key] === id : item._id === id))
+
             dataUpdate?.forEach((item: any) => {
               if (itemIndex) {
                 const updatedData = newData.map((item) =>
@@ -156,7 +157,7 @@ export const stateAction = (
               }
             })
           } else {
-            if (newData.find((item) => (key ? item?.[key] === id : item._id === id))) {
+            if (newData.some((item) => (key ? item?.[key] === id : item._id === id))) {
               const updatedData = newData.map((item) =>
                 key
                   ? item?.[key] === dataUpdate?.[key]

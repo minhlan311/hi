@@ -160,7 +160,7 @@ const FormControls = (props: Props) => {
               size='small'
             >
               {contentChecked && <div className={css.contentChecked}>{contentChecked}</div>}
-              <div dangerouslySetInnerHTML={{ __html: label as string }}></div>
+              <div className={css.danger} dangerouslySetInnerHTML={{ __html: label as string }}></div>
             </Card>
           </Checkbox>
         </div>

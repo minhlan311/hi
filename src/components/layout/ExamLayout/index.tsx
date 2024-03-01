@@ -43,7 +43,7 @@ const CustomModal = ({
 }
 
 export default function ExamLayout({ children }: Props) {
-  const { setVolume, volume, start } = useContext(AppContext)
+  const { setVolume, setTime, volume, start } = useContext(AppContext)
   document.title = 'Làm bài thi | Ucam'
   const { id } = useParams()
   const { data: examDetail } = useQuery({
@@ -52,9 +52,7 @@ export default function ExamLayout({ children }: Props) {
     enabled: !!id,
   })
 
-  const [modal1Visible, setModal1Visible] = useState(false)
-  const [modal3Visible, setModal3Visible] = useState(false)
-  console.log(modal1Visible)
+  const [isExit, setExit] = useState<boolean>(false)
 
   const onChange = (value: number) => {
     if (isNaN(value)) {
@@ -66,19 +64,14 @@ export default function ExamLayout({ children }: Props) {
 
   const navigate = useNavigate()
 
-  const showModal3 = () => {
-    setModal3Visible(true)
-  }
-
   const handleOk = (modalNumber: number) => {
     switch (modalNumber) {
       case 1:
-        setModal1Visible(false)
         break
       case 2:
         break
       case 3:
-        setModal3Visible(false)
+        setExit(false)
         navigate('/')
         break
       default:
@@ -89,12 +82,11 @@ export default function ExamLayout({ children }: Props) {
   const handleCancel = (modalNumber: number) => {
     switch (modalNumber) {
       case 1:
-        setModal1Visible(false)
         break
       case 2:
         break
       case 3:
-        setModal3Visible(false)
+        setExit(false)
         break
       default:
         break
@@ -116,10 +108,16 @@ export default function ExamLayout({ children }: Props) {
                 start={start}
                 timeFormat='mm:ss'
                 type='number'
+                callbackTimeEnd={(e) => setTime(e)}
               />
             </div>
             <Space size='large' className={style.action}>
-              <ButtonCustom className={style.default} onClick={showModal3}>
+              <ButtonCustom
+                className={style.default}
+                onClick={() => {
+                  setExit(true)
+                }}
+              >
                 Thoát
               </ButtonCustom>
               <Space>
@@ -144,7 +142,7 @@ export default function ExamLayout({ children }: Props) {
         </Card>
         <CustomModal
           title='Kết thúc làm bài'
-          visible={modal3Visible}
+          visible={isExit}
           onOk={() => handleOk(3)}
           onCancel={() => handleCancel(3)}
           content={<p>Bạn có chắc chắn muốn thoát không, bài thi của bạn sẽ không được lưu?</p>}

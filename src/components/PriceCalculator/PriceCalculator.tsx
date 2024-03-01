@@ -1,7 +1,7 @@
 import { useTotalCalculator } from '@/hooks/useTotalCalculator'
 import { CoursesState } from '@/interface/courses'
 import { TagFilled } from '@ant-design/icons'
-import { Space } from 'antd'
+import { Flex, Space } from 'antd'
 import css from './PriceCalculator.module.scss'
 
 interface Discount {
@@ -19,6 +19,8 @@ type Props = {
   direction?: 'right' | 'center' | 'column' | 'column-right' | 'column-center'
   showDiscountFromCode?: boolean
   showTotalDiscount?: boolean
+  textPrice?: string
+  textColor?: string
 }
 
 const PriceCalculator = (props: Props) => {
@@ -33,6 +35,8 @@ const PriceCalculator = (props: Props) => {
     showDiscountFromCode = false,
     showTotalDiscount = false,
     direction,
+    textPrice,
+    textColor,
   } = props
 
   const total = useTotalCalculator(price, discount ? discount : 0)
@@ -63,12 +67,15 @@ const PriceCalculator = (props: Props) => {
               : 'horizontal'
           }
         >
-          <Space style={{ color: priceColor }}>
+          <Flex style={{ color: priceColor }} align='center' gap={5}>
+            <p className={css.title} style={{ fontSize: priceSize && priceSize - 2 }}>
+              Học phí:{' '}
+            </p>
             <div className={css.title} style={{ fontSize: priceSize }}>
-              {total.lastPrice === 0 ? 'Miễn phí' : <b>{formatPrice(total.lastPrice)}</b>}
+              {total.lastPrice === 0 ? <h2 className={css.free}>Miễn phí</h2> : <b>{formatPrice(total.lastPrice)}</b>}
             </div>
             {showDiscountTag && <TagFilled style={{ transform: 'scaleX(-1)' }} />}
-          </Space>
+          </Flex>
           {showTotal && total.totalDiscountFromCode > 0 && (
             <div className={css.discount} style={direction === 'column-right' ? { marginLeft: 12 } : {}}>
               {formatPrice(total.initialPrice)}
@@ -78,20 +85,27 @@ const PriceCalculator = (props: Props) => {
         </Space>
       </Space>
     ) : (
-      <Space
+      <Flex
+        gap={5}
+        align='center'
         className={css.price}
         style={direction === 'right' || direction === 'column-right' ? { justifyContent: 'flex-end' } : {}}
       >
-        <div className={css.title} style={{ fontSize: priceSize }}>
+        {textPrice && (
+          <p className={css.title} style={{ fontSize: priceSize, color: textColor }}>
+            {textPrice}:{' '}
+          </p>
+        )}
+        <div className={css.title} style={{ fontSize: priceSize, color: textColor }}>
           {total.lastPrice === 0 ? (
-            <h2 className={css.free} style={{ fontSize: priceSize }}>
+            <h2 className={css.free} style={{ fontSize: priceSize, color: textColor }}>
               Miễn phí
             </h2>
           ) : (
             <b>{formatPrice(total.lastPrice)}</b>
           )}
         </div>
-      </Space>
+      </Flex>
     )
 }
 

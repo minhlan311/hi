@@ -10,6 +10,7 @@ import useResponsives from '@/hooks/useResponsives'
 import { useQuery } from '@tanstack/react-query'
 import { Col, Flex, Row, Space } from 'antd'
 import moment from 'moment-timezone'
+import { useState } from 'react'
 import { HiOutlineBookOpen, HiOutlineUserGroup } from 'react-icons/hi2'
 import MyCourses from '../ProfilePage/MyCourses'
 import ScheduleDetail from './Components/ScheduleDetail'
@@ -34,6 +35,8 @@ const OpeningPage = () => {
   })
 
   const promotion = promotionData?.data
+  const [countdown, setCountdown] = useState<number>(0.00001)
+  console.log(countdown)
 
   return (
     <Header padding={'35px 0 50px 0'}>
@@ -54,7 +57,7 @@ const OpeningPage = () => {
                         <b>{item.length}</b>
                         suất học bổng lên đến
                         <b>
-                          <PriceCalculator price={item.scholarship} />
+                          <PriceCalculator price={item.scholarship} priceSize={24} />
                         </b>
                       </p>
                     </Flex>
@@ -68,21 +71,31 @@ const OpeningPage = () => {
                     </p>
                   </Flex>
                   <Flex align='center' gap={12} className={style.content}>
-                    <div dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
+                    <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: promotion.description }}></div>
                   </Flex>
                   <p className={style.desc}>Kết thúc sau:</p>
                   <Flex align='center' vertical gap={55}>
-                    <CountDownTimer
-                      size={((sm || md) && 25) || 40}
-                      type='text'
-                      className={style.timer}
-                      initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
-                      space=':'
-                      spaceStyle={{ color: 'var(--black)' }}
-                      showAlex={false}
-                    />
+                    {countdown === 0 ? (
+                      <h1 className={style.end}>Ưu đãi đã kết thúc</h1>
+                    ) : (
+                      <CountDownTimer
+                        size={((sm || md) && 25) || 50}
+                        type='text'
+                        className={style.timer}
+                        initCountdown={moment(promotion.dateEnd).diff(moment(), 'minutes')}
+                        initTime={
+                          moment(promotion.dateEnd).diff(moment(), 'minutes') > 0
+                            ? moment(promotion.dateEnd).diff(moment(), 'minutes')
+                            : 0
+                        }
+                        space=':'
+                        spaceStyle={{ color: 'var(--white)' }}
+                        showAlex={false}
+                        callbackCoudown={setCountdown}
+                      />
+                    )}
                     {promotion.href && (
-                      <ButtonCustom type='primary' href={promotion.href}>
+                      <ButtonCustom type='primary' href={promotion.href} disabled={countdown === 0}>
                         <h1 style={{ padding: '0 50px' }}>Đăng ký</h1>
                       </ButtonCustom>
                     )}
@@ -101,8 +114,8 @@ const OpeningPage = () => {
         )}
 
         <Space direction='vertical' className={'sp100'}>
+          <BreadCrumbsDynamic homeTitle='Trang chủ' separator='>' style={{ marginBottom: 8 }} />
           <h1>Lịch học</h1>
-          <BreadCrumbsDynamic />
           <ScheduleDetail type='Online' />
           <ScheduleDetail type='Offline' />
           <h1>Khóa học trong tháng</h1>

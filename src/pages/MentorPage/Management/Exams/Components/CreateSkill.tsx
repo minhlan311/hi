@@ -18,7 +18,6 @@ type Props = {
 
 const CreateSkill = (props: Props) => {
   const { examData, packsSelected, setSkillSelected } = props
-
   const initSkill = [
     {
       value: 'READING',
@@ -43,10 +42,29 @@ const CreateSkill = (props: Props) => {
   ]
 
   const [changeSkill, setChangeSkill] = useState<SkillType | null>(null)
-  const [targetSkill, setTargetSkill] = useState<SkillType>('READING')
+  const [targetSkill, setTargetSkill] = useState<SkillType>()
   const [items, setItems] = useState<any[]>(initSkill)
   const [choosePack, setChoosePack] = useState<string[]>(packsSelected.length > 0 ? packsSelected : [])
-  const [current, setCurrent] = useState<number>(0)
+  const [current, setCurrent] = useState<number>(1)
+
+  const [search, setSearch] = useState<string>('')
+
+  const { data: skillData, isLoading } = useQuery({
+    queryKey: ['skillData', targetSkill, current, search],
+    queryFn: () => {
+      return skillApi.findSkill({
+        filterQuery: {
+          skill: targetSkill,
+          categoryId: examData.categoryIdDetail,
+          search,
+        },
+        options: {
+          limit: 8,
+          page: current,
+        },
+      })
+    },
+  })
 
   useEffect(() => {
     if (examData?.skillData?.length > 0) {
@@ -69,25 +87,6 @@ const CreateSkill = (props: Props) => {
       setChangeSkill(null)
     }
   }, [changeSkill])
-  const [search, setSearch] = useState<string>('')
-  const { data: skillData, isLoading } = useQuery({
-    queryKey: ['skillData', targetSkill, current, search],
-    queryFn: () => {
-      return skillApi.findSkill({
-        filterQuery: {
-          skill: targetSkill,
-          categoryId: examData.categoryIdDetail,
-          search,
-        },
-        options: {
-          limit: 8,
-          page: current,
-        },
-      })
-    },
-
-    enabled: Boolean(targetSkill),
-  })
 
   useEffect(() => {
     if (choosePack.length > 0) setSkillSelected(choosePack)
@@ -97,7 +96,6 @@ const CreateSkill = (props: Props) => {
     <div>
       <Space direction='vertical' className='sp100'>
         <h3>Kỹ năng:</h3>
-
         <Tabs onChange={(e) => setTargetSkill(e)} activeKey={targetSkill} type='card'>
           {items.map((tab) => (
             <Tabs.TabPane key={tab.key} tab={tab.label}>

@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { stateAction } from '@/common'
 import NavigationTest from '@/components/layout/ExamLayout/Components/NavigationTest'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { Skill } from '@/interface/exam'
 import TextArea from 'antd/es/input/TextArea'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 type Props = {
-  nextSteps: React.Dispatch<React.SetStateAction<number>>
   data: Skill
+  nextSteps: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Writing({ nextSteps, data }: Props) {
+export default function Writing({ data, nextSteps }: Props) {
+  const { setOverView } = useContext(AppContext)
   const { sm } = useResponsives()
   const [dividerPosition, setDividerPosition] = useState()
+  const [dataSubmit, setDataSubmit] = useState<string>('')
 
   const handleDividerDrag = (e: any) => {
     setDividerPosition(sm ? e.clientY : e.clientX)
@@ -34,7 +38,20 @@ export default function Writing({ nextSteps, data }: Props) {
         skillName='Writing'
         nextSkillName='Speaking'
         desc='Viết trả lời vào các câu hỏi bên dưới.'
-        nextSteps={nextSteps}
+        nextSteps={(e) => {
+          stateAction(
+            setOverView,
+            data?.questions?.[0]._id as string,
+            {
+              index: 1,
+              _id: data?.questions?.[0]._id,
+              anwser: dataSubmit,
+              correctAnswers: dataSubmit,
+            },
+            'update',
+          )
+          nextSteps(e)
+        }}
         step={5}
       />
       <div className='split-screen'>
@@ -46,7 +63,13 @@ export default function Writing({ nextSteps, data }: Props) {
               : { width: dividerPosition ? `${dividerPosition}px` : '50%' }
           }
         >
-          <div dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+          <div className={'dangerHTML'} dangerouslySetInnerHTML={{ __html: data?.description }}></div>
+          <div
+            className={'dangerHTML'}
+            dangerouslySetInnerHTML={{
+              __html: data?.questions?.length ? (data?.questions?.[0].question as any) : undefined,
+            }}
+          ></div>
         </div>
         <div className='divider' onMouseDown={handleDividerClick}></div>
         <div
@@ -58,6 +81,7 @@ export default function Writing({ nextSteps, data }: Props) {
               minHeight: '100%',
               width: '100%',
             }}
+            onChange={(e) => setDataSubmit(e.target.value)}
           />
         </div>
       </div>

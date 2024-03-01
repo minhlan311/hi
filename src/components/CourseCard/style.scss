@@ -1,0 +1,17 @@
+.card-course {
+  background: var(--lighish-white);
+  .ant-card-body {
+    height: 365px;
+  }
+  &:hover {
+    background: var(--whiteBg);
+  }
+  .title-course * {
+    color: var(--green);
+    font-size: 20px;
+  }
+  .icon-card {
+    color: #051a6b;
+    margin-right: 5px;
+  }
+}

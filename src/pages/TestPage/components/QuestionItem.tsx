@@ -4,6 +4,7 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
+import useResponsives from '@/hooks/useResponsives'
 import { Answer, Choice, QuestionState } from '@/interface/question'
 import { Flex, Form, Space } from 'antd'
 import { FormInstance } from 'antd/lib'
@@ -12,7 +13,6 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbArrowBack } from 'react-icons/tb'
 import css from '../styles.module.scss'
 import RenderAnswer from './RenderAnswer'
-import useResponsives from '@/hooks/useResponsives'
 
 type Props = {
   type: string
@@ -70,7 +70,7 @@ const QuestionItem = (props: Props) => {
         </Flex>
 
         <p
-          className={css.question}
+          className={`${css.question} dangerHTML`}
           dangerouslySetInnerHTML={{ __html: questionData.question as unknown as string }}
         ></p>
         {questionData.hint && questionData.hint !== '<p></p>' && (

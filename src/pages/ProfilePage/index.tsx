@@ -42,7 +42,7 @@ const ProfilePage = ({ profile }: Props) => {
   const [current, setCurrent] = useState<number>(1)
 
   const { data: courseData, isLoading: loading } = useQuery({
-    queryKey: ['coursesByMentor', current],
+    queryKey: ['coursesByMentor', current, userId],
     queryFn: () => {
       return courseApi.getCourses({ filterQuery: { createdById: userId }, options: { page: current, limit: 6 } })
     },

@@ -7,7 +7,7 @@ import { UserState } from '@/interface/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Col, Divider, Drawer, Flex, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
-import { BiSolidUserCircle } from 'react-icons/bi'
+import { BiBookContent, BiSolidBookContent, BiSolidUserCircle } from 'react-icons/bi'
 import { HiMiniHome, HiOutlineHome } from 'react-icons/hi2'
 import { IoCalendar, IoCalendarOutline, IoChevronDown, IoSchoolOutline } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
@@ -60,22 +60,22 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
   useEffect(() => {
     setOpen(false)
   }, [location])
-  const test = categoriesData?.find((item) => item.label === 'Khóa học')
-  const opening = categoriesData?.find((item) => item.label === 'Luyện thi')
-  const choice = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
+  const test = categoriesData?.find((item) => item.label === 'Luyện thi')
+  const opening = categoriesData?.find((item) => item.label === 'Lịch khai giảng')
+  const course = categoriesData?.find((item) => item.label === 'Khóa học')
 
   useEffect(() => {
     if (categoriesData.length > 0) {
       setMobileMenu([
         { label: 'Trang chủ', icon: <HiOutlineHome />, activeIcon: <HiMiniHome />, href: '/' },
         {
-          label: 'Khóa Học',
-          icon: <CiViewList />,
-          activeIcon: <FaClipboardList />,
-          href: `${test?.href}`,
+          label: 'Khóa học',
+          icon: <BiBookContent />,
+          activeIcon: <BiSolidBookContent />,
+          href: `${course?.href}`,
         },
         {
-          label: 'Luyện Thi',
+          label: 'Luyện thi',
           icon: <IoSchoolOutline />,
           activeIcon: <MdSchool />,
           href: `${opening?.href}`,
@@ -84,8 +84,9 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
           label: 'Lịch khai giảng',
           icon: <IoCalendarOutline />,
           activeIcon: <IoCalendar />,
-          href: `${choice?.href}`,
+          href: `${opening?.href}`,
         },
+
         { label: 'Tài khoản', icon: <PiUserCircle />, activeIcon: <BiSolidUserCircle /> },
       ])
     }
@@ -235,7 +236,7 @@ const MenuNav = ({ user, type }: Props) => {
             style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08),0 4px 12px rgba(0, 0, 0, 0.08)' }}
           >
             <div className={style.menu}>
-              <Flex justify='space-between' align='middle'>
+              <Flex justify='space-between' className={'sp100'}>
                 {categoriesData.map((item) => (
                   <div key={`${item._id}`} className={style.menuLabel}>
                     <Link to={`${item.href}`}>

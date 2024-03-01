@@ -178,7 +178,7 @@ export default function Navigation({ user }: Props) {
                             <BsFillTelephoneFill />
                           </div>
                           <div>
-                            <p className='mb-5 hotline'>Hotline</p>
+                            <p className='mb-5 hotline'>Hotline: </p>
                             <b>{configs?.hotline}</b>
                           </div>
                         </Space>

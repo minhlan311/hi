@@ -2,6 +2,8 @@
 
 .menu {
   position: relative;
+  display: flex;
+  align-items: center;
   z-index: 999;
   border-top: 1px solid var(--gray86);
   height: 50px;
@@ -23,6 +25,7 @@
   }
 
   .navMb {
+    width: 100%;
     padding: 10px 0;
     .title {
       font-size: 11px;

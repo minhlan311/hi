@@ -100,7 +100,7 @@ const Mentor = () => {
                 slidesToScroll={sm ? 1 : 2}
                 slidesToShow={sm ? 1 : 4}
                 infinite
-                dots
+                dots={!sm}
                 buttonStyle={{
                   color: 'var(--white)',
                   background: 'var(--red)',

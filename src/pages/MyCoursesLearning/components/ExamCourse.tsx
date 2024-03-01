@@ -70,6 +70,7 @@ export default function ExamCourse({ data, name }: Props) {
   const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60)
     const seconds = time % 60
+
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
@@ -243,6 +244,7 @@ export default function ExamCourse({ data, name }: Props) {
                     <div className='div-start-question'>
                       <h3
                         style={{ marginLeft: '10px' }}
+                        className={'dangerHTML'}
                         dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
                       />
                     </div>
@@ -260,6 +262,7 @@ export default function ExamCourse({ data, name }: Props) {
                           >
                             <Radio value={choiceIndex} style={{ pointerEvents: 'none' }}>
                               <div
+                                className={'dangerHTML'}
                                 dangerouslySetInnerHTML={{ __html: choice.answer }}
                                 style={{ color: getAnswerColor(choice) }}
                               ></div>
@@ -346,6 +349,7 @@ export default function ExamCourse({ data, name }: Props) {
                           fontWeight: '700',
                           fontSize: '16px',
                         }}
+                        className={'dangerHTML'}
                         dangerouslySetInnerHTML={{ __html: question.name }}
                       />
 
@@ -385,7 +389,10 @@ export default function ExamCourse({ data, name }: Props) {
                               >
                                 <div className='flex-radios'>
                                   <div>
-                                    <span dangerouslySetInnerHTML={{ __html: choice.answer }} />
+                                    <span
+                                      className={'dangerHTML'}
+                                      dangerouslySetInnerHTML={{ __html: choice.answer }}
+                                    />
                                   </div>
                                   <div>{icon}</div>
                                 </div>

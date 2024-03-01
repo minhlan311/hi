@@ -55,8 +55,6 @@ export default function CourseCalender() {
     </Col>
   ))
 
-  console.log(categoriesData)
-
   return (
     <Header desc='Lịch khai giảng khóa học online' title='ĐÀO TẠO NHIỀU NGÔN NGỮ'>
       <div className='groupButton'>
