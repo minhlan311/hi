@@ -78,7 +78,7 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
           label: 'Luyện thi',
           icon: <IoSchoolOutline />,
           activeIcon: <MdSchool />,
-          href: `${opening?.href}`,
+          href: `${test?.href}`,
         },
         {
           label: 'Lịch khai giảng',

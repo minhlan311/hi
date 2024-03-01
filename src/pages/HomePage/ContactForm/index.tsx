@@ -25,8 +25,8 @@ export default function ContactForm() {
   }
 
   return (
-    <Header size='sm' padding={'60px 0'}>
-      <Row align='middle' gutter={[24, 24]}>
+    <Header background='green' size='sm' padding={'60px 0'}>
+      <Row align='middle' gutter={[50, 50]}>
         <Col span={24} md={12}>
           <Image src='https://i.ytimg.com/vi/QlkPQCeeA04/maxresdefault.jpg' preview={false} />
         </Col>
@@ -72,9 +72,10 @@ export default function ContactForm() {
                   htmlType='submit'
                   style={{
                     borderRadius: '10px',
+                    
                   }}
                 >
-                  Đăng ký ngay
+                  ĐĂNG KÝ NGAY
                 </Button>
               </Flex>
             </Form>

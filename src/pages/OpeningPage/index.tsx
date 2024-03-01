@@ -48,8 +48,8 @@ const OpeningPage = () => {
               <Col span={24} md={15} className={style.desc}>
                 <Space direction='vertical' size='large' className={'sp100'}>
                   {promotion.promotions?.map((item) => (
-                    <Flex align='center' gap={12} vertical={sm} className={style.content} key={item._id}>
-                      {item.icon ? item.icon : <HiOutlineBookOpen size={sm || md ? 35 : 24} />}
+                    <Flex gap={12} vertical={sm} className={style.content} key={item._id}>
+                      {item.icon ? item.icon : <HiOutlineBookOpen style={{marginTop: 3}} size={sm || md ? 35 : 24} />}
                       <p>
                         Khóa
                         <b>{item.centificateName}</b>
@@ -62,8 +62,8 @@ const OpeningPage = () => {
                       </p>
                     </Flex>
                   ))}
-                  <Flex align='center' gap={12} vertical={sm} className={style.content}>
-                    <HiOutlineUserGroup size={(sm && 32) || (md && 28) || 24} />
+                  <Flex gap={12} vertical={sm} className={style.content}>
+                    <HiOutlineUserGroup style={{marginTop: 3}} size={(sm && 32) || (md && 28) || 24} />
                     <p>
                       Có
                       <b>5925</b>
