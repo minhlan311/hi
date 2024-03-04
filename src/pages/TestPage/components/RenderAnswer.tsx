@@ -1,13 +1,13 @@
-import { localAction, shuffleArray } from '@/common'
+import { shuffleArray, stateAction } from '@/common'
 import DragAndDrop from '@/components/DragAndDrop'
 import FormControls from '@/components/FormControls/FormControls'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
-import { Answer, Choice } from '@/interface/question'
-import { Card, Col, Divider, Form, Input, Row, Space } from 'antd'
-import { FormInstance } from 'antd/lib'
-import { useEffect, useState } from 'react'
+import { AppContext } from '@/contexts/app.context'
+import { debounce } from '@/helpers/common'
+import { Answer, Choice, QuestionState } from '@/interface/question'
+import { Card, Col, Divider, Input, Row, Space } from 'antd'
+import { useContext, useEffect, useState } from 'react'
 import PageTestDrag from './DragTest/PageTestDrag'
-import PageFillTest from './FillTest/PageFillTest'
 import './style.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -28,9 +28,76 @@ type Props = {
   reset: boolean
   setReset: React.Dispatch<React.SetStateAction<boolean>>
   data: Answer | null
-  form: FormInstance
   questId: string
-  testId: string
+  questionData: QuestionState
+}
+
+const FillBlank = ({ data }: { data: QuestionState }) => {
+  const [anwsFB, setAnwsFB] = useState<{ _id: string; anwser: string }[]>([])
+  const [FBData, setFBData] = useState<{ _id: string; index: number; anwText: string }>()
+  const { setOverView } = useContext(AppContext)
+
+  const replaceArr = (text: string) => {
+    const parts = text.split('______')
+
+    const newTextParts = []
+
+    for (let i = 0; i < parts.length - 1; i++) {
+      newTextParts.push(parts[i], '______')
+    }
+
+    newTextParts.push(parts[parts.length - 1])
+
+    return newTextParts
+  }
+
+  useEffect(() => {
+    if (FBData) {
+      let content = FBData.anwText
+      anwsFB.forEach((item) => {
+        content = content.replace('______', ` ${item.anwser} `)
+      })
+
+      if (FBData)
+        debounce(
+          stateAction(
+            setOverView,
+            data._id,
+            {
+              index: undefined,
+              _id: data._id,
+              anwser: undefined,
+              correctAnswers: [content],
+            },
+            'update',
+          ),
+          500,
+        )
+    }
+  }, [anwsFB, FBData])
+
+  const load = () => {
+    setFBData({
+      _id: data._id,
+      index: 0,
+      anwText: data?.questionText ? data?.questionText : '',
+    })
+  }
+
+  if (!FBData) load()
+
+  return replaceArr(data?.questionText as string).map((i, id) => (
+    <p key={id}>
+      {i === '______' ? (
+        <Input
+          onChange={(e) => stateAction(setAnwsFB, `${id}`, { _id: `${id}`, anwser: e.target.value }, 'update')}
+          style={{ width: 'auto', margin: '0 8px' }}
+        ></Input>
+      ) : (
+        i
+      )}
+    </p>
+  ))
 }
 
 const LikertScale = ({
@@ -40,7 +107,6 @@ const LikertScale = ({
   cols,
   type,
   questId,
-  testId,
 }: {
   anwsData: string[]
   reset: boolean
@@ -48,10 +114,10 @@ const LikertScale = ({
   cols: any[]
   type: string
   questId: string
-  testId: string
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
   const [correctAnswers, setCorrectAnswers] = useState<any[]>([])
+  const { setOverView } = useContext(AppContext)
 
   const handleElementClick = (item: string, isRow: boolean) => {
     if (selectedAnswers.length === 0 || isRow !== selectedAnswers[selectedAnswers.length - 1].isRow) {
@@ -105,13 +171,17 @@ const LikertScale = ({
 
   useEffect(() => {
     if (correctAnswers.length > 0) {
-      const payload = {
-        _id: questId,
-        correctAnswers: correctAnswers,
-      }
-      setTimeout(() => {
-        localAction(testId + 'data', payload, 'update', '_id')
-      }, 500)
+      stateAction(
+        setOverView,
+        questId,
+        {
+          index: undefined,
+          _id: questId,
+          anwser: undefined,
+          correctAnswers: correctAnswers,
+        },
+        'update',
+      )
     }
   }, [correctAnswers])
 
@@ -202,19 +272,23 @@ const LikertScale = ({
 }
 
 const RenderAnswer = (props: Props) => {
-  const { type, choices, reset, setReset, data, form, questId, testId, questionText } = props
+  const { type, choices, reset, setReset, data, questId, questionText, questionData } = props
   const [dataCallback, setDataCallback] = useState<any[]>([])
-  const [dndData, setDndData] = useState<any[]>(choices)
-
+  const [dndData, setDndData] = useState<any[]>(shuffleArray(choices))
+  const { setOverView } = useContext(AppContext)
   useEffect(() => {
     if (reset) {
       setReset(false)
     }
   }, [reset])
 
+  console.log(questionData)
+
   useEffect(() => {
     if (data && data.correctAnswers.length > 0) {
-      const newData = choices.sort((a, b) => data.correctAnswers.indexOf(a.id) - data.correctAnswers.indexOf(b.id))
+      const newData = shuffleArray(choices).sort(
+        (a, b) => data.correctAnswers.indexOf(a.id) - data.correctAnswers.indexOf(b.id),
+      )
       console.log(newData)
 
       setDndData(newData)
@@ -224,37 +298,69 @@ const RenderAnswer = (props: Props) => {
   useEffect(() => {
     if (dataCallback.length > 0) {
       const answers = dataCallback.map((i) => i.id)
-      const payload = {
-        _id: questId,
-        correctAnswers: answers,
-      }
-      setTimeout(() => {
-        localAction(testId + 'data', payload, 'update', '_id')
-      }, 500)
+
+      stateAction(
+        setOverView,
+        questId,
+        {
+          index: undefined,
+          _id: questId,
+          anwser: undefined,
+          correctAnswers: answers,
+        },
+        'update',
+      )
     }
   }, [dataCallback])
 
-  const optionsList = choices.map((ots) => {
+  const optionsList = shuffleArray(choices).map((ots) => {
     return { value: ots.id, label: ots.answer }
   })
 
-  useEffect(() => {
-    if (data && data.correctAnswers?.length > 0) {
-      if (type === 'NUMERICAL') {
-        form.setFieldsValue({ correctAnswers: data.correctAnswers[0] })
-      }
-    }
-  }, [data, type])
+  console.log({ data, questId, questionText })
 
   if (type === 'WRITING')
-    return <TextAreaCustom name='correctAnswers' data={data ? data?.correctAnswers?.[0] : '<p></p>'} dataArr />
+    return (
+      <TextAreaCustom
+        name='correctAnswers'
+        data={data ? data?.correctAnswers?.[0] : '<p></p>'}
+        dataArr
+        onChange={(e) =>
+          stateAction(
+            setOverView,
+            questId,
+            {
+              index: undefined,
+              _id: questId,
+              anwser: undefined,
+              correctAnswers: [e.target.value],
+            },
+            'update',
+          )
+        }
+      />
+    )
   if (type === 'DRAG DROP') return <PageTestDrag questionText={questionText} choices={choices} />
-  if (type === 'FILL BLANK') return <PageFillTest template={questionText || ''} />
+  if (type === 'FILL BLANK') return <FillBlank data={questionData} />
   if (type === 'NUMERICAL')
     return (
-      <Form.Item name='correctAnswers'>
-        <Input type='number' placeholder='Nhập giá trị' />
-      </Form.Item>
+      <Input
+        type='number'
+        placeholder='Nhập giá trị'
+        onChange={(e) =>
+          stateAction(
+            setOverView,
+            questId,
+            {
+              index: undefined,
+              _id: questId,
+              anwser: undefined,
+              correctAnswers: [e.target.value],
+            },
+            'update',
+          )
+        }
+      />
     )
   if (type === 'SINGLE CHOICE')
     return (
@@ -265,6 +371,19 @@ const RenderAnswer = (props: Props) => {
         options={optionsList}
         gutter={[12, 12]}
         value={data && data.correctAnswers[0]}
+        callbackValue={(e) =>
+          stateAction(
+            setOverView,
+            questId,
+            {
+              index: undefined,
+              _id: questId,
+              anwser: undefined,
+              correctAnswers: [e],
+            },
+            'update',
+          )
+        }
       />
     )
   if (type === 'MULTIPLE CHOICE')
@@ -276,6 +395,19 @@ const RenderAnswer = (props: Props) => {
         options={optionsList}
         gutter={[12, 12]}
         value={data ? data.correctAnswers : []}
+        callbackValue={(e) =>
+          stateAction(
+            setOverView,
+            questId,
+            {
+              index: undefined,
+              _id: questId,
+              anwser: undefined,
+              correctAnswers: e,
+            },
+            'update',
+          )
+        }
       />
     )
   if (type === 'SORT')
@@ -295,11 +427,10 @@ const RenderAnswer = (props: Props) => {
       <LikertScale
         anwsData={data ? data.correctAnswers : []}
         reset={reset}
-        rows={shuffleArray(choices[0]?.rows)}
-        cols={type === 'LIKERT SCALE' ? choices[0]?.cols : shuffleArray(choices[0]?.cols)}
+        rows={choices[0]?.rows}
+        cols={type === 'LIKERT SCALE' ? choices[0]?.cols : choices[0]?.cols}
         type={type}
         questId={questId}
-        testId={testId}
       />
     )
 }

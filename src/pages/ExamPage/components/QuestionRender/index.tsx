@@ -159,7 +159,7 @@ const FillBlank = ({
         content = content.replace('______', ` ${item.anwser} `)
       })
 
-      if (FBData) debounce(handleChange(FBData, start + index, combinedAnwser, content), 500)
+      if (FBData) debounce(handleChange(FBData, start + index, combinedAnwser, [content]), 500)
     }
   }, [anwsFB, FBData])
 

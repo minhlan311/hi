@@ -55,10 +55,7 @@ const NavigationTest = (props: Props) => {
     }
   }
 
-  const totalQuestions = examDetail?.data?.countQuestionsBySkill.reduce(
-    (total: any, item: any) => total + item.questions.length,
-    0,
-  )
+  const totalQuestions = examDetail?.data?.countQuestions
   console.log(overView)
 
   return (

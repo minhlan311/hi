@@ -55,7 +55,11 @@ export default function Writing({ data, nextSteps }: Props) {
           className='right-panel'
           style={sm ? { height: `calc(100% - ${dividerPosition}px)` } : { width: `calc(100% - ${dividerPosition}px)` }}
         >
-          <QuestionsRender prev={data.prevNum || 0} data={data?.questions?.length ? data.questions : []} />
+          <QuestionsRender
+            prev={data.prevNum || 0}
+            data={data?.questions?.length ? data.questions : []}
+            skill={data.skill}
+          />
         </div>
       </div>
     </div>

@@ -78,7 +78,7 @@ export default function ExamPage() {
     },
     {
       title: 'Last',
-      content: <Result result={result as any} />,
+      content: <Result result={result as any} time={dataExam?.duration || 0} />,
     },
   ]
 

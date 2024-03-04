@@ -90,10 +90,7 @@ const MentorExamDetail = () => {
       icon: <BsQuestionLg />,
       iconColor: '#367b97',
       title: 'Số câu hỏi',
-      data:
-        examDetail?.type === 'TEST'
-          ? examDetail?.countQuestionsBySkill.reduce((total, item) => total + item.countQuestions, 0)
-          : examDetail?.countQuestions,
+      data: examDetail?.countQuestions,
     },
     {
       icon: <RiCheckboxMultipleLine />,

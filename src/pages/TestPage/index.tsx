@@ -11,13 +11,14 @@ import openNotification from '@/components/Notification'
 import PageResult from '@/components/PageResult'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { ExamResultsState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Descriptions, Form, Row, Space } from 'antd'
 import moment from 'moment-timezone'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { BiCheckDouble } from 'react-icons/bi'
 import { useLocation } from 'react-router-dom'
@@ -35,8 +36,8 @@ const TestPage = () => {
   const [finishTest, setFinishTest] = useState<boolean>(false)
   const [selectId, setSelectId] = useState<string>('')
   const [current, setCurrent] = useState(0)
-  const [time, setTime] = useState<number>(0)
   const [isLoad, setIsLoad] = useState(false)
+  const { overView, time, setTime } = useContext(AppContext)
 
   const { sm, md, lg } = useResponsives()
   const { data: testData, isLoading } = useQuery({
@@ -146,12 +147,17 @@ const TestPage = () => {
   useEffect(() => {
     if (handleScore && !finishTest) {
       setTimeout(() => {
+        overView.forEach((item) => {
+          delete item.anwser
+          delete item.index
+        })
         const payload = {
           _id: testData?.data._id,
-          questions: answers,
-          time: testTime - time,
+          questions: overView,
+          time,
+          //  testTime - time
         }
-        testMutation.mutate(payload as unknown as any)
+        testMutation.mutate(payload as any)
       }, 150)
     }
   }, [handleScore, finishTest, time])
@@ -159,7 +165,6 @@ const TestPage = () => {
   const handleReset = () => {
     setFinishTest(false)
     setCurrent(0)
-    setTime(0)
   }
 
   const handleNext = () => {
@@ -277,7 +282,7 @@ const TestPage = () => {
                           start={startTest && !handleScore}
                           size={md ? 20 : 30}
                           localId={test._id}
-                          callbackTimeEnd={setTime}
+                          callbackTimeEnd={(e) => setTime(e)}
                           onListenEvent={handleFinish}
                         ></CountDownTimer>
                       </Col>
@@ -303,7 +308,6 @@ const TestPage = () => {
                         testId={testData ? testData.data._id : ''}
                         loading={questions.isLoading}
                         selectId={selectId}
-                        form={form}
                       />
                     </LoadingCustom>
                   </Card>
