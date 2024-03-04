@@ -37,13 +37,16 @@ export default function ExamPage() {
 
   useEffect(() => {
     if (submit) {
+      overView.forEach((item) => {
+        delete item.anwser
+        delete item.index
+      })
       const payload = {
         _id: id,
         questions: overView,
         time,
       }
-
-      console.log('submit', payload)
+      setResult(undefined)
       mutateSubmit.mutate(payload)
     }
   }, [submit])

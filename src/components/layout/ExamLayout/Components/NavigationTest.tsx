@@ -5,7 +5,7 @@ import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { ExamState } from '@/interface/exam'
 import { useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Flex, Modal, Row, Space } from 'antd'
+import { Card, Descriptions, Flex, Modal, Popover, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
 import { TbListSearch } from 'react-icons/tb'
@@ -116,15 +116,25 @@ const NavigationTest = (props: Props) => {
         <Space direction='vertical' size='large' className='sp100'>
           <i>* Cửa sổ này chỉ để xem lại câu trả lời của bạn, bạn không thể thay đổi câu trả lời ở đây!</i>
           <div>
-            <Row gutter={[24, 24]}>
-              {Array.from({ length: totalQuestions as number }).map((_, index) => (
-                <Col span={12} md={6} key={index}>
-                  <Flex gap={10}>
-                    <p>Q{index + 1}:</p> <b>{overView[index]?.anwser}</b>
-                  </Flex>
-                </Col>
-              ))}
-            </Row>
+            <Descriptions>
+              {Array.from({ length: totalQuestions as number }).map((_, index) => {
+                const item = overView.find((item) => item.index === index + 1)
+
+                return (
+                  <Descriptions.Item label={`Q${index + 1}`} key={index}>
+                    {item?.anwser ? (
+                      item.anwser.length > 20 ? (
+                        <Popover content={item.anwser} style={{ maxWidth: '50vw' }}>
+                          <b className='dangerHTMLThreeLine'>{item.anwser}</b>
+                        </Popover>
+                      ) : (
+                        <b className='dangerHTMLThreeLine'>{item.anwser}</b>
+                      )
+                    ) : null}
+                  </Descriptions.Item>
+                )
+              })}
+            </Descriptions>
           </div>
         </Space>
       </Modal>

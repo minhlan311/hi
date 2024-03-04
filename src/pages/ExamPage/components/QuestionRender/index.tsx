@@ -1,11 +1,126 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { stateAction } from '@/common'
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import { AppContext } from '@/contexts/app.context'
 import { debounce } from '@/helpers/common'
+import { SkillType } from '@/interface/exam'
 import { QuestionState, TypeQuestion } from '@/interface/question'
 import { Card, Divider, Flex, Input, InputNumber, Radio, Space } from 'antd'
 import { useContext, useEffect, useState } from 'react'
+import { LiveAudioVisualizer } from 'react-audio-visualize'
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
+import { BiMicrophone, BiMicrophoneOff } from 'react-icons/bi'
+import { GrPowerReset } from 'react-icons/gr'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import style from './styles.module.scss'
+
+const SpeakingRender = ({
+  handleChange,
+  data,
+  start,
+  index,
+}: {
+  handleChange: (item: any, index: number, anwser: any, correctAnswers: any | any[]) => void
+  data: QuestionState
+  start: number
+  index: number
+}) => {
+  const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition()
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [blobUrl, setBlobUrl] = useState<any>()
+
+  const addAudioElement = (blob: any) => {
+    setBlobUrl(URL.createObjectURL(blob))
+    console.log(blob)
+  }
+
+  const [reset, setReset] = useState<boolean>(false)
+  const [startRec, setStartRec] = useState<boolean>(false)
+  const recorder = useAudioRecorder()
+
+  useEffect(() => {
+    debounce(handleChange(data, start + index, transcript, [transcript]), 500)
+  }, [transcript])
+
+  useEffect(() => {
+    if (reset) {
+      setBlobUrl(undefined)
+      setReset(false)
+    }
+  }, [reset])
+
+  const handleRecord = () => {
+    const rec = !startRec
+    setStartRec(rec)
+
+    if (rec) {
+      recorder.startRecording()
+      SpeechRecognition.startListening()
+    } else {
+      recorder.stopRecording()
+      SpeechRecognition.stopListening()
+    }
+  }
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>
+  }
+
+  return (
+    <div>
+      <b
+        dangerouslySetInnerHTML={{
+          __html: `<span>${start + index}. </span><span>${
+            data?.question ? data?.question : 'Fill in the missing words in the blanks'
+          }</span>`,
+        }}
+        style={{ display: 'block', marginBottom: 6 }}
+      ></b>
+      <Flex justify='center' align='center' vertical className={style.audioMic} gap={24}>
+        <AudioRecorder
+          onRecordingComplete={addAudioElement}
+          recorderControls={recorder}
+          audioTrackConstraints={{
+            noiseSuppression: true,
+            echoCancellation: true,
+          }}
+          classes={{
+            AudioRecorderClass: style.audioClass,
+          }}
+        />
+        <div className={style.audioButt}>
+          <ButtonCustom
+            icon={startRec ? <BiMicrophoneOff size={28} /> : <BiMicrophone size={28} />}
+            shape='circle'
+            width={45}
+            onClick={handleRecord}
+            type={startRec ? 'primary' : 'default'}
+          ></ButtonCustom>
+          {blobUrl && (
+            <ButtonCustom
+              className={style.buttReset}
+              icon={<GrPowerReset />}
+              onClick={() => {
+                resetTranscript()
+
+                setReset(true)
+              }}
+              size='small'
+              type='link'
+            ></ButtonCustom>
+          )}
+        </div>
+
+        {recorder.mediaRecorder ? (
+          <LiveAudioVisualizer mediaRecorder={recorder.mediaRecorder} width={200} height={75} barColor='#019d44' />
+        ) : !reset && blobUrl ? (
+          <audio src={blobUrl} controls />
+        ) : null}
+      </Flex>
+    </div>
+  )
+}
 
 const FillBlank = ({
   handleChange,
@@ -40,12 +155,11 @@ const FillBlank = ({
       const anwserArray = anwsFB.map((item) => item.anwser)
       const combinedAnwser = anwserArray.join(', ')
       let content = FBData.anwText
-      anwsFB.forEach(function (item) {
-        content = content.replace('______', item.anwser)
+      anwsFB.forEach((item) => {
+        content = content.replace('______', ` ${item.anwser} `)
       })
-      console.log(content)
 
-      if (FBData) debounce(handleChange(FBData, FBData?.index, combinedAnwser, 21), 500)
+      if (FBData) debounce(handleChange(FBData, start + index, combinedAnwser, content), 500)
     }
   }, [anwsFB, FBData])
 
@@ -101,7 +215,7 @@ const SingleChoice = ({
   options: string[]
 }) => {
   return (
-    <div onLoad={() => handleChange(data, index, options[index], '')} className={style.typePack}>
+    <div onLoad={() => handleChange(data, start + index, options[index], '')} className={style.typePack}>
       <b
         dangerouslySetInnerHTML={{
           __html: `<span>${start + index}. </span><span>${data?.question}</span>`,
@@ -117,12 +231,15 @@ const SingleChoice = ({
               value={choice}
               className={style.radio}
               onChange={(e) => {
-                handleChange(data, index, options[index], [e.target.value.id])
+                handleChange(data, start + index, options[index], [e.target.value.id])
               }}
             >
               <Flex align='center' className={`sp100`}>
                 <span className={style.answer}>{options[i]}</span>
-                <Radio value={choice} onChange={(e) => handleChange(data, index, options[index], [e.target.value.id])}>
+                <Radio
+                  value={choice}
+                  onChange={(e) => handleChange(data, start + index, options[index], [e.target.value.id])}
+                >
                   <div dangerouslySetInnerHTML={{ __html: choice.answer }}></div>
                 </Radio>
               </Flex>
@@ -158,7 +275,11 @@ const TrueFalse = ({
       <Radio.Group optionType='button' buttonStyle='outline' size='small'>
         <Space>
           {data?.choices.map((choice, i) => (
-            <Radio key={i} value={choice} onChange={(e) => handleChange(data, index, options[i], [e.target.value._id])}>
+            <Radio
+              key={i}
+              value={choice}
+              onChange={(e) => handleChange(data, start + index, options[i], [e.target.value._id])}
+            >
               <div dangerouslySetInnerHTML={{ __html: choice.answer }}></div>
             </Radio>
           ))}
@@ -182,7 +303,7 @@ const Writing = ({
   type: TypeQuestion
 }) => {
   return (
-    <Space direction='vertical' className={'sp100'} onLoad={() => handleChange(data, index, '', '')}>
+    <Space direction='vertical' className={'sp100'} onLoad={() => handleChange(data, start + index, '', '')}>
       <p
         className={'dangerHTML'}
         dangerouslySetInnerHTML={{
@@ -192,13 +313,16 @@ const Writing = ({
       {type === 'NUMERICAL' ? (
         <InputNumber min={0} />
       ) : (
-        <Input.TextArea rows={5} onChange={(e) => handleChange(data, index, e.target.value, [e.target.value])} />
+        <Input.TextArea
+          rows={5}
+          onChange={(e) => handleChange(data, start + index, e.target.value, [e.target.value])}
+        />
       )}
     </Space>
   )
 }
 
-const QuestionsRender = ({ data, prev }: { data: QuestionState[]; prev: number }) => {
+const QuestionsRender = ({ data, prev, skill }: { data: QuestionState[]; prev: number; skill: SkillType }) => {
   const { setOverView } = useContext(AppContext)
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -230,12 +354,12 @@ const QuestionsRender = ({ data, prev }: { data: QuestionState[]; prev: number }
     }
   }, [data])
 
-  const handleChange = (item: any, index: number, anwser: any, correctAnswers: any | any[]) => {
+  const handleChange = (item: any, key: number, anwser: any, correctAnswers: any | any[]) => {
     stateAction(
       setOverView,
       item._id,
       {
-        index: index,
+        index: key,
         _id: item._id,
         anwser,
         correctAnswers,
@@ -262,7 +386,7 @@ const QuestionsRender = ({ data, prev }: { data: QuestionState[]; prev: number }
           return (
             <div style={{ marginTop: 20 }}>
               <h2 style={{ marginBottom: 10 }}>{`Questions ${startQuestionNumber} - ${currentQuestionNumber - 1}`}</h2>
-              {renderQuestionNumbers(startQuestionNumber, currentQuestionNumber, item)}
+              {renderQuestionNumbers(startQuestionNumber, currentQuestionNumber, item, skill)}
             </div>
           )
         }
@@ -277,6 +401,7 @@ const QuestionsRender = ({ data, prev }: { data: QuestionState[]; prev: number }
     start: number,
     end: number,
     question: { type: TypeQuestion; data: QuestionState[] },
+    skill: SkillType,
   ) => {
     const questionNumbers: any[] = []
 
@@ -291,11 +416,14 @@ const QuestionsRender = ({ data, prev }: { data: QuestionState[]; prev: number }
             (question?.type === 'TRUE FALSE' && (
               <TrueFalse handleChange={handleChange} data={data} start={start} index={i} options={options} />
             )) ||
-            ((question.type === 'WRITING' || question.type === 'NUMERICAL') && (
+            (skill !== 'SPEAKING' && (question.type === 'WRITING' || question.type === 'NUMERICAL') && (
               <Writing handleChange={handleChange} data={data} start={start} index={i} type={question.type} />
             )) ||
             (question.type === 'FILL BLANK' && (
               <FillBlank handleChange={handleChange} data={data} start={start} index={i} />
+            )) ||
+            (skill === 'SPEAKING' && question.data.length > 0 && (
+              <SpeakingRender handleChange={handleChange} data={data} start={start} index={i} />
             )) || (
               <div>
                 <Divider />
