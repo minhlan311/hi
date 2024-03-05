@@ -1,4 +1,5 @@
 import questionApi from '@/apis/question.api'
+import LoadingCustom from '@/components/LoadingCustom'
 import openNotification from '@/components/Notification'
 import TextAreaCustom from '@/components/TextAreaCustom/TextAreaCustom'
 import { ExamState, SkillType } from '@/interface/exam'
@@ -11,7 +12,6 @@ import { SetStateAction, useEffect, useState } from 'react'
 import CreateDnDQuestion from './CreateDragDrop'
 import RenderAddonLinkertScale from './RenderAddonLinkertScale'
 import TableAddonQues from './TableAddonQues'
-import LoadingCustom from '@/components/LoadingCustom'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Props = {
@@ -143,7 +143,6 @@ const CreateQuestion = (props: Props) => {
       skill: skill ? skill : skillOptions.length < 2 ? examDetail?.skillName[0] : values.skill,
     }
     mutate(payload)
-    console.log(payload, 'payload')
   }
 
   useEffect(() => {

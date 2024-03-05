@@ -32,6 +32,8 @@ const SpeakingRender = ({
 
   const addAudioElement = (blob: any) => {
     setBlobUrl(URL.createObjectURL(blob))
+
+    // upload audio to server here
     console.log(blob)
   }
 

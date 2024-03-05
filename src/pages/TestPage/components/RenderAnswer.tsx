@@ -282,14 +282,11 @@ const RenderAnswer = (props: Props) => {
     }
   }, [reset])
 
-  console.log(questionData)
-
   useEffect(() => {
     if (data && data.correctAnswers.length > 0) {
       const newData = shuffleArray(choices).sort(
         (a, b) => data.correctAnswers.indexOf(a.id) - data.correctAnswers.indexOf(b.id),
       )
-      console.log(newData)
 
       setDndData(newData)
     }
@@ -316,8 +313,6 @@ const RenderAnswer = (props: Props) => {
   const optionsList = shuffleArray(choices).map((ots) => {
     return { value: ots.id, label: ots.answer }
   })
-
-  console.log({ data, questId, questionText })
 
   if (type === 'WRITING')
     return (

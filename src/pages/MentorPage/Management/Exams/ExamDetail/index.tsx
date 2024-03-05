@@ -83,7 +83,6 @@ const MentorExamDetail = () => {
 
   // Đổi sang màn tạo
   if (id === 'createTest' || id === 'updateTest') return <MentorCreateTest />
-  console.log(examDetail)
 
   const labelData = [
     {

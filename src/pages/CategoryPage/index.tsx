@@ -47,7 +47,6 @@ const CategoryPage = () => {
   }, [error])
 
   const parent = categoriesParent?.data
-  console.log(parent)
   const s1 = parent
   const s2 = s1?.children?.find((item) => item.slug === categorySlug!)
   const s3 = s2?.children?.find((item) => item.slug === subCategorySlug!)

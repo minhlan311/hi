@@ -74,8 +74,6 @@ export default function ModalFormAnswer(props: IModalFormProps) {
   }
 
   useEffect(() => {
-    console.log(answer)
-
     if (answer) {
       form.setFieldsValue({
         content: answer?.content,

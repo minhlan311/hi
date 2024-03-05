@@ -35,7 +35,6 @@ const OpeningPage = () => {
 
   const promotion = promotionData?.data
   const [countdown, setCountdown] = useState<number>(0.00001)
-  console.log(countdown)
 
   return (
     <Header padding={'35px 0 50px 0'}>

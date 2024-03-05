@@ -56,7 +56,6 @@ const NavigationTest = (props: Props) => {
   }
 
   const totalQuestions = examDetail?.data?.countQuestions
-  console.log(overView)
 
   return (
     <Card size='small'>
