@@ -26,8 +26,8 @@ export const ENDPOINT = {
   PROMOTION_PATH: '/promotion/',
 
   // :::::::::::::::::::: NEWS PATH :::::::::::::::::::::
-  NEWS: '/news/find',
-  GET_ONE_NEWS: '/news/',
+  FIND_NEWS: '/news/find',
+  NEWS_PATH: '/news/',
 
   GET_USER_INFO: '/users/',
   FIND_USER_PATH: '/users/find',

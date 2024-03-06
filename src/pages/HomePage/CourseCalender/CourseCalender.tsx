@@ -4,6 +4,7 @@ import categoryApi from '@/apis/categories.api'
 import courseApi from '@/apis/course.api'
 import CourseCard from '@/components/CourseCard'
 import Header from '@/components/layout/Header/Header'
+import useResponsives from '@/hooks/useResponsives'
 import { CategoryState } from '@/interface/category'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Col, Row, Skeleton } from 'antd'
@@ -27,6 +28,8 @@ export default function CourseCalender() {
 
   const courses = categoriesData?.data?.docs?.find((item: CategoryState) => item.name === 'Khóa học')
 
+  const { lg, sm } = useResponsives()
+
   const { data: listData, isLoading } = useQuery({
     queryKey: ['course', id, categoriesData],
     queryFn: () => {
@@ -35,7 +38,7 @@ export default function CourseCalender() {
           categoryId: id ? id : courses?.children[0]?._id,
         },
         options: {
-          limit: 8,
+          limit: (sm && 5) || (lg && 6) || 8,
           sort: { createdAt: -1 },
         },
       })
@@ -88,7 +91,7 @@ export default function CourseCalender() {
         {isLoading
           ? divs
           : listData?.data?.docs?.map((item) => (
-              <Col span={24} md={6} key={item._id}>
+              <Col span={24} md={12} lg={8} xl={6} key={item._id}>
                 <CourseCard item={item} />
               </Col>
             ))}
