@@ -277,12 +277,14 @@ export const stateAction = (
   })
 }
 
-export const formatNumber = (number: number) => {
-  if (number >= 1000000) {
-    return (number / 1000000).toFixed(1) + 'm'
-  } else if (number >= 1000) {
-    return (number / 1000).toFixed(1) + 'k'
-  } else {
-    return number ? number.toString() : 0
-  }
+export const formatNumber = (number: number, type?: 'number', endText?: string) => {
+  if (!type) {
+    if (number >= 1000000) {
+      return (number / 1000000).toFixed(1) + 'm'
+    } else if (number >= 1000) {
+      return (number / 1000).toFixed(1) + 'k'
+    } else {
+      return number ? number.toString() : 0
+    }
+  } else return new Intl.NumberFormat('vi-VN').format(number) + (endText ? ` ${endText}` : '')
 }

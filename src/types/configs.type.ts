@@ -1,6 +1,10 @@
 type footer = {
-  name: string
-  children: { href: string; content: string }[]
+  contents: { name: string; children: { href: string; content: string }[] }[]
+  facebookAppId: string
+  facebookLink: string
+  googleMapKey: string
+  coordinates: { lat: string; lng: string }
+  zaloLink: string
 }
 
 type buttonADSLink = {
@@ -37,7 +41,7 @@ export type Configs = {
   banners: string[]
   logoFooter: string
   buttonADSLink: buttonADSLink[]
-  footer: footer[]
+  footer: footer
   linkIntroduction: string
   introductions: introductions[]
 }
