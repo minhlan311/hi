@@ -32,6 +32,7 @@ const QuestionItem = (props: Props) => {
 
   if (loading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
   const dataSubmit = dataValue.find((q) => q._id === selectId)
+  console.log(dataSubmit)
 
   if (questionData)
     return (

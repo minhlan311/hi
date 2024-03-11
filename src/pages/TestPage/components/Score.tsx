@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import useResponsives from '@/hooks/useResponsives'
 import { ExamResultsState } from '@/interface/exam'
-import { Progress, Row, Space, Table } from 'antd'
+import { Flex, Progress, Row, Space, Table } from 'antd'
 import { BsCheckCircle, BsPencil } from 'react-icons/bs'
 import { FaAssistiveListeningSystems } from 'react-icons/fa'
 import { PiTimer } from 'react-icons/pi'
@@ -10,7 +10,7 @@ import { VscBook } from 'react-icons/vsc'
 import css from '../styles.module.scss'
 
 type Props = {
-  data: ExamResultsState[]
+  data: ExamResultsState
   testQuestion: number
   time: number
 }
@@ -68,13 +68,13 @@ const Score = ({ data, testQuestion, time }: Props) => {
   ]
 
   const { md } = useResponsives()
-  const durations = data?.[0]?.time
+  const durations = data?.time
 
   const minutes = Math.floor(durations)
   const seconds = Math.round((durations - minutes) * 60)
   const formattedTime = `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
 
-  const filteredColumns = columns.filter((column) => data?.[0]?.score?.some((item) => item.skill === column.dataIndex))
+  const filteredColumns = columns.filter((column) => data?.score?.some((item) => item.skill === column.dataIndex))
 
   return (
     <Space align='center' size='large' direction='vertical' className={`sp100 ${css.score}`}>
@@ -82,23 +82,23 @@ const Score = ({ data, testQuestion, time }: Props) => {
       <Row justify='space-between' align='middle'>
         {md ? (
           <Space direction='vertical' align='center'>
-            <Space direction='vertical' className={css.done} align='center'>
+            <Flex vertical align='center' gap={10} className={css.done}>
               <BsCheckCircle />
               <p className={css.title}>Câu đúng</p>
-            </Space>
-            <h4>{`${data?.[0]?.totalCorrectAnswer}/${testQuestion}`}</h4>
+            </Flex>
+            <h4>{`${data?.totalCorrectAnswer}/${testQuestion}`}</h4>
           </Space>
         ) : (
           <Progress
             type='circle'
-            percent={(data?.[0]?.totalCorrectAnswer / testQuestion) * 100}
+            percent={(data?.totalCorrectAnswer / testQuestion) * 100}
             format={() => (
               <Space direction='vertical'>
-                <Space direction='vertical' className={css.done}>
+                <Flex vertical align='center' gap={10} className={css.done}>
                   <BsCheckCircle />
                   <p className={css.title}>Đúng</p>
-                </Space>
-                <h4>{`${data?.[0]?.totalCorrectAnswer}/${testQuestion}`}</h4>
+                </Flex>
+                <h4>{`${data?.totalCorrectAnswer}/${testQuestion}`}</h4>
               </Space>
             )}
           ></Progress>
@@ -107,34 +107,32 @@ const Score = ({ data, testQuestion, time }: Props) => {
           <Progress
             type='circle'
             percent={100}
-            format={() => <h2>{data?.[0]?.point}</h2>}
-            status={data?.[0]?.status === 'FAIL' ? 'exception' : 'success'}
+            format={() => <h2>{data?.point}</h2>}
+            status={data?.status === 'FAIL' ? 'exception' : 'success'}
           ></Progress>
-          <h2 className={`${css.title} ${data?.[0]?.status === 'FAIL' ? css.fail : css.done}`}>{data?.[0]?.status}!</h2>
+          <h2 className={`${css.title} ${data?.status === 'FAIL' ? css.fail : css.done}`}>{data?.status}!</h2>
         </Space>
         {md ? (
-          <Space direction='vertical' align='center'>
+          <Flex vertical align='center' gap={10}>
             <PiTimer size={28} />
             <p className={css.title}>Thời gian</p>
-            <h4>{formattedTime}</h4>
-          </Space>
+            <h3>{formattedTime}</h3>
+          </Flex>
         ) : (
           <Progress
             type='circle'
-            percent={(data?.[0]?.time / time) * 100}
+            percent={(data?.time / time) * 100}
             format={() => (
-              <Space direction='vertical'>
+              <Flex vertical align='center' gap={10}>
                 <PiTimer size={28} />
                 <p className={css.title}>Thời gian</p>
-                <h4>{formattedTime}</h4>
-              </Space>
+                <h3>{formattedTime}</h3>
+              </Flex>
             )}
           ></Progress>
         )}
       </Row>
-      {data?.[0]?.score && (
-        <Table columns={filteredColumns} dataSource={[data?.[0]?.score]} bordered pagination={false}></Table>
-      )}
+      {data?.score && <Table columns={filteredColumns} dataSource={[data?.score]} bordered pagination={false}></Table>}
     </Space>
   )
 }
