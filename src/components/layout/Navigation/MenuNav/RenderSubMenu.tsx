@@ -29,11 +29,15 @@ const RenderSubMenu = ({ item, parentSlug }: Props) => {
   if (item)
     return (
       <Space direction='vertical' className={'sp100'}>
-        {item.children && item.children.length > 0 ? (
+        {item.children && item.children.length > 0 && item.label !== 'Khóa học' ? (
           <div className={style.navIcon}>
             <div onClick={() => setOpenSub(true)}>
               {item.label}
-              {item.children ? item.children.length > 0 && <AiOutlineRight size={14} /> : <></>}
+              {item.children ? (
+                item.children.length > 0 && item.label !== 'Khóa học' && <AiOutlineRight size={14} />
+              ) : (
+                <></>
+              )}
             </div>
             <DrawerCustom
               open={openSub}

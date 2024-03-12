@@ -76,7 +76,7 @@ const MenuMb = ({ categoriesData, userData }: { categoriesData: TransformedItem[
           label: 'Luyện thi',
           icon: <IoSchoolOutline />,
           activeIcon: <MdSchool />,
-          href: `${test?.href}${test?.children?.[0]?.href}`,
+          href: `${test?.href}`,
         },
         {
           label: 'Lịch khai giảng',
@@ -245,15 +245,21 @@ const MenuNav = ({ user, type }: Props) => {
                           <>
                             <Flex gap={5}>
                               <div className={style.title}>{item.label}</div>
-                              {item.children ? item.children.length > 0 && <IoChevronDown /> : null}
+                              {item.children
+                                ? item.children.length > 0 && item.label !== 'Khóa học' && <IoChevronDown />
+                                : null}
                             </Flex>
-                            {item.children ? item.children.length > 0 && <div className={style.arr}></div> : null}
+                            {item.children
+                              ? item.children.length > 0 &&
+                                item.label !== 'Khóa học' && <div className={style.arr}></div>
+                              : null}
                           </>
                         )}
                       </div>
                     </Link>
                     {item.children
-                      ? item.children.length > 0 && (
+                      ? item.children.length > 0 &&
+                        item.label !== 'Khóa học' && (
                           <Row gutter={[0, 24]} className={style.chilMenu}>
                             {item.children.map((chil) =>
                               chil?.children.length > 0 ? (

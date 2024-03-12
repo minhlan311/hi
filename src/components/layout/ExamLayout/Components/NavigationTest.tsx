@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import Logo from '@/components/Logo/Logo'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { ExamState } from '@/interface/exam'
 import { useQueryClient } from '@tanstack/react-query'
-import { Card, Col, Flex, Modal, Row, Space } from 'antd'
+import { Card, Descriptions, Flex, Modal, Popover, Space } from 'antd'
 import { useContext, useState } from 'react'
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
 import { TbListSearch } from 'react-icons/tb'
@@ -54,7 +55,7 @@ const NavigationTest = (props: Props) => {
     }
   }
 
-  const totalQuestions = examDetail?.data.countQuestionsBySkill.reduce((total, item) => total + item.countQuestions, 0)
+  const totalQuestions = examDetail?.data?.countQuestions
 
   return (
     <Card size='small'>
@@ -97,7 +98,10 @@ const NavigationTest = (props: Props) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Bạn có muốn hoàn thành kỹ {skillName}?</p>
+        <div>Bạn có muốn hoàn thành kỹ năng {skillName} không?</div>
+        <i>
+          (*) Lưu ý: <b>Sau khi</b> chuyển kỹ năng khác, sẽ <b>không thể quay lại</b> để chỉnh sửa câu trả lời.
+        </i>
       </Modal>
       <Modal
         title='Xem lại câu trả lời'
@@ -108,15 +112,25 @@ const NavigationTest = (props: Props) => {
         <Space direction='vertical' size='large' className='sp100'>
           <i>* Cửa sổ này chỉ để xem lại câu trả lời của bạn, bạn không thể thay đổi câu trả lời ở đây!</i>
           <div>
-            <Row gutter={[24, 24]}>
-              {Array.from({ length: totalQuestions as number }).map((_, index) => (
-                <Col span={12} md={6} key={index}>
-                  <Space>
-                    <p>Q{index + 1}:</p> <b>{overView[index]?.anwser}</b>
-                  </Space>
-                </Col>
-              ))}
-            </Row>
+            <Descriptions>
+              {Array.from({ length: totalQuestions as number }).map((_, index) => {
+                const item = overView.find((item) => item.index === index + 1)
+
+                return (
+                  <Descriptions.Item label={`Q${index + 1}`} key={index}>
+                    {item?.anwser ? (
+                      item.anwser.length > 20 ? (
+                        <Popover content={item.anwser} style={{ maxWidth: '50vw' }}>
+                          <b className='dangerHTMLThreeLine'>{item.anwser}</b>
+                        </Popover>
+                      ) : (
+                        <b className='dangerHTMLThreeLine'>{item.anwser}</b>
+                      )
+                    ) : null}
+                  </Descriptions.Item>
+                )
+              })}
+            </Descriptions>
           </div>
         </Space>
       </Modal>

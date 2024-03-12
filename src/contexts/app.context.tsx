@@ -14,7 +14,7 @@ interface AppContextInterface {
   start: boolean
   volume: number
   time: number
-  overView: { index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]
+  overView: { index?: number; _id: string; anwser: any; correctAnswers: any | any[] }[]
   setConfigs: React.Dispatch<React.SetStateAction<Configs>>
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   setProfile: React.Dispatch<React.SetStateAction<UserState>>
@@ -24,7 +24,7 @@ interface AppContextInterface {
   setTime: React.Dispatch<React.SetStateAction<number>>
   setVolume: React.Dispatch<React.SetStateAction<number>>
   setOverView: React.Dispatch<
-    React.SetStateAction<{ index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>
+    React.SetStateAction<{ index?: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>
   >
 }
 
@@ -64,7 +64,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [start, setStart] = useState<boolean>(initialAppContext.start)
   const [volume, setVolume] = useState<number>(initialAppContext.volume)
   const [time, setTime] = useState<number>(initialAppContext.time)
-  const [overView, setOverView] = useState<{ index: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>(
+  const [overView, setOverView] = useState<{ index?: number; _id: string; anwser: any; correctAnswers: any | any[] }[]>(
     initialAppContext.overView,
   )
 

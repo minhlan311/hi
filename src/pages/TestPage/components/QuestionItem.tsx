@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { localAction, shuffleArray } from '@/common'
+import { localAction } from '@/common'
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom'
 import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import useResponsives from '@/hooks/useResponsives'
 import { Answer, Choice, QuestionState } from '@/interface/question'
-import { Flex, Form, Space } from 'antd'
-import { FormInstance } from 'antd/lib'
+import { Flex, Space } from 'antd'
 import { useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbArrowBack } from 'react-icons/tb'
@@ -22,28 +21,18 @@ type Props = {
   testId: string
   loading: boolean
   selectId: string
-  form: FormInstance
   dataValue: Answer[]
 }
 
 const QuestionItem = (props: Props) => {
   const { xl, xxl } = useResponsives()
-  const { type, questionData, questionLength, questionKey, testId, loading, selectId, form, dataValue } = props
+
+  const { type, questionData, questionLength, questionKey, testId, loading, selectId, dataValue } = props
   const [reset, setReset] = useState<boolean>(false)
-
-  const onFinish = (val: any) => {
-    if (val?.correctAnswers.length > 0) {
-      const payload = {
-        _id: questionData._id,
-        correctAnswers: typeof val.correctAnswers === 'string' ? [val.correctAnswers] : val.correctAnswers,
-      }
-
-      localAction(testId + 'data', payload, 'update', '_id')
-    }
-  }
 
   if (loading) return <LoadingCustom tip='Vui lòng chờ...' style={{ marginTop: '40vh' }}></LoadingCustom>
   const dataSubmit = dataValue.find((q) => q._id === selectId)
+  console.log(dataSubmit)
 
   if (questionData)
     return (
@@ -80,31 +69,28 @@ const QuestionItem = (props: Props) => {
           </Space>
         )}
 
-        <Form form={form} onFinish={onFinish}>
-          <RenderAnswer
-            type={
-              questionData.type as unknown as
-                | 'SINGLE CHOICE'
-                | 'MULTIPLE CHOICE'
-                | 'TRUE FALSE'
-                | 'SORT'
-                | 'DRAG DROP'
-                | 'LIKERT SCALE'
-                | 'FILL BLANK'
-                | 'MATCHING'
-                | 'NUMERICAL'
-                | 'WRITING'
-            }
-            choices={shuffleArray(questionData.choices as unknown as Choice[])}
-            reset={reset}
-            setReset={setReset}
-            data={dataSubmit && dataSubmit._id === selectId ? dataSubmit : null}
-            questId={questionData._id}
-            form={form}
-            questionText={questionData?.questionText}
-            testId={testId}
-          />
-        </Form>
+        <RenderAnswer
+          type={
+            questionData.type as unknown as
+              | 'SINGLE CHOICE'
+              | 'MULTIPLE CHOICE'
+              | 'TRUE FALSE'
+              | 'SORT'
+              | 'DRAG DROP'
+              | 'LIKERT SCALE'
+              | 'FILL BLANK'
+              | 'MATCHING'
+              | 'NUMERICAL'
+              | 'WRITING'
+          }
+          choices={questionData.choices as unknown as Choice[]}
+          reset={reset}
+          setReset={setReset}
+          data={dataSubmit && dataSubmit._id === selectId ? dataSubmit : null}
+          questId={questionData._id}
+          questionText={questionData?.questionText}
+          questionData={questionData}
+        />
       </Space>
     )
   else

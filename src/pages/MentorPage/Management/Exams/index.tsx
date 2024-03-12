@@ -111,11 +111,7 @@ const MentorExams = () => {
       key: 'countQuestions',
       width: '10%',
       render: (_: any, record: any) => {
-        return (
-          <Link to={`/mentor/exams/${record._id}/questions`}>
-            {record.type === 'TEST' ? record.countQuestionsBySkill : record.countQuestions}
-          </Link>
-        )
+        return <Link to={`/mentor/exams/${record._id}/questions`}>{record.countQuestions}</Link>
       },
     },
     {

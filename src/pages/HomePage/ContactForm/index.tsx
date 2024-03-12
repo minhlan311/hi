@@ -25,13 +25,17 @@ export default function ContactForm() {
   }
 
   return (
-    <Header size='sm' padding={'60px 0'}>
+    <Header size='sm' padding={'60px 0'} background='var(--red)'>
       <Row align='middle' gutter={[24, 24]}>
         <Col span={24} md={12}>
-          <Image src='https://i.ytimg.com/vi/QlkPQCeeA04/maxresdefault.jpg' preview={false} />
+          <Image
+            src='https://i.ytimg.com/vi/QlkPQCeeA04/maxresdefault.jpg'
+            style={{ borderRadius: 14 }}
+            preview={false}
+          />
         </Col>
         <Col span={24} md={12}>
-          <Space direction='vertical' size='large' className='sp100'>
+          <Space direction='vertical' size='large' className='sp100 content-form'>
             <h1 style={{ textAlign: 'center' }}>Liên hệ</h1>
             <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
               <Form.Item<FieldType> name='username' rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}>

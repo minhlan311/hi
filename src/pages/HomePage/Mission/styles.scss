@@ -5,6 +5,15 @@
     height: 300px;
     border-radius: 25px;
     overflow: hidden;
+    @include respond-to(xs) {
+      height: 430px;
+    }
+    @include respond-to(md) {
+      height: 380px;
+    }
+    @include respond-to(lg) {
+      height: 400px;
+    }
     .ms-content {
       color: white;
       position: relative;
@@ -16,6 +25,9 @@
         width: 100%;
       }
       @include respond-to(sm) {
+        width: 100%;
+      }
+      @include respond-to(md) {
         width: 100%;
       }
 

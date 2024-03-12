@@ -46,9 +46,7 @@ const FilterAction = (props: Props) => {
     filterQuery,
     initFilterQuery,
     checkQuery,
-    sort = {
-      createdAt: '-1',
-    },
+    sort,
     callApi = true,
     listenerFilterQuery = false,
   } = props
@@ -93,7 +91,11 @@ const FilterAction = (props: Props) => {
   })
   const [filterData, setFilterData] = useState<{ filterQuery: any; options: any } | null>({
     filterQuery: { ...initFilterQuery, ...filterQuery, mentorType: mentorSub?.label },
-    options: { sort, limit, page },
+    options: {
+      sort: { createdAt: '-1', ...sort },
+      limit,
+      page,
+    },
   })
 
   const onChangeFilter = () => {
@@ -170,7 +172,7 @@ const FilterAction = (props: Props) => {
       options: {
         limit,
         page: 1,
-        sort,
+        sort: { createdAt: '-1', ...sort },
       },
     })
   }
@@ -224,8 +226,6 @@ const FilterAction = (props: Props) => {
       })
     }
   }, [page, checkQuery, location, filterQuery, listenerFilterQuery])
-
-  console.log(filterData)
 
   useEffect(() => {
     setTimeout(() => {

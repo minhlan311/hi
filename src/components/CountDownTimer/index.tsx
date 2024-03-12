@@ -16,6 +16,7 @@ type Props = {
   action?: boolean
   start?: boolean
   localId?: string
+  localData?: any
   className?: string
   space?: string
   spaceStyle?: React.CSSProperties
@@ -37,6 +38,7 @@ const CountDownTimer = (props: Props) => {
     type = 'text',
     start = true,
     localId,
+    localData,
     className,
     space = type === 'flip' && ':',
     spaceStyle,
@@ -58,8 +60,12 @@ const CountDownTimer = (props: Props) => {
         e.returnValue =
           'Bạn đang làm bài kiểm tra. Bạn có chắc chắn muốn rời khỏi trang này? Mọi thay đổi chưa được lưu sẽ bị mất.'
 
-        if (localId)
+        if (localId) {
           localStorage.setItem(localId as string, JSON.stringify(moment.duration(stopedTime, 'seconds').asMinutes()))
+        }
+        if (localData) {
+          localStorage.setItem((localId + 'data') as string, JSON.stringify(localData))
+        }
       }
     }
 

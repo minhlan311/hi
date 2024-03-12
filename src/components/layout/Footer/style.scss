@@ -1,0 +1,15 @@
+.qrcode {
+  background-color: var(--whiteBg) !important;
+  padding: 5px !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.logo-footer {
+  object-fit: contain;
+  -webkit-filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px 1px 0 white) drop-shadow(1px -1px 0 white)
+    drop-shadow(-1px -1px 0 white);
+
+  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px 1px 0 white) drop-shadow(1px -1px 0 white)
+    drop-shadow(-1px -1px 0 white);
+}

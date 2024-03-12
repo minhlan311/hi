@@ -267,8 +267,6 @@ export default function QADetail() {
         }}
         answer={null}
         onSuccess={() => {
-          console.log('thành công')
-
           setIsModalOpen(false)
           setReload((reload: boolean) => !reload)
         }}

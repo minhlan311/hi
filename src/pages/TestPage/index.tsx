@@ -11,13 +11,14 @@ import openNotification from '@/components/Notification'
 import PageResult from '@/components/PageResult'
 import TagCustom from '@/components/TagCustom/TagCustom'
 import Header from '@/components/layout/Header/Header'
+import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { ExamResultsState } from '@/interface/exam'
 import { QuestionState } from '@/interface/question'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, Col, Descriptions, Form, Row, Space } from 'antd'
 import moment from 'moment-timezone'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { BiCheckDouble } from 'react-icons/bi'
 import { useLocation } from 'react-router-dom'
@@ -28,15 +29,14 @@ import css from './styles.module.scss'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TestPage = () => {
+  const { overView, time, setTime, setOverView } = useContext(AppContext)
   const location = useLocation()
   const [form] = Form.useForm()
-  const [startTest, setStartTest] = useState<boolean>(false)
-  const [handleScore, setHandleScore] = useState<boolean>(false)
-  const [finishTest, setFinishTest] = useState<boolean>(false)
+  const [steps, setSteps] = useState(0)
   const [selectId, setSelectId] = useState<string>('')
   const [current, setCurrent] = useState(0)
-  const [time, setTime] = useState<number>(0)
   const [isLoad, setIsLoad] = useState(false)
+  const [submit, setSubmit] = useState(false)
 
   const { sm, md, lg } = useResponsives()
   const { data: testData, isLoading } = useQuery({
@@ -90,7 +90,7 @@ const TestPage = () => {
     if (question && current >= 0) setSelectId(question[current]?._id)
   }, [test, event, current, question])
 
-  const [resultsData, setResultsData] = useState<ExamResultsState[]>()
+  const [resultsData, setResultsData] = useState<ExamResultsState | null>()
 
   const testMutation = useMutation({
     mutationFn: (body) => examApi.examSubmit(body),
@@ -101,64 +101,64 @@ const TestPage = () => {
         description: 'Đã gửi câu trả lời!',
       })
 
-      if (test) {
-        localStorage.removeItem(`${test._id}data`)
-        localStorage.removeItem(`${test._id}`)
-      }
-
-      const newData = [data.data]
-
-      setResultsData(newData as unknown as ExamResultsState[])
+      const results = data.data
+      const newData = results as unknown as ExamResultsState
+      localStorage.removeItem(newData?.testId)
+      localStorage.removeItem(newData?.testId + 'data')
+      setResultsData(newData)
     },
   })
 
   useEffect(() => {
-    if (handleScore && !startTest && !finishTest) {
+    if (resultsData) {
       setTimeout(() => {
-        setFinishTest(true)
-        setHandleScore(false)
+        setSteps(3)
       }, 250)
     }
   }, [resultsData])
 
   const testTime = location.state.testTime + location.state.addTime
 
-  const oldTime = testData?.data._id && localAction(testData?.data._id)
+  const oldTime = test?._id && localAction(test?._id)
 
   // data upload api
-  const [answers, setAnswers] = useState<any>([])
   useEffect(() => {
-    if (testData || isLoad) {
-      const savedAnswers = localAction(testData?.data._id + 'data')
-
-      if (savedAnswers !== null) {
-        setAnswers(savedAnswers)
-      }
+    if (test) {
+      const savedAnswers = localAction(test?._id + 'data')
+      setOverView(savedAnswers)
     }
-  }, [testData, finishTest, isLoad])
+  }, [test])
 
   const handleFinish = () => {
-    setStartTest(false)
-    setHandleScore(true)
-    localAction(testData?.data._id as string, null, 'delete')
+    setSubmit(true)
+    setTimeout(() => {
+      setSteps(2)
+    }, 250)
   }
 
   useEffect(() => {
-    if (handleScore && !finishTest) {
+    if (steps === 2) {
       setTimeout(() => {
+        overView.forEach((item) => {
+          delete item.anwser
+          delete item.index
+        })
         const payload = {
-          _id: testData?.data._id,
-          questions: answers,
+          _id: test?._id,
+          questions: overView,
           time: testTime - time,
         }
-        testMutation.mutate(payload as unknown as any)
+
+        testMutation.mutate(payload as any)
       }, 150)
     }
-  }, [handleScore, finishTest, time])
+  }, [steps, time])
 
   const handleReset = () => {
-    setFinishTest(false)
+    setSteps(0)
     setCurrent(0)
+    setSubmit(false)
+    setOverView([])
     setTime(0)
   }
 
@@ -189,7 +189,6 @@ const TestPage = () => {
   }
 
   const startTime = moment(eventData?.data.start)
-
   const endTime = moment(eventData?.data.end)
   const duration = moment.duration(endTime.diff(startTime))
   const totalMinutes = duration.asMinutes()
@@ -198,8 +197,8 @@ const TestPage = () => {
     return (
       <LoadingCustom style={{ height: '50vh' }} tip='Vui lòng chờ...' loading={isLoading}>
         <Header padding={md ? '20px 0' : '70px 0'}>
-          <Row justify='space-between' align={startTest ? 'top' : 'middle'} className={css.testMain} gutter={24}>
-            {!startTest && !finishTest && !handleScore && (
+          <Row justify='space-between' align={steps === 1 ? 'top' : 'middle'} className={css.testMain} gutter={24}>
+            {steps === 0 && (
               <>
                 <Col span={24} md={12}>
                   <img src={testBg} alt='testBg' width={'100%'} />
@@ -246,7 +245,7 @@ const TestPage = () => {
                     <ButtonCustom
                       size='large'
                       type='primary'
-                      onClick={() => setStartTest(true)}
+                      onClick={() => setSteps(1)}
                       disabled={!testData.data.countQuestions}
                     >
                       Bắt đầu thi
@@ -256,7 +255,7 @@ const TestPage = () => {
               </>
             )}
 
-            {startTest && !finishTest && (
+            {steps === 1 && (
               <>
                 <Col span={24} xl={20} lg={19}>
                   {md && (
@@ -274,9 +273,10 @@ const TestPage = () => {
                           type={md ? 'number' : 'progress'}
                           initTime={testTime}
                           initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
-                          start={startTest && !handleScore}
+                          start={steps === 1 && !submit}
                           size={md ? 20 : 30}
                           localId={test._id}
+                          localData={overView}
                           callbackTimeEnd={setTime}
                           onListenEvent={handleFinish}
                         ></CountDownTimer>
@@ -299,11 +299,10 @@ const TestPage = () => {
                         questionData={question?.[current] as unknown as QuestionState}
                         questionLength={question?.length as unknown as number}
                         questionKey={current}
-                        dataValue={answers}
+                        dataValue={overView}
                         testId={testData ? testData.data._id : ''}
                         loading={questions.isLoading}
                         selectId={selectId}
-                        form={form}
                       />
                     </LoadingCustom>
                   </Card>
@@ -315,10 +314,11 @@ const TestPage = () => {
                         type={sm ? 'number' : 'text'}
                         initTime={testTime}
                         initCountdown={oldTime !== 0 ? (oldTime as unknown as number) : 0}
-                        start={startTest && !handleScore}
+                        start={steps === 1 && !submit}
                         size={20}
                         localId={test._id}
-                        callbackTimeEnd={setTime}
+                        localData={overView}
+                        callbackTimeEnd={(e) => setTime(e)}
                         onListenEvent={handleFinish}
                       ></CountDownTimer>
                       <h2 style={{ textAlign: 'center' }}>{event ? event.name : test.name}</h2>
@@ -345,14 +345,14 @@ const TestPage = () => {
                 </Col>
               </>
             )}
-            {handleScore && !finishTest && (
+            {steps === 2 && (
               <Col span={24}>
                 <Row justify='center'>
                   <Col span={24} md={12}>
                     <img src={loadingBg} alt='loading' width={'85%'} style={{ display: 'block', margin: '0 auto' }} />
                   </Col>
                   <Col span={24}>
-                    <LoadingCustom loading={handleScore} tip='Đang tính toán điểm của bạn! Vui lòng chờ...'>
+                    <LoadingCustom loading={steps === 2} tip='Đang tính toán điểm của bạn! Vui lòng chờ...'>
                       <p style={{ height: 70 }}></p>
                     </LoadingCustom>
                   </Col>
@@ -360,7 +360,7 @@ const TestPage = () => {
               </Col>
             )}
 
-            {!startTest && finishTest && (
+            {steps === 3 && (
               <>
                 <Col span={24} md={12}>
                   <img src={successBg} alt='successBg' width={'100%'} />
@@ -374,11 +374,7 @@ const TestPage = () => {
                   >
                     <h1>{event ? event.name : test.name}</h1>
 
-                    <Score
-                      data={resultsData as unknown as ExamResultsState[]}
-                      testQuestion={testData.data.countQuestions}
-                      time={totalMinutes}
-                    />
+                    <Score data={resultsData!} testQuestion={testData.data.countQuestions} time={totalMinutes} />
                     <Space>
                       <ButtonCustom onClick={handleReset}>Làm lại</ButtonCustom>
                       <ButtonCustom type='primary' href='/'>

@@ -39,6 +39,7 @@
     color: white;
     border-radius: 2px;
     font-size: 20px;
+    animation: phone-ring 1.5s infinite ease-in-out;
   }
   .cartIcon {
     width: 42px;
@@ -65,5 +66,29 @@
       display: flex;
       padding-inline-end: 0;
     }
+  }
+}
+
+@keyframes phone-ring {
+  0% {
+    transform: rotate(0) scale(1) skew(1deg);
+  }
+  10% {
+    transform: rotate(-15deg) scale(1) skew(1deg);
+  }
+  20% {
+    transform: rotate(15deg) scale(1) skew(1deg);
+  }
+  30% {
+    transform: rotate(-15deg) scale(1) skew(1deg);
+  }
+  40% {
+    transform: rotate(15deg) scale(1) skew(1deg);
+  }
+  50% {
+    transform: rotate(0) scale(1) skew(1deg);
+  }
+  100% {
+    transform: rotate(0) scale(1) skew(1deg);
   }
 }
