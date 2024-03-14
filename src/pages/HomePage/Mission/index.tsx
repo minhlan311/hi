@@ -68,7 +68,7 @@ export default function Mission() {
                       <h2>Hiệu suất và Hiệu quả</h2>
                     </Col>
                     <Col span={24} md={10}>
-                      <h2>Cảm kết và Trách nhiệm</h2>
+                      <h2>Cam kết và Trách nhiệm</h2>
                     </Col>
                     <Col span={24} md={8} offset={sm ? 0 : 2}>
                       <h2>Học hỏi, Sáng tạo và Đổi mới</h2>
