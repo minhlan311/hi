@@ -206,7 +206,7 @@ const CoursesDetail = () => {
                               >
                                 {courseDetail.descriptions ? (
                                   <div
-                                    className={'dangerHTML'}
+                                    className={'dangerHTML p-block'}
                                     dangerouslySetInnerHTML={{ __html: courseDetail.descriptions }}
                                   ></div>
                                 ) : (
