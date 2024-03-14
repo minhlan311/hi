@@ -1,5 +1,6 @@
 import { formatNumber } from '@/common'
 import { AppContext } from '@/contexts/app.context'
+import useResponsives from '@/hooks/useResponsives'
 import { Col, Flex, QRCode, Row, Space, Typography } from 'antd'
 import GoogleMapReact from 'google-map-react'
 import { useContext } from 'react'
@@ -13,14 +14,58 @@ const { Title } = Typography
 
 const Footer = () => {
   const { configs } = useContext(AppContext)
+  const { sm, md, lg } = useResponsives()
 
-  if (configs)
+  if (configs) {
+    const footerArr = configs?.footer?.contents?.slice(1)
+    const info = configs?.footer?.contents?.[0]
+
     return (
       <Header padding='50px 0' background='var(--green)'>
         <Row gutter={[48, 48]}>
+          <Col span={24}>
+            <Flex vertical gap={24}>
+              <Row justify={'center'} align={'middle'} gutter={[sm || md ? 0 : 24, 24]}>
+                <Col>
+                  <img width={120} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + configs?.logoFooter} />
+                </Col>
+                {configs?.branch?.map((item) => (
+                  <Col span={24} md={configs.branch.length === 1 ? 8 : 5} key={item.name}>
+                    <Title level={5} style={{ color: '#fcb408' }}>
+                      {item?.name}
+                    </Title>
+                    <Flex vertical gap={3} style={{ lineHeight: 1.6 }}>
+                      <p className='link' style={{ color: 'var(--light-gray)' }}>
+                        Hotline: {item?.phoneNumber}
+                      </p>
+                      <p className='link' style={{ color: 'var(--light-gray)' }}>
+                        Địa chỉ: {item?.address}
+                      </p>
+                    </Flex>
+                  </Col>
+                ))}
+              </Row>
+              <Row justify={'center'} gutter={[sm || md || lg ? 0 : 24, 24]}>
+                {footerArr?.map((item) => (
+                  <Col span={24} md={6} key={item.name}>
+                    <Flex gap={12} vertical>
+                      <Title level={4} style={{ color: 'var(--white)' }}>
+                        {item?.name}
+                      </Title>
+                      {item.children.map((child) => (
+                        <Link to={child.href} key={child.href} className='link' style={{ color: 'var(--light-gray)' }}>
+                          {child?.content}
+                        </Link>
+                      ))}
+                    </Flex>
+                  </Col>
+                ))}
+              </Row>
+            </Flex>
+          </Col>
+
           <Col span={24} md={12} lg={6}>
             <Flex vertical gap={12}>
-              <img height={50} src={import.meta.env.VITE_FILE_ENDPOINT + '/' + configs?.logo} className='logo-footer' />
               <Row gutter={12} align='middle'>
                 <Col span={10} md={11}>
                   <img width='100%' src='https://images.dmca.com/Badges/dmca-badge-w250-2x1-04.png' alt='dmca' />
@@ -61,34 +106,32 @@ const Footer = () => {
           </Col>
 
           <Col span={24} md={12} lg={6}>
-            {configs.footer?.contents?.map((item) => (
-              <Flex gap={12} vertical key={item.name}>
-                <Title level={4} style={{ color: 'var(--white)' }}>
-                  {item?.name}
-                </Title>
-                {item.children.map((child) => (
-                  <Link to={child.href} key={child.href} className='link' style={{ color: 'var(--lighish-white)' }}>
-                    {child?.content}
-                  </Link>
-                ))}
-                <Space direction='vertical' style={{ marginTop: 32, color: 'var(--white)' }}>
-                  <Flex align='center' gap={8}>
-                    <HiUserGroup />
-                    <p>Số lượt truy cập:</p>
-                    <b>{formatNumber(6452142, 'number', 'lượt')}</b>
-                  </Flex>
-                  <Flex align='center' gap={8}>
-                    <FaUser size={12} style={{ marginRight: 2 }} />
-                    <p>Hôm nay:</p>
-                    <b>{formatNumber(5235, 'number', 'lượt')}</b>
-                  </Flex>
-                  <Flex align='center' gap={8}>
-                    <FaUserPlus /> <p>Đang xem:</p>
-                    <b>{formatNumber(355, 'number', 'lượt')}</b>
-                  </Flex>
-                </Space>
-              </Flex>
-            ))}
+            <Flex gap={12} vertical key={info.name}>
+              <Title level={4} style={{ color: 'var(--white)' }}>
+                {info?.name}
+              </Title>
+              {info.children.map((child) => (
+                <Link to={child.href} key={child.href} className='link' style={{ color: 'var(--lighish-white)' }}>
+                  {child?.content}
+                </Link>
+              ))}
+              <Space direction='vertical' style={{ marginTop: 32, color: 'var(--white)' }}>
+                <Flex align='center' gap={8}>
+                  <HiUserGroup />
+                  <p>Số lượt truy cập:</p>
+                  <b>{formatNumber(6452142, 'number', 'lượt')}</b>
+                </Flex>
+                <Flex align='center' gap={8}>
+                  <FaUser size={12} style={{ marginRight: 2 }} />
+                  <p>Hôm nay:</p>
+                  <b>{formatNumber(5235, 'number', 'lượt')}</b>
+                </Flex>
+                <Flex align='center' gap={8}>
+                  <FaUserPlus /> <p>Đang xem:</p>
+                  <b>{formatNumber(355, 'number', 'lượt')}</b>
+                </Flex>
+              </Space>
+            </Flex>
           </Col>
           {configs.footer?.facebookAppId && (
             <Col span={24} md={12} lg={6}>
@@ -120,6 +163,7 @@ const Footer = () => {
         </Row>
       </Header>
     )
+  }
 }
 
 export default Footer
