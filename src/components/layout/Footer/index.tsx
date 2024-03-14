@@ -52,7 +52,7 @@ const Footer = () => {
                       <Title level={4} style={{ color: 'var(--white)' }}>
                         {item?.name}
                       </Title>
-                      {item.children.map((child) => (
+                      {item?.children?.map((child) => (
                         <Link to={child.href} key={child.href} className='link' style={{ color: 'var(--light-gray)' }}>
                           {child?.content}
                         </Link>
@@ -110,7 +110,7 @@ const Footer = () => {
               <Title level={4} style={{ color: 'var(--white)' }}>
                 {info?.name}
               </Title>
-              {info.children.map((child) => (
+              {info?.children?.map((child) => (
                 <Link to={child.href} key={child.href} className='link' style={{ color: 'var(--lighish-white)' }}>
                   {child?.content}
                 </Link>
