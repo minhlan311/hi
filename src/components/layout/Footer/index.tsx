@@ -47,7 +47,7 @@ const Footer = () => {
               </Row>
               <Row justify={'center'} gutter={[sm || md || lg ? 0 : 24, 24]}>
                 {footerArr?.map((item) => (
-                  <Col span={24} md={6} key={item.name}>
+                  <Col span={24} md={6} key={item?.name}>
                     <Flex gap={12} vertical>
                       <Title level={4} style={{ color: 'var(--white)' }}>
                         {item?.name}
@@ -106,7 +106,7 @@ const Footer = () => {
           </Col>
 
           <Col span={24} md={12} lg={6}>
-            <Flex gap={12} vertical key={info.name}>
+            <Flex gap={12} vertical key={info?.name}>
               <Title level={4} style={{ color: 'var(--white)' }}>
                 {info?.name}
               </Title>
