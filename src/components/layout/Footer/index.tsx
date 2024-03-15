@@ -2,9 +2,7 @@ import { formatNumber } from '@/common'
 import { AppContext } from '@/contexts/app.context'
 import useResponsives from '@/hooks/useResponsives'
 import { Col, Flex, QRCode, Row, Space, Typography } from 'antd'
-import GoogleMapReact from 'google-map-react'
 import { useContext } from 'react'
-import { FacebookProvider, Page } from 'react-facebook'
 import { FaUser, FaUserPlus } from 'react-icons/fa6'
 import { HiUserGroup } from 'react-icons/hi2'
 import { Link } from 'react-router-dom'
@@ -133,33 +131,35 @@ const Footer = () => {
               </Space>
             </Flex>
           </Col>
-          {configs.footer?.facebookAppId && (
-            <Col span={24} md={12} lg={6}>
-              <Title level={4} style={{ color: 'var(--white)' }}>
-                FANPAGE
-              </Title>
-              <FacebookProvider appId={configs.footer?.facebookAppId}>
-                <Page href={configs.footer?.facebookLink} height={500} />
-              </FacebookProvider>
-            </Col>
-          )}
-          {configs.footer?.googleMapKey && configs.footer?.coordinates?.lat && (
-            <Col span={24} md={12} lg={6}>
-              <Title level={4} style={{ color: 'var(--white)' }}>
-                BẢN ĐỒ
-              </Title>
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: configs.footer?.googleMapKey,
-                }}
-                zoom={16}
-                center={{
-                  lat: parseFloat(configs.footer?.coordinates?.lat),
-                  lng: parseFloat(configs.footer?.coordinates?.lng),
-                }}
-              ></GoogleMapReact>
-            </Col>
-          )}
+
+          <Col span={24} md={12} lg={6}>
+            <Title level={4} style={{ color: 'var(--white)' }}>
+              FANPAGE
+            </Title>
+            <iframe
+              style={{ border: 'none', overflow: 'hidden' }}
+              src={`https://www.facebook.com/plugins/page.php?href=${configs.footer?.facebookLink}&tabs=timeline&width=300&height=220&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=482546240286798`}
+              width='300'
+              height='220'
+              allow='autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share'
+            ></iframe>
+          </Col>
+
+          <Col span={24} md={12} lg={6}>
+            <Title level={4} style={{ color: 'var(--white)' }}>
+              BẢN ĐỒ
+            </Title>
+            <div>
+              <iframe
+                style={{ border: 'none', overflow: 'hidden' }}
+                width='100%'
+                height='220'
+                src='https://maps.google.com/maps?width=100%25&amp;height=220&amp;hl=en&amp;q=85%20Nguy%E1%BB%85n%20V%C4%83n%20Nghi,%20ph%C6%B0%E1%BB%9Dng%207,%20qu%E1%BA%ADn%20G%C3%B2%20v%E1%BA%A5p,%20Ho%20Chi%20Minh%20City,%20Vietnam+(Trung%20T%C3%A2m%20Ngo%E1%BA%A1i%20Ng%E1%BB%AF%20UCAM)&amp;t=&amp;z=18&amp;ie=UTF8&amp;iwloc=B&amp;output=embed'
+              >
+                <a href='https://www.gps.ie/'>gps systems</a>
+              </iframe>
+            </div>
+          </Col>
         </Row>
       </Header>
     )

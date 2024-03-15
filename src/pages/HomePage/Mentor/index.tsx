@@ -6,7 +6,7 @@ import EmptyCustom from '@/components/EmptyCustom/EmptyCustom'
 import LoadingCustom from '@/components/LoadingCustom'
 import SliderCustom from '@/components/SliderCustom'
 import useResponsives from '@/hooks/useResponsives'
-import { UserState } from '@/interface/user'
+import { MentorInfo } from '@/types/mentor.type'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Rate, Space, Tooltip } from 'antd'
 import moment from 'moment-timezone'
@@ -22,34 +22,33 @@ const Mentor = () => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['getMentor'],
     queryFn: () => {
-      return userApi.findUser({
-        filterQuery: {
-          isMentor: true,
-          mentorStatus: 'APPROVED',
-        },
-      })
+      return userApi.findMentor({})
     },
   })
   const mentorData = userData?.data.docs
   const now = moment()
 
-  const RenderMentor = ({ user }: { user: UserState }) => {
-    const diffDuration = moment.duration(now.diff(user.createdAt))
+  const RenderMentor = ({ user }: { user: MentorInfo }) => {
+    const diffDuration = moment.duration(now.diff(user.userData.createdAt))
 
     return (
       <Card className='mentor-introduce'>
         <Space direction='vertical' align='center' className='it-main'>
           <div className='image'>
-            <Avatar avtUrl={user.avatarUrl} userData={user} size={140} />
+            <Avatar avtUrl={user.userData?.avatarUrl} userData={user.userData} size={140} />
           </div>
           <div>
-            <Tooltip title={user.fullName}>
-              <h2 className='oneLine'>{user.fullName}</h2>
+            <Tooltip title={user.userData.fullName}>
+              <h2 className='oneLine'>{user.userData.fullName}</h2>
             </Tooltip>
-            {user.mentorInfo?.certificateType ? <div>Chứng chỉ {user.mentorInfo?.certificateType}</div> : <br />}
-            <Rate defaultValue={user.assessment?.totalAssessmentsAverages} allowHalf style={{ fontSize: 12 }} />
+            {user.certificateType ? <div>Chứng chỉ {user?.certificateType}</div> : <br />}
+            <Rate
+              defaultValue={user.userData?.assessment?.totalAssessmentsAverages}
+              allowHalf
+              style={{ fontSize: 12 }}
+            />
             <div>
-              <b>{formatNumber(user.countAssessment as number)}</b> lượt đánh giá
+              <b>{formatNumber(user.userData.countAssessment as number)}</b> lượt đánh giá
             </div>
           </div>
 
@@ -57,9 +56,9 @@ const Mentor = () => {
             <ButtonCustom size='small' type='primary'>
               {diffDuration.asHours().toFixed(0)} giờ
             </ButtonCustom>
-            <ButtonCustom size='small'>{formatNumber(user.countStudents)} học viên</ButtonCustom>
+            <ButtonCustom size='small'>{formatNumber(user.userData.countStudents)} học viên</ButtonCustom>
           </Space>
-          <ButtonCustom className='sm-butt sp100' size='large' href={`/profiles/${user._id}`}>
+          <ButtonCustom className='sm-butt sp100' size='large' href={`/profiles/${user.userData._id}`}>
             <Space>
               <div>Chọn giáo viên</div>
               <BsArrowRight
@@ -109,7 +108,7 @@ const Mentor = () => {
                 nextArrow={<BsArrowRight />}
                 prevArrow={<BsArrowLeft />}
               >
-                {mentorData.map((item) => (
+                {mentorData.map((item: MentorInfo) => (
                   <RenderMentor user={item} key={item._id} />
                 ))}
               </SliderCustom>

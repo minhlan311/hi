@@ -46,7 +46,7 @@ export default function NewsPageDetail({ slug }: { slug: string }) {
         <LoadingCustom tip='Vui lòng chờ ...' loading={isLoading}>
           <h1 className='title-box'>{data?.data?.title}</h1>
 
-          <div className='dangerHTML' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
+          <div className='dangerHTML p-block' dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
           <div className='other-news'>
             <h3 className='other-news-title '>Bài viết liên quan</h3>
             <SliderCustom infinite={true} arrows dataLength={dataNewsAll?.data?.totalDocs as number}>

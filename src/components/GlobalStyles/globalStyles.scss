@@ -457,10 +457,16 @@ table {
     line-height: 1.6;
   }
   ul {
+    font-size: 17px;
+    margin-bottom: 12px;
     margin-left: 38px;
   }
 }
-
+.p-block {
+  p {
+    display: block;
+  }
+}
 /* Hide the scrollbar track */
 ::-webkit-scrollbar {
   width: 6px; /* Adjust the width as per your preference */
