@@ -1,9 +1,6 @@
 type footer = {
   contents: { name: string; children: { href: string; content: string }[] }[]
-  facebookAppId: string
   facebookLink: string
-  googleMapKey: string
-  coordinates: { lat: string; lng: string }
   zaloLink: string
 }
 

@@ -152,7 +152,7 @@ const FilterAction = (props: Props) => {
           sort: {
             ...sort,
             point,
-            createdAt,
+            createdAt: createdAt ? createdAt : -1,
             totalAssessmentsAverages: viewCountDownCount === 'highestRating' ? -1 : undefined,
             countAssessment: viewCountDownCount === 'highestParticipant' ? -1 : undefined,
           },

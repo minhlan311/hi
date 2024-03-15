@@ -1,8 +1,9 @@
 import configApi from '@/apis/config.api'
+import { AppContext } from '@/contexts/app.context'
 import Mentor from '@/pages/HomePage/Mentor'
 import { setConfigFromLS } from '@/utils/auth'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import Banner from './Banner'
 import ContactForm from './ContactForm'
 import CourseCalender from './CourseCalender/CourseCalender'
@@ -15,6 +16,8 @@ import VideoContent from './VideoContent/VideoContent'
 import './styles.scss'
 
 export default function HomePage() {
+  const { setConfigs } = useContext(AppContext)
+
   const { data } = useQuery({
     queryKey: ['config'],
     queryFn: () => configApi.getConfig(),
@@ -23,8 +26,9 @@ export default function HomePage() {
   useEffect(() => {
     if (data) {
       setConfigFromLS(data?.data)
+      setConfigs(data.data)
     }
-  }, [data?.data])
+  }, [data])
 
   const scrollRef = useRef<null | HTMLDivElement>(null)
 
