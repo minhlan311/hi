@@ -60,7 +60,7 @@ const CourseCard = ({ item }: Props) => {
               <Col span={24}>
                 <Flex align='center'>
                   <LuBookMarked className='icon-card' />
-                  SL bài học: {item.countTopics}
+                  SL chuyên đề: {item.countTopics}
                 </Flex>
               </Col>
               <Col span={24}>

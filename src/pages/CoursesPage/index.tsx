@@ -108,7 +108,9 @@ const CoursesDetail = () => {
             value: courseDetail?.countStudents,
             icon: <BsPeople />,
           },
-          { label: 'Bài học', value: courseDetail.countTopics, icon: <RiBookReadLine /> },
+          // { label: 'Bài học', value: courseDetail.countTopics, icon: <RiBookReadLine /> },
+          { label: 'Bài học', value: courseDetail?.countLessons, icon: <RiBookReadLine /> },
+
           { label: 'Cấp độ', value: '', icon: <IoPodiumOutline /> },
           { label: 'Ngôn ngữ', value: courseDetail.category?.name, icon: <TbLanguage /> },
           { label: 'Bài kiểm tra', value: courseDetail.countTests, icon: <HiOutlineNewspaper /> },

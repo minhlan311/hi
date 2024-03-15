@@ -54,7 +54,8 @@ const RenderCourse = ({ item }: { item: EnrollsState }) => {
           </Space>
           <Flex align='center'>
             <LuBookMarked style={{ marginRight: 5 }} />
-            {item.course?.countTopics} bài học
+            {/* {item.course?.countTopics} bài học */}
+            {item.course?.countLessons} bài học
           </Flex>
 
           <Flex align='center'>

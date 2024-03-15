@@ -23,6 +23,7 @@ export interface CoursesState {
   class: ClassState[]
   countStudents: number
   countTopics: number
+  countLessons: number
   countTests: number
   mentor: UserState
   assessment?: AssessmentState
